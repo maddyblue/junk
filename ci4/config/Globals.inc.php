@@ -4,7 +4,7 @@
 
 /* All addresses (filesystem or www) must end in '/'. */
 
-define('CI_FS_PATH', '/var/www/htdocs/dolmant.net/ci4/');
+define('CI_FS_PATH', '/usr/local/www/data/ci4/');
 define('CI_WWW_DOMAIN', 'dolmant.net');
 define('CI_WWW_PATH', '/ci4/'); // '/' if root, and must begin with '/'
 

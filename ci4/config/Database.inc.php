@@ -2,8 +2,8 @@
 
 /*	MySQL database connection configuration.	*/
 
-$CIConfigMain{'SQLUser'}       = 'user';
-$CIConfigMain{'SQLPassword'}   = 'usersql';
-$CIConfigMain{'SQLHost'}       = '10.0.0.7';
+$CIConfigMain{'SQLUser'}       = 'root';
+$CIConfigMain{'SQLPassword'}   = '';
+$CIConfigMain{'SQLHost'}       = 'localhost';
 
 ?>
