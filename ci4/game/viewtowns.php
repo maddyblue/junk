@@ -50,6 +50,9 @@ for($i = 0; $i < count($res); $i++)
 	));
 }
 
+if($PLAYER)
+	echo '<p>You are currently living in ' . getDBData('town_name', $PLAYER['player_town'], 'town_id', 'town') . '.';
+
 echo getTable($array);
 
 update_session_action(0506);
