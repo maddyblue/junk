@@ -253,7 +253,8 @@ INSERT INTO site VALUES ('ADMIN_SECTION_MENU',10,'link','Reset','','\'a=reset\''
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',20,'link','Sync forums','','\'a=sync-forums\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',30,'link','Manage forums','','\'a=manage-forums\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',40,'link','Manage Groups','','\'a=manage-groups\'','SECTION_ADMIN',1,1,'');
-INSERT INTO site VALUES ('BATTLE_SECTION_MENU',0,'link','New Battle','','\'a=newbattle\'','SECTION_BATTLE',1,0,'');
+INSERT INTO site VALUES ('BATTLE_SECTION_MENU',0,'link','Battle','','\'a=battle\'','SECTION_BATTLE',1,0,'');
+INSERT INTO site VALUES ('BATTLE_SECTION_MENU',10,'link','New Battle','','\'a=newbattle\'','SECTION_BATTLE',1,0,'');
 INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'eval','newthreadLink() . newreplyLink()','','','',1,0,'f and t are never specified together, hence this works well');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',0,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','\'a=viewjobs\'','SECTION_GAME',0,0,'');
