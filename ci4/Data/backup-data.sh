@@ -41,7 +41,6 @@ mysqldump -u ci4 --password=ci4sql -t ci4 \
 	cor_monster_drop \
 	domain \
 	equipment \
-	equipmentclass \
 	equipmenttype \
 	group_def \
 	house \

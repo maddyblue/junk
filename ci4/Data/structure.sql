@@ -154,13 +154,6 @@ CREATE TABLE equipment (
 ) TYPE=MyISAM;
 
 
-CREATE TABLE equipmentclass (
-  equipmentclass_id bigint(10) unsigned NOT NULL auto_increment,
-  equipmentclass_name varchar(25) NOT NULL default '',
-  PRIMARY KEY  (equipmentclass_id)
-) TYPE=MyISAM;
-
-
 CREATE TABLE equipmenttype (
   equipmenttype_id bigint(10) unsigned NOT NULL auto_increment,
   equipmenttype_name varchar(100) NOT NULL default '',

@@ -172,11 +172,6 @@ INSERT INTO equipment VALUES (19,'Toy Ring','',3,2,0,0,0,0,0,0,0,0,0,0,0,1,1,50,
 INSERT INTO equipment VALUES (20,'Rusty Band','',6,4,0,0,0,0,0,0,0,20,0,0,0,1,1,100,'This ring is made out of rusted iron.',1,0);
 
 
-INSERT INTO equipmentclass VALUES (1,'jewelry');
-INSERT INTO equipmentclass VALUES (2,'weapon');
-INSERT INTO equipmentclass VALUES (3,'armor');
-
-
 INSERT INTO equipmenttype VALUES (1,'ring',1);
 INSERT INTO equipmenttype VALUES (2,'sword',2);
 INSERT INTO equipmenttype VALUES (3,'dagger',2);
