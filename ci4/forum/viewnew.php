@@ -87,7 +87,7 @@ else
 
 		array_push($array, array(
 			makeLink('-&gt;', 'a=viewpost&p=' . $res[$i]['forum_post_id']) . ' ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id']) . $pageList,
-			makeLink($res[$i]['forum_forum_name'], 'a=viewforum&f=' . $res[$i]['forum_forum_id']),
+			makeLink(decode($res[$i]['forum_forum_name']), 'a=viewforum&f=' . $res[$i]['forum_forum_id']),
 			$res[$i]['forum_thread_replies'],
 			getUserlink($res[$i]['user_id'], decode($res[$i]['user_name'])),
 			getTime($res[$i]['forum_post_date'])
