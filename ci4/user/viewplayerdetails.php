@@ -102,6 +102,28 @@ if(count($res) == 1)
 
 	echo '<p>Jobs:';
 	echo getTable($array);
+
+	// ability type
+
+	$res = $DBMain->Query('select * from player_abilitytype, abilitytype where player_abilitytype_player=' . $player . ' and player_abilitytype_type=abilitytype_id');
+
+	$array = array(array('Type', 'Total AP', 'Current AP'));
+
+	for($i = 0; $i < count($res); $i++)
+		array_push($array, array(makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id'], SECTION_GAME), $res[$i]['player_abilitytype_aptot'], $res[$i]['player_abilitytype_ap']));
+
+	echo '<p>Ability types:' . getTable($array);
+
+	// abilities
+
+	$res = $DBMain->Query('select ability_id, ability_name, abilitytype_name, abilitytype_id from player_ability, ability, abilitytype where player_ability_player=' . $player . ' and player_ability_ability=ability_id and ability_type=abilitytype_id');
+
+	$array = array(array('Ability', 'Type'));
+
+	for($i = 0; $i < count($res); $i++)
+		array_push($array, array(makeLink($res[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $res[$i]['ability_id'], SECTION_GAME), makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id'], SECTION_GAME)));
+
+	echo '<p>Learned abilities:' . getTable($array);
 }
 else
 	echo '<p>Invalid player.';
