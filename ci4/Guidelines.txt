@@ -1,0 +1,15 @@
+GUIDELINES FOR CI4 STRUCTURE
+---------- --- --- ---------
+
+*	CI4 codebase layout uses an extremely strict file layout map.  Though this
+	can make things a bit annoying, it pays off with a much higher degree of 
+	organization.
+
+	Please try to follow the existing layout as best as you can: place utility
+	classes in "/utility", additional game objects in "/objects", etc.  If you
+	need to create a new directory, ask dolmant or I before continuing.
+
+*	When designing pieces of CI4, whenever possible, make pieces of code
+	likely to be reused multiple times a class, and be sure to follow
+	good class design when doing this.  This, too, improves organization, and
+	also makes the CI code easier to follow.
