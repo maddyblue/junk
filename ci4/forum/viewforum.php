@@ -236,6 +236,23 @@ array_push($array, array(
 $depth = 2;
 
 $forumid = isset($_GET['f']) ? encode($_GET['f']) : '0';
+$read = isset($_GET['read']) && $_GET['read'] == 'true' && LOGGED ? true : false;
+
+if($read)
+{
+	$where = $forumid == 0 ? '' : ' and forum_thread_forum="' . $forumid . '"';
+
+	$DBMain->Query('delete from forum_view where forum_view_user=' . ID);
+
+	// insert all threads with a last post date after the last ending session
+	$res = $DBMain->Query('select forum_thread_id from forum_thread, forum_post where forum_thread_last_post=forum_post_id and forum_post_date > ' . $USER['user_last_session'] . $where);
+
+	$s = '';
+	for($i = 0; $i < count($res); $i++)
+		$s .= '(' . ID . ', ' . $res[$i]['forum_thread_id'] . ', ' . TIME . '),';
+
+	$DBMain->Query('insert into forum_view values ' . substr($s, 0, -1));
+}
 
 if(!canView($forumid))
 {
@@ -274,6 +291,9 @@ else
 		echo '<p>' . getTable($array);
 		echo $pageDisp;
 	}
+
+	if(LOGGED)
+		echo '<p>' . makeLink('Mark all threads ' . ($forumid ? 'in this forum' : '') . ' as read.', 'a=viewforum&read=true&f=' . $forumid);
 }
 
 update_session_action(0405, $forumid);
