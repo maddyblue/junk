@@ -62,7 +62,7 @@ class DatabaseAccess
 				<p>Query: ' . $parameters{'Query'} . '.';
 			return;
 		}
-		while($row = mysql_fetch_assoc($dbq)) {
+		while($row = @mysql_fetch_assoc($dbq)) {
 			for($i = 1; $i <= sizeof($row); $i++) {
 				$ret{key($row)}[$counter] = $row{key($row)};
 				next($row);
