@@ -55,7 +55,7 @@ function newBattle($area)
 {
 	global $PLAYER, $DBMain;
 
-	$monster = $DBMain->Query('select * from monster, cor_area_monster where cor_area="' . $area . '" order by rand() limit 1');
+	$monster = $DBMain->Query('select * from monster, cor_area_monster where cor_area=' . $area . ' and cor_monster=monster_id order by rand() limit 1');
 
 	if(!count($monster))
 	{
@@ -65,9 +65,9 @@ function newBattle($area)
 
 	// we have the player, monster, and area, create the battle
 
-	$DBMain->Query('insert into battle (battle_start, battle_area) values (' . TIME . ', "' . $area . '")');
+	$DBMain->Query('insert into battle (battle_start, battle_area) values (' . TIME . ', ' . $area . ')');
 
-	$bat = $DBMain->Query('select battle_id from battle where battle_area="' . $area . '" and battle_start=' . TIME . ' limit 1');
+	$bat = $DBMain->Query('select battle_id from battle where battle_area=' . $area . ' and battle_start=' . TIME . ' limit 1');
 	$batid = $bat[0]['battle_id'];
 
 	$DBMain->Query('update player set player_battle=' . $batid . ' where player_id=' . $PLAYER['player_id']);
@@ -91,7 +91,8 @@ function newBattle($area)
 		' . $PLAYER['player_mod_def'] . ',
 		' . $PLAYER['player_mod_mgd'] . ',
 		' . $PLAYER['player_mod_agl'] . ',
-		' . $PLAYER['player_mod_acc'] . '), (
+		' . $PLAYER['player_mod_acc'] . ',
+		' . $PLAYER['player_lv'] . '), (
 		"",
 		' . $batid . ',
 		' . $monster[0]['monster_id'] . ',
@@ -108,7 +109,8 @@ function newBattle($area)
 		' . $monster[0]['monster_def'] . ',
 		' . $monster[0]['monster_mgd'] . ',
 		' . $monster[0]['monster_agl'] . ',
-		' . $monster[0]['monster_acc'] . ')'
+		' . $monster[0]['monster_acc'] . ',
+		' . $monster[0]['monster_lv'] . ')'
 	);
 
 	echo '<p>Battle started.';
