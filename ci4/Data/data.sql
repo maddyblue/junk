@@ -140,10 +140,10 @@ INSERT INTO equipmenttype VALUES (10,'Rod');
 INSERT INTO equipmenttype VALUES (11,'Robe');
 
 
-INSERT INTO group_def VALUES (1,'Administrators',1,1,1);
-INSERT INTO group_def VALUES (2,'Super Moderators',0,1,1);
-INSERT INTO group_def VALUES (3,'Banned',0,0,0);
-INSERT INTO group_def VALUES (4,'Moderators',0,0,0);
+INSERT INTO group_def VALUES (1,'Administrators',1,1,1,0);
+INSERT INTO group_def VALUES (2,'Super Moderators',0,1,1,0);
+INSERT INTO group_def VALUES (3,'Banned',0,0,0,1);
+INSERT INTO group_def VALUES (4,'Moderators',0,0,0,0);
 
 
 
