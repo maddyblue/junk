@@ -1,8 +1,6 @@
 <?php
 
-/* $CI$ */
-/* $Ci$ */
-/* $Id: index.php,v 1.49 2003/10/03 03:40:28 dolmant Exp $ */
+/* $Id: index.php,v 1.50 2003/10/03 03:40:51 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
