@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: kuro5hin.php,v 1.10 2004/01/07 01:58:40 dolmant Exp $ -->
+<!-- $Id: kuro5hin.php,v 1.11 2004/01/07 02:08:20 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
@@ -155,6 +155,11 @@ table.maintable {
 	<tr>
 		<td style="border: 1px solid #000000;">
 			<CINAV><td class="ciNavTableTd">INSERT</td></CINAV>
+			<?php
+				$pms = makePMLink();
+				if($pms)
+					echo '<td class="ciNavTableTd">' . $pms . '</td>';
+			?>
 		</td>
 	</tr>
 </table>

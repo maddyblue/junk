@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.58 2004/01/06 20:14:09 rayle Exp $ */
+/* $Id: Functions.inc.php,v 1.59 2004/01/07 02:08:21 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -632,6 +632,21 @@ function hasPermission($perm)
 		return true;
 	else
 		return false;
+}
+
+function makePMLink()
+{
+	if(LOGGED)
+	{
+		global $DBMain;
+
+		$ret = $DBMain->Query('select count(*) as count from pm where pm_to=' . ID . ' and pm_read=0');
+
+		if($ret[0]['count'])
+		 return makeLink($ret[0]['count'] . ' new PMs', 'a=viewpms', SECTION_USER);
+	}
+
+	return '';
 }
 
 ?>

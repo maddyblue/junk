@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: redux.php,v 1.23 2004/01/05 04:38:29 dolmant Exp $ -->
+<!-- $Id: redux.php,v 1.24 2004/01/07 02:08:20 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescent island ::
 <?php echo strtolower(CI_SECTION); ?>
@@ -204,6 +204,11 @@ td.block-light {
 				<tr>
 					<td class="block-light">
 						<CINAV>INSERT<br></CINAV><br>
+							<?php
+								$pms = makePMLink();
+								if($pms)
+									echo $pms . '<br>';
+							?>
 					</td>
 				</tr>
 			</table>
