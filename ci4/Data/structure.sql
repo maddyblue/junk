@@ -149,7 +149,8 @@ CREATE TABLE equipment (
   equipment_type bigint(10) unsigned NOT NULL default '0',
   equipment_class bigint(10) unsigned NOT NULL default '0',
   equipment_twohand tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (equipment_id)
+  PRIMARY KEY  (equipment_id),
+  UNIQUE KEY equipment_name (equipment_name)
 ) TYPE=MyISAM;
 
 
@@ -164,7 +165,7 @@ CREATE TABLE equipmenttype (
   equipmenttype_id bigint(10) unsigned NOT NULL auto_increment,
   equipmenttype_name varchar(100) NOT NULL default '',
   PRIMARY KEY  (equipmenttype_id)
-) TYPE=MyISAM COMMENT='class: 1=jewelry, 2=weapon, 3=armor';
+) TYPE=MyISAM;
 
 
 CREATE TABLE forum_forum (
@@ -265,6 +266,9 @@ CREATE TABLE group_user (
 CREATE TABLE house (
   house_id bigint(10) unsigned NOT NULL auto_increment,
   house_name varchar(100) NOT NULL default '',
+  house_cost bigint(10) unsigned NOT NULL default '0',
+  house_lv smallint(6) unsigned NOT NULL default '0',
+  house_text text NOT NULL,
   PRIMARY KEY  (house_id)
 ) TYPE=MyISAM;
 
