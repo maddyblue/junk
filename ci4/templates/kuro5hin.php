@@ -138,6 +138,7 @@ table.maintable {
 
 -->
 </style>
+<CI_HEAD>
 </head>
 
 <body>

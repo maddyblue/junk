@@ -115,7 +115,7 @@ function newBattle($area)
 
 	echo '<p>Starting battle...';
 	echo '<p>' . makeLink('Begin.', 'a=battle');
-	echo '<meta http-equiv="refresh" content="0; url=?a=battle">';
+	$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=?a=battle">';
 }
 
 if(LOGGED)
@@ -132,7 +132,7 @@ if(LOGGED)
 		$fail = true;
 		echo '<p>You already have an active battle. You must complete it before starting another.';
 		echo '<p>Redirecting you there...';
-		echo '<meta http-equiv="refresh" content="2; url=?a=battle">';
+		$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="2; url=?a=battle">';
 	}
 
 	if(!$fail)

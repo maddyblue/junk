@@ -170,6 +170,7 @@ td.block-light {
 }
 -->
 </style>
+<CI_HEAD>
 </head>
 <body>
 <table width="100%" cellspacing="0" cellpadding="0">

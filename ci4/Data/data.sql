@@ -292,6 +292,7 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',30,'link','Send PM','','\'a=sendpm\'
 INSERT INTO site VALUES ('USER_SECTION_NAV',40,'link','Logout','','\'a=logout\'','SECTION_USER',1,0,'');
 INSERT INTO site VALUES ('_PROFILE',0,'eval','getProfile()','','','',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
+INSERT INTO site VALUES ('_HEAD',0,'eval','$GLOBALS[\'CI_HEAD\']','','','',0,0,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');

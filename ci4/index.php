@@ -195,6 +195,9 @@ else
 	}
 }
 
+if(!isset($CI_HEAD))
+	$CI_HEAD = '';
+
 // Template
 if(isset($_GET['template']))
 	$t = $_GET['template'];
