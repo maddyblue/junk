@@ -19,8 +19,28 @@ if(!$fd)
 }
 setcookie('CI_TEMPLATE', $t, time() + 604800, $CI_PATH);
 $template = fread($fd, filesize(getTemplateName($t)));
+fclose($fd);
 
 $logged = '>'; // logged in
+
+// Add content page
+if($a)
+{
+	$fd = fopen($a, 'r');
+	if($fd)
+	{
+		$content = fread($fd, filesize($a));
+		fclose($fd);
+		ob_start();
+		eval('?>' . $content . '<?');
+		$content = ob_get_contents();
+		ob_end_clean();
+		$pos = strpos($template, '<CICONTENT>');
+		$template = substr_replace($template, $content, $pos, 11);
+		$template = str_replace('<CICONTENT>', '', $template);
+	}
+}
+
 
 $ret = $DB->Query('SELECT tag,type,repl FROM site_replace');
 for($i = 0; $i < sizeof($ret{'tag'}); $i++)
