@@ -29,7 +29,7 @@
 
 # dump data of static tables
 
-mysqldump -u root -p -t ci4 \
+mysqldump -u ci4 --password=ci4sql -t ci4 \
 	ability \
 	abilitytype \
 	area \
