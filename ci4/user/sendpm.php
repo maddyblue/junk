@@ -92,19 +92,21 @@ else
 	{
 		$userid = isset($_GET['userid']) ? intval($_GET['userid']) : '0';
 		$sub = '';
+		$text = '';
 
-		if(isset($_GET['reply']))
+		if(isset($_POST['reply']))
 		{
-			$res = $DBMain->Query('select * from pm where pm_id=' . intval($_GET['reply']));
+			$res = $DBMain->Query('select * from pm where pm_id=' . intval($_POST['reply']));
 			if(count($res))
 			{
 				$userid = $res[0]['pm_from'];
-				$sub = $res[0]['pm_subject'];
+				$sub = 'Re: ' . $res[0]['pm_subject'];
+				$text = '[quote]Originally sent by ' . getUsername($res[0]['pm_from']) . ':' . "\n" . $res[0]['pm_text'] . '[/quote]';
 			}
 		}
 
 		$user = getDBData('user_name', $userid);
-		disp($user, $sub, '');
+		disp($user, $sub, $text);
 	}
 }
 

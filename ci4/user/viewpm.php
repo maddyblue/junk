@@ -40,7 +40,7 @@ else
 {
 	$pm = isset($_GET['pm']) ? intval($_GET['pm']) : '0';
 	$pm = isset($_POST['pm']) ? intval($_POST['pm']) : $pm;
-	$sure = isset($_POST['sure']) ? $_POST['sure'] : '';
+	$confirm = isset($_POST['confirm']) ? $_POST['confirm'] : '';
 
 	$query = 'select * from pm where pm_id=' . $pm . ' and pm_to=' . ID;
 	$res = $DBMain->Query($query);
@@ -49,28 +49,16 @@ else
 	{
 		echo '<p>No message with that id.';
 	}
-	else if(isset($_POST['delete']) && $sure == 'Yes')
+	else if(isset($_POST['delete']) && $confirm == 'on')
 	{
 		$DBMain->Query('delete from pm where pm_id=' . $pm);
-		echo '<p>Message deleted.';
-	}
-	else if(isset($_POST['delete']) && !$sure)
-	{
-		echo getTableForm('Are you sure you want to delete this message?', array(
-			array('', array('type'=>'submit', 'name'=>'sure', 'val'=>'Yes')),
-			array('', array('type'=>'submit', 'name'=>'sure', 'val'=>'No')),
-
-			array('', array('type'=>'hidden', 'name'=>'delete')),
-			array('', array('type'=>'hidden', 'name'=>'pm', 'val'=>$pm)),
-			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewpm'))
-		));
-	}
-	else if(isset($_POST['reply']))
-	{
-		header('location: index.php?a=sendpm&reply=' . $pm);
+		echo '<p>Message deleted.' . '<p>' . makeLink('Return to pms.', 'a=viewpms');
 	}
 	else
 	{
+		if(isset($_POST['delete']))
+			echo '<p>You must check the confirm box to delete a pm.';
+
 		$DBMain->Query('update pm set pm_read=1 where pm_id=' . $pm);
 		$array = array(
 			array('From', getUserlink($res[0]['pm_from'])),
@@ -79,12 +67,16 @@ else
 			array('Message', parsePostText($res[0]['pm_text'])),
 			array('',
 				getForm('', array(
+					array('', array('type'=>'submit', 'name'=>'reply', 'val'=>'Reply')),
+					array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'sendpm')),
+					array('', array('type'=>'hidden', 'name'=>'reply', 'val'=>$pm))
+				)) .
+				getForm('', array(
 					array('', array('type'=>'submit', 'name'=>'delete', 'val'=>'Delete')),
 					array('', array('type'=>'disptext', 'val'=>'&nbsp;')),
-					array('', array('type'=>'submit', 'name'=>'reply', 'val'=>'Reply')),
-
+					array('Confirm Delete', array('type'=>'checkbox', 'name'=>'confirm')),
 					array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewpm')),
-					array('', array('type'=>'hidden', 'name'=>'pm', 'val'=>$res[0]['pm_id']))
+					array('', array('type'=>'hidden', 'name'=>'pm', 'val'=>$pm))
 				)))
 		);
 
