@@ -81,12 +81,19 @@ function updateFromPost($post)
 
 function forumReplace($text)
 {
-	global $DBMain;
+	$patterns = array(
+		'&amp;lt;',
+		'&amp;gt;',
+		'&amp;amp;'
+	);
 
-	$ret = $DBMain->Query('select * from forum_replace');
+	$replacements = array(
+		'&lt;',
+		'&gt;',
+		'&amp;'
+	);
 
-	for($i = 0; $i < count($ret); $i++)
-		$text = str_replace($ret[$i]['forum_replace_from'], $ret[$i]['forum_replace_to'], $text);
+	$text = str_replace($patterns, $replacements, $text);
 
 	return $text;
 }
