@@ -66,7 +66,10 @@ if(isset($_POST['t']))
 
 $ret = $DBMain->Query('select forum_thread_forum from forum_thread where forum_thread_id=' . $thread);
 if(count($ret) == 1)
-	echo getNavBar($ret[0]['forum_thread_forum']);
+{
+	$forum = $ret[0]['forum_thread_forum'];
+	echo getNavBar($forum);
+}
 
 if(LOGGED == false)
 {
@@ -112,7 +115,6 @@ else
 				$DBMain->Query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
 
 				echo '<br>Reply posted successfully.';
-				$forum=0;
 				echo '<p>Return to the ' . makeLink('previous forum', '?a=viewforum&f=' . $forum) . '.';
 				echo '<p>Return to the ' . makeLink('previous thread', '?a=viewthread&t=' . $thread) . '.';
 				echo '<p>Go to the ' . makeLink('new post', '?a=viewpost&p=' . $lastpost) . '.';
