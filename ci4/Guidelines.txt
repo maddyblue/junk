@@ -1,3 +1,5 @@
+$Id$
+
 GUIDELINES FOR CI4 STRUCTURE
 ---------- --- --- ---------
 
