@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: domains.php,v 1.1 2003/11/05 00:02:48 dolmant Exp $ */
+/* $Id: domains.php,v 1.2 2003/11/05 00:10:25 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -46,7 +46,7 @@ array_push($array, array(
 
 for($i = 0; $i < count($res); $i++)
 {
-	$query = 'select count(*) as count from player where player_domain=' . $res['domain_id'][$i];
+	$query = 'select count(*) as count from player where player_domain=' . $res[$i]['domain_id'];
 	$players = $DBMain->Query($query);
 
 	array_push($array, array(
