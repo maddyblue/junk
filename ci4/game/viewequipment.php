@@ -49,11 +49,11 @@ array_push($array, array(
 	'Description'
 ));
 
-for($i = 0; $i < count($res['equipment_name']); $i++)
+for($i = 0; $i < count($res); $i++)
 {
-	if($res['equipment_buy'][$i] == 1)
+	if($res[$i]['equipment_buy'] == 1)
 	{
-		$buytext = makeLink('Yes', '?a=buyequipment&amp;equipment=' . $res['equipment_id'][$i]);
+		$buytext = makeLink('Yes', '?a=buyequipment&amp;equipment=' . $res[$i]['equipment_id']);
 	}
 	else
 	{
@@ -61,11 +61,11 @@ for($i = 0; $i < count($res['equipment_name']); $i++)
 	}
 
 	array_push($array, array(
-		makeLink($res['equipmenttype_name'][$i], '?a=viewequipment&amp;type=' . $res['equipmenttype_id'][$i]),
-		$res['equipment_name'][$i],
+		makeLink($res[$i]['equipmenttype_name'], '?a=viewequipment&amp;type=' . $res[$i]['equipmenttype_id']),
+		$res[$i]['equipment_name'],
 		$buytext,
-		$res['equipment_cost'][$i],
-		$res['equipment_desc'][$i]
+		$res[$i]['equipment_cost'],
+		$res[$i]['equipment_desc']
 	));
 }
 

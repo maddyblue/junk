@@ -43,14 +43,14 @@ array_push($array, array(
 	'Description'
 ));
 
-for($i = 0; $i < count($res['ability_id']); $i++)
+for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		$res['ability_name'][$i],
-		$res['abilitytype_name'][$i],
-		$res['ability_ap_cost'][$i],
-		$res['ability_req_job_lv'][$i],
-		$res['ability_desc'][$i]
+		$res[$i]['ability_name'],
+		$res[$i]['abilitytype_name'],
+		$res[$i]['ability_ap_cost'],
+		$res[$i]['ability_req_job_lv'],
+		$res[$i]['ability_desc']
 	));
 }
 

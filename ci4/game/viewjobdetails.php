@@ -38,10 +38,10 @@ $equipmentlist = '';
 
 if(count($equipment))
 {
-	for($i = 0; $i < count($equipment['equipmenttype_name']); $i++)
+	for($i = 0; $i < count($equipment); $i++)
 	{
 		if($i) $equipmentlist .= ', ';
-		$equipmentlist .= $equipment['equipmenttype_name'][$i];
+		$equipmentlist .= $equipment[$i]['equipmenttype_name'];
 	}
 }
 else
@@ -59,43 +59,43 @@ if(count($jobs) == 0)
 }
 else
 {
-	for($i = 0; $i < count($jobs['job_name']); $i++)
+	for($i = 0; $i < count($jobs); $i++)
 	{
 		if($i) $joblist .= ', ';
-		$joblist .= makeLink($jobs['job_name'][$i], '?a=viewjobdetails&amp;job=' . $jobs['job_id'][$i]) . ' (' . $jobs['cor_joblv'][$i] . ')';
+		$joblist .= makeLink($jobs[$i]['job_name'], '?a=viewjobdetails&amp;job=' . $jobs[$i]['job_id']) . ' (' . $jobs[$i]['cor_joblv'] . ')';
 	}
 }
 
 $stat = array(
-	array('HP', $res['job_stat_hp'][0] . '%'),
-	array('MP', $res['job_stat_mp'][0] . '%'),
-	array('STR', $res['job_stat_str'][0] . '%'),
-	array('MAG', $res['job_stat_mag'][0] . '%'),
-	array('DEF', $res['job_stat_def'][0] . '%'),
-	array('MGD', $res['job_stat_mgd'][0] . '%'),
-	array('AGL', $res['job_stat_agl'][0] . '%'),
-	array('ACC', $res['job_stat_acc'][0] . '%')
+	array('HP', $res[0]['job_stat_hp'] . '%'),
+	array('MP', $res[0]['job_stat_mp'] . '%'),
+	array('STR', $res[0]['job_stat_str'] . '%'),
+	array('MAG', $res[0]['job_stat_mag'] . '%'),
+	array('DEF', $res[0]['job_stat_def'] . '%'),
+	array('MGD', $res[0]['job_stat_mgd'] . '%'),
+	array('AGL', $res[0]['job_stat_agl'] . '%'),
+	array('ACC', $res[0]['job_stat_acc'] . '%')
 );
 
 $level = array(
-	array('HP', $res['job_level_hp'][0]),
-	array('MP', $res['job_level_mp'][0]),
-	array('STR', $res['job_level_str'][0]),
-	array('MAG', $res['job_level_mag'][0]),
-	array('DEF', $res['job_level_def'][0]),
-	array('MGD', $res['job_level_mgd'][0]),
-	array('AGL', $res['job_level_agl'][0]),
-	array('ACC', $res['job_level_acc'][0])
+	array('HP', $res[0]['job_level_hp']),
+	array('MP', $res[0]['job_level_mp']),
+	array('STR', $res[0]['job_level_str']),
+	array('MAG', $res[0]['job_level_mag']),
+	array('DEF', $res[0]['job_level_def']),
+	array('MGD', $res[0]['job_level_mgd']),
+	array('AGL', $res[0]['job_level_agl']),
+	array('ACC', $res[0]['job_level_acc'])
 );
 
 // Setup is done, make the table
 
 $array = array(
-	array('Job', $res['job_name'][0]),
-	array('Description', $res['job_desc'][0]),
-	array('Gender', getGender($res['job_gender'][0])),
-	array('Required Level', $res['job_req_lv'][0]),
-	array('Wage', $res['job_wage'][0]),
+	array('Job', $res[0]['job_name']),
+	array('Description', $res[0]['job_desc']),
+	array('Gender', getGender($res[0]['job_gender'])),
+	array('Required Level', $res[0]['job_req_lv']),
+	array('Wage', $res[0]['job_wage']),
 	array('Useable Equipment Types', $equipmentlist),
 	array('Prerequisite Job Levels', $joblist),
 	array('Battle Stats', getTable($stat, false)),

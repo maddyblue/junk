@@ -42,13 +42,13 @@ array_push($array, array(
 	'Description'
 ));
 
-for($i = 0; $i < count($res['monster_id']); $i++)
+for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		makeLink($res['monster_name'][$i], '?a=viewmonsterdetails&amp;monster=' . $res['monster_id'][$i]),
-		$res['monster_lv'][$i],
-		$res['monstertype_name'][$i],
-		$res['monster_desc'][$i]
+		makeLink($res[$i]['monster_name'], '?a=viewmonsterdetails&amp;monster=' . $res[$i]['monster_id']),
+		$res[$i]['monster_lv'],
+		$res[$i]['monstertype_name'],
+		$res[$i]['monster_desc']
 	));
 }
 

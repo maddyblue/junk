@@ -33,40 +33,40 @@
 $res = $DBMain->Query('select * from monster, monstertype where monster_id=' . $_GET['monster'] . ' and monster_type=monstertype_id');
 
 $stat = array(
-	array('HP', $res['monster_hp'][0]),
-	array('MP', $res['monster_mp'][0]),
-	array('STR', $res['monster_str'][0]),
-	array('MAG', $res['monster_mag'][0]),
-	array('DEF', $res['monster_def'][0]),
-	array('MGD', $res['monster_mgd'][0]),
-	array('AGL', $res['monster_agl'][0]),
-	array('ACC', $res['monster_acc'][0])
+	array('HP', $res[0]['monster_hp']),
+	array('MP', $res[0]['monster_mp']),
+	array('STR', $res[0]['monster_str']),
+	array('MAG', $res[0]['monster_mag']),
+	array('DEF', $res[0]['monster_def']),
+	array('MGD', $res[0]['monster_mgd']),
+	array('AGL', $res[0]['monster_agl']),
+	array('ACC', $res[0]['monster_acc'])
 );
 
 $elemental = array(
-	array('Fire', $res['monster_fire'][0] . '%'),
-	array('Ice', $res['monster_ice'][0] . '%'),
-	array('Earth', $res['monster_earth'][0] . '%'),
-	array('Wind', $res['monster_wind'][0] . '%'),
-	array('Lightning', $res['monster_lightning'][0] . '%'),
-	array('Holy', $res['monster_holy'][0] . '%'),
-	array('Dark', $res['monster_dark'][0] . '%')
+	array('Fire', $res[0]['monster_fire'] . '%'),
+	array('Ice', $res[0]['monster_ice'] . '%'),
+	array('Earth', $res[0]['monster_earth'] . '%'),
+	array('Wind', $res[0]['monster_wind'] . '%'),
+	array('Lightning', $res[0]['monster_lightning'] . '%'),
+	array('Holy', $res[0]['monster_holy'] . '%'),
+	array('Dark', $res[0]['monster_dark'] . '%')
 );
 
-$image = makeImg($res['monster_image'][0], 'images/monster/');
+$image = makeImg($res[0]['monster_image'], 'images/monster/');
 if($image)
 	$image = ' ' . $image;
 
 // Setup is done, make the table
 
 $array = array(
-	array('Monster', $res['monster_name'][0] . $image),
-	array('Exp', $res['monster_exp'][0]),
-	array('Level', $res['monster_lv'][0]),
-	array('Type', $res['monstertype_name'][0]),
+	array('Monster', $res[0]['monster_name'] . $image),
+	array('Exp', $res[0]['monster_exp']),
+	array('Level', $res[0]['monster_lv']),
+	array('Type', $res[0]['monstertype_name']),
 	array('Battle Stats', getTable($stat, false)),
 	array('Elemental', getTable($elemental, false)),
-	array('Description', $res['monster_desc'][0])
+	array('Description', $res[0]['monster_desc'])
 );
 
 echo getTable($array);

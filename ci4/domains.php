@@ -42,16 +42,16 @@ array_push($array, array(
 	'Registered players in domain'
 ));
 
-for($i = 0; $i < count($res['domain_name']); $i++)
+for($i = 0; $i < count($res); $i++)
 {
 	$query = 'select count(*) as count from player where player_domain=' . $res['domain_id'][$i];
 	$players = $DBMain->Query($query);
 
 	array_push($array, array(
-		$res['domain_name'][$i],
-		$res['domain_expw_time'][$i],
-		$res['domain_expw_max'][$i],
-		$players['count'][0]
+		$res[$i]['domain_name'],
+		$res[$i]['domain_expw_time'],
+		$res[$i]['domain_expw_max'],
+		$players[0]['count']
 	));
 }
 

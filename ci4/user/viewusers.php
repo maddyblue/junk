@@ -40,11 +40,11 @@ array_push($array, array(
 	'Register date'
 ));
 
-for($i = 0; $i < count($res['user_name']); $i++)
+for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		decode($res['user_name'][$i]),
-		getTime($res['user_register'][$i]),
+		decode($res[$i]['user_name']),
+		getTime($res[$i]['user_register']),
 	));
 }
 

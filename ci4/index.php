@@ -192,7 +192,7 @@ while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 		$repl = '';
 		if(count($ret) > 0)
 		{
-			for($i = 0; $i < count($ret['site_type']); $i++)
+			for($i = 0; $i < count($ret); $i++)
 			{
 				$pos6 = $pos4;
 				$pos7 = 6;
@@ -201,7 +201,7 @@ while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 					$pos6 = 0;
 					$pos7 += $pos4;
 				}
-				if($i == sizeof($ret['site_type']) - 1)
+				if($i == count($ret) - 1)
 					$pos7 = $inslen - $pos6;
 				$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
 			}
