@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.57 2003/12/28 23:54:13 dolmant Exp $ */
+/* $Id: index.php,v 1.58 2004/01/05 04:37:20 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -67,7 +67,7 @@ else if(isset($_GET['a']))
 	$aval = $_GET['a'];
 define('ACTION', $aval);
 
-if(isset($aval) && CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
+if(CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
 {
 		$a = './' . $aval . '.php';
 
@@ -84,6 +84,11 @@ if(isset($aval) && CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout
 
 		$contentdone = true;
 }
+
+if(CI_SECTION == 'MAIN' && $aval == 'changedomain')
+	define('CI_DOMAIN', $_GET['domain']);
+else
+	define('CI_DOMAIN', getCIcookie('domain'));
 
 // check to see if we have a valid user
 
@@ -161,11 +166,6 @@ $pos = strpos($template, '<CICONTENT>');
 $top = substr($template, 0, $pos - 1);
 $bottom = substr($template, $pos + 11); // 11 = length of <CICONTENT>
 
-parseTags($top);
-echo $top;
-
-flush();
-
 // get content page
 if(!$contentdone)
 {
@@ -185,7 +185,10 @@ if(!$contentdone)
 
 			if(file_exists($a))
 			{
+				ob_start();
 				require $a;
+				$content = ob_get_contents();
+				ob_end_clean();
 			}
 			else
 			{
@@ -198,14 +201,13 @@ if(!$contentdone)
 		echo 'You do not have permission to view this page.';
 	}
 }
-else
-{
-	echo $content;
-}
+
+parseTags($top);
+echo $top;
+
+echo $content;
 
 echo '<p>' . $message;
-
-flush();
 
 parseTags($bottom);
 echo $bottom;
