@@ -368,4 +368,14 @@ function notLogged()
 	define('LOGGED_DIR', '<');
 }
 
+function getUsername($id)
+{
+	$ret = $GLOBALS['DBMain']->Query('select user_name from user where user_id=' . $id);
+
+	if(count($ret) == 1)
+		return $ret[0]['user_name'];
+	else
+		return '';
+}
+
 ?>
