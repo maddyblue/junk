@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.11 2004/01/05 04:38:00 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.12 2004/01/05 09:20:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -66,6 +66,7 @@ array(0307, 'makeLink(\'Veiwing their User CP\', \'a=usercp\', SECTION_USER)'),
 array(0308, 'makeLink(\'Viewing their PMs\', \'a=viewpms\', SECTION_USER)'),
 array(0309, 'makeLink(\'Viewing details of \' . decode(getDBData(\'user_name\', $d)), \'a=viewuserdetails&user=\' . $d, SECTION_USER)'),
 array(0310, 'makeLink(\'Viewing the user list\', \'a=viewusers\', SECTION_USER)'),
+array(0311, '\'Registering a new player\''),
 
 // forum
 array(0401, 'makeLink(\'Editing a post\', \'a=viewpost&p=\' . $d, SECTION_FORUM)'),
