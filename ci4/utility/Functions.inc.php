@@ -260,7 +260,7 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 		else
 			$num = 2;
 
-		$ret .= '<tr' . $num . '>';
+		$ret .= '<tr class="tr' . $num . '">';
 		for($j = 0; $j < $cols; $j++)
 		{
 			if($j == ($cols - 1))
@@ -275,7 +275,7 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 			else if($i == ($rows - 1))
 				$ret .= '<td class="tdbottom">';
 			else
-				$ret .= '<td' . $num . '>';
+				$ret .= '<td class="td' . $num . '">';
 
 			$ret .= $array[$i][$j] . '</td>';
 		}
@@ -284,7 +284,7 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 
 	if($withTableStructure)
 	{
-		$ret = '<p><table1>' . $ret . '</table>';
+		$ret = '<p><table class="table1">' . $ret . '</table>';
 	}
 
 	return $ret;

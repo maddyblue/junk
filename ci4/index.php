@@ -209,13 +209,6 @@ while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 	}
 }
 
-$list = array('table1', 'tr1', 'td1', 'tr2', 'td2');
-while(list(,$val) = each($list))
-{
-	$left = substr($val, 0, -1);
-	$template = str_replace('<' . $val, '<' . $left . ' class="' . $val . '"', $template);
-}
-
 echo $template;
 
 ?>
