@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.63 2004/01/12 07:35:28 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.64 2004/01/12 07:36:31 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -665,7 +665,7 @@ function makePMLink()
 	return '';
 }
 
-function pageDisp($curpage, $totpages, $perpage, $id, $link)
+function pageDisp($curpage, $totpages, $perpage, $link)
 {
 	if($curpage > $totpages)
 		$curpage = $totpages;
@@ -706,7 +706,7 @@ function pageDisp($curpage, $totpages, $perpage, $id, $link)
 			$pageDisp .= ' ';
 
 		if($pages[$i][1] != 0)
-			$pageDisp .= makeLink($pages[$i][0], $link . $id . '&start=' . ($perpage * ($pages[$i][1] - 1)));
+			$pageDisp .= makeLink($pages[$i][0], $link . '&start=' . ($perpage * ($pages[$i][1] - 1)));
 		else
 			$pageDisp .= $pages[$i][0];
 	}
