@@ -34,7 +34,8 @@
 
 $user = isset($_GET['user']) ? encode($_GET['user']) : 0;
 
-$res = $DBMain->Query('select * from user where user_id=' . $user);
+$res = $DBMain->Query('select * from user where user_id="' . $user . '"');
+$players = $DBMain->Query('select player_name, player_id, domain_id, domain_name from player, domain where player_user="' . $user . '" and domain_id=player_domain order by domain_expw_time, domain_expw_max');
 
 if(count($res) == 1)
 {
@@ -64,12 +65,19 @@ if(count($res) == 1)
 		array('Signature', parseSig($res[0]['user_sig']))
 	);
 
+	$player = array(array('Player', 'Domain'));
+
+	foreach($players as $p)
+		array_push($player, array(makeLink(decode($p['player_name']), 'a=viewplayerdetails&player=' . $p['player_id']), makeLink($p['domain_name'], 'a=domains', SECTION_HOME)));
+
 	if(LOGGED)
 	{
 		echo makeLink('Send this user a PM.', 'a=sendpm&userid=' . $res[0]['user_id']) . '<br><br>';
 	}
 
 	echo getTable($array, false);
+
+	echo '<p>' . getTable($player);
 }
 else
 	echo '<p>Invalid user.';
