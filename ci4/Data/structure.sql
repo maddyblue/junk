@@ -24,6 +24,7 @@ CREATE TABLE area (
   area_id bigint(10) unsigned NOT NULL auto_increment,
   area_name varchar(100) NOT NULL default '',
   area_desc text NOT NULL,
+  area_lv smallint(6) unsigned NOT NULL default '0',
   PRIMARY KEY  (area_id),
   UNIQUE KEY area_name (area_name)
 ) TYPE=MyISAM;
@@ -262,14 +263,6 @@ CREATE TABLE monster (
   monster_lv smallint(4) unsigned NOT NULL default '0',
   monster_exp tinyint(3) unsigned NOT NULL default '0',
   monster_gil smallint(1) unsigned NOT NULL default '0',
-  monster_fire tinyint(3) NOT NULL default '0',
-  monster_ice tinyint(3) NOT NULL default '0',
-  monster_earth tinyint(3) NOT NULL default '0',
-  monster_wind tinyint(3) NOT NULL default '0',
-  monster_water tinyint(3) NOT NULL default '0',
-  monster_lightning tinyint(3) NOT NULL default '0',
-  monster_holy tinyint(3) NOT NULL default '0',
-  monster_dark tinyint(3) NOT NULL default '0',
   monster_type bigint(10) unsigned NOT NULL default '0',
   monster_desc text NOT NULL,
   PRIMARY KEY  (monster_id)
@@ -369,6 +362,7 @@ CREATE TABLE skin (
 CREATE TABLE town (
   town_id bigint(10) unsigned NOT NULL auto_increment,
   town_name varchar(100) NOT NULL default '',
+  town_lv smallint(6) unsigned NOT NULL default '0',
   town_desc text NOT NULL,
   town_item_min_lv smallint(6) unsigned NOT NULL default '0',
   town_item_max_lv smallint(6) unsigned NOT NULL default '0',
@@ -376,7 +370,7 @@ CREATE TABLE town (
   town_reqs_desc text NOT NULL,
   PRIMARY KEY  (town_id),
   UNIQUE KEY town_name (town_name)
-) TYPE=MyISAM;
+) TYPE=MyISAM PACK_KEYS=0;
 
 
 CREATE TABLE user (
