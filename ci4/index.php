@@ -33,6 +33,8 @@
 // turn on all errors
 error_reporting(E_ALL);
 
+define('TIME', time());
+
 if(isset($_SERVER['HTTPS']))
 {
 	if($_SERVER['HTTPS'] == 'on')
@@ -65,6 +67,9 @@ if($pass && $id)
 		// set cookies to be alive for another week
 		setCIcookie('id', $id);
 		setCIcookie('pass', $pass);
+
+		// update last seen field
+		$DBMain->Query('update user set user_last=' . TIME . ' where user_id=' . ID);
 	}
 	else
 		notLogged();
@@ -113,9 +118,10 @@ $content .= $message;
 // Template
 if(isset($_GET['template']))
 	$t = $_GET['template'];
-else if(isset($_COOKIE['CI_TEMPLATE']))
-	$t = $_COOKIE['CI_TEMPLATE'];
 else
+	$t = getCIcookie('template');
+
+if(!$t)
 	$t = CI_DEF_TEMPLATE;
 
 $tfile = getTemplateFilename($t);
@@ -128,7 +134,7 @@ if(!file_exists($tfile))
 
 $fd = fopen($tfile, 'r');
 
-setCookie('CI_TEMPLATE', $t, time() + 604800, CI_WWW_PATH);
+setCIcookie('template', $t);
 
 define('CI_TEMPLATE', $t);
 define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
