@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.30 2004/01/08 06:45:26 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.31 2004/01/09 06:30:15 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -124,7 +124,7 @@ function threadList($forumid, $offset, $threadsPP)
 	AND plast.forum_post_id = forum_thread_last_post
 	AND pfirst.forum_post_user = ufirst.user_id
 	AND plast.forum_post_user = ulast.user_id
-	ORDER BY pfirst.forum_post_date DESC
+	ORDER BY plast.forum_post_date DESC
 	LIMIT ' . $offset . ', ' . $threadsPP);
 
 	foreach($ret as $row)
