@@ -32,6 +32,10 @@ p, body, td, li, input, textarea, select {
 	letter-spacing: 1px;
 }
 
+.small {
+	font-size: 7px;
+}
+
 input.text {
 	width: 285px;
 	background-color: #FFFFFF;
