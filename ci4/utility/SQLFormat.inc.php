@@ -1,4 +1,4 @@
-<?
+<?php
 
 	/*
 		SQLFormat
@@ -12,7 +12,7 @@
 	*/
 
 
-include_once("DatabaseAccess.inc.php");
+require_once("DatabaseAccess.inc.php");
 
 class SQLFormat extends DatabaseAccess {
 
@@ -81,15 +81,15 @@ class SQLFormat extends DatabaseAccess {
 		$j = 0;
 
 		$dbq = mysql_db_query($this->database, "select * from " . $table);
-    while ($row = mysql_fetch_assoc($dbq)) {
+	 while ($row = mysql_fetch_assoc($dbq)) {
 			$cp = $temp;
 			$parameters{"Hash"} = $row;
-      $data = $this->FormatFromHash($parameters);
+		$data = $this->FormatFromHash($parameters);
 			$fhtml[$j] = $data;
 			$j++;
 		}
 
-  	return $fhtml;
+	return $fhtml;
 	}
 
   /* FormatFromHash
@@ -98,10 +98,10 @@ class SQLFormat extends DatabaseAccess {
 			from a hash.  Useful if you have data to format that's not
 			in a DB.
 
-      Template - template data.
-     	Hash -  hash in which data resides.
-      Delim - template replacement delimiter.
-      Exceptions - exception list.
+		Template - template data.
+		Hash -  hash in which data resides.
+		Delim - template replacement delimiter.
+		Exceptions - exception list.
 
   */
 
@@ -119,17 +119,17 @@ class SQLFormat extends DatabaseAccess {
 		if ($excs) {
 			$exclist = $this->__build_exception_list($excs);
 		}
-    $cp = $temp;
-    for ($i = 0; $i <= sizeof($hash); $i++) {
-  	  if ($exclist{$hash{key($hash)}}) {
-	  	  $data = $this->__html_format_exception($hash{key($hash)}, $exclist{$hash{key($hash)}});
-  		} else {
-	  		$data = $hash{key($hash)};
+	 $cp = $temp;
+	 for ($i = 0; $i <= sizeof($hash); $i++) {
+	  if ($exclist{$hash{key($hash)}}) {
+		  $data = $this->__html_format_exception($hash{key($hash)}, $exclist{$hash{key($hash)}});
+		} else {
+			$data = $hash{key($hash)};
 		  }
 		  $cp = str_replace("$delim".key($hash)."$delim", $data, $cp);
-      next($hash);
-    }
-    return $cp;
+		next($hash);
+	 }
+	 return $cp;
   }
 }
 ?>
