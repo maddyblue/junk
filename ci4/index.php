@@ -108,8 +108,8 @@ $content = '';
 
 if(isset($_GET['a']))
 {
-	$a = $_GET['a'];
-	$a = './' . $a . '.php';
+	$aval = $_GET['a'];
+	$a = './' . $aval . '.php';
 
 	if(file_exists($a))
 	{
@@ -128,6 +128,10 @@ if(isset($_GET['a']))
 	{
 		$content = 'Non-existent action.';
 	}
+}
+else
+{
+	$aval = '';
 }
 $content .= $message;
 
