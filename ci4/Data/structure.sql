@@ -106,6 +106,7 @@ CREATE TABLE equipment (
   equipment_cost bigint(10) unsigned NOT NULL default '0',
   equipment_desc text NOT NULL,
   equipment_type bigint(10) unsigned NOT NULL default '0',
+  equipment_lv smallint(6) unsigned NOT NULL default '0',
   PRIMARY KEY  (equipment_id)
 ) TYPE=MyISAM;
 
