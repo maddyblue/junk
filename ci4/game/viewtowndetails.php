@@ -34,30 +34,61 @@
 
 $town = isset($_GET['town']) ? intval($_GET['town']) : '0';
 
+if(isset($_POST['town']))
+	$town = intval($_POST['town']);
+
 $res = $db->query('select * from town where town_id=' . $town);
 
-$arealist = $db->query('select * from cor_area_town, area where cor_area=area_id and cor_town=' . $town);
-$areas = '';
-for($i = 0; $i < count($arealist); $i++)
+if(count($res))
 {
-	if($i)
-		$areas .= ', ';
+	if(isset($_POST['town']) && $PLAYER)
+	{
+		$db->query('update player set player_town=' . $town . ' where player_id=' . $PLAYER['player_id']);
+		echo '<p>You have moved to ' . $res[0]['town_name'] . '.';
+		$PLAYER['player_town'] = $town;
+	}
 
-	$areas .= makeLink($arealist[$i]['area_name'], 'a=viewareadetails&area=' . $arealist[$i]['area_id']);
+	$arealist = $db->query('select * from cor_area_town, area where cor_area=area_id and cor_town=' . $town);
+	$areas = '';
+	for($i = 0; $i < count($arealist); $i++)
+	{
+		if($i)
+			$areas .= ', ';
+
+		$areas .= makeLink($arealist[$i]['area_name'], 'a=viewareadetails&area=' . $arealist[$i]['area_id']);
+	}
+
+	// Setup is done, make the table
+
+	$array = array(
+		array('Town', $res[0]['town_name']),
+		array('Description', $res[0]['town_desc']),
+		array('Minimum Level Items Sold', $res[0]['town_item_min_lv']),
+		array('Maximum Level Items Sold', $res[0]['town_item_max_lv']),
+		array('Requirements', $res[0]['town_reqs_desc']),
+		array('Surrounding Areas', $areas)
+	);
+
+	if($PLAYER)
+	{
+		$changetext = '<p>' . getForm('', array(
+				array('', array('type'=>'submit', 'name'=>'submit', 'val'=>('Move to ' . $res[0]['town_name']))),
+				array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewtowndetails')),
+				array('', array('type'=>'hidden', 'name'=>'town', 'val'=>$town))
+			));
+
+		if(!isset($_POST['town']))
+			echo '<p>You are currently living in ' . getDBData('town_name', $PLAYER['player_town'], 'town_id', 'town') . '.';
+	}
+	else
+		$changetext = '';
+
+	echo $changetext;
+	echo getTable($array);
+		echo $changetext;
 }
-
-// Setup is done, make the table
-
-$array = array(
-	array('Town', $res[0]['town_name']),
-	array('Description', $res[0]['town_desc']),
-	array('Minimum Level Items Sold', $res[0]['town_item_min_lv']),
-	array('Maximum Level Items Sold', $res[0]['town_item_max_lv']),
-	array('Requirements', $res[0]['town_reqs_desc']),
-	array('Surrounding Areas', $areas)
-);
-
-echo getTable($array);
+else
+	echo '<p>Invalid town ID.';
 
 update_session_action(0506);
 
