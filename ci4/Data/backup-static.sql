@@ -156,7 +156,8 @@ INSERT INTO cor_job_joblv VALUES (11,12,9);
 
 CREATE TABLE cor_monster_drop (
   cor_monster bigint(10) unsigned NOT NULL default '0',
-  cor_item bigint(10) unsigned NOT NULL default '0'
+  cor_drop bigint(10) unsigned NOT NULL default '0',
+  cor_type tinyint(1) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 --
