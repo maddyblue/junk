@@ -104,12 +104,35 @@ else
 
 	// turn is over, print current stats
 
-	$res = array(array('Entity', 'HP', 'MP'));
+	$stats = array(array('Entity', 'HP', 'MP'));
+
+	if($USER['user_battle_verbose'])
+		array_push($stats[0], 'CT', 'STR', 'MAG', 'DEF', 'MGD', 'AGL', 'ACC');
 
 	for($i = 0; $i < count($entities); $i++)
-		array_push($res,  array($entities[$i]->name, $entities[$i]->hp, $entities[$i]->mp));
+	{
+		$a = array();
+		array_push($a, $entities[$i]->name);
 
-	echo getTable($res);
+		if(!$USER['user_battle_verbose'])
+			array_push($a, $entities[$i]->hp, $entities[$i]->mp);
+		else
+			array_push($a,
+				$entities[$i]->hp . '/' . $entities[$i]->maxhp,
+				$entities[$i]->mp . '/' . $entities[$i]->maxmp,
+				$entities[$i]->ct,
+				$entities[$i]->str,
+				$entities[$i]->mag,
+				$entities[$i]->def,
+				$entities[$i]->mgd,
+				$entities[$i]->agl,
+				$entities[$i]->acc
+			);
+
+		array_push($stats, $a);
+	}
+
+	echo getTable($stats);
 
 	/* turnDone set to 0 means that the entitiy who went has printed a form for a
 	 * player to submit, thus, don't do it here.
