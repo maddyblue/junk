@@ -42,7 +42,6 @@ class Monster extends Entity
 			if($this->entities[$i]->team != $this->team)
 			{
 				$d = battleAttack($this, $this->entities[$i]);
-				echo '<p>' . $this->name . ' attacked ' . $this->entities[$i]->name . ' for ' . $d . '.';
 				break;
 			}
 		}

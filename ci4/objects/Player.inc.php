@@ -56,17 +56,28 @@ class Player extends Entity
 			return;
 		}
 
-		/* Battle engine specifiers:
-		 * p = physical attack
-		 */
+		$oid = 1;
 
 		$options = array(/* option name, option id, battle engine specifier */);
-		array_push($options, array('Attack', 1, 'p'));
+		array_push($options, array('Attack', $oid++, OPTION_ATTACK));
+
+		// get all fields, but also get the ability level as "lv", so that monsters' abilities will be able to use battleAbility()
+		$abilities = $db->query('select *, player_ability_level lv from player_ability, ability where player_ability_player=' . $this->id . ' and player_ability_display=1 and player_ability_ability=ability_id order by player_ability_order');
+
+		for($i = 0; $i < count($abilities); $i++)
+			array_push(
+				$options,
+				array($abilities[$i]['ability_name'] . ' Lv ' . $abilities[$i]['player_ability_level'],
+				$oid++,
+				OPTION_ABILITY,
+				// store the ability for easy access later on in an undisplayed 4th field
+				$abilities[$i]
+			));
 
 		$option = isset($_POST['option']) ? intval($_POST['option']) : '0';
 		$target = isset($_POST['target']) ? intval($_POST['target']) : '0';
 		$optdata = isset($_POST['optdata']) ? encode($_POST['optdata']) : '';
-		$turn = -1;
+		$turn = TURN_NONE;
 
 		if($option)
 		{
@@ -74,8 +85,8 @@ class Player extends Entity
 			{
 				if($options[$i][1] == $option)
 				{
-					// set turn to -2 so later on we can figure out possible errors
-					$turn = -2;
+					// set so later on we can figure out possible errors
+					$turn = TURN_BAD_TARGET;
 
 					// make sure that a valid target has been specified
 					for($j = 0; $j < count($this->entities); $j++)
@@ -96,73 +107,81 @@ class Player extends Entity
 		// player has selected a valid option
 		if($turn >= 0)
 		{
-			switch(substr($options[$turn][2], 0, 1))
+			switch($options[$turn][2])
 			{
-				// physical attack
-				case 'p':
-					$d = battleAttack($this, $target);
-					echo '<p>' . $this->name . ' has attacked ' . $target->name . ' for ' . $d . ' damage.';
+				case OPTION_ATTACK:
+					$valid = battleAttack($this, $target);
+					break;
+				case OPTION_ABILITY:
+					$valid = battleAbility($this, $target, $options[$turn][3]);
+					break;
+				default:
+					$valid = false;
 					break;
 			}
 
-			$exp = rand(5, 15);
-			$ap = rand(3, 7);
+			// if something bad happened, don't continue
+			if($valid)
+				{
+				$exp = rand(5, 15);
+				$ap = rand(3, 7);
 
-			$ratio = $this->lv / $target->lv;
-			$dif = $this->lv - $target->lv;
+				$ratio = $this->lv / $target->lv;
+				$dif = $this->lv - $target->lv;
 
-			// levels must be atleast 5 away
-			if(abs($dif) < 5)
-				$mult = 1;
-			// if the levels are not within 20% of eachother
-			else if($ratio < .8 || $ratio > 1.25)
-				$mult = $ratio;
-			else
-				$mult = 1;
+				// levels must be atleast 5 away
+				if(abs($dif) < 5)
+					$mult = 1;
+				// if the levels are not within 20% of eachother
+				else if($ratio < .8 || $ratio > 1.25)
+					$mult = $ratio;
+				else
+					$mult = 1;
 
-			$exp = (int)($exp / $mult);
-			$ap = (int)($exp / $mult);
+				$exp = (int)($exp / $mult);
+				$ap = (int)($exp / $mult);
 
-			$ret = $db->query('select * from player where player_id=' . $this->id);
-			$job = $ret[0]['player_job'];
-			$abs = $db->query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
+				$ret = $db->query('select * from player where player_id=' . $this->id);
+				$job = $ret[0]['player_job'];
+				$abs = $db->query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
 
-			$db->query('update player set player_exp=player_exp+' . $exp . ' where player_id=' . $this->id);
-			$db->query('update player_job set player_job_exp=player_job_exp+' . $exp . ' where player_job_player=' . $this->id . ' and player_job_job=' . $job);
+				$db->query('update player set player_exp=player_exp+' . $exp . ' where player_id=' . $this->id);
+				$db->query('update player_job set player_job_exp=player_job_exp+' . $exp . ' where player_job_player=' . $this->id . ' and player_job_job=' . $job);
 
-			for($i = 0; $i < count($abs); $i++)
-				$db->query('update player_abilitytype set player_abilitytype_ap=player_abilitytype_ap+' . $ap . ', player_abilitytype_aptot=player_abilitytype_aptot+' . $ap . ' where player_abilitytype_player=' . $this->id . ' and player_abilitytype_type=' . $abs[$i]['cor_abilitytype']);
+				for($i = 0; $i < count($abs); $i++)
+					$db->query('update player_abilitytype set player_abilitytype_ap=player_abilitytype_ap+' . $ap . ', player_abilitytype_aptot=player_abilitytype_aptot+' . $ap . ' where player_abilitytype_player=' . $this->id . ' and player_abilitytype_type=' . $abs[$i]['cor_abilitytype']);
 
-			echo '<p>Gained ' . $exp . ' experience and ' . $ap . ' ap.';
+				echo '<p>Gained ' . $exp . ' experience and ' . $ap . ' ap.';
 
-			$pexp = $ret[0]['player_exp'] + $exp;
-			$plv = $ret[0]['player_lv'];
+				$pexp = $ret[0]['player_exp'] + $exp;
+				$plv = $ret[0]['player_lv'];
 
-			if($plv < getLevel($pexp))
-			{
-				$hp = rand(5, 15);
-				$mp = rand(2, 8);
-				$str = rand(1, 3);
-				$mag = rand(1, 3);
-				$def = rand(1, 3);
-				$mgd = rand(1, 3);
-				$agl = rand(0, 1);
-				$acc = rand(0, 1);
+				if($plv < getLevel($pexp))
+				{
+					$hp = rand(5, 15);
+					$mp = rand(2, 8);
+					$str = rand(1, 3);
+					$mag = rand(1, 3);
+					$def = rand(1, 3);
+					$mgd = rand(1, 3);
+					$agl = rand(0, 1);
+					$acc = rand(0, 1);
 
-				$db->query('update player set player_nomod_hp=player_nomod_hp+' . $hp . ', player_nomod_mp=player_nomod_mp+' . $mp . ', player_nomod_str=player_nomod_str+' . $str . ', player_nomod_mag=player_nomod_mag+' . $mag . ', player_nomod_def=player_nomod_def+' . $def . ', player_nomod_mgd=player_nomod_mgd+' . $mgd . ', player_nomod_agl=player_nomod_agl+' . $agl . ', player_nomod_acc=player_nomod_acc+' . $acc . ', player_lv=player_lv+1 where player_id=' . $this->id);
-				updatePlayerStats();
+					$db->query('update player set player_nomod_hp=player_nomod_hp+' . $hp . ', player_nomod_mp=player_nomod_mp+' . $mp . ', player_nomod_str=player_nomod_str+' . $str . ', player_nomod_mag=player_nomod_mag+' . $mag . ', player_nomod_def=player_nomod_def+' . $def . ', player_nomod_mgd=player_nomod_mgd+' . $mgd . ', player_nomod_agl=player_nomod_agl+' . $agl . ', player_nomod_acc=player_nomod_acc+' . $acc . ', player_lv=player_lv+1 where player_id=' . $this->id);
+					updatePlayerStats();
 
-				echo '<p>Level up to level ' . ($plv + 1) . '<br>Gains:<br>hp: ' . $hp . '<br>mp: ' . $mp . '<br>str: ' . $str . '<br>mag: ' . $mag . '<br>def: ' . $def . '<br>mgd: ' . $mgd . '<br>agl: ' . $agl . '<br>acc: ' . $acc;
-			}
+					echo '<p>Level up to level ' . ($plv + 1) . '<br>Gains:<br>hp: ' . $hp . '<br>mp: ' . $mp . '<br>str: ' . $str . '<br>mag: ' . $mag . '<br>def: ' . $def . '<br>mgd: ' . $mgd . '<br>agl: ' . $agl . '<br>acc: ' . $acc;
+				}
 
-			$ret = $db->query('select player_job_exp, player_job_lv from player_job where player_job_player=' . $this->id . ' and player_job_job=' . $job);
-			$jexp = $ret[0]['player_job_exp'];
-			$jlv = $ret[0]['player_job_lv'];
+				$ret = $db->query('select player_job_exp, player_job_lv from player_job where player_job_player=' . $this->id . ' and player_job_job=' . $job);
+				$jexp = $ret[0]['player_job_exp'];
+				$jlv = $ret[0]['player_job_lv'];
 
-			if($jlv < getLevel($jexp))
-			{
-				$db->query('update player_job set player_job_lv=player_job_lv+1 where player_job_player=' . $this->id . ' and player_job_job=' . $job);
-				echo '<p>Reached ' . getDBData('job_name', $job, 'job_id', 'job') . ' level ' . ($jlv + 1) . '.';
+				if($jlv < getLevel($jexp))
+				{
+					$db->query('update player_job set player_job_lv=player_job_lv+1 where player_job_player=' . $this->id . ' and player_job_job=' . $job);
+					echo '<p>Reached ' . getDBData('job_name', $job, 'job_id', 'job') . ' level ' . ($jlv + 1) . '.';
+				}
 			}
 		}
 		// player has selected an invalid option or has yet to select
@@ -171,7 +190,7 @@ class Player extends Entity
 			// we need to compute results next turn - don't reset ct
 			$this->turnDone = 0;
 
-			if($turn == -2)
+			if($turn == TURN_BAD_TARGET)
 			{
 				echo '<p>Invalid target selected. Try again.';
 			}

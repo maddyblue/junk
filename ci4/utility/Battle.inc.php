@@ -32,18 +32,26 @@
  *
  */
 
+// Constants
+
+define('OPTION_ATTACK', 1);
+define('OPTION_ABILITY', 2);
+
+define('TURN_NONE', -1);
+define('TURN_BAD_TARGET', -2);
+
 // Functions for use in battles
 
 // $src attacks $dest for battleDamage()
 function battleAttack(&$src, &$dest)
 {
 	$d = battleDamage($src, $dest);
-	$dest->hp -= $d;
 
-	if($dest->hp < 0)
-		$dest->hp = 0;
+	battleDealDamage($d, $dest);
 
-	return $d;
+	echo '<p>' . $src->name . ' has attacked ' . $dest->name . ' for ' . $d . ' damage.';
+
+	return true;
 }
 
 // Returns the amount of damage dealt if $src attacked $dest
@@ -59,9 +67,32 @@ function battleDamage(&$src, &$dest)
 	return intval($dmg);
 }
 
+// deals $d damage to $dest, making sure hp doesn't fall below 0
+function battleDealDamage($d, &$dest)
+{
+	$dest->hp -= $d;
+
+	if($dest->hp < 0)
+		$dest->hp = 0;
+}
+
 // $src uses $ability on $dest
 function battleAbility(&$src, &$dest, $ability)
 {
+	// check for enough mp
+	if($src->mp < $ability['ability_mp'])
+	{
+		echo '<p>' . $src->name . ' does not have enough MP to use ' . $ability['ability_name'] . ' (' . $src->mp . ' of ' . $ability['ability_mp'] . ' needed).';
+		return false;
+	}
+	else
+		$src->mp -= $ability['ability_mp'];
+
+	$lv = $ability['lv'];
+
+	eval($ability['ability_code']);
+
+	return true;
 }
 
 ?>
