@@ -18,28 +18,30 @@ a
 }
 td
 {
-	 font-size:14px;
-	 font-family:Trebuchet MS, Tahoma, Times, sans-serif;
+	font-size:14px;
+	font-family:Trebuchet MS, Tahoma, Times, sans-serif;
 }
 .td1
 {
-	 font-size:14px;
-	 font-family:Trebuchet MS, Tahoma, Times, sans-serif;
-	 border-style:solid;
-	 border-top-width:1px;
-	 border-left-width:1px;
-	 border-bottom-width:0px;
-	 border-right-width:0px;
+	padding:4px;
+	font-size:14px;
+	font-family:Trebuchet MS, Tahoma, Times, sans-serif;
+	border-style:solid;
+	border-top-width:1px;
+	border-left-width:1px;
+	border-bottom-width:0px;
+	border-right-width:0px;
 }
 .td2
 {
-	 font-size:14px;
-	 font-family:Trebuchet MS, Tahoma, Times, sans-serif;
-	 border-style:solid;
-	 border-top-width:0px;
-	 border-left-width:0px;
-	 border-bottom-width:1px;
-	 border-right-width:1px;
+	padding:4px;
+	font-size:14px;
+	font-family:Trebuchet MS, Tahoma, Times, sans-serif;
+	border-style:solid;
+	border-top-width:0px;
+	border-left-width:0px;
+	border-bottom-width:1px;
+	border-right-width:1px;
 }
 .box
 {
