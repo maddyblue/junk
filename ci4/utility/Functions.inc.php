@@ -173,17 +173,31 @@ function getFormField($arr)
 	$type = '';
 
 	extract($arr);
-	if($type == 'textarea')
+
+	switch($type)
 	{
-		$str = '<textarea name="' . $name . '" ' . $parms . '>' . $val . '</textarea>';
+		case 'textarea':
+			$parms .= ' rows="15" cols="35" wrap="virtual" style="width:450px"';
+			break;
+		case 'text':
+			$parms = 'size="45" maxlength="100" style="width:450px"';
+			break;
 	}
-	else if($type == 'select')
+
+	switch($type)
 	{
-		$str = '<select name="' . $name . '" ' . $parms . '>' . $val . '</select>';
-	}
-	else
-	{
-		$str = '<input type="' . $type . '" name="' . $name . '" ' . $parms . ' value="' . $val . '">';
+		case 'textarea':
+			$str = '<textarea name="' . $name . '" ' . $parms . '>' . $val . '</textarea>';
+			break;
+		case 'select':
+			$str = '<select name="' . $name . '" ' . $parms . '>' . $val . '</select>';
+			break;
+		case 'disptext':
+			$str = $val;
+			break;
+		default:
+			$str = '<input type="' . $type . '" name="' . $name . '" ' . $parms . ' value="' . $val . '">';
+			break;
 	}
 	return $str;
 }
@@ -346,7 +360,7 @@ function decode($output)
 function getTime($ts = -1)
 {
 	if($ts == -1)
-		$ts = time();
+		$ts = TIME;
 
 	return date('d M y g:i a', $ts);
 }
@@ -362,7 +376,7 @@ function setCIcookie($name, $value)
 
 function setCIcookieReal($name, $value, $secure)
 {
-	setCookie('CI_' . $name, $value, time() + 604800, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
+	setCookie('CI_' . $name, $value, TIME + 604800, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
 }
 
 function deleteCIcookie($name)
@@ -403,6 +417,42 @@ function getUsername($id)
 		return decode($ret[0]['user_name']);
 	else
 		return '';
+}
+
+function getDBData($field, $search = ID, $where = 'user_id', $table = 'user')
+{
+	global $DBMain;
+
+	$ret = $DBMain->Query('select ' . $field . ' from ' . $table . ' where ' . $where . '="' . $search . '"');
+
+	if(count($ret) > 0)
+		return $ret[0][$field];
+	else
+		return '';
+}
+
+function parseSig($sig)
+{
+	$sig = decode($sig);
+
+	$sig = nl2br($sig);
+
+	$ereg = array(
+		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>"),
+		array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
+	);
+
+	foreach($ereg as $row)
+	{
+		$sig = eregi_replace($row[0], $row[1], $sig);
+	}
+
+	return $sig;
+}
+
+function getUserlink($user)
+{
+	return makeLink(getUsername($user), 'user/?a=viewuserdetails&user=' . $user, true);
 }
 
 ?>
