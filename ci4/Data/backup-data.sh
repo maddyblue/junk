@@ -33,6 +33,8 @@ mysqldump -u root -t ci4 \
 	ability \
 	abilitytype \
 	area \
+	cor_area_monster \
+	cor_area_town \
 	cor_job_ability \
 	cor_job_equipmenttype \
 	cor_job_joblv \
