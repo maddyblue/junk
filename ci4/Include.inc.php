@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Include.inc.php,v 1.16 2003/11/27 05:07:09 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -39,6 +39,7 @@ require_once CI_FS_PATH . 'config/Database.inc.php';
 
 require_once CI_FS_PATH . 'utility/Database.inc.php';
 require_once CI_FS_PATH . 'utility/Functions.inc.php';
+require_once CI_FS_PATH . 'utility/User.inc.php';
 require_once CI_FS_PATH . 'utility/Forum.inc.php';
 require_once CI_FS_PATH . 'utility/Session.inc.php';
 

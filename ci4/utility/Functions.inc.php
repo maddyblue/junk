@@ -32,18 +32,124 @@
  *
  */
 
-/*	Returns the template filename of $t.
- */
-function getTemplateFilename($t)
+/* Site and other oft used functions:
+
+Templates:
+	parseTags
+	getSiteArray
+	createSiteString
+	getSiteStringArray
+	getTemplateFilename
+
+Tables and forms:
+	getTableForm
+	getForm
+	getFormField
+	getTable
+
+Links and images:
+	makeLink
+	makeImg
+
+Data control:
+	encode
+	decode
+
+Cookies:
+	setCIcookie
+	setCIcookieReal
+	deleteCIcookie
+	deleteCIcookieReal
+	getCIcookie
+
+Small data:
+	getTime
+	getDomainName
+	getDBData
+	getDBDataNum
+
+IP addresses:
+	hex2ip
+	ip2hex
+
+String formatting:
+	zeropad
+	makeSpaces
+
+Profiling:
+	getProfile
+
+Pages:
+	pageDisp
+
+*/
+
+// --- Template formatting and related functions ---
+
+function parseTags(&$template)
 {
-	return CI_TEMPLATE_FS . $t . '.php';
+	// Find all of the tags and parse them out
+	while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
+	{
+		$tag = $matches[1];
+
+		if(substr($tag, 0, 1) == '_')
+		{
+			$ret = getSiteArray($matches[1]);
+			$val = createSiteString($ret);
+			$template = str_replace($matches[0], $val, $template);
+		}
+		else
+		{
+			$insert = '';
+			$pos = strpos($template, '<CI');
+			$pos1 = strpos($template, '>', $pos + 3);
+			$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
+
+			/* Shouldn't have to do this, but it'll prevent infinite loops.
+			 * This if block will remove the tag spanning $pos to $pos1,
+			 * since it didn't have a matching stop tag.
+			 */
+			if($pos2 === false)
+			{
+				$template = substr_replace($template, '', $pos, $pos1 - $pos + 1);
+				continue;
+			}
+
+			$pos3 = $pos2 + 5 + strlen($tag); // 5 to account for these chars: </CI>
+			$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
+			$pos4 = strpos($insert, 'INSERT');
+			$inslen = strlen($insert);
+
+			$ret = getSiteStringArray($tag);
+			$repl = '';
+			if(count($ret) > 0)
+			{
+				for($i = 0; $i < count($ret); $i++)
+				{
+					$pos6 = $pos4;
+					$pos7 = 6;
+					if($i == 0)
+					{
+						$pos6 = 0;
+						$pos7 += $pos4;
+					}
+					if($i == count($ret) - 1)
+						$pos7 = $inslen - $pos6;
+					$repl .= substr_replace($insert, $ret[$i], $pos6, $pos7);
+				}
+			}
+			$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
+		}
+	}
 }
 
-/*	Returns the associative array from the site[_replace] table corresponding
- * to the given tag.
+/* Returns the associative array from the site[_replace] table corresponding to
+ *  the given tag.
  * $tag - the name of the tag.  Something like 'GAMESEC' or 'AFFILIATES'.
  * Note: omit the CI part of the tag, as it's only used in the parser.
- * $single - boolean.  True if from the site_replace table, false for site table.
+ * $single - boolean.  True if from the site_replace table, false for site
+ *  table.
  */
 function getSiteArray($tag)
 {
@@ -63,25 +169,27 @@ function getSiteArray($tag)
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
-	type - the type of data being passed.  link, text, and image are typical.
-	main - main data, almost always used.
-	secondary - secondary data, rarely used.  One occasion it is used is with
-		image types where images aren't desired.  This is useful if
-		it is desired to put the affiliate list as a text list/combo box to
-		save bandwidth/screen real estate, or as a matter of style with the skin.
-	link - if this exists, the image/text is hyperlinked unless otherwise specified with ignoreLink.
-
-	Non array vars:
-	inrc - integer of which row to grab.  This is very useful, since this function is meant
-		to be used with getSiteArray, and thus this prevents lots of user parsing of arrays.
-	useSecondary - if true, the secondary data is used.
-	ignoreLink - if true, the link field will be completely ignored whether or not
-		it contains data.
+ * type - the type of data being passed. link, text, and image are typical.
+ * main - main data, almost always used.
+ * secondary - secondary data, rarely used. One occasion it is used is with
+ *  image types where images aren't desired. This is useful if it is desired to
+ *  put the affiliate list as a text list/combo box to save bandwidth/screen
+ *  real estate, or as a matter of style with the skin.
+ * link - if this exists, the image/text is hyperlinked unless otherwise
+ *  specified with ignoreLink.
+ *
+ * Non array vars:
+ * inrc - integer of which row to grab. This is very useful, since this function
+ *  is meant to be used with getSiteArray, and thus this prevents lots of user
+ *  parsing of arrays.
+ * useSecondary - if true, the secondary data is used.
+ * ignoreLink - if true, the link field will be completely ignored whether or
+ *  not it contains data.
  */
 function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignoreLink = false)
 {
-	/*	Due to this use of extract, useSecondary and ignoreLink could just as easily
-		be specified in $parameters.
+	/* Due to this use of extract, useSecondary and ignoreLink could just as
+	 * easily be specified in $parameters.
 	 */
 	$type      = $parameters[$incr]['site_type'];
 	$main      = $parameters[$incr]['site_main'];
@@ -111,6 +219,9 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 	return $val;
 }
 
+/* Wrapper function to remove empty values returned from createSiteString. Used
+ * in parseTags.
+ */
 function getSiteStringArray($tag, $useSecondary = false, $ignoreLink = false)
 {
 	$ret = array();
@@ -127,6 +238,14 @@ function getSiteStringArray($tag, $useSecondary = false, $ignoreLink = false)
 
 	return $ret;
 }
+
+// Returns the template filename of $t.
+function getTemplateFilename($t)
+{
+	return CI_TEMPLATE_FS . $t . '.php';
+}
+
+// --- Tables and forms ---
 
 /* This function takes lots of heavily nested arrays.
  * I suggest looking at other code as an example.
@@ -188,7 +307,7 @@ function getForm($title, $arr)
 	return $ret;
 }
 
-/* Fairly simple.  Just takes an associative array, and plugs in the values. */
+// Fairly simple. Just takes an associative array, and plugs in the values.
 function getFormField($arr)
 {
 	$name = '';
@@ -233,31 +352,12 @@ function getFormField($arr)
 	return $str;
 }
 
-function getDomainName($domain = 0)
-{
-	if($domain == 0)
-		$domain = CI_DOMAIN;
-
-	$name = getDBData('domain_name', $domain, 'domain_id', 'domain');
-
-	if($name == '')
-		return '-None-';
-	else
-		return $name;
-}
-
-function getGender($g)
-{
-	switch($g)
-	{
-		case 1: $ret = 'Male'; break;
-		case 0: $ret = 'Both'; break;
-		case -1: $ret = 'Female'; break;
-		default: $ret = ''; break;
-	}
-	return $ret;
-}
-
+/* Create a table from a 2d array. Adds all required css tags used in CI skins.
+ * $firstLineHeader - the first line is special header fields
+ * $lastLineFooter - the last line is the end of the table. set to false when
+ *  linking multiple tables together
+ * $withTableStructure - make <table> tags on the end
+ */
 function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $withTableStructure = true)
 {
 	$ret = '';
@@ -328,6 +428,15 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 	return $ret;
 }
 
+// --- Links and images ---
+
+/* Make a link to $link, displaying $text.
+ * $section - leave as '' for current section. Change to SECTION_[name] (ie:
+ *  SECTION_USER) to link to a different section. Use EXTERIOR as $section if
+ *  you want to link off site.
+ * $session - add a session $_GET value to the link. This should almost always
+ *  be true.
+ */
 function makeLink($text, $link, $section = '', $session = true)
 {
 	$ret = '<a href="';
@@ -358,30 +467,36 @@ function makeLink($text, $link, $section = '', $session = true)
 	return $ret;
 }
 
+/* Make an image of $img. Add $prefix before the image location.
+ * $relative - if the image location is with respect to the current directory,
+ *  set this to true. Otherwise, it is assumed the image is linked to
+ *  CI_WWW_PATH.
+ */
 function makeImg($img, $prefix = '', $relative = false)
 {
 	return ($img ? '<img src="' . ($relative ? '' : CI_WWW_PATH) . $prefix . $img . '">' : '');
 }
 
+// --- Data control ---
+
+// Make inupt data safe. Must always be used for all $_GET and $_POST data.
 function encode($input)
 {
 	return htmlentities(urlencode($input));
 }
 
+/* Opposite of encode(). Should be used when displaying encode()'ed data to the
+ * screen.
+ */
 function decode($output)
 {
 	// stripslashes might break stuff, i'm not sure
 	return stripslashes(htmlspecialchars(urldecode($output)));
 }
 
-function getTime($ts = -1)
-{
-	if($ts == -1)
-		$ts = TIME;
+// --- Cookies ---
 
-	return date('d M y g:i a', $ts);
-}
-
+// Set a cookie. This handles duration.
 function setCIcookie($name, $value)
 {
 	// 60*60*24*7 = 604800 = 7 days
@@ -396,6 +511,7 @@ function setCIcookieReal($name, $value, $secure)
 	setCookie('CI_' . $name, $value, TIME + 604800, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
 }
 
+// Clear a cookie made with setCICookie.
 function deleteCIcookie($name)
 {
 	if(defined('IS_SECURE'))
@@ -409,6 +525,7 @@ function deleteCIcookieReal($name, $secure)
 	setCookie('CI_' . $name, '', 0, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
 }
 
+// Retrieve a cookie set with setCICookie.
 function getCIcookie($name)
 {
 	$ret = '';
@@ -419,26 +536,37 @@ function getCIcookie($name)
 	return $ret;
 }
 
-function getUsername($id)
-{
-	$ret = $GLOBALS['DBMain']->Query('select user_name from user where user_id=' . $id);
+// --- Highly used, small data formatting or fetching ---
 
-	if(count($ret) == 1)
-		return decode($ret[0]['user_name']);
+// Formats the given timestamp in the standard format.
+function getTime($ts = -1)
+{
+	if($ts == -1)
+		$ts = TIME;
+
+	return date('d M y g:i a', $ts);
+}
+
+// Returns the name of the specified domain.
+function getDomainName($domain = 0)
+{
+	if($domain == 0)
+		$domain = CI_DOMAIN;
+
+	$name = getDBData('domain_name', $domain, 'domain_id', 'domain');
+
+	if($name == '')
+		return '-None-';
 	else
-		return '';
+		return $name;
 }
 
-function getDBDataNum($field, $search = ID, $where = 'user_id', $table = 'user')
-{
-	$r = getDBData($field, $search, $where, $table);
-
-	if(!$r)
-		$r = '0';
-
-	return $r;
-}
-
+/* Get one value back from a table:
+ * select $field from $table where $where = $search
+ * Since it defaults to the current user, to get back one field of the current
+ * user's data, this works: getDBData('user_name'). But, with the $USER
+ * variable, this should never be called with just one argument.
+ */
 function getDBData($field, $search = ID, $where = 'user_id', $table = 'user')
 {
 	global $DBMain;
@@ -451,58 +579,25 @@ function getDBData($field, $search = ID, $where = 'user_id', $table = 'user')
 		return '';
 }
 
-function parseSig($sig)
+/* Same as getDBData, except that if getDBData returns an empty value, return
+ * '0'.
+ */
+function getDBDataNum($field, $search = ID, $where = 'user_id', $table = 'user')
 {
-	$sig = decode($sig);
+	$r = getDBData($field, $search, $where, $table);
 
-	$sig = nl2br($sig);
-
-	$ereg = array(
-		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>")
-		//array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
-	);
-
-	foreach($ereg as $row)
-	{
-		$sig = eregi_replace($row[0], $row[1], $sig);
-	}
-
-	return $sig;
-}
-
-function getUserlink($id, $name = '')
-{
-	if(!$name)
-		$name = getUsername($id);
-
-	if($name)
-		return makeLink($name, 'a=viewuserdetails&user=' . $id, SECTION_USER);
-	else
-		return 'Guest';
-}
-
-function getInputList()
-{
-	$r = '';
-	reset($_GET);
-	while(list($key, $val) = each($_GET))
-		$r .= '<div><input type="hidden" name="' . $key . '" value="' . $val . '"></div>';
+	if(!$r)
+		$r = '0';
 
 	return $r;
 }
 
-function isInGroup($user, $group)
-{
-	global $DBMain;
+// --- IP address ---
 
-	$ret = $DBMain->Query('select * from group_user where group_user_user=' . $user . ' and group_user_group=' . $group);
-
-	if(count($ret))
-		return true;
-	else
-		return false;
-}
-
+/* Converts a hex value to an IP address. Used with ip2hex. Each two digits
+ * represent one byte:
+ * AABBCCDD -> WWW.XXX.YYY.ZZZ
+ */
 function hex2ip($hex)
 {
 	$ip = '';
@@ -519,6 +614,10 @@ function hex2ip($hex)
 	return $ip;
 }
 
+/* Converts an IP address to a hex value. Used with hex2ip. Each number
+ * separated by a period becomes a digit. Zeros are prepended if needed.
+ * WWW.XXX.YYY.ZZZ -> AABBCCDD
+ */
 function ip2hex($ip)
 {
 	$p1 = strpos($ip, '.');
@@ -534,6 +633,9 @@ function ip2hex($ip)
 	return $hex;
 }
 
+// --- String formatting ---
+
+// Add '0' to the begging of $str until it is $len long.
 function zeropad($str, $len)
 {
 	$l = strlen($str);
@@ -543,6 +645,18 @@ function zeropad($str, $len)
 	return $str;
 }
 
+// Create a string of $num non-breaking HTML spaces.
+function makeSpaces($num)
+{
+	$ret = '';
+	while($num-- > 0)
+		$ret .= '&nbsp;';
+	return $ret;
+}
+
+// --- Profiling ---
+
+// Return the execution information of the page load. Called by index.php.
 function getProfile($start, $end, $dbcalls, $dbtime)
 {
 	$total = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
@@ -554,118 +668,7 @@ function getProfile($start, $end, $dbcalls, $dbtime)
 	return $ret;
 }
 
-function parseTags(&$template)
-{
-	// Find all of the tags and parse them out
-	while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
-	{
-		$tag = $matches[1];
-
-		if(substr($tag, 0, 1) == '_')
-		{
-			$ret = getSiteArray($matches[1]);
-			$val = createSiteString($ret);
-			$template = str_replace($matches[0], $val, $template);
-		}
-		else
-		{
-			$insert = '';
-			$pos = strpos($template, '<CI');
-			$pos1 = strpos($template, '>', $pos + 3);
-			$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
-
-			/* Shouldn't have to do this, but it'll prevent infinite loops.
-			 * This if block will remove the tag spanning $pos to $pos1,
-			 * since it didn't have a matching stop tag.
-			 */
-			if($pos2 === false)
-			{
-				$template = substr_replace($template, '', $pos, $pos1 - $pos + 1);
-				continue;
-			}
-
-			$pos3 = $pos2 + 5 + strlen($tag); // 5 to account for these chars: </CI>
-			$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
-			$pos4 = strpos($insert, 'INSERT');
-			$inslen = strlen($insert);
-
-			$ret = getSiteStringArray($tag);
-			$repl = '';
-			if(count($ret) > 0)
-			{
-				for($i = 0; $i < count($ret); $i++)
-				{
-					$pos6 = $pos4;
-					$pos7 = 6;
-					if($i == 0)
-					{
-						$pos6 = 0;
-						$pos7 += $pos4;
-					}
-					if($i == count($ret) - 1)
-						$pos7 = $inslen - $pos6;
-					$repl .= substr_replace($insert, $ret[$i], $pos6, $pos7);
-				}
-			}
-			$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
-		}
-	}
-}
-
-function makeSpaces($num)
-{
-	$ret = '';
-	while($num-- > 0)
-		$ret .= '&nbsp;';
-	return $ret;
-}
-
-function hasAdmin()
-{
-	return hasPermission('admin');
-}
-
-function hasNews()
-{
-	return hasPermission('news');
-}
-
-function hasSupermod()
-{
-	return hasPermission('mod');
-}
-
-function hasBanned()
-{
-	return hasPermission('banned');
-}
-
-function hasPermission($perm)
-{
-	global $DBMain;
-
-	$res = $DBMain->Query('select group_def_id from group_def, group_user where group_user_user=' . ID . ' and group_def_' . $perm . '=1');
-
-	if(count($res))
-		return true;
-	else
-		return false;
-}
-
-function makePMLink()
-{
-	if(LOGGED)
-	{
-		global $DBMain;
-
-		$ret = $DBMain->Query('select count(*) as count from pm where pm_to=' . ID . ' and pm_read=0');
-
-		if($ret[0]['count'])
-		 return makeLink($ret[0]['count'] . ' new PMs', 'a=viewpms', SECTION_USER);
-	}
-
-	return '';
-}
+// --- Pages ---
 
 function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 {
@@ -714,76 +717,6 @@ function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 	}
 
 	return $pageDisp;
-}
-
-function pageList($totpages, $disppages, $perpage, $link, $section = '')
-{
-	if($totpages <= 1)
-		return '';
-
-	if($disppages > $totpages)
-		$disppages = $totpages;
-
-	$pageList = ' ( ';
-
-	$i = 1;
-	for(; $i <= $disppages; $i++)
-		$pageList .= makeLink($i, $link . '&start=' . ($perpage * ($i - 1)), $section) . ' ';
-
-	if($i < $totpages)
-		$pageList .= '... ' . makeLink('Last page', $link . '&start=' . ($perpage * ($totpages - 1)), $section) . ' ';
-
-	$pageList .= ')';
-
-	return $pageList;
-}
-
-function getAvatar($id = ID)
-{
-	$a = decode(getDBData('user_avatar_data'), $id);
-
-	return getAvatarImg($a);
-}
-
-function getAvatarImg($img)
-{
-	$ret = $img ? makeImg($img, CI_AVATAR_PATH) : '';
-
-	return $ret;
-}
-
-function dirList($dir, $files = true, $dirs = true, $omitdotfiles = true)
-{
-	$ret = array();
-
-	$path = CI_FS_PATH . $dir;
-	if(substr($path, -1) != '/')
-		$path .= '/';
-
-	$d = dir($path);
-	while (false !== ($entry = $d->read()))
-	{
-		if($omitdotfiles && substr($entry, 0, 1) == '.')
-			continue;
-
-		if(($files && is_file($path . $entry)) ||
-			($dirs && is_dir($path . $entry)))
-			array_push($ret, $entry);
-	}
-	$d->close();
-
-	return $ret;
-}
-
-function updatePlayerStats($pid = 0)
-{
-	if(!$pid)
-		$pid = $GLOBALS['PLAYER']['player_id'];
-
-	global $DBMain;
-
-	// we don't have items yet, so mod and nomod are the same
-	$DBMain->Query('update player set player_mod_hp=player_nomod_hp, player_mod_mp=player_nomod_mp, player_mod_str=player_nomod_str, player_mod_mag=player_nomod_mag, player_mod_def=player_nomod_def, player_mod_mgd=player_nomod_mgd, player_mod_agl=player_nomod_agl, player_mod_acc=player_nomod_acc where player_id=' . $pid);
 }
 
 ?>
