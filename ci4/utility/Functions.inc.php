@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.53 2003/12/19 09:09:53 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.54 2003/12/19 09:17:23 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -472,12 +472,13 @@ function parseSig($sig)
 	return $sig;
 }
 
-function getUserlink($user)
+function getUserlink($id, $name = '')
 {
-	$uname = getUsername($user);
+	if(!$name)
+		$name = getUsername($id);
 
-	if($uname)
-		return makeLink($uname, 'a=viewuserdetails&user=' . $user, SECTION_USER);
+	if($name)
+		return makeLink($name, 'a=viewuserdetails&user=' . $id, SECTION_USER);
 	else
 		return 'Guest';
 }
