@@ -53,6 +53,13 @@ else
 {
 	$ret = $DBMain->Query('select * from battle_entity where battle_entity_battle=' . $PLAYER['player_battle']);
 
+	if(count($ret) < 2)
+	{
+		// not a battle without atleast two entities
+		$DBMain->Query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
+		exit('battle with less than two entities: exiting');
+	}
+
 	$entities = array();
 	$teams = array();
 
