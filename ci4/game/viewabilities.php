@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewabilities.php,v 1.5 2004/01/07 06:33:01 dolmant Exp $ */
+/* $Id: viewabilities.php,v 1.6 2004/01/07 10:56:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -53,5 +53,7 @@ for($i = 0; $i < count($res); $i++)
 }
 
 echo getTable($array);
+
+update_session_action(0501);
 
 ?>

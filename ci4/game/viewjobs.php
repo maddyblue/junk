@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewjobs.php,v 1.7 2003/09/25 23:57:35 dolmant Exp $ */
+/* $Id: viewjobs.php,v 1.8 2004/01/07 10:56:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -55,5 +55,7 @@ for($i = 0; $i < count($res); $i++)
 }
 
 echo getTable($array);
+
+update_session_action(0504);
 
 ?>

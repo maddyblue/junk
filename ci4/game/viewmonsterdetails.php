@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewmonsterdetails.php,v 1.6 2004/01/07 03:22:13 dolmant Exp $ */
+/* $Id: viewmonsterdetails.php,v 1.7 2004/01/07 10:56:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -61,5 +61,7 @@ $array = array(
 );
 
 echo getTable($array);
+
+update_session_action(0505);
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.13 2004/01/07 10:49:40 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.14 2004/01/07 10:56:01 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -76,6 +76,14 @@ array(0403, 'makeLink(\'Creating a new thread\', \'a=viewforum&f=\' . $d, SECTIO
 array(0404, 'makeLink(\'Viewing the taglist\', \'a=taglist\', SECTION_FORUM)'),
 array(0405, 'makeLink(\'Viewing the \' . ($d == \'0\' ? \'forums\' : decode(getDBData(\'forum_forum_name\', $d, \'forum_forum_id\', \'forum_forum\')) . \' forum\'), \'a=viewforum&f=\' . $d, SECTION_FORUM)'),
 array(0406, 'makeLink(\'Viewing thread \' . decode(getDBData(\'forum_thread_title\', $d, \'forum_thread_id\', \'forum_thread\')), \'a=viewthread&t=\' . $d, SECTION_FORUM)'),
+
+// game
+array(0501, 'makeLink(\'Viewing Abilities\', \'a=viewabilities\', SECTION_GAME)'),
+array(0502, 'makeLink(\'Viewing Areas\', \'a=viewareas\', SECTION_GAME)'),
+array(0503, 'makeLink(\'Viewing Equipment\', \'a=viewequipment\', SECTION_GAME)'),
+array(0504, 'makeLink(\'Viewing Jobs\', \'a=viewjobs\', SECTION_GAME)'),
+array(0505, 'makeLink(\'Viewing Monsters\', \'a=viewmonsters\', SECTION_GAME)'),
+array(0506, 'makeLink(\'Viewing Towns\', \'a=viewtowns\', SECTION_GAME)'),
 
 // manual
 array(0601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),

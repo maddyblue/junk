@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewequipment.php,v 1.6 2004/01/07 02:38:29 dolmant Exp $ */
+/* $Id: viewequipment.php,v 1.7 2004/01/07 10:56:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -77,5 +77,7 @@ if(isset($_GET['type']))
 }
 
 echo getTable($array);
+
+update_session_action(0503);
 
 ?>

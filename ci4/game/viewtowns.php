@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewtowns.php,v 1.1 2004/01/07 03:31:35 dolmant Exp $ */
+/* $Id: viewtowns.php,v 1.2 2004/01/07 10:56:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -51,5 +51,7 @@ for($i = 0; $i < count($res); $i++)
 }
 
 echo getTable($array);
+
+update_session_action(0506);
 
 ?>
