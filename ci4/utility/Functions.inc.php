@@ -175,4 +175,65 @@ function doCookie($name, $val)
 	setcookie('CI_' . $name, $val, time() + 604800, CI_PATH);
 }
 
+function getCharName($id)
+{
+	if(!$id) $id = 0;
+	global $DB;
+	$ret = $DB->Query('SELECT name FROM player WHERE id=' . $id);
+	if(count($ret{'name'}) == 1)
+		return $ret{'name'}[0];
+	else
+		return '';
+}
+
+function getCharNameFD($forumid, $domain)
+{
+	if(!$forumid) $forumid = 0;
+	if(!$domain) $domain = 0;
+	global $DB;
+	$ret = $DB->Query('SELECT name FROM player WHERE forumid=' . $forumid . ' AND domain=' . $domain);
+	if(count($ret{'name'}) == 1)
+		return $ret{'name'}[0];
+	else
+		return '';
+}
+
+function getCharID($forumid, $domain)
+{
+	if(!$forumid) $forumid = 0;
+	if(!$domain) $domain = 0;
+	global $DB;
+	$ret = $DB->Query('SELECT id FROM player WHERE forumid=' . $forumid . ' AND domain=' . $domain);
+	if(count($ret{'id'}) == 1)
+		return $ret{'id'}[0];
+	else
+		return 0;
+}
+
+function getstat($stat, $id = -1, $look = "id", $list = "playerlist")
+{
+	if($id == -1)
+	{
+		$id = CI_ID
+	}
+  $mydb = mysql_connect("localhost", "user", "usersql");
+  mysql_select_db("ci", $mydb);
+	$query = mysql_query("select $stat from $list where $look = '$id'");
+	return @mysql_result($query, 0, 0);
+}
+
+function getistat($stat, $id = -1, $list = "playerlist")
+{
+	if($id == -1)
+	{
+		$id = CI_ID
+	}
+  $mydb = mysql_connect("localhost", "user", "usersql");
+  mysql_select_db("ci", $mydb);
+	$query = mysql_query("select $stat from $list where id = $id", $mydb);
+//  mysql_close($mydb);
+	return @mysql_result($query,0,0);
+
+}
+
 ?>
