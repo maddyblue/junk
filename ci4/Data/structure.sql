@@ -169,6 +169,7 @@ CREATE TABLE group_def (
   group_def_admin tinyint(1) unsigned NOT NULL default '0',
   group_def_news tinyint(1) unsigned NOT NULL default '0',
   group_def_mod tinyint(1) unsigned NOT NULL default '0',
+  group_def_banned tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (group_def_id)
 ) TYPE=MyISAM PACK_KEYS=0;
 
@@ -263,6 +264,7 @@ CREATE TABLE player (
   player_domain bigint(10) unsigned NOT NULL default '0',
   player_job bigint(10) unsigned NOT NULL default '0',
   player_battle bigint(10) unsigned NOT NULL default '0',
+  player_area bigint(10) unsigned NOT NULL default '0',
   player_house bigint(10) unsigned NOT NULL default '0',
   player_lv smallint(6) unsigned NOT NULL default '0',
   player_exp bigint(10) unsigned NOT NULL default '0',
