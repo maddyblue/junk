@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewareas.php,v 1.2 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -39,14 +39,24 @@ $array = array();
 
 array_push($array, array(
 	'Area',
-	'Description'
+	'Monsters'
 ));
 
 for($i = 0; $i < count($res); $i++)
 {
+	$monsterlist = $DBMain->Query('select * from cor_area_monster, monster where cor_monster=monster_id and cor_area=' . $res[$i]['area_id']);
+	$monsters = '';
+	for($j = 0; $j < count($monsterlist); $j++)
+	{
+		if($j)
+			$monsters .= ', ';
+
+		$monsters .= makeLink($monsterlist[$j]['monster_name'], 'a=viewmonsterdetails&monster=' . $monsterlist[$j]['monster_id']);
+	}
+
 	array_push($array, array(
 		makeLink($res[$i]['area_name'], 'a=viewareadetails&area=' . $res[$i]['area_id']),
-		$res[$i]['area_desc']
+		$monsters
 	));
 }
 
