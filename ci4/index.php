@@ -56,7 +56,7 @@ $pass = getCIcookie('pass');
 if($pass && $id)
 {
 	$res = $DBMain->Query('select count(*) as count from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
-	if($res['count'][0] == '1')
+	if($res[0]['count'] == 1)
 	{
 		define('LOGGED', true);
 		define('LOGGED_DIR', '>');
