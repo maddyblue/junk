@@ -35,7 +35,7 @@ INSERT INTO abilitytype VALUES (6,'Creation','Abilities used to create items.');
 INSERT INTO abilitytype VALUES (7,'Counter','When attacked, react.');
 INSERT INTO abilitytype VALUES (8,'Tactic','Other battles abilities excluding healing and attacking.');
 INSERT INTO abilitytype VALUES (9,'Archery','Anything dealing with bows and arrows or accuracy.');
-INSERT INTO abilitytype VALUES (10,'Aura','Light that envelopes a Paladin (or higher) which gives status and other bonuses.');
+INSERT INTO abilitytype VALUES (10,'Aura','Light that envelopes a Paladin which gives status and other bonuses.');
 INSERT INTO abilitytype VALUES (11,'Sword Tech','Attacks with status lowering affects.');
 
 
@@ -89,6 +89,10 @@ INSERT INTO cor_area_town VALUES (17,9);
 INSERT INTO cor_area_town VALUES (18,9);
 
 
+INSERT INTO cor_job_abilitytype VALUES (7,9);
+INSERT INTO cor_job_abilitytype VALUES (10,2);
+INSERT INTO cor_job_abilitytype VALUES (4,10);
+INSERT INTO cor_job_abilitytype VALUES (11,1);
 
 
 INSERT INTO cor_job_equipmenttype VALUES (1,0);
@@ -237,8 +241,9 @@ INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','\'a=viewjob
 INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','\'a=viewequipment\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','\'a=viewmonsters\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',30,'link','View Abilities','','\'a=viewabilities\'','SECTION_GAME',0,0,'');
-INSERT INTO site VALUES ('GAME_SECTION_NAV',40,'link','View Towns','','\'a=viewtowns\'','SECTION_GAME',0,0,'');
-INSERT INTO site VALUES ('GAME_SECTION_NAV',50,'link','View Areas','','\'a=viewareas\'','SECTION_GAME',0,0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',40,'link','View Ability Types','','\'a=viewabilitytypes\'','SECTION_GAME',0,0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',50,'link','View Towns','','\'a=viewtowns\'','SECTION_GAME',0,0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',60,'link','View Areas','','\'a=viewareas\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','\'a=domains\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',10,'link','Skins','','\'a=skins\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','','SECTION_HOME',0,0,'');
@@ -251,6 +256,7 @@ INSERT INTO site VALUES ('SKINS',0,'text','redux','','','',0,0,'');
 INSERT INTO site VALUES ('SKINS',10,'text','kuro5hin','','','',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','\'a=newuser\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','My Info','','\'a=viewuserdetails&user=\' . ID','SECTION_USER',1,0,'');
+INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new player','','\'a=newplayer\'','SECTION_USER',1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',10,'link','Login','','\'a=login\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',10,'link','User CP','','\'a=usercp\'','SECTION_USER',1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',20,'link','View PMs','','\'a=viewpms\'','SECTION_USER',1,0,'');
@@ -260,7 +266,6 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewus
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
-INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new player','','\'a=newplayer\'','SECTION_USER',1,0,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
