@@ -91,6 +91,7 @@ array(0551, 'makeLink(\'Changing Jobs\', \'a=changejobs\', SECTION_GAME)'),
 array(0601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),
 array(0602, 'makeLink(\'Viewing the advanced skinning tutorial\', \'a=skinning-advanced\', SECTION_MANUAL)'),
 array(0603, 'makeLink(\'Viewing the IRC manual page\', \'a=irc\', SECTION_MANUAL)'),
+array(0604, 'makeLink(\'Viewing the how to help page\', \'a=help\', SECTION_MANUAL)'),
 
 // player
 array(0701, 'makeLink(\'Viewing the player list\', \'a=viewplayers\', SECTION_PLAYER)'),
