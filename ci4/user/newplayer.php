@@ -110,13 +110,14 @@ if(LOGGED)
 		}
 		else
 		{
-			$DBMain->Query('insert into player (player_user, player_name, player_gender, player_domain, player_register, player_last) values (' .
+			$DBMain->Query('insert into player (player_user, player_name, player_gender, player_domain, player_register, player_last, player_job) values (' .
 			ID . ', ' .
 			'"' . $name . '", ' .
 			($gender == 'M' ? '1' : '-1') . ', ' .
 			$domain . ', ' .
 			TIME . ', ' .
-			TIME .
+			TIME . ', ' .
+			'1' .
 			')');
 
 			$pid = $DBMain->Query('select player_id from player where player_user=' . ID . ' and player_domain="' . $domain . '"');
