@@ -1,6 +1,6 @@
 <?php
 
-require_once $CI_HOME_MOD . 'config/Globals.inc.php';
+require_once CI_HOME_MOD . 'config/Globals.inc.php';
 
 // Requires
 require_once CI_FS_PATH . 'config/Database.inc.php';
