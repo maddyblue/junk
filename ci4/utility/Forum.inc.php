@@ -32,7 +32,7 @@
  *
  */
 
-function linkLastPost($postid, $userid, $username, $date, $threadid, $threadtitle, $firstpost = '', $lastpost = '')
+function linkLastPost($postid, $userid, $username, $date, $threadid = 0, $threadtitle = '', $firstpost = '', $lastpost = '')
 {
 	$ret = '';
 
