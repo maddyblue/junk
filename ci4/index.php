@@ -33,6 +33,12 @@
 // turn on all errors
 error_reporting(E_ALL);
 
+if(isset($_SERVER['HTTPS']))
+{
+	if($_SERVER['HTTPS'] == 'on')
+		define('IS_SECURE', true);
+}
+
 if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
 if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
 
