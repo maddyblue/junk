@@ -51,6 +51,11 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www)
 			array('ICQ', array('type'=>'text', 'name'=>'icq', 'val'=>decode($icq))),
 			array('MSN', array('type'=>'text', 'name'=>'msn', 'val'=>decode($msn))),
 			array('WWW', array('type'=>'text', 'name'=>'www', 'val'=>decode($www))),
+			array('', array('type'=>'disptext', 'val'=>'<br>')),
+
+			array('Avatar', array('type'=>'disptext', 'val'=>getAvatar())),
+			array('', array('type'=>'disptext', 'val'=>(makeLink('Change avatar', 'a=change-avatar') . ' (WITHOUT saving current profile changes!)'))),
+			array('', array('type'=>'disptext', 'val'=>'<br>')),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'usercp'))

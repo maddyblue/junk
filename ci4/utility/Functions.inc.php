@@ -738,4 +738,41 @@ function pageList($totpages, $disppages, $perpage, $link, $section = '')
 	return $pageList;
 }
 
+function getAvatar($id = ID)
+{
+	$a = decode(getDBData('user_avatar_data'));
+
+	return getAvatarImg($a);
+}
+
+function getAvatarImg($img)
+{
+	$ret = $img ? makeImg($img, CI_AVATAR_PATH) : '';
+
+	return $ret;
+}
+
+function dirList($dir, $files = true, $dirs = true, $omitdotfiles = true)
+{
+	$ret = array();
+
+	$path = CI_FS_PATH . $dir;
+	if(substr($path, -1) != '/')
+		$path .= '/';
+
+	$d = dir($path);
+	while (false !== ($entry = $d->read()))
+	{
+		if($omitdotfiles && substr($entry, 0, 1) == '.')
+			continue;
+
+		if(($files && is_file($path . $entry)) ||
+			($dirs && is_dir($path . $entry)))
+			array_push($ret, $entry);
+	}
+	$d->close();
+
+	return $ret;
+}
+
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Globals.inc.php,v 1.34 2004/01/12 07:55:24 dolmant Exp $ */
+/* $Id$ */
 
 /*	CI globals.	*/
 
@@ -9,6 +9,7 @@
 define('CI_FS_PATH', '/usr/local/www/data/ci4/');
 define('CI_WWW_DOMAIN', 'dolmant.net');
 define('CI_WWW_PATH', '/ci4/'); // '/' if root. must begin with '/'
+define('CI_AVATAR_PATH', 'images/avatar/');
 
 define('CI_DATABASE', 'ci4');
 define('CI_DEF_TEMPLATE', 'redux');
