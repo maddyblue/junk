@@ -13,3 +13,8 @@ GUIDELINES FOR CI4 STRUCTURE
 	likely to be reused multiple times a class, and be sure to follow
 	good class design when doing this.  This, too, improves organization, and
 	also makes the CI code easier to follow.
+
+*	If you're doing artwork for CI4, please, please try to prefix your art
+	with some sort of unique identifier, i.e. your forum username, your initials,
+	whatever.  Binary diffs do strange things sometimes, and we don't want
+	weird art corruption.
