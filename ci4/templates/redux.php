@@ -10,7 +10,15 @@ define('TEMPLATE_ADDROW_RIGHT', true);
 
 <html>
 <head>
-<title>crescent island</title>
+<title>crescent island ::
+<?php echo strtolower(CI_SECTION); ?>
+<?php
+if($aval)
+{
+	echo ' -> ' . $aval;
+}
+?>
+</title>
 <style type="text/css">
 <!--
 body {
