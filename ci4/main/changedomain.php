@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: domains.php,v 1.5 2004/01/05 04:37:42 dolmant Exp $ */
+/* $Id: changedomain.php,v 1.1 2004/01/05 04:37:42 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -32,37 +32,13 @@
  *
  */
 
-$query = 'select * from domain order by domain_expw_time, domain_expw_max';
-$res = $DBMain->Query($query);
-
-$array = array();
-
-array_push($array, array(
-	'Domain',
-	'EXPW drop time (hours)',
-	'Maximum EXPW',
-	'Registered players'
-));
-
-for($i = 0; $i < count($res); $i++)
+if(isset($_GET['domain']))
 {
-	$query = 'select count(*) as count from player where player_domain=' . $res[$i]['domain_id'];
-	$players = $DBMain->Query($query);
+	setCIcookie('domain', $_GET['domain']);
 
-	$name = makeLink($res[$i]['domain_name'], 'a=changedomain&domain=' . $res[$i]['domain_id']);
-
-	array_push($array, array(
-		$name,
-		$res[$i]['domain_expw_time'],
-		$res[$i]['domain_expw_max'],
-		$players[0]['count']
-	));
+	echo 'Domain changed.';
 }
 
-echo getTable($array);
-
-echo '<p>' . makeLink('Leave domains.', 'a=changedomain&domain=0');
-
-update_session_action(0103);
+update_session_action(0104);
 
 ?>
