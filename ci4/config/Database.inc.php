@@ -5,11 +5,11 @@
 // Main database
 $CIConfigMain{'SQLUser'}       = 'user';
 $CIConfigMain{'SQLPassword'}   = 'usersql';
-$CIConfigMain{'SQLHost'}       = '10.0.0.2';
+$CIConfigMain{'SQLHost'}       = ':/mysql/mysql.sock';
 
-// Player server
-$CIConfigPlayer{'SQLUser'}       = 'user';
-$CIConfigPlayer{'SQLPassword'}   = 'usersql';
-$CIConfigPlayer{'SQLHost'}       = '10.0.0.2';
+// Forum database
+$CIConfigForum{'SQLUser'}       = 'user';
+$CIConfigForum{'SQLPassword'}   = 'usersql';
+$CIConfigForum{'SQLHost'}       = ':/mysql/mysql.sock';
 
 ?>

@@ -6,7 +6,9 @@ require_once $CI_HOME_MOD . 'Include.inc.php';
 // User stuff
 if(!$domain) $domain = 0;
 define('DOMAIN', $domain);
-$ret = $DBForum->Query('SELECT username, usergroupid FROM user WHERE userid=' . "'$bbuserid'" . ' AND password=' . "'$bbpassword'");
+$ret = $DBForum->Query('SELECT username FROM ' . CI_FORUM_PREFIX . 'user WHERE userid=' . "'$bbuserid'" . ' AND password=' . "'$bbpassword'");
+$sessiondata = isset($HTTP_COOKIE_VARS[CI_FORUM_COOKIE . '_data']) ? unserialize(stripslashes($HTTP_COOKIE_VARS[CI_FORUM_COOKIE . '_data'])) : '';
+//print_r($sessiondata);
 if(count($ret) == 0)
 {
 	define('LOGGED', false);
@@ -14,6 +16,7 @@ if(count($ret) == 0)
 	define('ADMIN', false);
 	define('GROUPID', 0);
 	define('CI_ID', 0);
+	define('USERNAME', '');
 }
 else
 {
@@ -85,7 +88,7 @@ $template = substr_replace($template, $content, $pos, 11);
 // Single tags
 while(preg_match('/<CI_([^>]+)>/', $template, $matches)) // find a <CI_XXX> tag
 {
-	$ret = getSiteArray($matches[1], true);
+	$ret = getSiteArray($matches[1]);
 	$val = createSiteString($ret);
 	$template = str_replace($matches[0], $val, $template);
 }
@@ -129,7 +132,7 @@ while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 		}
 	}
 
-	$ret = getSiteArray($gettag, false);
+	$ret = getSiteArray($gettag);
 	$repl = '';
 	for($i = 0; $i < sizeof($ret{'type'}); $i++)
 	{

@@ -56,31 +56,31 @@ a
 <body bgcolor="#000000" text="#FFFFFF">
 
 <div id="lefttop" style="position:absolute; left:0px; top:0px; width:50; height:100;">
-	<img src="<CI_TI>/left_top.gif">
+	<img src="<CI_TEMPLATE_DIR>/left_top.gif">
 </div>
 
 <div id="leftbottom" style="position:absolute; left:0px; top:100px; width:50; height:50;">
-	<img src="<CI_TI>/left_bottom.gif">
+	<img src="<CI_TEMPLATE_DIR>/left_bottom.gif">
 </div>
 
 <div id="righttop" style="position:absolute; right:0px; top:0px; width:50; height:100; align:right;">
-	<img src="<CI_TI>/right_top.gif">
+	<img src="<CI_TEMPLATE_DIR>/right_top.gif">
 </div>
 
 <div id="rightbottom" style="position:absolute; right:0px; top:50px; width:50; height:100;">
-	<img src="<CI_TI>/right_bottom.gif">
+	<img src="<CI_TEMPLATE_DIR>/right_bottom.gif">
 </div>
 
 <div id="midtop" style="position:absolute; right:50px; top:0px;">
-	<img src="<CI_TI>/mid_top.gif">
+	<img src="<CI_TEMPLATE_DIR>/mid_top.gif">
 </div>
 
 <div id="banner" style="position:absolute; left:50px; top:0px;">
-	<a href="http://crescentisland.com"><img src="<CI_TI>/banner.gif" border=0></a>
+	<a href="http://crescentisland.com"><img src="<CI_TEMPLATE_DIR>/banner.gif" border=0></a>
 </div>
 
 <div id="midbottom" style="position:absolute; left:50px; top:100px;">
-	<img src="<CI_TI>/mid_bottom.gif">
+	<img src="<CI_TEMPLATE_DIR>/mid_bottom.gif">
 </div>
 
 <div id="domaintext" align="right" style="position:absolute; right:80px; top:28px; text-align:right; text-justify:right;">
