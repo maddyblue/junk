@@ -1,4 +1,4 @@
-<?
+<?php
 
 if(!$SECTION) $SECTION = 'MAIN';
 require_once $CI_HOME_MOD . 'Include.inc.php';
@@ -21,7 +21,7 @@ setcookie('CI_TEMPLATE', $t, time() + 604800, $CI_PATH);
 $template = fread($fd, filesize(getTemplateName($t)));
 fclose($fd);
 ob_start();
-eval('?>' . $template . '<?');
+eval('?>' . $template . '<?php');
 $template = ob_get_contents();
 ob_end_clean();
 
@@ -36,7 +36,7 @@ if($a)
 		$content = fread($fd, filesize($a));
 		fclose($fd);
 		ob_start();
-		eval('?>' . $content . '<?');
+		eval('?>' . $content . '<?php');
 		$content = ob_get_contents();
 		ob_end_clean();
 		$pos = strpos($template, '<CICONTENT>');
@@ -98,8 +98,9 @@ while(preg_match('/<CI[^>]+>/', $template)) // find a <CIXXX> tag
 	}
 
 	$ret = $DB->Query('SELECT type,text,link FROM site where logged ' . $logged . '=0 AND tag=' . "'$gettag'" . ' ORDER BY orderid');
-	$ret{'link'} = preg_replace('/^\$/', strtolower($SECTION) . '/', $ret{'link'});
-	$ret{'link'} = preg_replace('/^/', $CI_PATH . '/', $ret{'link'});
+	$ret{'link'} = preg_replace('/^(\^?)\$/', '\1' . strtolower($SECTION) . '/', $ret{'link'});
+	$ret{'link'} = preg_replace('/^\^/', $CI_PATH . '/', $ret{'link'});
+	$ret{'text'} = preg_replace('/^\^/', $CI_PATH . '/', $ret{'text'});
 	$repl = "";
 	for($i = 0; $i < sizeof($ret{'type'}); $i++)
 	{
