@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.59 2004/01/05 22:12:51 dolmant Exp $ */
+/* $Id: index.php,v 1.60 2004/01/08 07:35:31 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -115,6 +115,19 @@ else
 
 handle_session();
 
+// groups
+$ret = $DBMain->Query('select group_user_group from group_user where group_user_user=' . ID);
+
+if(count($ret))
+{
+	$GROUPS = array();
+
+	for($i = 0; $i < count($ret); $i++)
+		array_push($GROUPS, $ret[$i]['group_user_group']);
+}
+else
+	$GROUPS = array('0');
+
 /* $contentdone will only be set during log{in,out}; if we do
  * update_session_action in those scripts, no ID has been set yet, thus, do
  * update_session_action now.
@@ -210,6 +223,9 @@ parseTags($bottom);
 echo $bottom;
 
 echo '<!-- ' . getProfile($time_start, gettimeofday(), $DBMain->queries, $DBMain->time) . ' -->';
+echo '<!--' . "\n" .
+$DBMain->querylist .
+"\n" . '-->';
 
 $DBMain->Disconnect();
 
