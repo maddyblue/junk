@@ -1,9 +1,9 @@
 <?php
 
-/* $Id: index.php,v 1.56 2003/12/20 08:10:03 dolmant Exp $ */
+/* $Id$ */
 
 /*
- * Copyright (c) 2003 Matthew Jibson
+ * Copyright (c) 2004 Matthew Jibson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,16 +32,11 @@
  *
  */
 
-class Unit
+class Player extends Unit
 {
-	var $id;
-	var $name;
-	var $team;
-	var $type;
-
-
-
-	function takeTurn()	{}
+	function takeTurn()
+	{
+	}
 }
 
 ?>
