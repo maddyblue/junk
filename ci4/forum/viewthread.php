@@ -64,7 +64,7 @@ function postList($thread)
 		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
 		if($post['user_id'] == ID)
 			$user .= makeLink('edit', '?a=editpost&p=' . $post['forum_post_id']);
-		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class=small>' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
+		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class="small">' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
 		$body .= '<p>' . parsePost($post['forum_post_id']);
 
 		if($post['forum_post_edit_user'] != 0)
