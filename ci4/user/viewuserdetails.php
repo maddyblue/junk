@@ -38,7 +38,9 @@ if(count($res) == 1)
 {
 	$array = array(
 		array('User', decode($res[0]['user_name'])),
-		array('Register date', getTime($res[0]['user_register']))
+		array('Register date', getTime($res[0]['user_register'])),
+		array('Forum posts', $res[0]['user_posts']),
+		array('Signature', parseSig($res[0]['user_sig']))
 	);
 
 	echo getTable($array, false);
