@@ -102,17 +102,8 @@ INSERT INTO cor_job_equipmenttype VALUES (11,3);
 INSERT INTO cor_job_equipmenttype VALUES (11,11);
 
 
-INSERT INTO cor_job_joblv VALUES (1,0,0);
-INSERT INTO cor_job_joblv VALUES (2,0,0);
-INSERT INTO cor_job_joblv VALUES (3,12,2);
 INSERT INTO cor_job_joblv VALUES (4,11,3);
-INSERT INTO cor_job_joblv VALUES (5,14,4);
 INSERT INTO cor_job_joblv VALUES (6,10,3);
-INSERT INTO cor_job_joblv VALUES (7,0,0);
-INSERT INTO cor_job_joblv VALUES (8,14,7);
-INSERT INTO cor_job_joblv VALUES (9,0,0);
-INSERT INTO cor_job_joblv VALUES (10,12,9);
-INSERT INTO cor_job_joblv VALUES (11,12,9);
 
 
 
