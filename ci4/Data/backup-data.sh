@@ -29,7 +29,7 @@
 
 # dump data of static tables
 
-mysqldump -u user --password=usersql -h faye -t ci4 \
+mysqldump -u root -t ci4 \
 	ability \
 	abilitytype \
 	cor_job_ability \
@@ -44,4 +44,4 @@ mysqldump -u user --password=usersql -h faye -t ci4 \
 	monster \
 	monstertype \
 	site \
-	> data.sql
+	| egrep -v "^-.*" > data.sql
