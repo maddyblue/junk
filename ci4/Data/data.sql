@@ -281,8 +281,6 @@ INSERT INTO site VALUES ('PLAYER_SECTION_NAV',0,'link','View Players','','\'a=vi
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
 INSERT INTO skin VALUES ('kuro5hin','rusty','http://www.kuro5hin.org/');
-INSERT INTO skin VALUES ('trythil','trythil','http://www.rose-hulman.edu/~yipdw/');
-INSERT INTO skin VALUES ('trythil2','trythil','http://www.rose-hulman.edu/~yipdw/');
 
 
 INSERT INTO town VALUES (1,'Kilinos Port',1,'The first port of Crescent Island, founded by Lord Kilinos two hundred years ago. It was forged from hard wearing stone, rising from the beach up to the cliffs above. Famed for it\'s grand piatzas and the artificial waterfalls which have been created by pumping water to the windy piatza at the top of the city. It is said that the flowing water and white stone used to make the buildings is a magnificent sight to see for those arriving on Crescent Island for the first time.',0,0,'','');
