@@ -344,7 +344,8 @@ CREATE TABLE player (
   player_mod_agl smallint(6) unsigned NOT NULL default '0',
   player_mod_acc smallint(6) unsigned NOT NULL default '0',
   PRIMARY KEY  (player_id),
-  KEY player_user (player_user)
+  KEY player_user (player_user),
+  KEY player_battle (player_battle)
 ) TYPE=MyISAM;
 
 
