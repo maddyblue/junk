@@ -94,19 +94,6 @@ foreach($users as $user)
 
 echo 'done - ' . $count;
 
-echo '<p>Reparsing forum posts:<br>';
-$count = 0;
-
-$posts = $db->query('select forum_post_id, forum_post_text from forum_post');
-foreach($posts as $post)
-{
-	$db->query('update forum_post set forum_post_text_parsed="' . mysql_escape_string(parsePostText($post['forum_post_text'])) . '" where forum_post_id=' . $post['forum_post_id']);
-
-	$count++;
-}
-
-echo 'done - ' . $count;
-
 update_session_action(0200);
 
 ?>
