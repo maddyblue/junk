@@ -20,12 +20,33 @@ CREATE TABLE abilitytype (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE area (
+  area_id bigint(10) unsigned NOT NULL auto_increment,
+  area_name varchar(100) NOT NULL default '',
+  area_desc text NOT NULL,
+  PRIMARY KEY  (area_id),
+  UNIQUE KEY area_name (area_name)
+) TYPE=MyISAM;
+
+
 CREATE TABLE battle (
   battle_id bigint(10) unsigned NOT NULL auto_increment,
   battle_start bigint(10) unsigned NOT NULL default '0',
   battle_end bigint(10) unsigned NOT NULL default '0',
   battle_data text NOT NULL,
   PRIMARY KEY  (battle_id)
+) TYPE=MyISAM;
+
+
+CREATE TABLE cor_area_monster (
+  cor_area bigint(10) unsigned NOT NULL default '0',
+  cor_monster bigint(10) unsigned NOT NULL default '0'
+) TYPE=MyISAM;
+
+
+CREATE TABLE cor_area_town (
+  cor_area bigint(10) unsigned NOT NULL default '0',
+  cor_town bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
@@ -183,11 +204,17 @@ CREATE TABLE group_user (
 CREATE TABLE item (
   item_id bigint(10) unsigned NOT NULL auto_increment,
   item_name varchar(100) NOT NULL default '',
+  item_desc text NOT NULL,
+  item_lv smallint(6) unsigned NOT NULL default '0',
   item_useBattle tinyint(1) unsigned NOT NULL default '0',
   item_useWorld tinyint(1) unsigned NOT NULL default '0',
-  item_desc text NOT NULL,
   item_codeBattle text NOT NULL,
   item_codeWorld text NOT NULL,
+  item_buy tinyint(1) unsigned NOT NULL default '0',
+  item_sell tinyint(1) unsigned NOT NULL default '0',
+  item_cost bigint(10) unsigned NOT NULL default '0',
+  item_size smallint(6) unsigned NOT NULL default '0',
+  item_mass smallint(6) unsigned NOT NULL default '0',
   PRIMARY KEY  (item_id)
 ) TYPE=MyISAM;
 
@@ -282,39 +309,14 @@ CREATE TABLE player (
 
 
 CREATE TABLE player_equipment (
-  player_equipment_id bigint(10) unsigned NOT NULL auto_increment,
-  player_equipment_player bigint(10) unsigned NOT NULL default '0',
-  player_equipment_name varchar(100) NOT NULL default '',
-  player_equipment_stat_hp smallint(6) NOT NULL default '0',
-  player_equipment_stat_mp smallint(6) NOT NULL default '0',
-  player_equipment_stat_str smallint(6) NOT NULL default '0',
-  player_equipment_stat_mag smallint(6) NOT NULL default '0',
-  player_equipment_stat_def smallint(6) NOT NULL default '0',
-  player_equipment_stat_mgd smallint(6) NOT NULL default '0',
-  player_equipment_stat_agl smallint(6) NOT NULL default '0',
-  player_equipment_stat_acc smallint(6) NOT NULL default '0',
-  player_equipment_req_str smallint(5) unsigned NOT NULL default '0',
-  player_equipment_req_mag smallint(5) unsigned NOT NULL default '0',
-  player_equipment_req_agl smallint(5) unsigned NOT NULL default '0',
-  player_equipment_req_gender tinyint(1) NOT NULL default '0',
-  player_equipment_sell tinyint(1) unsigned NOT NULL default '0',
-  player_equipment_cost bigint(10) unsigned NOT NULL default '0',
-  player_equipment_desc text NOT NULL,
-  player_equipment_type bigint(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (player_equipment_id)
+  player_equipment_equipment bigint(10) unsigned NOT NULL default '0',
+  player_equipment_player bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
 CREATE TABLE player_item (
-  player_item_id bigint(10) unsigned NOT NULL auto_increment,
-  player_item_player bigint(10) unsigned NOT NULL default '0',
-  player_item_name varchar(100) NOT NULL default '',
-  player_item_useBattle tinyint(1) unsigned NOT NULL default '0',
-  player_item_useWorld tinyint(1) unsigned NOT NULL default '0',
-  player_item_desc text NOT NULL,
-  player_item_codeBattle text NOT NULL,
-  player_item_codeWorld text NOT NULL,
-  PRIMARY KEY  (player_item_id)
+  player_item_item bigint(10) unsigned NOT NULL default '0',
+  player_item_player bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
@@ -360,6 +362,18 @@ CREATE TABLE skin (
   skin_creator varchar(100) NOT NULL default '',
   skin_www varchar(100) NOT NULL default '',
   PRIMARY KEY  (skin_name)
+) TYPE=MyISAM;
+
+
+CREATE TABLE town (
+  town_id bigint(10) unsigned NOT NULL auto_increment,
+  town_name varchar(100) NOT NULL default '',
+  town_desc text NOT NULL,
+  town_item_min_lv smallint(6) unsigned NOT NULL default '0',
+  town_item_max_lv smallint(6) unsigned NOT NULL default '0',
+  town_reqs text NOT NULL,
+  PRIMARY KEY  (town_id),
+  UNIQUE KEY town_name (town_name)
 ) TYPE=MyISAM;
 
 
