@@ -36,36 +36,51 @@ $type = isset($_GET['type']) ? intval($_GET['type']) : '0';
 
 $res = $db->query('select * from abilitytype where abilitytype_id=' . $type);
 
-$joblist = $db->query('select * from cor_job_abilitytype, job, abilitytype where cor_job=job_id and cor_abilitytype=abilitytype_id and abilitytype_id=' . $type);
-$jobs = '';
-for($i = 0; $i < count($joblist); $i++)
+if(count($res))
 {
-	if($i)
-		$jobs .= ', ';
+	$joblist = $db->query('select * from cor_job_abilitytype, job, abilitytype where cor_job=job_id and cor_abilitytype=abilitytype_id and abilitytype_id=' . $type);
+	$jobs = '';
+	for($i = 0; $i < count($joblist); $i++)
+	{
+		if($i)
+			$jobs .= ', ';
 
-	$jobs .= makeLink($joblist[$i]['job_name'], 'a=viewjobdetails&job=' . $joblist[$i]['job_id']);
+		$jobs .= makeLink($joblist[$i]['job_name'], 'a=viewjobdetails&job=' . $joblist[$i]['job_id']);
+	}
+
+	$abilitylist = $db->query('select ability_id, ability_name from ability where ability_type=' . $type);
+	$abilities = '';
+	for($i = 0; $i < count($abilitylist); $i++)
+	{
+		if($i)
+			$abilities .= ', ';
+
+		$abilities .= makeLink($abilitylist[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $abilitylist[$i]['ability_id']);
+	}
+
+	// Setup is done, make the table
+
+	$array = array(
+		array('Ability Type', $res[0]['abilitytype_name']),
+		array('Description', $res[0]['abilitytype_desc']),
+		array('Abilities', $abilities),
+		array('Jobs that can learn this abilitytype', $jobs)
+	);
+
+	echo getTable($array);
+
+	if($PLAYER)
+	{
+		$ap = $db->query('select * from player_abilitytype where player_abilitytype_type=' . $type . ' and player_abilitytype_player=' . $PLAYER['player_id']);
+
+		if(count($ap))
+			echo '<p>You have ' . $ap[0]['player_abilitytype_ap'] . ' remaining AP in ' . $res[0]['abilitytype_name'] . ', and ' . $ap[0]['player_abilitytype_aptot'] . ' total.';
+		else
+			echo '<p>You do not have any AP in ' . $res[0]['abilitytype_name'] . '.';
+	}
 }
-
-$abilitylist = $db->query('select ability_id, ability_name from ability where ability_type=' . $type);
-$abilities = '';
-for($i = 0; $i < count($abilitylist); $i++)
-{
-	if($i)
-		$abilities .= ', ';
-
-	$abilities .= makeLink($abilitylist[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $abilitylist[$i]['ability_id']);
-}
-
-// Setup is done, make the table
-
-$array = array(
-	array('Ability Type', $res[0]['abilitytype_name']),
-	array('Description', $res[0]['abilitytype_desc']),
-	array('Abilities', $abilities),
-	array('Jobs that can learn this abilitytype', $jobs)
-);
-
-echo getTable($array);
+else
+	echo '<br>Invalid abilitytype ID.';
 
 update_session_action(0501);
 
