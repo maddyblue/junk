@@ -354,7 +354,18 @@ function deleteCIcookieReal($name, $secure)
 
 function getCIcookie($name)
 {
-	return $_COOKIE['CI_' . $name];
+	$ret = '';
+
+	if(isset($_COOKIE['CI_' . $name]))
+		$ret = encode($_COOKIE['CI_' . $name]);
+
+	return $ret;
+}
+
+function notLogged()
+{
+	define('LOGGED', false);
+	define('LOGGED_DIR', '<');
 }
 
 ?>
