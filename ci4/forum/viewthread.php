@@ -45,6 +45,8 @@ function parsePost($post)
 		$return = nl2br($return);
 	}
 
+	$return = forumReplace($return);
+
 	return $return;
 }
 
@@ -59,7 +61,10 @@ function postList($thread)
 	foreach($posts as $post)
 	{
 		$user = makeLink(decode($post['user_name']), 'user/?a=viewuserdetails&user=' . $post['user_id'], true);
-		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class=small>' . decode($post['forum_post_subject']) . '</div>';
+		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
+		if($post['user_id'] == ID)
+			$user .= makeLink('edit', '?a=editpost&p=' . $post['forum_post_id']);
+		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class=small>' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
 		$body .= '<p>' . parsePost($post['forum_post_id']);
 
 		array_push($array, array(
@@ -79,15 +84,34 @@ $res = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $thr
 
 echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), '?a=viewthread&t=' . $threadid) . '<p>';
 
-$navrow = array(makeLink('New Reply', '?a=newpost&t=' . $threadid), '');
+$newreply = makeLink('New Reply', '?a=newpost&t=' . $threadid);
 
 $array = postList($threadid);
 
-array_unshift($array, $navrow);
-array_push($array, $navrow);
-
 if(count($array))
-	echo getTable($array, false);
+{
+	?>
+		<table class="tableMain" width="100%">
+			<tr class="tableRow">
+				<td width=150 class="tableCellTL">
+				</td>
+				<td width="100%" class="tableCellTR" align="right">
+					<?php echo $newreply; ?>
+				</td>
+			</tr>
+
+			<?php echo getTable($array, false, false, false); ?>
+
+			<tr class="tableRow">
+				<td class="tableCellBL">
+				</td>
+				<td class="tableCellBR" align="right">
+					<?php echo $newreply; ?>
+				</td>
+			</tr>
+		</table>
+	<?php
+}
 else
 	echo '<br>Non-existent thread.';
 
