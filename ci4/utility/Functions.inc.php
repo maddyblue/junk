@@ -75,7 +75,7 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 /* Creates a nice table from the given array...should be used everywhere. */
 function makeTable($arr)
 {
-	$width = count($arr);
+	$depth = count($arr);
 	$list = array();
 	?><p><table1><tr1><?
 	while(list($val) = each($arr))
@@ -84,13 +84,13 @@ function makeTable($arr)
 		?><td1><? echo $val ?></td><?
 		array_push($list, $val);
 	}
-	$depth = count($arr{$list[0]});
+	$width = count($arr{$list[0]});
 	?></tr><?
-	for($i1 = 0; $i1 < $depth; $i1++)
+	for($i1 = 0; $i1 < $width; $i1++)
 	{
 		echo "\n";
 		?><tr2><?
-		for($i2 = 0; $i2 < $width; $i2++)
+		for($i2 = 0; $i2 < $depth; $i2++)
 		{
 			echo "\n";
 			?><td2><? echo $arr[$list[$i2]][$i1] ?></td><?
@@ -98,6 +98,60 @@ function makeTable($arr)
 		?></tr><?
 	}
 	?></table><?
+}
+
+function makeTableForm($title, $arr, $descrip = "", $parms = "")
+{
+	?>
+		<form method="POST" action="index.php" <? echo $parms ?>>
+		<table>
+			<tr>
+				<td colspan="<? echo count($arr[0]) ?>">
+					<? echo $title ?><? if($descrip) echo ": $descrip" ?>
+				</td>
+			</tr>
+	<?
+	while(list(,$array) = each($arr))
+	{
+		if($array[1][0] != "hidden")
+		{
+			?>
+				<tr>
+					<td>
+						<? echo $array[0] ?>
+					</td>
+					<td>
+						<? echo makeFormField($array[1]) ?>
+					</td>
+				</tr>
+			<?
+		}
+		else
+			$end .= makeFormField($array[1]);
+	}
+	?>
+		</table>
+		<? echo $end ?>
+		</form>
+	<?
+}
+
+function makeFormField($arr)
+{
+	extract($arr);
+	if($type == 'textarea')
+	{
+		$str = '<textarea name="' . $name . '" ' . $parms . '>' . $val . '</textarea>';
+	}
+	else if($type == 'select')
+	{
+		$str = '<select name="' . $name . '" ' . $parms . '' . $val . '</select>';
+	}
+	else
+	{
+		$str = '<input type="' . $type . '" name="' . $name . '" ' . $parms . ' value="' . $val . '">';
+	}
+	return $str;
 }
 
 ?>
