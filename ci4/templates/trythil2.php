@@ -18,6 +18,12 @@
 			margin: 0;
 		}
 
+		p, body, td, li, input, textarea, select {
+			font-family: Trebuchet MS, Arial;
+			font-size: 12px;
+			line-height: 12px;
+		}
+
 		a:link {
 			font-family: Trebuchet MS, Arial;
 			font-size: 12px;
@@ -34,37 +40,92 @@
 			color: #BCBCBC;
 		}
 
-		.tableHeaderCellL, .tableHeaderCell, .tableHeaderCellR,
-		.tableCellTL, .tableCellT, .tableCellTR,
-		.tableCellL, .tableCell, .tableCellR,
-		.tableCellBL, .tableCellB, .tableCellBR
-		{
-			font-family: Trebuchet MS, Arial;
-			font-size: 12px;
-			line-height: 12px;
-			margin-top: -1px;
-		}
-
 		.tableMain {
 			font-family: Trebuchet MS, Arial;
 			font-size: 12px;
 			line-height: 12px;
 			margin-top: -1px;
 			background-color: #5E5E5E;
+			border-spacing: 0px;
+			border-collapse: collapse;
+		}
+
+		.tableHeaderCellL, .tableHeaderCell {
+			padding: 2px;
+			background-color: #6E6E6E;
+			font-weight: bold;
+			text-align: center;
+			border-left: 1px solid #7E7E7E;
+			border-top: 1px solid #7E7E7E;
+		}
+
+		.tableHeaderCellR {
+			padding: 2px;
+			background-color: #6E6E6E;
+			font-weight: bold;
+			text-align: center;
+			border-left: 1px solid #7E7E7E;
+			border-top: 1px solid #7E7E7E;
+			border-right: 1px solid #7E7E7E;
+		}
+
+		.tableCell, .tableCellL, .tableCellTL, .tableCellT {
+			padding: 2px;
+			border-left: 1px solid #6E6E6E;
+			border-top: 1px solid #6E6E6E;
+		}
+
+		.tableCellTR, .tableCellR {
+			padding: 2px;
+			border-left: 1px solid #6E6E6E;
+			border-top: 1px solid #6E6E6E;
+			border-right: 1px solid #6E6E6E;
+		}
+
+		.tableCellB, .tableCellBL {
+			padding: 2px;
+			border-left: 1px solid #6E6E6E;
+			border-top: 1px solid #6E6E6E;
+			border-bottom: 1px solid #6E6E6E;
+		}
+
+		.tableCellBR {
+			padding: 2px;
+			border: 1px solid #6E6E6E;
 		}
 
 		.affil {
 			position: absolute;
-			left: 54px;
+			left: 50px;
 			top: 372px;
-			right: auto;
-			filter: Alpha(Opacity=85);
 		}
 
 	</style>
 
 	<body>
 		<!-- layout -->
+
+		<div class="affil">
+			<table class="tableMain" bgcolor="#6E6E6E" border=0 cellspacing=0 cellpadding=0 width=350>
+				<tr>
+					<td valign="top">
+						<table class="tableMain" border=0 width=100%>
+							<tr>
+								<td bgcolor="#7E7E7E" align="center">
+									<b> :: Active Users :: </b>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<?php echo getNumActiveUsers(); ?> users,
+									<?php echo getNumActiveGuests(); ?> guests
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
 
 		<table border=0 cellspacing=0 cellpadding=0>
 			<tr>
@@ -203,28 +264,6 @@
 			}
 		}
 	?>
-
-		<div class="affil">
-			<table class="table1" bgcolor="#6E6E6E" border=0 cellspacing=0 cellpadding=0 width=350>
-				<tr>
-					<td valign="top">
-						<table class="table1" border=0 width=100%>
-							<tr>
-								<td bgcolor="#7E7E7E" align="center">
-									<b> :: Active Users :: </b>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<?php echo getNumActiveUsers(); ?> users,
-									<?php echo getNumActiveGuests(); ?> guests
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</div>
 
 	</body>
 </html>
