@@ -271,10 +271,10 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 		{
 			if($j == ($cols - 1))
 			{
-				if($i == 0)
-					$ret .= '<td class="td' . $num . 'topright">';
-				else if($i == ($rows - 1))
+				if($i == ($rows - 1))
 					$ret .= '<td class="tdbottomright">';
+				else if($i == 0)
+					$ret .= '<td class="td' . $num . 'topright">';
 				else
 					$ret .= '<td class="tdright">';
 			}
@@ -329,9 +329,9 @@ function setCIcookie($name, $value)
 {
 	// 60*60*24*7 = 604800 = 7 days
 	if(defined('IS_SECURE'))
-		setCIcookieReal($name, $value, '0');
-	else
 		setCIcookieReal($name, $value, '1');
+	else
+		setCIcookieReal($name, $value, '0');
 }
 
 function setCIcookieReal($name, $value, $secure)
@@ -366,6 +366,7 @@ function notLogged()
 {
 	define('LOGGED', false);
 	define('LOGGED_DIR', '<');
+	define('ID', 0);
 }
 
 function getUsername($id)
