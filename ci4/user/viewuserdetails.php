@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewuserdetails.php,v 1.6 2003/09/27 21:50:23 dolmant Exp $ */
+/* $Id: viewuserdetails.php,v 1.7 2003/09/27 22:03:11 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -55,6 +55,6 @@ if(count($res) == 1)
 else
 	echo '<p>Invalid user.';
 
-update_session_action('Viewing ' . makeLink('user details' . (count($res) ? (' of ' . decode($res[0]['user_name'])) : ''), 'a=viewuserdetails&user=' . $user, SECTION_USER));
+update_session_action('Viewing ' . makeLink('user details' . (count($res) ? (' of ' . decode($res[0]['user_name'])) : ''), 'a=viewuserdetails&user=' . $user, SECTION_USER, false));
 
 ?>

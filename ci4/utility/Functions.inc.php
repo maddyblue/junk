@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.50 2003/09/27 04:39:01 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.51 2003/09/27 22:03:12 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -332,7 +332,7 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 	return $ret;
 }
 
-function makeLink($text, $link, $section = '')
+function makeLink($text, $link, $section = '', $session = true)
 {
 	$ret = '<a href="';
 
@@ -344,11 +344,13 @@ function makeLink($text, $link, $section = '')
 	if($link || !ID)
 	$ret .= '?';
 
-	if(!ID)
+	if(!ID && $session)
+	{
 		$ret .= 's=' . SESSION;
 
-	if(!ID && $link)
-		$ret .= '&amp;';
+		if($link)
+			$ret .= '&amp;';
+	}
 
 	if($link)
 		$ret .= str_replace('&', '&amp;', $link);

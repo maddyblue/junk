@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newuser.php,v 1.7 2003/09/27 21:50:23 dolmant Exp $ */
+/* $Id: newuser.php,v 1.8 2003/09/27 22:03:11 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -119,6 +119,6 @@ if(isset($_POST['submit']))
 else
 	display($name, $email);
 
-update_session_action('Making a ' . makeLink('new user', 'a=newuser', SECTION_USER));
+update_session_action('Making a ' . makeLink('new user', 'a=newuser', SECTION_USER, false));
 
 ?>
