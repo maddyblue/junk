@@ -1,12 +1,4 @@
--- MySQL dump 8.22
---
--- Host: faye    Database: ci4
----------------------------------------------------------
--- Server version	3.23.55
 
---
--- Table structure for table 'ability'
---
 
 CREATE TABLE ability (
   ability_id bigint(10) unsigned NOT NULL auto_increment,
@@ -19,9 +11,6 @@ CREATE TABLE ability (
   PRIMARY KEY  (ability_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'abilitytype'
---
 
 CREATE TABLE abilitytype (
   abilitytype_id bigint(10) unsigned NOT NULL auto_increment,
@@ -30,9 +19,6 @@ CREATE TABLE abilitytype (
   PRIMARY KEY  (abilitytype_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'battle'
---
 
 CREATE TABLE battle (
   battle_id bigint(10) unsigned NOT NULL auto_increment,
@@ -42,27 +28,18 @@ CREATE TABLE battle (
   PRIMARY KEY  (battle_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'cor_job_ability'
---
 
 CREATE TABLE cor_job_ability (
   cor_job bigint(10) unsigned NOT NULL default '0',
   cor_ability bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'cor_job_equipmenttype'
---
 
 CREATE TABLE cor_job_equipmenttype (
   cor_job bigint(10) unsigned NOT NULL default '0',
   cor_equipmenttype bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'cor_job_joblv'
---
 
 CREATE TABLE cor_job_joblv (
   cor_job bigint(10) unsigned NOT NULL default '0',
@@ -70,9 +47,6 @@ CREATE TABLE cor_job_joblv (
   cor_job_lv smallint(5) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'cor_monster_drop'
---
 
 CREATE TABLE cor_monster_drop (
   cor_monster bigint(10) unsigned NOT NULL default '0',
@@ -80,9 +54,6 @@ CREATE TABLE cor_monster_drop (
   cor_type tinyint(1) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'domain'
---
 
 CREATE TABLE domain (
   domain_id bigint(10) unsigned NOT NULL auto_increment,
@@ -93,9 +64,6 @@ CREATE TABLE domain (
   UNIQUE KEY domain_name (domain_name)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'equipment'
---
 
 CREATE TABLE equipment (
   equipment_id bigint(10) unsigned NOT NULL auto_increment,
@@ -120,9 +88,6 @@ CREATE TABLE equipment (
   PRIMARY KEY  (equipment_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'equipmenttype'
---
 
 CREATE TABLE equipmenttype (
   equipmenttype_id bigint(10) unsigned NOT NULL auto_increment,
@@ -130,9 +95,56 @@ CREATE TABLE equipmenttype (
   PRIMARY KEY  (equipmenttype_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'item'
---
+
+CREATE TABLE forum_forum (
+  forum_forum_id bigint(10) unsigned NOT NULL auto_increment,
+  forum_forum_name varchar(100) NOT NULL default '',
+  forum_forum_desc varchar(100) NOT NULL default '',
+  forum_forum_type tinyint(1) unsigned NOT NULL default '0',
+  forum_forum_parent bigint(10) unsigned NOT NULL default '0',
+  forum_forum_order tinyint(2) unsigned NOT NULL default '0',
+  forum_forum_threads bigint(10) unsigned NOT NULL default '0',
+  forum_forum_posts bigint(10) unsigned NOT NULL default '0',
+  forum_forum_last_post bigint(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (forum_forum_id)
+) TYPE=MyISAM;
+
+
+CREATE TABLE forum_post (
+  forum_post_id bigint(10) unsigned NOT NULL auto_increment,
+  forum_post_thread bigint(10) unsigned NOT NULL default '0',
+  forum_post_subject varchar(100) NOT NULL default '',
+  forum_post_text text NOT NULL,
+  forum_post_user bigint(10) unsigned NOT NULL default '0',
+  forum_post_ip varchar(8) NOT NULL default '',
+  forum_post_date bigint(10) unsigned NOT NULL default '0',
+  forum_post_edit_date bigint(10) unsigned NOT NULL default '0',
+  forum_post_edit_user bigint(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (forum_post_id)
+) TYPE=MyISAM;
+
+
+CREATE TABLE forum_thread (
+  forum_thread_id bigint(10) unsigned NOT NULL auto_increment,
+  forum_thread_forum bigint(10) unsigned NOT NULL default '0',
+  forum_thread_title varchar(100) NOT NULL default '',
+  forum_thread_user bigint(10) unsigned NOT NULL default '0',
+  forum_thread_date bigint(10) unsigned NOT NULL default '0',
+  forum_thread_replies bigint(10) unsigned NOT NULL default '0',
+  forum_thread_views bigint(10) unsigned NOT NULL default '0',
+  forum_thread_last_post bigint(10) unsigned NOT NULL default '0',
+  forum_thread_type tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (forum_thread_id)
+) TYPE=MyISAM;
+
+
+CREATE TABLE group (
+  group_id bigint(10) unsigned NOT NULL auto_increment,
+  group_name varchar(100) NOT NULL default '',
+  group_forum_supermod tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (group_id)
+) TYPE=MyISAM;
+
 
 CREATE TABLE item (
   item_id bigint(10) unsigned NOT NULL auto_increment,
@@ -145,9 +157,6 @@ CREATE TABLE item (
   PRIMARY KEY  (item_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'job'
---
 
 CREATE TABLE job (
   job_id bigint(10) unsigned NOT NULL auto_increment,
@@ -175,9 +184,6 @@ CREATE TABLE job (
   PRIMARY KEY  (job_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'monster'
---
 
 CREATE TABLE monster (
   monster_id bigint(10) unsigned NOT NULL auto_increment,
@@ -207,9 +213,6 @@ CREATE TABLE monster (
   PRIMARY KEY  (monster_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'monstertype'
---
 
 CREATE TABLE monstertype (
   monstertype_id bigint(10) unsigned NOT NULL auto_increment,
@@ -217,9 +220,6 @@ CREATE TABLE monstertype (
   PRIMARY KEY  (monstertype_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'player'
---
 
 CREATE TABLE player (
   player_id bigint(10) unsigned NOT NULL auto_increment,
@@ -235,9 +235,6 @@ CREATE TABLE player (
   PRIMARY KEY  (player_id)
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'site'
---
 
 CREATE TABLE site (
   site_tag varchar(100) NOT NULL default '',
@@ -250,9 +247,6 @@ CREATE TABLE site (
   site_comment text NOT NULL
 ) TYPE=MyISAM;
 
---
--- Table structure for table 'user'
---
 
 CREATE TABLE user (
   user_id bigint(10) unsigned NOT NULL auto_increment,
@@ -260,6 +254,11 @@ CREATE TABLE user (
   user_pass varchar(100) NOT NULL default '',
   user_email varchar(100) NOT NULL default '',
   user_register bigint(10) unsigned NOT NULL default '0',
+  user_last bigint(10) unsigned NOT NULL default '0',
+  user_avatar_type tinyint(1) unsigned NOT NULL default '0',
+  user_avatar_data blob NOT NULL,
+  user_sig text NOT NULL,
+  user_posts bigint(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (user_id),
   UNIQUE KEY user_name (user_name)
 ) TYPE=MyISAM;

@@ -1,12 +1,3 @@
--- MySQL dump 8.22
---
--- Host: faye    Database: ci4
----------------------------------------------------------
--- Server version	3.23.55
-
---
--- Dumping data for table 'ability'
---
 
 
 INSERT INTO ability VALUES (1,'Retreat',8,0,5,'Somehow agl is used to see if a player is able to run away from the battle. If the player can do it, the battle ends with some text saying \"You ran away.\" if not, then there is just some text saying \"You tried to retreat, but were not able to.\"','Discretion is the better part of valour and sometimes it is to your advantage to exercise this fact. Retreat allows you to withdraw from battle, if you can outrun your enemy, that is.');
@@ -34,10 +25,6 @@ INSERT INTO ability VALUES (22,'Thunder',1,0,5,'Cast a weak lightning elemental 
 INSERT INTO ability VALUES (23,'Force Missile',1,5,10,'Cast a weak magic spell with no elemental','');
 INSERT INTO ability VALUES (24,'Poison',1,10,10,'Inflicts poison status on the enemy','');
 
---
--- Dumping data for table 'abilitytype'
---
-
 
 INSERT INTO abilitytype VALUES (1,'Black Magic','Damaging magic.');
 INSERT INTO abilitytype VALUES (2,'White Magic','Healing magic.');
@@ -51,15 +38,7 @@ INSERT INTO abilitytype VALUES (9,'Archery','Anything dealing with bows and arro
 INSERT INTO abilitytype VALUES (10,'Aura','Light that envelopes a Paladin (or higher) which gives status and other bonuses.');
 INSERT INTO abilitytype VALUES (11,'Sword Tech','Attacks with status lowering affects.');
 
---
--- Dumping data for table 'cor_job_ability'
---
 
-
-
---
--- Dumping data for table 'cor_job_equipmenttype'
---
 
 
 INSERT INTO cor_job_equipmenttype VALUES (1,0);
@@ -102,10 +81,6 @@ INSERT INTO cor_job_equipmenttype VALUES (11,10);
 INSERT INTO cor_job_equipmenttype VALUES (11,3);
 INSERT INTO cor_job_equipmenttype VALUES (11,11);
 
---
--- Dumping data for table 'cor_job_joblv'
---
-
 
 INSERT INTO cor_job_joblv VALUES (1,0,0);
 INSERT INTO cor_job_joblv VALUES (2,0,0);
@@ -119,21 +94,9 @@ INSERT INTO cor_job_joblv VALUES (9,0,0);
 INSERT INTO cor_job_joblv VALUES (10,12,9);
 INSERT INTO cor_job_joblv VALUES (11,12,9);
 
---
--- Dumping data for table 'cor_monster_drop'
---
 
 
 
---
--- Dumping data for table 'domain'
---
-
-
-
---
--- Dumping data for table 'equipment'
---
 
 
 INSERT INTO equipment VALUES (1,'Rusty Dagger',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A rusty old dagger probably found in the trash.',1);
@@ -157,10 +120,6 @@ INSERT INTO equipment VALUES (18,'Ragged Robe',0,0,0,2,2,6,0,0,0,20,0,0,1,1,100,
 INSERT INTO equipment VALUES (19,'Toy Ring',3,2,0,0,0,0,0,0,0,0,0,0,1,1,50,'A fake children\'s toy ring, you can still see some residue of the cereal it came in around the edges of the inset glass \'jewel\'.',8);
 INSERT INTO equipment VALUES (20,'Rusty Band',6,4,0,0,0,0,0,0,20,0,0,0,1,1,100,'This ring is made out of rusted iron.',8);
 
---
--- Dumping data for table 'equipmenttype'
---
-
 
 INSERT INTO equipmenttype VALUES (1,'Dagger');
 INSERT INTO equipmenttype VALUES (2,'Knife');
@@ -174,15 +133,7 @@ INSERT INTO equipmenttype VALUES (9,'Bow');
 INSERT INTO equipmenttype VALUES (10,'Rod');
 INSERT INTO equipmenttype VALUES (11,'Robe');
 
---
--- Dumping data for table 'item'
---
 
-
-
---
--- Dumping data for table 'job'
---
 
 
 INSERT INTO job VALUES (1,'Citizen',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The humble beginning of every adventurer as a common citizen or Crescent Island.');
@@ -197,10 +148,6 @@ INSERT INTO job VALUES (9,'Apprentice',0,0,0,0,0,5,0,5,0,0,7,10,0,1,1,0,0,0,10,'
 INSERT INTO job VALUES (10,'White Mage',0,0,5,0,0,5,0,10,0,0,7,10,0,2,1,1,0,0,20,'Majestic healers and arcane protectors, White Mages seek to help the less fortunate wherever they go.');
 INSERT INTO job VALUES (11,'Black Mage',0,0,5,0,0,10,0,5,0,0,7,10,0,2,1,1,0,0,20,' For good or evil the Black Mage walks the path of destruction, shattering earth and incinerating their enemies is their trade, but what is the price for such power?');
 
---
--- Dumping data for table 'monster'
---
-
 
 INSERT INTO monster VALUES (1,'Kobold','kobold.gif',5,3,3,3,4,2,3,3,1,20,5,0,0,10,0,0,0,0,10,5,'Often described as a cross between a lizard, a dog and a wet day, Kobolds are the meek cousins of the larger lizardmen, though they don\'t share the draconic blood that runs through the Lizardmen\'s veins. Kobolds are small humanoids with alligator like heads and grey mottled skin.');
 INSERT INTO monster VALUES (2,'Gel','gel.gif',10,3,4,2,6,2,2,3,2,20,7,0,0,10,0,10,0,0,0,1,'Gels are the smallest form of ooze. They are amaeoba like with a red nucleus surrounded by dull green jelly that shifts as they slowly move. Gels can be a little sickening but aren\'t very difficult to beat.');
@@ -214,10 +161,6 @@ INSERT INTO monster VALUES (9,'Arachnid','',80,3,6,2,6,2,4,4,5,18,13,0,0,10,0,10
 INSERT INTO monster VALUES (10,'Black Bat','',80,3,8,2,5,2,6,6,5,20,15,0,0,0,10,0,0,0,10,3,'Black bats are large underground creatures that navigate through the darkest passages with the aid of sonar, with which they hunt any prey that stumbles too close to their lair.');
 INSERT INTO monster VALUES (11,'Dust Mephit','',160,3,60,2,10,2,6,6,6,28,0,0,0,10,0,0,0,0,10,5,'Sickly humanoids four feet tall and comprised of dirt and grime, Dust Mephits are malicious little creatures who hate all things more beautiful than themselves. In the case of Dust Mephits, this is almost everything.');
 
---
--- Dumping data for table 'monstertype'
---
-
 
 INSERT INTO monstertype VALUES (1,'Abberation');
 INSERT INTO monstertype VALUES (2,'Bug');
@@ -229,10 +172,6 @@ INSERT INTO monstertype VALUES (7,'Plant');
 INSERT INTO monstertype VALUES (8,'Phantom');
 INSERT INTO monstertype VALUES (9,'Undead');
 
---
--- Dumping data for table 'site'
---
-
 
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','',0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
 INSERT INTO site VALUES ('_DOMAIN',0,'eval','getDomainName()','','',0,'Domain.');
@@ -240,17 +179,24 @@ INSERT INTO site VALUES ('_SECTION',0,'eval','CI_SECTION','','',0,'section');
 INSERT INTO site VALUES ('_PLAYER_LV',0,'eval','\'<a href=\"\' . CI_WWW_PATH . \'/game/?a=viewplayer\">\' . getCharNameFD(CI_ID, CI_DOMAIN) . \'</a> (\' . getstat(\'lv\') . \')\'','','',1,'playername(lv), hyperlinked to viewplayer');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','CI_WWW_PATH . \'game/?a=viewjobs\'',0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','CI_WWW_PATH',0,'');
-INSERT INTO site VALUES ('NAV',20,'link','Game','','CI_WWW_PATH . \'game\'',0,'');
+INSERT INTO site VALUES ('NAV',30,'link','Game','','CI_WWW_PATH . \'game\'',0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','CI_WWW_PATH . \'game/?a=viewequipment\'',0,'');
-INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=get action=index.php><p><input type=hidden name=a value=\' . $GLOBALS[\'aval\'] . \'><p><select name=t>\'','','',0,'');
+INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=get action=index.php><p><input type=hidden name=a value=\' . $GLOBALS[\'aval\'] . \'><p><select name=template>\'','','',0,'');
 INSERT INTO site VALUES ('_SKIN_END',0,'eval','\'</select><br><input type=submit value=\"Skin\" class=\"submit\"></form>\'','','',0,'');
 INSERT INTO site VALUES ('_SKIN',0,'text','<CI_SKIN_START>\n<option><CISKINS><option>INSERT</option></CISKINS></option>\n<CI_SKIN_END>','','',0,'');
 INSERT INTO site VALUES ('SKINS',0,'text','redux','','',0,'');
-INSERT INTO site VALUES ('SKINS',10,'text','earthtone','','',0,'');
+INSERT INTO site VALUES ('SKINS',10,'text','kuro5hin','','',0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','CI_WWW_PATH . \'game/?a=viewmonsters\'',0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',30,'link','View Abilities','','CI_WWW_PATH . \'game/?a=viewabilities\'',0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','CI_WWW_PATH . \'/?a=domains\'',0,'');
-INSERT INTO site VALUES ('NAV',10,'link','User','','CI_WWW_PATH . \'user\'',0,'');
+INSERT INTO site VALUES ('NAV',20,'link','User','','CI_WWW_PATH . \'user\'',0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','CI_WWW_PATH . \'user/?a=newuser\'',-1,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','CI_WWW_PATH . \'user/?a=viewusers\'',0,'');
+INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','Remote Information','','CI_WWW_PATH . \'user/?a=info\'',0,'');
+INSERT INTO site VALUES ('NAV',10,'link','Forum','','CI_WWW_PATH . \'forum/?a=viewforum\'',0,'');
+INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Login','','CI_WWW_PATH . \'user/?a=login\'',-1,'');
+INSERT INTO site VALUES ('USER_SECTION_MENU',20,'link','Logout','','CI_WWW_PATH . \'user/?a=logout\'',1,'');
+INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'eval','newthreadLink() . newreplyLink()','','',1,'f and t are never specified together, hence this works well');
+INSERT INTO site VALUES ('USER_SECTION_MENU',10,'link','User CP','','CI_WWW_PATH . \'user/?a=usercp\'',1,'');
+INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','My Info','','CI_WWW_PATH . \'user/?a=viewuserdetails&user=\' . ID',1,'');
 
