@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.52 2003/12/15 05:26:13 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.53 2003/12/19 09:09:53 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -553,6 +553,75 @@ function getProfile($start, $end, $dbcalls, $dbtime)
 	$ret = $total . 's, ' . $scriptper . '% PHP, ' . (1 - $scriptper) . '% SQL with ' . $dbcalls . ' queries';
 
 	return $ret;
+}
+
+function parseTags(&$template)
+{
+	// Find all of the tags and parse them out
+	while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
+	{
+		$tag = $matches[1];
+
+		if(substr($tag, 0, 1) == '_')
+		{
+			$ret = getSiteArray($matches[1]);
+			$val = createSiteString($ret);
+			$template = str_replace($matches[0], $val, $template);
+		}
+		else
+		{
+			$insert = '';
+			$pos = strpos($template, '<CI');
+			$pos1 = strpos($template, '>', $pos + 3);
+			$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
+
+			/* Shouldn't have to do this, but it'll prevent infinite loops.
+			 * This if block will remove the tag spanning $pos to $pos1,
+			 * since it didn't have a matching stop tag.
+			 */
+			if($pos2 === false)
+			{
+				$template = substr_replace($template, '', $pos, $pos1 - $pos + 1);
+				continue;
+			}
+
+			$pos3 = $pos2 + 5 + strlen($tag); // 5 to account for these chars: </CI>
+			$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
+			$pos4 = strpos($insert, 'INSERT');
+			$inslen = strlen($insert);
+
+			switch($tag)
+			{
+				case 'SECTION_MENU':
+				case 'SECTION_NAV':
+					$gettag = CI_SECTION . '_' . $tag;
+					break;
+				default:
+					$gettag = $tag;
+					break;
+			}
+
+			$ret = getSiteArray($gettag);
+			$repl = '';
+			if(count($ret) > 0)
+			{
+				for($i = 0; $i < count($ret); $i++)
+				{
+					$pos6 = $pos4;
+					$pos7 = 6;
+					if($i == 0)
+					{
+						$pos6 = 0;
+						$pos7 += $pos4;
+					}
+					if($i == count($ret) - 1)
+						$pos7 = $inslen - $pos6;
+					$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
+				}
+			}
+			$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
+		}
+	}
 }
 
 ?>

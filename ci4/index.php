@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.53 2003/12/15 05:27:11 dolmant Exp $ */
+/* $Id: index.php,v 1.54 2003/12/19 09:09:52 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -57,6 +57,7 @@ $pass = getCIcookie('pass');
 
 $message = '';
 $content = '';
+$contentdone = false;
 $aval = '';
 
 if(isset($_POST['a']))
@@ -80,7 +81,7 @@ if(isset($aval) && CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout
 			ob_end_clean();
 		}
 
-		$aval = '';
+		$contentdone = true;
 }
 
 // check to see if we have a valid user
@@ -137,123 +138,62 @@ define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
 $template = fread($fd, filesize($tfile));
 fclose($fd);
 
-$permission = true;
-
-if(CI_SECTION == 'ADMIN')
-{
-	if(!ADMIN)
-		$permission = false;
-}
-
-// get content page
-if($permission)
-{
-	if(isset($aval) && $aval)
-	{
-			$a = CI_FS_PATH . CI_SECTION_DIR . $aval . '.php';
-
-			if(file_exists($a))
-			{
-				$fd = fopen($a, 'r');
-				if($fd)
-				{
-					$content = fread($fd, filesize($a));
-					fclose($fd);
-					ob_start();
-					eval('?>' . $content);
-					$content = ob_get_contents();
-					ob_end_clean();
-				}
-			}
-			else
-			{
-				$content .= 'Non-existent action.';
-			}
-	}
-}
-else
-{
-	$content .= 'You do not have permission to view this page.';
-}
-
-$content .= $message;
-
 ob_start();
 eval('?>' . $template);
 $template = ob_get_contents();
 ob_end_clean();
 
-// Add content page
+// Split the template into two halves, so we can do timed or incremental output in the content section
 $pos = strpos($template, '<CICONTENT>');
-$template = substr_replace($template, $content, $pos, 11);
+$top = substr($template, 0, $pos - 1);
+$bottom = substr($template, $pos + 11); // 11 = length of <CICONTENT>
 
-// Find all of the tags and parse them out
-while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
+parseTags($top);
+echo $top;
+
+flush();
+
+// get content page
+if(!$contentdone)
 {
-	$tag = $matches[1];
+	$permission = true;
 
-	if(substr($tag, 0, 1) == '_')
+	if(CI_SECTION == 'ADMIN')
 	{
-		$ret = getSiteArray($matches[1]);
-		$val = createSiteString($ret);
-		$template = str_replace($matches[0], $val, $template);
+		if(!ADMIN)
+			$permission = false;
+	}
+
+	if($permission)
+	{
+		if($aval)
+		{
+			$a = CI_FS_PATH . CI_SECTION_DIR . $aval . '.php';
+
+			if(file_exists($a))
+			{
+				require $a;
+			}
+			else
+			{
+				echo 'Non-existent action.';
+			}
+		}
 	}
 	else
 	{
-		$insert = '';
-		$pos = strpos($template, '<CI');
-		$pos1 = strpos($template, '>', $pos + 3);
-		$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
-
-		/* Shouldn't have to do this, but it'll prevent infinite loops.
-		 * This if block will remove the tag spanning $pos to $pos1,
-		 * since it didn't have a matching stop tag.
-		 */
-		if($pos2 === false)
-		{
-			$template = substr_replace($template, '', $pos, $pos1 - $pos + 1);
-			continue;
-		}
-
-		$pos3 = $pos2 + 5 + strlen($tag); // 5 to account for these chars: </CI>
-		$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
-		$pos4 = strpos($insert, 'INSERT');
-		$inslen = strlen($insert);
-
-		switch($tag)
-		{
-			case 'SECTION_MENU':
-			case 'SECTION_NAV':
-				$gettag = CI_SECTION . '_' . $tag;
-				break;
-			default:
-				$gettag = $tag;
-				break;
-		}
-
-		$ret = getSiteArray($gettag);
-		$repl = '';
-		if(count($ret) > 0)
-		{
-			for($i = 0; $i < count($ret); $i++)
-			{
-				$pos6 = $pos4;
-				$pos7 = 6;
-				if($i == 0)
-				{
-					$pos6 = 0;
-					$pos7 += $pos4;
-				}
-				if($i == count($ret) - 1)
-					$pos7 = $inslen - $pos6;
-				$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
-			}
-		}
-		$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
+		echo 'You do not have permission to view this page.';
 	}
 }
+else
+{
+	echo $content;
+}
 
-echo $template;
+flush();
+
+parseTags($bottom);
+echo $bottom;
 
 echo '<!-- ' . getProfile($time_start, gettimeofday(), $DBMain->queries, $DBMain->time) . ' -->';
 
