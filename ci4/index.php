@@ -21,7 +21,7 @@ setcookie('CI_TEMPLATE', $t, time() + 604800, $CI_PATH);
 $template = fread($fd, filesize(getTemplateName($t)));
 fclose($fd);
 ob_start();
-eval('?>' . $template . '<?php');
+eval('?>' . $template . '<?');
 $template = ob_get_contents();
 ob_end_clean();
 
@@ -36,7 +36,7 @@ if($a)
 		$content = fread($fd, filesize($a));
 		fclose($fd);
 		ob_start();
-		eval('?>' . $content . '<?php');
+		eval('?>' . $content . '<?');
 		$content = ob_get_contents();
 		ob_end_clean();
 		$pos = strpos($template, '<CICONTENT>');
