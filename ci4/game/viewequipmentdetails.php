@@ -45,7 +45,7 @@ if(count($res))
 		$cost = $res[0]['equipment_cost'];
 
 		if($cost > $PLAYER['player_money'])
-			echo '<p>You do not have enough money to purchase this.';
+			echo '<p>You do not have enough gold to purchase this.';
 		else
 		{
 			$db->query('insert into player_equipment (player_equipment_equipment, player_equipment_player) values (' . $res[0]['equipment_id'] . ', ' . $PLAYER['player_id'] . ')');
@@ -94,7 +94,7 @@ if(count($res))
 			array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
 		));
 
-		echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
+		echo '<p>You have ' . $PLAYER['player_money'] . ' gold.';
 	}
 	else
 		$buytext = '';

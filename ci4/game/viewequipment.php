@@ -79,7 +79,7 @@ else
 }
 
 if($PLAYER)
-	echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
+	echo '<p>You have ' . $PLAYER['player_money'] . ' gold.';
 
 echo getTable($array);
 
