@@ -6,10 +6,17 @@ $equipment = $DBMain->Query('select equipmenttype_name from cor_job_equipmenttyp
 
 $equipmentlist = '';
 
-for($i = 0; $i < count($equipment['equipmenttype_name']); $i++)
+if(count($equipment))
 {
-	if($i) $equipmentlist .= ', ';
-	$equipmentlist .= $equipment['equipmenttype_name'][$i];
+	for($i = 0; $i < count($equipment['equipmenttype_name']); $i++)
+	{
+		if($i) $equipmentlist .= ', ';
+		$equipmentlist .= $equipment['equipmenttype_name'][$i];
+	}
+}
+else
+{
+	$equipmentlist .= 'Cannot equip anything.';
 }
 
 $jobs = $DBMain->Query('select job_name, job_id, cor_job_lv from cor_job_joblv, job where cor_job=' . $_GET['job'] . ' and cor_job_req=job.job_id order by job_name');
