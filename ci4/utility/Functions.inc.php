@@ -435,13 +435,11 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
  * $section - leave as '' for current section. Change to SECTION_[name] (ie:
  *  SECTION_USER) to link to a different section. Use EXTERIOR as $section if
  *  you want to link off site.
- * $session - add a session $_GET value to the link. This should almost always
- *  be true.
  */
-function makeLink($text, $link, $section = '', $session = true, $title = '')
+function makeLink($text, $link, $section = '', $title = '')
 {
 	// if there's nothing to link, don't link anything
-	if(!$text)
+	if(!$text || !$link)
 		return '';
 
 	$ret = '<a href="';
@@ -453,21 +451,13 @@ function makeLink($text, $link, $section = '', $session = true, $title = '')
 		else if($section)
 			$ret .= CI_WWW_PATH . $section . '/';
 
-		if($link || !ID)
 		$ret .= '?';
 
-		if(!ID && $session)
-		{
-			$ret .= 's=' . SESSION;
-
-			if($link)
-				$ret .= '&amp;';
-		}
+		if(!LOGGED)
+			$ret .= 's=' . SESSION . '&amp;';
 	}
 
-	$ret .= str_replace('&', '&amp;', $link);
-
-	$ret .= '"';
+	$ret .= str_replace('&', '&amp;', $link) . '"';
 
 	if($title)
 		$ret .= ' title="' . $title . '"';

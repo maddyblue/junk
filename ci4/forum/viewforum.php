@@ -202,7 +202,7 @@ function threadList($forumid, $page, $threadsPP, $uls)
 
 		array_push($array, array(
 			(newThread($row, $uls) ? '* ' : '') .
-				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id'], '', true, decode($row['pft'])) . $pageList,
+				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id'], '', decode($row['pft'])) . $pageList,
 			getUserlink($row['ufi'], decode($row['ufn'])),
 			$row['forum_thread_replies'],
 			$row['forum_thread_views'],

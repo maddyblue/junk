@@ -87,7 +87,7 @@ else
 			$pageList = '<font class="small">' . $pageList . '</font>';
 
 		array_push($array, array(
-			makeLink('-&gt;', 'a=viewpost&p=' . $res[$i]['forum_post_id'], '', true, decode($res[$i]['forum_post_text'])) . ' ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id'], '', true, decode($res[$i]['pft'])) . $pageList,
+			makeLink('-&gt;', 'a=viewpost&p=' . $res[$i]['forum_post_id'], '', decode($res[$i]['forum_post_text'])) . ' ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id'], '', true, decode($res[$i]['pft'])) . $pageList,
 			makeLink(decode($res[$i]['forum_forum_name']), 'a=viewforum&f=' . $res[$i]['forum_forum_id']),
 			$res[$i]['forum_thread_replies'],
 			getUserlink($res[$i]['user_id'], decode($res[$i]['user_name'])),
