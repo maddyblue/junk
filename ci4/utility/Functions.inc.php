@@ -25,7 +25,7 @@ function getSiteArray($tag, $single)
 		$name = 'site';
 		$order = 'ORDER BY orderid';
 	}
-	return $DB->Query('SELECT type,main,secondary,link FROM ' . $name . ' WHERE logged ' . LOGGED . '= 0 AND tag=' . "'$tag'" . ' ' . $order);
+	return $DB->Query('SELECT type,main,secondary,link FROM ' . $name . ' WHERE logged ' . LOGGED_DIR . '= 0 AND tag=' . "'$tag'" . ' ' . $order);
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
@@ -102,6 +102,8 @@ function makeTable($arr, $skip = array())
 	?></table><?
 }
 
+/* This function takes lots of heavily nested arrays.
+	I suggest looking at the game/newchar.php script for examples. */
 function makeTableForm($title, $arr, $descrip = '', $parms = '')
 {
 	?>
@@ -115,7 +117,7 @@ function makeTableForm($title, $arr, $descrip = '', $parms = '')
 	<?
 	while(list(,$array) = each($arr))
 	{
-		if($array[1][0] != "hidden")
+		if($array[1][0] != 'hidden')
 		{
 			?>
 				<tr>
@@ -138,6 +140,7 @@ function makeTableForm($title, $arr, $descrip = '', $parms = '')
 	<?
 }
 
+/* Fairly simple.  Just takes an associative array, and plugs in the values. */
 function makeFormField($arr)
 {
 	extract($arr);
@@ -147,13 +150,29 @@ function makeFormField($arr)
 	}
 	else if($type == 'select')
 	{
-		$str = '<select name="' . $name . '" ' . $parms . '' . $val . '</select>';
+		$str = '<select name="' . $name . '" ' . $parms . '>' . $val . '</select>';
 	}
 	else
 	{
 		$str = '<input type="' . $type . '" name="' . $name . '" ' . $parms . ' value="' . $val . '">';
 	}
 	return $str;
+}
+
+function getDomainName($id)
+{
+	if(!$id) $id = 0;
+	global $DB;
+	$ret = $DB->Query('SELECT name FROM domain WHERE id=' . $id);
+	if(count($ret{'name'}) == 1)
+		return $ret{'name'}[0];
+	else
+		return '-None-';
+}
+
+function doCookie($name, $val)
+{
+	setcookie('CI_' . $name, $val, time() + 604800, CI_PATH);
 }
 
 ?>
