@@ -19,10 +19,16 @@ define('SECTION_FORUM', 'forum');
 define('SECTION_GAME', 'game');
 
 /* Groups */
+
 define('GROUP_ADMIN', 1);
 define('GROUP_SUPER', 2);
 define('GROUP_BANNED', 3);
 define('GROUP_MOD', 4);
+
+/* Forum specs */
+
+define('FORUM_THREADS_PP', 30);
+define('FORUM_POSTS_PP', 20);
 
 /* Don't mess with these */
 
