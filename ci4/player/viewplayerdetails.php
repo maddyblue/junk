@@ -88,6 +88,20 @@ if(count($res) == 1)
 
 	echo '<p>Stats <b>with</b> modifications from items, jobs, etc.:' . getTable($array, false);
 
+	// equipment
+
+	$res = $db->query('
+		select equipment_id, equipment_name, equipmentclass_name from equipment, equipmentclass, player_equipment
+		where player_equipment_player=' . $player . ' and player_equipment_equipped=1 and player_equipment_equipment=equipment_id and equipment_class=equipmentclass_id
+	');
+
+	$array = array(array('Location', 'Equipment'));
+
+	foreach($res as $r)
+		array_push($array, array($r['equipmentclass_name'], makeLink($r['equipment_name'], 'a=viewequipmentdetails&e=' . $r['equipment_id'], SECTION_GAME)));
+
+	echo '<p>Equipped:' . getTable($array);
+
 	// now make the job table
 
 	$res = $db->query('select job_id, job_name, player_job_lv, player_job_exp from player_job, job where player_job_player="' . $player . '" and job_id=player_job_job');

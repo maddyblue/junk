@@ -56,11 +56,6 @@ if(count($res))
 		array('Gender', getGender($res[0]['equipment_req_gender']))
 	);
 
-	if($res[0]['equipment_buy'] == 1)
-		$buytext = makeLink('Yes', 'a=buyequipment&e=' . $res[0]['equipment_id']);
-	else
-		$buytext = 'No';
-
 	$array = array(
 		array('Name', $res[0]['equipment_name'] . makeImg($res[0]['equipment_image'], 'images/equipment/')),
 		array('Type', makeLink($res[0]['equipmenttype_name'], 'a=viewequipment&type=' . $res[0]['equipmenttype_id'])),
@@ -68,11 +63,18 @@ if(count($res))
 		array('Two Hand?', ($res[0]['equipment_twohand'] ? 'Yes' : 'No')),
 		array('Stat Changes', getTable($stat, false)),
 		array('Requirements', getTable($req, false)),
-		array('Can Buy?', $buytext),
 		array('Cost', $res[0]['equipment_cost'])
 	);
 
+	$buytext = getForm('', array(
+		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Purchase')),
+		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'buyequipment')),
+		array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
+	));
+
+	echo $buytext;
 	echo getTable($array);
+	echo '<p>' . $buytext;
 }
 else
 	echo '<p>Invalid equipment id.';

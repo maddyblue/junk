@@ -56,22 +56,15 @@ else
 	array_push($array, array(
 		'Type',
 		'Equipment',
-		'Purchasable',
 		'Cost',
 		'Description'
 	));
 
 	for($i = 0; $i < count($res); $i++)
 	{
-		if($res[$i]['equipment_buy'] == 1)
-			$buytext = makeLink('Yes', 'a=buyequipment&e=' . $res[$i]['equipment_id']);
-		else
-			$buytext = 'No';
-
 		array_push($array, array(
 			makeLink($res[$i]['equipmenttype_name'], 'a=viewequipment&type=' . $res[$i]['equipmenttype_id']),
 			makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id']),
-			$buytext,
 			$res[$i]['equipment_cost'],
 			$res[$i]['equipment_desc']
 		));

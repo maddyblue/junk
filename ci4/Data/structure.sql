@@ -144,20 +144,25 @@ CREATE TABLE equipment (
   equipment_req_mag smallint(5) unsigned NOT NULL default '0',
   equipment_req_agl smallint(5) unsigned NOT NULL default '0',
   equipment_req_gender tinyint(1) NOT NULL default '0',
-  equipment_sell tinyint(1) unsigned NOT NULL default '1',
-  equipment_buy tinyint(1) unsigned NOT NULL default '1',
   equipment_cost bigint(10) unsigned NOT NULL default '0',
   equipment_desc text NOT NULL,
   equipment_type bigint(10) unsigned NOT NULL default '0',
+  equipment_class bigint(10) unsigned NOT NULL default '0',
   equipment_twohand tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (equipment_id)
+) TYPE=MyISAM;
+
+
+CREATE TABLE equipmentclass (
+  equipmentclass_id bigint(10) unsigned NOT NULL auto_increment,
+  equipmentclass_name varchar(25) NOT NULL default '',
+  PRIMARY KEY  (equipmentclass_id)
 ) TYPE=MyISAM;
 
 
 CREATE TABLE equipmenttype (
   equipmenttype_id bigint(10) unsigned NOT NULL auto_increment,
   equipmenttype_name varchar(100) NOT NULL default '',
-  equipmenttype_class tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (equipmenttype_id)
 ) TYPE=MyISAM COMMENT='class: 1=jewelry, 2=weapon, 3=armor';
 
@@ -368,16 +373,6 @@ CREATE TABLE player (
   player_mod_mgd smallint(6) unsigned NOT NULL default '0',
   player_mod_agl smallint(6) unsigned NOT NULL default '0',
   player_mod_acc smallint(6) unsigned NOT NULL default '0',
-  player_equip_head bigint(10) unsigned NOT NULL default '0',
-  player_equip_ringL bigint(10) unsigned NOT NULL default '0',
-  player_equip_ringR bigint(10) unsigned NOT NULL default '0',
-  player_equip_handL bigint(10) unsigned NOT NULL default '0',
-  player_equip_handR bigint(10) unsigned NOT NULL default '0',
-  player_equip_chest bigint(10) unsigned NOT NULL default '0',
-  player_equip_legs bigint(10) unsigned NOT NULL default '0',
-  player_equip_feet bigint(10) unsigned NOT NULL default '0',
-  player_equip_arms bigint(10) unsigned NOT NULL default '0',
-  player_equip_gloves bigint(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (player_id),
   KEY player_user (player_user),
   KEY player_battle (player_battle)
@@ -404,6 +399,7 @@ CREATE TABLE player_equipment (
   player_equipment_id bigint(10) unsigned NOT NULL auto_increment,
   player_equipment_equipment bigint(10) unsigned NOT NULL default '0',
   player_equipment_player bigint(10) unsigned NOT NULL default '0',
+  player_equipment_equipped tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (player_equipment_id)
 ) TYPE=MyISAM;
 

@@ -127,6 +127,8 @@ INSERT INTO cor_job_equipmenttype VALUES (11,7);
 INSERT INTO cor_job_equipmenttype VALUES (3,10);
 INSERT INTO cor_job_equipmenttype VALUES (4,10);
 INSERT INTO cor_job_equipmenttype VALUES (5,10);
+INSERT INTO cor_job_equipmenttype VALUES (3,7);
+INSERT INTO cor_job_equipmenttype VALUES (3,3);
 
 
 INSERT INTO cor_job_joblv VALUES (11,9,8);
@@ -150,38 +152,50 @@ INSERT INTO domain VALUES (3,'Starvation','star',4,5);
 INSERT INTO domain VALUES (5,'Torture','tort',4,10);
 
 
-INSERT INTO equipment VALUES (1,'Rusty Dagger','dagger/rusty.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,1,1,50,'A rusty old dagger probably found in the trash.',3,0);
-INSERT INTO equipment VALUES (2,'Sandals','',0,0,0,0,5,0,0,0,0,0,0,0,0,1,1,50,'A few strips of leather and a hard base make up this poorly made piece of footwear.',7,0);
-INSERT INTO equipment VALUES (3,'Worn Boots','',0,0,0,0,7,3,0,0,0,20,0,0,0,1,1,100,'Second hand leather boots, worn at the toe and heel but still useful despite this.',7,0);
-INSERT INTO equipment VALUES (4,'Butter Knife','dagger/dagger.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,1,1,50,'A blunt kitchen utensil with all the offensive power of a warm breeze, still it\'s better than being totally unarmed.',3,0);
-INSERT INTO equipment VALUES (5,'Wooden Sword','sword/wood.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,1,1,50,'A wooden practice sword used by squires, and citizens in the mock duels they stage.',2,0);
-INSERT INTO equipment VALUES (6,'Rusty Sword','sword/rusty.gif',0,0,10,0,0,0,0,0,0,20,0,0,0,1,1,100,'An old sword probably belonging to an elderly adventurer who didn\'t get too far. Despite the terrible rusting where the blade meets the crosspiece it should hold together long enough for your purposes.',2,0);
-INSERT INTO equipment VALUES (7,'Reed Stick','staff/walkingstick.gif',0,0,2,3,0,0,0,0,0,0,0,0,0,1,1,50,'A few reeds wrapped together around a small stick or pieve of bamboo make a small rod often used by children imitating the mages they sometimes see passing through town.',4,1);
-INSERT INTO equipment VALUES (8,'Walking Stick','staff/walkingstick.gif',0,0,4,6,0,0,0,0,0,0,20,0,0,1,1,100,'A walking stick probably once belonging to an old man and discarded in the gutter. When money is tight you have to make do with what you can find.',4,1);
-INSERT INTO equipment VALUES (9,'Hide Armor','armor/leather.gif',0,0,0,0,5,0,0,0,0,0,0,0,0,1,1,50,'Armour made from the patched together hides of different animals. A favourite with many tribal communities it doesn\'t really cut it next to that shining chainmail but it will do for now.',7,0);
-INSERT INTO equipment VALUES (10,'Broken Armor','armor/steel.gif',0,0,0,0,5,0,0,0,0,20,0,0,0,1,1,100,'Once a well made piece of armour this was discarded after a fight with irreperable damage. Whilst only a shadow of it\'s former glory you can still count on some protection from it.',8,0);
-INSERT INTO equipment VALUES (11,'Crude Bow','bow/crude.gif',0,0,2,0,0,0,0,3,0,0,0,0,0,1,1,50,'A crudly built bow, probably constructed by one of the tribal races to imitate the archers from the civilised world.',5,1);
-INSERT INTO equipment VALUES (12,'Wooden Bow','bow/wooden.gif',0,0,4,0,0,0,0,6,0,0,0,0,0,1,1,100,'A fairly simple wooden bow, but it has the range and with a good enough archer will usually find it\'s mark.',5,1);
-INSERT INTO equipment VALUES (13,'Broken Buckler','shield/buckler.gif',0,0,0,0,4,1,0,0,0,0,0,0,0,1,1,50,'A buckler usually used for duelling, this one had been battered in a recent fight and discarded in favour of a new one, still the limited protection it offers will see you through until you can afford better gear.',10,0);
-INSERT INTO equipment VALUES (14,'Buckler','shield/buckler.gif',0,0,0,0,7,3,0,0,0,20,0,0,0,1,1,100,'A buckler usually used for duelling, it\'s small and offers little actual protection, but it\'s this or try and ward away blows with your arm.',10,0);
-INSERT INTO equipment VALUES (15,'Cloth Cap','head/leather.gif',0,0,0,0,3,2,0,0,0,0,0,0,0,1,1,50,'A basic peasents cap used to keep the rain off your head and your ears warm in winter.',7,0);
-INSERT INTO equipment VALUES (16,'Felt Hat','head/leather.gif',0,0,0,0,6,4,0,0,0,20,0,0,0,1,1,100,'A simple hat often worn by scribes or merchants in a poor attempt to flaunt their greater wealth over the peasents.',7,0);
-INSERT INTO equipment VALUES (17,'Torn Robe','armor/leather.gif',0,0,0,1,1,3,0,0,0,0,0,0,0,1,1,50,'This robe is torn at the seams and gives the asppearence of a beggar, still you can feel a slight tingle whenever you don the garment.',7,0);
-INSERT INTO equipment VALUES (18,'Ragged Robe','armor/leather.gif',0,0,0,2,2,6,0,0,0,0,20,0,0,1,1,100,'A poor quality robe, worn at the seams with stiches coming out everywhere, generally worn by children imitating mages or peasent adepts whilst practicing their base form of magic.',7,0);
-INSERT INTO equipment VALUES (19,'Toy Ring','',3,2,0,0,0,0,0,0,0,0,0,0,0,1,1,50,'A fake children\'s toy ring, you can still see some residue of the cereal it came in around the edges of the inset glass \'jewel\'.',1,0);
-INSERT INTO equipment VALUES (20,'Rusty Band','',6,4,0,0,0,0,0,0,0,20,0,0,0,1,1,100,'This ring is made out of rusted iron.',1,0);
+INSERT INTO equipment VALUES (1,'Rusty Dagger','dagger/rusty.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,50,'A rusty old dagger probably found in the trash.',3,2,0);
+INSERT INTO equipment VALUES (2,'Sandals','',0,0,0,0,5,0,0,0,0,0,0,0,0,50,'A few strips of leather and a hard base make up this poorly made piece of footwear.',7,6,0);
+INSERT INTO equipment VALUES (3,'Worn Boots','',0,0,0,0,7,3,0,0,0,20,0,0,0,100,'Second hand leather boots, worn at the toe and heel but still useful despite this.',7,6,0);
+INSERT INTO equipment VALUES (4,'Butter Knife','dagger/dagger.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,50,'A blunt kitchen utensil with all the offensive power of a warm breeze, still it\'s better than being totally unarmed.',3,2,0);
+INSERT INTO equipment VALUES (5,'Wooden Sword','sword/wood.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,50,'A wooden practice sword used by squires, and citizens in the mock duels they stage.',2,2,0);
+INSERT INTO equipment VALUES (6,'Rusty Sword','sword/rusty.gif',0,0,10,0,0,0,0,0,0,20,0,0,0,100,'An old sword probably belonging to an elderly adventurer who didn\'t get too far. Despite the terrible rusting where the blade meets the crosspiece it should hold together long enough for your purposes.',2,2,0);
+INSERT INTO equipment VALUES (7,'Reed Stick','staff/walkingstick.gif',0,0,2,3,0,0,0,0,0,0,0,0,0,50,'A few reeds wrapped together around a small stick or pieve of bamboo make a small rod often used by children imitating the mages they sometimes see passing through town.',4,2,1);
+INSERT INTO equipment VALUES (8,'Walking Stick','staff/walkingstick.gif',0,0,4,6,0,0,0,0,0,0,20,0,0,100,'A walking stick probably once belonging to an old man and discarded in the gutter. When money is tight you have to make do with what you can find.',4,2,1);
+INSERT INTO equipment VALUES (9,'Hide Armor','armor/leather.gif',0,0,0,0,5,0,0,0,0,0,0,0,0,50,'Armour made from the patched together hides of different animals. A favourite with many tribal communities it doesn\'t really cut it next to that shining chainmail but it will do for now.',7,9,0);
+INSERT INTO equipment VALUES (10,'Broken Armor','armor/steel.gif',0,0,0,0,5,0,0,0,0,20,0,0,0,100,'Once a well made piece of armour this was discarded after a fight with irreperable damage. Whilst only a shadow of it\'s former glory you can still count on some protection from it.',8,9,0);
+INSERT INTO equipment VALUES (11,'Crude Bow','bow/crude.gif',0,0,2,0,0,0,0,3,0,0,0,0,0,50,'A crudly built bow, probably constructed by one of the tribal races to imitate the archers from the civilised world.',5,2,1);
+INSERT INTO equipment VALUES (12,'Wooden Bow','bow/wooden.gif',0,0,4,0,0,0,0,6,0,0,0,0,0,100,'A fairly simple wooden bow, but it has the range and with a good enough archer will usually find it\'s mark.',5,2,1);
+INSERT INTO equipment VALUES (13,'Broken Buckler','shield/buckler.gif',0,0,0,0,4,1,0,0,0,0,0,0,0,50,'A buckler usually used for duelling, this one had been battered in a recent fight and discarded in favour of a new one, still the limited protection it offers will see you through until you can afford better gear.',10,3,0);
+INSERT INTO equipment VALUES (14,'Buckler','shield/buckler.gif',0,0,0,0,7,3,0,0,0,20,0,0,0,100,'A buckler usually used for duelling, it\'s small and offers little actual protection, but it\'s this or try and ward away blows with your arm.',10,3,0);
+INSERT INTO equipment VALUES (15,'Cloth Cap','head/leather.gif',0,0,0,0,3,2,0,0,0,0,0,0,0,50,'A basic peasents cap used to keep the rain off your head and your ears warm in winter.',7,4,0);
+INSERT INTO equipment VALUES (16,'Felt Hat','head/leather.gif',0,0,0,0,6,4,0,0,0,20,0,0,0,100,'A simple hat often worn by scribes or merchants in a poor attempt to flaunt their greater wealth over the peasents.',7,4,0);
+INSERT INTO equipment VALUES (17,'Torn Robe','armor/leather.gif',0,0,0,1,1,3,0,0,0,0,0,0,0,50,'This robe is torn at the seams and gives the asppearence of a beggar, still you can feel a slight tingle whenever you don the garment.',7,9,0);
+INSERT INTO equipment VALUES (18,'Ragged Robe','armor/leather.gif',0,0,0,2,2,6,0,0,0,0,20,0,0,100,'A poor quality robe, worn at the seams with stiches coming out everywhere, generally worn by children imitating mages or peasent adepts whilst practicing their base form of magic.',7,9,0);
+INSERT INTO equipment VALUES (19,'Toy Ring','',3,2,0,0,0,0,0,0,0,0,0,0,0,50,'A fake children\'s toy ring, you can still see some residue of the cereal it came in around the edges of the inset glass \'jewel\'.',1,1,0);
+INSERT INTO equipment VALUES (20,'Rusty Band','',6,4,0,0,0,0,0,0,0,20,0,0,0,100,'This ring is made out of rusted iron.',1,1,0);
 
 
-INSERT INTO equipmenttype VALUES (1,'ring',1);
-INSERT INTO equipmenttype VALUES (2,'sword',2);
-INSERT INTO equipmenttype VALUES (3,'dagger',2);
-INSERT INTO equipmenttype VALUES (4,'staff',2);
-INSERT INTO equipmenttype VALUES (5,'bow',2);
-INSERT INTO equipmenttype VALUES (6,'polearm',2);
-INSERT INTO equipmenttype VALUES (7,'leather',3);
-INSERT INTO equipmenttype VALUES (8,'mail',3);
-INSERT INTO equipmenttype VALUES (9,'gun',2);
-INSERT INTO equipmenttype VALUES (10,'shield',3);
+INSERT INTO equipmentclass VALUES (1,'Ring');
+INSERT INTO equipmentclass VALUES (2,'Hand (Main)');
+INSERT INTO equipmentclass VALUES (3,'Hand (Offhand)');
+INSERT INTO equipmentclass VALUES (4,'Head');
+INSERT INTO equipmentclass VALUES (5,'Legs');
+INSERT INTO equipmentclass VALUES (6,'Feet');
+INSERT INTO equipmentclass VALUES (7,'Arms');
+INSERT INTO equipmentclass VALUES (8,'Gloves');
+INSERT INTO equipmentclass VALUES (9,'Chest');
+INSERT INTO equipmentclass VALUES (10,'Back');
+
+
+INSERT INTO equipmenttype VALUES (1,'ring');
+INSERT INTO equipmenttype VALUES (2,'sword');
+INSERT INTO equipmenttype VALUES (3,'dagger');
+INSERT INTO equipmenttype VALUES (4,'staff');
+INSERT INTO equipmenttype VALUES (5,'bow');
+INSERT INTO equipmenttype VALUES (6,'polearm');
+INSERT INTO equipmenttype VALUES (7,'leather');
+INSERT INTO equipmenttype VALUES (8,'mail');
+INSERT INTO equipmenttype VALUES (9,'gun');
+INSERT INTO equipmenttype VALUES (10,'shield');
 
 
 INSERT INTO group_def VALUES (1,'Administrators',1,1,1,0);
@@ -242,6 +256,7 @@ INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'link','View New Threads','','\'
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',0,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',10,'link','Smilies','','\'a=smilies\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_MENU',0,'link','Change Job','','\'a=changejob\'','SECTION_GAME',1,0,'');
+INSERT INTO site VALUES ('GAME_SECTION_MENU',10,'link','Manage Equipment','','\'a=equip\'','SECTION_GAME',1,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','\'a=viewjobs\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','\'a=viewequipment\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','\'a=viewmonsters\'','SECTION_GAME',0,0,'');

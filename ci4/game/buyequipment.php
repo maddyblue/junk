@@ -44,7 +44,8 @@ function disp($e, $name, $cost)
 
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Buy')),
 		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'buyequipment')),
-		array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
+		array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e)),
+		array('', array('type'=>'hidden', 'name'=>'safety'))
 	));
 }
 
@@ -60,7 +61,7 @@ else if(count($res))
 	$name = $res[0]['equipment_name'];
 	$cost = $res[0]['equipment_cost'];
 
-	if(!isset($_POST['submit']))
+	if(!isset($_POST['safety']))
 		disp($e, $name, $cost);
 	else if($cost > $PLAYER['player_money'])
 		echo '<p>You do not have enough money to purchase this.';

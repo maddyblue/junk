@@ -153,7 +153,11 @@ else
 				$db->query('insert into player_abilitytype values (' . $PLAYER['player_id'] . ', ' . $ret[$i]['cor_abilitytype'] . ', 0, 0)');
 		}
 
+		// unequip everything
+		$db->query('update player_equipment set player_equipment_equipped=0 where player_equipment_player=' . $PLAYER['player_id']);
+
 		echo '<p>Job change to ' . $res[0]['job_name'] . ' succeeded.';
+		echo '<p>All of your equipment has been unequipped.';
 	}
 	else
 	{
