@@ -56,6 +56,7 @@ $pass = getCIcookie('pass');
 
 $message = '';
 $content = '';
+$aval = '';
 
 if(isset($_POST['a']))
 	$aval = $_POST['a'];
@@ -89,6 +90,11 @@ if($res[0]['count'] == 1)
 	define('LOGGED_DIR', '>');
 	define('ID', $id);
 
+	if(isInGroup(ID, GROUP_ADMIN))
+		define('ADMIN', 1);
+	else
+		define('ADMIN', 0);
+
 	// set cookies to be alive for another week
 	setCIcookie('id', $id);
 	setCIcookie('pass', $pass);
@@ -97,35 +103,52 @@ if($res[0]['count'] == 1)
 	$DBMain->Query('update user set user_last=' . TIME . ' where user_id=' . ID);
 }
 else
-	notLogged();
+{
+	define('LOGGED', false);
+	define('LOGGED_DIR', '<');
+	define('ID', 0);
+	define('ADMIN', 0);
+}
+
+$permission = true;
+
+if(CI_SECTION == 'ADMIN')
+{
+	if(!ADMIN)
+		$permission = false;
+}
 
 // get content page
-if(isset($aval) && $aval)
+if($permission)
 {
-		$a = './' . $aval . '.php';
+	if(isset($aval) && $aval)
+	{
+			$a = './' . $aval . '.php';
 
-		if(file_exists($a))
-		{
-			$fd = fopen($a, 'r');
-			if($fd)
+			if(file_exists($a))
 			{
-				$content = fread($fd, filesize($a));
-				fclose($fd);
-				ob_start();
-				eval('?>' . $content);
-				$content = ob_get_contents();
-				ob_end_clean();
+				$fd = fopen($a, 'r');
+				if($fd)
+				{
+					$content = fread($fd, filesize($a));
+					fclose($fd);
+					ob_start();
+					eval('?>' . $content);
+					$content = ob_get_contents();
+					ob_end_clean();
+				}
 			}
-		}
-		else
-		{
-			$content .= 'Non-existent action.';
-		}
+			else
+			{
+				$content .= 'Non-existent action.';
+			}
+	}
 }
 else
 {
-	$aval = '';
+	$content .= 'You do not have permission to view this page.';
 }
+
 $content .= $message;
 
 // Template
