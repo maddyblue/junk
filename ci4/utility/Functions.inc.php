@@ -256,11 +256,23 @@ function getGender($g)
 	return $ret;
 }
 
-function getTable($array, $withInit = true)
+function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 {
 	$ret = '';
 
-	for($i = 0; $i < count($array); $i++)
+	$i = 0;
+	if($firstLineHeader)
+	{
+		$ret .= '<tr1>';
+		for($j = 0; $j < count($array[$i]); $j++)
+		{
+			$ret .= '<td1>' . $array[$i][$j] . '</td>';
+		}
+		$ret .= '</tr>';
+		$i = 1;
+	}
+
+	for(; $i < count($array); $i++)
 	{
 		$ret .= '<tr2>';
 		for($j = 0; $j < count($array[$i]); $j++)
@@ -270,12 +282,17 @@ function getTable($array, $withInit = true)
 		$ret .= '</tr>';
 	}
 
-	if($withInit)
+	if($withTableStructure)
 	{
 		$ret = '<table>' . $ret . '</table>';
 	}
 
 	return $ret;
+}
+
+function makeLink($text, $link, $root = false)
+{
+	return '<a href="' . CI_WWW_PATH . ($root ? '' : CI_SECTION_DIR) . $link . '">' . $text . '</a>';
 }
 
 ?>
