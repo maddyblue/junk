@@ -51,12 +51,9 @@ function disp($post, $thread)
 		));
 }
 
-$subject = '';
 $post = '';
 $thread = '0';
 
-if(isset($_POST['subject']))
-	$subject = encode($_POST['subject']);
 if(isset($_POST['post']))
 	$post = encode($_POST['post']);
 if(isset($_GET['t']))
