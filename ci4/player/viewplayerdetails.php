@@ -56,7 +56,8 @@ if(count($res) == 1)
 		array('Town', $town),
 		array('House', $house),
 		array('Level', $res[0]['player_lv']),
-		array('Experience', $res[0]['player_exp'])
+		array('Experience', $res[0]['player_exp']),
+		array('Money', $res[0]['player_money'])
 	);
 
 	echo getTable($array, false);
