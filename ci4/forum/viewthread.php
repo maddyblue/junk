@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.31 2004/01/05 09:49:48 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.32 2004/01/12 07:54:54 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -91,7 +91,7 @@ $ret = $DBMain->Query('select ceiling(count(*)/' . $postsPP . ') as count from f
 $totpages = $ret[0]['count'];
 $curpage = floor($offset / $postsPP) + 1;
 
-$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $postsPP, $threadid, 'a=viewthread&t=');
+$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $postsPP, 'a=viewthread&t=' . $threadid);
 
 $array = postList($threadid, $offset, $postsPP, $canMod);
 
