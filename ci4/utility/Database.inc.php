@@ -36,6 +36,8 @@ class Database
 {
 	var $handle = null;
 
+	var $db;
+
 	var $queries = array();
 	var $time = 0;
 
@@ -50,7 +52,8 @@ class Database
 			$params['pass']
 		);
 
-		mysql_select_db($params['database'], $this->handle);
+		//mysql_select_db($params['database'], $this->handle);
+		$this->db = $params['database'];
 
 		return $this->handle;
 	}
@@ -81,7 +84,8 @@ class Database
 	{
 		$start = gettimeofday();
 
-		$dbq = mysql_query(
+		$dbq = mysql_db_query(
+			$this->db,
 			$query,
 			$this->handle
 		);
