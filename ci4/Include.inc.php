@@ -37,9 +37,6 @@ require_once CI_FS_PATH . 'config/Database.inc.php';
 
 require_once CI_FS_PATH . 'utility/DatabaseAccess.inc.php';
 require_once CI_FS_PATH . 'utility/Database.inc.php'; // needs to be after DatabaseAccess.inc.php
-require_once CI_FS_PATH . 'utility/SQLFormat.inc.php'; // needs to be after DatabaseAccess.inc.php
-require_once CI_FS_PATH . 'utility/GameMath.inc.php';
-require_once CI_FS_PATH . 'utility/URLUtil.inc.php';
 require_once CI_FS_PATH . 'utility/Functions.inc.php';
 
 // Setup database connections
