@@ -150,6 +150,4 @@ echo "<br>forums: $forums";
 echo "<br>threads: $threads";
 echo "<br>posts: $posts";
 
-require 'sync.php';
-
 ?>
