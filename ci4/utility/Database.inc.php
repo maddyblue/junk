@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Database.inc.php,v 1.6 2003/09/25 23:57:36 dolmant Exp $ */
+/* $Id: Database.inc.php,v 1.7 2003/11/27 05:07:12 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -32,38 +32,88 @@
  *
  */
 
-/*	Interface class for DatabaseAccess	*/
-
 class Database
 {
 	var $handle;
 	var $dbname;
-	var $da;
 
-	function Database()
-	{
-		$this->da = new DatabaseAccess;
-	}
+	/*	Connect: returns a handle to a database connection
 
-	function Connect($parms, $dbname = '')
+			Expected parameters:
+				SQLServer - server to connect to.
+				SQLUser - user to connect as.
+				SQLPassword - user's password.
+	*/
+
+	function Connect($parameters, $dbname = '')
 	{
-		$this->handle = $this->da->Connect($parms);
 		$this->dbname = $dbname;
+
+		$this->handle = mysql_connect(
+			$parameters['SQLHost'],
+			$parameters['SQLUser'],
+			$parameters['SQLPassword']
+		);
+
+		return $this->handle;
 	}
 
-	function Query($query, $dbname = '')
-	{
-		// no database specified
-		if(!$dbname && !$this->dbname) return;
+	/*	Disconnect: Closes a database connection
 
-		if($dbname) $db = $dbname;
-		else $db = $this->dbname;
-		return $this->da->ReadTable(array('Database' => $db, 'Query' => $query, 'Handle' => $this->handle));
-	}
+			Expected parameters:
+				handle - database connection to close.
+	*/
 
 	function Disconnect()
 	{
-		$this->da->Disconnect($handle);
+		mysql_close($this->handle);
+	}
+
+	/*	ReadTable: Given a query, execute that query, and retrieve
+		all data in row/column format.
+
+		$query[0]['key1'] = 'value01';
+		$query[0]['key2'] = 'value02';
+		$query[1]['key1'] = 'value11';
+		etc.
+
+		Expected parameters:
+			Handle - database connection to use.
+			Query - query to execute.
+			Database - database to perform this query on.
+	*/
+
+	function Query($query, $dbname = '')
+	{
+		$db = $dbname ? $dbname : $this->dbname;
+
+		if(!$db) return;
+
+		$ret = array();
+		$rcount = 0;
+		$dbq = mysql_db_query(
+			$db,
+			$query,
+			$this->handle
+		);
+		if($dbq == false)
+		{
+			global $message;
+			$message .= '<p>Error: ' . mysql_error() . '.
+				<p>Query: ' . $query . '.';
+			return;
+		}
+		while($row = @mysql_fetch_assoc($dbq))
+		{
+			for($i = 0; $i < sizeof($row); $i++)
+			{
+				$ret[$rcount][key($row)] = $row[key($row)];
+				next($row);
+			}
+			$rcount++;
+		}
+
+		return $ret;
 	}
 }
 

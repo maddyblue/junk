@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Include.inc.php,v 1.15 2003/09/25 23:57:33 dolmant Exp $ */
+/* $Id: Include.inc.php,v 1.16 2003/11/27 05:07:09 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -37,8 +37,7 @@ require_once CI_HOME_MOD . 'config/Globals.inc.php';
 // Requires
 require_once CI_FS_PATH . 'config/Database.inc.php';
 
-require_once CI_FS_PATH . 'utility/DatabaseAccess.inc.php';
-require_once CI_FS_PATH . 'utility/Database.inc.php'; // needs to be after DatabaseAccess.inc.php
+require_once CI_FS_PATH . 'utility/Database.inc.php';
 require_once CI_FS_PATH . 'utility/Functions.inc.php';
 require_once CI_FS_PATH . 'utility/Forum.inc.php';
 require_once CI_FS_PATH . 'utility/Session.inc.php';
