@@ -316,4 +316,13 @@ function decode($output)
 	// stripslashes might break stuff, i'm not sure
 	return stripslashes(htmlspecialchars(urldecode($output)));
 }
+
+function getTime($ts = -1)
+{
+	if($ts == -1)
+		$ts = time();
+
+	return date('d M y - H:i', $ts);
+}
+
 ?>
