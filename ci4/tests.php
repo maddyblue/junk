@@ -1,10 +1,16 @@
 <?php
-/* A very rough demonstration of GameObjectUnknown. */
+
+/*	tests.php
+		Khraythia - trythil@dolmant.net
+
+		Testing ground for CI4 infrastructure, as well as a big reference code
+		...swamp.
+*/
 
 include_once("objects/GameObjectUnknown.inc.php");
 include_once("utility/DatabaseAccess.inc.php");
 include_once("utility/SQLFormat.inc.php");
-
+include_once("utility/GameMath.inc.php");
 
 $c = new GameObjectUnknown;
 $i = 400;
@@ -54,31 +60,15 @@ for($k = 0; $k <= sizeof($stuff); $k++)
 
 /* Demonstrating point advancement system. */
 
-function getExp($level)
-{
-	$con[1] = .175137;
-	$con[2] = -1.51982;
-	$con[3] = 6.61609;
-	$con[4] = 2.16264;
-
-	$pwr = 3;
-	$exp = 0;
-
-	for($i = 1; $i <= 4; $i++)
-	{
-		$exp = $exp + ($con[$i] * (pow($level, $pwr)));
-		$pwr--;
-	}
-
-	return $exp;
-}
 
 $thresh = 40;
+
+$gm = new GameMath;
 
 for($i = 0; $i <= $thresh; $i++)
 {
 	print "level $i to level " . ($i + 1) . ": ";
-	print round(getExp($i + 1) - getExp($i));
+	print round($gm->getExp($i + 1) - $gm->getExp($i));
 	print "<br>\n";
 }
 
