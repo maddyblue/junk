@@ -252,7 +252,12 @@ echo $content;
 echo '<p>' . $message;
 
 if(isset($_GET['sqlprofile']))
-	echo '<p>' . $db->querylist;
+{
+	foreach($db->queries as $q)
+	{
+		echo '<br>' . $q[1] . ': ' . $q[0];
+	}
+}
 
 parseTags($bottom);
 echo $bottom;
