@@ -138,7 +138,7 @@ CREATE TABLE forum_thread (
 ) TYPE=MyISAM;
 
 
-CREATE TABLE group (
+CREATE TABLE groups (
   group_id bigint(10) unsigned NOT NULL auto_increment,
   group_name varchar(100) NOT NULL default '',
   group_forum_supermod tinyint(1) unsigned NOT NULL default '0',
