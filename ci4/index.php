@@ -45,9 +45,9 @@ if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
 if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
 
 if(CI_SECTION == 'MAIN')
-	define('CI_SECTION_DIR', '');
+	define('CI_SECTION_DIR', '/');
 else
-	define('CI_SECTION_DIR', strtolower(CI_SECTION));
+	define('CI_SECTION_DIR', strtolower(CI_SECTION) . '/');
 
 require_once CI_HOME_MOD . 'Include.inc.php';
 
