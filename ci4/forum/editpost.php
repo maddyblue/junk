@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: editpost.php,v 1.7 2003/12/20 20:52:17 dolmant Exp $ */
+/* $Id: editpost.php,v 1.8 2003/12/25 05:23:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -105,5 +105,7 @@ else
 	else
 		disp($subject, $text, $post);
 }
+
+update_session_action(0401, $post);
 
 ?>

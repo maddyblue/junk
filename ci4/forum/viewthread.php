@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.29 2003/12/20 09:18:36 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.30 2003/12/25 05:23:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -137,5 +137,7 @@ if(count($array))
 }
 else
 	echo '<br>Non-existent thread.';
+
+update_session_action(0406, $threadid);
 
 ?>

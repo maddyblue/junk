@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: add-forum.php,v 1.3 2003/12/21 03:36:04 dolmant Exp $ */
+/* $Id: add-forum.php,v 1.4 2003/12/25 05:23:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -75,5 +75,7 @@ if(isset($_POST['submit']))
 }
 else
 	display('', '');
+
+update_session_action(0200);
 
 ?>

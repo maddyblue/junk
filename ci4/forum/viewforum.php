@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.25 2003/12/22 07:12:16 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.26 2003/12/25 05:23:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -202,5 +202,7 @@ else
 		echo '<p>' . $pageDisp;
 	}
 }
+
+update_session_action(0405, $forumid);
 
 ?>

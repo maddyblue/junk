@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: sendpm.php,v 1.7 2003/12/15 05:36:39 dolmant Exp $ */
+/* $Id: sendpm.php,v 1.8 2003/12/25 05:22:56 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -107,5 +107,7 @@ else
 		disp($user, $sub, '');
 	}
 }
+
+update_session_action(0306);
 
 ?>

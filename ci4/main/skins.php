@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: skins.php,v 1.1 2003/11/05 00:28:54 dolmant Exp $ */
+/* $Id: skins.php,v 1.2 2003/12/25 05:23:06 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -57,5 +57,7 @@ for($i = 0; $i < count($res); $i++)
 }
 
 echo getTable($array);
+
+update_session_action(0102);
 
 ?>

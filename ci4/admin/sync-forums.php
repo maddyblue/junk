@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: sync-forums.php,v 1.5 2003/12/19 09:10:17 dolmant Exp $ */
+/* $Id: sync-forums.php,v 1.6 2003/12/25 05:23:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -90,5 +90,7 @@ foreach($users as $user)
 }
 
 echo 'done - ' . $count;
+
+update_session_action(0200);
 
 ?>

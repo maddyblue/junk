@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: logout.php,v 1.6 2003/12/15 05:36:39 dolmant Exp $ */
+/* $Id: logout.php,v 1.7 2003/12/25 05:22:56 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -37,6 +37,8 @@ deleteCIcookie('pass');
 
 $id = '';
 $pass = '';
+
+update_session_action(0303);
 
 ?>
 

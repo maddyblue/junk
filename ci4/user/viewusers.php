@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewusers.php,v 1.7 2003/12/15 05:36:39 dolmant Exp $ */
+/* $Id: viewusers.php,v 1.8 2003/12/25 05:22:56 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -51,5 +51,7 @@ for($i = 0; $i < count($res); $i++)
 }
 
 echo getTable($array);
+
+update_session_action(0310);
 
 ?>

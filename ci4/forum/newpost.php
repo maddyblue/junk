@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newpost.php,v 1.11 2003/12/16 09:07:15 dolmant Exp $ */
+/* $Id: newpost.php,v 1.12 2003/12/25 05:23:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -138,5 +138,7 @@ else
 		disp($subject, $post, $thread);
 	}
 }
+
+update_session_action(0402, $thread);
 
 ?>

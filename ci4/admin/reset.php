@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: reset.php,v 1.4 2003/09/25 23:57:33 dolmant Exp $ */
+/* $Id: reset.php,v 1.5 2003/12/25 05:23:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -81,5 +81,7 @@ echo getTableForm('Reset forum', array(
 	array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Reset forum')),
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'reset'))
 ));
+
+update_session_action(0200);
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: manage-forums.php,v 1.2 2003/12/22 07:08:57 dolmant Exp $ */
+/* $Id: manage-forums.php,v 1.3 2003/12/25 05:23:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -110,4 +110,7 @@ echo getFormField(array('type'=>'hidden', 'name'=>'a', 'val'=>'manage-forums'));
 echo '</form>';
 
 echo '<p>' . makeLink('Add a forum', 'a=add-forum');
+
+update_session_action(0200);
+
 ?>

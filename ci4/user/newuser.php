@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newuser.php,v 1.9 2003/12/15 05:36:39 dolmant Exp $ */
+/* $Id: newuser.php,v 1.10 2003/12/25 05:22:56 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -118,5 +118,7 @@ if(isset($_POST['submit']))
 }
 else
 	display($name, $email);
+
+update_session_action(0305);
 
 ?>

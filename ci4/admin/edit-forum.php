@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: edit-forum.php,v 1.2 2003/12/22 07:08:57 dolmant Exp $ */
+/* $Id: edit-forum.php,v 1.3 2003/12/25 05:23:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -107,5 +107,7 @@ else
 		display($forumid, $res[0]['forum_forum_name'], $res[0]['forum_forum_desc'], $res[0]['forum_forum_parent'], $res[0]['forum_forum_type']);
 	}
 }
+
+update_session_action(0200);
 
 ?>

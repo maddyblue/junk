@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: usercp.php,v 1.6 2003/12/15 05:36:39 dolmant Exp $ */
+/* $Id: usercp.php,v 1.7 2003/12/25 05:22:56 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -93,5 +93,7 @@ else
 {
 	echo '<p>You must be logged in to edit userdata.';
 }
+
+update_session_action(0307);
 
 ?>
