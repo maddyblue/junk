@@ -208,30 +208,7 @@ table.maintable {
 					<table class="boxinner">
 						<tr>
 						<td class="box">
-							Section Menu
-						</td>
-					</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-
-		<table class="boxcontents">
-			<tr>
-				<td>
-					<CISECTION_MENU>INSERT<br></CISECTION_MENU>
-				</td>
-			</tr>
-		</table>
-		<p>
-
-		<table class="box">
-			<tr>
-				<td width="100%">
-					<table class="boxinner">
-						<tr>
-						<td class="box">
-							Section Nav
+							Section Navigation
 						</td>
 					</tr>
 					</table>

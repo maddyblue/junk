@@ -248,18 +248,6 @@ td.block-light {
 			<table cellspacing="0" class="nav">
 				<tr>
 					<td class="block-dark">
-						<?php echo $seclower; ?> menu
-					</td>
-				</tr>
-				<tr>
-					<td class="block-light">
-						<CISECTION_MENU>INSERT<br></CISECTION_MENU>
-					</td>
-				</tr>
-			</table>
-			<table cellspacing="0" class="nav">
-				<tr>
-					<td class="block-dark">
 						<? echo $seclower; ?> nav
 					</td>
 				</tr>
