@@ -134,6 +134,9 @@ else
 				updateFromPost($lastpost);
 				$DBMain->Query('update forum_forum set forum_forum_threads=forum_forum_threads+1 where forum_forum_id=' . $forum);
 
+				$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $lastthread);
+				$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $lastthread . ', ' . TIME . ')');
+
 				echo '<p>Thread created successfully.';
 				echo '<p>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
 				echo '<p>Go to the ' . makeLink('created thread', 'a=viewthread&t=' . $lastthread) . '.';

@@ -117,6 +117,9 @@ else
 				updateFromPost($lastpost);
 				$DBMain->Query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
 
+				$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $thread);
+				$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $thread . ', ' . TIME . ')');
+
 				echo '<p>Reply posted successfully.';
 				echo '<p>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
 				echo '<p>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $thread) . '.';
