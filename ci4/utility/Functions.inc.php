@@ -356,7 +356,7 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 	$ret = '';
 
 	$rows = count($array);
-	$cols = count($array[0]);
+	$cols = isset($array[0]) ? count($array[0]) : 0;
 	$i = 0;
 
 	if($firstLineHeader)
