@@ -241,7 +241,6 @@ INSERT INTO monstertype VALUES (8,'Phantom');
 INSERT INTO monstertype VALUES (9,'Undead');
 
 
-INSERT INTO site VALUES ('ADMIN_SECTION_MENU',0,'link','Import PHPBB forums','','\'a=import-phpbb\'','SECTION_ADMIN',0,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',10,'link','Reset','','\'a=reset\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',20,'link','Sync forums','','\'a=sync-forums\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',30,'link','Manage forums','','\'a=manage-forums\'','SECTION_ADMIN',1,1,'');
