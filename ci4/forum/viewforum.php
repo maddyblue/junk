@@ -183,7 +183,7 @@ function threadList($forumid, $page, $threadsPP, $uls)
 
 	// simultaneously get usernames and post data for first and last post by doing complex self-joins
 	$ret = $DBMain->Query('
-	SELECT forum_thread.*, plast.forum_post_date pld, ufirst.user_name ufn, ufirst.user_id ufi, ulast.user_name uln, ulast.user_id uli
+	SELECT forum_thread.*, pfirst.forum_post_text pft, plast.forum_post_date pld, plast.forum_post_text plt, ufirst.user_name ufn, ufirst.user_id ufi, ulast.user_name uln, ulast.user_id uli
 	FROM forum_thread, forum_post pfirst, forum_post plast, user ufirst, user ulast
 	WHERE forum_thread_forum=' . $forumid . '
 	AND pfirst.forum_post_id = forum_thread_first_post
@@ -202,11 +202,11 @@ function threadList($forumid, $page, $threadsPP, $uls)
 
 		array_push($array, array(
 			(newThread($row, $uls) ? '* ' : '') .
-				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']) . $pageList,
+				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id'], '', true, decode($row['pft'])) . $pageList,
 			getUserlink($row['ufi'], decode($row['ufn'])),
 			$row['forum_thread_replies'],
 			$row['forum_thread_views'],
-			linkLastPost($row['forum_thread_last_post'], $row['uli'], $row['uln'], $row['pld'], '', '')
+			linkLastPost($row['forum_thread_last_post'], $row['uli'], $row['uln'], $row['pld'], '', '', '', decode($row['plt']))
 		));
 	}
 

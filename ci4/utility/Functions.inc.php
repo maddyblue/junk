@@ -438,7 +438,7 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
  * $session - add a session $_GET value to the link. This should almost always
  *  be true.
  */
-function makeLink($text, $link, $section = '', $session = true)
+function makeLink($text, $link, $section = '', $session = true, $title = '')
 {
 	// if there's nothing to link, don't link anything
 	if(!$text)
@@ -467,7 +467,12 @@ function makeLink($text, $link, $section = '', $session = true)
 
 	$ret .= str_replace('&', '&amp;', $link);
 
-	$ret .= '">' . $text . '</a>';
+	$ret .= '"';
+
+	if($title)
+		$ret .= ' title="' . $title . '"';
+
+	$ret .= '>' . $text . '</a>';
 
 	return $ret;
 }
