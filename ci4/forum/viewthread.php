@@ -67,6 +67,11 @@ function postList($thread)
 		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class=small>' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
 		$body .= '<p>' . parsePost($post['forum_post_id']);
 
+		if($post['forum_post_edit_user'] != 0)
+		{
+			$body .= '<p><i class="small">Last edited by ' . getUsername($post['forum_post_edit_user']) . ' on ' . getTime($post['forum_post_edit_date']) . '.</i>';
+		}
+
 		array_push($array, array(
 			$user,
 			$body
