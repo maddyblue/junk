@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.29 2004/01/08 06:43:52 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.30 2004/01/08 06:45:26 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -180,7 +180,8 @@ else
 
 	$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forumid);
 
-	echo getTable($array);
+	if(count($array) > 1)
+		echo getTable($array);
 
 	if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 	{
