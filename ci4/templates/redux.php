@@ -211,12 +211,7 @@ td.block-light {
 				</tr>
 				<tr>
 					<td class="block-light">
-						<CINAV>INSERT<br></CINAV><br>
-							<?php
-								$pms = makePMLink();
-								if($pms)
-									echo $pms . '<br>';
-							?>
+						<CINAV>INSERT<br></CINAV>
 					</td>
 				</tr>
 			</table>
@@ -233,6 +228,10 @@ td.block-light {
 						<tr>
 							<td class="block-light">
 								<?php
+									$pms = makePMLink();
+									if($pms)
+										echo $pms . '<br>';
+
 									$res = $DBMain->Query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
 									for($i = 0; $i < count($res); $i++)
 									{
@@ -256,7 +255,7 @@ td.block-light {
 				</tr>
 				<tr>
 					<td class="block-light">
-						<CISECTION_MENU>INSERT<br></CISECTION_MENU><br>
+						<CISECTION_MENU>INSERT<br></CISECTION_MENU>
 					</td>
 				</tr>
 			</table>
