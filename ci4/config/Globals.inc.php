@@ -18,6 +18,12 @@ define('SECTION_USER', 'user');
 define('SECTION_FORUM', 'forum');
 define('SECTION_GAME', 'game');
 
+/* Groups */
+define('GROUP_ADMIN', 1);
+define('GROUP_SUPER', 2);
+define('GROUP_BANNED', 3);
+define('GROUP_MOD', 4);
+
 /* Don't mess with these */
 
 define('CI_WWW_ADDRESS', 'http://' . CI_WWW_DOMAIN . CI_WWW_PATH);
