@@ -291,7 +291,7 @@ CREATE TABLE player (
   player_domain bigint(10) unsigned NOT NULL default '0',
   player_job bigint(10) unsigned NOT NULL default '0',
   player_battle bigint(10) unsigned NOT NULL default '0',
-  player_area bigint(10) unsigned NOT NULL default '0',
+  player_town bigint(10) unsigned NOT NULL default '0',
   player_house bigint(10) unsigned NOT NULL default '0',
   player_lv smallint(6) unsigned NOT NULL default '0',
   player_exp bigint(10) unsigned NOT NULL default '0',
