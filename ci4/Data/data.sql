@@ -28,11 +28,6 @@ INSERT INTO ability VALUES (24,'Poison','',1,10,0,10,0,'Inflicts poison status o
 
 INSERT INTO abilitytype VALUES (1,'Black Magic','Damaging magic.');
 INSERT INTO abilitytype VALUES (2,'White Magic','Healing magic.');
-INSERT INTO abilitytype VALUES (3,'Green Magic','Nature magic.');
-INSERT INTO abilitytype VALUES (4,'Gray Magic','Illusionary magic.');
-INSERT INTO abilitytype VALUES (5,'Red Magic','A combination of Black and White Magic.');
-INSERT INTO abilitytype VALUES (6,'Creation','Abilities used to create items.');
-INSERT INTO abilitytype VALUES (7,'Counter','When attacked, react.');
 INSERT INTO abilitytype VALUES (8,'Tactic','Other battles abilities excluding healing and attacking.');
 INSERT INTO abilitytype VALUES (9,'Archery','Anything dealing with bows and arrows or accuracy.');
 INSERT INTO abilitytype VALUES (10,'Aura','Light that envelopes a Paladin which gives status and other bonuses.');
@@ -101,9 +96,11 @@ INSERT INTO cor_area_town VALUES (18,9);
 
 
 INSERT INTO cor_job_abilitytype VALUES (7,9);
-INSERT INTO cor_job_abilitytype VALUES (10,2);
 INSERT INTO cor_job_abilitytype VALUES (4,10);
 INSERT INTO cor_job_abilitytype VALUES (11,1);
+INSERT INTO cor_job_abilitytype VALUES (2,8);
+INSERT INTO cor_job_abilitytype VALUES (10,2);
+INSERT INTO cor_job_abilitytype VALUES (3,11);
 
 
 INSERT INTO cor_job_equipmenttype VALUES (2,3);
