@@ -295,9 +295,9 @@ function makeLink($text, $link, $root = false)
 	return '<a href="' . CI_WWW_PATH . ($root ? '' : CI_SECTION_DIR) . $link . '">' . $text . '</a>';
 }
 
-function makeImg($img, $relative = false)
+function makeImg($img, $prefix = '', $relative = false)
 {
-	return ($img ? '<img src="' . ($relative ? '' : CI_WWW_PATH) . $link . '">' : '');
+	return ($img ? '<img src="' . ($relative ? '' : CI_WWW_PATH) . $prefix . $img . '">' : '');
 }
 
 ?>
