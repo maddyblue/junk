@@ -1,3 +1,6 @@
+<?php
+$seclower = strtolower(CI_SECTION);
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 	"http://www.w3.org/TR/html4/strict.dtd">
 
@@ -6,8 +9,9 @@
 <!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescent island ::
-<?php echo strtolower(CI_SECTION); ?>
 <?php
+echo $seclower;
+
 if($aval)
 {
 	echo ' -> ' . $aval;
@@ -177,14 +181,26 @@ td.block-light {
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="block">
 				<tr>
 					<td align="right" valign="top" class="block-dark" style="padding-top: 3px; padding-bottom: 8px; padding-right: 8px;">
-						<div class="header">
-						[<?php
-							if(LOGGED)
-								echo decode($USER['user_name']) . '@';
+						<table width=100% border=0>
+							<tr>
+								<td align="left">
+									<div class="header"><?php echo $seclower; ?></div>
+								</td>
+								<td align="right">
+									<div class="header">
+										[<?php
+											if(LOGGED)
+											{
+												echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . ($PLAYER ? (':' . makeLink(decode($PLAYER['player_name']), 'a=viewplayerdetails', SECTION_USER)) : '') . '@';
+											}
 
-							echo getDomainName();
-						?>]
-						crescent island</div>
+											echo makeLink(getDomainName(), 'a=domains', SECTION_HOME);
+										?>]
+										crescent island
+									</div>
+								</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 				<tr>
@@ -215,7 +231,7 @@ td.block-light {
 			<table cellspacing="0" class="nav">
 				<tr>
 					<td class="block-dark">
-						section menu
+						<?php echo $seclower; ?> menu
 					</td>
 				</tr>
 				<tr>
@@ -227,7 +243,7 @@ td.block-light {
 			<table cellspacing="0" class="nav">
 				<tr>
 					<td class="block-dark">
-						section nav
+						<? echo $seclower; ?> nav
 					</td>
 				</tr>
 				<tr>
