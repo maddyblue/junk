@@ -109,24 +109,28 @@ $content = '';
 if(isset($_GET['a']))
 {
 	$aval = $_GET['a'];
-	$a = './' . $aval . '.php';
 
-	if(file_exists($a))
+	if($aval)
 	{
-		$fd = fopen($a, 'r');
-		if($fd)
+		$a = './' . $aval . '.php';
+
+		if(file_exists($a))
 		{
-			$content = fread($fd, filesize($a));
-			fclose($fd);
-			ob_start();
-			eval('?>' . $content);
-			$content = ob_get_contents();
-			ob_end_clean();
+			$fd = fopen($a, 'r');
+			if($fd)
+			{
+				$content = fread($fd, filesize($a));
+				fclose($fd);
+				ob_start();
+				eval('?>' . $content);
+				$content = ob_get_contents();
+				ob_end_clean();
+			}
 		}
-	}
-	else
-	{
-		$content = 'Non-existent action.';
+		else
+		{
+			$content = 'Non-existent action.';
+		}
 	}
 }
 else
