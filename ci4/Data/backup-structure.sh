@@ -29,4 +29,4 @@
 
 # dump structure only (-d)
 
-mysqldump -u root -d -f ci4 | egrep -v "^-.*" > structure.sql
+mysqldump -u root -p -d -f ci4 | egrep -v "^-.*" > structure.sql

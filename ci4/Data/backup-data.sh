@@ -29,7 +29,7 @@
 
 # dump data of static tables
 
-mysqldump -u root -t ci4 \
+mysqldump -u root -p -t ci4 \
 	ability \
 	abilitytype \
 	area \
