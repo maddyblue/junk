@@ -266,8 +266,6 @@ INSERT INTO site VALUES ('NAV',40,'link','Game','','','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('NAV',50,'link','Battle','','','SECTION_BATTLE',0,0,'');
 INSERT INTO site VALUES ('NAV',60,'link','Admin','','','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('NAV',70,'link','Manual','','','SECTION_MANUAL',0,0,'');
-INSERT INTO site VALUES ('SKINS',0,'text','redux','','','',0,0,'');
-INSERT INTO site VALUES ('SKINS',10,'text','kuro5hin','','','',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','\'a=newuser\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','My Info','','\'a=viewuserdetails&user=\' . ID','SECTION_USER',1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new player','','\'a=newplayer\'','SECTION_USER',1,0,'');
@@ -280,6 +278,7 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewus
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
+INSERT INTO site VALUES ('BATTLE_SECTION_MENU',0,'link','New Battle','','\'a=new-battle\'','SECTION_BATTLE',1,0,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
