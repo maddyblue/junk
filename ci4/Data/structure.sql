@@ -172,7 +172,9 @@ CREATE TABLE forum_forum (
   forum_forum_threads bigint(10) unsigned NOT NULL default '0',
   forum_forum_posts bigint(10) unsigned NOT NULL default '0',
   forum_forum_last_post bigint(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (forum_forum_id)
+  PRIMARY KEY  (forum_forum_id),
+  KEY forum_forum_last_post (forum_forum_last_post),
+  KEY forum_forum_parent (forum_forum_parent)
 ) TYPE=MyISAM;
 
 
@@ -242,13 +244,16 @@ CREATE TABLE group_def (
   group_def_news tinyint(1) unsigned NOT NULL default '0',
   group_def_mod tinyint(1) unsigned NOT NULL default '0',
   group_def_banned tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (group_def_id)
+  PRIMARY KEY  (group_def_id),
+  KEY group_def_admin (group_def_admin)
 ) TYPE=MyISAM PACK_KEYS=0;
 
 
 CREATE TABLE group_user (
   group_user_user bigint(10) unsigned NOT NULL default '0',
-  group_user_group bigint(10) unsigned NOT NULL default '0'
+  group_user_group bigint(10) unsigned NOT NULL default '0',
+  KEY group_user_user (group_user_user),
+  KEY group_user_group (group_user_group)
 ) TYPE=MyISAM;
 
 
@@ -427,7 +432,9 @@ CREATE TABLE pm (
   pm_read tinyint(1) unsigned NOT NULL default '0',
   pm_subject varchar(100) NOT NULL default '',
   pm_text text NOT NULL,
-  PRIMARY KEY  (pm_id)
+  PRIMARY KEY  (pm_id),
+  KEY pm_read (pm_read),
+  KEY pm_to (pm_to)
 ) TYPE=MyISAM;
 
 
@@ -501,6 +508,7 @@ CREATE TABLE user (
   PRIMARY KEY  (user_id),
   UNIQUE KEY user_name (user_name),
   KEY user_register (user_register),
-  KEY user_last (user_last)
+  KEY user_last (user_last),
+  KEY user_pass (user_pass)
 ) TYPE=MyISAM;
 
