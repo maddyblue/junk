@@ -32,7 +32,7 @@
  *
  */
 
-$query = 'select * from area order by area_lv';
+$query = 'select * from area order by area_order';
 $res = $DBMain->Query($query);
 
 $array = array();
