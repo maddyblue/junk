@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: taglist.php,v 1.7 2003/12/25 05:23:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -36,9 +36,8 @@ $array = array('[i]italics[/i]',
 '[b]bold[/b]',
 '[u]underline[/u]',
 '[img]http://crescentisland.com/images/monster/grat.gif[/img]',
-'[font color=red size=24]big red[/font]',
 '[url]http://crescentisland.com[/url]',
-//'[url=http://crescentisland.com]Crescent Island[/url]',
+'[url=http://crescentisland.com]Crescent Island[/url]',
 '[quote]Hi, I said something![/quote]',
 '[pre]
 test
