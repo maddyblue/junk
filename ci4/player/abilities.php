@@ -87,4 +87,6 @@ if($PLAYER)
 else
 	echo '<p>You must switch to a domain with a player, or create a new one in this domain.';
 
+update_session_action(0704);
+
 ?>
