@@ -51,11 +51,16 @@ class DatabaseAccess
 		$ret = array();
 		$counter = 0;
 		$dbq = mysql_db_query(
-			$parameters{"Database"},
-			$parameters{"Query"},
-			$parameters{"Handle"}
+			$parameters{'Database'},
+			$parameters{'Query'},
+			$parameters{'Handle'}
 		);
-
+		if(mysql_error())
+		{
+			echo 'Error: ' . mysql_error() . '.
+				<p>Query: ' . $parameters{'Query'} . '.';
+			return;
+		}
 		while($row = mysql_fetch_assoc($dbq)) {
 			for($i = 1; $i <= sizeof($row); $i++) {
 				$ret{key($row)}[$counter] = $row{key($row)};
