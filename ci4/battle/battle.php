@@ -134,17 +134,6 @@ else
 
 	echo getTable($stats);
 
-	/* turnDone set to 0 means that the entitiy who went has printed a form for a
-	 * player to submit, thus, don't do it here.
-	 */
-	if($entities[$turn]->turnDone != 0)
-	{
-		echo getTableForm('', array(
-			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Continue')),
-			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'battle'))
-		));
-	}
-
 	/* In a multi player battle, turnDone = -1 means that the current player does
 	 * not control this turn, and must wait. Thus, don't do worry about end
 	 * battle.
@@ -170,11 +159,21 @@ else
 		if(count($t) <= 1)
 		{
 			$db->query('update battle set battle_end=' . TIME . ' where battle_id=' . $PLAYER['player_battle']);
-
 			$db->query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
-
 			echo '<p>Battle ended.';
+			$done = true;
 		}
+	}
+
+	/* turnDone set to 0 means that the entitiy who went has printed a form for a
+	 * player to submit, thus, don't do it here.
+	 */
+	if(!isset($done) && $entities[$turn]->turnDone != 0)
+	{
+		echo getTableForm('', array(
+			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Continue')),
+			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'battle'))
+		));
 	}
 }
 
