@@ -95,7 +95,7 @@ td
 	<table width="100%" height="100%" valign="top">
 		<tr>
 			<td>
-				<CICONTENT>INSERT</CICONTENT>
+				<CICONTENT>
 			</td>
 		</tr>
 	</table>
@@ -114,7 +114,7 @@ td
 	<table width="100%" class="box">
 		<tr>
 			<td>
-				[ <CISEC>[ INSERT ]<br></CIdSEC> ]
+				[ <CISEC>[ INSERT ]<br></CISEC> ]
 			</td>
 		</tr>
 	</table>
