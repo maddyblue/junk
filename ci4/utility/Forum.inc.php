@@ -237,7 +237,7 @@ function parsePostText($post)
 	}
 
 	// extended urls: [url=http://blah.com]text[/url]
-	$url = "\[url=([-a-zA-Z0-9:/\.%~_]+)\](.+)\[/url\]";
+	$url = "\[url=([-a-zA-Z0-9:/\.%~_\?\=\+&;#]+)\](.+)\[/url\]";
 	$endurl = '[/url]';
 	$regs = array();
 	// don't use eregi because PHP4 apparently doesn't have stripos
