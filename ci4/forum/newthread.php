@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newthread.php,v 1.10 2003/12/25 05:23:00 dolmant Exp $ */
+/* $Id: newthread.php,v 1.11 2003/12/25 05:25:50 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -38,7 +38,7 @@ function disp($subject, $post, $forum)
 
 	$ret = $DBMain->Query('select forum_forum_name from forum_forum where forum_forum_id=' . $forum);
 	if(count($ret))
-		$name = ' in ' . makeLink($ret[0]['forum_forum_name'], 'a=viewforum&f=' . $forum);
+		$name = ' in ' . makeLink(decode($ret[0]['forum_forum_name']), 'a=viewforum&f=' . $forum);
 	else
 		$name = '';
 

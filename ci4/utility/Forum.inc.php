@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.20 2003/12/22 07:07:54 dolmant Exp $ */
+/* $Id: Forum.inc.php,v 1.21 2003/12/25 05:26:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -63,7 +63,7 @@ function getNavBar($forum)
 	global $DBMain;
 	$res = $DBMain->Query('select forum_forum_name, forum_forum_id, forum_forum_parent from forum_forum where forum_forum_id=' . $forum);
 
-	$ret = makeLink($res[0]['forum_forum_name'], 'a=viewforum&f=' . $res[0]['forum_forum_id']);
+	$ret = makeLink(decode($res[0]['forum_forum_name']), 'a=viewforum&f=' . $res[0]['forum_forum_id']);
 
 	if($res[0]['forum_forum_parent'] != 0)
 		$ret = getNavBar($res[0]['forum_forum_parent']) . ' &gt; ' . $ret;
