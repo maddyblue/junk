@@ -32,7 +32,7 @@
  *
  */
 
-if(LOGGED && isset($_POST['job']))
+if($PLAYER && isset($_POST['job']))
 {
 	$job = intval($_POST['job']);
 
@@ -188,12 +188,12 @@ $change = getForm('', array(
 	array('', array('type'=>'hidden', 'name'=>'job', 'val'=>$job))
 ));
 
-if(LOGGED)
+if($PLAYER)
 	echo '<p>' . $change;
 
 echo getTable($array);
 
-if(LOGGED)
+if($PLAYER)
 	echo '<p>' . $change;
 
 update_session_action(0504);

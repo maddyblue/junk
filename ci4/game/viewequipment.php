@@ -76,7 +76,7 @@ else
 	}
 }
 
-if(LOGGED)
+if($PLAYER)
 	echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
 
 echo getTable($array);

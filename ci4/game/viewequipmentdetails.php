@@ -39,7 +39,7 @@ $res = $db->query('select * from equipment, equipmenttype where equipment_id=' .
 
 if(count($res))
 {
-	if(LOGGED && isset($_POST['e']))
+	if($PLAYER && isset($_POST['e']))
 	{
 		$name = $res[0]['equipment_name'];
 		$cost = $res[0]['equipment_cost'];
@@ -89,7 +89,7 @@ if(count($res))
 		array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
 	));
 
-	if(LOGGED)
+	if($PLAYER)
 	{
 		echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
 		echo '<p>' . $buytext;
@@ -97,7 +97,7 @@ if(count($res))
 
 	echo getTable($array);
 
-	if(LOGGED)
+	if($PLAYER)
 		echo '<p>' . $buytext;
 }
 else
