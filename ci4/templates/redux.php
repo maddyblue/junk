@@ -242,7 +242,7 @@ td.block-light {
 				</tr>
 				<tr>
 					<td class="block-light">
-						<?php echo getTime(TIME); ?>
+						<?php echo date('d M y g:i a T', TIME); ?>
 					</td>
 				</tr>
 			</table>
