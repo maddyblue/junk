@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.48 2003/09/25 23:57:36 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.49 2003/09/27 03:34:20 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -348,10 +348,10 @@ function makeLink($text, $link, $section = '')
 		$ret .= 's=' . SESSION;
 
 	if(!ID && $link)
-		$ret .= '&';
+		$ret .= '&amp;';
 
 	if($link)
-		$ret .= $link;
+		$ret .= str_replace('&', '&amp;', $link);
 
 	$ret .= '">' . $text . '</a>';
 
@@ -475,7 +475,7 @@ function getInputList()
 	$r = '';
 	reset($_GET);
 	while(list($key, $val) = each($_GET))
-		$r .= '<input type="hidden" name="' . $key . '" value="' . $val . '">';
+		$r .= '<div><input type="hidden" name="' . $key . '" value="' . $val . '"></div>';
 
 	return $r;
 }
