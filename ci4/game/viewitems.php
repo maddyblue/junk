@@ -23,7 +23,7 @@ for($i = 0; $i < count($res['item_name']); $i++)
 {
 	if($res['item_buy'][$i] == 1)
 	{
-		$buytext = makeLink('Yes', '?a=buyitem&item=' . $res['item_id'][$i]);
+		$buytext = makeLink('Yes', '?a=buyitem&amp;item=' . $res['item_id'][$i]);
 	}
 	else
 	{
@@ -31,7 +31,7 @@ for($i = 0; $i < count($res['item_name']); $i++)
 	}
 
 	array_push($array, array(
-		makeLink($res['itemtype_name'][$i], '?a=viewitems&type=' . $res['itemtype_id'][$i]),
+		makeLink($res['itemtype_name'][$i], '?a=viewitems&amp;type=' . $res['itemtype_id'][$i]),
 		$res['item_name'][$i],
 		$buytext,
 		$res['item_cost'][$i],

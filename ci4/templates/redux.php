@@ -5,18 +5,22 @@ define('TEMPLATE_ADDROW_RIGHT', true);
 
 ?>
 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+
 <html>
 <head>
+<title>crescent island</title>
 <style type="text/css">
 <!--
 body {
-  background-color: D5D9DD;
+  background-color: #D5D9DD;
 }
 
 p, body, td, li, input, textarea, select {
   font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size: 10px;
-  color: 333333;
+  color: #333333;
   letter-spacing: 1px;
 }
 
@@ -27,9 +31,9 @@ input.text {
 
 .submit {
   padding-top: 2px;
-  height: 22 px;
+  height: 22px;
   width: 88px;
-  color: 224488;
+  color: #224488;
   font-weight: bold;
   background-image: url(<CI_TEMPLATE_DIR>/button.gif);
   background-repeat: no-repeat;
@@ -54,7 +58,7 @@ textarea {
 
 a {
 	text-decoration: none;
-	color: 224488;
+	color: #224488;
 
 }
 a:hover {
@@ -74,6 +78,14 @@ table.block {
   table-layout: fixed;
 }
 
+.tdmain {
+	width: 580px;
+}
+
+.tdside {
+	width: 175px;
+}
+
 .nav td {
   padding: 5px;
   padding-left: 8px;
@@ -91,7 +103,7 @@ td.block-dark {
   border-right: 1px solid #777777;
   border-left: 1px solid #DDDDDD;
   border-top: 1px solid #DDDDDD;
-  background-color: C0C7CD;
+  background-color: #C0C7CD;
 }
 
 td.block-dark a {
@@ -103,11 +115,15 @@ td.block-light {
   border-right: 1px solid #888888;
   border-left: 1px solid #FFFFFF;
   border-top: 1px solid #FFFFFF;
-  background-color: EEEEEE;
+  background-color: #EEEEEE;
 }
 
 .table1 {
 	border-spacing: 0px;
+}
+
+.header {
+	font-size: 18px;
 }
 
 .td1 {
@@ -158,7 +174,7 @@ td.block-light {
   padding-top: 5px;
   padding-bottom: 5px;
   text-align: center;
-  height: 22 px;
+  height: 22px;
   width: 88px;
   margin-right: 8px;
   background-image: url(<CI_TEMPLATE_DIR>/button.gif);
@@ -174,11 +190,11 @@ td.block-light {
 <body>
 <table cellspacing="0" cellpadding="0">
 	<tr>
-		<td width="580" valign="top">
+		<td class="tdmain" valign="top">
 			<table width="580" border="0" cellspacing="0" cellpadding="0" class="block">
 				<tr>
 					<td align="right" valign="top" class="block-dark" style="padding-top: 3px; padding-bottom: 8px; padding-right: 8px;">
-						<font style="font-size: 18px">crescent island</font>
+						<div class="header">crescent island</div>
   				</td>
 				</tr>
 				<tr>
@@ -188,7 +204,7 @@ td.block-light {
 				</tr>
 			</table>
 		</td>
-		<td width="175" valign="top">
+		<td class="tdside" valign="top">
 			<table cellspacing="0" class="nav">
 				<tr>
 					<td class="block-dark">
