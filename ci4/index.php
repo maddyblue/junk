@@ -34,21 +34,46 @@ for($i = 0; $i < sizeof($ret{'tag'}); $i++)
 
 $ret = $DB->Query('SELECT tag,type,text,link FROM site where logged ' . $logged . '= 0 order by orderid');
 
-while(preg_match('/<CI[^>]+>/', $template))
+while(preg_match('/<CI[^>]+>/', $template)) // find a <CIXXX> tag
 {
 	$tag = '';
 	$insert = '';
 	$pos = strpos($template, '<CI');
 	$pos1 = strpos($template, '>', $pos + 3);
 	$tag = substr($template, $pos + 3, $pos1 - $pos - 3);
-	$pos2 = strpos($template, '</CI', $pos1);
+	$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
+
+	/*	Shouldn't have to do this, but it'll prevent infinite loops.
+	 * This if block will remove the tag spanning $pos to $pos1,
+	 * since it didn't have a matching stop tag.
+	 */
+	if($pos2 === false)
+	{
+		$template = substr_replace($template, '', $pos, $pos1 - $pos + 1);
+		continue;
+	}
 	$pos3 = $pos2 + 5 + strlen($tag);
 	$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
 
 	$pos4 = strpos($insert, 'INSERT');
 	$inslen = strlen($insert);
 
-	$ret = $DB->Query('SELECT type,text,link FROM site where logged ' . $logged . '=0 AND tag=' . "'$tag'" . ' ORDER BY orderid');
+	switch($tag)
+	{
+		case 'SEC':
+		case 'SUB':
+		{
+			$gettag = $SECTION . $tag;
+			break;
+		}
+		default:
+		{
+			$gettag = $tag;
+			break;
+		}
+	}
+
+	$ret = $DB->Query('SELECT type,text,link FROM site where logged ' . $logged . '=0 AND tag=' . "'$gettag'" . ' ORDER BY orderid');
 	$ret{'link'} = preg_replace('/^\$/', strtolower($SECTION) . '/', $ret{'link'});
 	$ret{'link'} = preg_replace('/^/', $CI_PATH . '/', $ret{'link'});
 	$repl = "";
@@ -68,6 +93,14 @@ while(preg_match('/<CI[^>]+>/', $template))
 		{
 			case 'text': $repl .= substr_replace($insert, $ret{'text'}{$i}, $pos6, $pos7); break;
 			case 'link': $repl .= substr_replace($insert, '<a href="' . $ret{'link'}{$i} . '">' . $ret{'text'}{$i} . '</a>', $pos6, $pos7); break;
+			case 'image':
+			{
+				if($ret{'link'}{$i})
+					$repl .= substr_replace($insert, '<a href="' . $ret{'link'}{$i} . '"><img src="' . $ret{'text'}{$i} . '"></a>', $pos6, $pos7);
+				else
+					$repl .= substr_replace($insert, '<img src="' . $ret{'text'}{$i} . '">', $pos6, $pos7);
+				break;
+			}
 		}
 		$template = str_replace('<CI' . $ret{'tag'}{$i} . '>', $repl, $template);
 	}
