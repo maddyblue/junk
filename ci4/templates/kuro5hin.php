@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: kuro5hin.php,v 1.9 2004/01/06 09:57:47 dolmant Exp $ -->
+<!-- $Id: kuro5hin.php,v 1.10 2004/01/07 01:58:40 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
@@ -163,7 +163,7 @@ table.maintable {
 
 <table class="maintable">
 	<tr>
-		<td valign="top" width="20%">
+		<td valign="top" width="15%">
 
 		<table class="box">
 			<tr>
@@ -259,7 +259,7 @@ table.maintable {
 
 		</td>
 
-		<td valign="top" width="80%">
+		<td valign="top" width="85%">
 			<table class="box">
 				<tr>
 					<td>
