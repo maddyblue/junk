@@ -99,8 +99,8 @@ else
 		{
 			$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date) values (' .
 				$thread . ',' .
-				'"' . decode($subject) . '",' .
-				'"' . decode($post) . '",' .
+				'"' . $subject . '",' .
+				'"' . $post . '",' .
 				ID . ',' .
 				TIME .
 				')');
