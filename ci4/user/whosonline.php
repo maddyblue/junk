@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.5 2003/09/27 22:03:11 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.6 2003/12/15 05:36:39 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -31,8 +31,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
-
-update_session_action('Viewing ' . makeLink('who\'s online', 'a=whosonline', SECTION_USER, false));
 
 $query = 'select * from session order by session_current';
 $res = $DBMain->Query($query);

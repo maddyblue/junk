@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewpm.php,v 1.5 2003/09/27 22:03:11 dolmant Exp $ */
+/* $Id: viewpm.php,v 1.6 2003/12/15 05:36:39 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -91,7 +91,5 @@ else
 		echo getTable($array, false);
 	}
 }
-
-update_session_action('Viewing ' . makeLink('PMs', 'a=viewpms', SECTION_USER, false));
 
 ?>

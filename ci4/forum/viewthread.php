@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.24 2003/12/15 04:36:25 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.25 2003/12/15 05:36:39 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -132,8 +132,6 @@ if(count($array))
 		$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $threadid);
 		$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_forum, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . $forumid . ', ' . TIME . ')');
 	}
-
-	update_session_action('Viewing thread ' . makeLink($res[0]['forum_thread_title'], 'a=viewthread&t=' . $threadid, SECTION_FORUM, false));
 }
 else
 	echo '<br>Non-existent thread.';

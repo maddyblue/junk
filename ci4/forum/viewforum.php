@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.17 2003/09/27 22:03:09 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.18 2003/12/15 05:36:39 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -219,7 +219,5 @@ if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 	echo '<p>' . getTable($array);
 	echo '<p>' . $pageDisp;
 }
-
-update_session_action('Viewing ' . makeLink($forumid ? ($res[0]['forum_forum_name'] . ' forum') : 'forums', 'a=viewforum&f=' . $forumid, SECTION_FORUM, false));
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: info.php,v 1.4 2003/09/27 22:03:11 dolmant Exp $ */
+/* $Id: info.php,v 1.5 2003/12/15 05:36:39 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -39,7 +39,5 @@ $array = array(
 );
 
 echo getTable($array, false);
-
-update_session_action('Viewing ' . makeLink('remote info', 'a=info', SECTION_USER, false));
 
 ?>
