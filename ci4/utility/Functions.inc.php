@@ -47,7 +47,7 @@ function getSiteArray($tag)
 {
 	global $DBMain;
 
-	return $DBMain->Query('SELECT * FROM site WHERE site_logged ' . LOGGED_DIR . '= 0 AND site_tag="' . $tag . '" ORDER BY site_orderid');
+	return $DBMain->Query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag="' . $tag . '" order by site_orderid');
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
@@ -133,7 +133,7 @@ function getTableForm($title, $arr, $descrip = '', $parms = '')
 	$ret = '';
 	$end = '';
 
-	$ret .= '<form method="POST" action="index.php" ' . $parms . '>
+	$ret .= '<form method="post" action="index.php" ' . $parms . '>
 		<table>
 			<tr>
 				<td colspan="' . count($arr[0]) . '">
@@ -214,46 +214,10 @@ function getDomainName($id = -1)
 	global $DBMain;
 	$ret = $DBMain->Query('SELECT name FROM domain WHERE id=' . $id);
 
-	if(count($ret{'name'}) == 1)
-	{
-		return $ret{'name'}[0];
-	}
+	if(count($ret['name']) == 1)
+		return $ret['name'][0];
+
 	return '-None-';
-}
-
-function getCharName($id)
-{
-	if(!$id) $id = 0;
-	global $DB;
-	$ret = $DB->Query('SELECT name FROM player WHERE id=' . $id);
-	if(count($ret{'name'}) == 1)
-		return $ret{'name'}[0];
-	else
-		return '';
-}
-
-function getCharNameFD($forumid, $domain)
-{
-	if(!$forumid) $forumid = 0;
-	if(!$domain) $domain = 0;
-	global $DB;
-	$ret = $DB->Query('SELECT name FROM player WHERE forumid=' . $forumid . ' AND domain=' . $domain);
-	if(count($ret{'name'}) == 1)
-		return $ret{'name'}[0];
-	else
-		return '';
-}
-
-function getCharID($forumid, $domain)
-{
-	if(!$forumid) $forumid = 0;
-	if(!$domain) $domain = 0;
-	global $DB;
-	$ret = $DB->Query('SELECT id FROM player WHERE forumid=' . $forumid . ' AND domain=' . $domain);
-	if(count($ret{'id'}) == 1)
-		return $ret{'id'}[0];
-	else
-		return 0;
 }
 
 function getGender($g)
@@ -440,8 +404,8 @@ function parseSig($sig)
 	$sig = nl2br($sig);
 
 	$ereg = array(
-		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>"),
-		array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
+		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>")
+		//array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
 	);
 
 	foreach($ereg as $row)
@@ -454,7 +418,7 @@ function parseSig($sig)
 
 function getUserlink($user)
 {
-	return makeLink(getUsername($user), 'user/?a=viewuserdetails&user=' . $user, true);
+	return makeLink(getUsername($user), SECTION_USER . '/?a=viewuserdetails&user=' . $user, true);
 }
 
 function getInputList()
