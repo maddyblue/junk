@@ -66,29 +66,23 @@ function newForum($f, $uls)
 	{
 		global $DBMain;
 
-		// This query returns any new posts since the last visit.
-		$ret = $DBMain->Query('select count(*) count from forum_forum, forum_post where forum_forum_last_post=forum_post_id and forum_forum_id=' . $f['forum_forum_id'] . ' and forum_post_date > ' . $uls);
-
-		// no new posts in this forum since last session ended
-		if($ret[0]['count'] == '0')
-			return false;
-
-		// This query returns any new posts since the last visit of not viewed threads.
+		/* This query is three fold:
+			1) gets new posts since last end of session which satisfy one of:
+				2) new posts of unread threads
+				3) new posts after the last view time of a thread
+		*/
 		$ret = $DBMain->Query('
 		SELECT count(*) count
 		FROM forum_thread, forum_post
-		LEFT JOIN forum_view ON forum_view_thread=forum_thread_id
+		LEFT JOIN forum_view ON
+			forum_view_thread=forum_thread_id
+			AND forum_view_user=' . ID . '
 		WHERE forum_thread_forum=' . $f['forum_forum_id'] . '
 			AND forum_thread_last_post=forum_post_id
-			AND forum_post_date > ' . $uls . // <- is this line necessary?
-			' AND forum_view_thread IS NULL');
-
-		// new posts in threads we've already visited
-		if($ret[0]['count'] != '0')
-			return true;
-
-		// This query returns new posts of already viewed threads.
-		$ret = $DBMain->Query('select count(*) count from forum_thread, forum_view, forum_post where forum_thread_forum=' . $f['forum_forum_id'] . ' and forum_view_thread=forum_thread_id and forum_post_id=forum_thread_last_post and forum_post_date > forum_view_date and forum_post_date > ' . $uls);
+			AND forum_post_date > ' . $uls . '
+			AND (forum_view_user IS NULL
+				OR forum_view_date < forum_post_date)'
+		);
 
 		if($ret[0]['count'] != '0')
 			return true;
