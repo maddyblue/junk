@@ -14,6 +14,7 @@ define('CI_DEF_TEMPLATE', 'redux');
 /* Don't mess with these */
 
 define('CI_WWW_ADDRESS', 'http://' . CI_WWW_DOMAIN . CI_WWW_PATH);
+define('CI_WWW_ADDRESS_HTTPS', 'https://' . CI_WWW_DOMAIN . CI_WWW_PATH);
 
 define('CI_TEMPLATE_FS', CI_FS_PATH . 'templates/');
 define('CI_TEMPLATE_WWW', CI_WWW_PATH . 'templates/');
