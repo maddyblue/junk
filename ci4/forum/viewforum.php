@@ -116,6 +116,34 @@ function forumList(&$array, $id, $topdepth, $depth, $uls)
 	}
 }
 
+/* Return a linked list of pages.
+ * $totpages - total number of pages
+ * $disppages - list up to this many pages
+ * $link - the page to link to. '&start=' . [page] will be added to this
+ * $section - the section to be passed to makeLink()
+ */
+function pageList($totpages, $disppages, $perpage, $link, $section = '')
+{
+	if($totpages <= 1)
+		return '';
+
+	if($disppages > $totpages)
+		$disppages = $totpages;
+
+	$pageList = ' ( ';
+
+	$i = 1;
+	for(; $i <= $disppages; $i++)
+		$pageList .= makeLink($i, $link . '&start=' . ($perpage * ($i - 1)), $section) . ' ';
+
+	if($i < $totpages)
+		$pageList .= '... ' . makeLink('Last page', $link . '&start=' . ($perpage * ($totpages - 1)), $section) . ' ';
+
+	$pageList .= ')';
+
+	return $pageList;
+}
+
 function newThread($t, $uls)
 {
 	if(LOGGED && $t['pld'] > $uls)
