@@ -34,8 +34,27 @@ CREATE TABLE battle (
   battle_id bigint(10) unsigned NOT NULL auto_increment,
   battle_start bigint(10) unsigned NOT NULL default '0',
   battle_end bigint(10) unsigned NOT NULL default '0',
-  battle_data text NOT NULL,
+  battle_log text NOT NULL,
   PRIMARY KEY  (battle_id)
+) TYPE=MyISAM;
+
+
+CREATE TABLE battle_entity (
+  battle_entity_battle bigint(10) unsigned NOT NULL auto_increment,
+  battle_entity_id bigint(10) unsigned NOT NULL default '0',
+  battle_entity_type tinyint(1) unsigned NOT NULL default '0',
+  battle_entity_name varchar(100) NOT NULL default '',
+  battle_entity_max_hp smallint(6) unsigned NOT NULL default '0',
+  battle_entity_max_mp smallint(6) unsigned NOT NULL default '0',
+  battle_entity_hp smallint(6) unsigned NOT NULL default '0',
+  battle_entity_mp smallint(6) unsigned NOT NULL default '0',
+  battle_entity_str smallint(6) unsigned NOT NULL default '0',
+  battle_entity_mag smallint(6) unsigned NOT NULL default '0',
+  battle_entity_def smallint(6) unsigned NOT NULL default '0',
+  battle_entity_mgd smallint(6) unsigned NOT NULL default '0',
+  battle_entity_agl smallint(6) unsigned NOT NULL default '0',
+  battle_entity_acc smallint(6) unsigned NOT NULL default '0',
+  UNIQUE KEY battle_entity_battle (battle_entity_battle)
 ) TYPE=MyISAM;
 
 
