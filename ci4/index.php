@@ -51,35 +51,10 @@ else
 
 require_once CI_HOME_MOD . 'Include.inc.php';
 
-// User stuff
 $id = getCIcookie('id');
 $pass = getCIcookie('pass');
 
-if($pass && $id)
-{
-	$res = $DBMain->Query('select count(*) as count from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
-	if($res[0]['count'] == 1)
-	{
-		define('LOGGED', true);
-		define('LOGGED_DIR', '>');
-		define('ID', $id);
-
-		// set cookies to be alive for another week
-		setCIcookie('id', $id);
-		setCIcookie('pass', $pass);
-
-		// update last seen field
-		$DBMain->Query('update user set user_last=' . TIME . ' where user_id=' . ID);
-	}
-	else
-		notLogged();
-}
-else
-	notLogged();
-
 $message = '';
-
-// Get content page
 $content = '';
 
 if(isset($_POST['a']))
@@ -87,7 +62,45 @@ if(isset($_POST['a']))
 else if(isset($_GET['a']))
 	$aval = $_GET['a'];
 
-if(isset($aval))
+if(isset($aval) && CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
+{
+		$a = './' . $aval . '.php';
+
+		$fd = fopen($a, 'r');
+		if($fd)
+		{
+			$content = fread($fd, filesize($a));
+			fclose($fd);
+			ob_start();
+			eval('?>' . $content);
+			$content = ob_get_contents();
+			ob_end_clean();
+		}
+
+		$aval = '';
+}
+
+// check to see if we have a valid user
+
+$res = $DBMain->Query('select count(*) as count from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
+if($res[0]['count'] == 1)
+{
+	define('LOGGED', true);
+	define('LOGGED_DIR', '>');
+	define('ID', $id);
+
+	// set cookies to be alive for another week
+	setCIcookie('id', $id);
+	setCIcookie('pass', $pass);
+
+	// update last seen field
+	$DBMain->Query('update user set user_last=' . TIME . ' where user_id=' . ID);
+}
+else
+	notLogged();
+
+// get content page
+if(isset($aval) && $aval)
 {
 		$a = './' . $aval . '.php';
 

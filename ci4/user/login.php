@@ -64,12 +64,14 @@ if(isset($_POST['submit']))
 	{
 		setCIcookie('id', $ret[0]['user_id']);
 		setCIcookie('pass', $ret[0]['user_pass']);
+		$id = $ret[0]['user_id'];
+		$pass = $ret[0]['user_pass'];
 		echo '<br>Logged in successfully as ' . decode($user) . '.';
 	}
 	else if($user && $pass)
 	{
 		echo '<br>Not a valid username/password combination. Try again.';
-		$fail = true;	
+		$fail = true;
 	}
 
 	if($fail)
