@@ -1,10 +1,6 @@
 <?php
 /* A very rough demonstration of GameObjectUnknown. */
 
-
-/* Dummy update. */
-
-
 include_once("objects/GameObjectUnknown.inc.php");
 $c = new GameObjectUnknown;
 $i = 400;
