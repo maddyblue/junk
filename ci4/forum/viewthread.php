@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.22 2003/09/27 22:03:09 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.23 2003/10/07 05:29:10 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -45,7 +45,7 @@ function postList($thread, $offset, $postsPP)
 		$user = getUserlink($post['user_id']);
 		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
 		$user .= makeLink('quote', 'a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
-		if($post['user_id'] == ID)
+		if($post['user_id'] == ID || ADMIN)
 			$user .= ' ' . makeLink('edit', 'a=editpost&p=' . $post['forum_post_id']);
 
 		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class="small">' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
@@ -58,7 +58,7 @@ function postList($thread, $offset, $postsPP)
 
 		if($post['forum_post_edit_user'] != 0)
 		{
-			$body .= '<p><i class="small">Last edited by ' . getUsername($post['forum_post_edit_user']) . ' on ' . getTime($post['forum_post_edit_date']) . '.</i>';
+			$body .= '<p><i class="small">Last edited by ' . getUserlink($post['forum_post_edit_user']) . ' on ' . getTime($post['forum_post_edit_date']) . '.</i>';
 		}
 
 		array_push($array, array(
@@ -97,9 +97,9 @@ if(count($array))
 	?>
 		<table class="tableMain" width="100%">
 			<tr class="tableRow">
-				<td width=150 class="tableCellTL">
+				<td width="150" class="tableCellTL">
 				</td>
-				<td width="100%" class="tableCellTR" align="right">
+				<td class="tableCellTR" align="right">
 					<?php echo $newreply; ?>
 				</td>
 			</tr>
