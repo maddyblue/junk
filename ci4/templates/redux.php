@@ -3,7 +3,8 @@
 
 <html>
 <head>
-<!-- $Id: redux.php,v 1.18 2003/09/26 00:01:12 dolmant Exp $ -->
+<!-- $Id: redux.php,v 1.19 2003/09/27 03:35:02 dolmant Exp $ -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescent island ::
 <?php echo strtolower(CI_SECTION); ?>
 <?php
@@ -261,7 +262,7 @@ td.block-light {
 				</tr>
 			</table>
 		</td>
-		<td width=8></td>
+		<td style="width: 8px"></td>
 	</tr>
 </table>
 </body>

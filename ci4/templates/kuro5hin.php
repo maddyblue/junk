@@ -1,6 +1,10 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+
 <html>
 <head>
-<!-- $Id: kuro5hin.php,v 1.4 2003/09/26 00:01:12 dolmant Exp $ -->
+<!-- $Id: kuro5hin.php,v 1.5 2003/09/27 03:35:02 dolmant Exp $ -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
 <!--
