@@ -128,6 +128,7 @@ td.block-light {
 }
 
 .td1 {
+	padding: 2px;
 	background-color: #DDDDDD;
 	font-weight: bold;
 	text-align: center;
@@ -136,11 +137,13 @@ td.block-light {
 }
 
 .td2 {
+	padding: 2px;
 	border-left: 1px solid #000000;
 	border-top: 1px solid #000000;
 }
 
 .td1topright {
+	padding: 2px;
 	background-color: #DDDDDD;
 	font-weight: bold;
 	text-align: center;
@@ -149,25 +152,22 @@ td.block-light {
 	border-right: 1px solid #000000;
 }
 
-.td2topright {
+.td2topright, .tdright {
+	padding: 2px;
 	border-left: 1px solid #000000;
 	border-top: 1px solid #000000;
 	border-right: 1px solid #000000;
 }
 
 .tdbottom {
+	padding: 2px;
 	border-left: 1px solid #000000;
 	border-top: 1px solid #000000;
 	border-bottom: 1px solid #000000;
 }
 
-.tdright {
-	border-left: 1px solid #000000;
-	border-top: 1px solid #000000;
-	border-right: 1px solid #000000;
-}
-
 .tdbottomright {
+	padding: 2px;
 	border: 1px solid #000000;
 }
 -->
