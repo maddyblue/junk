@@ -36,7 +36,7 @@ function disp($subject, $post, $thread)
 
 	$ret = $DBMain->Query('select forum_thread_title from forum_thread where forum_thread_id=' . $thread);
 	if(count($ret))
-		$name = ' in ' . makeLink($ret[0]['forum_thread_title'], '?a=viewthread&t=' . $thread);
+		$name = ' in ' . makeLink(decode($ret[0]['forum_thread_title']), '?a=viewthread&t=' . $thread);
 	else
 		$name = '';
 
