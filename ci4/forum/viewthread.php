@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.23 2003/10/07 05:29:10 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.24 2003/12/15 04:36:25 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -76,7 +76,9 @@ $DBMain->Query('update forum_thread set forum_thread_views=forum_thread_views+1 
 
 $res = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $threadid);
 
-echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid) . '<p>';
+$forumid = $res[0]['forum_thread_forum'];
+
+echo getNavBar($forumid) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid) . '<p>';
 
 $newreply = makeLink('New Reply', 'a=newpost&t=' . $threadid);
 
@@ -128,7 +130,7 @@ if(count($array))
 		));
 
 		$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $threadid);
-		$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . TIME . ')');
+		$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_forum, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . $forumid . ', ' . TIME . ')');
 	}
 
 	update_session_action('Viewing thread ' . makeLink($res[0]['forum_thread_title'], 'a=viewthread&t=' . $threadid, SECTION_FORUM, false));
