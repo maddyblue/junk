@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newthread.php,v 1.7 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id: newthread.php,v 1.8 2003/11/27 04:23:33 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -69,7 +69,7 @@ echo getNavBar($forum);
 
 if(LOGGED == false)
 {
-	echo '<br>You must be logged in to create new threads.';
+	echo '<p>You must be logged in to create new threads.';
 }
 else
 {
@@ -79,19 +79,19 @@ else
 
 		if(!$subject)
 		{
-			echo '<br>No subject: enter a subject.';
+			echo '<p>No subject: enter a subject.';
 			$fail = true;
 		}
 
 		if(!$post)
 		{
-			echo '<br>No post: enter a post.';
+			echo '<p>No post: enter a post.';
 			$fail = true;
 		}
 
 		if(!$forum)
 		{
-			echo '<br>No forum selected: navigate to a forum and try to post a new thread there.';
+			echo '<p>No forum selected: navigate to a forum and try to post a new thread there.';
 			$fail = true;
 		}
 
@@ -125,6 +125,7 @@ else
 					')');
 				$res = $DBMain->Query('select forum_post_id from forum_post where forum_post_user=' . ID .' order by forum_post_date desc limit 1');
 				$lastpost = $res[0]['forum_post_id'];
+				$DBMain->Query('update forum_thread set forum_thread_first_post=' . $lastpost . ' where forum_thread_id=' . $lastthread);
 				updateFromPost($lastpost);
 				$DBMain->Query('update forum_forum set forum_forum_threads=forum_forum_threads+1 where forum_forum_id=' . $forum);
 
@@ -134,7 +135,7 @@ else
 			}
 			else
 			{
-				echo '<br>Thread creation failed.';
+				echo '<p>Thread creation failed.';
 			}
 		}
 	}
