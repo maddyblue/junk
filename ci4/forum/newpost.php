@@ -41,8 +41,8 @@ function disp($subject, $post, $thread)
 		$name = '';
 
 	echo getTableForm('New Reply' . $name, array(
-			array('Subject', array('type'=>'text', 'name'=>'subject', 'parms'=>'size="45" maxlength="100" style="width:450px"', 'val'=>decode($subject))),
-			array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="15" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($post))),
+			array('Subject', array('type'=>'text', 'name'=>'subject', 'val'=>decode($subject))),
+			array('Post', array('type'=>'textarea', 'name'=>'post', 'val'=>decode($post))),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')),
 			array('', array('type'=>'hidden', 'name'=>'t', 'val'=>$thread)),
@@ -102,7 +102,7 @@ else
 				'"' . decode($subject) . '",' .
 				'"' . decode($post) . '",' .
 				ID . ',' .
-				time() .
+				TIME .
 				')');
 			$ret = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread=' . $thread . ' and forum_post_user=' . ID . ' order by forum_post_date desc limit 1');
 			if(count($ret))
