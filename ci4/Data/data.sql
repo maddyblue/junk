@@ -275,7 +275,6 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_PROFILE',0,'eval','getProfile()','','','',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
-INSERT INTO site VALUES ('PLAYER_SECTION_MENU',0,'link','Register new player','','\'a=newplayer\'','SECTION_PLAYER',1,0,'');
 INSERT INTO site VALUES ('PLAYER_SECTION_NAV',0,'link','View Players','','\'a=viewplayers\'','SECTION_PLAYER',0,0,'');
 
 
