@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.52 2003/11/05 00:28:53 dolmant Exp $ */
+/* $Id: index.php,v 1.53 2003/12/15 05:27:11 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -31,6 +31,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+$time_start = gettimeofday();
 
 // turn on all errors
 error_reporting(E_ALL);
@@ -252,5 +254,9 @@ while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 }
 
 echo $template;
+
+echo '<!-- ' . getProfile($time_start, gettimeofday(), $DBMain->queries, $DBMain->time) . ' -->';
+
+$DBMain->Disconnect();
 
 ?>
