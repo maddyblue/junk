@@ -51,6 +51,65 @@ function disp($area)
 		));
 }
 
+function newBattle($area)
+{
+	global $PLAYER, $DBMain;
+
+	$monster = $DBMain->Query('select * from monster, cor_area_monster where cor_area="' . $area . '" order by rand() limit 1');
+
+	if(!count($monster))
+	{
+		echo '<br>No monsters in the selected domain.';
+		return;
+	}
+
+	// we have the player, monster, and area, create the battle
+
+	$DBMain->Query('insert into battle (battle_start, battle_area) values (' . TIME . ', "' . $area . '")');
+
+	$bat = $DBMain->Query('select battle_id from battle where battle_area="' . $area . '" and battle_start=' . TIME . ' limit 1');
+	$batid = $bat[0]['battle_id'];
+
+	// create the battle entities
+
+	$DBMain->Query('insert into battle_entity values (
+		' . $batid . ',
+		' . $PLAYER['player_id'] . ',
+		1,
+		1,
+		"' . $PLAYER['player_name'] . '",
+		' . rand(0, 100) . ',
+		' . $PLAYER['player_mod_hp'] . ',
+		' . $PLAYER['player_mod_mp'] . ',
+		' . $PLAYER['player_mod_hp'] . ',
+		' . $PLAYER['player_mod_mp'] . ',
+		' . $PLAYER['player_mod_str'] . ',
+		' . $PLAYER['player_mod_mag'] . ',
+		' . $PLAYER['player_mod_def'] . ',
+		' . $PLAYER['player_mod_mgd'] . ',
+		' . $PLAYER['player_mod_agl'] . ',
+		' . $PLAYER['player_mod_acc'] . '), (
+		' . $batid . ',
+		' . $monster[0]['monster_id'] . ',
+		2,
+		2,
+		"' . $monster[0]['monster_name'] . '",
+		' . rand(0, 100) . ',
+		' . $monster[0]['monster_hp'] . ',
+		' . $monster[0]['monster_mp'] . ',
+		' . $monster[0]['monster_hp'] . ',
+		' . $monster[0]['monster_mp'] . ',
+		' . $monster[0]['monster_str'] . ',
+		' . $monster[0]['monster_mag'] . ',
+		' . $monster[0]['monster_def'] . ',
+		' . $monster[0]['monster_mgd'] . ',
+		' . $monster[0]['monster_agl'] . ',
+		' . $monster[0]['monster_acc'] . ')'
+	);
+
+	echo '<p>Battle started.';
+}
+
 if(LOGGED)
 {
 	$fail = false;
@@ -74,7 +133,25 @@ if(LOGGED)
 		{
 			$fail = false;
 
+			global $DBMain, $PLAYER;
 
+			$ret = $DBMain->Query('select count(*) count from cor_area_town where cor_area = "' . $area . '" and cor_town=' . $PLAYER['player_town']);
+
+			if($ret[0]['count'] != '1')
+			{
+				$fail = true;
+				echo '<br>That area is not accessible from your current town.';
+			}
+
+			if(!$fail)
+			{
+				newBattle($area);
+			}
+			else
+			{
+				echo '<p>Battle creation failed.';
+				disp($area);
+			}
 		}
 		else
 			disp($area);
