@@ -54,31 +54,31 @@ td
 <body bgcolor="#000000" text="#FFFFFF">
 
 <div id="lefttop" style="position:absolute; left:0px; top:0px; width:50; height:100;">
-	<img src="<TI>/ci4/left_top.gif">
+	<img src="<CITI>/left_top.gif">
 </div>
 
 <div id="leftbottom" style="position:absolute; left:0px; top:100px; width:50; height:50;">
-	<img src="<TI>/ci4/left_bottom.gif">
+	<img src="<CITI>/left_bottom.gif">
 </div>
 
 <div id="righttop" style="position:absolute; right:0px; top:0px; width:50; height:100; align:right;">
-	<img src="<TI>/ci4/right_top.gif">
+	<img src="<CITI>/right_top.gif">
 </div>
 
 <div id="rightbottom" style="position:absolute; right:0px; top:50px; width:50; height:100;">
-	<img src="<TI>/ci4/right_bottom.gif">
+	<img src="<CITI>/right_bottom.gif">
 </div>
 
 <div id="midtop" style="position:absolute; right:50px; top:0px;">
-	<img src="<TI>/ci4/mid_top.gif">
+	<img src="<CITI>/mid_top.gif">
 </div>
 
 <div id="banner" style="position:absolute; left:50px; top:0px;">
-	<a href="http://crescentisland.com"><img src="<TI>/banner.gif" border=0></a>
+	<a href="http://crescentisland.com"><img src="<CITI>/banner.gif" border=0></a>
 </div>
 
 <div id="midbottom" style="position:absolute; left:50px; top:100px;">
-	<img src="<TI>/ci4/mid_bottom.gif">
+	<img src="<CITI>/mid_bottom.gif">
 </div>
 
 <div id="toptext" style="position:absolute; left:100px; right:50px; top:100px; height:50;">
