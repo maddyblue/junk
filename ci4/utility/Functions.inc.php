@@ -284,7 +284,7 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 
 	if($withTableStructure)
 	{
-		$ret = '<p><table class="table1">' . $ret . '</table>';
+		$ret = '<table class="table1">' . $ret . '</table>';
 	}
 
 	return $ret;
