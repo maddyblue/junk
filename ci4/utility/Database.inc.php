@@ -7,10 +7,16 @@ class Database
 {
 	var $handle;
 	var $dbname;
+	var $da;
 
-	function Connect($parms, $dbname = "")
+	function Database()
 	{
-		$handle = DatabaseAccess->Connect($parms);
+		$this->da = new DatabaseAccess;
+	}
+
+	function Connect($parms, $dbname = '')
+	{
+		$this->handle = $this->da->Connect($parms);
 		$this->dbname = $dbname;
 	}
 
@@ -19,12 +25,12 @@ class Database
 		if(!$dbname && !$this->dbname) return;
 		if($dbname) $db = $dbname;
 		else $db = $this->dbname;
-		return DatabaseAccess->ReadTable(array('Database' => $db, 'Query' => $query, 'Handle' => $this->handle));
+		return $this->da->ReadTable(array('Database' => $db, 'Query' => $query, 'Handle' => $this->handle));
 	}
 
 	function Disconnect()
 	{
-		DatabaseAccess->Disconnect($handle);
+		$this->da->Disconnect($handle);
 	}
 }
 
