@@ -8,6 +8,7 @@
 	<title>crescent island ::</title>
 	<CI_HEAD>
 
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
 	<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR>/redux.css" />
 </head>
 
@@ -40,7 +41,7 @@
 					nav
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<CINAV>INSERT<br></CINAV>
+					<CINAV>INSERT<br/></CINAV>
 				</div></div>
 			</div>
 
@@ -55,7 +56,7 @@
 						<?php
 							$pms = makePMLink();
 							if($pms)
-								echo $pms . '<br>';
+								echo $pms . '<br/>';
 
 							$res = $db->query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
 							for($i = 0; $i < count($res); $i++)
@@ -63,7 +64,7 @@
 								if($res[$i]['player_id'] == $PLAYER['player_id'])
 									echo '* ';
 
-								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_PLAYER) . ' [' . makeLink($res[$i]['domain_abrev'], 'a=changedomain&domain=' . $res[$i]['domain_id'], SECTION_HOME) . ']<br>';
+								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_PLAYER) . ' [' . makeLink($res[$i]['domain_abrev'], 'a=changedomain&domain=' . $res[$i]['domain_id'], SECTION_HOME) . ']<br/>';
 							}
 						?>
 					</div></div>
@@ -76,7 +77,7 @@
 					<? echo CI_SECTION; ?> nav
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<CISECTION_NAV>INSERT<br></CISECTION_NAV><br>
+					<CISECTION_NAV>INSERT<br/></CISECTION_NAV><br>
 				</div></div>
 			</div>
 
