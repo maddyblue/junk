@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newthread.php,v 1.11 2003/12/25 05:25:50 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -42,7 +42,7 @@ function disp($subject, $post, $forum)
 	else
 		$name = '';
 
-	echo getTableForm('New Thread' . $name, array(
+	echo '<p>' . getTableForm('New Thread' . $name, array(
 			array('Subject', array('type'=>'text', 'name'=>'subject', 'parms'=>'size="45" maxlength="100" style="width:450px"', 'val'=>decode($subject))),
 			array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="15" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($post))),
 
