@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.21 2003/12/20 08:20:00 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.22 2003/12/20 09:18:36 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -47,12 +47,12 @@ function forumList(&$array, $id, $topdepth, $depth)
 
 	global $DBMain;
 
-	$res = $DBMain->Query('select * from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
+	$res = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post, user_id, user_name, forum_post_date from forum_forum, forum_post, user where forum_forum_last_post=forum_post_id and forum_post_user=user_id and forum_forum_parent = ' . $id . ' order by forum_forum_order');
 
 	// if we're not viewing the root forum, stick in the parent
 	if($id != 0 && $topdepth == $depth)
 	{
-		$top = $DBMain->Query('select * from forum_forum where forum_forum_id = ' . $id);
+		$top = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post, user_id, user_name, forum_post_date from forum_forum, forum_post, user where forum_post_user=user_id and forum_forum_last_post=forum_post_id and forum_forum_id = ' . $id);
 		if(count($top == 1))
 		{
 			$row = $top[0];
@@ -69,7 +69,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 						$row['forum_forum_threads'],
 						$row['forum_forum_posts'],
-						forumLinkLastPost($row['forum_forum_last_post'])
+						forumLinkLastPost($row['forum_forum_last_post'], $row['user_id'], $row['user_name'], $row['forum_post_date'])
 					));
 					break;
 				case  1:
@@ -102,7 +102,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 					$row['forum_forum_threads'],
 					$row['forum_forum_posts'],
-					forumLinkLastPost($row['forum_forum_last_post'])
+					forumLinkLastPost($row['forum_forum_last_post'], $row['user_id'], $row['user_name'], $row['forum_post_date'])
 				));
 				break;
 			case  1:
@@ -164,7 +164,7 @@ function threadList($forumid, $offset, $threadsPP)
 			getUserlink($row['forum_thread_user']),
 			$row['forum_thread_replies'],
 			$row['forum_thread_views'],
-			forumLinkLastPost($row['forum_post_id'])
+			forumLinkLastPost($row['forum_post_id'], $row['user_id'], $row['user_name'], $row['forum_post_date'])
 		));
 	}
 

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.18 2003/12/19 09:17:59 dolmant Exp $ */
+/* $Id: Forum.inc.php,v 1.19 2003/12/20 09:18:34 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,20 +32,27 @@
  *
  */
 
-function forumLinkLastPost($postid)
+function forumLinkLastPost($postid, $userid = '', $username = '', $date = '')
 {
-	$ret = $GLOBALS['DBMain']->Query('select * from forum_post, user where forum_post_user=user_id and forum_post_id=' . $postid);
+	if(!$userid || !$username || !$date)
+	{
+		$res = $GLOBALS['DBMain']->Query('select forum_post_date, forum_post_user, user_name from forum_post, user where forum_post_user=user_id and forum_post_id=' . $postid);
 
-	if(count($ret) == 1)
-		return (
-			getTime($ret[0]['forum_post_date']) .
-			' ' .
-			getUserlink($ret[0]['forum_post_user'], $ret[0]['user_name']) .
-			' ' .
-			makeLink('-&gt;', 'a=viewpost&p=' . $ret[0]['forum_post_id'])
-		);
+		if(count($res))
+			$ret =
+				getTime($res[0]['forum_post_date']) . ' ' .
+				getUserlink($res[0]['forum_post_user'], $res[0]['user_name']) . ' ' .
+				makeLink('-&gt;', 'a=viewpost&p=' . $postid);
+		else
+			$ret = 'No posts';
+	}
 	else
-		return 'No posts';
+		$ret =
+			getTime($date) . ' ' .
+			getUserlink($userid, $username) . ' ' .
+			makeLink('-&gt;', 'a=viewpost&p=' . $postid);
+
+	return $ret;
 }
 
 function getNavBar($forum)
@@ -54,7 +61,7 @@ function getNavBar($forum)
 		return '';
 
 	global $DBMain;
-	$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forum);
+	$res = $DBMain->Query('select forum_forum_name, forum_forum_id, forum_forum_parent from forum_forum where forum_forum_id=' . $forum);
 
 	$ret = makeLink($res[0]['forum_forum_name'], 'a=viewforum&f=' . $res[0]['forum_forum_id']);
 

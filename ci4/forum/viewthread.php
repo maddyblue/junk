@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.28 2003/12/19 09:22:40 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.29 2003/12/20 09:18:36 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -38,7 +38,7 @@ function postList($thread, $offset, $postsPP, $canMod)
 
 	$array = array();
 
-	$posts = $DBMain->Query('select * from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . $offset . ', ' . $postsPP);
+	$posts = $DBMain->Query('select user_id, user_name, forum_post_date, forum_post_id, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . $offset . ', ' . $postsPP);
 
 	foreach($posts as $post)
 	{
@@ -74,7 +74,7 @@ $threadid = isset($_GET['t']) ? $_GET['t'] : 0;
 
 $DBMain->Query('update forum_thread set forum_thread_views=forum_thread_views+1 where forum_thread_id=' . $threadid);
 
-$res = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $threadid);
+$res = $DBMain->Query('select forum_thread_forum, forum_thread_title from forum_thread where forum_thread_id=' . $threadid);
 
 $forumid = $res[0]['forum_thread_forum'];
 
