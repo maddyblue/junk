@@ -170,21 +170,6 @@ td.block-light {
 .tdbottomright {
 	border: 1px solid #000000;
 }
-
-.preflink {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  text-align: center;
-  height: 22px;
-  width: 88px;
-  margin-right: 8px;
-  background-image: url(<CI_TEMPLATE_DIR>/button.gif);
-  background-repeat: no-repeat;
-}
-
-.preflink a:hover {
-  text-decoration: none;
-}
 -->
 </style>
 </head>
