@@ -196,6 +196,7 @@ CREATE TABLE forum_post (
   forum_post_id bigint(10) unsigned NOT NULL auto_increment,
   forum_post_thread bigint(10) unsigned NOT NULL default '0',
   forum_post_text text NOT NULL,
+  forum_post_text_parsed text NOT NULL,
   forum_post_user bigint(10) unsigned NOT NULL default '0',
   forum_post_ip int(11) NOT NULL default '0',
   forum_post_date bigint(10) unsigned NOT NULL default '0',
