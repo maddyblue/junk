@@ -7,6 +7,11 @@
 <head>
 <style type="text/css">
 <!--
+div,td,p,a,body
+{
+	font-family:verdana,arial,helvetica,sans-serif;
+	font-size:11px;
+}
 a
 {
 	text-decoration:underline;
@@ -15,11 +20,6 @@ a
 .br1
 {
 	height:5px;
-}
-td
-{
-	font-size:14px;
-	font-family:Trebuchet MS, Tahoma, Times, sans-serif;
 }
 .td1
 {
@@ -81,6 +81,10 @@ td
 
 <div id="midbottom" style="position:absolute; left:50px; top:100px;">
 	<img src="<CI_TI>/mid_bottom.gif">
+</div>
+
+<div id="domaintext" align="right" style="position:absolute; right:80px; top:28px; text-align:right; text-justify:right;">
+	@<CI_DOMAIN>
 </div>
 
 <div id="toptext" style="position:absolute; left:100px; right:50px; top:100px; height:50;">
