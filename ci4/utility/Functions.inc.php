@@ -482,7 +482,7 @@ function makeImg($img, $prefix = '', $relative = false)
 // Make inupt data safe. Must always be used for all $_GET and $_POST data.
 function encode($input)
 {
-	return htmlentities(urlencode($input));
+	return urlencode($input);
 }
 
 /* Opposite of encode(). Should be used when displaying encode()'ed data to the
@@ -490,8 +490,7 @@ function encode($input)
  */
 function decode($output)
 {
-	// stripslashes might break stuff, i'm not sure
-	return stripslashes(htmlspecialchars(urldecode($output)));
+	return stripslashes(urldecode($output));
 }
 
 // --- Cookies ---
