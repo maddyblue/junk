@@ -32,7 +32,7 @@
 
 /*	Returns the template filename of $t.
  */
-function getTemplateName($t)
+function getTemplateFilename($t)
 {
 	return CI_TEMPLATE_FS . $t . '.php';
 }
@@ -199,16 +199,6 @@ function getDomainName($id = -1)
 	return '-None-';
 }
 
-function doCookie($name, $val)
-{
-	setcookie(CI_COOKIE . '_' . $name, $val, time() + 604800, CI_WWW_PATH);
-}
-
-function getCookie($name)
-{
-	return $globals['_cookie'][CI_COOKIE . '_' . $name];
-}
-
 function getCharName($id)
 {
 	if(!$id) $id = 0;
@@ -260,31 +250,41 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 {
 	$ret = '';
 
-	$i = 0;
-	if($firstLineHeader)
-	{
-		$ret .= '<tr1>';
-		for($j = 0; $j < count($array[$i]); $j++)
-		{
-			$ret .= '<td1>' . $array[$i][$j] . '</td>';
-		}
-		$ret .= '</tr>';
-		$i = 1;
-	}
+	$rows = count($array);
+	$cols = count($array[0]);
 
-	for(; $i < count($array); $i++)
+	for($i = 0; $i < $rows; $i++)
 	{
-		$ret .= '<tr2>';
-		for($j = 0; $j < count($array[$i]); $j++)
+		if($firstLineHeader && $i == 0)
+			$num = 1;
+		else
+			$num = 2;
+
+		$ret .= '<tr' . $num . '>';
+		for($j = 0; $j < $cols; $j++)
 		{
-			$ret .= '<td2>' . $array[$i][$j] . '</td>';
+			if($j == ($cols - 1))
+			{
+				if($i == 0)
+					$ret .= '<td class="td' . $num . 'topright">';
+				else if($i == ($rows - 1))
+					$ret .= '<td class="tdbottomright">';
+				else
+					$ret .= '<td class="tdright">';
+			}
+			else if($i == ($rows - 1))
+				$ret .= '<td class="tdbottom">';
+			else
+				$ret .= '<td' . $num . '>';
+
+			$ret .= $array[$i][$j] . '</td>';
 		}
 		$ret .= '</tr>';
 	}
 
 	if($withTableStructure)
 	{
-		$ret = '<table>' . $ret . '</table>';
+		$ret = '<table1>' . $ret . '</table>';
 	}
 
 	return $ret;
