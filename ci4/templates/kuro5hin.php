@@ -295,6 +295,20 @@ table.maintable {
 		</table>
 		<p>
 
+		<table class="box">
+			<tr>
+				<td width="100%">
+					<table class="boxinner">
+						<tr>
+						<td class="box">
+							Render Stats
+						</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
 		<table class="boxcontents">
 			<tr>
 				<td>
