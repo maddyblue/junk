@@ -294,7 +294,18 @@ td.block-light {
 					</td>
 				</tr>
 			</table>
-			<CI_PROFILE>
+						<table cellspacing="0" class="nav">
+				<tr>
+					<td class="block-dark">
+						render stats
+					</td>
+				</tr>
+				<tr>
+					<td class="block-light">
+						<CI_PROFILE>
+					</td>
+				</tr>
+			</table>
 		</td>
 		<td style="width: 8px"></td>
 	</tr>
