@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Database.inc.php,v 1.9 2004/01/08 07:34:42 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -90,7 +90,7 @@ class Database
 
 	function Query($query, $dbname = '')
 	{
-		$this->querylist .= "\n" . $query;
+		$this->querylist .= '<p>' . $query;
 
 		$db = $dbname ? $dbname : $this->dbname;
 

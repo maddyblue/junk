@@ -248,6 +248,9 @@ echo $content;
 
 echo '<p>' . $message;
 
+if(isset($_GET['sqlprofile']))
+	echo '<p>' . $DBMain->querylist;
+
 parseTags($bottom);
 echo $bottom;
 
