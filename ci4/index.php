@@ -49,25 +49,13 @@ if(count($ret) == 0)
 {
 	define('LOGGED', false);
 	define('LOGGED_DIR', '<');
-	define('ADMIN', false);
-	define('GROUPID', 0);
-	define('CI_ID', 0);
-	define('USERNAME', '');
+	define('USER_ID', 0);
+	define('PLAYER_ID', 0);
 }
 else
 {
 	define('LOGGED', true);
 	define('LOGGED_DIR', '>');
-	define('GROUPID', $ret{'usergroupid'}[0]);
-	if(GROUPID == CI_FORUM_ADMIN_GROUP)
-		define('ADMIN', true);
-	else
-		define('ADMIN', false);
-}
-if(CI_SECTION == 'ADMIN' && ADMIN != true)
-{
-	echo '<p>Admins only here.';
-	exit();
 }
 
 $message = '';
@@ -75,12 +63,13 @@ $message = '';
 // Get content page
 $content = '';
 
-if(isset($_GET['a']))
-{
+if(isset($_POST['a']))
+	$aval = $_POST['a'];
+else if(isset($_GET['a']))
 	$aval = $_GET['a'];
 
-	if($aval)
-	{
+if(isset($aval))
+{
 		$a = './' . $aval . '.php';
 
 		if(file_exists($a))
@@ -100,7 +89,6 @@ if(isset($_GET['a']))
 		{
 			$content .= 'Non-existent action.';
 		}
-	}
 }
 else
 {
