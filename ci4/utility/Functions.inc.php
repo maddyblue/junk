@@ -73,34 +73,36 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 }
 
 /* Creates a nice table from the given array...should be used everywhere. */
-function makeTable($arr)
+function makeTable($arr, $skip = array())
 {
-	$depth = count($arr);
 	$list = array();
 	?><p><table1><tr1><?
+	$width = 0;
 	while(list($val) = each($arr))
 	{
+		if($skip{$val}) continue;
+		$width++;
 		echo "\n";
 		?><td1><? echo $val ?></td><?
 		array_push($list, $val);
 	}
-	$width = count($arr{$list[0]});
+	$depth = count($arr{$list[0]});
 	?></tr><?
-	for($i1 = 0; $i1 < $width; $i1++)
+	for($i1 = 0; $i1 < $depth; $i1++)
 	{
 		echo "\n";
 		?><tr2><?
-		for($i2 = 0; $i2 < $depth; $i2++)
+		for($i2 = 0; $i2 < $width; $i2++)
 		{
 			echo "\n";
-			?><td2><? echo $arr[$list[$i2]][$i1] ?></td><?
+			?><td2><? echo $arr{$list[$i2]}[$i1] ?></td><?
 		}
 		?></tr><?
 	}
 	?></table><?
 }
 
-function makeTableForm($title, $arr, $descrip = "", $parms = "")
+function makeTableForm($title, $arr, $descrip = '', $parms = '')
 {
 	?>
 		<form method="POST" action="index.php" <? echo $parms ?>>
