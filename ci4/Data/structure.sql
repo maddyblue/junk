@@ -265,6 +265,16 @@ CREATE TABLE player (
   player_battle bigint(10) unsigned NOT NULL default '0',
   player_house bigint(10) unsigned NOT NULL default '0',
   player_lv smallint(6) unsigned NOT NULL default '0',
+  player_exp bigint(10) unsigned NOT NULL default '0',
+  player_hp smallint(6) unsigned NOT NULL default '100',
+  player_mp smallint(6) unsigned NOT NULL default '50',
+  player_str smallint(6) unsigned NOT NULL default '10',
+  player_mag smallint(6) unsigned NOT NULL default '10',
+  player_def smallint(6) unsigned NOT NULL default '10',
+  player_mgd smallint(6) unsigned NOT NULL default '10',
+  player_agl smallint(6) unsigned NOT NULL default '10',
+  player_acc smallint(6) unsigned NOT NULL default '10',
+  player_gender tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (player_id)
 ) TYPE=MyISAM;
 
