@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.25 2004/01/12 07:34:10 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -372,6 +372,25 @@ function makeForumSelect($forum, $parent)
 	}
 
 	return $val;
+}
+
+function parseSig($sig)
+{
+	$sig = decode($sig);
+
+	$sig = nl2br($sig);
+
+	$ereg = array(
+		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>")
+		//array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
+	);
+
+	foreach($ereg as $row)
+	{
+		$sig = eregi_replace($row[0], $row[1], $sig);
+	}
+
+	return $sig;
 }
 
 ?>
