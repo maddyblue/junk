@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: redux.php,v 1.22 2003/11/05 00:28:54 dolmant Exp $ -->
+<!-- $Id: redux.php,v 1.23 2004/01/05 04:38:29 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescent island ::
 <?php echo strtolower(CI_SECTION); ?>
@@ -177,7 +177,14 @@ td.block-light {
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="block">
 				<tr>
 					<td align="right" valign="top" class="block-dark" style="padding-top: 3px; padding-bottom: 8px; padding-right: 8px;">
-						<div class="header">crescent island</div>
+						<div class="header">
+						[<?php
+							if(LOGGED)
+								echo decode(getDBData('user_name')) . '@';
+
+							echo getDomainName();
+						?>]
+						crescent island</div>
 					</td>
 				</tr>
 				<tr>
