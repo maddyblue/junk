@@ -69,8 +69,12 @@ function updateFromPost($post)
 	global $DBMain;
 
 	// find the thread and forum this post is in
-	$res = $DBMain->Query('select forum_post_thread from forum_post where forum_post_id=' . $post);
+	$res = $DBMain->Query('select forum_post_thread, forum_post_user from forum_post where forum_post_id=' . $post);
 	$thread = $res[0]['forum_post_thread'];
+
+	// bump post count
+	$DBMain->Query('update user set user_posts=user_posts+1 where user_id=' . $res[0]['forum_post_user']);
+
 	$res = $DBMain->Query('select forum_thread_forum from forum_thread where forum_thread_id=' . $thread);
 	$forum = $res[0]['forum_thread_forum'];
 
