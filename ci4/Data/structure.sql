@@ -183,7 +183,9 @@ CREATE TABLE forum_post (
   forum_post_date bigint(10) unsigned NOT NULL default '0',
   forum_post_edit_date bigint(10) unsigned NOT NULL default '0',
   forum_post_edit_user bigint(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (forum_post_id)
+  PRIMARY KEY  (forum_post_id),
+  KEY forum_post_thread (forum_post_thread),
+  KEY forum_post_user (forum_post_user)
 ) TYPE=MyISAM;
 
 
@@ -198,7 +200,11 @@ CREATE TABLE forum_thread (
   forum_thread_first_post bigint(10) unsigned NOT NULL default '0',
   forum_thread_last_post bigint(10) unsigned NOT NULL default '0',
   forum_thread_type tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (forum_thread_id)
+  PRIMARY KEY  (forum_thread_id),
+  KEY forum_thread_forum (forum_thread_forum),
+  KEY forum_thread_first_post (forum_thread_first_post),
+  KEY forum_thread_last_post (forum_thread_last_post),
+  KEY forum_thread_user (forum_thread_user)
 ) TYPE=MyISAM;
 
 
@@ -337,7 +343,8 @@ CREATE TABLE player (
   player_mod_mgd smallint(6) unsigned NOT NULL default '0',
   player_mod_agl smallint(6) unsigned NOT NULL default '0',
   player_mod_acc smallint(6) unsigned NOT NULL default '0',
-  PRIMARY KEY  (player_id)
+  PRIMARY KEY  (player_id),
+  KEY player_user (player_user)
 ) TYPE=MyISAM;
 
 
