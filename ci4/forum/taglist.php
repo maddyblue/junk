@@ -31,6 +31,7 @@
  */
 
 $array = array('[i]italics[/i]',
+'[b]bold[/b]',
 '[u]underline[/u]',
 '[img]http://dolmant.net/~dolmant/logo.gif[/img]',
 '[font color=red size=24]big red[/font]',
