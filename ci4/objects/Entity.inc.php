@@ -54,6 +54,7 @@ class Entity
 	var $mgd;
 	var $agl;
 	var $acc;
+	var $lv;
 
 	function Entity($e, &$entities)
 	{
@@ -78,6 +79,7 @@ class Entity
 		$this->mgd = $e['battle_entity_mgd'];
 		$this->agl = $e['battle_entity_agl'];
 		$this->acc = $e['battle_entity_acc'];
+		$this->lv = $e['battle_entity_lv'];
 	}
 
 	// abstract functions
@@ -104,6 +106,12 @@ class Entity
 	{
 		global $DBMain;
 
+		if($this->type == 3 && $this->hp <= 0) // timer
+		{
+
+			$DBMain->Query('delete from battle_entity where battle_entity_uid=' . $this->uid);
+		}
+
 		$DBMain->Query('update battle_entity set
 			battle_entity_ct=' . $this->ct . ',
 			battle_entity_max_hp=' . $this->maxhp . ',
@@ -127,7 +135,7 @@ class Entity
 		for($i = 0; $i < count($this->entities); $i++)
 		{
 			if($this->entities[$i]->team != $this->team)
-				array_push($enemies, &$this->entities[$i]);
+				array_push($enemies, $this->entities[$i]);
 		}
 
 		return $enemies;
@@ -141,7 +149,7 @@ class Entity
 		for($i = 0; $i < count($this->entities); $i++)
 		{
 			if($this->entities[$i]->team == $this->team)
-				array_push($allies, &$this->entities[$i]);
+				array_push($allies, $this->entities[$i]);
 		}
 
 		return $allies;
