@@ -4,7 +4,7 @@ CREATE TABLE ability (
   ability_id bigint(10) unsigned NOT NULL auto_increment,
   ability_name varchar(100) NOT NULL default '',
   ability_type bigint(10) unsigned NOT NULL default '0',
-  ability_req_job_lv smallint(5) unsigned NOT NULL default '0',
+  ability_req_lv smallint(6) unsigned NOT NULL default '0',
   ability_ap_cost smallint(6) unsigned NOT NULL default '0',
   ability_effect text NOT NULL,
   ability_desc text NOT NULL,
