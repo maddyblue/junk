@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.61 2004/01/08 09:54:49 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.62 2004/01/12 07:34:10 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -663,6 +663,55 @@ function makePMLink()
 	}
 
 	return '';
+}
+
+function pageDisp($curpage, $totpages, $perpage, $id, $link)
+{
+	if($curpage > $totpages)
+		$curpage = $totpages;
+
+	$pages = array();
+
+	if($curpage > 1)
+	{
+		array_push($pages, array('&laquo;', 1));
+		array_push($pages, array('&lt;', $curpage - 1));
+	}
+
+	if($curpage == $totpages && $curpage > 2)
+		array_push($pages, array($curpage - 2, $curpage - 2));
+
+	if($curpage > 1)
+		array_push($pages, array($curpage - 1, $curpage - 1));
+
+	array_push($pages, array($curpage, 0));
+
+	if(($totpages - $curpage) > 0)
+		array_push($pages, array($curpage + 1, $curpage + 1));
+
+	if($curpage == 1 && $totpages > 2)
+		array_push($pages, array($curpage + 2, $curpage + 2));
+
+	if($curpage < $totpages)
+	{
+		array_push($pages, array('&gt;', $curpage + 1));
+		array_push($pages, array('&raquo;', $totpages));
+	}
+
+	$pageDisp = '';
+
+	for($i = 0; $i < count($pages); $i++)
+	{
+		if($i > 0)
+			$pageDisp .= ' ';
+
+		if($pages[$i][1] != 0)
+			$pageDisp .= makeLink($pages[$i][0], $link . $id . '&start=' . ($perpage * ($pages[$i][1] - 1)), SECTION_FORUM);
+		else
+			$pageDisp .= $pages[$i][0];
+	}
+
+	return $pageDisp;
 }
 
 ?>
