@@ -111,6 +111,9 @@ class Database
 			}
 		}
 
+		if(is_resource($dbq))
+			mysql_free_result($dbq);
+
 		return $ret;
 	}
 
