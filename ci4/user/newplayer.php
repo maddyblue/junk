@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newplayer.php,v 1.1 2004/01/05 09:20:27 dolmant Exp $ */
+/* $Id: newplayer.php,v 1.2 2004/01/05 09:31:48 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,7 +32,7 @@
  *
  */
 
-function display($name, $domain)
+function display($name, $domain, $gender)
 {
 	global $DBMain;
 
@@ -43,10 +43,14 @@ function display($name, $domain)
 	foreach($res as $dom)
 		$domainlist .= '<option value="' . $dom['domain_id'] . '"' . ($domain == $dom['domain_id'] ? ' selected' : '') . '>' . $dom['domain_name'] . '</option>';
 
+	$genderlist = '<option ' . ($gender == 'M' ? 'selected' : '') . '>M</option>' .
+		'<option ' . ($gender == 'F' ? 'selected' : '') . '>F</option>';
+
 	echo
 		getTableForm('New Player:', array(
 			array('Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($name))),
 			array('Domain', array('type'=>'select', 'name'=>'domain', 'val'=>$domainlist)),
+			array('Gender', array('type'=>'select', 'name'=>'gender', 'val'=>$genderlist)),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Register')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newplayer'))
@@ -57,6 +61,7 @@ if(LOGGED)
 {
 	$name = isset($_POST['name']) ? encode($_POST['name']) : '';
 	$domain = isset($_POST['domain']) ? encode($_POST['domain']) : '';
+	$gender = isset($_POST['gender']) ? encode($_POST['gender']) : '';
 
 	if(isset($_POST['submit']))
 	{
@@ -84,16 +89,23 @@ if(LOGGED)
 			$fail = true;
 		}
 
+		if($gender != 'M' && $gender != 'F')
+		{
+			echo '<br>Invalid gender.';
+			$fail = true;
+		}
+
 		if($fail)
 		{
 			echo '<br>Player registration failed.';
-			display($name, $domain);
+			display($name, $domain, $gender);
 		}
 		else
 		{
-			$DBMain->Query('insert into player (player_user, player_name, player_domain, player_register, player_last) values (' .
+			$DBMain->Query('insert into player (player_user, player_name, player_gender, player_domain, player_register, player_last) values (' .
 			ID . ', ' .
 			'"' . $name . '", ' .
+			($gender == 'M' ? '1' : '-1') . ', ' .
 			$domain . ', ' .
 			TIME . ', ' .
 			TIME .
@@ -103,7 +115,7 @@ if(LOGGED)
 		}
 	}
 	else
-		display($name, $domain);
+		display($name, $domain, $gender);
 }
 else
 	echo '<p>You must be logged in to view this page.';
