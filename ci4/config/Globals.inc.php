@@ -6,7 +6,7 @@ $CI_HOME           = '/var/www/ci4/';
 $CI_DOMAIN         = 'localhost';
 $CI_PATH           = '/ci4';
 $CI_ADDRESS        = 'http://' . $CI_DOMAIN . $CI_PATH;
-$CI_DATABASE       = 'ci';
+$CI_DATABASE       = 'ci4';
 $CI_DEF_TEMPLATE   = 'ci4';
 
 $CI_FORUM_HOME     = '/var/www/ci4/forum/';
