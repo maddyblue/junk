@@ -1,10 +1,3 @@
-<?php
-
-define('TEMPLATE_ADDROW_BOTTOM', true);
-define('TEMPLATE_ADDROW_RIGHT', true);
-
-?>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 	"http://www.w3.org/TR/html4/strict.dtd">
 
@@ -33,7 +26,7 @@ p, body, td, li, input, textarea, select {
 }
 
 .small {
-	font-size: 7px;
+	font-size: 9px;
 }
 
 input.text {
