@@ -35,7 +35,7 @@
 function addForumEntry(&$array, $row, $depth, $uls)
 {
 	if($row['forum_forum_desc'])
-		$desc = '<br>' . makeSpaces(1 + $depth) . decode($row['forum_forum_desc']);
+		$desc = '<br>' . str_repeat('&nbsp;', 1 + $depth) . decode($row['forum_forum_desc']);
 	else
 		$desc = '';
 
@@ -43,7 +43,7 @@ function addForumEntry(&$array, $row, $depth, $uls)
 	{
 		case 0:
 			array_push($array, array(
-				makeSpaces($depth) . (newForum($row, $uls) ? '* ' : '') . makeLink(decode($row['forum_forum_name']), 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+				str_repeat('&nbsp;', $depth) . (newForum($row, $uls) ? '* ' : '') . makeLink(decode($row['forum_forum_name']), 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 				$row['forum_forum_threads'],
 				$row['forum_forum_posts'],
 				linkLastPost($row['forum_forum_last_post'], $row['user_id'], $row['user_name'], $row['forum_post_date'], $row['forum_thread_id'], $row['forum_thread_title'])
@@ -51,7 +51,7 @@ function addForumEntry(&$array, $row, $depth, $uls)
 			break;
 		case  1:
 			array_push($array, array(
-				makeSpaces($depth) . makeLink('<b>' . decode($row['forum_forum_name']) . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+				str_repeat('&nbsp;', $depth) . makeLink('<b>' . decode($row['forum_forum_name']) . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 				'',
 				'',
 				'',

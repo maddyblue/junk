@@ -69,14 +69,6 @@ Small data:
 	getDBData
 	getDBDataNum
 
-IP addresses:
-	hex2ip
-	ip2hex
-
-String formatting:
-	zeropad
-	makeSpaces
-
 Profiling:
 	getProfile
 
@@ -621,68 +613,6 @@ function getDBDataNum($field, $search = ID, $where = 'user_id', $table = 'user')
 		$r = '0';
 
 	return $r;
-}
-
-// --- IP address ---
-
-/* Converts a hex value to an IP address. Used with ip2hex. Each two digits
- * represent one byte:
- * AABBCCDD -> WWW.XXX.YYY.ZZZ
- */
-function hex2ip($hex)
-{
-	$ip = '';
-
-	for($i = 0; $i < 4; $i++)
-	{
-		if($i)
-			$ip .= '.';
-
-		$s = substr($hex, (2 * $i), 2);
-		$ip .= hexdec($s);
-	}
-
-	return $ip;
-}
-
-/* Converts an IP address to a hex value. Used with hex2ip. Each number
- * separated by a period becomes a digit. Zeros are prepended if needed.
- * WWW.XXX.YYY.ZZZ -> AABBCCDD
- */
-function ip2hex($ip)
-{
-	$p1 = strpos($ip, '.');
-	$p2 = strpos($ip, '.', $p1 + 1);
-	$p3 = strpos($ip, '.', $p2 + 1);
-
-	$hex =
-		zeropad(dechex(substr($ip, 0, $p1)), 2) .
-		zeropad(dechex(substr($ip, $p1 + 1, $p2 - $p1)), 2) .
-		zeropad(dechex(substr($ip, $p2 + 1, $p3 - $p2)), 2) .
-		zeropad(dechex(substr($ip, $p3 + 1)), 2);
-
-	return $hex;
-}
-
-// --- String formatting ---
-
-// Add '0' to the begging of $str until it is $len long.
-function zeropad($str, $len)
-{
-	$l = strlen($str);
-	for(; $l < $len; $l++)
-		$str = '0' . $str;
-
-	return $str;
-}
-
-// Create a string of $num non-breaking HTML spaces.
-function makeSpaces($num)
-{
-	$ret = '';
-	while($num-- > 0)
-		$ret .= '&nbsp;';
-	return $ret;
 }
 
 // --- Profiling ---

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: manage-forums.php,v 1.3 2003/12/25 05:23:13 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -35,7 +35,7 @@
 function addForumEntry(&$array, $row, $depth)
 {
 	if($row['forum_forum_desc'])
-		$desc = '<br>' . makeSpaces(1 + $depth) . decode($row['forum_forum_desc']);
+		$desc = '<br>' . str_repeat('&nbsp;', 1 + $depth) . decode($row['forum_forum_desc']);
 	else
 		$desc = '';
 
@@ -43,7 +43,7 @@ function addForumEntry(&$array, $row, $depth)
 	{
 		case '0':
 			array_push($array, array(
-				makeSpaces($depth) . decode($row['forum_forum_name']) . $desc,
+				str_repeat('&nbsp;', $depth) . decode($row['forum_forum_name']) . $desc,
 				getFormField(array('type'=>'input', 'name'=>('order' . $row['forum_forum_id']), 'val'=>$row['forum_forum_order'], 'parms'=>'size="3" maxlength="3" style="width:30px"')),
 				makeLink('Edit', 'a=edit-forum&f=' . $row['forum_forum_id']),
 				makeLink('Delete', 'a=delete-forum&f=' . $row['forum_forum_id'])
@@ -51,7 +51,7 @@ function addForumEntry(&$array, $row, $depth)
 			break;
 		case  '1':
 			array_push($array, array(
-				makeSpaces($depth) . '<b>' . decode($row['forum_forum_name']) . '</b>' . $desc,
+				str_repeat('&nbsp;', $depth) . '<b>' . decode($row['forum_forum_name']) . '</b>' . $desc,
 				getFormField(array('type'=>'input', 'name'=>('order' . $row['forum_forum_id']), 'val'=>$row['forum_forum_order'], 'parms'=>'size="3" maxlength="3" style="width:30px"')),
 				makeLink('Edit', 'a=edit-forum&f=' . $row['forum_forum_id']),
 				makeLink('Delete', 'a=delete-forum&f=' . $row['forum_forum_id'])
