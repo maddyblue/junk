@@ -344,6 +344,7 @@ CREATE TABLE player (
   player_house bigint(10) unsigned NOT NULL default '0',
   player_lv smallint(6) unsigned NOT NULL default '0',
   player_exp bigint(10) unsigned NOT NULL default '0',
+  player_money bigint(10) unsigned NOT NULL default '0',
   player_nomod_hp smallint(6) unsigned NOT NULL default '100',
   player_nomod_mp smallint(6) unsigned NOT NULL default '50',
   player_nomod_str smallint(6) unsigned NOT NULL default '10',
