@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.33 2004/01/12 07:55:27 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.34 2004/01/12 08:08:24 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -198,7 +198,7 @@ else
 		$totpages = $ret[0]['count'];
 		$curpage = floor($offset / $threadsPP) + 1;
 
-		$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, $forumid, 'a=viewforum&f=');
+		$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, 'a=viewforum&f=' . $forumid);
 
 		$array = threadList($forumid, $offset, $threadsPP);
 		echo '<p>' . $pageDisp;
