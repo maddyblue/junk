@@ -251,11 +251,6 @@ echo '<p>' . $message;
 parseTags($bottom);
 echo $bottom;
 
-echo '<!-- ' . getProfile($time_start, gettimeofday(), $DBMain->queries, $DBMain->time) . ' -->';
-echo '<!--' . "\n" .
-$DBMain->querylist .
-"\n" . '-->';
-
 $DBMain->Disconnect();
 
 ?>

@@ -697,14 +697,21 @@ function makeSpaces($num)
 
 // --- Profiling ---
 
-// Return the execution information of the page load. Called by index.php.
-function getProfile($start, $end, $dbcalls, $dbtime)
+// Return the execution information of the page load.
+function getProfile()
 {
+	global $time_start, $DBMain;
+
+	$start = $time_start;
+	$end = gettimeofday();
+	$dbcalls = $DBMain->queries;
+	$dbtime = $DBMain->time;
+
 	$total = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
 	$script = $total - $dbtime;
 	$scriptper = $script / $total;
 
-	$ret = $total . 's, ' . $scriptper . '% PHP, ' . (1 - $scriptper) . '% SQL with ' . $dbcalls . ' queries';
+	$ret = '<small>'  .round($total, 3) . 's, ' . round(100 * $scriptper, 1) . '% PHP, ' . round(100* (1 - $scriptper), 1) . '% SQL with ' . $dbcalls . ' queries</small>';
 
 	return $ret;
 }

@@ -288,11 +288,21 @@ table.maintable {
 		<table class="boxcontents">
 			<tr>
 				<td>
-						<?php echo getNumActiveUsers(); ?> users,
-						<?php echo getNumActiveGuests(); ?> guests
+					<?php echo getNumActiveUsers(); ?> users,
+					<?php echo getNumActiveGuests(); ?> guests
 				</td>
 			</tr>
 		</table>
+		<p>
+
+		<table class="boxcontents">
+			<tr>
+				<td>
+						<CI_PROFILE>
+				</td>
+			</tr>
+		</table>
+		<p>
 
 		</td>
 

@@ -296,6 +296,7 @@ td.block-light {
 					</td>
 				</tr>
 			</table>
+			<CI_PROFILE>
 		</td>
 		<td style="width: 8px"></td>
 	</tr>
