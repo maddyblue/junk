@@ -266,6 +266,7 @@ CREATE TABLE session (
   session_start bigint(10) unsigned NOT NULL default '0',
   session_current bigint(10) unsigned NOT NULL default '0',
   session_action varchar(100) NOT NULL default '',
+  session_action_data bigint(10) NOT NULL default '0',
   PRIMARY KEY  (session_id)
 ) TYPE=HEAP;
 
