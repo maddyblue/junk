@@ -32,7 +32,24 @@
  *
  */
 
+function disp($e, $name, $cost)
+{
+	global $PLAYER;
+
+	echo getTableForm('Buy Equipment', array(
+		array('', array('type'=>'disptext', 'val'=>makeLink($name, 'a=viewequipmentdetails&e=' . $e))),
+		array('Your Money', array('type'=>'disptext', 'val'=>$PLAYER['player_money'])),
+		array('Cost', array('type'=>'disptext', 'val'=>$cost)),
+		array('Remaining', array('type'=>'disptext', 'val'=>($PLAYER['player_money'] - $cost))),
+
+		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Buy')),
+		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'buyequipment')),
+		array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
+	));
+}
+
 $e = isset($_GET['e']) ? intval($_GET['e']) : '0';
+$e = isset($_POST['e']) ? intval($_POST['e']) : $e;
 
 $res = $DBMain->Query('select * from equipment where equipment_id=' . $e);
 
@@ -40,13 +57,18 @@ if($PLAYER == false)
 	echo '<p>You must be logged in to buy equipment.';
 else if(count($res))
 {
-	if($res[0]['equipment_cost'] > $PLAYER['player_money'])
+	$name = $res[0]['equipment_name'];
+	$cost = $res[0]['equipment_cost'];
+
+	if(!isset($_POST['submit']))
+		disp($e, $name, $cost);
+	else if($cost > $PLAYER['player_money'])
 		echo '<p>You do not have enough money to purchase this.';
 	else
 	{
 		$DBMain->Query('insert into player_equipment (player_equipment_equipment, player_equipment_player) values (' . $res[0]['equipment_id'] . ', ' . $PLAYER['player_id'] . ')');
-		$DBMain->Query('update player set player_money = player_money - ' . $res[0]['equipment_cost'] . ' where player_id=' . $PLAYER['player_id']);
-		echo '<p>Successfully purchased a ' . $res[0]['equipment_name'] . '.';
+		$DBMain->Query('update player set player_money = player_money - ' . $cost . ' where player_id=' . $PLAYER['player_id']);
+		echo '<p>Purchased a ' . $name . '.';
 	}
 }
 else
