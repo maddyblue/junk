@@ -12,7 +12,7 @@ for($i = 0; $i < count($items['itemtype_name']); $i++)
 	$itemlist .= $items['itemtype_name'][$i];
 }
 
-$jobs = $DBMain->Query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $_GET['job'] . ' and cor_jobreq=job.job_id order by job_name');
+$jobs = $DBMain->Query('select job_name, job_id, cor_job_lv from cor_job_joblv, job where cor_job=' . $_GET['job'] . ' and cor_job_req=job.job_id order by job_name');
 
 $joblist = '';
 
