@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.28 2004/01/08 04:53:10 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.29 2004/01/08 06:43:52 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -83,7 +83,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 
 function newThread($t)
 {
-	if(ID && $t['forum_post_date'] > getDBData('user_last_session'))
+	if(ID && $t['pld'] > $t['uls'])
 	{
 		global $DBMain;
 
@@ -115,17 +115,27 @@ function threadList($forumid, $offset, $threadsPP)
 		'Last Post'
 	));
 
-	$ret = $DBMain->Query('select * from forum_thread, forum_post, user where forum_post_user=user_id and forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread and forum_thread_last_post=forum_post_id order by forum_post_date desc limit ' . $offset . ', ' . $threadsPP);
+	// simultaneously get usernames and post data for first and last post by doing complex self-joins
+	$ret = $DBMain->Query('
+	SELECT forum_thread.*, plast.forum_post_date as pld, ufirst.user_name ufn, ufirst.user_id ufi, ulast.user_name uln, ulast.user_id uli, ulast.user_last_session as uls
+	FROM forum_thread, forum_post pfirst, forum_post plast, user ufirst, user ulast
+	WHERE forum_thread_forum=' . $forumid . '
+	AND pfirst.forum_post_id = forum_thread_first_post
+	AND plast.forum_post_id = forum_thread_last_post
+	AND pfirst.forum_post_user = ufirst.user_id
+	AND plast.forum_post_user = ulast.user_id
+	ORDER BY pfirst.forum_post_date DESC
+	LIMIT ' . $offset . ', ' . $threadsPP);
 
 	foreach($ret as $row)
 	{
 		array_push($array, array(
 			(newThread($row) ? '* ' : '') .
 				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']),
-			getUserlink($row['forum_thread_user']),
+			getUserlink($row['ufi'], $row['ufn']),
 			$row['forum_thread_replies'],
 			$row['forum_thread_views'],
-			forumLinkLastPost($row['forum_post_id'], $row['user_id'], decode($row['user_name']), $row['forum_post_date'])
+			forumLinkLastPost($row['forum_thread_last_post'], $row['uli'], decode($row['uln']), $row['pld'])
 		));
 	}
 
