@@ -27,25 +27,22 @@ $params["Query"] = "select * from commands";
 $params["Database"] = "trythbot";
 
 $data = $db->ReadTable($params);
-
-/* Demonstrating SQLFormat. */
-
-$db->Disconnect($params["Handle"]);
+$db->Disconnect($params{"Handle"});
 
 $sqlf = new SQLFormat;
 
 $fd = fopen("temp1.html", "r");
 $temp = fread($fd, filesize("temp1.html"));
 
-$param{"Template"} = $temp;
-$param{"Table"} = "commands";
-$param{"Delim"} = "%";
-$param{"IndexStart"} = 1;
-$param{"Exceptions"} = "";
-$param{"Database"} = "trythbot";
-$param{"Handle"} = $db->Connect($con);
+$params{"Template"} = $temp;
+$params{"Table"} = "commands";
+$params{"Delim"} = "%";
+$params{"IndexStart"} = 1;
+$params{"Exceptions"} = "";
+$params{"Database"} = "trythbot";
+$params{"Handle"} = $db->connect($con);
 
-$stuff = $sqlf->FormatFromDB($param);
+$stuff = $sqlf->FormatFromDB($params);
 
 for($k = 0; $k <= sizeof($stuff); $k++)
 {
