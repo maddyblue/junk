@@ -56,6 +56,18 @@ class GameObjectEntity extends GameObjectUnknown
 		$this->Code{"Reaction" . $parameters{"Event"}} = $parameters{"Code"};
 	}
 
-	
+	// BroadcastEvent: causes an Event signal to be broadcast.
+
+	/* Parameters:
+			Event - event to trigger.
+			Scope - scope of broadcast:
+				0 - Characters online in current town.
+				1 - All characters online.
+	*/
+
+	function BroadcastEvent($parameters)
+	{
+			
+	}
 }
 
