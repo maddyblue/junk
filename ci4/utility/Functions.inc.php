@@ -98,30 +98,30 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 function makeTable($arr, $skip = array())
 {
 	$list = array();
-	?><p><table1><tr1><?
+	?><p><table1><tr1><?php
 	$width = 0;
 	while(list($val) = each($arr))
 	{
 		if($skip{$val}) continue;
 		$width++;
 		echo "\n";
-		?><td1><? echo $val ?></td><?
+		?><td1><?php echo $val ?></td><?php
 		array_push($list, $val);
 	}
 	$depth = count($arr{$list[0]});
-	?></tr><?
+	?></tr><?php
 	for($i1 = 0; $i1 < $depth; $i1++)
 	{
 		echo "\n";
-		?><tr2><?
+		?><tr2><?php
 		for($i2 = 0; $i2 < $width; $i2++)
 		{
 			echo "\n";
-			?><td2><? echo $arr{$list[$i2]}[$i1] ?></td><?
+			?><td2><?php echo $arr{$list[$i2]}[$i1] ?></td><?php
 		}
-		?></tr><?
+		?></tr><?php
 	}
-	?></table><?
+	?></table><?php
 }
 
 /* This function takes lots of heavily nested arrays.
@@ -130,14 +130,14 @@ function makeTable($arr, $skip = array())
 function makeTableForm($title, $arr, $descrip = '', $parms = '')
 {
 	?>
-		<form method="POST" action="index.php" <? echo $parms ?>>
+		<form method="POST" action="index.php" <?php echo $parms ?>>
 		<table>
 			<tr>
-				<td colspan="<? echo count($arr[0]) ?>">
-					<? echo $title ?><? if($descrip) echo ": $descrip" ?>
+				<td colspan="<?php echo count($arr[0]) ?>">
+					<?php echo $title ?><?php if($descrip) echo ": $descrip" ?>
 				</td>
 			</tr>
-	<?
+	<?php
 	while(list(,$array) = each($arr))
 	{
 		if($array[1][0] != 'hidden')
@@ -145,22 +145,22 @@ function makeTableForm($title, $arr, $descrip = '', $parms = '')
 			?>
 				<tr>
 					<td>
-						<? echo $array[0] ?>
+						<?php echo $array[0] ?>
 					</td>
 					<td>
-						<? echo makeFormField($array[1]) ?>
+						<?php echo makeFormField($array[1]) ?>
 					</td>
 				</tr>
-			<?
+			<?php
 		}
 		else
 			$end .= makeFormField($array[1]);
 	}
 	?>
 		</table>
-		<? echo $end ?>
+		<?php echo $end ?>
 		</form>
-	<?
+	<?php
 }
 
 /* Fairly simple.  Just takes an associative array, and plugs in the values. */

@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -41,18 +41,18 @@ if($changedom)
 <input type=hidden name=a value=domains>
 <p>Change domain to:
 <select name=dom>
-<?
+<?php
 $ret = $DB->Query('SELECT id FROM domain ORDER BY expwdrop,bosslevel');
 while(list(,$val) = each($ret{'id'}))
 {
-	?><option value=<? echo $val ?>><? echo getDomainName($val) ?></option><?
+	?><option value=<?php echo $val ?>><?php echo getDomainName($val) ?></option><?php
 }
 ?>
 </select>
 &nbsp;<input type=submit name=changedom value="Change">
 </form>
 
-<?
+<?php
 
 $ret = $DB->Query('SELECT id,name,expwdrop,bosslevel FROM domain ORDER BY expwdrop,bosslevel');
 for($i = 0; $i < count($ret{'id'}); $i++)
@@ -60,9 +60,9 @@ for($i = 0; $i < count($ret{'id'}); $i++)
 	$id = $ret{'id'}[$i];
 	$name = $ret{'name'}[$i];
 
-	?><p><b><? echo $name ?></b><?
+	?><p><b><?php echo $name ?></b><?php
 	if($CI_DOMAIN == $id) echo ' (current domain)';
-	?>:<br>Players in this domain: <?
+	?>:<br>Players in this domain: <?php
 	$cur = $DB->Query('SELECT COUNT(*) AS COUNT FROM player WHERE domain=' . $id);
 	echo $cur{'COUNT'}[0];
 

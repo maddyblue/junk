@@ -1,4 +1,4 @@
-<?
+<?php
 
 if($submit)
 {
@@ -16,8 +16,8 @@ if($submit)
 	else
 	{
 		$ret = $DB->Query('INSERT INTO player (forumid,domain,name,gender,town) VALUES (' . $bbuserid . ', ' . $dom . ', ' . "'" . addslashes($name) . "'" . ', ' . "'$gender'" . ', ' . $town . ')');
-		?><p>Character created.  Click <a href="<? echo CI_ADDRESS . '/?a=domains&dom=' . $dom ?>">here</a> to change to that character's domain.
-		<?
+		?><p>Character created.  Click <a href="<?php echo CI_ADDRESS . '/?a=domains&dom=' . $dom ?>">here</a> to change to that character's domain.
+		<?php
 	}
 }
 
