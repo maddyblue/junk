@@ -40,7 +40,7 @@ function forumLinkLastPost($postid)
 			' ' .
 			getUsername($ret[0]['forum_post_user']) .
 			' ' .
-			makeLink('->', '?a=viewpost&postid=' . $ret[0]['forum_post_id'])
+			makeLink('-&gt;', '?a=viewpost&postid=' . $ret[0]['forum_post_id'])
 		);
 	else
 		return 'No posts.';
