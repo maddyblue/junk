@@ -105,7 +105,8 @@ td
 	<table width="100%" class="box">
 		<tr>
 			<td>
-				<CISUB>INSERT<br></CISUB>
+				[ <CISUB>[ INSERT ]<br></CISUB> ]
+				<p><CISECTION>
 			</td>
 		</tr>
 	</table>
@@ -113,7 +114,7 @@ td
 	<table width="100%" class="box">
 		<tr>
 			<td>
-				<CISEC>INSERT<br></CISEC>
+				[ <CISEC>[ INSERT ]<br></CIdSEC> ]
 			</td>
 		</tr>
 	</table>
