@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.7 2003/12/15 06:03:18 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.8 2003/12/15 06:09:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -41,7 +41,6 @@ array(2, 'makeLink(\'Viewing Who\\\'s online\', \'a=whosonline\', SECTION_USER)'
 function getAction($a, $d)
 {
 	$ret = '';
-	//echo $GLOBALS['actionlist'][$a][1];
 	eval('$ret = ' . $GLOBALS['actionlist'][$a][1] . ';');
 	return $ret;
 }
