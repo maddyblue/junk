@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: sync-forums.php,v 1.7 2004/01/09 06:40:50 dolmant Exp $ */
+/* $Id: sync-forums.php,v 1.8 2004/01/12 08:17:12 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -40,6 +40,13 @@ foreach($threads as $thread)
 {
 	$lastpost = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread=' . $thread['forum_thread_id'] . ' order by forum_post_date desc limit 1');
 	$last = $lastpost ? $lastpost[0]['forum_post_id'] : '0';
+
+	if($last == '0')
+	{
+		echo 'deleting empty thread: ' . decode($thread['forum_thread_title']) . '<br>';
+		$DBMain->Query('delete from forum_thread where forum_thread_id=' . $thread['forum_thread_id']);
+		continue;
+	}
 
 	$firstpost = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread=' . $thread['forum_thread_id'] . ' order by forum_post_date asc limit 1');
 	$first = $firstpost ? $firstpost[0]['forum_post_id'] : '0';
