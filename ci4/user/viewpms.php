@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewpms.php,v 1.7 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -51,13 +51,8 @@ else
 
 	for($i = 0; $i < count($res); $i++)
 	{
-		$sub = makeLink(decode($res[$i]['pm_subject']), 'a=viewpm&pm=' . $res[$i]['pm_id']);
-
-		if(!$res[$i]['pm_read'])
-			$sub = '<b>' . $sub . '</b>';
-
 		array_push($array, array(
-			$sub,
+			($res[$i]['pm_read'] ? '' : '* ') . makeLink(decode($res[$i]['pm_subject']), 'a=viewpm&pm=' . $res[$i]['pm_id']),
 			getUserlink($res[$i]['pm_from']),
 			getTime($res[$i]['pm_date'])
 		));
