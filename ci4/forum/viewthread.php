@@ -30,39 +30,6 @@
  *
  */
 
-function parsePost($post)
-{
-	global $DBMain;
-
-	$return = '';
-
-	$res = $DBMain->Query('select forum_post_text from forum_post where forum_post_id=' . $post);
-
-	if(count($res) == 1)
-	{
-		$return = decode($res[0]['forum_post_text']);
-
-		$return = nl2br($return);
-	}
-
-	$ereg = array(
-		array("\[url=(.+)\](.+)\[/url\]", "<a href=\"\\1\">\\2</a>"),
-		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>"),
-		array("\[quote\](.+)\[/quote\]", "<table class=\"tableMain\"><tr class=\"tableRow\"><td class=\"tableCellBR\">\\1</td></tr></table>")
-		//array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
-	);
-
-	foreach($ereg as $row)
-	{
-//		while(eregi($row[0], $return) == true)
-			$return = eregi_replace($row[0], $row[1], $return);
-	}
-
-	$return = forumReplace($return);
-
-	return $return;
-}
-
 function postList($thread, $offset, $postsPP)
 {
 	global $DBMain;
@@ -111,7 +78,7 @@ echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[
 
 $newreply = makeLink('New Reply', '?a=newpost&t=' . $threadid);
 
-$offset = isset($_GET['start']) ? decode($_GET['start']) : 0;
+$offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
 $postsPP = 20;
 
 $ret = $DBMain->Query('select ceiling(count(*)/' . $postsPP . ') as count from forum_post where forum_post_thread=' . $threadid);
