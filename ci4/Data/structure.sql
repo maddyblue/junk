@@ -372,6 +372,7 @@ CREATE TABLE town (
   town_item_min_lv smallint(6) unsigned NOT NULL default '0',
   town_item_max_lv smallint(6) unsigned NOT NULL default '0',
   town_reqs text NOT NULL,
+  town_reqs_desc text NOT NULL,
   PRIMARY KEY  (town_id),
   UNIQUE KEY town_name (town_name)
 ) TYPE=MyISAM;

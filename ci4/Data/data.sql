@@ -234,14 +234,14 @@ INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
 INSERT INTO skin VALUES ('kuro5hin','rusty','http://www.kuro5hin.org/');
 
 
-INSERT INTO town VALUES (1,'Kilinos Port','',0,0,'');
-INSERT INTO town VALUES (2,'Lagos Villiage','',0,0,'');
-INSERT INTO town VALUES (3,'Oman\'s Keep','',0,0,'');
-INSERT INTO town VALUES (4,'Gale Point','',0,0,'');
-INSERT INTO town VALUES (5,'','',0,0,'');
-INSERT INTO town VALUES (6,'Venture','',0,0,'');
-INSERT INTO town VALUES (7,'Rookheim','',0,0,'');
-INSERT INTO town VALUES (8,'Olmeneux (Lower Wards)','',0,0,'');
-INSERT INTO town VALUES (9,'Olmeneux (Upper Wards)','',0,0,'');
-INSERT INTO town VALUES (10,'Northgate','',0,0,'');
+INSERT INTO town VALUES (1,'Kilinos Port','',0,0,'','');
+INSERT INTO town VALUES (2,'Lagos Villiage','',0,0,'','');
+INSERT INTO town VALUES (3,'Oman\'s Keep','',0,0,'','');
+INSERT INTO town VALUES (4,'Gale Point','',0,0,'','');
+INSERT INTO town VALUES (5,'','',0,0,'','');
+INSERT INTO town VALUES (6,'Venture','',0,0,'','');
+INSERT INTO town VALUES (7,'Rookheim','',0,0,'','');
+INSERT INTO town VALUES (8,'Olmeneux (Lower Wards)','',0,0,'','');
+INSERT INTO town VALUES (9,'Olmeneux (Upper Wards)','',0,0,'','');
+INSERT INTO town VALUES (10,'Northgate','',0,0,'','');
 
