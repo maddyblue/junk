@@ -32,6 +32,7 @@
 mysqldump -u root -t ci4 \
 	ability \
 	abilitytype \
+	area \
 	cor_job_ability \
 	cor_job_equipmenttype \
 	cor_job_joblv \
@@ -46,4 +47,5 @@ mysqldump -u root -t ci4 \
 	monstertype \
 	site \
 	skin \
+	town \
 	| egrep -v "^-.*" > data.sql

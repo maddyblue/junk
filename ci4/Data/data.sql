@@ -39,6 +39,26 @@ INSERT INTO abilitytype VALUES (10,'Aura','Light that envelopes a Paladin (or hi
 INSERT INTO abilitytype VALUES (11,'Sword Tech','Attacks with status lowering affects.');
 
 
+INSERT INTO area VALUES (1,'Kilinos Beach','');
+INSERT INTO area VALUES (2,'Kilinos Bay','');
+INSERT INTO area VALUES (3,'Greenlands','');
+INSERT INTO area VALUES (4,'Clifftop Path','');
+INSERT INTO area VALUES (5,'Breeze Sprite Shrine','');
+INSERT INTO area VALUES (6,'Inland Pass','');
+INSERT INTO area VALUES (7,'Hill Top','');
+INSERT INTO area VALUES (8,'Overlooking the Great Plains','');
+INSERT INTO area VALUES (9,'Staircase Cavern','');
+INSERT INTO area VALUES (10,'Venture Hill','');
+INSERT INTO area VALUES (11,'The Great Plains [South]','');
+INSERT INTO area VALUES (12,'Rookwood','');
+INSERT INTO area VALUES (13,'The Great Plains [Central]','');
+INSERT INTO area VALUES (14,'The Great Plains [North]','');
+INSERT INTO area VALUES (15,'Ruined Spire','');
+INSERT INTO area VALUES (16,'Crysalis Speculum','');
+INSERT INTO area VALUES (17,'Mausoleum','');
+INSERT INTO area VALUES (18,'Northwest Passage','');
+
+
 
 
 INSERT INTO cor_job_equipmenttype VALUES (1,0);
@@ -221,4 +241,16 @@ INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
 INSERT INTO skin VALUES ('kuro5hin','rusty','http://www.kuro5hin.org/');
+
+
+INSERT INTO town VALUES (1,'Kilinos Port','',0,0,'');
+INSERT INTO town VALUES (2,'Lagos Villiage','',0,0,'');
+INSERT INTO town VALUES (3,'Oman\'s Keep','',0,0,'');
+INSERT INTO town VALUES (4,'Gale Point','',0,0,'');
+INSERT INTO town VALUES (5,'','',0,0,'');
+INSERT INTO town VALUES (6,'Venture','',0,0,'');
+INSERT INTO town VALUES (7,'Rookheim','',0,0,'');
+INSERT INTO town VALUES (8,'Olmeneux (Lower Wards)','',0,0,'');
+INSERT INTO town VALUES (9,'Olmeneux (Upper Wards)','',0,0,'');
+INSERT INTO town VALUES (10,'Northgate','',0,0,'');
 
