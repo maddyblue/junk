@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewjobdetails.php,v 1.10 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id: viewjobdetails.php,v 1.11 2004/01/07 02:37:09 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -51,7 +51,7 @@ else
 	$equipmentlist .= 'Cannot equip anything.';
 }
 
-$jobs = $DBMain->Query('select job_name, job_id, cor_job_lv from cor_job_joblv, job where cor_job=' . $_GET['job'] . ' and cor_job_req=job.job_id order by job_name');
+$jobs = $DBMain->Query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $_GET['job'] . ' and cor_job_req=job.job_id order by job_name');
 
 $joblist = '';
 
@@ -63,8 +63,10 @@ else
 {
 	for($i = 0; $i < count($jobs); $i++)
 	{
-		if($i) $joblist .= ', ';
-		$joblist .= makeLink($jobs[$i]['job_name'], 'a=viewjobdetails&amp;job=' . $jobs[$i]['job_id']) . ' (' . $jobs[$i]['cor_joblv'] . ')';
+		if($i)
+			$joblist .= ', ';
+
+		$joblist .= makeLink($jobs[$i]['job_name'], 'a=viewjobdetails&job=' . $jobs[$i]['job_id']) . ' (' . $jobs[$i]['cor_joblv'] . ')';
 	}
 }
 
