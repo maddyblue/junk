@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.15 2004/01/12 04:05:34 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -84,6 +84,7 @@ array(0503, 'makeLink(\'Viewing Equipment\', \'a=viewequipment\', SECTION_GAME)'
 array(0504, 'makeLink(\'Viewing Jobs\', \'a=viewjobs\', SECTION_GAME)'),
 array(0505, 'makeLink(\'Viewing Monsters\', \'a=viewmonsters\', SECTION_GAME)'),
 array(0506, 'makeLink(\'Viewing Towns\', \'a=viewtowns\', SECTION_GAME)'),
+array(0551, 'makeLink(\'Changing Jobs\', \'a=changejobs\', SECTION_GAME)'),
 
 // manual
 array(0601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),
