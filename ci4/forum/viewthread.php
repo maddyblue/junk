@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.26 2003/12/16 09:07:15 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.27 2003/12/18 00:59:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,7 +32,7 @@
  *
  */
 
-function postList($thread, $offset, $postsPP)
+function postList($thread, $offset, $postsPP, $canMod)
 {
 	global $DBMain;
 
@@ -45,7 +45,7 @@ function postList($thread, $offset, $postsPP)
 		$user = getUserlink($post['user_id']);
 		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
 		$user .= makeLink('quote', 'a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
-		if(canEdit($post['user_id'], $GLOBALS['forumid']))
+		if(ID == $post['user_id'] || $canMod) // <- exactly the same as canEdit, but saves us a few DB calls per post
 			$user .= ' ' . makeLink('edit', 'a=editpost&p=' . $post['forum_post_id']);
 
 		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class="small">' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
@@ -78,6 +78,8 @@ $res = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $thr
 
 $forumid = $res[0]['forum_thread_forum'];
 
+$canMod = canMod($forumid);
+
 echo getNavBar($forumid) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid) . '<p>';
 
 $newreply = makeLink('New Reply', 'a=newpost&t=' . $threadid);
@@ -91,7 +93,7 @@ $curpage = floor($offset / $postsPP) + 1;
 
 $pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $postsPP, $threadid, 'a=viewthread&t=');
 
-$array = postList($threadid, $offset, $postsPP);
+$array = postList($threadid, $offset, $postsPP, $canMod);
 
 if(count($array))
 {
