@@ -38,25 +38,6 @@ function makeSpaces($num)
 	return $ret;
 }
 
-function getName($name, $type)
-{
-	$ret = '';
-
-	switch($type)
-	{
-		case 0:
-			$ret = $name;
-			break;
-		case 1:
-			$ret = '<b>' . $name . '</b>';
-			break;
-		default:
-			break;
-	}
-
-	return $ret;
-}
-
 function forumList(&$array, $id, $topdepth, $depth)
 {
 	global $DBMain;
@@ -73,34 +54,103 @@ function forumList(&$array, $id, $topdepth, $depth)
 		{
 			$row = $top[0];
 
-			array_push($array, array(
-				makeLink(getName($row['forum_forum_name'], $row['forum_forum_type']), '?a=viewforum&forumid=' . $row['forum_forum_id']),
-				$row['forum_forum_topics'],
-				$row['forum_forum_posts'],
-				forumLinkLastPost($row['forum_forum_last_post'])
-			));
+			switch($row['forum_forum_type'])
+			{
+				case 0:
+					array_push($array, array(
+						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&forumid=' . $row['forum_forum_id']),
+						$row['forum_forum_threads'],
+						$row['forum_forum_posts'],
+						forumLinkLastPost($row['forum_forum_last_post'])
+					));
+					break;
+				case  1:
+					array_push($array, array(
+						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&forumid=' . $row['forum_forum_id']),
+						'',
+						'',
+						'',
+					));
+					break;
+			}	
 		}
 	}
 
 	foreach($res as $row)
 	{
-		array_push($array, array(
-			makeSpaces($topdepth - $depth) . makeLink(getName($row['forum_forum_name'], $row['forum_forum_type']), '?a=viewforum&forumid=' . $row['forum_forum_id']),
-			$row['forum_forum_topics'],
-			$row['forum_forum_posts'],
-			forumLinkLastPost($row['forum_forum_last_post'])
-		));
+		switch($row['forum_forum_type'])
+		{
+			case 0:
+				array_push($array, array(
+					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&forumid=' . $row['forum_forum_id']),
+					$row['forum_forum_threads'],
+					$row['forum_forum_posts'],
+					forumLinkLastPost($row['forum_forum_last_post'])
+				));
+				break;
+			case  1:
+				array_push($array, array(
+					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&forumid=' . $row['forum_forum_id']),
+					'',
+					'',
+					'',
+				));
+				break;
+		}
 
 		if($depth > 1)
 			forumList($array, $row['forum_forum_id'], $topdepth, $depth - 1);
 	}
 }
 
+function threadList($forumid)
+{
+	global $DBMain;
+
+	$array = array();
+
+	array_push($array, array(
+		'Thread',
+		'Started By',
+		'Replies',
+		'Views',
+		'Last Post'
+	));
+
+	$ret = $DBMain->Query('select * from forum_thread, forum_post where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread and forum_thread_last_post=forum_post_id order by forum_post_date desc limit 30');
+
+	if(count($ret))
+	{
+		foreach($ret as $row)
+		{
+			array_push($array, array(
+				makeLink(decode($row['forum_thread_title']), '?a=viewthread&threadid=' . $row['forum_thread_id']),
+				getUsername($row['forum_thread_user']),
+				$row['forum_thread_replies'],
+				$row['forum_thread_views'],
+				forumLinkLastPost($row['forum_post_id'])
+			));
+		}
+	}
+	else
+	{
+		array_push($array, array(
+			'No threads',
+			'',
+			'',
+			'',
+			' '
+		));
+	}
+
+	return $array;
+}
+
 $array = array();
 
 array_push($array, array(
 	'Forum',
-	'Topics',
+	'Threads',
 	'Posts',
 	'Last Post'
 ));
@@ -111,6 +161,10 @@ $forumid = 0;
 if(isset($_GET['forumid']))
 	$forumid = $_GET['forumid'];
 
+echo getNavBar($forumid);
+
+echo '<p>';
+
 forumList($array, $forumid, $depth, $depth);
 
 $res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forumid);
@@ -120,6 +174,9 @@ echo getTable($array);
 if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 {
 	echo '<p>' . makeLink('New Thread', '?a=newthread&forumid=' . $forumid);
+
+	$array = threadList($forumid);
+	echo '<p>' . getTable($array);
 }
 
 ?>

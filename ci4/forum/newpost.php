@@ -30,54 +30,48 @@
  *
  */
 
-function disp($subject, $post, $forum)
+function disp($subject, $post, $thread)
 {
 	global $DBMain;
 
-	$ret = $DBMain->Query('select forum_forum_name from forum_forum where forum_forum_id=' . $forum);
+	$ret = $DBMain->Query('select forum_thread_title from forum_thread where forum_thread_id=' . $thread);
 	if(count($ret))
-		$name = ' in ' . makeLink($ret[0]['forum_forum_name'], '?a=viewforum&forumid=' . $forum);
+		$name = ' in ' . makeLink($ret[0]['forum_thread_title'], '?a=viewthread&threadid=' . $thread);
 	else
 		$name = '';
 
-	echo getTableForm('New Thread' . $name, array(
+	echo getTableForm('New Reply' . $name, array(
 			array('Subject', array('type'=>'text', 'name'=>'subject', 'parms'=>'size="45" maxlength="100" style="width:450px"', 'val'=>decode($subject))),
 			array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="15" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($post))),
 
-			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Thread')),
-			array('', array('type'=>'hidden', 'name'=>'forumid', 'val'=>$forum)),
-			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newthread'))
+			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')),
+			array('', array('type'=>'hidden', 'name'=>'threadid', 'val'=>$thread)),
+			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
 		));
 }
 
 if(LOGGED == false)
 {
-	echo '<br>You must be logged in to create new threads.';
+	echo '<br>You must be logged in to post replies.';
 }
 else
 {
 	$subject = '';
 	$post = '';
-	$forumid = 0;
+	$threadid = 0;
 
 	if(isset($_POST['subject']))
 		$subject = encode($_POST['subject']);
 	if(isset($_POST['post']))
 		$post = encode($_POST['post']);
-	if(isset($_GET['forumid']))
-		$forum = encode($_GET['forumid']);
-	if(isset($_POST['forumid']))
-		$forum = encode($_POST['forumid']);
+	if(isset($_GET['threadid']))
+		$thread = encode($_GET['threadid']);
+	if(isset($_POST['threadid']))
+		$thread = encode($_POST['threadid']);
 
 	if(isset($_POST['submit']))
 	{
 		$fail = false;
-
-		if(!$subject)
-		{
-			echo '<br>No subject: enter a subject.';
-			$fail = true;
-		}
 
 		if(!$post)
 		{
@@ -85,62 +79,47 @@ else
 			$fail = true;
 		}
 
-		if(!$forum)
+		if(!$thread)
 		{
-			echo '<br>No forum selected: navigate to a forum and try to post a new thread there.';
+			echo '<br>No thread selected: navigate to a thread and post a new reply there.';
 			$fail = true;
 		}
 	
-		$ret = $DBMain->Query('select forum_thread_title from forum_thread where forum_thread_title="' . $subject . '" and forum_thread_forum=' . $forum);
-		if(count($ret))
-		{
-			echo '<br>There is already a thread in this forum with that subject name: change the subject.';
-			$fail = true;
-		}
-
 		if($fail)
 		{
-			echo '<br>Thread creation failed.<br>';
+			echo '<br>Post creation failed.<br>';
 			disp($subject, $post, $forum);
 		}
 		else
 		{
-			$DBMain->Query('insert into forum_thread (forum_thread_forum, forum_thread_title, forum_thread_user, forum_thread_date, forum_thread_type) values (' .
-				$forum . ',' .
-				'"' . $subject . '",' .
+			$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date) values (' .
+				$thread . ',' .
+				'"' . decode($subject) . '",' .
+				'"' . decode($post) . '",' .
 				ID . ',' .
-				time() . ',' .
-				'1' .
+				time() .
 				')');
-	
-			$ret = $DBMain->Query('select forum_thread_id from forum_thread where forum_thread_title="' . $subject . '"');
+			$ret = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread=' . $thread . ' and forum_post_user=' . ID . ' order by forum_post_date desc limit 1');
 			if(count($ret))
 			{
-				$lastthread = $ret[0]['forum_thread_id'];
-	
-				$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date) values (' .
-					$lastthread . ',' .
-					'"' . $subject . '",' .
-					'"' . $post . '",' .
-					ID  . ',' .
-					time() .
-					')');
-				$res = $DBMain->Query('select forum_post_id from forum_post where forum_post_user=' . ID .' order by forum_post_date desc limit 1');
-				$lastpost = $res[0]['forum_post_id'];
+				$lastpost = $ret[0]['forum_post_id'];
 				updateFromPost($lastpost);
+				$DBMain->Query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
 	
-				echo '<br>Thread created successfully.';
+				echo '<br>Reply posted successfully.';
+				$forum=0;
 				echo '<p>Return to the ' . makeLink('previous forum', '?a=viewforum&forumid=' . $forum) . '.';
-				echo '<p>Go to the ' . makeLink('created thread', '?a=viewthread&threadid=' . $lastthread) . '.';
+				echo '<p>Return to the ' . makeLink('previous thread', '?a=viewthread&threadid=' . $thread) . '.';
+				echo '<p>Go to the ' . makeLink('new post', '?a=viewpost&postid=' . $lastpost) . '.';
 			}
 			else
 			{
-				echo '<br>Thread creation failed.';
+				echo '<br>Post creation failed.';
 			}
 		}
 	}
 	else
-		disp($subject, $post, $forum);
+		disp($subject, $post, $thread);
 }
 	
 ?>
