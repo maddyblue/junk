@@ -32,7 +32,7 @@
  *
  */
 
-function disp()
+function disp($job)
 {
 	global $DBMain;
 
@@ -73,7 +73,7 @@ function disp()
 		// if the next job is _not_ the same as this one, add ourselves
 		if($i == count($res) - 1 || $res[$i + 1]['jid'] != $res[$i]['jid'])
 		{
-			$sel .= '<option value="' . $res[$i]['jid'] . '"' . ($GLOBALS['PLAYER']['player_job'] == $res[$i]['jid'] ? ' selected' : '') . '>' . $res[$i]['jname'] . '</option>';
+			$sel .= '<option value="' . $res[$i]['jid'] . '"' . ($job == $res[$i]['jid'] ? ' selected' : '') . '>' . $res[$i]['jname'] . '</option>';
 
 			array_push($array, array(
 				makeLink($res[$i]['jname'], 'a=viewjobdetails&job=' . $res[$i]['jid']),
@@ -97,16 +97,59 @@ function disp()
 if(!ID)
 	echo '<p>You must be logged in to change jobs.';
 else if(!$PLAYER)
-	echo '<p>You do not have a pla0yer in this domain.';
+	echo '<p>You do not have a player in this domain.';
 else if($PLAYER['player_battle'])
 	echo '<p>You have an active battle. You cannot changes jobs until it is finished.';
 else if(!isset($_POST['submit']))
-	disp();
+	disp($PLAYER['player_job']);
 else
 {
 	$job = isset($_POST['job']) ? encode($_POST['job']) : '0';
 
-	$res = $DBMain->Query('select job_reqlv from job where job_id="' . $job . '"');
+	$fail = false;
+
+	$res = $DBMain->Query('select job_req_lv, job_name from job where job_id="' . $job . '"');
+	if(!count($res))
+	{
+		echo '<br>Unknown job.';
+		$fail = true;
+	}
+
+	if($res[0]['job_req_lv'] > $PLAYER['player_lv'])
+	{
+		echo '<br>You are not yet at a high enough level to change to ' . $res[0]['job_name'] . '.';
+		$fail = true;
+	}
+
+	$failed = $DBMain->Query('select job_name, player_job_lv, cor_job_joblv.*
+		from cor_job_joblv, job
+		left join player_job on
+			player_job_player=' . $PLAYER['player_id'] . ' and
+			cor_job_req=player_job_job
+		where cor_job="' . $job . '" and
+			job_id=cor_job_req and
+			(player_job_lv is NULL or
+			player_job_lv < cor_joblv)');
+
+	if(count($failed))
+	{
+		foreach($failed as $entry)
+			echo '<br>You must be ' . $entry['job_name'] . ' level ' . $entry['cor_joblv'] . ', but you are level ' . ($entry['player_job_lv'] ? $entry['player_job_lv'] : '0') . '.';
+		$fail = true;
+	}
+
+	if(!$fail)
+	{
+		$DBMain->Query('update player set player_job="' . $job . '" where player_id=' . $PLAYER['player_id']);
+		echo '<p>Job change to ' . $res[0]['job_name'] . ' succeeded.';
+	}
+	else
+	{
+		echo '<br>Job change to ' . $res[0]['job_name'] . ' failed.';
+		echo '<p>';
+		disp($job);
+	}
+
 }
 
 update_session_action(0551);
