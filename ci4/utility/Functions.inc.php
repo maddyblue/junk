@@ -436,4 +436,44 @@ function isInGroup($user, $group)
 		return false;
 }
 
+function hex2ip($hex)
+{
+	$ip = '';
+
+	for($i = 0; $i < 4; $i++)
+	{
+		if($i)
+			$ip .= '.';
+
+		$s = substr($hex, (2 * $i), 2);
+		$ip .= hexdec($s);
+	}
+
+	return $ip;
+}
+
+function ip2hex($ip)
+{
+	$p1 = strpos($ip, '.');
+	$p2 = strpos($ip, '.', $p1 + 1);
+	$p3 = strpos($ip, '.', $p2 + 1);
+
+	$hex =
+		zeropad(dechex(substr($ip, 0, $p1)), 2) .
+		zeropad(dechex(substr($ip, $p1 + 1, $p2 - $p1)), 2) .
+		zeropad(dechex(substr($ip, $p2 + 1, $p3 - $p2)), 2) .
+		zeropad(dechex(substr($ip, $p3 + 1)), 2);
+
+	return $hex;
+}
+
+function zeropad($str, $len)
+{
+	$l = strlen($str);
+	for(; $l < $len; $l++)
+		$str = '0' . $str;
+
+	return $str;
+}
+
 ?>
