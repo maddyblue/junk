@@ -5,6 +5,7 @@ include_once("objects/GameObjectUnknown.inc.php");
 include_once("utility/DatabaseAccess.inc.php");
 include_once("utility/SQLFormat.inc.php");
 
+
 $c = new GameObjectUnknown;
 $i = 400;
 $act = "print $i";
@@ -14,7 +15,7 @@ $c->DoAction("1");
 
 print "<br>\n";
 
-/* Demonstrating DatabaseAccess object. */
+/* Demonstrating DatabaseAccess object. 
 
 $db = new DatabaseAccess;
 
@@ -48,4 +49,37 @@ for($k = 0; $k <= sizeof($stuff); $k++)
 {
 	print $stuff[$k];
 }
+
+*/
+
+/* Demonstrating point advancement system. */
+
+function getExp($level)
+{
+	$con[1] = .175137;
+	$con[2] = -1.51982;
+	$con[3] = 6.61609;
+	$con[4] = 2.16264;
+
+	$pwr = 3;
+	$exp = 0;
+
+	for($i = 1; $i <= 4; $i++)
+	{
+		$exp = $exp + ($con[$i] * (pow($level, $pwr)));
+		$pwr--;
+	}
+
+	return $exp;
+}
+
+$thresh = 40;
+
+for($i = 0; $i <= $thresh; $i++)
+{
+	print "level $i to level " . ($i + 1) . ": ";
+	print round(getExp($i + 1) - getExp($i));
+	print "<br>\n";
+}
+
 ?>
