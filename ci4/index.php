@@ -111,8 +111,8 @@ else
 $content .= $message;
 
 // Template
-if(isset($_GET['t']))
-	$t = $_GET['t'];
+if(isset($_GET['template']))
+	$t = $_GET['template'];
 else if(isset($_COOKIE['CI_TEMPLATE']))
 	$t = $_COOKIE['CI_TEMPLATE'];
 else
