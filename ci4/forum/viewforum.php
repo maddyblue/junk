@@ -52,11 +52,16 @@ function forumList(&$array, $id, $topdepth, $depth)
 		{
 			$row = $top[0];
 
+			if($row['forum_forum_desc'])
+				$desc = '<br>' . $row['forum_forum_desc'];
+			else
+				$desc = '';
+
 			switch($row['forum_forum_type'])
 			{
 				case 0:
 					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&f=' . $row['forum_forum_id']),
+						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 						$row['forum_forum_threads'],
 						$row['forum_forum_posts'],
 						forumLinkLastPost($row['forum_forum_last_post'])
@@ -64,7 +69,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 					break;
 				case  1:
 					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&f=' . $row['forum_forum_id']),
+						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 						'',
 						'',
 						'',
@@ -77,11 +82,16 @@ function forumList(&$array, $id, $topdepth, $depth)
 
 	foreach($res as $row)
 	{
+		if($row['forum_forum_desc'])
+			$desc = '<br>' . makeSpaces(1 + $topdepth - $depth) . $row['forum_forum_desc'];
+		else
+			$desc = '';
+
 		switch($row['forum_forum_type'])
 		{
 			case 0:
 				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&f=' . $row['forum_forum_id']),
+					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 					$row['forum_forum_threads'],
 					$row['forum_forum_posts'],
 					forumLinkLastPost($row['forum_forum_last_post'])
@@ -89,7 +99,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 				break;
 			case  1:
 				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&f=' . $row['forum_forum_id']),
+					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 					'',
 					'',
 					'',
