@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Database.inc.php,v 1.8 2003/12/15 05:26:13 dolmant Exp $ */
+/* $Id: Database.inc.php,v 1.9 2004/01/08 07:34:42 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -39,6 +39,7 @@ class Database
 
 	var $queries = 0;
 	var $time = 0;
+	var $querylist = '';
 
 	/*	Connect: returns a handle to a database connection
 
@@ -89,6 +90,8 @@ class Database
 
 	function Query($query, $dbname = '')
 	{
+		$this->querylist .= "\n" . $query;
+
 		$db = $dbname ? $dbname : $this->dbname;
 
 		if(!$db)
