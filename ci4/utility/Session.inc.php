@@ -58,7 +58,14 @@ function handle_session()
 		if(session_exists($sid))
 			update_session($sid);
 		else
-			start_session();
+		{
+			$sid = getDBData('session_id', ip2long($_SERVER['REMOTE_ADDR']), 'session_ip', 'session');
+
+			if($sid)
+				update_session($sid);
+			else
+				start_session();
+		}
 	}
 }
 
