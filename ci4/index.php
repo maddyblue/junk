@@ -4,21 +4,29 @@ if(!defined('SECTION')) define('SECTION', 'MAIN');
 require_once $CI_HOME_MOD . 'Include.inc.php';
 
 // User stuff
+if(!$domain) $domain = 0;
+define('DOMAIN', $domain);
 $ret = $DBForum->Query('SELECT username, usergroupid FROM user WHERE userid=' . "'$bbuserid'" . ' AND password=' . "'$bbpassword'");
 if(count($ret) == 0)
-	define('LOGGED', '<');
+{
+	define('LOGGED', false);
+	define('LOGGED_DIR', '<');
+	define('ADMIN', false);
+	define('GROUPID', 0);
+}
 else
 {
-	define('LOGGED', '>');
+	define('LOGGED', true);
+	define('LOGGED_DIR', '>');
 	define('GROUPID', $ret{'usergroupid'}[0]);
 	if(GROUPID == CI_FORUM_ADMIN_GROUP)
 		define('ADMIN', true);
 	else
 		define('ADMIN', false);
 }
-if(SECTION == 'ADMIN' && ADMIN == false)
+if(SECTION == 'ADMIN' && ADMIN != true)
 {
-	echo '<p>Admins only here.\n';
+	echo '<p>Admins only here.';
 	exit();
 }
 
@@ -36,7 +44,7 @@ if(!$fd)
 	$t = CI_DEF_TEMPLATE;
 	$fd = fopen(getTemplateName($t), 'r');
 }
-setcookie('CI_TEMPLATE', $t, time() + 604800, $CI_PATH);
+doCookie('TEMPLATE', $t);
 define('CI_TEMPLATE', $t);
 $template = fread($fd, filesize(getTemplateName($t)));
 fclose($fd);
@@ -64,7 +72,12 @@ if($a)
 $content .= $message;
 $pos = strpos($template, '<CICONTENT>');
 $template = substr_replace($template, $content, $pos, 11);
-$template = str_replace('<CICONTENT>', '', $template);
+
+if(!$CI_DOMAIN)
+	define('CI_DOMAIN', 0);
+else
+	define('CI_DOMAIN', $CI_DOMAIN);
+doCookie('DOMAIN', $CI_DOMAIN);
 
 // Single tags
 while(preg_match('/<CI_([^>]+)>/', $template, $matches)) // find a <CI_XXX> tag
