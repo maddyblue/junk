@@ -207,4 +207,6 @@ INSERT INTO site VALUES ('_SKIN_END',0,'eval','\'</select><br><input type=\"subm
 INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=\"get\" action=\"index.php\">\' . getInputList() . \'<select name=\"template\">\'','','',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
 INSERT INTO site VALUES ('NAV',50,'link','Admin','','CI_WWW_PATH . SECTION_ADMIN',1,1,'');
+INSERT INTO site VALUES ('ADMIN_SECTION_MENU',30,'link','Groups','','CI_WWW_PATH . SECTION_ADMIN . \'/?a=group-user\'',1,1,'');
+INSERT INTO site VALUES ('NAV',0,'link','Login','','CI_WWW_PATH . SECTION_USER . \'/?a=login\'',-1,0,'');
 
