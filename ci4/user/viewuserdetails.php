@@ -77,7 +77,7 @@ if(count($res) == 1)
 
 	echo getTable($array, false);
 
-	echo '<p>' . getTable($player);
+	echo '<p>Players owned by this user:' . getTable($player);
 }
 else
 	echo '<p>Invalid user.';
