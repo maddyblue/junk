@@ -69,7 +69,7 @@ if(count($res) == 1)
 	$player = array(array('Player', 'Domain'));
 
 	foreach($players as $p)
-		array_push($player, array(makeLink(decode($p['player_name']), 'a=viewplayerdetails&player=' . $p['player_id']), makeLink($p['domain_name'], 'a=domains', SECTION_HOME)));
+		array_push($player, array(makeLink(decode($p['player_name']), 'a=viewplayerdetails&player=' . $p['player_id'], SECTION_PLAYER), makeLink($p['domain_name'], 'a=domains', SECTION_HOME)));
 
 	if(LOGGED)
 	{

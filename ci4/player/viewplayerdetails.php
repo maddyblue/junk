@@ -47,7 +47,7 @@ if(count($res) == 1)
 
 	$array = array(
 		array('Player', decode($res[0]['player_name'])),
-		array('Owned by', makeLink(decode($res[0]['user_name']), 'a=viewuserdetails&user=' . $res[0]['player_user'])),
+		array('Owned by', makeLink(decode($res[0]['user_name']), 'a=viewuserdetails&user=' . $res[0]['player_user']), SECTION_USER),
 		array('Register date', getTime($res[0]['player_register'])),
 		array('Last active', getTime($res[0]['player_last'])),
 		array('Gender', getGender($res[0]['player_gender'])),

@@ -25,6 +25,7 @@ define('SECTION_FORUM', 'forum');
 define('SECTION_GAME', 'game');
 define('SECTION_BATTLE', 'battle');
 define('SECTION_MANUAL', 'manual');
+define('SECTION_PLAYER', 'player');
 
 /* Forum specs */
 

@@ -1,0 +1,183 @@
+<?php
+
+/* $Id$ */
+
+/*
+ * Copyright (c) 2004 Bruno De Rosa
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    - Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    - Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+$fields = array(
+	'player_name'=>'Name',
+	'user_name'=>'Owner',
+	'player_register'=>'Register Date',
+	'player_last'=>'Last Active',
+	'domain_abrev'=>'Domain',
+	'player_gender'=>'Gender',
+	'job_name'=>'Job',
+	'town_name'=>'Town',
+	'house_name'=>'House',
+	'player_lv'=>'Level',
+	'player_exp'=>'Exp',
+	'player_nomod_hp'=>'Base HP',
+	'player_nomod_mp'=>'Base MP',
+	'player_nomod_str'=>'Base STR',
+	'player_nomod_mag'=>'Base MAG',
+	'player_nomod_def'=>'Base DEF',
+	'player_nomod_mgd'=>'Base MGD',
+	'player_nomod_agl'=>'Base AGL',
+	'player_nomod_acc'=>'Base Acc',
+	'player_mod_hp'=>'HP',
+	'player_mod_mp'=>'MP',
+	'player_mod_str'=>'STR',
+	'player_mod_mag'=>'MAG',
+	'player_mod_def'=>'DEF',
+	'player_mod_mgd'=>'MGD',
+	'player_mod_agl'=>'AGL',
+	'player_mod_acc'=>'ACC'
+);
+
+$array = array();
+
+$header = array();
+
+$cols = array();
+
+foreach($_POST as $key => $value)
+{
+	if(strpos($key, '_') > 0)
+		$cols[$key] = $key;
+}
+
+// default column list
+if(count($cols) == 0)
+	$cols = array('player_name'=>'player_name', 'user_name'=>'user_name', 'player_lv'=>'player_lv', 'player_exp'=>'player_exp', 'domain_abrev'=>'domain_abrev');
+
+foreach($cols as $col)
+	array_push($header, $fields[$col]);
+
+array_push($array, $header);
+
+$limit = isset($_POST['limit']) ? intval($_POST['limit']) : 10;
+if($limit < 1)
+	$limit = 1;
+else if($limit > 50)
+	$limit = 50;
+
+$order = (isset($_POST['order']) && array_key_exists($_POST['order'], $fields)) ? $_POST['order'] : 'player_exp';
+
+$orderdir = (isset($_POST['orderdir']) && $_POST['orderdir'] == 'asc') ? 'asc' : 'desc';
+
+$query = 'select * from player, domain, user, job
+	left join town on town_id = player_town
+	left join house on house_id = player_house
+	where
+		player_job = job_id and
+		player_domain = domain_id and
+		player_user = user_id
+	order by ' . $order . ' ' . $orderdir .'
+	limit ' . $limit;
+
+$res = $DBMain->Query($query);
+
+foreach($res as $row)
+{
+	$push = array();
+
+  foreach($cols as $col)
+  {
+    switch($col)
+    {
+      case 'player_name':
+        $entry = makeLink(decode($row[$col]), 'a=viewplayerdetails&player=' . $row['player_id']);
+        break;
+
+      case 'player_gender':
+        $entry = getGender($row[$col]);
+        break;
+
+      case 'user_name':
+        $entry = makeLink(decode($row[$col]), 'a=viewuserdetails&user=' . $row['user_id'], SECTION_USER);
+        break;
+
+      case 'job_name':
+        $entry = makeLink($row[$col], 'a=viewuserdetails&user=' . $row['job_id'], SECTION_GAME);
+        break;
+
+      case 'town_name':
+        $entry = makeLink($row[$col], 'a=viewtowndetails&town=' . $row['town_id'], SECTION_GAME);
+        break;
+
+			case 'player_register':
+			case 'player_last':
+				$entry = getTime($row[$col]);
+				break;
+
+			default:
+				$entry = $row[$col];
+    }
+
+		array_push($push, $entry);
+  }
+  array_push($array, $push);
+}
+
+$disp = array();
+
+$orderby = '';
+foreach($fields as $key => $value)
+	$orderby .= '<option value="' . $key . '" ' . ($order == $key ? 'selected' : '') . '>' . $value . '</option>';
+
+$limitsel = '';
+foreach(array(10, 25, 50) as $val)
+	$limitsel .= '<option value="' . $val . '" ' . ($val == $limit ? 'selected' : '') . '>' . $val . '</option>';
+
+array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
+array_push($disp, array('Display Columns', array('type'=>'disptext')));
+
+foreach($fields as $key => $value)
+	array_push($disp, array($value, array('type'=>'checkbox', 'val'=>(array_key_exists($key, $cols) ? 'checked' : ''), 'name'=>$key)));
+
+array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
+array_push($disp, array('Order By', array('type'=>'select', 'name'=>'order', 'val'=>$orderby)));
+array_push($disp, array('Sort', array('type'=>'select', 'name'=>'orderdir', 'val'=>
+	'<option value="desc" ' . ($orderdir == 'desc' ? 'selected' : '') . '>Descending</option>' .
+	'<option value="asc" ' . ($orderdir == 'asc' ? 'selected' : '') . '>Ascending</option>'
+)));
+array_push($disp, array('Results', array('type'=>'select', 'name'=>'limit', 'val'=>$limitsel)));
+
+array_push($disp, array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Display')));
+array_push($disp, array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewplayers')));
+
+echo getTable($array);
+
+echo '<p>';
+
+echo getTableForm('Show Players:', $disp);
+
+?>
