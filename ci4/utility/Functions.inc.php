@@ -451,7 +451,8 @@ function makeLink($text, $link, $section = '', $title = '')
 		else if($section)
 			$ret .= CI_WWW_PATH . $section . '/';
 
-		$ret .= '?';
+		if($link)
+			$ret .= '?';
 
 		if(!LOGGED)
 			$ret .= 's=' . SESSION . '&amp;';
