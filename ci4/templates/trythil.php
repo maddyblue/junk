@@ -12,19 +12,19 @@
 
 	<style type="text/css">
 		.normal {
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			color: #FFFFFF;
 			text-transform: lowercase;
 			font-size: 12px;
 		}
 		.sidebar {
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			color: #FFFFFF;
 			text-transform: lowercase;
 			font-size: 12px;
 		}
 		.newsheading {
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			color: #FFFFFF;
 			font-weight: bold;
 			font-size: 14px;
@@ -32,7 +32,7 @@
 		}
 
 		a:link {
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			color: #9CB4D3;
 			text-decoration: none;
 			text-transform: lowercase;
@@ -41,7 +41,7 @@
 		}
 
 		a:hover {
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			color: #FFFFFF;
 			font-weight: bold;
 			text-decoration: underline;
@@ -50,7 +50,7 @@
 		}
 
 		a:visited {
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			color: #9CB4D3;
 			font-weight: bold;
 			text-decoration: none;
@@ -69,7 +69,7 @@
 		{
 			padding: 1px;
 			border-spacing: 1px;
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			color: #FFFFFF;
 			text-decoration: none;
 			text-transform: lowercase;
@@ -86,7 +86,7 @@
 			border: thin outset #424B9C;
 			font-size: 12px;
 			text-transform: lowercase;
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			background: url("/templates/trythil/menubg.png");
 			filter: Alpha(Opacity=66);
 			transparent;
@@ -103,7 +103,7 @@
 			background-color: #424B9C;
 			font-size: 12px;
 			text-transform: lowercase;
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			filter: Alpha(Opacity=66);
 		}
 
@@ -118,7 +118,7 @@
 			filter: Alpha(Opacity=66);
 			font-size: 12px;
 			text-transform: lowercase;
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 			transparent;
 		}
 
@@ -133,7 +133,7 @@
 			background-color: #424B9C;
 			font-size: 12px;
 			text-transform: lowercase;
-			font-family: Trebuchet MS, Tahoma, Times, sans-serif;
+			font-family: sans-serif;
 		}
 
 	</style>

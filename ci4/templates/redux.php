@@ -21,7 +21,7 @@ body {
 }
 
 p, body, td, li, input, textarea, select {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: sans-serif;
 	font-size: 12px;
 	color: #333333;
 	letter-spacing: 1px;

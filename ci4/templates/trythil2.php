@@ -24,13 +24,13 @@
 		}
 
 		p, body, td, li, input, textarea, select {
-			font-family: Trebuchet MS, Arial;
+			font-family: sans-serif;
 			font-size: 12px;
 			line-height: 13px;
 		}
 
 		a:link {
-			font-family: Trebuchet MS, Arial;
+			font-family: sans-serif;
 			font-size: 12px;
 			font-weight: bold;
 			text-decoration: none;
@@ -38,7 +38,7 @@
 		}
 
 		a:visited {
-			font-family: Trebuchet MS, Arial;
+			font-family: sans-serif;
 			font-size: 12px;
 			font-weight: bold;
 			text-decoration: none;
@@ -46,7 +46,7 @@
 		}
 
 		.tableMain {
-			font-family: Trebuchet MS, Arial;
+			font-family: sans-serif;
 			font-size: 12px;
 			line-height: 13px;
 			margin-top: -1px;

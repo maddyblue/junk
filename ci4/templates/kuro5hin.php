@@ -14,7 +14,7 @@ body {
 }
 
 p, body, td, li, input, textarea, select {
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: sans-serif;
 	font-size: 8pt;
 	color: #000000;
 }
