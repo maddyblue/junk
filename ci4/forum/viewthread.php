@@ -60,7 +60,8 @@ function postList($thread, $offset, $postsPP, $canMod)
 
 		if($post['forum_post_edit_user'] != 0)
 		{
-			$body .= '<p><i class="small">Last edited by ' . getUserlink($post['forum_post_edit_user']) . ' on ' . getTime($post['forum_post_edit_date']) . '.</i>';
+			$ul = $post['forum_post_edit_user'] == $post['user_id'] ? getUserLink($post['user_id'], decode($post['user_name'])) : getUserlink($post['forum_post_edit_user']);
+			$body .= '<p><i class="small">Last edited by ' . $ul . ' on ' . getTime($post['forum_post_edit_date']) . '.</i>';
 		}
 
 		array_push($array, array(
