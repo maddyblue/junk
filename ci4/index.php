@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.58 2004/01/05 04:37:20 dolmant Exp $ */
+/* $Id: index.php,v 1.59 2004/01/05 22:12:51 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -99,10 +99,7 @@ if($res[0]['count'] == 1)
 	define('LOGGED_DIR', '>');
 	define('ID', $id);
 
-	if(isInGroup(ID, GROUP_ADMIN))
-		define('ADMIN', 1);
-	else
-		define('ADMIN', 0);
+	define('ADMIN', (hasAdmin() ? 1 : 0));
 
 	// set cookies to be alive for another week
 	setCIcookie('id', $id);
