@@ -40,6 +40,7 @@ function display($name, $email)
 			array('Password', array('type'=>'password', 'name'=>'pass1')),
 			array('Verify password', array('type'=>'password', 'name'=>'pass2')),
 			array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
+			array('', array('type'=>'disptext', 'val'=>'Your email address will never be used publicly. It is used <b>only</b> to recover passwords.')),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Register')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newuser'))
