@@ -397,7 +397,6 @@ CREATE TABLE player_equipment (
   player_equipment_id bigint(10) unsigned NOT NULL auto_increment,
   player_equipment_equipment bigint(10) unsigned NOT NULL default '0',
   player_equipment_player bigint(10) unsigned NOT NULL default '0',
-  player_equipment_equipped tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (player_equipment_id)
 ) TYPE=MyISAM;
 
