@@ -30,56 +30,31 @@
  *
  */
 
-if($changedom)
+$query = 'select * from domain order by domain_expw_time, domain_expw_max';
+$res = $DBMain->Query($query);
+
+$array = array();
+
+array_push($array, array(
+	'Domain',
+	'Hours between EXPW drops',
+	'Maximum EXPW',
+	'Registered players in domain'
+));
+
+for($i = 0; $i < count($res['domain_name']); $i++)
 {
-	$CI_DOMAIN = $dom;
+	$query = 'select count(*) as count from player where player_domain=' . $res['domain_id'][$i];
+	$players = $DBMain->Query($query);
+
+	array_push($array, array(
+		$res['domain_name'][$i],
+		$res['domain_expw_time'][$i],
+		$res['domain_expw_max'][$i],
+		$players['count'][0]
+	));
 }
 
-?>
-
-<form method=post>
-<input type=hidden name=a value=domains>
-<p>Change domain to:
-<select name=dom>
-<?php
-$ret = $DB->Query('SELECT id FROM domain ORDER BY expwdrop,bosslevel');
-while(list(,$val) = each($ret{'id'}))
-{
-	?><option value=<?php echo $val ?>><?php echo getDomainName($val) ?></option><?php
-}
-?>
-</select>
-&nbsp;<input type=submit name=changedom value="Change">
-</form>
-
-<?php
-
-$ret = $DB->Query('SELECT id,name,expwdrop,bosslevel FROM domain ORDER BY expwdrop,bosslevel');
-for($i = 0; $i < count($ret{'id'}); $i++)
-{
-	$id = $ret{'id'}[$i];
-	$name = $ret{'name'}[$i];
-
-	?><p><b><?php echo $name ?></b><?php
-	if($CI_DOMAIN == $id) echo ' (current domain)';
-	?>:<br>Players in this domain: <?php
-	$cur = $DB->Query('SELECT COUNT(*) AS COUNT FROM player WHERE domain=' . $id);
-	echo $cur{'COUNT'}[0];
-
-	echo '<br>Experience Weight drops every ';
-	$drop = $ret{'expwdrop'}[$i];
-	if($drop == 1)
-		echo 'hour.';
-	else
-		echo $drop . ' hours.';
-
-	$level = $ret{'bosslevel'}[$i];
-	echo '<br>The final boss is at level ' . $level . '.';
-
-	$cur = $DB->Query('SELECT name,lv FROM player WHERE domain=' . $id);
-	if(count($cur{'name'}) > 0)
-	{
-	}
-}
+echo getTable($array);
 
 ?>
