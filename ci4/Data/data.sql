@@ -257,13 +257,15 @@ INSERT INTO site VALUES ('GAME_SECTION_NAV',60,'link','View Areas','','\'a=viewa
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','\'a=domains\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',10,'link','Skins','','\'a=skins\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('MANUAL_SECTION_MENU',0,'link','Skinning','','\'a=skinning\'','SECTION_MANUAL',0,0,'');
+INSERT INTO site VALUES ('MANUAL_SECTION_MENU',10,'link','Advanced Skinning','','\'a=skinning-advanced\'','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('NAV',10,'link','Login','','\'a=login\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('NAV',20,'link','Forum','','\'a=viewforum\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('NAV',30,'link','User','','','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('NAV',40,'link','Game','','','SECTION_GAME',0,0,'');
-INSERT INTO site VALUES ('NAV',50,'link','Admin','','','SECTION_ADMIN',1,1,'');
-INSERT INTO site VALUES ('NAV',60,'link','Manual','','','SECTION_MANUAL',0,0,'');
+INSERT INTO site VALUES ('NAV',50,'link','Battle','','','SECTION_BATTLE',0,0,'');
+INSERT INTO site VALUES ('NAV',60,'link','Admin','','','SECTION_ADMIN',1,1,'');
+INSERT INTO site VALUES ('NAV',70,'link','Manual','','','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('SKINS',0,'text','redux','','','',0,0,'');
 INSERT INTO site VALUES ('SKINS',10,'text','kuro5hin','','','',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','\'a=newuser\'','SECTION_USER',-1,0,'');
@@ -278,7 +280,6 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewus
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
-INSERT INTO site VALUES ('MANUAL_SECTION_MENU',10,'link','Advanced Skinning','','\'a=skinning-advanced\'','SECTION_MANUAL',0,0,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
