@@ -31,16 +31,17 @@
  */
 
 // turn on all errors
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
+if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
 
 if(CI_SECTION == 'MAIN')
 	define('CI_SECTION_DIR', '');
 else
 	define('CI_SECTION_DIR', strtolower(CI_SECTION));
 
-require_once $CI_HOME_MOD . 'Include.inc.php';
+require_once CI_HOME_MOD . 'Include.inc.php';
 
 // User stuff
 $ret = array();
@@ -68,6 +69,8 @@ if(CI_SECTION == 'ADMIN' && ADMIN != true)
 	echo '<p>Admins only here.';
 	exit();
 }
+
+$message = '';
 
 // Template
 if(isset($_GET['t']))
@@ -101,18 +104,29 @@ ob_end_clean();
 
 // Get content page
 $content = '';
-if($a)
+
+
+if(isset($_GET['a']))
 {
+	$a = $_GET['a'];
 	$a = './' . $a . '.php';
-	$fd = fopen($a, 'r');
-	if($fd)
+
+	if(file_exists($a))
 	{
-		$content = fread($fd, filesize($a));
-		fclose($fd);
-		ob_start();
-		eval('?>' . $content);
-		$content = ob_get_contents();
-		ob_end_clean();
+		$fd = fopen($a, 'r');
+		if($fd)
+		{
+			$content = fread($fd, filesize($a));
+			fclose($fd);
+			ob_start();
+			eval('?>' . $content);
+			$content = ob_get_contents();
+			ob_end_clean();
+		}
+	}
+	else
+	{
+		$content = 'Non-existent action.';
 	}
 }
 $content .= $message;
@@ -167,18 +181,21 @@ while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 
 		$ret = getSiteArray($gettag);
 		$repl = '';
-		for($i = 0; $i < sizeof($ret{'site_type'}); $i++)
+		if(count($ret) > 0)
 		{
-			$pos6 = $pos4;
-			$pos7 = 6;
-			if($i == 0)
+			for($i = 0; $i < count($ret['site_type']); $i++)
 			{
-				$pos6 = 0;
-				$pos7 += $pos4;
+				$pos6 = $pos4;
+				$pos7 = 6;
+				if($i == 0)
+				{
+					$pos6 = 0;
+					$pos7 += $pos4;
+				}
+				if($i == sizeof($ret['site_type']) - 1)
+					$pos7 = $inslen - $pos6;
+				$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
 			}
-			if($i == sizeof($ret{'site_type'}) - 1)
-				$pos7 = $inslen - $pos6;
-			$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
 		}
 		$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
 	}
