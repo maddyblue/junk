@@ -200,29 +200,35 @@ function parsePostText($post)
 
 	$return = nl2br($return);
 
-	// non-recursive replaces
+	// non-regex replaces
 
-	$ereg = array(
-		array("\[url=(.+)\](.+)\[/url\]", "<a href=\"\\1\">\\2</a>"),
-		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>"),
-		array("\[img\](.+)\[/img\]", "<img src=\"\\1\">"),
-		array("\[b\](.+)\[/b\]", "<b>\\1</b>"),
-		array("\[u\](.+)\[/u\]", "<u>\\1</u>"),
-		array("\[i\](.+)\[/i\]", "<i>\\1</i>"),
-		array("\[font (.+)\](.+)\[/font\]", "<font \\1>\\2</font>"),
-		array("\[pre\](.+)\[/pre\]", "<pre>\\1</pre>"),
-		array("\[list\](.+)\[/list\]", "<ul>\\1</ul>"),
-		array("\[list=1\](.+)\[/list=1\]", "<ol type=\"1\">\\1</ol>"),
-		array("\[list=a\](.+)\[/list=a\]", "<ol type=\"a\">\\1</ol>")
-		//array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
+	$repl = array(
+		array('[url]', '[/url]', '<a href="$1">$1</a>'),
+		array('[img]', '[/img]', '<img src="$1">'),
+		array('[b]', '[/b]', '<b>$1</b>'),
+		array('[u]', '[/u]', '<u>$1</u>'),
+		array('[i]', '[/i]', '<i>$1</i>'),
+		array('[pre]', '[/pre]', '<pre>$1</pre>'),
+		array('[list]', '[/list]', '<ul>$1</ul>'),
+		array('[list=1]', '[/list=1]', '<ol type="1">$1</ol>'),
+		array('[list=a]', '[/list=a]', '<ol type="a">$1</ol>')
 	);
 
-	foreach($ereg as $row)
+	foreach($repl as $row)
 	{
-		$return = eregi_replace($row[0], $row[1], $return);
+		while(
+			!(($cur = strpos($return, $row[0])) === false) &&
+			!(($next = strpos($return, $row[1], $cur + 1)) === false))
+		{
+			$len = $next - $cur;
+			$len_0 = strlen($row[0]);
+			$len_1 = strlen($row[1]);
+			$one = substr($return, $cur + $len_0, $len - $len_0);
+			$return = substr_replace($return, str_replace('$1', $one, $row[2]), $cur, $len + $len_1);
+		}
 	}
 
-	// recursive replaces
+	// regex replaces
 
 	$ereg = array(
 		array("\[quote\](.+)\[/quote\]", "<table class=\"tableMain\"><tr class=\"tableRow\"><td class=\"tableCellBR\">\\1</td></tr></table>"),
