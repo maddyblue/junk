@@ -5,12 +5,11 @@ CREATE TABLE ability (
   ability_name varchar(100) NOT NULL default '',
   ability_type bigint(10) unsigned NOT NULL default '0',
   ability_req_lv smallint(6) unsigned NOT NULL default '0',
-  ability_ap_cost smallint(6) unsigned NOT NULL default '0',
+  ability_ap_cost_init smallint(6) unsigned NOT NULL default '0',
+  ability_ap_cost_level smallint(6) unsigned NOT NULL default '0',
   ability_effect text NOT NULL,
   ability_desc text NOT NULL,
-  ability_code_start text NOT NULL,
-  ability_code_turn text NOT NULL,
-  ability_code_end text NOT NULL,
+  ability_code text NOT NULL,
   PRIMARY KEY  (ability_id)
 ) TYPE=MyISAM;
 
@@ -382,6 +381,7 @@ CREATE TABLE player (
 CREATE TABLE player_ability (
   player_ability_player bigint(10) unsigned NOT NULL default '0',
   player_ability_ability bigint(10) unsigned NOT NULL default '0',
+  player_ability_level tinyint(2) unsigned NOT NULL default '0',
   player_ability_display tinyint(1) unsigned NOT NULL default '0',
   player_ability_order smallint(5) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
