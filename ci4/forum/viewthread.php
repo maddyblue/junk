@@ -45,6 +45,17 @@ function parsePost($post)
 		$return = nl2br($return);
 	}
 
+	$preg = array(
+		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>"),
+		array("\[quote\](.+)\[/quote\]", "<table class=\"tableMain\"><tr class=\"tableRow\"><td class=\"tableCellBR\">\\1</td></tr></table>"),
+		array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
+	);
+
+	foreach($preg as $row)
+	{
+		$return = eregi_replace($row[0], $row[1], $return);
+	}
+
 	$return = forumReplace($return);
 
 	return $return;
@@ -62,8 +73,10 @@ function postList($thread)
 	{
 		$user = makeLink(decode($post['user_name']), 'user/?a=viewuserdetails&user=' . $post['user_id'], true);
 		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
+		$user .= makeLink('quote', '?a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
 		if($post['user_id'] == ID)
-			$user .= makeLink('edit', '?a=editpost&p=' . $post['forum_post_id']);
+			$user .= ' ' . makeLink('edit', '?a=editpost&p=' . $post['forum_post_id']);
+
 		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class="small">' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
 		$body .= '<p>' . parsePost($post['forum_post_id']);
 

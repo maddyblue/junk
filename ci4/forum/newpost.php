@@ -124,7 +124,15 @@ else
 		}
 	}
 	else
+	{
+		if(isset($_GET['q']))
+		{
+			$ret = $DBMain->Query('select * from forum_post where forum_post_id=' . $_GET['q']);
+			if(count($ret) == 1)
+				$post = '[quote]Originally posted by ' . getUsername($ret[0]['forum_post_user']) . ':' . "\n" . $ret[0]['forum_post_text'] . '[/quote]';
+		}
 		disp($subject, $post, $thread);
+	}
 }
 
 ?>
