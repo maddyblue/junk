@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: redux.php,v 1.24 2004/01/07 02:08:20 dolmant Exp $ -->
+<!-- $Id: redux.php,v 1.25 2004/01/12 05:29:36 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescent island ::
 <?php echo strtolower(CI_SECTION); ?>
@@ -22,7 +22,7 @@ body {
 
 p, body, td, li, input, textarea, select {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 10px;
+	font-size: 12px;
 	color: #333333;
 	letter-spacing: 1px;
 }
