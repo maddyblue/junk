@@ -209,7 +209,7 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewus
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_SKIN',0,'text','<CI_SKIN_START>\n<option><CISKINS><option>INSERT</option></CISKINS></option>\n<CI_SKIN_END>','','','',0,0,'');
-INSERT INTO site VALUES ('_SKIN_END',0,'eval','\'</select><br><input type=\"submit\" value=\"Skin\" class=\"submit\"></form>\'','','','',0,0,'');
-INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=\"get\" action=\"index.php\">\' . getInputList() . \'<select name=\"template\">\'','','','',0,0,'');
+INSERT INTO site VALUES ('_SKIN_END',0,'eval','\'</select></div><div><input type=\"submit\" value=\"Skin\" class=\"submit\"></div></form>\'','','','',0,0,'');
+INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=\"get\" action=\"index.php\">\' . getInputList() . \'<div><select name=\"template\">\'','','','',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
 
