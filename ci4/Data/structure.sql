@@ -104,6 +104,7 @@ CREATE TABLE cor_monster_drop (
 CREATE TABLE domain (
   domain_id bigint(10) unsigned NOT NULL auto_increment,
   domain_name varchar(100) NOT NULL default '',
+  domain_abrev varchar(5) NOT NULL default '',
   domain_expw_time tinyint(1) unsigned NOT NULL default '0',
   domain_expw_max tinyint(2) unsigned NOT NULL default '0',
   PRIMARY KEY  (domain_id),
