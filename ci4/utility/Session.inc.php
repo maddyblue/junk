@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Session.inc.php,v 1.9 2003/12/29 09:27:55 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -42,12 +42,11 @@ function handle_session()
 	 * anything malicious.
 	 */
 	if(ID && $sid)
-		$GLOBALS['DBMain']->Query('update session set session_user=' . ID . ' where session_id="' . $sid . '"');
-
-	if(ID)
+		update_session($sid, true);
+	else if(ID)
 	{
 		if(!$sid)
-		$sid = getDBData('session_id', ID, 'session_user', 'session');
+			$sid = getDBData('session_id', ID, 'session_user', 'session');
 
 		if(!$sid)
 			start_session();
@@ -82,7 +81,7 @@ function start_session()
 		')');
 }
 
-function update_session($sid)
+function update_session($sid, $updateplayer = false)
 {
 	global $DBMain;
 
@@ -91,7 +90,16 @@ function update_session($sid)
 	if(ID)
 		$DBMain->Query('update user set user_last=' . TIME . ' where user_id=' . ID . '');
 
-	$DBMain->Query('update session set session_current=' . TIME . ', session_action=0000 where session_id="' . $sid . '"');
+	if(!$updateplayer)
+		$query = 'update session set session_current=' . TIME . ', session_action=0000 where session_id="' . $sid . '"';
+	/* This is called when the user has just logged in. If they manually set a
+	 * session in their GET or POST, a session hijacking cannot occur, due to the
+	 * session_user=0 in the where clause.
+	 */
+	else
+		$query = 'update session set session_current=' . TIME . ', session_action=0000, session_user=' . ID . ' where session_id="' . $sid . '" and session_user=0';
+
+	$DBMain->Query($query);
 }
 
 function update_session_action($action, $data = '')
