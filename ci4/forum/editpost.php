@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: editpost.php,v 1.8 2003/12/25 05:23:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -56,6 +56,12 @@ $post = isset($_POST['p']) ? encode($_POST['p']) : (isset($_GET['p']) ? encode($
 
 $ret = $DBMain->Query('select * from forum_post where forum_post_id=' . $post);
 
+if(count($ret))
+{
+	$thread = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $ret[0]['forum_post_thread']);
+	echo getNavBar($thread[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($thread[0]['forum_thread_title']), 'a=viewthread&t=' . $thread[0]['forum_thread_id']) . '<p>';
+}
+
 if(count($ret) != 1)
 {
 	echo '<p>Invalid post.';
@@ -97,7 +103,7 @@ else
 				'forum_post_edit_user=' . ID .
 				' where forum_post_id=' . $post);
 
-				echo '<br>Post edited successfully.';
+				echo 'Post edited successfully.';
 				echo '<p>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $ret[0]['forum_post_thread']) . '.';
 				echo '<p>Go to the ' . makeLink('edited post', 'a=viewpost&p=' . $post) . '.';
 		}
