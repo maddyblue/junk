@@ -42,9 +42,9 @@ function postList($thread, $offset, $postsPP)
 	{
 		$user = getUserlink($post['user_id']);
 		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
-		$user .= makeLink('quote', '?a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
+		$user .= makeLink('quote', 'a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
 		if($post['user_id'] == ID)
-			$user .= ' ' . makeLink('edit', '?a=editpost&p=' . $post['forum_post_id']);
+			$user .= ' ' . makeLink('edit', 'a=editpost&p=' . $post['forum_post_id']);
 
 		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class="small">' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
 		$body .= '<p>' . parsePost($post['forum_post_id']);
@@ -74,9 +74,9 @@ $DBMain->Query('update forum_thread set forum_thread_views=forum_thread_views+1 
 
 $res = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $threadid);
 
-echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), '?a=viewthread&t=' . $threadid) . '<p>';
+echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid) . '<p>';
 
-$newreply = makeLink('New Reply', '?a=newpost&t=' . $threadid);
+$newreply = makeLink('New Reply', 'a=newpost&t=' . $threadid);
 
 $offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
 $postsPP = FORUM_POSTS_PP;
@@ -85,7 +85,7 @@ $ret = $DBMain->Query('select ceiling(count(*)/' . $postsPP . ') as count from f
 $totpages = $ret[0]['count'];
 $curpage = floor($offset / $postsPP) + 1;
 
-$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $postsPP, $threadid, '/?a=viewthread&t=');
+$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $postsPP, $threadid, 'a=viewthread&t=');
 
 $array = postList($threadid, $offset, $postsPP);
 

@@ -36,7 +36,7 @@ function disp($subject, $post, $forum)
 
 	$ret = $DBMain->Query('select forum_forum_name from forum_forum where forum_forum_id=' . $forum);
 	if(count($ret))
-		$name = ' in ' . makeLink($ret[0]['forum_forum_name'], '?a=viewforum&f=' . $forum);
+		$name = ' in ' . makeLink($ret[0]['forum_forum_name'], 'a=viewforum&f=' . $forum);
 	else
 		$name = '';
 
@@ -127,8 +127,8 @@ else
 				$DBMain->Query('update forum_forum set forum_forum_threads=forum_forum_threads+1 where forum_forum_id=' . $forum);
 
 				echo '<p>Thread created successfully.';
-				echo '<p>Return to the ' . makeLink('previous forum', '?a=viewforum&f=' . $forum) . '.';
-				echo '<p>Go to the ' . makeLink('created thread', '?a=viewthread&t=' . $lastthread) . '.';
+				echo '<p>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
+				echo '<p>Go to the ' . makeLink('created thread', 'a=viewthread&t=' . $lastthread) . '.';
 			}
 			else
 			{

@@ -61,7 +61,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 			{
 				case 0:
 					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 						$row['forum_forum_threads'],
 						$row['forum_forum_posts'],
 						forumLinkLastPost($row['forum_forum_last_post'])
@@ -69,7 +69,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 					break;
 				case  1:
 					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 						'',
 						'',
 						'',
@@ -91,7 +91,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 		{
 			case 0:
 				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 					$row['forum_forum_threads'],
 					$row['forum_forum_posts'],
 					forumLinkLastPost($row['forum_forum_last_post'])
@@ -99,7 +99,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 				break;
 			case  1:
 				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 					'',
 					'',
 					'',
@@ -133,7 +133,7 @@ function threadList($forumid, $offset, $threadsPP)
 		foreach($ret as $row)
 		{
 			array_push($array, array(
-				makeLink(decode($row['forum_thread_title']), '?a=viewthread&t=' . $row['forum_thread_id']),
+				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']),
 				getUserlink($row['forum_thread_user']),
 				$row['forum_thread_replies'],
 				$row['forum_thread_views'],
@@ -182,7 +182,7 @@ echo getTable($array);
 
 if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 {
-	echo '<p>' . makeLink('New Thread', '?a=newthread&f=' . $forumid);
+	echo '<p>' . makeLink('New Thread', 'a=newthread&f=' . $forumid);
 
 	$offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
 	$threadsPP = FORUM_THREADS_PP;
@@ -191,7 +191,7 @@ if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 	$totpages = $ret[0]['count'];
 	$curpage = floor($offset / $threadsPP) + 1;
 
-	$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, $forumid, '/?a=viewforum&f=');
+	$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, $forumid, 'a=viewforum&f=');
 
 	$array = threadList($forumid, $offset, $threadsPP);
 	echo '<p>' . $pageDisp;

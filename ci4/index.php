@@ -62,6 +62,7 @@ if(isset($_POST['a']))
 	$aval = $_POST['a'];
 else if(isset($_GET['a']))
 	$aval = $_GET['a'];
+define('ACTION', $aval);
 
 if(isset($aval) && CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
 {
@@ -109,6 +110,8 @@ else
 	define('ID', 0);
 	define('ADMIN', 0);
 }
+
+handle_session();
 
 $permission = true;
 

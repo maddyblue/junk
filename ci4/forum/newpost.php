@@ -36,7 +36,7 @@ function disp($subject, $post, $thread)
 
 	$ret = $DBMain->Query('select forum_thread_title from forum_thread where forum_thread_id=' . $thread);
 	if(count($ret))
-		$name = ' in ' . makeLink(decode($ret[0]['forum_thread_title']), '?a=viewthread&t=' . $thread);
+		$name = ' in ' . makeLink(decode($ret[0]['forum_thread_title']), 'a=viewthread&t=' . $thread);
 	else
 		$name = '';
 
@@ -115,9 +115,9 @@ else
 				$DBMain->Query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
 
 				echo '<p>Reply posted successfully.';
-				echo '<p>Return to the ' . makeLink('previous forum', '?a=viewforum&f=' . $forum) . '.';
-				echo '<p>Return to the ' . makeLink('previous thread', '?a=viewthread&t=' . $thread) . '.';
-				echo '<p>Go to the ' . makeLink('new post', '?a=viewpost&p=' . $lastpost) . '.';
+				echo '<p>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
+				echo '<p>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $thread) . '.';
+				echo '<p>Go to the ' . makeLink('new post', 'a=viewpost&p=' . $lastpost) . '.';
 			}
 			else
 			{

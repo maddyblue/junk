@@ -49,7 +49,7 @@ else
 
 	for($i = 0; $i < count($res); $i++)
 	{
-		$sub = makeLink(decode($res[$i]['pm_subject']), '?a=viewpm&pm=' . $res[$i]['pm_id']);
+		$sub = makeLink(decode($res[$i]['pm_subject']), 'a=viewpm&pm=' . $res[$i]['pm_id']);
 
 		if(!$res[$i]['pm_read'])
 			$sub = '<b>' . $sub . '</b>';

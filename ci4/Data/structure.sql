@@ -253,6 +253,15 @@ CREATE TABLE pm (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE session (
+  session_id varchar(32) NOT NULL default '',
+  session_user bigint(10) unsigned NOT NULL default '0',
+  session_start bigint(10) unsigned NOT NULL default '0',
+  session_action bigint(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (session_id)
+) TYPE=HEAP;
+
+
 CREATE TABLE site (
   site_tag varchar(100) NOT NULL default '',
   site_orderid smallint(5) unsigned NOT NULL default '0',
@@ -260,6 +269,7 @@ CREATE TABLE site (
   site_main text NOT NULL,
   site_secondary text NOT NULL,
   site_link varchar(250) NOT NULL default '',
+  site_section varchar(100) NOT NULL default '',
   site_logged tinyint(1) NOT NULL default '0',
   site_admin tinyint(1) NOT NULL default '0',
   site_comment text NOT NULL

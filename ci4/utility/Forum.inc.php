@@ -40,7 +40,7 @@ function forumLinkLastPost($postid)
 			' ' .
 			getUserlink($ret[0]['forum_post_user']) .
 			' ' .
-			makeLink('-&gt;', '?a=viewpost&p=' . $ret[0]['forum_post_id'])
+			makeLink('-&gt;', 'a=viewpost&p=' . $ret[0]['forum_post_id'])
 		);
 	else
 		return 'No posts';
@@ -54,12 +54,12 @@ function getNavBar($forum)
 	global $DBMain;
 	$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forum);
 
-	$ret = makeLink($res[0]['forum_forum_name'], '?a=viewforum&f=' . $res[0]['forum_forum_id']);
+	$ret = makeLink($res[0]['forum_forum_name'], 'a=viewforum&f=' . $res[0]['forum_forum_id']);
 
 	if($res[0]['forum_forum_parent'] != 0)
 		$ret = getNavBar($res[0]['forum_forum_parent']) . ' &gt; ' . $ret;
 	else
-		$ret = makeLink('Home', '?a=viewforum') . ' &gt; '. $ret;
+		$ret = makeLink('Home', 'a=viewforum') . ' &gt; '. $ret;
 
 	return $ret;
 }
@@ -115,7 +115,7 @@ function newthreadLink()
 		$ret = $DBMain->Query('select forum_forum_type from forum_forum where forum_forum_id=' . $_GET['f']);
 
 		if(count($ret) == 1 && $ret[0]['forum_forum_type'] == 0)
-			$r = makeLink('New Thread', SECTION_FORUM . '/?a=newthread&f=' . $_GET['f'], true);
+			$r = makeLink('New Thread', 'a=newthread&f=' . $_GET['f'], SECTION_FORUM);
 	}
 
 	return $r;
@@ -126,7 +126,7 @@ function newreplyLink()
 	$r = '';
 
 	if(isset($_GET['t']))
-		$r = makeLink('New Reply', SECTION_FORUM . '/?a=newpost&t=' . $_GET['t'], true);
+		$r = makeLink('New Reply', 'a=newpost&t=' . $_GET['t'], SECTION_FORUM);
 
 	return $r;
 }
@@ -172,7 +172,7 @@ function pageDisp($curpage, $totpages, $perpage, $id, $link)
 			$pageDisp .= ' ';
 
 		if($pages[$i][1] != 0)
-			$pageDisp .= makeLink($pages[$i][0], SECTION_FORUM . $link . $id . '&start=' . ($perpage * ($pages[$i][1] - 1)), true);
+			$pageDisp .= makeLink($pages[$i][0], $link . $id . '&start=' . ($perpage * ($pages[$i][1] - 1)), SECTION_FORUM);
 		else
 			$pageDisp .= $pages[$i][0];
 	}

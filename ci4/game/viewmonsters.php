@@ -45,7 +45,7 @@ array_push($array, array(
 for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		makeLink($res[$i]['monster_name'], '?a=viewmonsterdetails&amp;monster=' . $res[$i]['monster_id']),
+		makeLink($res[$i]['monster_name'], 'a=viewmonsterdetails&monster=' . $res[$i]['monster_id']),
 		$res[$i]['monster_lv'],
 		$res[$i]['monstertype_name'],
 		$res[$i]['monster_desc']

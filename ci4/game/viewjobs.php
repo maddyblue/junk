@@ -45,7 +45,7 @@ array_push($array, array(
 for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		makeLink($res[$i]['job_name'], '?a=viewjobdetails&amp;job=' . $res[$i]['job_id']),
+		makeLink($res[$i]['job_name'], 'a=viewjobdetails&job=' . $res[$i]['job_id']),
 		getGender($res[$i]['job_gender']),
 		$res[$i]['job_req_lv'],
 		$res[$i]['job_desc']

@@ -75,6 +75,7 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 	$main      = $parameters[$incr]['site_main'];
 	$secondary = $parameters[$incr]['site_secondary'];
 	$link      = $parameters[$incr]['site_link'];
+	$section   = $parameters[$incr]['site_section'];
 	if($useSecondary) $main = $secondary;
 	if($ignoreLink) $link = '';
 
@@ -86,10 +87,14 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 		case 'image': $val = '<img src="' . $main . '">'; break;
 		default: $val = ''; break;
 	}
-	if($link)
+	if($link || $section)
 	{
-		eval('$link = ' . $link . ';');
-		$val = '<a href="' . $link . '">' . $val . '</a>';
+		if($link)
+			eval('$link = ' . $link . ';');
+		if($section)
+			eval('$section = ' . $section . ';');
+
+		$val = makeLink($val, $link, $section);
 	}
 	return $val;
 }
@@ -325,9 +330,30 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 	return $ret;
 }
 
-function makeLink($text, $link, $root = false)
+function makeLink($text, $link, $section = '')
 {
-	return '<a href="' . ($root ? CI_WWW_PATH : '') . $link . '">' . $text . '</a>';
+	$ret = '<a href="';
+
+	if($section == '/')
+		$ret .= CI_WWW_PATH;
+	else if($section)
+		$ret .= CI_WWW_PATH . $section . '/';
+
+	if($link || !ID)
+	$ret .= '?';
+
+	if(!ID)
+		$ret .= 's=' . SESSION;
+
+	if(!ID && $link)
+		$ret .= '&';
+
+	if($link)
+		$ret .= $link;
+
+	$ret .= '">' . $text . '</a>';
+
+	return $ret;
 }
 
 function makeImg($img, $prefix = '', $relative = false)
@@ -434,7 +460,7 @@ function parseSig($sig)
 
 function getUserlink($user)
 {
-	return makeLink(getUsername($user), SECTION_USER . '/?a=viewuserdetails&user=' . $user, true);
+	return makeLink(getUsername($user), 'a=viewuserdetails&user=' . $user, SECTION_USER);
 }
 
 function getInputList()

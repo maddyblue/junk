@@ -37,6 +37,8 @@ if(isset($_GET['type']))
 
 $query .= 'order by equipmenttype_name, equipment_cost';
 
+echo $query;
+
 $res = $DBMain->Query($query);
 
 $array = array();
@@ -53,7 +55,7 @@ for($i = 0; $i < count($res); $i++)
 {
 	if($res[$i]['equipment_buy'] == 1)
 	{
-		$buytext = makeLink('Yes', '?a=buyequipment&amp;equipment=' . $res[$i]['equipment_id']);
+		$buytext = makeLink('Yes', 'a=buyequipment&equipment=' . $res[$i]['equipment_id']);
 	}
 	else
 	{
@@ -61,7 +63,7 @@ for($i = 0; $i < count($res); $i++)
 	}
 
 	array_push($array, array(
-		makeLink($res[$i]['equipmenttype_name'], '?a=viewequipment&amp;type=' . $res[$i]['equipmenttype_id']),
+		makeLink($res[$i]['equipmenttype_name'], '?a=viewequipment&type=' . $res[$i]['equipmenttype_id']),
 		$res[$i]['equipment_name'],
 		$buytext,
 		$res[$i]['equipment_cost'],
@@ -71,7 +73,7 @@ for($i = 0; $i < count($res); $i++)
 
 if(isset($_GET['type']))
 {
-	echo '<p>' . makeLink('View all types', '?a=viewequipment');
+	echo '<p>' . makeLink('View all types', 'a=viewequipment');
 }
 
 echo getTable($array);

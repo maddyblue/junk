@@ -13,6 +13,7 @@ define('CI_DEF_TEMPLATE', 'redux');
 
 /* Section alises */
 
+define('SECTION_MAIN', '/');
 define('SECTION_ADMIN', 'admin');
 define('SECTION_USER', 'user');
 define('SECTION_FORUM', 'forum');

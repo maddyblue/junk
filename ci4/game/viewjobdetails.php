@@ -62,7 +62,7 @@ else
 	for($i = 0; $i < count($jobs); $i++)
 	{
 		if($i) $joblist .= ', ';
-		$joblist .= makeLink($jobs[$i]['job_name'], '?a=viewjobdetails&amp;job=' . $jobs[$i]['job_id']) . ' (' . $jobs[$i]['cor_joblv'] . ')';
+		$joblist .= makeLink($jobs[$i]['job_name'], 'a=viewjobdetails&amp;job=' . $jobs[$i]['job_id']) . ' (' . $jobs[$i]['cor_joblv'] . ')';
 	}
 }
 
