@@ -139,6 +139,7 @@ CREATE TABLE equipment (
   equipment_stat_mgd smallint(6) NOT NULL default '0',
   equipment_stat_agl smallint(6) NOT NULL default '0',
   equipment_stat_acc smallint(6) NOT NULL default '0',
+  equipment_req_lv smallint(6) unsigned NOT NULL default '0',
   equipment_req_str smallint(5) unsigned NOT NULL default '0',
   equipment_req_mag smallint(5) unsigned NOT NULL default '0',
   equipment_req_agl smallint(5) unsigned NOT NULL default '0',
@@ -148,7 +149,6 @@ CREATE TABLE equipment (
   equipment_cost bigint(10) unsigned NOT NULL default '0',
   equipment_desc text NOT NULL,
   equipment_type bigint(10) unsigned NOT NULL default '0',
-  equipment_lv smallint(6) unsigned NOT NULL default '0',
   equipment_twohand tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (equipment_id)
 ) TYPE=MyISAM;
