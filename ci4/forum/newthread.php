@@ -107,19 +107,15 @@ else
 		else
 		{
 
-			$db->query('insert into forum_thread (forum_thread_forum, forum_thread_title, forum_thread_user, forum_thread_date, forum_thread_type) values (' .
+			$lastthread = $db->insert('insert into forum_thread (forum_thread_forum, forum_thread_title, forum_thread_user, forum_thread_date, forum_thread_type) values (' .
 				$forum . ',' .
 				'"' . $subject . '",' .
 				ID . ',' .
 				TIME . ',' .
 				'1' .
 				')');
-
-			$ret = $db->query('select forum_thread_id from forum_thread where forum_thread_date=' . TIME . ' and forum_thread_user=' . ID);
-			if(count($ret))
+			if($lastthread != FALSE)
 			{
-				$lastthread = $ret[0]['forum_thread_id'];
-
 				$db->query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
 					$lastthread . ',' .
 					'"' . $subject . '",' .
