@@ -16,7 +16,7 @@ $jobs = $DBMain->Query('select job_name, job_id, cor_joblv from cor_job_joblv, j
 
 $joblist = '';
 
-if(count($jobs['job_name']) == 0)
+if(count($jobs) == 0)
 {
 	$joblist .= 'None';
 }
