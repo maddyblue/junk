@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2003 Matthew Jibson
+ * Copyright (c) 2002 Matthew Jibson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,27 +30,38 @@
  *
  */
 
-$user = isset($_GET['user']) ? encode($_GET['user']) : 0;
-
-$res = $DBMain->Query('select * from user where user_id=' . $user);
-
-if(count($res) == 1)
+if(!LOGGED)
 {
-	$array = array(
-		array('User', decode($res[0]['user_name'])),
-		array('Register date', getTime($res[0]['user_register'])),
-		array('Forum posts', $res[0]['user_posts']),
-		array('Signature', parseSig($res[0]['user_sig']))
-	);
-
-	if(LOGGED)
-	{
-		echo makeLink('Send this user a PM.', '?a=sendpm&userid=' . $res[0]['user_id']) . '<br><br>';
-	}
-
-	echo getTable($array, false);
+	echo '<p>You must be logged in to view your pms.';
 }
 else
-	echo '<p>Invalid user.';
+{
+	$query = 'select * from pm where pm_to=' . ID . ' order by pm_date desc';
+	$res = $DBMain->Query($query);
+
+	$array = array();
+
+	array_push($array, array(
+		'Subject',
+		'From',
+		'Date'
+	));
+
+	for($i = 0; $i < count($res); $i++)
+	{
+		$sub = makeLink(decode($res[$i]['pm_subject']), '?a=viewpm&pm=' . $res[$i]['pm_id']);
+
+		if(!$res[$i]['pm_read'])
+			$sub = '<b>' . $sub . '</b>';
+
+		array_push($array, array(
+			$sub,
+			getUserlink($res[$i]['pm_from']),
+			getTime($res[$i]['pm_date'])
+		));
+	}
+
+	echo getTable($array);
+}
 
 ?>

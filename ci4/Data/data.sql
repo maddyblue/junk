@@ -209,4 +209,6 @@ INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE
 INSERT INTO site VALUES ('NAV',50,'link','Admin','','CI_WWW_PATH . SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',30,'link','Groups','','CI_WWW_PATH . SECTION_ADMIN . \'/?a=group-user\'',1,1,'');
 INSERT INTO site VALUES ('NAV',0,'link','Login','','CI_WWW_PATH . SECTION_USER . \'/?a=login\'',-1,0,'');
+INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','View PMs','','CI_WWW_PATH . SECTION_USER . \'/?a=viewpms\'',1,0,'');
+INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Send PM','','CI_WWW_PATH . SECTION_USER . \'/?a=sendpm\'',1,0,'');
 

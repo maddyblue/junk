@@ -241,6 +241,18 @@ CREATE TABLE player (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE pm (
+  pm_id bigint(10) unsigned NOT NULL auto_increment,
+  pm_from bigint(10) unsigned NOT NULL default '0',
+  pm_to bigint(10) unsigned NOT NULL default '0',
+  pm_date bigint(10) unsigned NOT NULL default '0',
+  pm_read tinyint(1) unsigned NOT NULL default '0',
+  pm_subject varchar(100) NOT NULL default '',
+  pm_text text NOT NULL,
+  PRIMARY KEY  (pm_id)
+) TYPE=MyISAM;
+
+
 CREATE TABLE site (
   site_tag varchar(100) NOT NULL default '',
   site_orderid smallint(5) unsigned NOT NULL default '0',
