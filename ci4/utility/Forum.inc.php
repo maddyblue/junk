@@ -47,7 +47,7 @@ function linkLastPost($postid, $userid, $username, $date, $threadid = 0, $thread
 		else
 			$ret =
 				'<div class="small">' .
-				getTime($date) . 
+				getTime($date) .
 				'<br>by ' .
 				getUserlink($userid, decode($username)) . ' ' .
 				makeLink('-&gt;', 'a=viewpost&p=' . $postid, '', $lastpost) .
@@ -240,7 +240,7 @@ function parsePostText($post)
 	}
 
 	// extended urls: [url=http://blah.com]text[/url]
-	$url = "\[url=([-a-zA-Z0-9:/\.%~_\?\=\+&;#]+)\](.+)\[/url\]";
+	$url = "\[url=([-a-zA-Z0-9:/\.%~_\?\=\+&;# ,]+)\](.+)\[/url\]";
 	$endurl = '[/url]';
 	$regs = array();
 	// don't use eregi because PHP4 apparently doesn't have stripos
