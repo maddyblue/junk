@@ -8,6 +8,7 @@ $CI_PATH           = '/ci4';
 $CI_ADDRESS        = 'http://' . $CI_DOMAIN . $CI_PATH;
 $CI_DATABASE       = 'ci4';
 $CI_DEF_TEMPLATE   = 'ci4';
+$CI_TEMPLATE_LOC   = 'templates';
 
 $CI_FORUM_HOME     = '/var/www/ci4/forum/';
 $CI_FORUM_ADDRESS  = $CI_ADDRESS . '/forum';
