@@ -45,15 +45,16 @@ function parsePost($post)
 		$return = nl2br($return);
 	}
 
-	$preg = array(
+	$ereg = array(
 		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>"),
 		array("\[quote\](.+)\[/quote\]", "<table class=\"tableMain\"><tr class=\"tableRow\"><td class=\"tableCellBR\">\\1</td></tr></table>"),
 		array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
 	);
 
-	foreach($preg as $row)
+	foreach($ereg as $row)
 	{
-		$return = eregi_replace($row[0], $row[1], $return);
+		while(eregi($row[0], $return) == true)
+			$return = eregi_replace($row[0], $row[1], $return);
 	}
 
 	$return = forumReplace($return);
