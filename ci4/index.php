@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.60 2004/01/08 07:35:31 dolmant Exp $ */
+/* $Id: index.php,v 1.61 2004/01/12 05:22:22 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -39,12 +39,6 @@ error_reporting(E_ALL);
 
 define('TIME', time());
 
-if(isset($_SERVER['HTTPS']))
-{
-	if($_SERVER['HTTPS'] == 'on')
-		define('IS_SECURE', true);
-}
-
 if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
 if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
 
@@ -65,6 +59,10 @@ if(isset($_POST['a']))
 	$aval = $_POST['a'];
 else if(isset($_GET['a']))
 	$aval = $_GET['a'];
+
+if(!$aval && CI_SECTION == 'MAIN')
+	$aval = 'news';
+
 define('ACTION', $aval);
 
 if(CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
