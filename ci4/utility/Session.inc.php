@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Session.inc.php,v 1.7 2003/09/27 04:56:05 dolmant Exp $ */
+/* $Id: Session.inc.php,v 1.8 2003/12/15 06:03:18 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -88,11 +88,11 @@ function update_session($sid)
 	$DBMain->Query('update session set session_current=' . TIME . ', session_action="" where session_id="' . $sid . '"');
 }
 
-function update_session_action($action)
+function update_session_action($action, $data = '')
 {
 	global $DBMain;
 
-	$DBMain->Query('update session set session_action="' . mysql_escape_string($action) . '" where session_id="' . SESSION . '"');
+	$DBMain->Query('update session set session_action=' . $action . ', session_action_data="' . $data . '" where session_id="' . SESSION . '"');
 }
 
 function close_sessions()

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.6 2003/12/15 05:36:39 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.7 2003/12/15 06:03:18 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,6 +32,22 @@
  *
  */
 
+$actionlist = array(
+array(0, '\'Unknown\''),
+array(1, 'makeLink(\'Viewing the news\', \'\', SECTION_MAIN)'),
+array(2, 'makeLink(\'Viewing Who\\\'s online\', \'a=whosonline\', SECTION_USER)')
+);
+
+function getAction($a, $d)
+{
+	$ret = '';
+	//echo $GLOBALS['actionlist'][$a][1];
+	eval('$ret = ' . $GLOBALS['actionlist'][$a][1] . ';');
+	return $ret;
+}
+
+update_session_action(2);
+
 $query = 'select * from session order by session_current';
 $res = $DBMain->Query($query);
 
@@ -50,7 +66,7 @@ for($i = 0; $i < count($res); $i++)
 		getUserlink($res[$i]['session_user']),
 		getTime($res[$i]['session_start']),
 		getTime($res[$i]['session_current']),
-		$res[$i]['session_action']
+		getAction($res[$i]['session_action'], $res[$i]['session_action_data'])
 	));
 }
 
