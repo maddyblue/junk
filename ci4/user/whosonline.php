@@ -89,6 +89,7 @@ array(0551, 'makeLink(\'Changing Jobs\', \'a=changejobs\', SECTION_GAME)'),
 // manual
 array(0601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),
 array(0602, 'makeLink(\'Viewing the advanced skinning tutorial\', \'a=skinning-advanced\', SECTION_MANUAL)'),
+array(0603, 'makeLink(\'Viewing the IRC manual page\', \'a=irc\', SECTION_MANUAL)')
 
 );
 

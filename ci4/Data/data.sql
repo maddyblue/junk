@@ -269,6 +269,7 @@ INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','\'a=domains\'
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',10,'link','Skins','','\'a=skins\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('MANUAL_SECTION_MENU',0,'link','Skinning','','\'a=skinning\'','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('MANUAL_SECTION_MENU',10,'link','Advanced Skinning','','\'a=skinning-advanced\'','SECTION_MANUAL',0,0,'');
+INSERT INTO site VALUES ('MANUAL_SECTION_MENU',20,'link','IRC','','\'a=irc\'','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('NAV',10,'link','Forum','','\'a=viewforum\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('NAV',20,'link','Game','','','SECTION_GAME',0,0,'');
