@@ -1,19 +1,60 @@
+<?php
+
+/*
+ * Copyright (c) 2002 Matthew Jibson
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    - Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    - Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+?>
+
 <!--
 <td1>class="td1"</td1>
 <td2>class="td2"</td2>
 -->
 
+<?php
+$_ld = strtolower(CI_DOMAIN);
+?>
+
 <html>
 <head>
 <style type="text/css">
 <!--
-div,td,p,a,body
+div,td,p,body
 {
 	font-family:verdana,arial,helvetica,sans-serif;
 	font-size:11px;
+	color:white;
 }
 a
 {
+	font-family:verdana,arial,helvetica,sans-serif;
+	font-size:11px;
 	text-decoration:underline;
 	color:white;
 }
@@ -45,7 +86,7 @@ a
 }
 .box
 {
-	background-color: #444444;
+	background-color:#444444;
 	border:solid 1px;
 	border-color:#AAAAAA;
 }
@@ -84,19 +125,15 @@ a
 </div>
 
 <div id="domaintext" align="right" style="position:absolute; right:80px; top:28px; text-align:right; text-justify:right;">
-	@<CI_DOMAIN><?
-		if(LOGGED == true && CI_DOMAIN != 0)
-		{
-			echo '<br><a href="' . CI_PATH . '/game/?a=viewplayer">' . getCharNameFD($bbuserid, CI_DOMAIN) . '</a> (' . getstat('lv') . ')';
-		}
-	?>
+	@<CI_DOMAIN>
+	<CI_PLAYER_LV>
 </div>
 
-<div id="toptext" style="position:absolute; left:100px; right:50px; top:100px; height:50;">
+<div id="toptext" style="position:absolute; left:100px; right:50px; top:100px; height:50; background-color:black;">
 	<table height="100%" align="right" class="td2">
 		<tr>
 			<td valign="bottom">
-				<CIMAIN> INSERT |</CIMAIN>
+				<CINAV> INSERT |</CINAV>
 			</td>
 		</tr>
 	</table>
@@ -116,7 +153,7 @@ a
 	<table width="100%" class="box">
 		<tr>
 			<td>
-				[&nbsp;<CISUB>[&nbsp;INSERT&nbsp;]<br></CISUB>&nbsp;]
+				[&nbsp;<CISECTION_MENU>[&nbsp;INSERT&nbsp;]<br></CISECTION_MENU>&nbsp;]
 			</td>
 		</tr>
 	</table>
@@ -124,7 +161,7 @@ a
 	<table width="100%" class="box">
 		<tr>
 			<td>
-				[&nbsp;<CISEC>[&nbsp;INSERT&nbsp;]<br></CISEC>&nbsp;]
+				[&nbsp;<CISECTION_NAV>[&nbsp;INSERT&nbsp;]<br></CISECTION_NAV>&nbsp;]
 			</td>
 		</tr>
 	</table>

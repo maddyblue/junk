@@ -1,14 +1,43 @@
 <?php
 
-if(!defined('SECTION')) define('SECTION', 'MAIN');
+/*
+ * Copyright (c) 2002 Matthew Jibson
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    - Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    - Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+// turn on all errors
+//error_reporting(E_ALL);
+
+if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
 require_once $CI_HOME_MOD . 'Include.inc.php';
 
 // User stuff
-if(!$domain) $domain = 0;
-define('DOMAIN', $domain);
-$ret = $DBForum->Query('SELECT username FROM ' . CI_FORUM_PREFIX . 'user WHERE userid=' . "'$bbuserid'" . ' AND password=' . "'$bbpassword'");
-$sessiondata = isset($HTTP_COOKIE_VARS[CI_FORUM_COOKIE . '_data']) ? unserialize(stripslashes($HTTP_COOKIE_VARS[CI_FORUM_COOKIE . '_data'])) : '';
-//print_r($sessiondata);
+$ret = array();
 if(count($ret) == 0)
 {
 	define('LOGGED', false);
@@ -28,35 +57,21 @@ else
 	else
 		define('ADMIN', false);
 }
-if(SECTION == 'ADMIN' && ADMIN != true)
+if(CI_SECTION == 'ADMIN' && ADMIN != true)
 {
 	echo '<p>Admins only here.';
 	exit();
 }
 
-// Get content page
-$content = '';
-if($a)
+if(isset($_cookie[CI_COOKIE . '_domain']))
 {
-	$a = './' . $a . '.php';
-	$fd = fopen($a, 'r');
-	if($fd)
-	{
-		$content = fread($fd, filesize($a));
-		fclose($fd);
-		ob_start();
-		eval("?>" . $content . "<?");
-		$content = ob_get_contents();
-		ob_end_clean();
-	}
+	define('CI_DOMAIN', $_cookie[CI_COOKIE . '_domain']);
 }
-$content .= $message;
-
-if(!$CI_DOMAIN)
-	define('CI_DOMAIN', 0);
 else
-	define('CI_DOMAIN', $CI_DOMAIN);
-doCookie('DOMAIN', $CI_DOMAIN);
+{
+	define('CI_DOMAIN', 0);
+}
+doCookie('domain', CI_DOMAIN);
 
 // Template
 if($t);
@@ -74,80 +89,97 @@ if(!$fd)
 }
 doCookie('TEMPLATE', $t);
 define('CI_TEMPLATE', $t);
+define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
 $template = fread($fd, filesize(getTemplateName($t)));
 fclose($fd);
 ob_start();
-eval("?>" . $template); // " is used instaed of a ' due to JEdit php parsing problems
+eval('?>' . $template);
 $template = ob_get_contents();
 ob_end_clean();
+
+// Get content page
+$content = '';
+if($a)
+{
+	$a = './' . $a . '.php';
+	$fd = fopen($a, 'r');
+	if($fd)
+	{
+		$content = fread($fd, filesize($a));
+		fclose($fd);
+		ob_start();
+		eval('?>' . $content);
+		$content = ob_get_contents();
+		ob_end_clean();
+	}
+}
+$content .= $message;
 
 // Add content page
 $pos = strpos($template, '<CICONTENT>');
 $template = substr_replace($template, $content, $pos, 11);
 
-// Single tags
-while(preg_match('/<CI_([^>]+)>/', $template, $matches)) // find a <CI_XXX> tag
-{
-	$ret = getSiteArray($matches[1]);
-	$val = createSiteString($ret);
-	$template = str_replace($matches[0], $val, $template);
-}
-
-// Listed tags
+// Find all of the tags and parse them out
 while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 {
 	$tag = $matches[1];
-	$insert = '';
-	$pos = strpos($template, '<CI');
-	$pos1 = strpos($template, '>', $pos + 3);
-	$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
 
-	/*	Shouldn't have to do this, but it'll prevent infinite loops.
-	 * This if block will remove the tag spanning $pos to $pos1,
-	 * since it didn't have a matching stop tag.
-	 */
-	if($pos2 === false)
+	if(substr($tag, 0, 1) == '_')
 	{
-		$template = substr_replace($template, '', $pos, $pos1 - $pos + 1);
-		continue;
+		$ret = getSiteArray($matches[1]);
+		$val = createSiteString($ret);
+		$template = str_replace($matches[0], $val, $template);
 	}
-
-	$pos3 = $pos2 + 5 + strlen($tag); // 5 to account for these chars: </CI>
-	$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
-	$pos4 = strpos($insert, 'INSERT');
-	$inslen = strlen($insert);
-
-	switch($tag)
+	else
 	{
-		case 'SEC':
-		case 'SUB':
-		{
-			$gettag = SECTION . $tag;
-			break;
-		}
-		default:
-		{
-			$gettag = $tag;
-			break;
-		}
-	}
+		$insert = '';
+		$pos = strpos($template, '<CI');
+		$pos1 = strpos($template, '>', $pos + 3);
+		$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
 
-	$ret = getSiteArray($gettag);
-	$repl = '';
-	for($i = 0; $i < sizeof($ret{'type'}); $i++)
-	{
-		$pos6 = $pos4;
-		$pos7 = 6;
-		if($i == 0)
+		/* Shouldn't have to do this, but it'll prevent infinite loops.
+		 * This if block will remove the tag spanning $pos to $pos1,
+		 * since it didn't have a matching stop tag.
+		 */
+		if($pos2 === false)
 		{
-			$pos6 = 0;
-			$pos7 += $pos4;
+			$template = substr_replace($template, '', $pos, $pos1 - $pos + 1);
+			continue;
 		}
-		if($i == sizeof($ret{'type'}) - 1)
-			$pos7 = $inslen - $pos6;
-		$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
+
+		$pos3 = $pos2 + 5 + strlen($tag); // 5 to account for these chars: </CI>
+		$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
+		$pos4 = strpos($insert, 'INSERT');
+		$inslen = strlen($insert);
+
+		switch($tag)
+		{
+			case 'SECTION_MENU':
+			case 'SECTION_NAV':
+				$gettag = CI_SECTION . '_' . $tag;
+				break;
+			default:
+				$gettag = $tag;
+				break;
+		}
+
+		$ret = getSiteArray($gettag);
+		$repl = '';
+		for($i = 0; $i < sizeof($ret{'site_type'}); $i++)
+		{
+			$pos6 = $pos4;
+			$pos7 = 6;
+			if($i == 0)
+			{
+				$pos6 = 0;
+				$pos7 += $pos4;
+			}
+			if($i == sizeof($ret{'site_type'}) - 1)
+				$pos7 = $inslen - $pos6;
+			$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
+		}
+		$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
 	}
-	$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
 }
 
 $list = array('table1', 'tr1', 'td1', 'tr2', 'td2');

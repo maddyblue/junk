@@ -17,9 +17,7 @@ require_once CI_FS_PATH . 'objects/GameObjectEntity.inc.php'; // needs to be aft
 
 // Setup database connections
 $DBMain = new Database();
-$DBForum = new Database();
 
 $DBMain->Connect($CIConfigMain, CI_DATABASE);
-$DBForum->Connect($CIConfigForum, CI_FORUM_DATABASE);
 
 ?>

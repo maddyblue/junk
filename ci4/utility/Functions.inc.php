@@ -1,8 +1,36 @@
 <?php
 
+/*
+ * Copyright (c) 2002 Matthew Jibson
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    - Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    - Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
 /*	Returns the template filename of $t.
-	For $t = 'ci4', this would return (as of 20020512, at least):
-	/var/www/ci4/templates/ci4.php
  */
 function getTemplateName($t)
 {
@@ -10,16 +38,16 @@ function getTemplateName($t)
 }
 
 /*	Returns the associative array from the site[_replace] table corresponding
-	to the given tag.
-	$tag - the name of the tag.  Something like 'GAMESEC' or 'AFFILIATES'.
-		Note: omit the CI part of the tag, as it's only used in the parser.
-	$single - boolean.  True if from the site_replace table, false for site table.
+ * to the given tag.
+ * $tag - the name of the tag.  Something like 'GAMESEC' or 'AFFILIATES'.
+ * Note: omit the CI part of the tag, as it's only used in the parser.
+ * $single - boolean.  True if from the site_replace table, false for site table.
  */
 function getSiteArray($tag)
 {
 	global $DBMain;
 
-	return $DBMain->Query('SELECT type,main,secondary,link FROM ' . CI_DATABASE_PREFIX . 'site WHERE logged ' . LOGGED_DIR . '= 0 AND tag=' . "'$tag'" . ' ORDER BY orderid');
+	return $DBMain->Query('SELECT site_type, site_main, site_secondary, site_link FROM site WHERE site_logged ' . LOGGED_DIR . '= 0 AND site_tag="' . $tag . '" ORDER BY site_orderid');
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
@@ -43,16 +71,12 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 	/*	Due to this use of extract, useSecondary and ignoreLink could just as easily
 		be specified in $parameters.
 	 */
-	$type      = $parameters{'type'}{$incr};
-	$main      = $parameters{'main'}{$incr};
-	$secondary = $parameters{'secondary'}{$incr};
-	$link      = $parameters{'link'}{$incr};
+	$type      = $parameters{'site_type'}{$incr};
+	$main      = $parameters{'site_main'}{$incr};
+	$secondary = $parameters{'site_secondary'}{$incr};
+	$link      = $parameters{'site_link'}{$incr};
 	if($useSecondary) $main = $secondary;
 	if($ignoreLink) $link = '';
-
-	$link = preg_replace('/^(\^?)\$/', '\1' . strtolower(SECTION) . '/', $link);
-	$link = preg_replace('/^\^/', CI_WWW_PATH . '/', $link);
-	$main = preg_replace('/^\^/', CI_WWW_PATH . '/', $main);
 
 	switch($type)
 	{
@@ -62,11 +86,15 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 		case 'image': $val = '<img src="' . $main . '">'; break;
 	}
 	if($link)
+	{
+		eval('$link = ' . $link . ';');
 		$val = '<a href="' . $link . '">' . $val . '</a>';
+	}
 	return $val;
 }
 
-/* Creates a nice table from the given array...should be used everywhere. */
+/* Creates a nice table from the given array...should be used everywhere.
+ */
 function makeTable($arr, $skip = array())
 {
 	$list = array();
@@ -97,7 +125,8 @@ function makeTable($arr, $skip = array())
 }
 
 /* This function takes lots of heavily nested arrays.
-	I suggest looking at the game/newchar.php script for examples. */
+ * I suggest looking at game/newchar.php as an example.
+ */
 function makeTableForm($title, $arr, $descrip = '', $parms = '')
 {
 	?>
@@ -153,20 +182,31 @@ function makeFormField($arr)
 	return $str;
 }
 
-function getDomainName($id)
+function getDomainName($id = -1)
 {
-	if(!$id) $id = 0;
-	global $DB;
-	$ret = $DB->Query('SELECT name FROM domain WHERE id=' . $id);
+	if($id == -1)
+	{
+		$id = CI_DOMAIN;
+	}
+
+	global $DBMain;
+	$ret = $DBMain->Query('SELECT name FROM domain WHERE id=' . $id);
+
 	if(count($ret{'name'}) == 1)
+	{
 		return $ret{'name'}[0];
-	else
-		return '-None-';
+	}
+	return '-None-';
 }
 
 function doCookie($name, $val)
 {
-	setcookie('CI_' . $name, $val, time() + 604800, CI_PATH);
+	setcookie(CI_COOKIE . '_' . $name, $val, time() + 604800, CI_WWW_PATH);
+}
+
+function getCookie($name)
+{
+	return $globals['_cookie'][CI_COOKIE . '_' . $name];
 }
 
 function getCharName($id)
