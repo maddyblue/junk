@@ -85,7 +85,6 @@ if(count($res))
 		array('Description', $res[0]['ability_desc']),
 		array('Effect', $res[0]['ability_effect']),
 		array('Jobs that can learn this ability', $jobs),
-		array('Required Level', $res[0]['ability_req_lv']),
 		array('AP cost', $res[0]['ability_ap_cost_init'] . '+' . $res[0]['ability_ap_cost_level'] . '/level')
 	);
 

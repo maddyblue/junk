@@ -1,29 +1,25 @@
 
 
-INSERT INTO ability VALUES (1,'Retreat','',8,0,0,10,5,'You will leave the battle if your agility * rand(.5, lv) &gt; other\'s agility.','Discretion is the better part of valour and sometimes it is to your advantage to exercise this fact. Retreat allows you to withdraw from battle, if you can outrun your enemy, that is.','$r = $src->agl * drand(.5, $lv);\r\nif($r > $dest->agl)\r\n{\r\n $src->hp = 0;\r\n $db->query(\'delete from battle_entity where battle_entity_uid=\' . $src->uid);\r\n if($src->type == ENTITY_PLAYER)\r\n  $db->query(\'update player set player_battle=0 where player_id=\' . $src->id);\r\n echo \'<p>\' . $src->name . \' has retreated from battle.\';\r\n}\r\nelse\r\n echo \'<p>\' . $src->name . \' tried to retreat, but was not able to.\';');
-INSERT INTO ability VALUES (2,'Errantry','',8,5,0,10,10,'If (the natural logarithm of your strength) < lv + rand(1, 3), your strength will be multiplied by 1.5 and you will attack. Otherwise nothing will happen.','Young Knights are often spirited on to greater feats of strength by their youthful exuberance, leading to a rush of adrenaline. While useful early on later it becomes useless as the knight relies more on finess than mindless attacking.','$ln = log($src->str);\r\n$r = drand(1, 3);\r\nif($ln < $r + $lv)\r\n{\r\n $src->str *= 1.5;\r\n echo \'<p>\' . $src->name . \' has been errant, increasing their strength to \' . $src->str . \'.\';\r\n battleAttack($src, $dest);\r\n}\r\nelse\r\n echo \'<p>\' . $src->name . \' is not very errant...\';');
-INSERT INTO ability VALUES (3,'Power Break','',11,5,0,10,0,'This decreased the enemy\'s str by at most 25%. The monster\'s level is subtracted from your level, and the difference multiplied by a random number is how much it decreased. If the amount is negative, nothing happens.','To thwart the enemies attack is to leave them unable to oppose your victory over them, Power Break reduces your opponants strength leaving them less capable of inflicting damage.','');
-INSERT INTO ability VALUES (4,'Magic Break','',11,10,0,20,0,'Same idea as Power Break, but mag gets decreased by a maximum of 25%','A dwarf once said that the only good wizard was a dead wizard. Magic Break attacks the enemy in a way that inhibits their spell casting abilities, causing their spells to lose power and become less effective.','');
-INSERT INTO ability VALUES (5,'Aura Of Fortitude','',10,5,0,20,0,'Def will increase by 20 percent for 3 rounds.','An aura of fortitude surround thee, showing your faith and protecting you from the blows of you enemies.','');
-INSERT INTO ability VALUES (6,'Mighty Aura','',10,10,0,30,0,'Atk will increase by 20 percent for 3 rounds.','An aura infused with divine strength to aid the users blows in combat.','');
-INSERT INTO ability VALUES (7,'Aura of Devoutness','',10,15,0,50,0,'Mdef will increase by 20 percent for 3 rounds.','An aura of devout worship surrounds you, using the power of your devout faith to protect you from the magic of your enemies.','');
-INSERT INTO ability VALUES (8,'Aura Of Vigilance','',10,5,0,30,0,'Acc will increase by 20 percent for 3 rounds','With patience and vigilance you become empowered with a divine foresight, allowing you to strike with greater clarity.','');
-INSERT INTO ability VALUES (9,'Aura Of Grace','',10,10,0,50,0,'Agl will increase by 20 percent for 3 rounds.','Infused with an aura of divine grace you become swift and agile, easily avoiding the blows of your opponants.','');
-INSERT INTO ability VALUES (10,'Spirit Break','',11,5,0,20,0,'Same idea as Power Break, but mdef gets decreased by a maximum of 25%','By probing your targets defences you find a weak point in their mental armour, striking hard in order to leave them vunerable to magic attack.','');
-INSERT INTO ability VALUES (11,'Armor Break','',11,10,0,40,0,'Same idea as Power Break, but def gets decreased by a maximum of 25%','A heavy strike against your opponants defence breaks through their armour, leaving them weaker towards your strikes.','');
-INSERT INTO ability VALUES (12,'Charge','',9,5,0,10,0,'A regular attack is increased by ~1.5 but it takes 2 turns to charge up. ','By slowly charging up your attack you may unleash your inner energy with the blow that will strike for greater damage.','');
-INSERT INTO ability VALUES (13,'Sureshot','',9,10,0,20,0,'A regular attack with 1.5 times the accuracy','By focusing for a moment you can better percieve the path of your prey as you let fly with a deadly arrow.','');
-INSERT INTO ability VALUES (14,'Eagle Eye','',9,15,0,40,0,'ACC is multiplied by 1.2','Focusing the mind you become like an eagle, soaring majestically in your mind before seeing with flawless vision your prey.','');
-INSERT INTO ability VALUES (15,'Cure','',2,0,0,5,0,'Cast a weak healing magic spell','','');
-INSERT INTO ability VALUES (16,'Fire','fire.gif',1,0,0,5,0,'Cast a weak fire elemental magic spell','','');
-INSERT INTO ability VALUES (17,'Poisona','',2,0,0,10,0,'Heals poison','','');
-INSERT INTO ability VALUES (18,'Sleeple','',2,5,0,10,0,'Attempts to put the enemy to sleep','','');
-INSERT INTO ability VALUES (19,'Protect','',2,10,0,20,0,'Increases Def by 1.5 for 3 rounds','','');
-INSERT INTO ability VALUES (20,'Haste','',2,15,0,30,0,'Increases AGL by 1.5 for 3 rounds','','');
-INSERT INTO ability VALUES (21,'Blizzard','blizzard.gif',1,0,0,5,0,'Cast a weak ice elemental magic spell','','');
-INSERT INTO ability VALUES (22,'Thunder','thunder.gif',1,0,0,5,0,'Cast a weak lightning elemental magic spell','','');
-INSERT INTO ability VALUES (23,'Force Missile','',1,5,0,10,0,'Cast a weak magic spell with no elemental','','');
-INSERT INTO ability VALUES (24,'Poison','',1,10,0,10,0,'Inflicts poison status on the enemy','','');
+INSERT INTO ability VALUES (1,'Retreat','',8,0,10,5,'You will leave the battle if your agility * rand(.5, lv) &gt; other\'s agility.','Discretion is the better part of valour and sometimes it is to your advantage to exercise this fact. Retreat allows you to withdraw from battle, if you can outrun your enemy, that is.','$r = $src->agl * drand(.5, $lv);\r\nif($r > $dest->agl)\r\n{\r\n $src->hp = 0;\r\n $db->query(\'delete from battle_entity where battle_entity_uid=\' . $src->uid);\r\n if($src->type == ENTITY_PLAYER)\r\n  $db->query(\'update player set player_battle=0 where player_id=\' . $src->id);\r\n echo \'<p>\' . $src->name . \' has retreated from battle.\';\r\n}\r\nelse\r\n echo \'<p>\' . $src->name . \' tried to retreat, but was not able to.\';');
+INSERT INTO ability VALUES (2,'Errantry','',8,0,10,10,'If (the natural logarithm of your strength) < lv + rand(1, 3), your strength will be multiplied by 1.5 and you will attack. Otherwise nothing will happen.','Young Knights are often spirited on to greater feats of strength by their youthful exuberance, leading to a rush of adrenaline. While useful early on later it becomes useless as the knight relies more on finess than mindless attacking.','$ln = log($src->str);\r\n$r = drand(1, 3);\r\nif($ln < $r + $lv)\r\n{\r\n $src->str *= 1.5;\r\n echo \'<p>\' . $src->name . \' has been errant, increasing their strength to \' . $src->str . \'.\';\r\n battleAttack($src, $dest);\r\n}\r\nelse\r\n echo \'<p>\' . $src->name . \' is not very errant...\';');
+INSERT INTO ability VALUES (3,'Power Break','',11,0,10,0,'This decreased the enemy\'s str by at most 25%. The monster\'s level is subtracted from your level, and the difference multiplied by a random number is how much it decreased. If the amount is negative, nothing happens.','To thwart the enemies attack is to leave them unable to oppose your victory over them, Power Break reduces your opponants strength leaving them less capable of inflicting damage.','');
+INSERT INTO ability VALUES (4,'Magic Break','',11,0,20,0,'Same idea as Power Break, but mag gets decreased by a maximum of 25%','A dwarf once said that the only good wizard was a dead wizard. Magic Break attacks the enemy in a way that inhibits their spell casting abilities, causing their spells to lose power and become less effective.','');
+INSERT INTO ability VALUES (5,'Aura Of Fortitude','',10,0,20,0,'Def will increase by 20 percent for 3 rounds.','An aura of fortitude surround thee, showing your faith and protecting you from the blows of you enemies.','');
+INSERT INTO ability VALUES (6,'Mighty Aura','',10,0,30,0,'Atk will increase by 20 percent for 3 rounds.','An aura infused with divine strength to aid the users blows in combat.','');
+INSERT INTO ability VALUES (7,'Aura of Devoutness','',10,0,50,0,'Mdef will increase by 20 percent for 3 rounds.','An aura of devout worship surrounds you, using the power of your devout faith to protect you from the magic of your enemies.','');
+INSERT INTO ability VALUES (8,'Aura Of Vigilance','',10,0,30,0,'Acc will increase by 20 percent for 3 rounds','With patience and vigilance you become empowered with a divine foresight, allowing you to strike with greater clarity.','');
+INSERT INTO ability VALUES (9,'Aura Of Grace','',10,0,50,0,'Agl will increase by 20 percent for 3 rounds.','Infused with an aura of divine grace you become swift and agile, easily avoiding the blows of your opponants.','');
+INSERT INTO ability VALUES (10,'Spirit Break','',11,0,20,0,'Same idea as Power Break, but mdef gets decreased by a maximum of 25%','By probing your targets defences you find a weak point in their mental armour, striking hard in order to leave them vunerable to magic attack.','');
+INSERT INTO ability VALUES (11,'Armor Break','',11,0,40,0,'Same idea as Power Break, but def gets decreased by a maximum of 25%','A heavy strike against your opponants defence breaks through their armour, leaving them weaker towards your strikes.','');
+INSERT INTO ability VALUES (12,'Charge','',9,0,10,0,'A regular attack is increased by ~1.5 but it takes 2 turns to charge up. ','By slowly charging up your attack you may unleash your inner energy with the blow that will strike for greater damage.','');
+INSERT INTO ability VALUES (13,'Sureshot','',9,0,20,0,'A regular attack with 1.5 times the accuracy','By focusing for a moment you can better percieve the path of your prey as you let fly with a deadly arrow.','');
+INSERT INTO ability VALUES (14,'Eagle Eye','',9,0,40,0,'ACC is multiplied by 1.2','Focusing the mind you become like an eagle, soaring majestically in your mind before seeing with flawless vision your prey.','');
+INSERT INTO ability VALUES (15,'Cure','',2,0,5,0,'Cast a weak healing magic spell','','');
+INSERT INTO ability VALUES (16,'Fire','fire.gif',1,0,5,0,'Cast a weak fire elemental magic spell','','');
+INSERT INTO ability VALUES (17,'Regen','',2,0,10,0,'Slowly regains life over time.','','');
+INSERT INTO ability VALUES (18,'Dispel','',2,0,10,0,'Removes debuffs from target.','','');
+INSERT INTO ability VALUES (23,'Force Missile','',1,0,10,0,'Cast a weak magic spell with no elemental','','');
+INSERT INTO ability VALUES (24,'Poison','',1,0,10,0,'Inflicts poison status on the enemy','','');
 
 
 INSERT INTO abilitytype VALUES (1,'Black Magic','Damaging magic.');
@@ -32,6 +28,9 @@ INSERT INTO abilitytype VALUES (8,'Tactic','Other battles abilities excluding he
 INSERT INTO abilitytype VALUES (9,'Archery','Anything dealing with bows and arrows or accuracy.');
 INSERT INTO abilitytype VALUES (10,'Aura','Light that envelopes a Paladin which gives status and other bonuses.');
 INSERT INTO abilitytype VALUES (11,'Sword Tech','Attacks with status lowering affects.');
+INSERT INTO abilitytype VALUES (12,'Understudy','Studying under a greater mage, you can start to learn this powerful art, although sometimes it can be aggravating.');
+INSERT INTO abilitytype VALUES (13,'Tracking','Use terrain to out maneuver your opponent.');
+INSERT INTO abilitytype VALUES (14,'Protection','Training has shown you the different means of defending against a foe. But never forget that this does not always imply defense.');
 
 
 INSERT INTO area VALUES (1,'Kilinos Beach','',1);
@@ -101,6 +100,9 @@ INSERT INTO cor_job_abilitytype VALUES (11,1);
 INSERT INTO cor_job_abilitytype VALUES (2,8);
 INSERT INTO cor_job_abilitytype VALUES (10,2);
 INSERT INTO cor_job_abilitytype VALUES (3,11);
+INSERT INTO cor_job_abilitytype VALUES (9,12);
+INSERT INTO cor_job_abilitytype VALUES (8,13);
+INSERT INTO cor_job_abilitytype VALUES (5,14);
 
 
 INSERT INTO cor_job_equipmenttype VALUES (2,3);

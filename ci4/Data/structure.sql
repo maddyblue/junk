@@ -5,7 +5,6 @@ CREATE TABLE ability (
   ability_name varchar(100) NOT NULL default '',
   ability_image varchar(50) NOT NULL default '',
   ability_type bigint(10) unsigned NOT NULL default '0',
-  ability_req_lv smallint(6) unsigned NOT NULL default '0',
   ability_mp smallint(6) unsigned NOT NULL default '0',
   ability_ap_cost_init smallint(6) unsigned NOT NULL default '0',
   ability_ap_cost_level smallint(6) unsigned NOT NULL default '0',
