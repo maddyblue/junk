@@ -38,39 +38,81 @@ function makeSpaces($num)
 	return $ret;
 }
 
-function forumList(&$array, $id, $topdepth, $depth, $header)
+function getName($name, $type)
 {
-	$depth--;
+	$ret = '';
 
-	$res = $GLOBALS['DBMain']->Query('select * from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
-
-	if($header)
+	switch($type)
 	{
-		array_push($array, array(
-			'Forum',
-			'Topics',
-			'Posts',
-			'Last Post'
-		));
-		$header = false;
+		case 0:
+			$ret = $name;
+			break;
+		case 1:
+			$ret = '<b>' . $name . '</b>';
+			break;
+		default:
+			break;
+	}
+
+	return $ret;
+}
+
+function forumList(&$array, $id, $topdepth, $depth)
+{
+	global $DBMain;
+
+	$res = $DBMain->Query('select * from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
+
+	// if we're not viewing the root forum, stick in the parent
+	if($id != 0 && $topdepth == $depth)
+	{
+		$topdepth++;
+
+		$top = $DBMain->Query('select * from forum_forum where forum_forum_id = ' . $id);
+		if(count($top == 1))
+		{
+			$row = $top[0];
+
+			array_push($array, array(
+				makeLink(getName($row['forum_forum_name'], $row['forum_forum_type']), '?a=viewforum&forumid=' . $row['forum_forum_id']),
+				$row['forum_forum_topics'],
+				$row['forum_forum_posts'],
+				forumLinkLastPost($row['forum_forum_last_post'])
+			));
+		}
 	}
 
 	foreach($res as $row)
 	{
 		array_push($array, array(
-			makeSpaces($topdepth - (1 + $depth)) . ($row['forum_forum_type'] == 1 ? ('<b>' . $row['forum_forum_name'] . '</b>') : $row['forum_forum_name']),
+			makeSpaces($topdepth - $depth) . makeLink(getName($row['forum_forum_name'], $row['forum_forum_type']), '?a=viewforum&forumid=' . $row['forum_forum_id']),
 			$row['forum_forum_topics'],
 			$row['forum_forum_posts'],
 			forumLinkLastPost($row['forum_forum_last_post'])
 		));
 
-		if($depth > 0)
-			forumList($array, $row['forum_forum_id'], $topdepth, $depth, $header);
+		if($depth > 1)
+			forumList($array, $row['forum_forum_id'], $topdepth, $depth - 1);
 	}
 }
 
 $array = array();
-forumList($array, 0, 2, 2, true);
+
+array_push($array, array(
+	'Forum',
+	'Topics',
+	'Posts',
+	'Last Post'
+));
+
+$depth = 2;
+
+$forumid = 0;
+if(isset($_GET['forumid']))
+	$forumid = $_GET['forumid'];
+
+forumList($array, $forumid, $depth, $depth);
+
 echo getTable($array);
 
 ?>
