@@ -59,7 +59,7 @@ function battleDamage(&$src, &$dest)
 {
 	$s = (double)$src->str;
 	$d = (double)$dest->def;
-	$dmg = $s / $d * $s * rand(5, 15) / (double)10;
+	$dmg = $s / $d * $s * drand(.5, 1.5);
 
 	if($dmg < 0)
 		$dmg = 0;
@@ -93,6 +93,12 @@ function battleAbility(&$src, &$dest, $ability)
 	eval($ability['ability_code']);
 
 	return true;
+}
+
+// returns a random double between $a and $b. $b must be > $a
+function drand($a, $b)
+{
+	return $a + ($b - $a) * (rand(0, 100) / 100);
 }
 
 ?>
