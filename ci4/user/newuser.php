@@ -64,7 +64,7 @@ if(isset($_POST['submit']))
 		echo '<br>No name: enter a name.';
 		$fail = true;
 	}
-	else if($res['count'][0] != '0')
+	else if($res[0]['count'] != '0')
 	{
 		echo '<br>Username already registered: try another name.';
 		$fail = true;
@@ -97,7 +97,7 @@ if(isset($_POST['submit']))
 		echo '<br>Invalid email address.';
 		$fail = true;
 	}
-	else if($res['count'][0] != '0')
+	else if($res[0]['count'] != '0')
 	{
 		echo '<br>Email address already registered: try another address.';
 		$fail = true;
