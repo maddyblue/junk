@@ -32,6 +32,8 @@
  *
  */
 
+echo '<p><b>' . makeLink('First time to Crescent Island?', 'a=about', SECTION_MANUAL) . '</b><hr>';
+
 $ppp = 10; // posts per page
 $offset = 0;
 
