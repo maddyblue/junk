@@ -97,6 +97,12 @@ INSERT INTO cor_job_joblv VALUES (11,12,9);
 
 
 
+INSERT INTO domain VALUES (2,'Electrocution',1,10);
+INSERT INTO domain VALUES (4,'Combustion',1,5);
+INSERT INTO domain VALUES (1,'Defenestration',2,5);
+INSERT INTO domain VALUES (6,'Suffocation',2,10);
+INSERT INTO domain VALUES (3,'Starvation',4,5);
+INSERT INTO domain VALUES (5,'Torture',4,10);
 
 
 INSERT INTO equipment VALUES (1,'Rusty Dagger',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A rusty old dagger probably found in the trash.',1);
