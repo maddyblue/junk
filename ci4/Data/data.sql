@@ -43,7 +43,7 @@ INSERT INTO area VALUES (1,'Kilinos Beach','',1);
 INSERT INTO area VALUES (2,'Kilinos Bay','',2);
 INSERT INTO area VALUES (3,'Greenlands','',3);
 INSERT INTO area VALUES (4,'Clifftop Path','',4);
-INSERT INTO area VALUES (5,'Breeze Sprite Shrine','',5);
+INSERT INTO area VALUES (5,'Breeze Sprite Shrine','Atop the cliffs there sits a shrine, a simple construction of stone, plain pillars and single statue of the travellers of the wind, the Breeze Sprites. Throughout this modest building a wind always blows, and sometimes in the lull you can see the faint glow of the Breeze Sprites, coming out to play.',5);
 INSERT INTO area VALUES (6,'Inland Pass','',6);
 INSERT INTO area VALUES (7,'Hill Top','',7);
 INSERT INTO area VALUES (8,'Overlooking the Great Plains','',8);
@@ -246,12 +246,14 @@ INSERT INTO site VALUES ('GAME_SECTION_NAV',50,'link','View Towns','','\'a=viewt
 INSERT INTO site VALUES ('GAME_SECTION_NAV',60,'link','View Areas','','\'a=viewareas\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','\'a=domains\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',10,'link','Skins','','\'a=skins\'','SECTION_HOME',0,0,'');
+INSERT INTO site VALUES ('MANUAL_SECTION_MENU',0,'link','Skinning','','\'a=skinning\'','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('NAV',10,'link','Login','','\'a=login\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('NAV',20,'link','Forum','','\'a=viewforum\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('NAV',30,'link','User','','','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('NAV',40,'link','Game','','','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('NAV',50,'link','Admin','','','SECTION_ADMIN',1,1,'');
+INSERT INTO site VALUES ('NAV',60,'link','Manual','','','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('SKINS',0,'text','redux','','','',0,0,'');
 INSERT INTO site VALUES ('SKINS',10,'text','kuro5hin','','','',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','\'a=newuser\'','SECTION_USER',-1,0,'');
@@ -266,14 +268,13 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewus
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
-INSERT INTO site VALUES ('NAV',60,'link','Manual','','','SECTION_MANUAL',1,1,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
 INSERT INTO skin VALUES ('kuro5hin','rusty','http://www.kuro5hin.org/');
 
 
-INSERT INTO town VALUES (1,'Kilinos Port',1,'',0,0,'','');
+INSERT INTO town VALUES (1,'Kilinos Port',1,'The first port of Crescent Island, founded by Lord Kilinos two hundred years ago. It was forged from hard wearing stone, rising from the beach up to the cliffs above. Famed for it\'s grand piatzas and the artificial waterfalls which have been created by pumping water to the windy piatza at the top of the city. It is said that the flowing water and white stone used to make the buildings is a magnificent sight to see for those arriving on Crescent Island for the first time.',0,0,'','');
 INSERT INTO town VALUES (2,'Lagos Villiage',2,'',0,0,'','');
 INSERT INTO town VALUES (3,'Oman\'s Keep',3,'',0,0,'','');
 INSERT INTO town VALUES (4,'Gale Point',4,'',0,0,'','');
