@@ -258,39 +258,65 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 
 	$rows = count($array);
 	$cols = count($array[0]);
+	$i = 0;
 
-	for($i = 0; $i < $rows; $i++)
+	if($firstLineHeader)
 	{
-		if($firstLineHeader && $i == 0)
-			$num = 1;
-		else
-			$num = 2;
-
-		$ret .= '<tr class="tr' . $num . '">';
+		$ret .= '<tr class="tableHeaderRow">';
 		for($j = 0; $j < $cols; $j++)
 		{
-			if($j == ($cols - 1))
-			{
-				if($i == ($rows - 1))
-					$ret .= '<td class="tdbottomright">';
-				else if($i == 0)
-					$ret .= '<td class="td' . $num . 'topright">';
-				else
-					$ret .= '<td class="tdright">';
-			}
-			else if($i == ($rows - 1))
-				$ret .= '<td class="tdbottom">';
+			if($j == 0)
+				$ret .= '<td class="tableHeaderCellL">';
+			else if($j == ($cols - 1))
+				$ret .= '<td class="tableHeaderCellR">';
 			else
-				$ret .= '<td class="td' . $num . '">';
+				$ret .= '<td class="tableHeaderCell">';
 
-			$ret .= $array[$i][$j] . '</td>';
+			$ret .= $array[$i][$j] . '</td>' . "\n";
 		}
-		$ret .= '</tr>';
+		$ret .= '</tr>' . "\n";
+
+		$i++;
+	}
+
+	for(; $i < $rows; $i++)
+	{
+		$ret .= '<tr class="tableRow">';
+		for($j = 0; $j < $cols; $j++)
+		{
+			if($j == 0)
+			{
+				if($i == 0)
+					$ret .= '<td class="tableCellTL">';
+				else if($i == ($rows - 1))
+					$ret .= '<td class="tableCellBL">';
+				else
+					$ret .= '<td class="tableCellL">';
+			}
+			else if($j == ($cols - 1))
+			{
+				if($i == 0)
+					$ret .= '<td class="tableCellTR">';
+				else if($i == ($rows - 1))
+					$ret .= '<td class="tableCellBR">';
+				else
+					$ret .= '<td class="tableCellR">';
+			}
+			else if($i == 0)
+				$ret .= '<td class="tableCellT">';
+			else if($i == ($rows - 1))
+				$ret .= '<td class="tableCellB">';
+			else
+				$ret .= '<td class="tableCell">';
+
+			$ret .= $array[$i][$j] . '</td>' . "\n";
+		}
+		$ret .= '</tr>' . "\n";
 	}
 
 	if($withTableStructure)
 	{
-		$ret = '<table class="table1">' . $ret . '</table>';
+		$ret = '<table class="tableMain">' . $ret . '</table>';
 	}
 
 	return $ret;
