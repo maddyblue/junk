@@ -80,8 +80,8 @@ CREATE TABLE equipment (
   equipment_req_mag smallint(5) unsigned NOT NULL default '0',
   equipment_req_agl smallint(5) unsigned NOT NULL default '0',
   equipment_req_gender tinyint(1) NOT NULL default '0',
-  equipment_sell tinyint(1) NOT NULL default '1',
-  equipment_buy tinyint(1) NOT NULL default '1',
+  equipment_sell tinyint(1) unsigned NOT NULL default '1',
+  equipment_buy tinyint(1) unsigned NOT NULL default '1',
   equipment_cost bigint(10) unsigned NOT NULL default '0',
   equipment_desc text NOT NULL,
   equipment_type bigint(10) unsigned NOT NULL default '0',
@@ -132,6 +132,7 @@ CREATE TABLE forum_thread (
   forum_thread_date bigint(10) unsigned NOT NULL default '0',
   forum_thread_replies bigint(10) unsigned NOT NULL default '0',
   forum_thread_views bigint(10) unsigned NOT NULL default '0',
+  forum_thread_first_post bigint(10) unsigned NOT NULL default '0',
   forum_thread_last_post bigint(10) unsigned NOT NULL default '0',
   forum_thread_type tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (forum_thread_id)
@@ -141,6 +142,7 @@ CREATE TABLE forum_thread (
 CREATE TABLE forum_view (
   forum_view_user bigint(10) unsigned NOT NULL default '0',
   forum_view_thread bigint(10) unsigned NOT NULL default '0',
+  forum_view_forum bigint(10) unsigned NOT NULL default '0',
   forum_view_date bigint(10) NOT NULL default '0'
 ) TYPE=MyISAM;
 
@@ -245,6 +247,43 @@ CREATE TABLE player (
   player_house bigint(10) unsigned NOT NULL default '0',
   player_lv smallint(6) unsigned NOT NULL default '0',
   PRIMARY KEY  (player_id)
+) TYPE=MyISAM;
+
+
+CREATE TABLE player_equipment (
+  player_equipment_id bigint(10) unsigned NOT NULL auto_increment,
+  player_equipment_player bigint(10) unsigned NOT NULL default '0',
+  player_equipment_name varchar(100) NOT NULL default '',
+  player_equipment_stat_hp smallint(6) NOT NULL default '0',
+  player_equipment_stat_mp smallint(6) NOT NULL default '0',
+  player_equipment_stat_str smallint(6) NOT NULL default '0',
+  player_equipment_stat_mag smallint(6) NOT NULL default '0',
+  player_equipment_stat_def smallint(6) NOT NULL default '0',
+  player_equipment_stat_mgd smallint(6) NOT NULL default '0',
+  player_equipment_stat_agl smallint(6) NOT NULL default '0',
+  player_equipment_stat_acc smallint(6) NOT NULL default '0',
+  player_equipment_req_str smallint(5) unsigned NOT NULL default '0',
+  player_equipment_req_mag smallint(5) unsigned NOT NULL default '0',
+  player_equipment_req_agl smallint(5) unsigned NOT NULL default '0',
+  player_equipment_req_gender tinyint(1) NOT NULL default '0',
+  player_equipment_sell tinyint(1) unsigned NOT NULL default '0',
+  player_equipment_cost bigint(10) unsigned NOT NULL default '0',
+  player_equipment_desc text NOT NULL,
+  player_equipment_type bigint(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (player_equipment_id)
+) TYPE=MyISAM;
+
+
+CREATE TABLE player_item (
+  player_item_id bigint(10) unsigned NOT NULL auto_increment,
+  player_item_player bigint(10) unsigned NOT NULL default '0',
+  player_item_name varchar(100) NOT NULL default '',
+  player_item_useBattle tinyint(1) unsigned NOT NULL default '0',
+  player_item_useWorld tinyint(1) unsigned NOT NULL default '0',
+  player_item_desc text NOT NULL,
+  player_item_codeBattle text NOT NULL,
+  player_item_codeWorld text NOT NULL,
+  PRIMARY KEY  (player_item_id)
 ) TYPE=MyISAM;
 
 
