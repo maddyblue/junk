@@ -120,6 +120,7 @@ td.block-light {
 
 .table1 {
 	border-spacing: 0px;
+	border-collapse: collapse;
 }
 
 .header {
