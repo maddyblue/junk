@@ -32,12 +32,11 @@
  *
  */
 
-function disp($subject, $text, $post)
+function disp($text, $post)
 {
 	global $db;
 
 	echo getTableForm('Edit Post', array(
-			array('Subject', array('type'=>'text', 'name'=>'subject', 'parms'=>'size="45" maxlength="100" style="width:450px"', 'val'=>decode($subject))),
 			array('Post', array('type'=>'textarea', 'name'=>'text', 'parms'=>'rows="15" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($text))),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Edit Post')),
@@ -54,11 +53,9 @@ function disp($subject, $text, $post)
 		));
 }
 
-$subject = '';
 $text = '';
 $post = '0';
 
-$subject = isset($_POST['subject']) ? encode($_POST['subject']) : '';
 $text = isset($_POST['text']) ? encode($_POST['text']) : '';
 $post = isset($_POST['p']) ? intval($_POST['p']) : (isset($_GET['p']) ? intval($_GET['p']) : '0');
 
@@ -84,7 +81,6 @@ else
 	if(!isset($_POST['submit']))
 	{
 		$text = $ret[0]['forum_post_text'];
-		$subject = $ret[0]['forum_post_subject'];
 	}
 
 	if(isset($_POST['submit']))
@@ -100,13 +96,13 @@ else
 		if($fail)
 		{
 			echo '<br>Post edit failed.<br>';
-			disp($subject, $text, $post);
+			disp($text, $post);
 		}
 		else
 		{
 			$db->query('update forum_post set ' .
-				'forum_post_subject="' . $subject . '",' .
 				'forum_post_text="' . $text . '",' .
+				'forum_post_text_parsed="' . mysql_escape_string(parsePostText($text)) . '",' .
 				'forum_post_edit_date=' . TIME . ',' .
 				'forum_post_edit_user=' . ID .
 				' where forum_post_id=' . $post);
@@ -117,7 +113,7 @@ else
 		}
 	}
 	else
-		disp($subject, $text, $post);
+		disp($text, $post);
 }
 
 update_session_action(0401, $post);
