@@ -740,7 +740,7 @@ function pageList($totpages, $disppages, $perpage, $link, $section = '')
 
 function getAvatar($id = ID)
 {
-	$a = decode(getDBData('user_avatar_data'));
+	$a = decode(getDBData('user_avatar_data'), $id);
 
 	return getAvatarImg($a);
 }
