@@ -214,10 +214,10 @@ function getstat($stat, $id = -1, $look = "id", $list = "playerlist")
 {
 	if($id == -1)
 	{
-		$id = CI_ID
+		$id = CI_ID;
 	}
-  $mydb = mysql_connect("localhost", "user", "usersql");
-  mysql_select_db("ci", $mydb);
+	$mydb = mysql_connect("localhost", "user", "usersql");
+	mysql_select_db("ci", $mydb);
 	$query = mysql_query("select $stat from $list where $look = '$id'");
 	return @mysql_result($query, 0, 0);
 }
@@ -226,14 +226,12 @@ function getistat($stat, $id = -1, $list = "playerlist")
 {
 	if($id == -1)
 	{
-		$id = CI_ID
+		$id = CI_ID;
 	}
-  $mydb = mysql_connect("localhost", "user", "usersql");
-  mysql_select_db("ci", $mydb);
+	$mydb = mysql_connect("localhost", "user", "usersql");
+	mysql_select_db("ci", $mydb);
 	$query = mysql_query("select $stat from $list where id = $id", $mydb);
-//  mysql_close($mydb);
 	return @mysql_result($query,0,0);
-
 }
 
 ?>
