@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.34 2004/01/12 08:08:24 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,7 +32,7 @@
  *
  */
 
-function addForumEntry(&$array, $row, $depth)
+function addForumEntry(&$array, $row, $depth, $uls)
 {
 	if($row['forum_forum_desc'])
 		$desc = '<br>' . makeSpaces(1 + $depth) . decode($row['forum_forum_desc']);
@@ -43,7 +43,7 @@ function addForumEntry(&$array, $row, $depth)
 	{
 		case 0:
 			array_push($array, array(
-				makeSpaces($depth) . makeLink(decode($row['forum_forum_name']), 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+				makeSpaces($depth) . (newForum($row, $uls) ? '* ' : '') . makeLink(decode($row['forum_forum_name']), 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 				$row['forum_forum_threads'],
 				$row['forum_forum_posts'],
 				forumLinkLastPost($row['forum_forum_last_post'])
@@ -60,48 +60,89 @@ function addForumEntry(&$array, $row, $depth)
 	}
 }
 
-function forumList(&$array, $id, $topdepth, $depth)
+function newForum($f, $uls)
 {
-	if(!canView($id))
-		return;
-
-	global $DBMain;
-
-	$res = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
-
-	foreach($res as $row)
-	{
-		if(canView($row['forum_forum_id']))
-		{
-			addForumEntry($array, $row, $topdepth - $depth);
-
-			if($depth > 1)
-				forumList($array, $row['forum_forum_id'], $topdepth, $depth - 1);
-		}
-	}
-}
-
-function newThread($t)
-{
-	if(ID && $t['pld'] > $t['uls'])
+	if(LOGGED)
 	{
 		global $DBMain;
 
-		$r = $DBMain->Query('select count(*) as count from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id']);
+		// This query returns any new posts since the last visit.
+		$ret = $DBMain->Query('select count(*) count from forum_forum, forum_post where forum_forum_last_post=forum_post_id and forum_forum_id=' . $f['forum_forum_id'] . ' and forum_post_date > ' . $uls);
 
-		if(!$r[0]['count'])
+		// no new posts in this forum since last session ended
+		if($ret[0]['count'] == '0')
+			return false;
+
+		// This query returns any new posts since the last visit of not viewed threads.
+		$ret = $DBMain->Query('
+		SELECT count(*) count
+		FROM forum_thread, forum_post
+		LEFT JOIN forum_view ON forum_view_thread=forum_thread_id
+		WHERE forum_thread_forum=' . $f['forum_forum_id'] . '
+			AND forum_thread_last_post=forum_post_id
+			AND forum_post_date > ' . $uls . // <- is this line necessary?
+			' AND forum_view_thread IS NULL');
+
+		// new posts in threads we've already visited
+		if($ret[0]['count'] != '0')
 			return true;
 
-		$r = $DBMain->Query('select count(*) as count from forum_view, forum_post where forum_post_thread=' . $t['forum_thread_id'] . ' and forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id'] . ' and forum_view_date < forum_post_date');
+		// This query returns new posts of already viewed threads.
+		$ret = $DBMain->Query('select count(*) count from forum_thread, forum_view, forum_post where forum_thread_forum=' . $f['forum_forum_id'] . ' and forum_view_thread=forum_thread_id and forum_post_id=forum_thread_last_post and forum_post_date > forum_view_date and forum_post_date > ' . $uls);
 
-		if($r[0]['count'])
+		if($ret[0]['count'] != '0')
 			return true;
 	}
 
 	return false;
 }
 
-function threadList($forumid, $offset, $threadsPP)
+function forumList(&$array, $id, $topdepth, $depth, $uls)
+{
+	if(!canView($id))
+		return;
+
+	global $DBMain;
+
+	$res = $DBMain->Query('
+	SELECT forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post
+	FROM forum_forum
+	WHERE forum_forum_parent = ' . $id . '
+	ORDER BY forum_forum_order');
+
+	foreach($res as $row)
+	{
+		if(canView($row['forum_forum_id']))
+		{
+			addForumEntry($array, $row, $topdepth - $depth, $uls);
+
+			if($depth > 1)
+				forumList($array, $row['forum_forum_id'], $topdepth, $depth - 1, $uls);
+		}
+	}
+}
+
+function newThread($t, $uls)
+{
+	if(LOGGED && $t['pld'] > $uls)
+	{
+		global $DBMain;
+
+		$r = $DBMain->Query('select count(*) as count from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id']);
+
+		if($r[0]['count'] == '0')
+			return true;
+
+		$r = $DBMain->Query('select count(*) as count from forum_view, forum_post where forum_post_thread=' . $t['forum_thread_id'] . ' and forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id'] . ' and forum_view_date < forum_post_date');
+
+		if($r[0]['count'] != '0')
+			return true;
+	}
+
+	return false;
+}
+
+function threadList($forumid, $offset, $threadsPP, $uls)
 {
 	global $DBMain;
 
@@ -117,7 +158,7 @@ function threadList($forumid, $offset, $threadsPP)
 
 	// simultaneously get usernames and post data for first and last post by doing complex self-joins
 	$ret = $DBMain->Query('
-	SELECT forum_thread.*, plast.forum_post_date as pld, ufirst.user_name ufn, ufirst.user_id ufi, ulast.user_name uln, ulast.user_id uli, ulast.user_last_session as uls
+	SELECT forum_thread.*, plast.forum_post_date pld, ufirst.user_name ufn, ufirst.user_id ufi, ulast.user_name uln, ulast.user_id uli
 	FROM forum_thread, forum_post pfirst, forum_post plast, user ufirst, user ulast
 	WHERE forum_thread_forum=' . $forumid . '
 	AND pfirst.forum_post_id = forum_thread_first_post
@@ -133,7 +174,7 @@ function threadList($forumid, $offset, $threadsPP)
 		$pageList = pageList($totpages, FORUM_THREAD_PAGES, FORUM_POSTS_PP, 'a=viewthread&t=' . $row['forum_thread_id']);
 
 		array_push($array, array(
-			(newThread($row) ? '* ' : '') .
+			(newThread($row, $uls) ? '* ' : '') .
 				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']) . $pageList,
 			getUserlink($row['ufi'], decode($row['ufn'])),
 			$row['forum_thread_replies'],
@@ -177,9 +218,11 @@ else
 {
 	echo getNavBar($forumid);
 
+	$lastSession = LOGGED ? getDBData('user_last_session') : 0;
+
 	echo '<p>';
 
-	forumList($array, $forumid, $depth, $depth);
+	forumList($array, $forumid, $depth, $depth, $lastSession);
 
 	$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forumid);
 
@@ -200,7 +243,7 @@ else
 
 		$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, 'a=viewforum&f=' . $forumid);
 
-		$array = threadList($forumid, $offset, $threadsPP);
+		$array = threadList($forumid, $offset, $threadsPP, $lastSession);
 		echo '<p>' . $pageDisp;
 		echo '<p>' . getTable($array);
 		echo '<p>' . $pageDisp;
