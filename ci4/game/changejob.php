@@ -141,6 +141,18 @@ else
 	if(!$fail)
 	{
 		$DBMain->Query('update player set player_job=' . $job . ' where player_id=' . $PLAYER['player_id']);
+
+		// if this is the first time in this job, add the initial entries
+		$ret = $DBMain->Query('select player_job_job from player_job where player_job_player=' . $PLAYER['player_id'] . ' and player_job_job=' . $job);
+		if(count($ret) == 0)
+		{
+			$DBMain->Query('insert into player_job values (' . $PLAYER['player_id'] . ', ' . $job . ', 0, 0)');
+
+			$ret = $DBMain->Query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
+			for($i = 0; $i < count($ret); $i++)
+				$DBMain->Query('insert into player_abilitytype values (' . $PLAYER['player_id'] . ', ' . $ret[$i]['cor_abilitytype'] . ', 0, 0)');
+		}
+
 		echo '<p>Job change to ' . $res[0]['job_name'] . ' succeeded.';
 	}
 	else
