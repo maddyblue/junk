@@ -32,44 +32,55 @@
  *
  */
 
-$query = 'select * from equipment, equipmenttype where equipment_type=equipmenttype_id ';
-
-if(isset($_GET['type']))
-	$query .= 'and equipment_type=' . intval($_GET['type']) . ' ';
-
-$query .= 'order by equipmenttype_name, equipment_cost';
-
-$res = $DBMain->Query($query);
+$type = isset($_GET['type']) ? intval($_GET['type']) : '0';
 
 $array = array();
 
-array_push($array, array(
-	'Type',
-	'Equipment',
-	'Purchasable',
-	'Cost',
-	'Description'
-));
-
-for($i = 0; $i < count($res); $i++)
+if($type <= 0)
 {
-	if($res[$i]['equipment_buy'] == 1)
-		$buytext = makeLink('Yes', 'a=buyequipment&e=' . $res[$i]['equipment_id']);
-	else
-		$buytext = 'No';
+	$res = $DBMain->Query('select * from equipmenttype order by equipmenttype_name');
 
 	array_push($array, array(
-		makeLink($res[$i]['equipmenttype_name'], 'a=viewequipment&type=' . $res[$i]['equipmenttype_id']),
-		makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id']),
-		$buytext,
-		$res[$i]['equipment_cost'],
-		$res[$i]['equipment_desc']
+		'Equipment Types'
 	));
-}
 
-if(isset($_GET['type']))
+	for($i = 0; $i < count($res); $i++)
+		array_push($array, array(
+			makeLink($res[$i]['equipmenttype_name'], 'a=viewequipment&type=' . $res[$i]['equipmenttype_id'])
+		));
+}
+else
 {
-	echo '<p>' . makeLink('View all types', 'a=viewequipment');
+	$res = $DBMain->Query('select * from equipment, equipmenttype where equipment_type=equipmenttype_id and equipment_type=' . $type . ' order by equipmenttype_name, equipment_cost');
+
+	array_push($array, array(
+		'Type',
+		'Equipment',
+		'Purchasable',
+		'Cost',
+		'Description'
+	));
+
+	for($i = 0; $i < count($res); $i++)
+	{
+		if($res[$i]['equipment_buy'] == 1)
+			$buytext = makeLink('Yes', 'a=buyequipment&e=' . $res[$i]['equipment_id']);
+		else
+			$buytext = 'No';
+
+		array_push($array, array(
+			makeLink($res[$i]['equipmenttype_name'], 'a=viewequipment&type=' . $res[$i]['equipmenttype_id']),
+			makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id']),
+			$buytext,
+			$res[$i]['equipment_cost'],
+			$res[$i]['equipment_desc']
+		));
+	}
+
+	if(isset($_GET['type']))
+	{
+		echo '<p>' . makeLink('View all types', 'a=viewequipment');
+	}
 }
 
 echo getTable($array);
