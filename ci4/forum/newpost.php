@@ -102,7 +102,7 @@ else
 		}
 		else
 		{
-			$db->query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
+			$lastpost = $db->insert('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
 				$thread . ',' .
 				'"' . $subject . '",' .
 				'"' . $post . '",' .
@@ -110,10 +110,8 @@ else
 				TIME . ',' .
 				ip2long($_SERVER['REMOTE_ADDR']) .
 				')');
-			$ret = $db->query('select forum_post_id from forum_post where forum_post_thread=' . $thread . ' and forum_post_user=' . ID . ' order by forum_post_date desc limit 1');
-			if(count($ret))
+			if($lastpost != FALSE)
 			{
-				$lastpost = $ret[0]['forum_post_id'];
 				updateFromPost($lastpost);
 				$db->query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
 
