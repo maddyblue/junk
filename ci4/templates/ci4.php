@@ -95,7 +95,7 @@ td
 	<table width="100%" height="100%" valign="top">
 		<tr>
 			<td>
-				<CICONTENT>
+				<CICONTENT>INSERT</CICONTENT>
 			</td>
 		</tr>
 	</table>
