@@ -16,9 +16,9 @@ class DatabaseAccess
 	function Connect($parameters)
 	{
 		return mysql_connect(
-			$parameters{"SQLServer"},
-			$parameters{"SQLUser"},
-			$parameters{"SQLPassword"}
+			$parameters{'SQLHost'},
+			$parameters{'SQLUser'},
+			$parameters{'SQLPassword'}
 		);
 	}
 

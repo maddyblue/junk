@@ -6,7 +6,7 @@
  */
 function getTemplateName($t)
 {
-	return CI_HOME . CI_TEMPLATE_LOC . '/' . $t . '.php';
+	return CI_FS_HOME . CI_TEMPLATE_LOC . '/' . $t . '.php';
 }
 
 /*	Returns the associative array from the site[_replace] table corresponding
@@ -17,7 +17,7 @@ function getTemplateName($t)
  */
 function getSiteArray($tag, $single)
 {
-	global $DB;
+	global $DBMain;
 	if($single)
 		$name = 'site_replace';
 	else
@@ -25,7 +25,7 @@ function getSiteArray($tag, $single)
 		$name = 'site';
 		$order = 'ORDER BY orderid';
 	}
-	return $DB->Query('SELECT type,main,secondary,link FROM ' . $name . ' WHERE logged ' . LOGGED_DIR . '= 0 AND tag=' . "'$tag'" . ' ' . $order);
+	return $DBMain->Query('SELECT type,main,secondary,link FROM ' . $name . ' WHERE logged ' . LOGGED_DIR . '= 0 AND tag=' . "'$tag'" . ' ' . $order);
 }
 
 /* Returns a string made from the given parameters array dependant on the type.

@@ -1,7 +1,6 @@
 <?php
 
-/* Interface class for DatabaseAccess
- */
+/*	Interface class for DatabaseAccess	*/
 
 class Database
 {
@@ -20,9 +19,11 @@ class Database
 		$this->dbname = $dbname;
 	}
 
-	function Query($query, $dbname = "")
+	function Query($query, $dbname = '')
 	{
+		// no database specified
 		if(!$dbname && !$this->dbname) return;
+		
 		if($dbname) $db = $dbname;
 		else $db = $this->dbname;
 		return $this->da->ReadTable(array('Database' => $db, 'Query' => $query, 'Handle' => $this->handle));
