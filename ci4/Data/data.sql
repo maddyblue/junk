@@ -39,24 +39,54 @@ INSERT INTO abilitytype VALUES (10,'Aura','Light that envelopes a Paladin (or hi
 INSERT INTO abilitytype VALUES (11,'Sword Tech','Attacks with status lowering affects.');
 
 
-INSERT INTO area VALUES (1,'Kilinos Beach','');
-INSERT INTO area VALUES (2,'Kilinos Bay','');
-INSERT INTO area VALUES (3,'Greenlands','');
-INSERT INTO area VALUES (4,'Clifftop Path','');
-INSERT INTO area VALUES (5,'Breeze Sprite Shrine','');
-INSERT INTO area VALUES (6,'Inland Pass','');
-INSERT INTO area VALUES (7,'Hill Top','');
-INSERT INTO area VALUES (8,'Overlooking the Great Plains','');
-INSERT INTO area VALUES (9,'Staircase Cavern','');
-INSERT INTO area VALUES (10,'Venture Hill','');
-INSERT INTO area VALUES (11,'The Great Plains [South]','');
-INSERT INTO area VALUES (12,'Rookwood','');
-INSERT INTO area VALUES (13,'The Great Plains [Central]','');
-INSERT INTO area VALUES (14,'The Great Plains [North]','');
-INSERT INTO area VALUES (15,'Ruined Spire','');
-INSERT INTO area VALUES (16,'Crysalis Speculum','');
-INSERT INTO area VALUES (17,'Mausoleum','');
-INSERT INTO area VALUES (18,'Northwest Passage','');
+INSERT INTO area VALUES (1,'Kilinos Beach','',1);
+INSERT INTO area VALUES (2,'Kilinos Bay','',2);
+INSERT INTO area VALUES (3,'Greenlands','',3);
+INSERT INTO area VALUES (4,'Clifftop Path','',4);
+INSERT INTO area VALUES (5,'Breeze Sprite Shrine','',5);
+INSERT INTO area VALUES (6,'Inland Pass','',6);
+INSERT INTO area VALUES (7,'Hill Top','',7);
+INSERT INTO area VALUES (8,'Overlooking the Great Plains','',8);
+INSERT INTO area VALUES (9,'Staircase Cavern','',9);
+INSERT INTO area VALUES (10,'Venture Hill','',10);
+INSERT INTO area VALUES (11,'Rookwood','',11);
+INSERT INTO area VALUES (12,'The Great Plains [South]','',12);
+INSERT INTO area VALUES (13,'The Great Plains [Central]','',13);
+INSERT INTO area VALUES (14,'The Great Plains [North]','',14);
+INSERT INTO area VALUES (15,'Ruined Spire','',15);
+INSERT INTO area VALUES (16,'Crysalis Speculum','',16);
+INSERT INTO area VALUES (17,'Mausoleum','',17);
+INSERT INTO area VALUES (18,'Northwest Passage','',18);
+
+
+
+
+INSERT INTO cor_area_town VALUES (1,1);
+INSERT INTO cor_area_town VALUES (2,1);
+INSERT INTO cor_area_town VALUES (3,1);
+INSERT INTO cor_area_town VALUES (3,2);
+INSERT INTO cor_area_town VALUES (4,2);
+INSERT INTO cor_area_town VALUES (5,2);
+INSERT INTO cor_area_town VALUES (5,3);
+INSERT INTO cor_area_town VALUES (6,3);
+INSERT INTO cor_area_town VALUES (7,3);
+INSERT INTO cor_area_town VALUES (7,4);
+INSERT INTO cor_area_town VALUES (8,4);
+INSERT INTO cor_area_town VALUES (8,5);
+INSERT INTO cor_area_town VALUES (9,5);
+INSERT INTO cor_area_town VALUES (10,5);
+INSERT INTO cor_area_town VALUES (10,6);
+INSERT INTO cor_area_town VALUES (11,6);
+INSERT INTO cor_area_town VALUES (12,6);
+INSERT INTO cor_area_town VALUES (11,7);
+INSERT INTO cor_area_town VALUES (13,7);
+INSERT INTO cor_area_town VALUES (14,7);
+INSERT INTO cor_area_town VALUES (13,8);
+INSERT INTO cor_area_town VALUES (15,8);
+INSERT INTO cor_area_town VALUES (16,8);
+INSERT INTO cor_area_town VALUES (14,9);
+INSERT INTO cor_area_town VALUES (17,9);
+INSERT INTO cor_area_town VALUES (18,9);
 
 
 
@@ -172,17 +202,17 @@ INSERT INTO job VALUES (10,'White Mage',0,0,5,0,0,5,0,10,0,0,7,10,0,2,1,1,0,0,20
 INSERT INTO job VALUES (11,'Black Mage',0,0,5,0,0,10,0,5,0,0,7,10,0,2,1,1,0,0,20,' For good or evil the Black Mage walks the path of destruction, shattering earth and incinerating their enemies is their trade, but what is the price for such power?');
 
 
-INSERT INTO monster VALUES (1,'Kobold','kobold.gif',5,3,3,3,4,2,3,3,1,20,5,0,0,10,0,0,0,0,10,5,'Often described as a cross between a lizard, a dog and a wet day, Kobolds are the meek cousins of the larger lizardmen, though they don\'t share the draconic blood that runs through the Lizardmen\'s veins. Kobolds are small humanoids with alligator like heads and grey mottled skin.');
-INSERT INTO monster VALUES (2,'Gel','gel.gif',10,3,4,2,6,2,2,3,2,20,7,0,0,10,0,10,0,0,0,1,'Gels are the smallest form of ooze. They are amaeoba like with a red nucleus surrounded by dull green jelly that shifts as they slowly move. Gels can be a little sickening but aren\'t very difficult to beat.');
-INSERT INTO monster VALUES (3,'Midgies','',5,3,2,2,2,2,5,3,1,20,5,0,0,0,10,10,0,0,0,2,'Midgies are tiny black flies that swarm under trees and in the shade on sunny days. Annoying certainly but unlikely to cause any problems to you. ');
-INSERT INTO monster VALUES (4,'Frog','',20,9,4,3,4,2,6,4,3,14,9,0,0,10,0,10,0,0,0,3,'Frogs are small amphibious creatures that generally eat small insects or scrounge small scraps of food of passing adventurers. Despite their usually passive nature they will attack if their habitat is being encroached upon by passing travellers.');
-INSERT INTO monster VALUES (5,'Dragonfly','',20,9,5,2,3,2,5,3,3,14,9,10,0,0,10,0,0,0,0,2,'Small annoying bugs dragonflies constantly hover around pestering passing travellers, although this kind are a little more difficult to swat.');
-INSERT INTO monster VALUES (6,'Grat','grat.gif',20,9,6,2,5,2,3,5,3,16,11,0,0,10,0,10,0,0,0,7,'Grats a gangly limbed carniverous weeds that typically grow near the watering grounds for animals, seeking to draw one into it\'s trap like maw.');
-INSERT INTO monster VALUES (7,'Green Drake','green_drake.gif',40,3,8,4,8,4,7,3,4,25,20,10,0,10,0,0,0,0,0,4,'Green Drakes are the smallest and least powerful of the draconic family. Often haunting remote trails they often attack passing creatures for sport as much as for sustinance.');
-INSERT INTO monster VALUES (8,'Rat','rat.gif',40,3,6,2,4,4,5,5,4,16,11,0,0,10,0,0,0,0,10,3,'Small mucky rodents that swarm wherever there is food to be had, Rats are capable scavengers and are usually present in any dark place.');
-INSERT INTO monster VALUES (9,'Arachnid','',80,3,6,2,6,2,4,4,5,18,13,0,0,10,0,10,0,0,0,2,'Arachnids are large spiders with small round bodies and long, thin legs. They gather in dark places and form colonies, although they prefer to hunt alone.');
-INSERT INTO monster VALUES (10,'Black Bat','',80,3,8,2,5,2,6,6,5,20,15,0,0,0,10,0,0,0,10,3,'Black bats are large underground creatures that navigate through the darkest passages with the aid of sonar, with which they hunt any prey that stumbles too close to their lair.');
-INSERT INTO monster VALUES (11,'Dust Mephit','',160,3,60,2,10,2,6,6,6,28,0,0,0,10,0,0,0,0,10,5,'Sickly humanoids four feet tall and comprised of dirt and grime, Dust Mephits are malicious little creatures who hate all things more beautiful than themselves. In the case of Dust Mephits, this is almost everything.');
+INSERT INTO monster VALUES (1,'Kobold','kobold.gif',5,3,3,3,4,2,3,3,1,20,5,5,'Often described as a cross between a lizard, a dog and a wet day, Kobolds are the meek cousins of the larger lizardmen, though they don\'t share the draconic blood that runs through the Lizardmen\'s veins. Kobolds are small humanoids with alligator like heads and grey mottled skin.');
+INSERT INTO monster VALUES (2,'Gel','gel.gif',10,3,4,2,6,2,2,3,2,20,7,1,'Gels are the smallest form of ooze. They are amaeoba like with a red nucleus surrounded by dull green jelly that shifts as they slowly move. Gels can be a little sickening but aren\'t very difficult to beat.');
+INSERT INTO monster VALUES (3,'Midgies','',5,3,2,2,2,2,5,3,1,20,5,2,'Midgies are tiny black flies that swarm under trees and in the shade on sunny days. Annoying certainly but unlikely to cause any problems to you. ');
+INSERT INTO monster VALUES (4,'Frog','',20,9,4,3,4,2,6,4,3,14,9,3,'Frogs are small amphibious creatures that generally eat small insects or scrounge small scraps of food of passing adventurers. Despite their usually passive nature they will attack if their habitat is being encroached upon by passing travellers.');
+INSERT INTO monster VALUES (5,'Dragonfly','',20,9,5,2,3,2,5,3,3,14,9,2,'Small annoying bugs dragonflies constantly hover around pestering passing travellers, although this kind are a little more difficult to swat.');
+INSERT INTO monster VALUES (6,'Grat','grat.gif',20,9,6,2,5,2,3,5,3,16,11,7,'Grats a gangly limbed carniverous weeds that typically grow near the watering grounds for animals, seeking to draw one into it\'s trap like maw.');
+INSERT INTO monster VALUES (7,'Green Drake','green_drake.gif',40,3,8,4,8,4,7,3,4,25,20,4,'Green Drakes are the smallest and least powerful of the draconic family. Often haunting remote trails they often attack passing creatures for sport as much as for sustinance.');
+INSERT INTO monster VALUES (8,'Rat','rat.gif',40,3,6,2,4,4,5,5,4,16,11,3,'Small mucky rodents that swarm wherever there is food to be had, Rats are capable scavengers and are usually present in any dark place.');
+INSERT INTO monster VALUES (9,'Arachnid','',80,3,6,2,6,2,4,4,5,18,13,2,'Arachnids are large spiders with small round bodies and long, thin legs. They gather in dark places and form colonies, although they prefer to hunt alone.');
+INSERT INTO monster VALUES (10,'Black Bat','',80,3,8,2,5,2,6,6,5,20,15,3,'Black bats are large underground creatures that navigate through the darkest passages with the aid of sonar, with which they hunt any prey that stumbles too close to their lair.');
+INSERT INTO monster VALUES (11,'Dust Mephit','',160,3,60,2,10,2,6,6,6,28,0,5,'Sickly humanoids four feet tall and comprised of dirt and grime, Dust Mephits are malicious little creatures who hate all things more beautiful than themselves. In the case of Dust Mephits, this is almost everything.');
 
 
 INSERT INTO monstertype VALUES (1,'Abberation');
@@ -199,6 +229,7 @@ INSERT INTO monstertype VALUES (9,'Undead');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',0,'link','Import PHPBB forums','','\'a=import-phpbb\'','SECTION_ADMIN',0,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',10,'link','Reset','','\'a=reset\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',20,'link','Sync forums','','\'a=sync-forums\'','SECTION_ADMIN',1,1,'');
+INSERT INTO site VALUES ('ADMIN_SECTION_MENU',30,'link','Manage forums','','\'a=manage-forums\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',40,'link','Manage Groups','','\'a=manage-groups\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'eval','newthreadLink() . newreplyLink()','','','',1,0,'f and t are never specified together, hence this works well');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',0,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
@@ -206,6 +237,8 @@ INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','\'a=viewjob
 INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','\'a=viewequipment\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','\'a=viewmonsters\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',30,'link','View Abilities','','\'a=viewabilities\'','SECTION_GAME',0,0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',40,'link','View Towns','','\'a=viewtowns\'','SECTION_GAME',0,0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',50,'link','View Areas','','\'a=viewareas\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','\'a=domains\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',10,'link','Skins','','\'a=skins\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','','SECTION_HOME',0,0,'');
@@ -226,7 +259,6 @@ INSERT INTO site VALUES ('USER_SECTION_MENU',40,'link','Logout','','\'a=logout\'
 INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewusers\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
-INSERT INTO site VALUES ('ADMIN_SECTION_MENU',30,'link','Manage forums','','\'a=manage-forums\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
 
 
@@ -234,13 +266,13 @@ INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
 INSERT INTO skin VALUES ('kuro5hin','rusty','http://www.kuro5hin.org/');
 
 
-INSERT INTO town VALUES (1,'Kilinos Port','',0,0,'','');
-INSERT INTO town VALUES (2,'Lagos Villiage','',0,0,'','');
-INSERT INTO town VALUES (3,'Oman\'s Keep','',0,0,'','');
-INSERT INTO town VALUES (4,'Gale Point','',0,0,'','');
-INSERT INTO town VALUES (5,'Venture','',0,0,'','');
-INSERT INTO town VALUES (6,'Rookheim','',0,0,'','');
-INSERT INTO town VALUES (7,'Olmeneux (Lower Wards)','',0,0,'','');
-INSERT INTO town VALUES (8,'Olmeneux (Upper Wards)','',0,0,'','');
-INSERT INTO town VALUES (9,'Northgate','',0,0,'','');
+INSERT INTO town VALUES (1,'Kilinos Port',1,'',0,0,'','');
+INSERT INTO town VALUES (2,'Lagos Villiage',2,'',0,0,'','');
+INSERT INTO town VALUES (3,'Oman\'s Keep',3,'',0,0,'','');
+INSERT INTO town VALUES (4,'Gale Point',4,'',0,0,'','');
+INSERT INTO town VALUES (5,'Venture',5,'',0,0,'','');
+INSERT INTO town VALUES (6,'Rookheim',6,'',0,0,'','');
+INSERT INTO town VALUES (7,'Olmeneux (Lower Wards)',7,'',0,0,'','');
+INSERT INTO town VALUES (8,'Olmeneux (Upper Wards)',8,'',0,0,'','');
+INSERT INTO town VALUES (9,'Northgate',9,'',0,0,'','');
 
