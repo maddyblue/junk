@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.2 2003/09/25 23:57:35 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.3 2003/09/27 21:32:49 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,6 +32,8 @@
  *
  */
 
+update_session_action('Viewing ' . makeLink('Who\'s online', 'a=whosonline', SECTION_USER));
+
 $query = 'select * from session order by session_current';
 $res = $DBMain->Query($query);
 
@@ -40,6 +42,7 @@ $array = array();
 array_push($array, array(
 	'Username',
 	'Active Since',
+	'Last Seen',
 	'Current Action'
 ));
 
@@ -48,6 +51,7 @@ for($i = 0; $i < count($res); $i++)
 	array_push($array, array(
 		getUserlink($res[$i]['session_user']),
 		getTime($res[$i]['session_start']),
+		getTime($res[$i]['session_current']),
 		$res[$i]['session_action']
 	));
 }
