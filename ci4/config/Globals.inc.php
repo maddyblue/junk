@@ -3,9 +3,9 @@
 /*	CI globals.	*/
 
 define('CI_HOME', '/var/www/ci4/');
-define('CI_DOMAIN', 'localhost');
+define('CI_WWW_DOMAIN', 'mythran.dolmant.net');
 define('CI_PATH', '/ci4');
-define('CI_ADDRESS', 'http://' . CI_DOMAIN . CI_PATH);
+define('CI_ADDRESS', 'http://' . CI_WWW_DOMAIN . CI_PATH);
 define('CI_DATABASE', 'ci4');
 define('CI_DEF_TEMPLATE', 'ci4');
 define('CI_TEMPLATE_LOC', 'templates');
