@@ -327,7 +327,7 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 
 function makeLink($text, $link, $root = false)
 {
-	return '<a href="' . CI_WWW_PATH . ($root ? '' : CI_SECTION_DIR) . $link . '">' . $text . '</a>';
+	return '<a href="' . ($root ? CI_WWW_PATH : '') . $link . '">' . $text . '</a>';
 }
 
 function makeImg($img, $prefix = '', $relative = false)
