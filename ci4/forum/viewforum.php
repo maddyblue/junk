@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.19 2003/12/16 09:07:15 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.20 2003/12/19 09:22:57 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -154,14 +154,14 @@ function threadList($forumid, $offset, $threadsPP)
 		'Last Post'
 	));
 
-	$ret = $DBMain->Query('select * from forum_thread, forum_post where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread and forum_thread_last_post=forum_post_id order by forum_post_date desc limit ' . $offset . ', ' . $threadsPP);
+	$ret = $DBMain->Query('select * from forum_thread, forum_post, user where forum_post_user=user_id and forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread and forum_thread_last_post=forum_post_id order by forum_post_date desc limit ' . $offset . ', ' . $threadsPP);
 
 	foreach($ret as $row)
 	{
 		array_push($array, array(
 			(newThread($row) ? '* ' : '') .
 				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']),
-			getUserlink($row['forum_thread_user']),
+			getUserlink($row['forum_thread_user'], $row['user_name']),
 			$row['forum_thread_replies'],
 			$row['forum_thread_views'],
 			forumLinkLastPost($row['forum_post_id'])

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.27 2003/12/18 00:59:13 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.28 2003/12/19 09:22:40 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -42,7 +42,7 @@ function postList($thread, $offset, $postsPP, $canMod)
 
 	foreach($posts as $post)
 	{
-		$user = getUserlink($post['user_id']);
+		$user = getUserlink($post['user_id'], $post['user_name']);
 		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
 		$user .= makeLink('quote', 'a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
 		if(ID == $post['user_id'] || $canMod) // <- exactly the same as canEdit, but saves us a few DB calls per post
