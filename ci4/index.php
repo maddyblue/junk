@@ -47,7 +47,7 @@ require_once CI_HOME_MOD . 'Include.inc.php';
 eval('$secDir = SECTION_' . strtoupper(CI_SECTION) . ';');
 define('CI_SECTION_DIR', $secDir . '/');
 
-$id = getCIcookie('id');
+$id = intval(getCIcookie('id'));
 $pass = getCIcookie('pass');
 
 $message = '';
@@ -59,6 +59,8 @@ if(isset($_POST['a']))
 	$aval = $_POST['a'];
 else if(isset($_GET['a']))
 	$aval = $_GET['a'];
+
+validateCharsDie($aval);
 
 if(!$aval && CI_SECTION == 'MAIN')
 	$aval = 'news';
@@ -84,19 +86,16 @@ if(CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
 }
 
 if(CI_SECTION == 'MAIN' && $aval == 'changedomain' && isset($_GET['domain']))
-	$dom = encode($_GET['domain']);
+	$dom = intval($_GET['domain']);
 else
-	$dom = getCICookie('domain');
-
-if(!$dom)
-	$dom = '0';
+	$dom = intval(getCICookie('domain'));
 
 define('CI_DOMAIN', $dom);
 
 // check to see if we have a valid user
 
 if($id && $pass)
-	$res = $DBMain->Query('select * from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
+	$res = $DBMain->Query('select * from user where user_id=' . $id . ' and user_pass="' . $pass . '"');
 else
 	$res = array();
 
@@ -173,6 +172,8 @@ else
 
 if(!$t)
 	$t = CI_DEF_TEMPLATE;
+
+validateCharsDie($t);
 
 $tfile = getTemplateFilename($t);
 if(!file_exists($tfile))

@@ -32,7 +32,7 @@
  *
  */
 
-$postid = isset($_GET['p']) ? $_GET['p'] : 0;
+$postid = isset($_GET['p']) ? intval($_GET['p']) : '0';
 
 $ret = $DBMain->Query('select forum_post_thread, forum_post_date from forum_post where forum_post_id=' . $postid);
 

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewjobdetails.php,v 1.13 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,7 +32,7 @@
  *
  */
 
-$job = isset($_GET['job']) ? encode($_GET['job']) : 0;
+$job = isset($_GET['job']) ? intval($_GET['job']) : '0';
 
 $res = $DBMain->Query('select * from job where job_id=' . $job);
 
@@ -63,7 +63,7 @@ for($i = 0; $i < count($abilities); $i++)
 	$abilitylist .= makeLink($abilities[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $abilities[$i]['abilitytype_id']);
 }
 
-$jobs = $DBMain->Query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $_GET['job'] . ' and cor_job_req=job.job_id order by job_name');
+$jobs = $DBMain->Query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $job . ' and cor_job_req=job.job_id order by job_name');
 
 $joblist = '';
 

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newpost.php,v 1.12 2003/12/25 05:23:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -54,16 +54,16 @@ function disp($subject, $post, $thread)
 
 $subject = '';
 $post = '';
-$thread = 0;
+$thread = '0';
 
 if(isset($_POST['subject']))
 	$subject = encode($_POST['subject']);
 if(isset($_POST['post']))
 	$post = encode($_POST['post']);
 if(isset($_GET['t']))
-	$thread = encode($_GET['t']);
+	$thread = intval($_GET['t']);
 if(isset($_POST['t']))
-	$thread = encode($_POST['t']);
+	$thread = intval($_POST['t']);
 
 $forum = getForumFromThread($thread);
 
@@ -131,7 +131,7 @@ else
 	{
 		if(isset($_GET['q']))
 		{
-			$ret = $DBMain->Query('select * from forum_post where forum_post_id=' . $_GET['q']);
+			$ret = $DBMain->Query('select * from forum_post where forum_post_id=' . intval($_GET['q']));
 			if(count($ret) == 1)
 				$post = '[quote]Originally posted by ' . getUsername($ret[0]['forum_post_user']) . ':' . "\n" . $ret[0]['forum_post_text'] . '[/quote]';
 		}

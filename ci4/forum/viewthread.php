@@ -74,7 +74,7 @@ function postList($thread, $curpage, $postsPP, $canMod)
 	return $array;
 }
 
-$threadid = isset($_GET['t']) ? $_GET['t'] : 0;
+$threadid = isset($_GET['t']) ? intval($_GET['t']) : '0';
 
 $DBMain->Query('update forum_thread set forum_thread_views=forum_thread_views+1 where forum_thread_id=' . $threadid);
 

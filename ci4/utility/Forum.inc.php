@@ -120,7 +120,7 @@ function newthreadLink()
 	{
 		global $DBMain;
 
-		$f = encode($_GET['f']);
+		$f = intval($_GET['f']);
 
 		$ret = $DBMain->Query('select forum_forum_type from forum_forum where forum_forum_id=' . $f);
 

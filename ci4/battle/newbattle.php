@@ -133,7 +133,7 @@ if(LOGGED)
 
 	if(!$fail)
 	{
-		$area = isset($_POST['area']) ? encode($_POST['area']) : '0';
+		$area = isset($_POST['area']) ? intval($_POST['area']) : '0';
 
 		if(isset($_POST['submit']))
 		{
@@ -141,7 +141,7 @@ if(LOGGED)
 
 			global $DBMain, $PLAYER;
 
-			$ret = $DBMain->Query('select count(*) count from cor_area_town where cor_area = "' . $area . '" and cor_town=' . $PLAYER['player_town']);
+			$ret = $DBMain->Query('select count(*) count from cor_area_town where cor_area = ' . $area . ' and cor_town=' . $PLAYER['player_town']);
 
 			if($ret[0]['count'] != '1')
 			{

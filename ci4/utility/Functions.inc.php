@@ -54,6 +54,7 @@ Links and images:
 Data control:
 	encode
 	decode
+	validateChars
 
 Cookies:
 	setCIcookie
@@ -483,10 +484,12 @@ function makeImg($img, $prefix = '', $relative = false)
 
 // --- Data control ---
 
-// Make inupt data safe. Must always be used for all $_GET and $_POST data.
+// Make inupt data safe. Must always be used for all $_GET and $_POST string data.
 function encode($input)
 {
-	return urlencode($input);
+	validateChars($input);
+
+	return urlencode(htmlspecialchars($input));
 }
 
 /* Opposite of encode(). Should be used when displaying encode()'ed data to the
@@ -497,12 +500,47 @@ function decode($output)
 	return stripslashes(urldecode($output));
 }
 
+/* Verifies that all chars in $text are one listed in $alphabet. If they are
+ * not listed, replace them with a space. $alphabet is not is ASCII order so as
+ * to make searching faster. Most used characters are closer to the front.
+ */
+function validateChars(&$text)
+{
+	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890 ~`!@#$%^&*()_+=-,.<>?/|;:\'"' . chr(92) /* \ */ . chr(10) /* \n */;
+
+	$sizestr = strlen($text) - 1;
+
+	for($i = 0; $i <= $sizestr; $i++)
+	{
+		if(strstr($alphabet, $text[$i]))
+			continue;
+		else
+			$text[$i] = ' ';
+	}
+}
+
+/* Same as validateChars, except with a stricter alphabet. Also, die on a
+ * mismatch instead of replacing with a space.
+ */
+function validateCharsDie(&$text, $alphabet = 'abcdefghijklmnopqrstuvwxyz-')
+{
+	$sizestr = strlen($text) - 1;
+
+	for($i = 0; $i <= $sizestr; $i++)
+	{
+		if(strstr($alphabet, $text[$i]))
+			continue;
+		// if $text contians a character not in $alphabet, don't do anything else
+		else
+			die('Invalid characters specified in input. This could be caused by invalid cookie data, thus it is recommended to clear your cookies.');
+	}
+}
+
 // --- Cookies ---
 
 // Set a cookie. This handles duration.
 function setCIcookie($name, $value)
 {
-	// 60*60*24*7 = 604800 = 7 days
 	if(defined('IS_SECURE'))
 		setCIcookieReal($name, $value, '1');
 	else
@@ -511,6 +549,7 @@ function setCIcookie($name, $value)
 
 function setCIcookieReal($name, $value, $secure)
 {
+	// 60*60*24*7 = 604800 = 7 days
 	setCookie('CI_' . $name, $value, TIME + 604800, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
 }
 

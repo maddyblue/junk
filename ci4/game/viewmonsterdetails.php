@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewmonsterdetails.php,v 1.7 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,7 +32,7 @@
  *
  */
 
-$res = $DBMain->Query('select * from monster, monstertype where monster_id=' . $_GET['monster'] . ' and monster_type=monstertype_id');
+$res = $DBMain->Query('select * from monster, monstertype where monster_id=' . intval($_GET['monster']) . ' and monster_type=monstertype_id');
 
 $stat = array(
 	array('HP', $res[0]['monster_hp']),

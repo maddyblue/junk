@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewareadetails.php,v 1.2 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,7 +32,7 @@
  *
  */
 
-$area = isset($_GET['area']) ? encode($_GET['area']) : 0;
+$area = isset($_GET['area']) ? intval($_GET['area']) : '0';
 
 $res = $DBMain->Query('select * from area where area_id=' . $area);
 

@@ -32,8 +32,8 @@
  *
  */
 
-$player = isset($_GET['player']) ? encode($_GET['player']) :
-	(LOGGED ? $PLAYER['player_id'] : 0);
+$player = isset($_GET['player']) ? intval($_GET['player']) :
+	(LOGGED ? $PLAYER['player_id'] : '0');
 
 $res = $DBMain->Query('select player.*, user_name, domain_name, job_name, town_name, house_name from player, user, domain, job
 	left join town on town_id=player_town

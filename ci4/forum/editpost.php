@@ -52,7 +52,7 @@ $post = '0';
 
 $subject = isset($_POST['subject']) ? encode($_POST['subject']) : '';
 $text = isset($_POST['text']) ? encode($_POST['text']) : '';
-$post = isset($_POST['p']) ? encode($_POST['p']) : (isset($_GET['p']) ? encode($_GET['p']) : '0');
+$post = isset($_POST['p']) ? intval($_POST['p']) : (isset($_GET['p']) ? intval($_GET['p']) : '0');
 
 $ret = $DBMain->Query('select * from forum_post where forum_post_id=' . $post);
 

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: manage-group.php,v 1.4 2004/01/07 07:18:27 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -48,7 +48,7 @@ function groupUserListManage(&$array, $groupid)
 	}
 }
 
-$groupid = isset($_GET['g']) ? encode($_GET['g']) : 0;
+$groupid = isset($_GET['g']) ? intval($_GET['g']) : '0';
 
 if($groupid)
 {

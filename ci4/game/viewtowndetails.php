@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewtowndetails.php,v 1.2 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,7 +32,7 @@
  *
  */
 
-$town = isset($_GET['town']) ? encode($_GET['town']) : 0;
+$town = isset($_GET['town']) ? intval($_GET['town']) : '0';
 
 $res = $DBMain->Query('select * from town where town_id=' . $town);
 

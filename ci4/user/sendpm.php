@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: sendpm.php,v 1.8 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -52,14 +52,14 @@ if(!LOGGED)
 }
 else
 {
-	$to = isset($_POST['to']) ? $_POST['to'] : '';
-	$sub = isset($_POST['sub']) ? $_POST['sub'] : '';
-	$text = isset($_POST['text']) ? $_POST['text'] : '';
+	$to = isset($_POST['to']) ? encode($_POST['to']) : '';
+	$sub = isset($_POST['sub']) ? encode($_POST['sub']) : '';
+	$text = isset($_POST['text']) ? encode($_POST['text']) : '';
 
 	if(isset($_POST['submit']))
 	{
 		$fail = false;
-		$userid = getDBData('user_id', encode($to), 'user_name');
+		$userid = getDBData('user_id', $to, 'user_name');
 		if(!$userid)
 		{
 			$fail = true;
@@ -77,8 +77,8 @@ else
 			$DBMain->Query('insert into pm (pm_from, pm_to, pm_subject, pm_text, pm_date, pm_read) values (' .
 				ID . ',' .
 				$userid . ',' .
-				'"' . encode($sub) . '",' .
-				'"' . encode($text) . '",' .
+				'"' . $sub . '",' .
+				'"' . $text . '",' .
 				TIME . ',' .
 				0 .
 				')');
@@ -90,12 +90,12 @@ else
 	}
 	else
 	{
-		$userid = isset($_GET['userid']) ? $_GET['userid'] : 0;
+		$userid = isset($_GET['userid']) ? intval($_GET['userid']) : '0';
 		$sub = '';
 
 		if(isset($_GET['reply']))
 		{
-			$res = $DBMain->Query('select * from pm where pm_id=' . $_GET['reply']);
+			$res = $DBMain->Query('select * from pm where pm_id=' . intval($_GET['reply']));
 			if(count($res))
 			{
 				$userid = $res[0]['pm_from'];

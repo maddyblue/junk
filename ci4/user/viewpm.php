@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewpm.php,v 1.7 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -38,8 +38,8 @@ if(!LOGGED)
 }
 else
 {
-	$pm = isset($_GET['pm']) ? $_GET['pm'] : 0;
-	$pm = isset($_POST['pm']) ? $_POST['pm'] : $pm;
+	$pm = isset($_GET['pm']) ? intval($_GET['pm']) : '0';
+	$pm = isset($_POST['pm']) ? intval($_POST['pm']) : $pm;
 	$sure = isset($_POST['sure']) ? $_POST['sure'] : '';
 
 	$query = 'select * from pm where pm_id=' . $pm . ' and pm_to=' . ID;

@@ -104,11 +104,11 @@ else if(!isset($_POST['submit']))
 	disp($PLAYER['player_job']);
 else
 {
-	$job = isset($_POST['job']) ? encode($_POST['job']) : '0';
+	$job = isset($_POST['job']) ? intval($_POST['job']) : '0';
 
 	$fail = false;
 
-	$res = $DBMain->Query('select job_req_lv, job_name from job where job_id="' . $job . '"');
+	$res = $DBMain->Query('select job_req_lv, job_name from job where job_id=' . $job);
 	if(!count($res))
 	{
 		echo '<br>Unknown job.';
@@ -126,7 +126,7 @@ else
 		left join player_job on
 			player_job_player=' . $PLAYER['player_id'] . ' and
 			cor_job_req=player_job_job
-		where cor_job="' . $job . '" and
+		where cor_job=' . $job . ' and
 			job_id=cor_job_req and
 			(player_job_lv is NULL or
 			player_job_lv < cor_joblv)');
@@ -140,7 +140,7 @@ else
 
 	if(!$fail)
 	{
-		$DBMain->Query('update player set player_job="' . $job . '" where player_id=' . $PLAYER['player_id']);
+		$DBMain->Query('update player set player_job=' . $job . ' where player_id=' . $PLAYER['player_id']);
 		echo '<p>Job change to ' . $res[0]['job_name'] . ' succeeded.';
 	}
 	else

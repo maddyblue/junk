@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: delete-group.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -34,7 +34,7 @@
 
 if (isset($_POST['submit']))
 {
-	$groupid = encode($_POST['g']);
+	$groupid = isset($_POST['g']) ? intval($_POST['g']) : '0';
 
 	$DBMain->Query('delete from group_user where group_user_group =' . $groupid);
 

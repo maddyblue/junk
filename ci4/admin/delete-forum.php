@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: delete-forum.php,v 1.3 2003/12/25 05:23:13 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -96,7 +96,7 @@ function deleteForum($forumid, $delthreads, $delforums)
 
 if(isset($_POST['submit']))
 {
-	$forumid = isset($_POST['f']) ? encode($_POST['f']) : '';
+	$forumid = isset($_POST['f']) ? intval($_POST['f']) : 0;
 	$sure = isset($_POST['sure']) && $_POST['sure'] == '1' ? true : false;
 	$delthreads = isset($_POST['delthreads']) && $_POST['delthreads'] == '1' ? true : false;
 	$delforums = isset($_POST['delforums']) && $_POST['delforums'] == '1' ? true : false;
@@ -127,7 +127,7 @@ if(isset($_POST['submit']))
 }
 else
 {
-	$forumid = isset($_GET['f']) ? encode($_GET['f']) : '';
+	$forumid = isset($_GET['f']) ? intval($_GET['f']) : '0';
 
 	if(!$forumid)
 		echo '<p>No forum specified.';

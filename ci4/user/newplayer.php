@@ -60,7 +60,7 @@ function display($name, $domain, $gender)
 if(LOGGED)
 {
 	$name = isset($_POST['name']) ? encode($_POST['name']) : '';
-	$domain = isset($_POST['domain']) ? encode($_POST['domain']) : '';
+	$domain = isset($_POST['domain']) ? intval($_POST['domain']) : '0';
 	$gender = isset($_POST['gender']) ? encode($_POST['gender']) : '';
 
 	if(isset($_POST['submit']))

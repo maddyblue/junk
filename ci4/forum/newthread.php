@@ -61,9 +61,9 @@ if(isset($_POST['subject']))
 if(isset($_POST['post']))
 	$post = encode($_POST['post']);
 if(isset($_GET['f']))
-	$forum = encode($_GET['f']);
+	$forum = intval($_GET['f']);
 if(isset($_POST['f']))
-	$forum = encode($_POST['f']);
+	$forum = intval($_POST['f']);
 
 echo getNavBar($forum);
 

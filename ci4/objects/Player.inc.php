@@ -61,8 +61,8 @@ class Player extends Entity
 		$options = array(/* option name, option id, battle engine specifier */);
 		array_push($options, array('Attack', 1, 'p'));
 
-		$option = isset($_POST['option']) ? encode($_POST['option']) : '';
-		$target = isset($_POST['target']) ? encode($_POST['target']) : '';
+		$option = isset($_POST['option']) ? intval($_POST['option']) : '0';
+		$target = isset($_POST['target']) ? intval($_POST['target']) : '0';
 		$optdata = isset($_POST['optdata']) ? encode($_POST['optdata']) : '';
 		$turn = -1;
 

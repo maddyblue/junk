@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: edit-forum.php,v 1.3 2003/12/25 05:23:13 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -58,11 +58,11 @@ function display($forumid, $name, $desc, $parent, $type)
 
 if(isset($_POST['submit']))
 {
-	$forumid = isset($_POST['f']) ? encode($_POST['f']) : '';
+	$forumid = isset($_POST['f']) ? intval($_POST['f']) : '0';
 	$name = isset($_POST['name']) ? encode($_POST['name']) : '';
 	$desc = isset($_POST['desc']) ? encode($_POST['desc']) : '';
-	$parent = isset($_POST['parent']) ? encode($_POST['parent']) : '';
-	$type = isset($_POST['type']) ? encode($_POST['type']) : '';
+	$parent = isset($_POST['parent']) ? intval($_POST['parent']) : '0';
+	$type = isset($_POST['type']) ? intval($_POST['type']) : '0';
 
 	$fail = false;
 
@@ -98,7 +98,7 @@ if(isset($_POST['submit']))
 }
 else
 {
-	$forumid = isset($_GET['f']) ? encode($_GET['f']) : '';
+	$forumid = isset($_GET['f']) ? intval($_GET['f']) : '0';
 
 	if($forumid)
 	{

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewabilitytypedetails.php,v 1.2 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,7 +32,7 @@
  *
  */
 
-$type = isset($_GET['type']) ? encode($_GET['type']) : 0;
+$type = isset($_GET['type']) ? intval($_GET['type']) : '0';
 
 $res = $DBMain->Query('select * from abilitytype where abilitytype_id=' . $type);
 

@@ -235,7 +235,7 @@ array_push($array, array(
 
 $depth = 2;
 
-$forumid = isset($_GET['f']) ? encode($_GET['f']) : '0';
+$forumid = isset($_GET['f']) ? intval($_GET['f']) : '0';
 $read = isset($_GET['read']) && $_GET['read'] == 'true' && LOGGED ? true : false;
 
 if($read)
@@ -278,7 +278,10 @@ else
 		if(canPost($forumid))
 			echo '<p>' . makeLink('New Thread', 'a=newthread&f=' . $forumid);
 
-		$curpage = isset($_GET['page']) ? encode($_GET['page']) : 1;
+		$curpage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+		if($curpage < 1)
+			$curpage = 1;
+
 		$threadsPP = FORUM_THREADS_PP;
 
 		$ret = $DBMain->Query('select floor(count(*)/' . $threadsPP . ') + 1 as count from forum_thread where forum_thread_forum=' . $forumid);

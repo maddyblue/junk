@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: changedomain.php,v 1.1 2004/01/05 04:37:42 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -34,7 +34,7 @@
 
 if(isset($_GET['domain']))
 {
-	setCIcookie('domain', $_GET['domain']);
+	setCIcookie('domain', intval($_GET['domain']));
 
 	echo 'Domain changed.';
 }
