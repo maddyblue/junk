@@ -252,7 +252,7 @@ function getGender($g)
 	return $ret;
 }
 
-function getTable($array, $firstLineHeader = true, $withTableStructure = true)
+function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $withTableStructure = true)
 {
 	$ret = '';
 
@@ -265,10 +265,10 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 		$ret .= '<tr class="tableHeaderRow">';
 		for($j = 0; $j < $cols; $j++)
 		{
-			if($j == 0)
-				$ret .= '<td class="tableHeaderCellL">';
-			else if($j == ($cols - 1))
+			if($j == ($cols - 1))
 				$ret .= '<td class="tableHeaderCellR">';
+			else if($j == 0)
+				$ret .= '<td class="tableHeaderCellL">';
 			else
 				$ret .= '<td class="tableHeaderCell">';
 
@@ -286,26 +286,26 @@ function getTable($array, $firstLineHeader = true, $withTableStructure = true)
 		{
 			if($j == 0)
 			{
-				if($i == 0)
-					$ret .= '<td class="tableCellTL">';
-				else if($i == ($rows - 1))
+				if($i == ($rows - 1) && $lastLineFooter)
 					$ret .= '<td class="tableCellBL">';
+				else if($i == 0)
+					$ret .= '<td class="tableCellTL">';
 				else
 					$ret .= '<td class="tableCellL">';
 			}
 			else if($j == ($cols - 1))
 			{
-				if($i == 0)
-					$ret .= '<td class="tableCellTR">';
-				else if($i == ($rows - 1))
+				if($i == ($rows - 1) && $lastLineFooter)
 					$ret .= '<td class="tableCellBR">';
+				else if($i == 0)
+					$ret .= '<td class="tableCellTR">';
 				else
 					$ret .= '<td class="tableCellR">';
 			}
+			else if($i == ($rows - 1) && $lastLineFooter)
+				$ret .= '<td class="tableCellB">';
 			else if($i == 0)
 				$ret .= '<td class="tableCellT">';
-			else if($i == ($rows - 1))
-				$ret .= '<td class="tableCellB">';
 			else
 				$ret .= '<td class="tableCell">';
 
@@ -348,7 +348,7 @@ function getTime($ts = -1)
 	if($ts == -1)
 		$ts = time();
 
-	return date('d M y - H:i', $ts);
+	return date('d M y g:i a', $ts);
 }
 
 function setCIcookie($name, $value)
@@ -400,7 +400,7 @@ function getUsername($id)
 	$ret = $GLOBALS['DBMain']->Query('select user_name from user where user_id=' . $id);
 
 	if(count($ret) == 1)
-		return $ret[0]['user_name'];
+		return decode($ret[0]['user_name']);
 	else
 		return '';
 }
