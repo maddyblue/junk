@@ -114,6 +114,14 @@ if(count($array))
 		</table>
 	<?php
 	echo '<p>' . $pageDisp;
+
+	echo getTableForm('Quick Reply', array(
+		array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="4" cols="35" wrap="virtual" style="width:450px"')),
+
+		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')),
+		array('', array('type'=>'hidden', 'name'=>'t', 'val'=>$threadid)),
+		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
+	));
 }
 else
 	echo '<br>Non-existent thread.';
