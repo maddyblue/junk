@@ -110,9 +110,9 @@ if(ID != 0 && LOGGED == true)
 {
 	$base = CI_AVATAR_PATH;
 
-	$dir = isset($_POST['dir']) ? encode($_POST['dir']) : '';
-	$dir = isset($_GET['dir']) ? encode($_GET['dir']) : $dir;
-	$img = isset($_GET['img']) ? encode($_GET['img']) : '';
+	$dir = isset($_POST['dir']) ? $_POST['dir'] : '';
+	$dir = isset($_GET['dir']) ? $_GET['dir'] : $dir;
+	$img = isset($_GET['img']) ? $_GET['img'] : '';
 
 	if($img == 'clear')
 	{
