@@ -129,7 +129,7 @@ if(isset($_GET['a']))
 		}
 		else
 		{
-			$content = 'Non-existent action.';
+			$content .= 'Non-existent action.';
 		}
 	}
 }
