@@ -32,7 +32,7 @@
  *
  */
 
-function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz)
+function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle)
 {
 	$tzarr = array(
 		array(-12, '(GMT -12:00) Eniwetok, Kwajalein'),
@@ -80,17 +80,21 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz)
 
 		array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
 		array('', array('type'=>'disptext', 'val'=>'Your email address will never be used publicly. It is used <b>only</b> to recover passwords.')),
-		array('Signature', array('type'=>'textarea', 'name'=>'sig', 'val'=>decode($sig))),
+		array('Signature', array('type'=>'textarea', 'name'=>'sig', 'parms'=>' rows="5" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($sig))),
 		array('', array('type'=>'disptext', 'val'=>'Signature must be less than or equal to five lines long, may contain only non-formatted text and hyperlinks. Your sig will be edited by an admin or moderator if it is in any way obscene or unacceptable.')),
 		array('', array('type'=>'disptext', 'val'=>'<br>')),
 
 		array('Timezone', array('type'=>'select', 'name'=>'tz', 'val'=>$timezone)),
+		array('', array('type'=>'disptext', 'val'=>'<br>')),
 
 		array('AIM', array('type'=>'text', 'name'=>'aim', 'val'=>decode($aim))),
 		array('Yahoo', array('type'=>'text', 'name'=>'yahoo', 'val'=>decode($yahoo))),
 		array('ICQ', array('type'=>'text', 'name'=>'icq', 'val'=>decode($icq))),
 		array('MSN', array('type'=>'text', 'name'=>'msn', 'val'=>decode($msn))),
 		array('WWW', array('type'=>'text', 'name'=>'www', 'val'=>decode($www))),
+		array('', array('type'=>'disptext', 'val'=>'<br>')),
+
+		array('Verbose Battles', array('type'=>'checkbox', 'name'=>'battle', 'val'=>($battle ? 'checked' : ''))),
 		array('', array('type'=>'disptext', 'val'=>'<br>')),
 
 		array('Avatar', array('type'=>'disptext', 'val'=>getAvatar())),
@@ -116,6 +120,7 @@ if(ID != 0 && LOGGED == true)
 		$www = isset($_POST['www']) ? encode($_POST['www']) : '';
 		// $tz won't be checked later on, so force it to be a number
 		$tz = isset($_POST['tz']) ? floatval($_POST['tz']) : 0;
+		$battle = (isset($_POST['battle']) && $_POST['battle'] == 'on') ? 1 : 0;
 		$pass1 = isset($_POST['pass1']) ? encode($_POST['pass1']) : '';
 		$pass2 = isset($_POST['pass2']) ? encode($_POST['pass2']) : '';
 	}
@@ -131,6 +136,7 @@ if(ID != 0 && LOGGED == true)
 		$msn = $ret[0]['user_msn'];
 		$www = $ret[0]['user_www'];
 		$tz = $ret[0]['user_timezone'];
+		$battle = $ret[0]['user_battle_verbose'];
 	}
 
 	if(isset($_POST['submit']))
@@ -172,8 +178,8 @@ if(ID != 0 && LOGGED == true)
 			disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
 		else
 		{
-			$db->query('update user set user_email="' . $email . '", user_sig="' . $sig . '", user_aim="' . $aim . '", user_yahoo="' . $yahoo . '", user_icq="' . $icq . '", user_msn="' . $msn . '", user_www="' . $www . '", user_timezone="' . $tz . '" where user_id=' . ID);
-			echo '<br>Userdata updated successfully.';
+			$db->query('update user set user_email="' . $email . '", user_sig="' . $sig . '", user_aim="' . $aim . '", user_yahoo="' . $yahoo . '", user_icq="' . $icq . '", user_msn="' . $msn . '", user_www="' . $www . '", user_timezone="' . $tz . '", user_battle_verbose=' . $battle . ' where user_id=' . ID);
+			echo '<p>Userdata updated successfully.';
 
 			if($pass1)
 			{
@@ -182,11 +188,11 @@ if(ID != 0 && LOGGED == true)
 			}
 			// don't show this if password changed, since they won't have a valid login
 			else
-				disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
+				disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle);
 		}
 	}
 	else
-		disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
+		disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle);
 }
 else
 {
