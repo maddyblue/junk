@@ -61,6 +61,32 @@ if(count($res) == 1)
 
 	echo getTable($array, false);
 
+	$array = array(
+		array('hp', $res[0]['player_nomod_hp']),
+		array('mp', $res[0]['player_nomod_mp']),
+		array('str', $res[0]['player_nomod_str']),
+		array('mag', $res[0]['player_nomod_mag']),
+		array('def', $res[0]['player_nomod_mag']),
+		array('mgd', $res[0]['player_nomod_mgd']),
+		array('agl', $res[0]['player_nomod_agl']),
+		array('acc', $res[0]['player_nomod_acc'])
+	);
+
+	echo '<p>Stats <b>without</b> modifications from items, jobs, etc.:' . getTable($array, false);
+
+	$array = array(
+		array('hp', $res[0]['player_mod_hp']),
+		array('mp', $res[0]['player_mod_mp']),
+		array('str', $res[0]['player_mod_str']),
+		array('mag', $res[0]['player_mod_mag']),
+		array('def', $res[0]['player_mod_mag']),
+		array('mgd', $res[0]['player_mod_mgd']),
+		array('agl', $res[0]['player_mod_agl']),
+		array('acc', $res[0]['player_mod_acc'])
+	);
+
+	echo '<p>Stats <b>with</b> modifications from items, jobs, etc.:' . getTable($array, false);
+
 	// now make the job table
 
 	$res = $DBMain->Query('select job_id, job_name, player_job_lv, player_job_exp from player_job, job where player_job_player="' . $player . '" and job_id=player_job_job');
