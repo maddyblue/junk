@@ -106,12 +106,6 @@ class Entity
 	{
 		global $db;
 
-		if($this->type == 3 && $this->hp <= 0) // timer
-		{
-
-			$db->query('delete from battle_entity where battle_entity_uid=' . $this->uid);
-		}
-
 		$db->query('update battle_entity set
 			battle_entity_ct=' . $this->ct . ',
 			battle_entity_max_hp=' . $this->maxhp . ',
