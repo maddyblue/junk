@@ -96,7 +96,7 @@ else
 			$DBMain->Query('update forum_post set ' .
 				'forum_post_subject="' . $subject . '",' .
 				'forum_post_text="' . $text . '",' .
-				'forum_post_edit_date=' . time() . ',' .
+				'forum_post_edit_date=' . TIME . ',' .
 				'forum_post_edit_user=' . ID .
 				' where forum_post_id=' . $post);
 
