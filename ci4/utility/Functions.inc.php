@@ -506,7 +506,7 @@ function decode($output)
  */
 function validateChars(&$text)
 {
-	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890 ~`!@#$%^&*()_+=-,.<>?/|;:\'"' . chr(92) /* \ */ . chr(10) /* \n */;
+	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890 ~`!@#$%^&*()[]{}_+=-,.<>?/|;:\'"' . chr(92) /* \ */ . chr(10) /* \n */;
 
 	$sizestr = strlen($text) - 1;
 
