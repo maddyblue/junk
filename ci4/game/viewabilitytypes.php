@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewabilities.php,v 1.5 2004/01/07 06:33:01 dolmant Exp $ */
+/* $Id: viewabilitytypes.php,v 1.1 2004/01/07 06:33:01 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,23 +32,21 @@
  *
  */
 
-$query = 'select * from ability, abilitytype where ability_type = abilitytype_id order by ability_type';
+$query = 'select * from abilitytype order by abilitytype_name';
 $res = $DBMain->Query($query);
 
 $array = array();
 
 array_push($array, array(
-	'Ability',
-	'Type',
+	'Ability Type',
 	'Description'
 ));
 
 for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		makeLink($res[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $res[$i]['ability_id']),
 		makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id']),
-		$res[$i]['ability_desc']
+		$res[$i]['abilitytype_desc']
 	));
 }
 

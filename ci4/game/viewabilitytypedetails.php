@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewabilities.php,v 1.5 2004/01/07 06:33:01 dolmant Exp $ */
+/* $Id: viewabilitytypedetails.php,v 1.1 2004/01/07 06:33:01 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,25 +32,38 @@
  *
  */
 
-$query = 'select * from ability, abilitytype where ability_type = abilitytype_id order by ability_type';
-$res = $DBMain->Query($query);
+$type = isset($_GET['type']) ? encode($_GET['type']) : 0;
 
-$array = array();
+$res = $DBMain->Query('select * from abilitytype where abilitytype_id=' . $type);
 
-array_push($array, array(
-	'Ability',
-	'Type',
-	'Description'
-));
-
-for($i = 0; $i < count($res); $i++)
+$joblist = $DBMain->Query('select * from cor_job_abilitytype, job, abilitytype where cor_job=job_id and cor_abilitytype=abilitytype_id and abilitytype_id=' . $type);
+$jobs = '';
+for($i = 0; $i < count($joblist); $i++)
 {
-	array_push($array, array(
-		makeLink($res[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $res[$i]['ability_id']),
-		makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id']),
-		$res[$i]['ability_desc']
-	));
+	if($i)
+		$jobs .= ', ';
+
+	$jobs .= makeLink($joblist[$i]['job_name'], 'a=viewjobdetails&job=' . $joblist[$i]['job_id']);
 }
+
+$abilitylist = $DBMain->Query('select ability_id, ability_name from ability where ability_type=' . $type);
+$abilities = '';
+for($i = 0; $i < count($abilitylist); $i++)
+{
+	if($i)
+		$abilities .= ', ';
+
+	$abilities .= makeLink($abilitylist[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $abilitylist[$i]['ability_id']);
+}
+
+// Setup is done, make the table
+
+$array = array(
+	array('Ability Type', $res[0]['abilitytype_name']),
+	array('Description', $res[0]['abilitytype_desc']),
+	array('Abilities', $abilities),
+	array('Jobs that can learn this abilitytype', $jobs)
+);
 
 echo getTable($array);
 

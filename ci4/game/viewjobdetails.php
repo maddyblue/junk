@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewjobdetails.php,v 1.11 2004/01/07 02:37:09 dolmant Exp $ */
+/* $Id: viewjobdetails.php,v 1.12 2004/01/07 06:33:01 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,9 +32,11 @@
  *
  */
 
-$res = $DBMain->Query('select * from job where job_id=' . $_GET['job']);
+$job = isset($_GET['job']) ? encode($_GET['job']) : 0;
 
-$equipment = $DBMain->Query('select equipmenttype_name from cor_job_equipmenttype, equipmenttype where cor_job=' . $_GET['job'] . ' and equipmenttype.equipmenttype_id=cor_equipmenttype order by equipmenttype_name');
+$res = $DBMain->Query('select * from job where job_id=' . $job);
+
+$equipment = $DBMain->Query('select equipmenttype_name from cor_job_equipmenttype, equipmenttype where cor_job=' . $job . ' and equipmenttype.equipmenttype_id=cor_equipmenttype order by equipmenttype_name');
 
 $equipmentlist = '';
 
@@ -49,6 +51,16 @@ if(count($equipment))
 else
 {
 	$equipmentlist .= 'Cannot equip anything.';
+}
+
+$abilities = $DBMain->Query('select abilitytype_name, abilitytype_id from job, abilitytype, cor_job_abilitytype where job_id=cor_job and cor_abilitytype=abilitytype_id and job_id=' . $job);
+$abilitylist = '';
+for($i = 0; $i < count($abilities); $i++)
+{
+	if($i)
+		$abilitylist .= ', ';
+
+	$abilitylist .= makeLink($abilities[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $abilities[$i]['abilitytype_id']);
 }
 
 $jobs = $DBMain->Query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $_GET['job'] . ' and cor_job_req=job.job_id order by job_name');
@@ -101,6 +113,7 @@ $array = array(
 	array('Required Level', $res[0]['job_req_lv']),
 	array('Wage', $res[0]['job_wage']),
 	array('Useable Equipment Types', $equipmentlist),
+	array('Useable Ability Types', $abilitylist),
 	array('Prerequisite Job Levels', $joblist),
 	array('Battle Stats', getTable($stat, false)),
 	array('Level Up Stats', getTable($level, false)),
