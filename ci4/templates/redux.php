@@ -226,24 +226,24 @@ td.block-light {
 			<table cellspacing="0" class="nav">
 				<tr>
 					<td class="block-dark">
-						skin
-					</td>
-				</tr>
-				<tr>
-					<td class="block-light">
-						<CI_SKIN>
-					</td>
-				</tr>
-			</table>
-			<table cellspacing="0" class="nav">
-				<tr>
-					<td class="block-dark">
 						section nav
 					</td>
 				</tr>
 				<tr>
 					<td class="block-light">
 						<CISECTION_NAV>INSERT<br></CISECTION_NAV><br>
+					</td>
+				</tr>
+			</table>
+			<table cellspacing="0" class="nav">
+				<tr>
+					<td class="block-dark">
+						skin
+					</td>
+				</tr>
+				<tr>
+					<td class="block-light">
+						<CI_SKIN>
 					</td>
 				</tr>
 			</table>
