@@ -50,19 +50,27 @@ else
 require_once CI_HOME_MOD . 'Include.inc.php';
 
 // User stuff
-$ret = array();
-if(count($ret) == 0)
+$id = getCIcookie('id');
+$pass = getCIcookie('pass');
+
+if($pass && $id)
 {
-	define('LOGGED', false);
-	define('LOGGED_DIR', '<');
-	define('USER_ID', 0);
-	define('PLAYER_ID', 0);
+	$res = $DBMain->Query('select count(*) as count from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
+	if($res['count'][0] == '1')
+	{
+		define('LOGGED', true);
+		define('LOGGED_DIR', '>');
+		define('ID', $id);
+
+		// set cookies to be alive for another week
+		setCIcookie('id', $id);
+		setCIcookie('pass', $pass);
+	}
+	else
+		notLogged();
 }
 else
-{
-	define('LOGGED', true);
-	define('LOGGED_DIR', '>');
-}
+	notLogged();
 
 $message = '';
 
