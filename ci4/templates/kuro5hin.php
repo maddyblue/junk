@@ -208,7 +208,7 @@ table.maintable {
 					<table class="boxinner">
 						<tr>
 						<td class="box">
-							Section Navigation
+							<?php echo substr(CI_SECTION, 0, 1) . strtolower(substr(CI_SECTION, 1)); ?> Navigation
 						</td>
 					</tr>
 					</table>
