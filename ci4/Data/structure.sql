@@ -3,6 +3,7 @@
 CREATE TABLE ability (
   ability_id bigint(10) unsigned NOT NULL auto_increment,
   ability_name varchar(100) NOT NULL default '',
+  ability_image varchar(50) NOT NULL default '',
   ability_type bigint(10) unsigned NOT NULL default '0',
   ability_req_lv smallint(6) unsigned NOT NULL default '0',
   ability_mp smallint(6) unsigned NOT NULL default '0',

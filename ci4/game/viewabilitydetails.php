@@ -79,7 +79,7 @@ if(count($res))
 	// Setup is done, make the table
 
 	$array = array(
-		array('Ability', $res[0]['ability_name']),
+		array('Ability', $res[0]['ability_name'] . makeImg($res[0]['ability_image'], 'images/abilities/')),
 		array('Type', makeLink($res[0]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[0]['abilitytype_id'])),
 		array('MP', $res[0]['ability_mp']),
 		array('Description', $res[0]['ability_desc']),
