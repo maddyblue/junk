@@ -72,7 +72,7 @@ table.block {
 }
 
 .tdmain {
-	width: 580px;
+	width: 100%;
 }
 
 .tdside {
@@ -139,7 +139,7 @@ td.block-light {
 	border-right: 1px solid #000000;
 }
 
-.tableCell, .tableCellL, .tableCellTL {
+.tableCell, .tableCellL, .tableCellTL, .tableCellT {
 	padding: 2px;
 	border-left: 1px solid #000000;
 	border-top: 1px solid #000000;
@@ -169,10 +169,10 @@ td.block-light {
 </style>
 </head>
 <body>
-<table cellspacing="0" cellpadding="0">
+<table width="100%" cellspacing="0" cellpadding="0">
 	<tr>
 		<td class="tdmain" valign="top">
-			<table width="580" border="0" cellspacing="0" cellpadding="0" class="block">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="block">
 				<tr>
 					<td align="right" valign="top" class="block-dark" style="padding-top: 3px; padding-bottom: 8px; padding-right: 8px;">
 						<div class="header">crescent island</div>
@@ -235,6 +235,7 @@ td.block-light {
 				</tr>
 			</table>
 		</td>
+		<td width=8></td>
 	</tr>
 </table>
 </body>
