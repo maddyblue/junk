@@ -23,10 +23,14 @@ $elemental = array(
 	array('Dark', $res['monster_dark'][0] . '%')
 );
 
+$image = makeImg($res['monster_image'][0], 'images/monster/');
+if($image)
+	$image = ' ' . $image;
+
 // Setup is done, make the table
 
 $array = array(
-	array('Monster', $res['monster_name'][0]),
+	array('Monster', $res['monster_name'][0] . $image),
 	array('Exp', $res['monster_exp'][0]),
 	array('Level', $res['monster_lv'][0]),
 	array('Type', $res['monstertype_name'][0]),
