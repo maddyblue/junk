@@ -116,12 +116,13 @@ class Database
 
 	function insert($query)
 	{
-		$ret = query($query);
+		$ret = $this->query($query);
+		var_dump($ret);
 
-		if($ret == FALSE)
+		if($ret === FALSE)
 			return $ret;
 
-		return insertId();
+		return $this->insertId();
 	}
 
 	function insertId()
