@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.32 2004/01/09 23:08:46 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.33 2004/01/12 07:55:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -129,9 +129,12 @@ function threadList($forumid, $offset, $threadsPP)
 
 	foreach($ret as $row)
 	{
+		$totpages = ceil(($row['forum_thread_replies'] + 1) / FORUM_POSTS_PP);
+		$pageList = pageList($totpages, FORUM_THREAD_PAGES, FORUM_POSTS_PP, 'a=viewthread&t=' . $row['forum_thread_id']);
+
 		array_push($array, array(
 			(newThread($row) ? '* ' : '') .
-				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']),
+				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']) . $pageList,
 			getUserlink($row['ufi'], decode($row['ufn'])),
 			$row['forum_thread_replies'],
 			$row['forum_thread_views'],

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Globals.inc.php,v 1.33 2004/01/12 05:20:05 dolmant Exp $ */
+/* $Id: Globals.inc.php,v 1.34 2004/01/12 07:55:24 dolmant Exp $ */
 
 /*	CI globals.	*/
 
@@ -27,6 +27,7 @@ define('SECTION_MANUAL', 'manual');
 
 define('FORUM_THREADS_PP', 30);
 define('FORUM_POSTS_PP', 20);
+define('FORUM_THREAD_PAGES', 15);
 define('NEWSFORUM', 9);
 
 /* Don't mess with these */

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.65 2004/01/12 07:38:58 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.66 2004/01/12 07:55:29 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -712,6 +712,28 @@ function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 	}
 
 	return $pageDisp;
+}
+
+function pageList($totpages, $disppages, $perpage, $link, $section = '')
+{
+	if($totpages <= 1)
+		return '';
+
+	if($disppages > $totpages)
+		$disppages = $totpages;
+
+	$pageList = ' ( ';
+
+	$i = 1;
+	for(; $i <= $disppages; $i++)
+		$pageList .= makeLink($i, $link . '&start=' . ($perpage * ($i - 1)), $section) . ' ';
+
+	if($i < $totpages)
+		$pageList .= '... ' . makeLink('Last page', $link . '&start=' . ($perpage * ($totpages - 1)), $section) . ' ';
+
+	$pageList .= ')';
+
+	return $pageList;
 }
 
 ?>
