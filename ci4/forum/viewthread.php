@@ -30,6 +30,24 @@
  *
  */
 
+function parsePost($post)
+{
+	global $DBMain;
+
+	$return = '';
+
+	$res = $DBMain->Query('select forum_post_text from forum_post where forum_post_id=' . $post);
+
+	if(count($res) == 1)
+	{
+		$return = decode($res[0]['forum_post_text']);
+
+		$return = nl2br($return);
+	}
+
+	return $return;
+}
+
 function postList($thread)
 {
 	global $DBMain;
@@ -41,9 +59,9 @@ function postList($thread)
 	foreach($posts as $post)
 	{
 		$user = makeLink(decode($post['user_name']), 'user/?a=viewuserdetails&user=' . $post['user_id'], true);
-		$body = '<div class=small>' . decode($post['forum_post_subject']) . '</div>';
-		$body .= '<p>' . decode($post['forum_post_text']);
-	
+		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class=small>' . decode($post['forum_post_subject']) . '</div>';
+		$body .= '<p>' . parsePost($post['forum_post_id']);
+
 		array_push($array, array(
 			$user,
 			$body
@@ -53,18 +71,22 @@ function postList($thread)
 	return $array;
 }
 
-$threadid = isset($_GET['threadid']) ? $_GET['threadid'] : 0;
+$threadid = isset($_GET['t']) ? $_GET['t'] : 0;
 
-$res = $DBMain->Query('select forum_thread_forum, forum_thread_title from forum_thread where forum_thread_id=' . $threadid);
-if(count($res))
-	echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink($res[0]['forum_thread_title'], '?a=viewthread&threadid=' . $threadid) . '<p>';
+$DBMain->Query('update forum_thread set forum_thread_views=forum_thread_views+1 where forum_thread_id=' . $threadid);
 
-$navrow = array(makeLink('New Reply', '?a=newpost&threadid=' . $threadid), makeLink('Previous Thread', '?a=viewthread&threadid=') . ' : ' . makeLink('Next Thread', '?a=viewthread&threadid='));
+$res = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $threadid);
+
+echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), '?a=viewthread&t=' . $threadid) . '<p>';
+
+//$prev = $DBMain->Query('select forum_post_id from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit 1'
+
+//$navrow = array(makeLink('New Reply', '?a=newpost&t=' . $pthread), makeLink('Previous Thread', '?a=viewthread&t=') . (($pthread && $nthread) ? ' : ' : '') . makeLink('Next Thread', '?a=viewthread&t=' . $nthread));
 
 $array = postList($threadid);
 
-array_unshift($array, $navrow);
-array_push($array, $navrow);
+//array_unshift($array, $navrow);
+//array_push($array, $navrow);
 
 if(count($array))
 	echo getTable($array, false);

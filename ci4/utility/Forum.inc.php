@@ -60,7 +60,7 @@ function getNavBar($forum)
 		$ret = getNavBar($res[0]['forum_forum_parent']) . ' &gt; ' . $ret;
 	else
 		$ret = makeLink('Home', '?a=viewforum') . ' &gt; '. $ret;
-	
+
 	return $ret;
 }
 
@@ -75,7 +75,7 @@ function updateFromPost($post)
 	$forum = $res[0]['forum_thread_forum'];
 
 	// update the last post in the thread and forum; increment the forum thread and post counts
-	$DBMain->Query('update forum_forum set forum_forum_last_post=' . $post . ', forum_forum_threads=forum_forum_threads+1, forum_forum_posts=forum_forum_posts+1 where forum_forum_id=' . $forum);
+	$DBMain->Query('update forum_forum set forum_forum_last_post=' . $post . ', forum_forum_posts=forum_forum_posts+1 where forum_forum_id=' . $forum);
 	$DBMain->Query('update forum_thread set forum_thread_last_post=' . $post . ' where forum_thread_id=' . $thread);
 }
 

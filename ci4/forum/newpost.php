@@ -36,7 +36,7 @@ function disp($subject, $post, $thread)
 
 	$ret = $DBMain->Query('select forum_thread_title from forum_thread where forum_thread_id=' . $thread);
 	if(count($ret))
-		$name = ' in ' . makeLink($ret[0]['forum_thread_title'], '?a=viewthread&threadid=' . $thread);
+		$name = ' in ' . makeLink($ret[0]['forum_thread_title'], '?a=viewthread&t=' . $thread);
 	else
 		$name = '';
 
@@ -45,10 +45,28 @@ function disp($subject, $post, $thread)
 			array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="15" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($post))),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')),
-			array('', array('type'=>'hidden', 'name'=>'threadid', 'val'=>$thread)),
+			array('', array('type'=>'hidden', 'name'=>'t', 'val'=>$thread)),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
 		));
 }
+
+$subject = '';
+$post = '';
+$thread = 0;
+$forum = 0;
+
+if(isset($_POST['subject']))
+	$subject = encode($_POST['subject']);
+if(isset($_POST['post']))
+	$post = encode($_POST['post']);
+if(isset($_GET['t']))
+	$thread = encode($_GET['t']);
+if(isset($_POST['t']))
+	$thread = encode($_POST['t']);
+
+$ret = $DBMain->Query('select forum_thread_forum from forum_thread where forum_thread_id=' . $thread);
+if(count($ret) == 1)
+	echo getNavBar($ret[0]['forum_thread_forum']);
 
 if(LOGGED == false)
 {
@@ -56,19 +74,6 @@ if(LOGGED == false)
 }
 else
 {
-	$subject = '';
-	$post = '';
-	$threadid = 0;
-
-	if(isset($_POST['subject']))
-		$subject = encode($_POST['subject']);
-	if(isset($_POST['post']))
-		$post = encode($_POST['post']);
-	if(isset($_GET['threadid']))
-		$thread = encode($_GET['threadid']);
-	if(isset($_POST['threadid']))
-		$thread = encode($_POST['threadid']);
-
 	if(isset($_POST['submit']))
 	{
 		$fail = false;
@@ -84,11 +89,11 @@ else
 			echo '<br>No thread selected: navigate to a thread and post a new reply there.';
 			$fail = true;
 		}
-	
+
 		if($fail)
 		{
 			echo '<br>Post creation failed.<br>';
-			disp($subject, $post, $forum);
+			disp($subject, $post, $thread);
 		}
 		else
 		{
@@ -105,12 +110,12 @@ else
 				$lastpost = $ret[0]['forum_post_id'];
 				updateFromPost($lastpost);
 				$DBMain->Query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
-	
+
 				echo '<br>Reply posted successfully.';
 				$forum=0;
-				echo '<p>Return to the ' . makeLink('previous forum', '?a=viewforum&forumid=' . $forum) . '.';
-				echo '<p>Return to the ' . makeLink('previous thread', '?a=viewthread&threadid=' . $thread) . '.';
-				echo '<p>Go to the ' . makeLink('new post', '?a=viewpost&postid=' . $lastpost) . '.';
+				echo '<p>Return to the ' . makeLink('previous forum', '?a=viewforum&f=' . $forum) . '.';
+				echo '<p>Return to the ' . makeLink('previous thread', '?a=viewthread&t=' . $thread) . '.';
+				echo '<p>Go to the ' . makeLink('new post', '?a=viewpost&p=' . $lastpost) . '.';
 			}
 			else
 			{
@@ -121,5 +126,5 @@ else
 	else
 		disp($subject, $post, $thread);
 }
-	
+
 ?>

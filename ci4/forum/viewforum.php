@@ -47,8 +47,6 @@ function forumList(&$array, $id, $topdepth, $depth)
 	// if we're not viewing the root forum, stick in the parent
 	if($id != 0 && $topdepth == $depth)
 	{
-		$topdepth++;
-
 		$top = $DBMain->Query('select * from forum_forum where forum_forum_id = ' . $id);
 		if(count($top == 1))
 		{
@@ -58,7 +56,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 			{
 				case 0:
 					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&forumid=' . $row['forum_forum_id']),
+						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&f=' . $row['forum_forum_id']),
 						$row['forum_forum_threads'],
 						$row['forum_forum_posts'],
 						forumLinkLastPost($row['forum_forum_last_post'])
@@ -66,13 +64,14 @@ function forumList(&$array, $id, $topdepth, $depth)
 					break;
 				case  1:
 					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&forumid=' . $row['forum_forum_id']),
+						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&f=' . $row['forum_forum_id']),
 						'',
 						'',
 						'',
 					));
 					break;
-			}	
+			}
+			$topdepth++;
 		}
 	}
 
@@ -82,7 +81,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 		{
 			case 0:
 				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&forumid=' . $row['forum_forum_id']),
+					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], '?a=viewforum&f=' . $row['forum_forum_id']),
 					$row['forum_forum_threads'],
 					$row['forum_forum_posts'],
 					forumLinkLastPost($row['forum_forum_last_post'])
@@ -90,7 +89,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 				break;
 			case  1:
 				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&forumid=' . $row['forum_forum_id']),
+					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', '?a=viewforum&f=' . $row['forum_forum_id']),
 					'',
 					'',
 					'',
@@ -124,7 +123,7 @@ function threadList($forumid)
 		foreach($ret as $row)
 		{
 			array_push($array, array(
-				makeLink(decode($row['forum_thread_title']), '?a=viewthread&threadid=' . $row['forum_thread_id']),
+				makeLink(decode($row['forum_thread_title']), '?a=viewthread&t=' . $row['forum_thread_id']),
 				getUsername($row['forum_thread_user']),
 				$row['forum_thread_replies'],
 				$row['forum_thread_views'],
@@ -158,8 +157,8 @@ array_push($array, array(
 $depth = 2;
 
 $forumid = 0;
-if(isset($_GET['forumid']))
-	$forumid = $_GET['forumid'];
+if(isset($_GET['f']))
+	$forumid = $_GET['f'];
 
 echo getNavBar($forumid);
 
@@ -173,7 +172,7 @@ echo getTable($array);
 
 if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 {
-	echo '<p>' . makeLink('New Thread', '?a=newthread&forumid=' . $forumid);
+	echo '<p>' . makeLink('New Thread', '?a=newthread&f=' . $forumid);
 
 	$array = threadList($forumid);
 	echo '<p>' . getTable($array);
