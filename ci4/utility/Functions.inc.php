@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.59 2004/01/07 02:08:21 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.60 2004/01/08 09:33:52 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -48,6 +48,16 @@ function getTemplateFilename($t)
 function getSiteArray($tag)
 {
 	global $DBMain;
+
+	switch($tag)
+	{
+		case 'SECTION_MENU':
+		case 'SECTION_NAV':
+			$tag = CI_SECTION . '_' . $tag;
+			break;
+		default:
+			break;
+	}
 
 	return $DBMain->Query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag="' . $tag . '" and site_admin <= ' . ADMIN . ' order by site_orderid');
 }
@@ -560,18 +570,7 @@ function parseTags(&$template)
 			$pos4 = strpos($insert, 'INSERT');
 			$inslen = strlen($insert);
 
-			switch($tag)
-			{
-				case 'SECTION_MENU':
-				case 'SECTION_NAV':
-					$gettag = CI_SECTION . '_' . $tag;
-					break;
-				default:
-					$gettag = $tag;
-					break;
-			}
-
-			$ret = getSiteArray($gettag);
+			$ret = getSiteArray($tag);
 			$repl = '';
 			if(count($ret) > 0)
 			{
