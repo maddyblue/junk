@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewmonsterdetails.php,v 1.5 2003/09/25 23:57:35 dolmant Exp $ */
+/* $Id: viewmonsterdetails.php,v 1.6 2004/01/07 03:22:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -45,16 +45,6 @@ $stat = array(
 	array('ACC', $res[0]['monster_acc'])
 );
 
-$elemental = array(
-	array('Fire', $res[0]['monster_fire'] . '%'),
-	array('Ice', $res[0]['monster_ice'] . '%'),
-	array('Earth', $res[0]['monster_earth'] . '%'),
-	array('Wind', $res[0]['monster_wind'] . '%'),
-	array('Lightning', $res[0]['monster_lightning'] . '%'),
-	array('Holy', $res[0]['monster_holy'] . '%'),
-	array('Dark', $res[0]['monster_dark'] . '%')
-);
-
 $image = makeImg($res[0]['monster_image'], 'images/monster/');
 if($image)
 	$image = ' ' . $image;
@@ -67,7 +57,6 @@ $array = array(
 	array('Level', $res[0]['monster_lv']),
 	array('Type', $res[0]['monstertype_name']),
 	array('Battle Stats', getTable($stat, false)),
-	array('Elemental', getTable($elemental, false)),
 	array('Description', $res[0]['monster_desc'])
 );
 
