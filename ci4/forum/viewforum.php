@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.23 2003/12/20 20:53:23 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.24 2003/12/21 00:02:04 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -40,6 +40,34 @@ function makeSpaces($num)
 	return $ret;
 }
 
+function addForumEntry(&$array, $row, $depth)
+{
+	if($row['forum_forum_desc'])
+		$desc = '<br>' . makeSpaces(1 + $depth) . $row['forum_forum_desc'];
+	else
+		$desc = '';
+
+	switch($row['forum_forum_type'])
+	{
+		case 0:
+			array_push($array, array(
+				makeSpaces($depth) . makeLink($row['forum_forum_name'], 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+				$row['forum_forum_threads'],
+				$row['forum_forum_posts'],
+				forumLinkLastPost($row['forum_forum_last_post'])
+			));
+			break;
+		case  1:
+			array_push($array, array(
+				makeSpaces($depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+				'',
+				'',
+				'',
+			));
+			break;
+	}
+}
+
 function forumList(&$array, $id, $topdepth, $depth)
 {
 	if(!canView($id))
@@ -47,76 +75,27 @@ function forumList(&$array, $id, $topdepth, $depth)
 
 	global $DBMain;
 
-	$res = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post, user_id, user_name, forum_post_date from forum_forum, forum_post, user where forum_forum_last_post=forum_post_id and forum_post_user=user_id and forum_forum_parent = ' . $id . ' order by forum_forum_order');
+	$res = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
 
 	// if we're not viewing the root forum, stick in the parent
 	if($id != 0 && $topdepth == $depth)
 	{
-		$top = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post, user_id, user_name, forum_post_date from forum_forum, forum_post, user where forum_post_user=user_id and forum_forum_last_post=forum_post_id and forum_forum_id = ' . $id);
-		if(count($top == 1))
-		{
-			$row = $top[0];
+		$top = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post from forum_forum where forum_forum_id = ' . $id);
 
-			if($row['forum_forum_desc'])
-				$desc = '<br>' . $row['forum_forum_desc'];
-			else
-				$desc = '';
+		addForumEntry($array, $top[0], 0);
 
-			switch($row['forum_forum_type'])
-			{
-				case 0:
-					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
-						$row['forum_forum_threads'],
-						$row['forum_forum_posts'],
-						forumLinkLastPost($row['forum_forum_last_post'], $row['user_id'], $row['user_name'], $row['forum_post_date'])
-					));
-					break;
-				case  1:
-					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
-						'',
-						'',
-						'',
-					));
-					break;
-			}
-			$topdepth++;
-		}
+		$topdepth++;
 	}
 
 	foreach($res as $row)
 	{
-		if(!canView($row['forum_forum_id']))
-			continue;
-
-		if($row['forum_forum_desc'])
-			$desc = '<br>' . makeSpaces(1 + $topdepth - $depth) . $row['forum_forum_desc'];
-		else
-			$desc = '';
-
-		switch($row['forum_forum_type'])
+		if(canView($row['forum_forum_id']))
 		{
-			case 0:
-				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
-					$row['forum_forum_threads'],
-					$row['forum_forum_posts'],
-					forumLinkLastPost($row['forum_forum_last_post'], $row['user_id'], $row['user_name'], $row['forum_post_date'])
-				));
-				break;
-			case  1:
-				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
-					'',
-					'',
-					'',
-				));
-				break;
-		}
+			addForumEntry($array, $row, $topdepth - $depth);
 
-		if($depth > 1)
-			forumList($array, $row['forum_forum_id'], $topdepth, $depth - 1);
+			if($depth > 1)
+				forumList($array, $row['forum_forum_id'], $topdepth, $depth - 1);
+		}
 	}
 }
 
