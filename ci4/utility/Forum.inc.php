@@ -38,7 +38,7 @@ function forumLinkLastPost($postid)
 		return (
 			getTime($ret[0]['forum_post_date']) .
 			' ' .
-			getUsername($ret[0]['forum_post_user']) .
+			makeLink(getUsername($ret[0]['forum_post_user']), 'user/?a=viewuserdetails&user=' . $ret[0]['forum_post_user'], true) .
 			' ' .
 			makeLink('-&gt;', '?a=viewpost&p=' . $ret[0]['forum_post_id'])
 		);
@@ -77,6 +77,45 @@ function updateFromPost($post)
 	// update the last post in the thread and forum; increment the forum thread and post counts
 	$DBMain->Query('update forum_forum set forum_forum_last_post=' . $post . ', forum_forum_posts=forum_forum_posts+1 where forum_forum_id=' . $forum);
 	$DBMain->Query('update forum_thread set forum_thread_last_post=' . $post . ' where forum_thread_id=' . $thread);
+}
+
+function forumReplace($text)
+{
+	global $DBMain;
+
+	$ret = $DBMain->Query('select * from forum_replace');
+
+	for($i = 0; $i < count($ret); $i++)
+		$text = str_replace($ret[$i]['forum_replace_from'], $ret[$i]['forum_replace_to'], $text);
+
+	return $text;
+}
+
+function newthreadLink()
+{
+	$r = '';
+
+	if(isset($_GET['f']))
+	{
+		global $DBMain;
+
+		$ret = $DBMain->Query('select forum_forum_type from forum_forum where forum_forum_id=' . $_GET['f']);
+
+		if(count($ret) == 1 && $ret[0]['forum_forum_type'] == 0)
+			$r = makeLink('New Thread', 'forum/?a=newthread&f=' . $_GET['f'], true);
+	}
+
+	return $r;
+}
+
+function newreplyLink()
+{
+	$r = '';
+
+	if(isset($_GET['t']))
+		$r = makeLink('New Reply', 'forum/?a=newpost&t=' . $_GET['t'], true);
+
+	return $r;
 }
 
 ?>
