@@ -28,7 +28,6 @@ p, body, td, li, input, textarea, select {
 	font-family: sans-serif;
 	font-size: 12px;
 	color: #333333;
-	letter-spacing: 1px;
 }
 
 .small {
