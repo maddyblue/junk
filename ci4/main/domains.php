@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: domains.php,v 1.5 2004/01/05 04:37:42 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -33,7 +33,7 @@
  */
 
 $query = 'select * from domain order by domain_expw_time, domain_expw_max';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 
@@ -47,7 +47,7 @@ array_push($array, array(
 for($i = 0; $i < count($res); $i++)
 {
 	$query = 'select count(*) as count from player where player_domain=' . $res[$i]['domain_id'];
-	$players = $DBMain->Query($query);
+	$players = $db->query($query);
 
 	$name = makeLink($res[$i]['domain_name'], 'a=changedomain&domain=' . $res[$i]['domain_id']);
 

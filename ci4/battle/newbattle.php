@@ -34,9 +34,9 @@
 
 function disp($area)
 {
-	global $DBMain, $PLAYER;
+	global $db, $PLAYER;
 
-	$ret = $DBMain->Query('select area_id, area_name from area, cor_area_town where cor_area = area_id and cor_town=' . $PLAYER['player_town'] . ' order by area_order');
+	$ret = $db->query('select area_id, area_name from area, cor_area_town where cor_area = area_id and cor_town=' . $PLAYER['player_town'] . ' order by area_order');
 
 	$areaselect = '';
 	foreach($ret as $r)
@@ -53,9 +53,9 @@ function disp($area)
 
 function newBattle($area)
 {
-	global $PLAYER, $DBMain;
+	global $PLAYER, $db;
 
-	$monster = $DBMain->Query('select * from monster, cor_area_monster where cor_area=' . $area . ' and cor_monster=monster_id order by rand() limit 1');
+	$monster = $db->query('select * from monster, cor_area_monster where cor_area=' . $area . ' and cor_monster=monster_id order by rand() limit 1');
 
 	if(!count($monster))
 	{
@@ -65,16 +65,16 @@ function newBattle($area)
 
 	// we have the player, monster, and area, create the battle
 
-	$DBMain->Query('insert into battle (battle_start, battle_area) values (' . TIME . ', ' . $area . ')');
+	$db->query('insert into battle (battle_start, battle_area) values (' . TIME . ', ' . $area . ')');
 
-	$bat = $DBMain->Query('select battle_id from battle where battle_area=' . $area . ' and battle_start=' . TIME . ' limit 1');
+	$bat = $db->query('select battle_id from battle where battle_area=' . $area . ' and battle_start=' . TIME . ' limit 1');
 	$batid = $bat[0]['battle_id'];
 
-	$DBMain->Query('update player set player_battle=' . $batid . ' where player_id=' . $PLAYER['player_id']);
+	$db->query('update player set player_battle=' . $batid . ' where player_id=' . $PLAYER['player_id']);
 
 	// create the battle entities
 
-	$DBMain->Query('insert into battle_entity values (
+	$db->query('insert into battle_entity values (
 		"",
 		' . $batid . ',
 		' . $PLAYER['player_id'] . ',
@@ -141,9 +141,9 @@ if(LOGGED)
 		{
 			$fail = false;
 
-			global $DBMain, $PLAYER;
+			global $db, $PLAYER;
 
-			$ret = $DBMain->Query('select count(*) count from cor_area_town where cor_area = ' . $area . ' and cor_town=' . $PLAYER['player_town']);
+			$ret = $db->query('select count(*) count from cor_area_town where cor_area = ' . $area . ' and cor_town=' . $PLAYER['player_town']);
 
 			if($ret[0]['count'] != '1')
 			{

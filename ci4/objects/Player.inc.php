@@ -46,7 +46,7 @@ class Player extends Entity
 
 	function takeTurn()
 	{
-		global $DBMain;
+		global $db;
 
 		// in a multi player battle, only the player whose turn it is can go
 		if(!$this->access)
@@ -110,7 +110,7 @@ class Player extends Entity
 
 			$ratio = $this->lv / $target->lv;
 			$dif = $this->lv - $target->lv;
-			
+
 			// levels must be atleast 5 away
 			if(abs($dif) < 5)
 				$mult = 1;
@@ -123,15 +123,15 @@ class Player extends Entity
 			$exp = (int)($exp / $mult);
 			$ap = (int)($exp / $mult);
 
-			$ret = $DBMain->Query('select * from player where player_id=' . $this->id);
+			$ret = $db->query('select * from player where player_id=' . $this->id);
 			$job = $ret[0]['player_job'];
-			$abs = $DBMain->Query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
-			
-			$DBMain->Query('update player set player_exp=player_exp+' . $exp . ' where player_id=' . $this->id);
-			$DBMain->Query('update player_job set player_job_exp=player_job_exp+' . $exp . ' where player_job_player=' . $this->id . ' and player_job_job=' . $job);
+			$abs = $db->query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
+
+			$db->query('update player set player_exp=player_exp+' . $exp . ' where player_id=' . $this->id);
+			$db->query('update player_job set player_job_exp=player_job_exp+' . $exp . ' where player_job_player=' . $this->id . ' and player_job_job=' . $job);
 
 			for($i = 0; $i < count($abs); $i++)
-				$DBMain->Query('update player_abilitytype set player_abilitytype_ap=player_abilitytype_ap+' . $ap . ', player_abilitytype_aptot=player_abilitytype_aptot+' . $ap . ' where player_abilitytype_player=' . $this->id . ' and player_abilitytype_type=' . $abs[$i]['cor_abilitytype']);
+				$db->query('update player_abilitytype set player_abilitytype_ap=player_abilitytype_ap+' . $ap . ', player_abilitytype_aptot=player_abilitytype_aptot+' . $ap . ' where player_abilitytype_player=' . $this->id . ' and player_abilitytype_type=' . $abs[$i]['cor_abilitytype']);
 
 			echo '<p>Gained ' . $exp . ' experience and ' . $ap . ' ap.';
 
@@ -149,19 +149,19 @@ class Player extends Entity
 				$agl = rand(0, 1);
 				$acc = rand(0, 1);
 
-				$DBMain->Query('update player set player_nomod_hp=player_nomod_hp+' . $hp . ', player_nomod_mp=player_nomod_mp+' . $mp . ', player_nomod_str=player_nomod_str+' . $str . ', player_nomod_mag=player_nomod_mag+' . $mag . ', player_nomod_def=player_nomod_def+' . $def . ', player_nomod_mgd=player_nomod_mgd+' . $mgd . ', player_nomod_agl=player_nomod_agl+' . $agl . ', player_nomod_acc=player_nomod_acc+' . $acc . ', player_lv=player_lv+1 where player_id=' . $this->id);
+				$db->query('update player set player_nomod_hp=player_nomod_hp+' . $hp . ', player_nomod_mp=player_nomod_mp+' . $mp . ', player_nomod_str=player_nomod_str+' . $str . ', player_nomod_mag=player_nomod_mag+' . $mag . ', player_nomod_def=player_nomod_def+' . $def . ', player_nomod_mgd=player_nomod_mgd+' . $mgd . ', player_nomod_agl=player_nomod_agl+' . $agl . ', player_nomod_acc=player_nomod_acc+' . $acc . ', player_lv=player_lv+1 where player_id=' . $this->id);
 				updatePlayerStats();
 
 				echo '<p>Level up to level ' . ($plv + 1) . '<br>Gains:<br>hp: ' . $hp . '<br>mp: ' . $mp . '<br>str: ' . $str . '<br>mag: ' . $mag . '<br>def: ' . $def . '<br>mgd: ' . $mgd . '<br>agl: ' . $agl . '<br>acc: ' . $acc;
 			}
 
-			$ret = $DBMain->Query('select player_job_exp, player_job_lv from player_job where player_job_player=' . $this->id . ' and player_job_job=' . $job);
+			$ret = $db->query('select player_job_exp, player_job_lv from player_job where player_job_player=' . $this->id . ' and player_job_job=' . $job);
 			$jexp = $ret[0]['player_job_exp'];
 			$jlv = $ret[0]['player_job_lv'];
 
 			if($jlv < getLevel($jexp))
 			{
-				$DBMain->Query('update player_job set player_job_lv=player_job_lv+1 where player_job_player=' . $this->id . ' and player_job_job=' . $job);
+				$db->query('update player_job set player_job_lv=player_job_lv+1 where player_job_player=' . $this->id . ' and player_job_job=' . $job);
 				echo '<p>Reached ' . getDBData('job_name', $job, 'job_id', 'job') . ' level ' . ($jlv + 1) . '.';
 			}
 		}

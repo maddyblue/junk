@@ -43,7 +43,7 @@ else
 	$confirm = isset($_POST['confirm']) ? $_POST['confirm'] : '';
 
 	$query = 'select * from pm where pm_id=' . $pm . ' and pm_to=' . ID;
-	$res = $DBMain->Query($query);
+	$res = $db->query($query);
 
 	if(!count($res))
 	{
@@ -51,7 +51,7 @@ else
 	}
 	else if(isset($_POST['delete']) && $confirm == 'on')
 	{
-		$DBMain->Query('delete from pm where pm_id=' . $pm);
+		$db->query('delete from pm where pm_id=' . $pm);
 		echo '<p>Message deleted.' . '<p>' . makeLink('Return to pms.', 'a=viewpms');
 	}
 	else
@@ -59,7 +59,7 @@ else
 		if(isset($_POST['delete']))
 			echo '<p>You must check the confirm box to delete a pm.';
 
-		$DBMain->Query('update pm set pm_read=1 where pm_id=' . $pm);
+		$db->query('update pm set pm_read=1 where pm_id=' . $pm);
 		$array = array(
 			array('From', getUserlink($res[0]['pm_from'])),
 			array('Date', getTime($res[0]['pm_date'])),

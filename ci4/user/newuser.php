@@ -56,7 +56,7 @@ if(isset($_POST['submit']))
 {
 	$fail = false;
 
-	$res = $DBMain->Query('select count(*) as count from user where user_name="' . $name . '"');
+	$res = $db->query('select count(*) as count from user where user_name="' . $name . '"');
 	if(!$name)
 	{
 		echo '<br>No name: enter a name.';
@@ -84,7 +84,7 @@ if(isset($_POST['submit']))
 		$fail = true;
 	}
 
-	$res = $DBMain->Query('select count(*) as count from user where user_email="' . $email . '"');
+	$res = $db->query('select count(*) as count from user where user_email="' . $email . '"');
 	if(!$email)
 	{
 		echo '<br>No email: enter an address.';
@@ -108,7 +108,7 @@ if(isset($_POST['submit']))
 	}
 	else
 	{
-		$DBMain->Query('insert into user (user_name, user_email, user_pass, user_register) values ("' . $name . '", "' . $email . '", md5("' . $pass1 . '"), ' . TIME . ')');
+		$db->query('insert into user (user_name, user_email, user_pass, user_register) values ("' . $name . '", "' . $email . '", md5("' . $pass1 . '"), ' . TIME . ')');
 		echo '<br>User &quot;' . decode($name) . '&quot; successfully registered. Please ' . makeLink('login', 'a=login') . '.';
 		echo '<br>After logging in, it is suggest that you complete your profile in the User Control Panel.';
 	}

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: add-group-user.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -34,15 +34,15 @@
 
 function addGroupUser($groupid, $userid)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select group_user_user from group_user where group_user_user ="' . $userid . '" and group_user_group =' . $groupid);
+	$res = $db->query('select group_user_user from group_user where group_user_user ="' . $userid . '" and group_user_group =' . $groupid);
 
 	if ($res)
 		$text = 'User already exists in this group.';
 	else
 	{
-		$DBMain->Query('insert into group_user (group_user_user, group_user_group) values (' . $userid . ', ' . $groupid . ')');
+		$db->query('insert into group_user (group_user_user, group_user_group) values (' . $userid . ', ' . $groupid . ')');
 		$text = 'User added to group.';
 	}
 	return $text;
@@ -53,7 +53,7 @@ if (isset($_POST['submit']))
 	$groupid = encode($_POST['g']);
 	$username = encode($_POST['name']);
 
-	$res = $DBMain->Query('select user_id from user where user_name = "' . $username . '"');
+	$res = $db->query('select user_id from user where user_name = "' . $username . '"');
 
 	if ($res)
 		echo addGroupUser($groupid, $res[0]['user_id']);

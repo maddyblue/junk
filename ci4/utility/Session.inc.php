@@ -64,7 +64,7 @@ function handle_session()
 
 function start_session()
 {
-	global $DBMain;
+	global $db;
 
 	do
 	{
@@ -81,7 +81,7 @@ function start_session()
 	else
 		$host = '*' . substr($host, strpos($host, '.'));
 
-	$DBMain->Query('insert into session (session_id, session_ip, session_host, session_user, session_start, session_current) values (' .
+	$db->query('insert into session (session_id, session_ip, session_host, session_user, session_start, session_current) values (' .
 		'"' . $sid . '",' .
 		ip2long($ip) . ',' .
 		'"' . $host . '",' .
@@ -93,12 +93,12 @@ function start_session()
 
 function update_session($sid, $updateplayer = false)
 {
-	global $DBMain;
+	global $db;
 
 	define('SESSION', $sid);
 
 	if(ID)
-		$DBMain->Query('update user set user_last=' . TIME . ' where user_id=' . ID . '');
+		$db->query('update user set user_last=' . TIME . ' where user_id=' . ID . '');
 
 	if(!$updateplayer)
 		$query = 'update session set session_current=' . TIME . ', session_action=0000 where session_id="' . $sid . '"';
@@ -109,31 +109,31 @@ function update_session($sid, $updateplayer = false)
 	else
 		$query = 'update session set session_current=' . TIME . ', session_action=0000, session_user=' . ID . ' where session_id="' . $sid . '" and session_user=0';
 
-	$DBMain->Query($query);
+	$db->query($query);
 }
 
 function update_session_action($action, $data = '')
 {
-	global $DBMain;
+	global $db;
 
-	$DBMain->Query('update session set session_action=' . $action . ', session_action_data="' . $data . '" where session_id="' . SESSION . '"');
+	$db->query('update session set session_action=' . $action . ', session_action_data="' . $data . '" where session_id="' . SESSION . '"');
 }
 
 function close_sessions()
 {
-	global $DBMain;
+	global $db;
 
 	// non guest sessions that are 10 minutes old
-	$ret = $DBMain->Query('select * from session where session_current < (' . TIME . ' - 600) and session_user > 0');
+	$ret = $db->query('select * from session where session_current < (' . TIME . ' - 600) and session_user > 0');
 
 	foreach($ret as $row)
 	{
-		$DBMain->Query('update user set user_last_session = ' . $row['session_current'] . ' where user_id = ' . $row['session_user']);
-		$DBMain->Query('delete from forum_view where forum_view_user=' . $row['session_user']);
+		$db->query('update user set user_last_session = ' . $row['session_current'] . ' where user_id = ' . $row['session_user']);
+		$db->query('delete from forum_view where forum_view_user=' . $row['session_user']);
 	}
 
 	// remove all sessions that are over 10 minutes old
-	$DBMain->Query('delete from session where session_current < (' . TIME . ' - 600)');
+	$db->query('delete from session where session_current < (' . TIME . ' - 600)');
 }
 
 function session_exists($sid)
@@ -153,9 +153,9 @@ function getNumActiveGuests()
 
 function getNumActiveSessions($dir)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select count(*) as count from session where session_user ' . $dir . ' 0');
+	$res = $db->query('select count(*) as count from session where session_user ' . $dir . ' 0');
 
 	return $res[0]['count'];
 }

@@ -64,14 +64,14 @@ function newForum($f, $uls)
 {
 	if(LOGGED)
 	{
-		global $DBMain;
+		global $db;
 
 		/* This query is three fold:
 			1) gets new posts since last end of session which satisfy one of:
 				2) new posts of unread threads
 				3) new posts after the last view time of a thread
 		*/
-		$ret = $DBMain->Query('
+		$ret = $db->query('
 		SELECT count(*) count
 		FROM forum_thread, forum_post
 		LEFT JOIN forum_view ON
@@ -96,9 +96,9 @@ function forumList(&$array, $id, $topdepth, $depth, $uls)
 	if(!canView($id))
 		return;
 
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('
+	$res = $db->query('
 	SELECT forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post, user_name, user_id, forum_thread_id, forum_thread_title, forum_post_date
 	FROM forum_forum
 	LEFT JOIN forum_post ON forum_post_id = forum_forum_last_post
@@ -151,14 +151,14 @@ function newThread($t, $uls)
 {
 	if(LOGGED && $t['pld'] > $uls)
 	{
-		global $DBMain;
+		global $db;
 
-		$r = $DBMain->Query('select count(*) as count from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id']);
+		$r = $db->query('select count(*) as count from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id']);
 
 		if($r[0]['count'] == '0')
 			return true;
 
-		$r = $DBMain->Query('select count(*) as count from forum_view, forum_post where forum_post_thread=' . $t['forum_thread_id'] . ' and forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id'] . ' and forum_view_date < forum_post_date');
+		$r = $db->query('select count(*) as count from forum_view, forum_post where forum_post_thread=' . $t['forum_thread_id'] . ' and forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id'] . ' and forum_view_date < forum_post_date');
 
 		if($r[0]['count'] != '0')
 			return true;
@@ -169,7 +169,7 @@ function newThread($t, $uls)
 
 function threadList($forumid, $page, $threadsPP, $uls)
 {
-	global $DBMain;
+	global $db;
 
 	$array = array();
 
@@ -182,7 +182,7 @@ function threadList($forumid, $page, $threadsPP, $uls)
 	));
 
 	// simultaneously get usernames and post data for first and last post by doing complex self-joins
-	$ret = $DBMain->Query('
+	$ret = $db->query('
 	SELECT forum_thread.*, pfirst.forum_post_text pft, plast.forum_post_date pld, plast.forum_post_text plt, ufirst.user_name ufn, ufirst.user_id ufi, ulast.user_name uln, ulast.user_id uli
 	FROM forum_thread, forum_post pfirst, forum_post plast, user ufirst, user ulast
 	WHERE forum_thread_forum=' . $forumid . '
@@ -242,16 +242,16 @@ if($read)
 {
 	$where = $forumid == 0 ? '' : ' and forum_thread_forum="' . $forumid . '"';
 
-	$DBMain->Query('delete from forum_view where forum_view_user=' . ID);
+	$db->query('delete from forum_view where forum_view_user=' . ID);
 
 	// insert all threads with a last post date after the last ending session
-	$res = $DBMain->Query('select forum_thread_id from forum_thread, forum_post where forum_thread_last_post=forum_post_id and forum_post_date > ' . $USER['user_last_session'] . $where);
+	$res = $db->query('select forum_thread_id from forum_thread, forum_post where forum_thread_last_post=forum_post_id and forum_post_date > ' . $USER['user_last_session'] . $where);
 
 	$s = '';
 	for($i = 0; $i < count($res); $i++)
 		$s .= '(' . ID . ', ' . $res[$i]['forum_thread_id'] . ', ' . TIME . '),';
 
-	$DBMain->Query('insert into forum_view values ' . substr($s, 0, -1));
+	$db->query('insert into forum_view values ' . substr($s, 0, -1));
 }
 
 if(!canView($forumid))
@@ -268,7 +268,7 @@ else
 
 	forumList($array, $forumid, $depth, $depth, $lastSession);
 
-	$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forumid);
+	$res = $db->query('select * from forum_forum where forum_forum_id=' . $forumid);
 
 	if(count($array) > 1)
 		echo getTable($array);
@@ -284,7 +284,7 @@ else
 
 		$threadsPP = FORUM_THREADS_PP;
 
-		$ret = $DBMain->Query('select floor(count(*)/' . $threadsPP . ') + 1 as count from forum_thread where forum_thread_forum=' . $forumid);
+		$ret = $db->query('select floor(count(*)/' . $threadsPP . ') + 1 as count from forum_thread where forum_thread_forum=' . $forumid);
 		$totpages = $ret[0]['count'];
 
 		$pageDisp = '<p>' . pageDisp($curpage, $totpages, $threadsPP, 'a=viewforum&f=' . $forumid);

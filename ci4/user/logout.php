@@ -34,17 +34,17 @@
 
 $id = getCIcookie('id');
 $pass = getCIcookie('pass');
-$res = $DBMain->Query('select * from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
+$res = $db->query('select * from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
 
 // if and only if we are who we say we are, close the session
 if(count($res))
 {
 	// do everything that both {update|close}_session do
-	$DBMain->Query('update user set user_last = ' . TIME . ', user_last_session = ' . TIME . ' where user_id = ' . $id);
-	$DBMain->Query('delete from forum_view where forum_view_user=' . $id);
+	$db->query('update user set user_last = ' . TIME . ', user_last_session = ' . TIME . ' where user_id = ' . $id);
+	$db->query('delete from forum_view where forum_view_user=' . $id);
 
 	// now delete the session. a new one will be created for an guest user.
-	$DBMain->Query('delete from session where session_user=' . $id);
+	$db->query('delete from session where session_user=' . $id);
 }
 
 deleteCIcookie('id');

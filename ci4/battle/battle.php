@@ -51,12 +51,12 @@ else if(!$PLAYER['player_battle'])
 	echo '<p>You do not have an active battle. Create a new one.';
 else
 {
-	$ret = $DBMain->Query('select * from battle_entity where battle_entity_battle=' . $PLAYER['player_battle']);
+	$ret = $db->query('select * from battle_entity where battle_entity_battle=' . $PLAYER['player_battle']);
 
 	if(count($ret) < 2)
 	{
 		// not a battle without atleast two entities
-		$DBMain->Query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
+		$db->query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
 		exit('battle with less than two entities: exiting');
 	}
 
@@ -146,9 +146,9 @@ else
 		// one or zero teams are still alive, end battle and clean up
 		if(count($t) <= 1)
 		{
-			$DBMain->Query('update battle set battle_end=' . TIME . ' where battle_id=' . $PLAYER['player_battle']);
+			$db->query('update battle set battle_end=' . TIME . ' where battle_id=' . $PLAYER['player_battle']);
 
-			$DBMain->Query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
+			$db->query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
 
 			echo '<p>Battle ended.';
 		}

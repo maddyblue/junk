@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: manage-groups.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -34,9 +34,9 @@
 
 function groupListManage(&$array)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select group_def_id, group_def_name from group_def order by group_def_id');
+	$res = $db->query('select group_def_id, group_def_name from group_def order by group_def_id');
 
 	foreach($res as $row)
 	{

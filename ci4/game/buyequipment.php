@@ -51,7 +51,7 @@ function disp($e, $name, $cost)
 $e = isset($_GET['e']) ? intval($_GET['e']) : '0';
 $e = isset($_POST['e']) ? intval($_POST['e']) : $e;
 
-$res = $DBMain->Query('select * from equipment where equipment_id=' . $e);
+$res = $db->query('select * from equipment where equipment_id=' . $e);
 
 if($PLAYER == false)
 	echo '<p>You must be logged in to buy equipment.';
@@ -66,8 +66,8 @@ else if(count($res))
 		echo '<p>You do not have enough money to purchase this.';
 	else
 	{
-		$DBMain->Query('insert into player_equipment (player_equipment_equipment, player_equipment_player) values (' . $res[0]['equipment_id'] . ', ' . $PLAYER['player_id'] . ')');
-		$DBMain->Query('update player set player_money = player_money - ' . $cost . ' where player_id=' . $PLAYER['player_id']);
+		$db->query('insert into player_equipment (player_equipment_equipment, player_equipment_player) values (' . $res[0]['equipment_id'] . ', ' . $PLAYER['player_id'] . ')');
+		$db->query('update player set player_money = player_money - ' . $cost . ' where player_id=' . $PLAYER['player_id']);
 		echo '<p>Purchased a ' . $name . '.';
 	}
 }

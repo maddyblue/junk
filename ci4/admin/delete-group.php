@@ -36,11 +36,11 @@ if (isset($_POST['submit']))
 {
 	$groupid = isset($_POST['g']) ? intval($_POST['g']) : '0';
 
-	$DBMain->Query('delete from group_user where group_user_group =' . $groupid);
+	$db->query('delete from group_user where group_user_group =' . $groupid);
 
 	echo 'Users removed from the group<p>';
 
-	$DBMain->Query('delete from group_def where group_def_id =' . $groupid);
+	$db->query('delete from group_def where group_def_id =' . $groupid);
 
 	echo 'Group Deleted';
 

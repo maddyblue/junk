@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewmonsters.php,v 1.6 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -33,7 +33,7 @@
  */
 
 $query = 'select * from monster, monstertype where monster_type = monstertype_id order by monster_lv, monster_name';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 

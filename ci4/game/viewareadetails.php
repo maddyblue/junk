@@ -34,9 +34,9 @@
 
 $area = isset($_GET['area']) ? intval($_GET['area']) : '0';
 
-$res = $DBMain->Query('select * from area where area_id=' . $area);
+$res = $db->query('select * from area where area_id=' . $area);
 
-$townlist = $DBMain->Query('select * from cor_area_town, town where cor_town=town_id and cor_area=' . $area);
+$townlist = $db->query('select * from cor_area_town, town where cor_town=town_id and cor_area=' . $area);
 $towns = '';
 for($i = 0; $i < count($townlist); $i++)
 {
@@ -46,7 +46,7 @@ for($i = 0; $i < count($townlist); $i++)
 	$towns .= makeLink($townlist[$i]['town_name'], 'a=viewtowndetails&town=' . $townlist[$i]['town_id']);
 }
 
-$monsterlist = $DBMain->Query('select * from cor_area_monster, monster where cor_monster=monster_id and cor_area=' . $area);
+$monsterlist = $db->query('select * from cor_area_monster, monster where cor_monster=monster_id and cor_area=' . $area);
 $monsters = '';
 for($i = 0; $i < count($monsterlist); $i++)
 {

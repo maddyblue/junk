@@ -33,7 +33,7 @@
  */
 
 $query = 'select * from area order by area_order';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 
@@ -44,7 +44,7 @@ array_push($array, array(
 
 for($i = 0; $i < count($res); $i++)
 {
-	$monsterlist = $DBMain->Query('select * from cor_area_monster, monster where cor_monster=monster_id and cor_area=' . $res[$i]['area_id']);
+	$monsterlist = $db->query('select * from cor_area_monster, monster where cor_monster=monster_id and cor_area=' . $res[$i]['area_id']);
 	$monsters = '';
 	for($j = 0; $j < count($monsterlist); $j++)
 	{

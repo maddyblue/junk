@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewabilitytypes.php,v 1.2 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -33,7 +33,7 @@
  */
 
 $query = 'select * from abilitytype order by abilitytype_name';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 

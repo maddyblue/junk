@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: skins.php,v 1.2 2003/12/25 05:23:06 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -33,7 +33,7 @@
  */
 
 $query = 'select * from skin order by skin_name';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 

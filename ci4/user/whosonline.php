@@ -121,7 +121,7 @@ function getAction($a, $d)
 update_session_action(0301);
 
 $query = 'select * from session order by session_current';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 

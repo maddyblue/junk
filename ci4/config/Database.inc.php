@@ -4,8 +4,9 @@
 
 /*	MySQL database connection configuration.	*/
 
-$CIConfigMain{'SQLUser'}       = 'ci4';
-$CIConfigMain{'SQLPassword'}   = 'ci4sql';
-$CIConfigMain{'SQLHost'}       = 'localhost';
+$DBConf['user']     = 'ci4';
+$DBConf['pass']     = 'ci4sql';
+$DBConf['host']     = 'localhost';
+$DBConf['database'] = 'ci4';
 
 ?>

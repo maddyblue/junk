@@ -34,11 +34,11 @@
 
 function postList($thread, $curpage, $postsPP, $canMod)
 {
-	global $DBMain;
+	global $db;
 
 	$array = array();
 
-	$posts = $DBMain->Query('select user_id, user_name, user_avatar_type, forum_post_date, forum_post_id, forum_post_text, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . (($curpage - 1) * $postsPP) . ', ' . $postsPP);
+	$posts = $db->query('select user_id, user_name, user_avatar_type, forum_post_date, forum_post_id, forum_post_text, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . (($curpage - 1) * $postsPP) . ', ' . $postsPP);
 
 	foreach($posts as $post)
 	{
@@ -76,9 +76,9 @@ function postList($thread, $curpage, $postsPP, $canMod)
 
 $threadid = isset($_GET['t']) ? intval($_GET['t']) : '0';
 
-$DBMain->Query('update forum_thread set forum_thread_views=forum_thread_views+1 where forum_thread_id=' . $threadid);
+$db->query('update forum_thread set forum_thread_views=forum_thread_views+1 where forum_thread_id=' . $threadid);
 
-$res = $DBMain->Query('select forum_thread_forum, forum_thread_title, forum_thread_replies from forum_thread where forum_thread_id=' . $threadid);
+$res = $db->query('select forum_thread_forum, forum_thread_title, forum_thread_replies from forum_thread where forum_thread_id=' . $threadid);
 
 $forumid = $res[0]['forum_thread_forum'];
 
@@ -138,8 +138,8 @@ else
 				array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
 			));
 
-			$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $threadid);
-			$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . TIME . ')');
+			$db->query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $threadid);
+			$db->query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . TIME . ')');
 		}
 	}
 	else

@@ -35,13 +35,13 @@
 $postid = isset($_POST['p']) ? intval($_POST['p']) : '0';
 $sure = (isset($_POST['sure']) && $_POST['sure'] == 'on');
 
-$res = $DBMain->Query('select * from forum_post where forum_post_id=' . $postid);
+$res = $db->query('select * from forum_post where forum_post_id=' . $postid);
 
 if(!$sure)
 	echo '<p>Go back and click the checkbox indicating you are sure you want to delete this post.';
 else if(count($res))
 {
-	$thread = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $res[0]['forum_post_thread']);
+	$thread = $db->query('select * from forum_thread where forum_thread_id=' . $res[0]['forum_post_thread']);
 
 	$forumid = $thread[0]['forum_thread_forum'];
 	$threadid = $res[0]['forum_post_thread'];
@@ -58,18 +58,18 @@ else if(count($res))
 		else
 		{
 			// decrement user post count
-			$DBMain->Query('update user set user_posts = user_posts - 1 where user_id=' . $userid);
+			$db->query('update user set user_posts = user_posts - 1 where user_id=' . $userid);
 
 			// delete post
-			$DBMain->Query('delete from forum_post where forum_post_id =' . $postid);
+			$db->query('delete from forum_post where forum_post_id =' . $postid);
 
 			// update thread stats
-			$threadlast = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread=' . $threadid . ' order by forum_post_date desc limit 1');
-			$DBMain->Query('update forum_thread set forum_thread_last_post=' . $threadlast[0]['forum_post_id'] . ', forum_thread_replies = forum_thread_replies - 1 where forum_thread_id=' . $threadid);
+			$threadlast = $db->query('select forum_post_id from forum_post where forum_post_thread=' . $threadid . ' order by forum_post_date desc limit 1');
+			$db->query('update forum_thread set forum_thread_last_post=' . $threadlast[0]['forum_post_id'] . ', forum_thread_replies = forum_thread_replies - 1 where forum_thread_id=' . $threadid);
 
 			// update forum stats
-			$forumlast = $DBMain->Query('select forum_post_id from forum_post, forum_thread where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread order by forum_post_date desc limit 1');
-			$DBMain->Query('update forum_forum set forum_forum_last_post=' . $forumlast[0]['forum_post_id'] . ', forum_forum_posts = forum_forum_posts - 1 where forum_forum_id=' . $forumid);
+			$forumlast = $db->query('select forum_post_id from forum_post, forum_thread where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread order by forum_post_date desc limit 1');
+			$db->query('update forum_forum set forum_forum_last_post=' . $forumlast[0]['forum_post_id'] . ', forum_forum_posts = forum_forum_posts - 1 where forum_forum_id=' . $forumid);
 
 			echo '<p>Post deleted.';
 		}

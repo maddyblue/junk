@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: news.php,v 1.1 2004/01/12 05:19:21 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -36,7 +36,7 @@ $ppp = 10; // posts per page
 $offset = 0;
 
 $query = 'select user_name, user_id, forum_thread.*, forum_post.* from forum_thread, user, forum_post where forum_thread_forum=' . NEWSFORUM . ' and forum_thread_first_post=forum_post_id and forum_post_user=user_id order by forum_post_date desc limit ' . $offset . ', ' . $ppp;
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 for($i = 0; $i < count($res); $i++)
 {

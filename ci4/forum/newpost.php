@@ -34,9 +34,9 @@
 
 function disp($subject, $post, $thread)
 {
-	global $DBMain;
+	global $db;
 
-	$ret = $DBMain->Query('select forum_thread_title from forum_thread where forum_thread_id=' . $thread);
+	$ret = $db->query('select forum_thread_title from forum_thread where forum_thread_id=' . $thread);
 	if(count($ret))
 		$name = ' in ' . makeLink(decode($ret[0]['forum_thread_title']), 'a=viewthread&t=' . $thread);
 	else
@@ -102,7 +102,7 @@ else
 		}
 		else
 		{
-			$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
+			$db->query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
 				$thread . ',' .
 				'"' . $subject . '",' .
 				'"' . $post . '",' .
@@ -110,15 +110,15 @@ else
 				TIME . ',' .
 				ip2long($_SERVER['REMOTE_ADDR']) .
 				')');
-			$ret = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread=' . $thread . ' and forum_post_user=' . ID . ' order by forum_post_date desc limit 1');
+			$ret = $db->query('select forum_post_id from forum_post where forum_post_thread=' . $thread . ' and forum_post_user=' . ID . ' order by forum_post_date desc limit 1');
 			if(count($ret))
 			{
 				$lastpost = $ret[0]['forum_post_id'];
 				updateFromPost($lastpost);
-				$DBMain->Query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
+				$db->query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
 
-				$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $thread);
-				$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $thread . ', ' . TIME . ')');
+				$db->query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $thread);
+				$db->query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $thread . ', ' . TIME . ')');
 
 				echo '<p>Reply posted successfully.';
 				echo '<p>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
@@ -135,7 +135,7 @@ else
 	{
 		if(isset($_GET['q']))
 		{
-			$ret = $DBMain->Query('select * from forum_post where forum_post_id=' . intval($_GET['q']));
+			$ret = $db->query('select * from forum_post where forum_post_id=' . intval($_GET['q']));
 			if(count($ret) == 1)
 				$post = '[quote]Originally posted by ' . getUsername($ret[0]['forum_post_user']) . ':' . "\n" . $ret[0]['forum_post_text'] . '[/quote]';
 		}

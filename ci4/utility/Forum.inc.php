@@ -59,8 +59,8 @@ function getNavBar($forum)
 	if($forum == 0)
 		return '';
 
-	global $DBMain;
-	$res = $DBMain->Query('select forum_forum_name, forum_forum_id, forum_forum_parent from forum_forum where forum_forum_id=' . $forum);
+	global $db;
+	$res = $db->query('select forum_forum_name, forum_forum_id, forum_forum_parent from forum_forum where forum_forum_id=' . $forum);
 
 	$ret = makeLink(decode($res[0]['forum_forum_name']), 'a=viewforum&f=' . $res[0]['forum_forum_id']);
 
@@ -74,21 +74,21 @@ function getNavBar($forum)
 
 function updateFromPost($post)
 {
-	global $DBMain;
+	global $db;
 
 	// find the thread and forum this post is in
-	$res = $DBMain->Query('select forum_post_thread, forum_post_user from forum_post where forum_post_id=' . $post);
+	$res = $db->query('select forum_post_thread, forum_post_user from forum_post where forum_post_id=' . $post);
 	$thread = $res[0]['forum_post_thread'];
 
 	// bump post count
-	$DBMain->Query('update user set user_posts=user_posts+1 where user_id=' . $res[0]['forum_post_user']);
+	$db->query('update user set user_posts=user_posts+1 where user_id=' . $res[0]['forum_post_user']);
 
-	$res = $DBMain->Query('select forum_thread_forum from forum_thread where forum_thread_id=' . $thread);
+	$res = $db->query('select forum_thread_forum from forum_thread where forum_thread_id=' . $thread);
 	$forum = $res[0]['forum_thread_forum'];
 
 	// update the last post in the thread and forum; increment the forum thread and post counts
-	$DBMain->Query('update forum_forum set forum_forum_last_post=' . $post . ', forum_forum_posts=forum_forum_posts+1 where forum_forum_id=' . $forum);
-	$DBMain->Query('update forum_thread set forum_thread_last_post=' . $post . ' where forum_thread_id=' . $thread);
+	$db->query('update forum_forum set forum_forum_last_post=' . $post . ', forum_forum_posts=forum_forum_posts+1 where forum_forum_id=' . $forum);
+	$db->query('update forum_thread set forum_thread_last_post=' . $post . ' where forum_thread_id=' . $thread);
 }
 
 function forumReplace($text)
@@ -142,11 +142,11 @@ function newthreadLink()
 
 	if(isset($_GET['f']))
 	{
-		global $DBMain;
+		global $db;
 
 		$f = intval($_GET['f']);
 
-		$ret = $DBMain->Query('select forum_forum_type from forum_forum where forum_forum_id=' . $f);
+		$ret = $db->query('select forum_forum_type from forum_forum where forum_forum_id=' . $f);
 
 		if(count($ret) == 1 && $ret[0]['forum_forum_type'] == 0 && canThread($f))
 			$r = makeLink('New Thread', 'a=newthread&f=' . $f, SECTION_FORUM);
@@ -172,9 +172,9 @@ function newreplyLink()
 
 function parsePost($post)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select forum_post_text from forum_post where forum_post_id=' . $post);
+	$res = $db->query('select forum_post_text from forum_post where forum_post_id=' . $post);
 
 	if(count($res) == 1)
 		$return = parsePostText($res[0]['forum_post_text']);
@@ -328,13 +328,13 @@ function forumPerm($forum, $perm, $default = true)
 	if(ADMIN)
 		return true;
 
-	global $DBMain, $GROUPS;
+	global $db, $GROUPS;
 
 	$ret = true;
 
 	foreach($GROUPS as $group)
 	{
-		$result = $DBMain->Query('select forum_perm_' . $perm . ' perm from forum_perm where forum_perm_forum=' . $forum . ' and forum_perm_group=' . $group);
+		$result = $db->query('select forum_perm_' . $perm . ' perm from forum_perm where forum_perm_forum=' . $forum . ' and forum_perm_group=' . $group);
 
 		if(count($result))
 		{
@@ -364,9 +364,9 @@ function getForumFromThread($t)
 
 function listForums(&$array, $forum, $exclude = -1, $depth = 0)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select forum_forum_id, forum_forum_name from forum_forum where forum_forum_parent=' . $forum . ' and forum_forum_id != ' . $exclude . ' order by forum_forum_order');
+	$res = $db->query('select forum_forum_id, forum_forum_name from forum_forum where forum_forum_parent=' . $forum . ' and forum_forum_id != ' . $exclude . ' order by forum_forum_order');
 
 	foreach($res as $row)
 	{

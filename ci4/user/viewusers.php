@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewusers.php,v 1.8 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -33,7 +33,7 @@
  */
 
 $query = 'select * from user order by user_name';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 

@@ -116,7 +116,7 @@ if(ID != 0 && LOGGED == true)
 
 	if($img == 'clear')
 	{
-		$DBMain->Query('update user set user_avatar_type="" where user_id=' . ID);
+		$db->query('update user set user_avatar_type="" where user_id=' . ID);
 		echo '<p>Avatar cleared.';
 	}
 	else if($img)
@@ -149,7 +149,7 @@ if(ID != 0 && LOGGED == true)
 		if(!$fail)
 		{
 			// no encode/decode here, just set it as the filename, thus, mysql_escape_string is needed
-			$DBMain->Query('update user set user_avatar_data="' . mysql_escape_string($full) . '", user_avatar_type="1" where user_id=' . ID);
+			$db->query('update user set user_avatar_data="' . mysql_escape_string($full) . '", user_avatar_type="1" where user_id=' . ID);
 			echo '<p>Avatar updated.';
 		}
 		else

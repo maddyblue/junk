@@ -34,13 +34,13 @@
 
 function groupUserListManage(&$array, $groupid)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select group_user_user from group_user where group_user_group=' . $groupid);
+	$res = $db->query('select group_user_user from group_user where group_user_group=' . $groupid);
 
 	foreach($res as $row)
 	{
-		$res = $DBMain->Query('select user_name from user where user_id=' . $row['group_user_user']);
+		$res = $db->query('select user_name from user where user_id=' . $row['group_user_user']);
 		array_push($array, array(
 			decode($res[0]['user_name']),
 			makeLink('Remove', 'a=remove-group-user&g=' . $groupid . '&user=' . $row['group_user_user'])
@@ -52,7 +52,7 @@ $groupid = isset($_GET['g']) ? intval($_GET['g']) : '0';
 
 if($groupid)
 {
-	$res = $DBMain->Query('select * from group_def where group_def_id = ' . $groupid);
+	$res = $db->query('select * from group_def where group_def_id = ' . $groupid);
 
 	echo 'Manage ' . decode($res[0]['group_def_name']);
 
@@ -86,7 +86,7 @@ if($groupid)
 
 	groupUserListManage($array, $groupid);
 
-	$res = $DBMain->Query('select group_def_name from group_def where group_def_id=' . $groupid);
+	$res = $db->query('select group_def_name from group_def where group_def_id=' . $groupid);
 
 	echo '<p>Users';
 

@@ -104,7 +104,7 @@ $query = 'select * from player, domain, user, job
 	order by ' . $order . ' ' . $orderdir .'
 	limit ' . $limit;
 
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 foreach($res as $row)
 {

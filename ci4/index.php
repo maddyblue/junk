@@ -95,7 +95,7 @@ define('CI_DOMAIN', $dom);
 // check to see if we have a valid user
 
 if($id && $pass)
-	$res = $DBMain->Query('select * from user where user_id=' . $id . ' and user_pass="' . $pass . '"');
+	$res = $db->query('select * from user where user_id=' . $id . ' and user_pass="' . $pass . '"');
 else
 	$res = array();
 
@@ -114,11 +114,11 @@ if(count($res))
 	// get all player data to save on erroneous getDBData calls
 	if(CI_DOMAIN)
 	{
-		$ret = $DBMain->Query('select * from player where player_user=' . ID . ' and player_domain=' . CI_DOMAIN);
+		$ret = $db->query('select * from player where player_user=' . ID . ' and player_domain=' . CI_DOMAIN);
 		if(count($ret))
 		{
 			$PLAYER = $ret[0];
-			$DBMain->Query('update player set player_last=' . TIME . ' where player_id=' . $PLAYER['player_id']);
+			$db->query('update player set player_last=' . TIME . ' where player_id=' . $PLAYER['player_id']);
 		}
 		else
 			$PLAYER = false;
@@ -146,7 +146,7 @@ else
 handle_session();
 
 // groups
-$ret = $DBMain->Query('select group_user_group from group_user where group_user_user=' . ID);
+$ret = $db->query('select group_user_group from group_user where group_user_user=' . ID);
 
 if(count($ret))
 {
@@ -252,11 +252,11 @@ echo $content;
 echo '<p>' . $message;
 
 if(isset($_GET['sqlprofile']))
-	echo '<p>' . $DBMain->querylist;
+	echo '<p>' . $db->querylist;
 
 parseTags($bottom);
 echo $bottom;
 
-$DBMain->Disconnect();
+$db->Disconnect();
 
 ?>

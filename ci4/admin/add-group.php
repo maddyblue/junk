@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: add-group.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -36,7 +36,7 @@ if(isset($_POST['submit']))
 {
 	$name = encode($_POST['name']);
 
-	$DBMain->Query('insert into group_def (group_def_name) values ("' . $name . '")');
+	$db->query('insert into group_def (group_def_name) values ("' . $name . '")');
 
 	echo decode($name) . ' added';
 

@@ -74,7 +74,7 @@ else
 
 		if(!$fail)
 		{
-			$DBMain->Query('insert into pm (pm_from, pm_to, pm_subject, pm_text, pm_date, pm_read) values (' .
+			$db->query('insert into pm (pm_from, pm_to, pm_subject, pm_text, pm_date, pm_read) values (' .
 				ID . ',' .
 				$userid . ',' .
 				'"' . $sub . '",' .
@@ -96,7 +96,7 @@ else
 
 		if(isset($_POST['reply']))
 		{
-			$res = $DBMain->Query('select * from pm where pm_id=' . intval($_POST['reply']));
+			$res = $db->query('select * from pm where pm_id=' . intval($_POST['reply']));
 			if(count($res))
 			{
 				$userid = $res[0]['pm_from'];

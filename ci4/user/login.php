@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: login.php,v 1.9 2003/12/29 09:26:13 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -62,7 +62,7 @@ if(isset($_POST['submit']))
 		$fail = true;
 	}
 
-	$ret = $DBMain->Query('select user_id, user_pass from user where user_name="' . $user . '" and user_pass=md5("' . $pass . '")');
+	$ret = $db->query('select user_id, user_pass from user where user_name="' . $user . '" and user_pass=md5("' . $pass . '")');
 	if(count($ret) == 1)
 	{
 		setCIcookie('id', $ret[0]['user_id']);

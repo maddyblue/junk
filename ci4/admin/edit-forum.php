@@ -86,7 +86,7 @@ if(isset($_POST['submit']))
 
 	if(!$fail)
 	{
-		$DBMain->Query('update forum_forum set forum_forum_name="' . $name . '", forum_forum_desc="' . $desc . '", forum_forum_type=' . $type . ', forum_forum_parent=' . $parent . ' where forum_forum_id=' . $forumid);
+		$db->query('update forum_forum set forum_forum_name="' . $name . '", forum_forum_desc="' . $desc . '", forum_forum_type=' . $type . ', forum_forum_parent=' . $parent . ' where forum_forum_id=' . $forumid);
 
 		echo '<p>Forum updated.';
 	}
@@ -102,7 +102,7 @@ else
 
 	if($forumid)
 	{
-		$res = $DBMain->Query('select forum_forum_name, forum_forum_desc, forum_forum_parent, forum_forum_type from forum_forum where forum_forum_id=' . $forumid);
+		$res = $db->query('select forum_forum_name, forum_forum_desc, forum_forum_parent, forum_forum_type from forum_forum where forum_forum_id=' . $forumid);
 
 		display($forumid, $res[0]['forum_forum_name'], $res[0]['forum_forum_desc'], $res[0]['forum_forum_parent'], $res[0]['forum_forum_type']);
 	}

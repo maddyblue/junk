@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: reset.php,v 1.5 2003/12/25 05:23:13 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -34,23 +34,23 @@
 
 function reset_users()
 {
-	global $DBMain;
+	global $db;
 
-	$DBMain->Query('truncate table user');
-	$DBMain->Query('truncate table groups');
-	$DBMain->Query('truncate table player');
+	$db->query('truncate table user');
+	$db->query('truncate table groups');
+	$db->query('truncate table player');
 
 	echo '<p>Users reset.';
 }
 
 function reset_forum()
 {
-	global $DBMain;
+	global $db;
 
-	$DBMain->Query('truncate table forum_post');
-	$DBMain->Query('truncate table forum_thread');
-	$DBMain->Query('truncate table forum_forum');
-	$DBMain->Query('update user set user_posts=0');
+	$db->query('truncate table forum_post');
+	$db->query('truncate table forum_thread');
+	$db->query('truncate table forum_forum');
+	$db->query('update user set user_posts=0');
 
 	echo '<p>Forum reset.';
 }

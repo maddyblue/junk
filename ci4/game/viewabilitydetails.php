@@ -34,9 +34,9 @@
 
 $ability = isset($_GET['ability']) ? intval($_GET['ability']) : '0';
 
-$res = $DBMain->Query('select * from ability, abilitytype where abilitytype_id=ability_type and ability_id=' . $ability);
+$res = $db->query('select * from ability, abilitytype where abilitytype_id=ability_type and ability_id=' . $ability);
 
-$joblist = $DBMain->Query('select * from cor_job_abilitytype, job, abilitytype, ability where cor_job=job_id and cor_abilitytype=abilitytype_id and ability_type=abilitytype_id and ability_id=' . $ability);
+$joblist = $db->query('select * from cor_job_abilitytype, job, abilitytype, ability where cor_job=job_id and cor_abilitytype=abilitytype_id and ability_type=abilitytype_id and ability_id=' . $ability);
 $jobs = '';
 for($i = 0; $i < count($joblist); $i++)
 {

@@ -138,7 +138,7 @@ if(LOGGED)
 				$data = mysql_escape_string(fread($fd, filesize($name)));
 				fclose($fd);
 
-				$DBMain->Query('update user set user_avatar_data="' . $data . '", user_avatar_type="' . $type . '" where user_id=' . ID);
+				$db->query('update user set user_avatar_data="' . $data . '", user_avatar_type="' . $type . '" where user_id=' . ID);
 
 				echo '<p>Avatar upload complete.';
 			}

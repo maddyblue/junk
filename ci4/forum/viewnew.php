@@ -66,7 +66,7 @@ if(!LOGGED)
 }
 else
 {
-	$res = $DBMain->Query('select forum_thread_replies, forum_thread_id, forum_thread_title, forum_forum_name, user_id, user_name, plast.forum_post_date, plast.forum_post_text, forum_forum_id, plast.forum_post_id, pfirst.forum_post_text pft
+	$res = $db->query('select forum_thread_replies, forum_thread_id, forum_thread_title, forum_forum_name, user_id, user_name, plast.forum_post_date, plast.forum_post_text, forum_forum_id, plast.forum_post_id, pfirst.forum_post_text pft
 	FROM forum_thread, forum_forum, forum_post plast, forum_post pfirst, user
 	LEFT JOIN forum_view ON forum_view_user=' . ID . ' and forum_view_thread=forum_thread_id
 	WHERE forum_thread_forum=forum_forum_id

@@ -34,9 +34,9 @@
 
 function disp($subject, $post, $forum)
 {
-	global $DBMain;
+	global $db;
 
-	$ret = $DBMain->Query('select forum_forum_name from forum_forum where forum_forum_id=' . $forum);
+	$ret = $db->query('select forum_forum_name from forum_forum where forum_forum_id=' . $forum);
 	if(count($ret))
 		$name = ' in ' . makeLink(decode($ret[0]['forum_forum_name']), 'a=viewforum&f=' . $forum);
 	else
@@ -107,7 +107,7 @@ else
 		else
 		{
 
-			$DBMain->Query('insert into forum_thread (forum_thread_forum, forum_thread_title, forum_thread_user, forum_thread_date, forum_thread_type) values (' .
+			$db->query('insert into forum_thread (forum_thread_forum, forum_thread_title, forum_thread_user, forum_thread_date, forum_thread_type) values (' .
 				$forum . ',' .
 				'"' . $subject . '",' .
 				ID . ',' .
@@ -115,12 +115,12 @@ else
 				'1' .
 				')');
 
-			$ret = $DBMain->Query('select forum_thread_id from forum_thread where forum_thread_date=' . TIME . ' and forum_thread_user=' . ID);
+			$ret = $db->query('select forum_thread_id from forum_thread where forum_thread_date=' . TIME . ' and forum_thread_user=' . ID);
 			if(count($ret))
 			{
 				$lastthread = $ret[0]['forum_thread_id'];
 
-				$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
+				$db->query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
 					$lastthread . ',' .
 					'"' . $subject . '",' .
 					'"' . $post . '",' .
@@ -128,14 +128,14 @@ else
 					TIME . ',' .
 					ip2long($_SERVER['REMOTE_ADDR']) .
 					')');
-				$res = $DBMain->Query('select forum_post_id from forum_post where forum_post_user=' . ID .' order by forum_post_date desc limit 1');
+				$res = $db->query('select forum_post_id from forum_post where forum_post_user=' . ID .' order by forum_post_date desc limit 1');
 				$lastpost = $res[0]['forum_post_id'];
-				$DBMain->Query('update forum_thread set forum_thread_first_post=' . $lastpost . ' where forum_thread_id=' . $lastthread);
+				$db->query('update forum_thread set forum_thread_first_post=' . $lastpost . ' where forum_thread_id=' . $lastthread);
 				updateFromPost($lastpost);
-				$DBMain->Query('update forum_forum set forum_forum_threads=forum_forum_threads+1 where forum_forum_id=' . $forum);
+				$db->query('update forum_forum set forum_forum_threads=forum_forum_threads+1 where forum_forum_id=' . $forum);
 
-				$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $lastthread);
-				$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $lastthread . ', ' . TIME . ')');
+				$db->query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $lastthread);
+				$db->query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $lastthread . ', ' . TIME . ')');
 
 				echo '<p>Thread created successfully.';
 				echo '<p>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';

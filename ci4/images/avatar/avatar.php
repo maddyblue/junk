@@ -40,13 +40,13 @@ require_once CI_FS_PATH . 'utility/Database.inc.php';
 
 // Setup database connections
 
-$DBMain = new Database();
+$db = new Database();
 
-$DBMain->Connect($CIConfigMain, CI_DATABASE);
+$db->Connect($CIConfigMain, CI_DATABASE);
 
 $id = isset($_GET['i']) ? intval($_GET['i']) : 0;
 
-$im = $DBMain->Query('select user_avatar_type, user_avatar_data from user where user_id=' . $id);
+$im = $db->query('select user_avatar_type, user_avatar_data from user where user_id=' . $id);
 
 header('Content-type: ' . $im[0]['user_avatar_type']);
 echo $im[0]['user_avatar_data'];

@@ -34,9 +34,9 @@
 
 $job = isset($_GET['job']) ? intval($_GET['job']) : '0';
 
-$res = $DBMain->Query('select * from job where job_id=' . $job);
+$res = $db->query('select * from job where job_id=' . $job);
 
-$equipment = $DBMain->Query('select equipmenttype_name, equipmenttype_id from cor_job_equipmenttype, equipmenttype where cor_job=' . $job . ' and equipmenttype.equipmenttype_id=cor_equipmenttype order by equipmenttype_name');
+$equipment = $db->query('select equipmenttype_name, equipmenttype_id from cor_job_equipmenttype, equipmenttype where cor_job=' . $job . ' and equipmenttype.equipmenttype_id=cor_equipmenttype order by equipmenttype_name');
 
 $equipmentlist = '';
 
@@ -53,7 +53,7 @@ else
 	$equipmentlist .= 'Cannot equip anything.';
 }
 
-$abilities = $DBMain->Query('select abilitytype_name, abilitytype_id from job, abilitytype, cor_job_abilitytype where job_id=cor_job and cor_abilitytype=abilitytype_id and job_id=' . $job);
+$abilities = $db->query('select abilitytype_name, abilitytype_id from job, abilitytype, cor_job_abilitytype where job_id=cor_job and cor_abilitytype=abilitytype_id and job_id=' . $job);
 $abilitylist = '';
 for($i = 0; $i < count($abilities); $i++)
 {
@@ -63,7 +63,7 @@ for($i = 0; $i < count($abilities); $i++)
 	$abilitylist .= makeLink($abilities[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $abilities[$i]['abilitytype_id']);
 }
 
-$jobs = $DBMain->Query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $job . ' and cor_job_req=job.job_id order by job_name');
+$jobs = $db->query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $job . ' and cor_job_req=job.job_id order by job_name');
 
 $joblist = '';
 

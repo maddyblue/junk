@@ -44,8 +44,8 @@ require_once CI_FS_PATH . 'utility/Forum.inc.php';
 require_once CI_FS_PATH . 'utility/Session.inc.php';
 
 // Setup database connections
-$DBMain = new Database();
+$db = new Database();
 
-$DBMain->Connect($CIConfigMain, CI_DATABASE);
+$db->Connect($DBConf);
 
 ?>

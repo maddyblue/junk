@@ -104,15 +104,15 @@ class Entity
 	// use this to sync data back into the database
 	function sync()
 	{
-		global $DBMain;
+		global $db;
 
 		if($this->type == 3 && $this->hp <= 0) // timer
 		{
 
-			$DBMain->Query('delete from battle_entity where battle_entity_uid=' . $this->uid);
+			$db->query('delete from battle_entity where battle_entity_uid=' . $this->uid);
 		}
 
-		$DBMain->Query('update battle_entity set
+		$db->query('update battle_entity set
 			battle_entity_ct=' . $this->ct . ',
 			battle_entity_max_hp=' . $this->maxhp . ',
 			battle_entity_max_mp=' . $this->maxmp . ',

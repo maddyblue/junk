@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: edit-group.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -37,7 +37,7 @@ if (isset($_POST['submit']))
 	$groupid = encode($_POST['g']);
 	$name = encode($_POST['name']);
 
-	$DBMain->Query('update group_def set group_def_name="' . $name . '" where group_def_id=' . $groupid);
+	$db->query('update group_def set group_def_name="' . $name . '" where group_def_id=' . $groupid);
 
 	echo decode($name) . ' updated';
 

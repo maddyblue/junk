@@ -34,7 +34,7 @@
 
 function disp($subject, $text, $post)
 {
-	global $DBMain;
+	global $db;
 
 	echo getTableForm('Edit Post', array(
 			array('Subject', array('type'=>'text', 'name'=>'subject', 'parms'=>'size="45" maxlength="100" style="width:450px"', 'val'=>decode($subject))),
@@ -62,11 +62,11 @@ $subject = isset($_POST['subject']) ? encode($_POST['subject']) : '';
 $text = isset($_POST['text']) ? encode($_POST['text']) : '';
 $post = isset($_POST['p']) ? intval($_POST['p']) : (isset($_GET['p']) ? intval($_GET['p']) : '0');
 
-$ret = $DBMain->Query('select * from forum_post where forum_post_id=' . $post);
+$ret = $db->query('select * from forum_post where forum_post_id=' . $post);
 
 if(count($ret))
 {
-	$thread = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $ret[0]['forum_post_thread']);
+	$thread = $db->query('select * from forum_thread where forum_thread_id=' . $ret[0]['forum_post_thread']);
 	echo getNavBar($thread[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($thread[0]['forum_thread_title']), 'a=viewthread&t=' . $thread[0]['forum_thread_id']) . '<p>';
 }
 
@@ -104,7 +104,7 @@ else
 		}
 		else
 		{
-			$DBMain->Query('update forum_post set ' .
+			$db->query('update forum_post set ' .
 				'forum_post_subject="' . $subject . '",' .
 				'forum_post_text="' . $text . '",' .
 				'forum_post_edit_date=' . TIME . ',' .

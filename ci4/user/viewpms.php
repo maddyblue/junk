@@ -47,12 +47,12 @@ else
 		while(list($key, $val) = each($_POST))
 		{
 			if($val == 'on' && substr($key, 0, 2) == 'pm')
-				$DBMain->Query('delete from pm where pm_id=' . intval(substr($key, 2)));
+				$db->query('delete from pm where pm_id=' . intval(substr($key, 2)));
 		}
 	}
 
 	$query = 'select * from pm where pm_to=' . ID . ' order by pm_date desc';
-	$res = $DBMain->Query($query);
+	$res = $db->query($query);
 
 	$array = array();
 

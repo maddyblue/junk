@@ -34,9 +34,9 @@
 
 $town = isset($_GET['town']) ? intval($_GET['town']) : '0';
 
-$res = $DBMain->Query('select * from town where town_id=' . $town);
+$res = $db->query('select * from town where town_id=' . $town);
 
-$arealist = $DBMain->Query('select * from cor_area_town, area where cor_area=area_id and cor_town=' . $town);
+$arealist = $db->query('select * from cor_area_town, area where cor_area=area_id and cor_town=' . $town);
 $areas = '';
 for($i = 0; $i < count($arealist); $i++)
 {

@@ -146,7 +146,7 @@ function parseTags(&$template)
  */
 function getSiteArray($tag)
 {
-	global $DBMain;
+	global $db;
 
 	switch($tag)
 	{
@@ -158,7 +158,7 @@ function getSiteArray($tag)
 			break;
 	}
 
-	return $DBMain->Query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag="' . $tag . '" and site_admin <= ' . ADMIN . ' order by site_orderid');
+	return $db->query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag="' . $tag . '" and site_admin <= ' . ADMIN . ' order by site_orderid');
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
@@ -571,9 +571,9 @@ function getDomainName($domain = 0)
  */
 function getDBData($field, $search = ID, $where = 'user_id', $table = 'user')
 {
-	global $DBMain;
+	global $db;
 
-	$ret = $DBMain->Query('select ' . $field . ' from ' . $table . ' where ' . $where . '="' . $search . '"');
+	$ret = $db->query('select ' . $field . ' from ' . $table . ' where ' . $where . '="' . $search . '"');
 
 	if(count($ret) > 0)
 		return $ret[0][$field];
@@ -599,12 +599,12 @@ function getDBDataNum($field, $search = ID, $where = 'user_id', $table = 'user')
 // Return the execution information of the page load.
 function getProfile()
 {
-	global $time_start, $DBMain;
+	global $time_start, $db;
 
 	$start = $time_start;
 	$end = gettimeofday();
-	$dbcalls = $DBMain->queries;
-	$dbtime = $DBMain->time;
+	$dbcalls = count($db->queries);
+	$dbtime = $db->time;
 
 	$total = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
 	$script = $total - $dbtime;

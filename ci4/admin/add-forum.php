@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: add-forum.php,v 1.5 2004/01/05 21:02:10 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -62,14 +62,14 @@ if(isset($_POST['submit']))
 	}
 	else
 	{
-		$res = $DBMain->Query('select forum_forum_order from forum_forum where forum_forum_parent = 0 order by forum_forum_order desc limit 1');
+		$res = $db->query('select forum_forum_order from forum_forum where forum_forum_parent = 0 order by forum_forum_order desc limit 1');
 
 		if(count($res))
 			$order = $res[0]['forum_forum_order'] + 1;
 		else
 			$order = 1;
 
-		$DBMain->Query('insert into forum_forum (forum_forum_name, forum_forum_desc, forum_forum_type, forum_forum_parent, forum_forum_order) values("' . $name . '", "' .  $desc . '", 0, 0, ' .  $order . ')');
+		$db->query('insert into forum_forum (forum_forum_name, forum_forum_desc, forum_forum_type, forum_forum_parent, forum_forum_order) values("' . $name . '", "' .  $desc . '", 0, 0, ' .  $order . ')');
 
 		echo '<p>&quot;' . decode($name) . '&quot; added.<p>';
 

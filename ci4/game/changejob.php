@@ -34,7 +34,7 @@
 
 function disp($job)
 {
-	global $DBMain;
+	global $db;
 
 	/* Get each job, as well as all required jobs for that job.
 	 * Note that column j is this job, column job is the prereq.
@@ -44,7 +44,7 @@ function disp($job)
 	LEFT JOIN cor_job_joblv ON cor_job = j.job_id
 	LEFT JOIN job ON cor_job_req = job.job_id
 	ORDER BY j.job_req_lv, j.job_name, cor_joblv, job.job_name';
-	$res = $DBMain->Query($query);
+	$res = $db->query($query);
 
 	$array = array();
 
@@ -108,7 +108,7 @@ else
 
 	$fail = false;
 
-	$res = $DBMain->Query('select job_req_lv, job_name from job where job_id=' . $job);
+	$res = $db->query('select job_req_lv, job_name from job where job_id=' . $job);
 	if(!count($res))
 	{
 		echo '<br>Unknown job.';
@@ -121,7 +121,7 @@ else
 		$fail = true;
 	}
 
-	$failed = $DBMain->Query('select job_name, player_job_lv, cor_job_joblv.*
+	$failed = $db->query('select job_name, player_job_lv, cor_job_joblv.*
 		from cor_job_joblv, job
 		left join player_job on
 			player_job_player=' . $PLAYER['player_id'] . ' and
@@ -140,17 +140,17 @@ else
 
 	if(!$fail)
 	{
-		$DBMain->Query('update player set player_job=' . $job . ' where player_id=' . $PLAYER['player_id']);
+		$db->query('update player set player_job=' . $job . ' where player_id=' . $PLAYER['player_id']);
 
 		// if this is the first time in this job, add the initial entries
-		$ret = $DBMain->Query('select player_job_job from player_job where player_job_player=' . $PLAYER['player_id'] . ' and player_job_job=' . $job);
+		$ret = $db->query('select player_job_job from player_job where player_job_player=' . $PLAYER['player_id'] . ' and player_job_job=' . $job);
 		if(count($ret) == 0)
 		{
-			$DBMain->Query('insert into player_job values (' . $PLAYER['player_id'] . ', ' . $job . ', 0, 0)');
+			$db->query('insert into player_job values (' . $PLAYER['player_id'] . ', ' . $job . ', 0, 0)');
 
-			$ret = $DBMain->Query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
+			$ret = $db->query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
 			for($i = 0; $i < count($ret); $i++)
-				$DBMain->Query('insert into player_abilitytype values (' . $PLAYER['player_id'] . ', ' . $ret[$i]['cor_abilitytype'] . ', 0, 0)');
+				$db->query('insert into player_abilitytype values (' . $PLAYER['player_id'] . ', ' . $ret[$i]['cor_abilitytype'] . ', 0, 0)');
 		}
 
 		echo '<p>Job change to ' . $res[0]['job_name'] . ' succeeded.';

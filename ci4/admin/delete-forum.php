@@ -47,49 +47,49 @@ function display($forumid)
 
 function deleteForum($forumid, $delthreads, $delforums)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select forum_forum_name, forum_forum_parent from forum_forum where forum_forum_id=' . $forumid);
+	$res = $db->query('select forum_forum_name, forum_forum_parent from forum_forum where forum_forum_id=' . $forumid);
 	$name = decode($res[0]['forum_forum_name']);
 	$parent = $res[0]['forum_forum_parent'];
 
 	if($delthreads)
 	{
-		$threads = $DBMain->Query('select forum_thread_id from forum_thread where forum_thread_forum =' . $forumid);
+		$threads = $db->query('select forum_thread_id from forum_thread where forum_thread_forum =' . $forumid);
 
 		foreach($threads as $thread)
-			$DBMain->Query('delete from forum_post where forum_post_thread=' . $thread['forum_thread_id']);
+			$db->query('delete from forum_post where forum_post_thread=' . $thread['forum_thread_id']);
 
-		$DBMain->Query('delete from forum_thread where forum_thread_forum=' . $forumid);
+		$db->query('delete from forum_thread where forum_thread_forum=' . $forumid);
 
 		echo '<br>Deleted all threads and posts from ' . $name;
 	}
 	else
 	{
-		$DBMain->Query('update forum_thread set forum_thread_forum=' . $parent . ' where forum_thread_forum=' . $forumid);
+		$db->query('update forum_thread set forum_thread_forum=' . $parent . ' where forum_thread_forum=' . $forumid);
 
 		echo '<br>Moved all threads from ' . $name . ' to its parent.';
 	}
 
 	if($delforums)
 	{
-		$forums = $DBMain->Query('select forum_forum_id from forum_forum where forum_forum_parent =' . $forumid);
+		$forums = $db->query('select forum_forum_id from forum_forum where forum_forum_parent =' . $forumid);
 
 		foreach($forums as $forum)
 			deleteForum($forum['forum_forum_id'], true, true);
 
-		$DBMain->Query('delete from forum_forum where forum_forum_parent=' . $forumid);
+		$db->query('delete from forum_forum where forum_forum_parent=' . $forumid);
 
 		echo '<br>Deleted all sub forums of ' . $name;
 	}
 	else
 	{
-		$DBMain->Query('update forum_forum set forum_forum_parent=' . $parent . ' where forum_forum_parent=' . $forumid);
+		$db->query('update forum_forum set forum_forum_parent=' . $parent . ' where forum_forum_parent=' . $forumid);
 
 		echo '<br>Moved all sub forums of ' . $name . ' to its parent.';
 	}
 
-	$DBMain->Query('delete from forum_forum where forum_forum_id=' . $forumid);
+	$db->query('delete from forum_forum where forum_forum_id=' . $forumid);
 
 	echo '<br>Deleted ' . $name . '.';
 }

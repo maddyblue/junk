@@ -34,9 +34,9 @@
 
 $type = isset($_GET['type']) ? intval($_GET['type']) : '0';
 
-$res = $DBMain->Query('select * from abilitytype where abilitytype_id=' . $type);
+$res = $db->query('select * from abilitytype where abilitytype_id=' . $type);
 
-$joblist = $DBMain->Query('select * from cor_job_abilitytype, job, abilitytype where cor_job=job_id and cor_abilitytype=abilitytype_id and abilitytype_id=' . $type);
+$joblist = $db->query('select * from cor_job_abilitytype, job, abilitytype where cor_job=job_id and cor_abilitytype=abilitytype_id and abilitytype_id=' . $type);
 $jobs = '';
 for($i = 0; $i < count($joblist); $i++)
 {
@@ -46,7 +46,7 @@ for($i = 0; $i < count($joblist); $i++)
 	$jobs .= makeLink($joblist[$i]['job_name'], 'a=viewjobdetails&job=' . $joblist[$i]['job_id']);
 }
 
-$abilitylist = $DBMain->Query('select ability_id, ability_name from ability where ability_type=' . $type);
+$abilitylist = $db->query('select ability_id, ability_name from ability where ability_type=' . $type);
 $abilities = '';
 for($i = 0; $i < count($abilitylist); $i++)
 {

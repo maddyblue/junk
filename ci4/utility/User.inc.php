@@ -52,7 +52,9 @@ function getGender($g)
 // Get the username if the given id. Return '' if this id doesn't exist.
 function getUsername($id)
 {
-	$ret = $GLOBALS['DBMain']->Query('select user_name from user where user_id=' . $id);
+	global $db;
+
+	$ret = $db->query('select user_name from user where user_id=' . $id);
 
 	if(count($ret) == 1)
 		return decode($ret[0]['user_name']);
@@ -78,9 +80,9 @@ function getUserlink($id, $name = '')
 // Returns true if $user is in group $group.
 function isInGroup($user, $group)
 {
-	global $DBMain;
+	global $db;
 
-	$ret = $DBMain->Query('select * from group_user where group_user_user=' . $user . ' and group_user_group=' . $group);
+	$ret = $db->query('select * from group_user where group_user_user=' . $user . ' and group_user_group=' . $group);
 
 	if(count($ret))
 		return true;
@@ -115,9 +117,9 @@ function hasBanned()
 // Return if the current user has specified the permission.
 function hasPermission($perm)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select group_def_id from group_def, group_user where group_user_user=' . ID . ' and group_def_' . $perm . '=1');
+	$res = $db->query('select group_def_id from group_def, group_user where group_user_user=' . ID . ' and group_def_' . $perm . '=1');
 
 	if(count($res))
 		return true;
@@ -130,9 +132,9 @@ function makePMLink()
 {
 	if(LOGGED)
 	{
-		global $DBMain;
+		global $db;
 
-		$ret = $DBMain->Query('select count(*) as count from pm where pm_to=' . ID . ' and pm_read=0');
+		$ret = $db->query('select count(*) as count from pm where pm_to=' . ID . ' and pm_read=0');
 
 		if($ret[0]['count'])
 		 return makeLink($ret[0]['count'] . ' new PMs', 'a=viewpms', SECTION_USER);
@@ -177,10 +179,10 @@ function updatePlayerStats($pid = 0)
 		$pid = $GLOBALS['PLAYER']['player_id'];
 	}
 
-	global $DBMain;
+	global $db;
 
 	// we don't have items yet, so mod and nomod are the same
-	$DBMain->Query('update player set player_mod_hp=player_nomod_hp, player_mod_mp=player_nomod_mp, player_mod_str=player_nomod_str, player_mod_mag=player_nomod_mag, player_mod_def=player_nomod_def, player_mod_mgd=player_nomod_mgd, player_mod_agl=player_nomod_agl, player_mod_acc=player_nomod_acc where player_id=' . $pid);
+	$db->query('update player set player_mod_hp=player_nomod_hp, player_mod_mp=player_nomod_mp, player_mod_str=player_nomod_str, player_mod_mag=player_nomod_mag, player_mod_def=player_nomod_def, player_mod_mgd=player_nomod_mgd, player_mod_agl=player_nomod_agl, player_mod_acc=player_nomod_acc where player_id=' . $pid);
 }
 
 ?>

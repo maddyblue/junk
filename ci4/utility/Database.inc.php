@@ -35,40 +35,30 @@
 class Database
 {
 	var $handle = null;
-	var $dbname;
 
-	var $queries = 0;
+	var $queries = array();
 	var $time = 0;
-	var $querylist = '';
 
 	/*	Connect: returns a handle to a database connection
-
-			Expected parameters:
-				SQLServer - server to connect to.
-				SQLUser - user to connect as.
-				SQLPassword - user's password.
 	*/
 
-	function Connect($parameters, $dbname = '')
+	function connect($params)
 	{
-		$this->dbname = $dbname;
-
 		$this->handle = mysql_connect(
-			$parameters['SQLHost'],
-			$parameters['SQLUser'],
-			$parameters['SQLPassword']
+			$params['host'],
+			$params['user'],
+			$params['pass']
 		);
+
+		mysql_select_db($params['database'], $this->handle);
 
 		return $this->handle;
 	}
 
 	/*	Disconnect: Closes a database connection
-
-			Expected parameters:
-				handle - database connection to close.
 	*/
 
-	function Disconnect()
+	function disconnect()
 	{
 		mysql_close($this->handle);
 		$this->handle = null;
@@ -85,52 +75,58 @@ class Database
 		Expected parameters:
 			Handle - database connection to use.
 			Query - query to execute.
-			Database - database to perform this query on.
 	*/
 
-	function Query($query, $dbname = '')
+	function query($query)
 	{
-		$this->querylist .= '<p>' . $query;
-
-		$db = $dbname ? $dbname : $this->dbname;
-
-		if(!$db)
-			return;
-
-		$this->queries++;
 		$start = gettimeofday();
 
-		$dbq = mysql_db_query(
-			$db,
+		$dbq = mysql_query(
 			$query,
 			$this->handle
 		);
 
 		$end = gettimeofday();
-		$this->time += (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
+		$time = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
+
+		$this->time += $time;
+		array_push($this->queries,array($query, $time));
 
 		if($dbq == false)
 		{
 			global $message;
 			$message .= '<p>Error: ' . mysql_error() . '.
-				<p>Query: ' . $query . '.';
+				<p>Query: ' . $query;
 			return;
 		}
 
 		$ret = array();
-		$rcount = 0;
 
-		while($row = @mysql_fetch_assoc($dbq))
+		for($rcount = 0; $row = @mysql_fetch_assoc($dbq); $rcount++)
 		{
 			for($i = 0; $i < sizeof($row); $i++)
 			{
 				$ret[$rcount][key($row)] = $row[key($row)];
 				next($row);
 			}
-			$rcount++;
 		}
 
 		return $ret;
+	}
+
+	function insert($query)
+	{
+		$ret = query($query);
+
+		if($ret == FALSE)
+			return $ret;
+
+		return insertId();
+	}
+
+	function insertId()
+	{
+		return mysql_insert_id($this->handle);
 	}
 }
 

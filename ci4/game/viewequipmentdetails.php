@@ -34,7 +34,7 @@
 
 $e = isset($_GET['e']) ? intval($_GET['e']) : '0';
 
-$res = $DBMain->Query('select * from equipment, equipmenttype where equipment_id=' . $e . ' and equipmenttype_id=equipment_type');
+$res = $db->query('select * from equipment, equipmenttype where equipment_id=' . $e . ' and equipmenttype_id=equipment_type');
 
 if(count($res))
 {

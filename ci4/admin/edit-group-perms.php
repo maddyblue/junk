@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: edit-group-perms.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -40,7 +40,7 @@ if(isset($_POST['submit']))
 	$mod = ($_POST['mod'] == 'on') ? '1' : '0';
 	$banned = ($_POST['banned'] == 'on') ? '1' : '0';
 
-	$DBMain->Query('update group_def set group_def_admin=' . $admin . ', group_def_news=' . $news . ', group_def_mod=' . $mod . ', group_def_banned=' . $banned . ' where group_def_id=' . $groupid);
+	$db->query('update group_def set group_def_admin=' . $admin . ', group_def_news=' . $news . ', group_def_mod=' . $mod . ', group_def_banned=' . $banned . ' where group_def_id=' . $groupid);
 
 	echo 'Permissions Updated<p>' . makeLink('Go back to Manage Group', '?a=manage-group&g=' . $groupid);
 }

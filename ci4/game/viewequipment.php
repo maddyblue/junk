@@ -38,7 +38,7 @@ $array = array();
 
 if($type <= 0)
 {
-	$res = $DBMain->Query('select * from equipmenttype order by equipmenttype_name');
+	$res = $db->query('select * from equipmenttype order by equipmenttype_name');
 
 	array_push($array, array(
 		'Equipment Types'
@@ -51,7 +51,7 @@ if($type <= 0)
 }
 else
 {
-	$res = $DBMain->Query('select * from equipment, equipmenttype where equipment_type=equipmenttype_id and equipment_type=' . $type . ' order by equipmenttype_name, equipment_cost');
+	$res = $db->query('select * from equipment, equipmenttype where equipment_type=equipmenttype_id and equipment_type=' . $type . ' order by equipmenttype_name, equipment_cost');
 
 	array_push($array, array(
 		'Type',

@@ -35,7 +35,7 @@
 $player = isset($_GET['player']) ? intval($_GET['player']) :
 	(LOGGED ? $PLAYER['player_id'] : '0');
 
-$res = $DBMain->Query('select player.*, user_name, domain_name, job_name, town_name, house_name from player, user, domain, job
+$res = $db->query('select player.*, user_name, domain_name, job_name, town_name, house_name from player, user, domain, job
 	left join town on town_id=player_town
 	left join house on house_id=player_house
 	where player_id=' . $player . ' and player_domain=domain_id and player_job=job_id and player_user=user_id');
@@ -90,7 +90,7 @@ if(count($res) == 1)
 
 	// now make the job table
 
-	$res = $DBMain->Query('select job_id, job_name, player_job_lv, player_job_exp from player_job, job where player_job_player="' . $player . '" and job_id=player_job_job');
+	$res = $db->query('select job_id, job_name, player_job_lv, player_job_exp from player_job, job where player_job_player="' . $player . '" and job_id=player_job_job');
 
 	$array = array(array('Job', 'Level', 'Experience'));
 
@@ -106,7 +106,7 @@ if(count($res) == 1)
 
 	// ability type
 
-	$res = $DBMain->Query('select * from player_abilitytype, abilitytype where player_abilitytype_player=' . $player . ' and player_abilitytype_type=abilitytype_id');
+	$res = $db->query('select * from player_abilitytype, abilitytype where player_abilitytype_player=' . $player . ' and player_abilitytype_type=abilitytype_id');
 
 	$array = array(array('Type', 'Total AP', 'Current AP'));
 
@@ -117,7 +117,7 @@ if(count($res) == 1)
 
 	// abilities
 
-	$res = $DBMain->Query('select ability_id, ability_name, abilitytype_name, abilitytype_id from player_ability, ability, abilitytype where player_ability_player=' . $player . ' and player_ability_ability=ability_id and ability_type=abilitytype_id');
+	$res = $db->query('select ability_id, ability_name, abilitytype_name, abilitytype_id from player_ability, ability, abilitytype where player_ability_player=' . $player . ' and player_ability_ability=ability_id and ability_type=abilitytype_id');
 
 	$array = array(array('Ability', 'Type'));
 
@@ -130,7 +130,7 @@ if(count($res) == 1)
 
 	echo '<p>Equipment:<p>';
 
-	$res = $DBMain->Query('select count(*) c, equipment_id, equipment_name from player_equipment, equipment where equipment_id=player_equipment_equipment and player_equipment_player=' . $player . ' group by equipment_id order by equipment_name');
+	$res = $db->query('select count(*) c, equipment_id, equipment_name from player_equipment, equipment where equipment_id=player_equipment_equipment and player_equipment_player=' . $player . ' group by equipment_id order by equipment_name');
 
 	for($i = 0; $i < count($res); $i++)
 	{

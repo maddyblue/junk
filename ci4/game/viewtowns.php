@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewtowns.php,v 1.2 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -33,7 +33,7 @@
  */
 
 $query = 'select * from town order by town_lv';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 

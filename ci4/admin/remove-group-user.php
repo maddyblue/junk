@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: remove-group-user.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -37,7 +37,7 @@ if(isset($_GET['g']) && isset($_GET['user']))
 		$groupid = encode($_GET['g']);
 		$userid = encode($_GET['user']);
 
-		$DBMain->Query('delete from group_user where group_user_group ="' . $groupid . '" and group_user_user=' . $userid);
+		$db->query('delete from group_user where group_user_group ="' . $groupid . '" and group_user_user=' . $userid);
 
 		echo 'User removed from the group.';
 		echo '<p>' . makeLink('Go back to Manage Group', '?a=manage-group&g=' . $groupid);

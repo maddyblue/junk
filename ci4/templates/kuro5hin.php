@@ -185,7 +185,7 @@ table.maintable {
 							if($pms)
 								echo $pms . '<br>';
 
-							$res = $DBMain->Query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
+							$res = $db->query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
 							for($i = 0; $i < count($res); $i++)
 							{
 								if($res[$i]['player_id'] == $PLAYER['player_id'])

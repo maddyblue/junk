@@ -62,9 +62,9 @@ function addForumEntry(&$array, $row, $depth)
 
 function forumListManage(&$array, $id, $depth)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order, forum_forum_desc, forum_forum_id from forum_forum where forum_forum_parent = "' . $id . '" order by forum_forum_order');
+	$res = $db->query('select forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order, forum_forum_desc, forum_forum_id from forum_forum where forum_forum_parent = "' . $id . '" order by forum_forum_order');
 
 	foreach($res as $row)
 	{
@@ -76,14 +76,14 @@ function forumListManage(&$array, $id, $depth)
 
 if(isset($_POST['submit']))
 {
-	$forums = $DBMain->Query('select forum_forum_id from forum_forum');
+	$forums = $db->query('select forum_forum_id from forum_forum');
 
 	foreach($forums as $forum)
 	{
 		$id = $forum['forum_forum_id'];
 
 		if(isset($_POST['order' . $id]))
-			$DBMain->Query('update forum_forum set forum_forum_order=' . encode($_POST['order' . $id]) . ' where forum_forum_id=' . $id);
+			$db->query('update forum_forum set forum_forum_order=' . encode($_POST['order' . $id]) . ' where forum_forum_id=' . $id);
 	}
 
 	echo '<p>Order updated.';

@@ -34,9 +34,9 @@
 
 function display($name, $domain, $gender)
 {
-	global $DBMain;
+	global $db;
 
-	$res = $DBMain->Query('select domain_name, domain_id from domain order by domain_expw_time, domain_expw_max');
+	$res = $db->query('select domain_name, domain_id from domain order by domain_expw_time, domain_expw_max');
 
 	$domainlist = '';
 
@@ -81,7 +81,7 @@ if(LOGGED)
 			$fail = true;
 		}
 
-		$player = $DBMain->Query('select player_name from player where player_user=' . ID . ' and player_domain=' . $domain);
+		$player = $db->query('select player_name from player where player_user=' . ID . ' and player_domain=' . $domain);
 
 		if(count($player))
 		{
@@ -89,7 +89,7 @@ if(LOGGED)
 			$fail = true;
 		}
 
-		$existing = $DBMain->Query('select player_id from player where player_name="' . $name . '" and player_domain=' . $domain);
+		$existing = $db->query('select player_id from player where player_name="' . $name . '" and player_domain=' . $domain);
 
 		if(count($existing))
 		{
@@ -110,7 +110,7 @@ if(LOGGED)
 		}
 		else
 		{
-			$DBMain->Query('insert into player (player_user, player_name, player_gender, player_domain, player_register, player_last, player_job, player_town) values (' .
+			$db->query('insert into player (player_user, player_name, player_gender, player_domain, player_register, player_last, player_job, player_town) values (' .
 			ID . ', ' .
 			'"' . $name . '", ' .
 			($gender == 'M' ? '1' : '-1') . ', ' .
@@ -121,10 +121,10 @@ if(LOGGED)
 			'1' .
 			')');
 
-			$pid = $DBMain->Query('select player_id from player where player_user=' . ID . ' and player_domain="' . $domain . '"');
+			$pid = $db->query('select player_id from player where player_user=' . ID . ' and player_domain="' . $domain . '"');
 
 			// create an entry in player_job
-			$DBMain->Query('insert into player_job values (' . $pid[0]['player_id'] . ', 1, 0, 0)');
+			$db->query('insert into player_job values (' . $pid[0]['player_id'] . ', 1, 0, 0)');
 
 			// set the mod stats
 			updatePlayerStats($pid[0]['player_id']);

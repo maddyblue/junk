@@ -40,7 +40,7 @@ FROM job j
 LEFT JOIN cor_job_joblv ON cor_job = j.job_id
 LEFT JOIN job ON cor_job_req = job.job_id
 ORDER BY j.job_req_lv, j.job_name, cor_joblv, job.job_name';
-$res = $DBMain->Query($query);
+$res = $db->query($query);
 
 $array = array();
 
