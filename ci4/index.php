@@ -13,6 +13,7 @@ if(count($ret) == 0)
 	define('LOGGED_DIR', '<');
 	define('ADMIN', false);
 	define('GROUPID', 0);
+	define('CI_ID', 0);
 }
 else
 {
@@ -29,6 +30,30 @@ if(SECTION == 'ADMIN' && ADMIN != true)
 	echo '<p>Admins only here.';
 	exit();
 }
+
+// Get content page
+$content = '';
+if($a)
+{
+	$a = './' . $a . '.php';
+	$fd = fopen($a, 'r');
+	if($fd)
+	{
+		$content = fread($fd, filesize($a));
+		fclose($fd);
+		ob_start();
+		eval("?>" . $content . "<?");
+		$content = ob_get_contents();
+		ob_end_clean();
+	}
+}
+$content .= $message;
+
+if(!$CI_DOMAIN)
+	define('CI_DOMAIN', 0);
+else
+	define('CI_DOMAIN', $CI_DOMAIN);
+doCookie('DOMAIN', $CI_DOMAIN);
 
 // Template
 if($t);
@@ -54,30 +79,8 @@ $template = ob_get_contents();
 ob_end_clean();
 
 // Add content page
-$content = '';
-if($a)
-{
-	$a = './' . $a . '.php';
-	$fd = fopen($a, 'r');
-	if($fd)
-	{
-		$content = fread($fd, filesize($a));
-		fclose($fd);
-		ob_start();
-		eval("?>" . $content . "<?");
-		$content = ob_get_contents();
-		ob_end_clean();
-	}
-}
-$content .= $message;
 $pos = strpos($template, '<CICONTENT>');
 $template = substr_replace($template, $content, $pos, 11);
-
-if(!$CI_DOMAIN)
-	define('CI_DOMAIN', 0);
-else
-	define('CI_DOMAIN', $CI_DOMAIN);
-doCookie('DOMAIN', $CI_DOMAIN);
 
 // Single tags
 while(preg_match('/<CI_([^>]+)>/', $template, $matches)) // find a <CI_XXX> tag
