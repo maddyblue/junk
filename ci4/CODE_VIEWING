@@ -1,0 +1,9 @@
+Note to CI4 contributors (and regular developers):
+
+To keep some sanity when you view the CI4 code, it's recommended that you set your tab-space value to 2.  (If it's not set at 2 already, why the hell isn't it?  :) )
+
+We like using tabs.  It helps makes code look organizable.  Unfortunately, if your tab space is like something insane like 8, you're not going to have much fun, especially on a normal 80x24 terminal.
+
+Just a note for your comfort.
+
+--Khraythia / Dolmant
