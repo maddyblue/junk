@@ -136,9 +136,10 @@ array_push($array, array(
 
 for($i = 0; $i < count($res); $i++)
 {
+	$admin = ADMIN ? (' - ' . long2ip($res[$i]['session_ip'])) : '';
 	array_push($array, array(
 		getUserlink($res[$i]['session_user']),
-		$res[$i]['session_host'],
+		$res[$i]['session_host'] . $admin,
 		getTime($res[$i]['session_start']),
 		getTime($res[$i]['session_current']),
 		getAction($res[$i]['session_action'], $res[$i]['session_action_data'])
