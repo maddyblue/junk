@@ -126,18 +126,18 @@ function makeTable($arr, $skip = array())
 }
 
 /* This function takes lots of heavily nested arrays.
- * I suggest looking at user/newchar.php as an example.
+ * I suggest looking at other code as an example.
  */
-function getTableForm($title, $arr, $descrip = '', $parms = '')
+function getTableForm($title, $arr)
 {
 	$ret = '';
 	$end = '';
 
-	$ret .= '<form method="post" action="index.php" ' . $parms . '>
+	$ret .= '<form method="post" action="index.php">
 		<table>
 			<tr>
 				<td colspan="' . count($arr[0]) . '">
-					' . $title . ($descrip ? ': ' . $descrip : '') . '
+					' . $title . '
 				</td>
 			</tr>';
 
@@ -160,6 +160,26 @@ function getTableForm($title, $arr, $descrip = '', $parms = '')
 
 	$ret .= '</table>';
 	$ret .= $end;
+	$ret .= '</form>';
+
+	return $ret;
+}
+
+/* This function takes lots of heavily nested arrays.
+ * I suggest looking at other code as an example.
+ */
+function getForm($title, $arr)
+{
+	$ret = '';
+
+	$ret .= '<form method="post" action="index.php">
+		' . $title;
+
+	while(list(,$array) = each($arr))
+	{
+		$ret .= $array[0] . getFormField($array[1]);
+	}
+
 	$ret .= '</form>';
 
 	return $ret;
