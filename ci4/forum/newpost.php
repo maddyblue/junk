@@ -114,7 +114,7 @@ else
 				updateFromPost($lastpost);
 				$DBMain->Query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
 
-				echo '<br>Reply posted successfully.';
+				echo '<p>Reply posted successfully.';
 				echo '<p>Return to the ' . makeLink('previous forum', '?a=viewforum&f=' . $forum) . '.';
 				echo '<p>Return to the ' . makeLink('previous thread', '?a=viewthread&t=' . $thread) . '.';
 				echo '<p>Go to the ' . makeLink('new post', '?a=viewpost&p=' . $lastpost) . '.';

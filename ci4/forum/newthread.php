@@ -126,7 +126,7 @@ else
 				updateFromPost($lastpost);
 				$DBMain->Query('update forum_forum set forum_forum_threads=forum_forum_threads+1 where forum_forum_id=' . $forum);
 
-				echo '<br>Thread created successfully.';
+				echo '<p>Thread created successfully.';
 				echo '<p>Return to the ' . makeLink('previous forum', '?a=viewforum&f=' . $forum) . '.';
 				echo '<p>Go to the ' . makeLink('created thread', '?a=viewthread&t=' . $lastthread) . '.';
 			}
