@@ -93,13 +93,6 @@ else
 			$fail = true;
 		}
 
-		$ret = $DBMain->Query('select forum_thread_title from forum_thread where forum_thread_title="' . $subject . '" and forum_thread_forum=' . $forum);
-		if(count($ret))
-		{
-			echo '<br>There is already a thread in this forum with that subject name: change the subject.';
-			$fail = true;
-		}
-
 		if($fail)
 		{
 			echo '<br>Thread creation failed.<br>';
@@ -107,15 +100,16 @@ else
 		}
 		else
 		{
+
 			$DBMain->Query('insert into forum_thread (forum_thread_forum, forum_thread_title, forum_thread_user, forum_thread_date, forum_thread_type) values (' .
 				$forum . ',' .
 				'"' . $subject . '",' .
 				ID . ',' .
-				time() . ',' .
+				TIME . ',' .
 				'1' .
 				')');
 
-			$ret = $DBMain->Query('select forum_thread_id from forum_thread where forum_thread_title="' . $subject . '"');
+			$ret = $DBMain->Query('select forum_thread_id from forum_thread where forum_thread_date=' . TIME . ' and forum_thread_user=' . ID);
 			if(count($ret))
 			{
 				$lastthread = $ret[0]['forum_thread_id'];
@@ -125,7 +119,7 @@ else
 					'"' . $subject . '",' .
 					'"' . $post . '",' .
 					ID  . ',' .
-					time() .
+					TIME .
 					')');
 				$res = $DBMain->Query('select forum_post_id from forum_post where forum_post_user=' . ID .' order by forum_post_date desc limit 1');
 				$lastpost = $res[0]['forum_post_id'];
