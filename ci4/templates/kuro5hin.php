@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: kuro5hin.php,v 1.5 2003/09/27 03:35:02 dolmant Exp $ -->
+<!-- $Id: kuro5hin.php,v 1.6 2003/09/27 21:23:07 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
@@ -214,6 +214,32 @@ a:active {
 			<tr>
 				<td>
 					<?php echo date('d M y g:i a T', TIME); ?>
+				</td>
+			</tr>
+		</table>
+		<p>
+
+			<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#000000">
+			<tr>
+				<td width="100%">
+					<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#006699">
+						<tr>
+						<td width="100%">
+							<font face="verdana, arial, helvetica, sans-serif" color="#ffffff" size=2>
+								<?php echo makeLink('who\'s online', '?a=whosonline', SECTION_USER); ?>
+							</font>
+						</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+		<table width="100%" border=0 cellpadding=1 cellspacing=0>
+			<tr>
+				<td>
+						<?php echo getNumActiveUsers(); ?> users,
+						<?php echo getNumActiveGuests(); ?> guests
 				</td>
 			</tr>
 		</table>
