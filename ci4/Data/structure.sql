@@ -56,7 +56,8 @@ CREATE TABLE battle_entity (
   battle_entity_def smallint(6) unsigned NOT NULL default '0',
   battle_entity_mgd smallint(6) unsigned NOT NULL default '0',
   battle_entity_agl smallint(6) unsigned NOT NULL default '0',
-  battle_entity_acc smallint(6) unsigned NOT NULL default '0'
+  battle_entity_acc smallint(6) unsigned NOT NULL default '0',
+  KEY battle_entity_battle (battle_entity_battle)
 ) TYPE=MyISAM;
 
 
