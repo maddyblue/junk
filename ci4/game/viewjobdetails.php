@@ -36,7 +36,7 @@ $job = isset($_GET['job']) ? intval($_GET['job']) : '0';
 
 $res = $DBMain->Query('select * from job where job_id=' . $job);
 
-$equipment = $DBMain->Query('select equipmenttype_name from cor_job_equipmenttype, equipmenttype where cor_job=' . $job . ' and equipmenttype.equipmenttype_id=cor_equipmenttype order by equipmenttype_name');
+$equipment = $DBMain->Query('select equipmenttype_name, equipmenttype_id from cor_job_equipmenttype, equipmenttype where cor_job=' . $job . ' and equipmenttype.equipmenttype_id=cor_equipmenttype order by equipmenttype_name');
 
 $equipmentlist = '';
 
@@ -45,7 +45,7 @@ if(count($equipment))
 	for($i = 0; $i < count($equipment); $i++)
 	{
 		if($i) $equipmentlist .= ', ';
-		$equipmentlist .= $equipment[$i]['equipmenttype_name'];
+		$equipmentlist .= makeLink($equipment[$i]['equipmenttype_name'], 'a=viewequipment&type=' . $equipment[$i]['equipmenttype_id']);
 	}
 }
 else

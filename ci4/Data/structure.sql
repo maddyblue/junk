@@ -359,6 +359,16 @@ CREATE TABLE player (
   player_mod_mgd smallint(6) unsigned NOT NULL default '0',
   player_mod_agl smallint(6) unsigned NOT NULL default '0',
   player_mod_acc smallint(6) unsigned NOT NULL default '0',
+  player_equip_head bigint(10) unsigned NOT NULL default '0',
+  player_equip_ringL bigint(10) unsigned NOT NULL default '0',
+  player_equip_ringR bigint(10) unsigned NOT NULL default '0',
+  player_equip_handL bigint(10) unsigned NOT NULL default '0',
+  player_equip_handR bigint(10) unsigned NOT NULL default '0',
+  player_equip_chest bigint(10) unsigned NOT NULL default '0',
+  player_equip_legs bigint(10) unsigned NOT NULL default '0',
+  player_equip_feet bigint(10) unsigned NOT NULL default '0',
+  player_equip_arms bigint(10) unsigned NOT NULL default '0',
+  player_equip_gloves bigint(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (player_id),
   KEY player_user (player_user),
   KEY player_battle (player_battle)
@@ -382,8 +392,11 @@ CREATE TABLE player_abilitytype (
 
 
 CREATE TABLE player_equipment (
+  player_equipment_id bigint(10) unsigned NOT NULL auto_increment,
   player_equipment_equipment bigint(10) unsigned NOT NULL default '0',
-  player_equipment_player bigint(10) unsigned NOT NULL default '0'
+  player_equipment_player bigint(10) unsigned NOT NULL default '0',
+  player_equipment_equipped tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (player_equipment_id)
 ) TYPE=MyISAM;
 
 
