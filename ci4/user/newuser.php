@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newuser.php,v 1.10 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id: newuser.php,v 1.11 2004/01/05 08:52:57 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -34,11 +34,6 @@
 
 function display($name, $email)
 {
-	if(0 && !defined('IS_SECURE'))
-	{
-		echo '<p><b>We highly suggest that you switch to the <a href="' . CI_WWW_ADDRESS_HTTPS . 'user/?a=newuser">secure version of this page</a> while registering. It will make your password and all other submitted data transfer over the Internet in a secure method.</b></p>';
-	}
-
 	echo
 		getTableForm('New User:', array(
 			array('Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($name))),
