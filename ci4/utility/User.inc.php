@@ -179,16 +179,22 @@ function updatePlayerStats($pid = 0)
 		$pid = $GLOBALS['PLAYER']['player_id'];
 	}
 
-	global $db, $PLAYER;
+	global $db;
 
-	$stats = array('hp'=>$PLAYER['player_nomod_hp'], 'mp'=>$PLAYER['player_nomod_mp'], 'str'=>$PLAYER['player_nomod_str'], 'mag'=>$PLAYER['player_nomod_mag'], 'def'=>$PLAYER['player_nomod_def'], 'mgd'=>$PLAYER['player_nomod_mgd'], 'agl'=>$PLAYER['player_nomod_agl'], 'acc'=>$PLAYER['player_nomod_acc']);
+	$res = $db->query('select * from player where player_id=' . $pid);
+
+	if(!count($res))
+		return;
+
+	$stats = array('hp'=>$res[0]['player_nomod_hp'], 'mp'=>$res[0]['player_nomod_mp'], 'str'=>$res[0]['player_nomod_str'], 'mag'=>$res[0]['player_nomod_mag'], 'def'=>$res[0]['player_nomod_def'], 'mgd'=>$res[0]['player_nomod_mgd'], 'agl'=>$res[0]['player_nomod_agl'], 'acc'=>$res[0]['player_nomod_acc']);
 
 	// equipment
 
 	$res = $db->query('select sum(equipment_stat_hp) hp, sum(equipment_stat_mp) mp, sum(equipment_stat_str) str, sum(equipment_stat_mag) mag, sum(equipment_stat_def) def, sum(equipment_stat_mgd) mgd, sum(equipment_stat_agl) agl, sum(equipment_stat_acc) acc from equipment, player_equipment where equipment_id=player_equipment_equipment and player_equipment_equipped=1 and player_equipment_player=' . $pid . ' group by player_equipment_player');
 
-	foreach($stats as $key => $val)
-		$stats[$key] = $val + $res[0][$key];
+	if(count($res))
+		foreach($stats as $key => $val)
+			$stats[$key] = $val + $res[0][$key];
 
 	// commit data
 
