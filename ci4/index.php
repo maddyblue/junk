@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.43 2003/09/25 23:52:47 dolmant Exp $ */
+/* $Id: index.php,v 1.44 2003/09/27 03:38:19 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -101,9 +101,6 @@ if($res[0]['count'] == 1)
 	// set cookies to be alive for another week
 	setCIcookie('id', $id);
 	setCIcookie('pass', $pass);
-
-	// update last seen field
-	$DBMain->Query('update user set user_last=' . TIME . ' where user_id=' . ID);
 }
 else
 {

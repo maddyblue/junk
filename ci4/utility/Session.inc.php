@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Session.inc.php,v 1.3 2003/09/25 23:57:36 dolmant Exp $ */
+/* $Id: Session.inc.php,v 1.4 2003/09/27 03:38:22 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -88,6 +88,7 @@ function update_session_action($action)
 {
 	global $DBMain;
 
+	$DBMain->Query('update user set user_last=' . TIME . ' where user_id="' . ID . '"');
 	$DBMain->Query('update session set session_action="' . mysql_escape_string($action) . '" where session_id="' . SESSION . '"');
 }
 
