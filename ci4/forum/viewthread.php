@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.32 2004/01/12 07:54:54 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.33 2004/01/12 08:01:31 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -74,7 +74,7 @@ $threadid = isset($_GET['t']) ? $_GET['t'] : 0;
 
 $DBMain->Query('update forum_thread set forum_thread_views=forum_thread_views+1 where forum_thread_id=' . $threadid);
 
-$res = $DBMain->Query('select forum_thread_forum, forum_thread_title from forum_thread where forum_thread_id=' . $threadid);
+$res = $DBMain->Query('select forum_thread_forum, forum_thread_title, forum_thread_replies from forum_thread where forum_thread_id=' . $threadid);
 
 $forumid = $res[0]['forum_thread_forum'];
 
@@ -85,15 +85,13 @@ echo getNavBar($forumid) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_titl
 $newreply = makeLink('New Reply', 'a=newpost&t=' . $threadid);
 
 $offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
-$postsPP = FORUM_POSTS_PP;
 
-$ret = $DBMain->Query('select ceiling(count(*)/' . $postsPP . ') as count from forum_post where forum_post_thread=' . $threadid);
-$totpages = $ret[0]['count'];
-$curpage = floor($offset / $postsPP) + 1;
+$totpages = ceil(($res[0]['forum_thread_replies'] + 1) / FORUM_POSTS_PP);
+$curpage = floor($offset / FORUM_POSTS_PP) + 1;
 
-$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $postsPP, 'a=viewthread&t=' . $threadid);
+$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, FORUM_POSTS_PP, 'a=viewthread&t=' . $threadid);
 
-$array = postList($threadid, $offset, $postsPP, $canMod);
+$array = postList($threadid, $offset, FORUM_POSTS_PP, $canMod);
 
 if(count($array))
 {
