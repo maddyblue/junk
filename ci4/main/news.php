@@ -33,7 +33,7 @@
  */
 
 if(!LOGGED)
-	echo '<p><b>' . makeLink('First time to Crescent Island?', 'a=about', SECTION_MANUAL) . '</b><hr>';
+	echo '<div><b>' . makeLink('First time to Crescent Island?', 'a=about', SECTION_MANUAL) . '</b><hr/></div>';
 
 $ppp = 10; // posts per page
 $offset = 0;
