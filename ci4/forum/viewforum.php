@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.27 2004/01/05 09:49:48 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.28 2004/01/08 04:53:10 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -68,16 +68,6 @@ function forumList(&$array, $id, $topdepth, $depth)
 	global $DBMain;
 
 	$res = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
-
-	// if we're not viewing the root forum, stick in the parent
-	if($id != 0 && $topdepth == $depth)
-	{
-		$top = $DBMain->Query('select forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post from forum_forum where forum_forum_id = ' . $id);
-
-		addForumEntry($array, $top[0], 0);
-
-		$topdepth++;
-	}
 
 	foreach($res as $row)
 	{
