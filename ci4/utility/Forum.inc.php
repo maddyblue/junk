@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.21 2003/12/25 05:26:00 dolmant Exp $ */
+/* $Id: Forum.inc.php,v 1.22 2003/12/25 05:31:42 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -398,7 +398,7 @@ function listForums(&$array, $forum, $exclude = -1, $depth = 0)
 
 	foreach($res as $row)
 	{
-		array_push($array, array($row['forum_forum_id'], $row['forum_forum_name'], $depth));
+		array_push($array, array($row['forum_forum_id'], decode($row['forum_forum_name']), $depth));
 		listForums($array, $row['forum_forum_id'], $exclude, $depth + 1);
 	}
 
