@@ -9,7 +9,7 @@ define('CI_WWW_DOMAIN', 'dolmant.net');
 define('CI_WWW_PATH', '/ci4/'); // '/' if root, and must begin with '/'
 
 define('CI_DATABASE', 'ci4');
-define('CI_DEF_TEMPLATE', 'ci4');
+define('CI_DEF_TEMPLATE', 'redux');
 
 /* Don't mess with these */
 
