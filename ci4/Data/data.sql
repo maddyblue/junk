@@ -153,12 +153,12 @@ INSERT INTO domain VALUES (5,'Torture','tort',4,10);
 
 
 INSERT INTO equipment VALUES (1,'Rusty Dagger','dagger/rusty.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,50,'A rusty old dagger probably found in the trash.',3,2,0);
-INSERT INTO equipment VALUES (2,'Sandals','',0,0,0,0,5,0,0,0,0,0,0,0,0,50,'A few strips of leather and a hard base make up this poorly made piece of footwear.',7,6,0);
-INSERT INTO equipment VALUES (3,'Worn Boots','',0,0,0,0,7,3,0,0,0,20,0,0,0,100,'Second hand leather boots, worn at the toe and heel but still useful despite this.',7,6,0);
+INSERT INTO equipment VALUES (2,'Sandals','armor/sandals.gif',0,0,0,0,5,0,0,0,0,0,0,0,0,50,'A few strips of leather and a hard base make up this poorly made piece of footwear.',7,6,0);
+INSERT INTO equipment VALUES (3,'Worn Boots','armor/boots.gif',0,0,0,0,7,3,0,0,0,20,0,0,0,100,'Second hand leather boots, worn at the toe and heel but still useful despite this.',7,6,0);
 INSERT INTO equipment VALUES (4,'Butter Knife','dagger/dagger.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,50,'A blunt kitchen utensil with all the offensive power of a warm breeze, still it\'s better than being totally unarmed.',3,2,0);
 INSERT INTO equipment VALUES (5,'Wooden Sword','sword/wood.gif',0,0,5,0,0,0,0,0,0,0,0,0,0,50,'A wooden practice sword used by squires, and citizens in the mock duels they stage.',2,2,0);
 INSERT INTO equipment VALUES (6,'Rusty Sword','sword/rusty.gif',0,0,10,0,0,0,0,0,0,20,0,0,0,100,'An old sword probably belonging to an elderly adventurer who didn\'t get too far. Despite the terrible rusting where the blade meets the crosspiece it should hold together long enough for your purposes.',2,2,0);
-INSERT INTO equipment VALUES (7,'Reed Stick','staff/walkingstick.gif',0,0,2,3,0,0,0,0,0,0,0,0,0,50,'A few reeds wrapped together around a small stick or pieve of bamboo make a small rod often used by children imitating the mages they sometimes see passing through town.',4,2,1);
+INSERT INTO equipment VALUES (7,'Reed Stick','staff/reedstaff.gif',0,0,2,3,0,0,0,0,0,0,0,0,0,50,'A few reeds wrapped together around a small stick or pieve of bamboo make a small rod often used by children imitating the mages they sometimes see passing through town.',4,2,1);
 INSERT INTO equipment VALUES (8,'Walking Stick','staff/walkingstick.gif',0,0,4,6,0,0,0,0,0,0,20,0,0,100,'A walking stick probably once belonging to an old man and discarded in the gutter. When money is tight you have to make do with what you can find.',4,2,1);
 INSERT INTO equipment VALUES (9,'Hide Armor','armor/leather.gif',0,0,0,0,5,0,0,0,0,0,0,0,0,50,'Armour made from the patched together hides of different animals. A favourite with many tribal communities it doesn\'t really cut it next to that shining chainmail but it will do for now.',7,9,0);
 INSERT INTO equipment VALUES (10,'Broken Armor','armor/steel.gif',0,0,0,0,5,0,0,0,0,20,0,0,0,100,'Once a well made piece of armour this was discarded after a fight with irreperable damage. Whilst only a shadow of it\'s former glory you can still count on some protection from it.',8,9,0);
@@ -168,8 +168,8 @@ INSERT INTO equipment VALUES (13,'Broken Buckler','shield/buckler.gif',0,0,0,0,4
 INSERT INTO equipment VALUES (14,'Buckler','shield/buckler.gif',0,0,0,0,7,3,0,0,0,20,0,0,0,100,'A buckler usually used for duelling, it\'s small and offers little actual protection, but it\'s this or try and ward away blows with your arm.',10,3,0);
 INSERT INTO equipment VALUES (15,'Cloth Cap','head/leather.gif',0,0,0,0,3,2,0,0,0,0,0,0,0,50,'A basic peasents cap used to keep the rain off your head and your ears warm in winter.',7,4,0);
 INSERT INTO equipment VALUES (16,'Felt Hat','head/leather.gif',0,0,0,0,6,4,0,0,0,20,0,0,0,100,'A simple hat often worn by scribes or merchants in a poor attempt to flaunt their greater wealth over the peasents.',7,4,0);
-INSERT INTO equipment VALUES (17,'Torn Robe','armor/leather.gif',0,0,0,1,1,3,0,0,0,0,0,0,0,50,'This robe is torn at the seams and gives the asppearence of a beggar, still you can feel a slight tingle whenever you don the garment.',7,9,0);
-INSERT INTO equipment VALUES (18,'Ragged Robe','armor/leather.gif',0,0,0,2,2,6,0,0,0,0,20,0,0,100,'A poor quality robe, worn at the seams with stiches coming out everywhere, generally worn by children imitating mages or peasent adepts whilst practicing their base form of magic.',7,9,0);
+INSERT INTO equipment VALUES (17,'Torn Robe','armor/clothroberagged.gif',0,0,0,1,1,3,0,0,0,0,0,0,0,50,'This robe is torn at the seams and gives the asppearence of a beggar, still you can feel a slight tingle whenever you don the garment.',7,9,0);
+INSERT INTO equipment VALUES (18,'Ragged Robe','armor/clothroberagged.gif',0,0,0,2,2,6,0,0,0,0,20,0,0,100,'A poor quality robe, worn at the seams with stiches coming out everywhere, generally worn by children imitating mages or peasent adepts whilst practicing their base form of magic.',7,9,0);
 INSERT INTO equipment VALUES (19,'Toy Ring','',3,2,0,0,0,0,0,0,0,0,0,0,0,50,'A fake children\'s toy ring, you can still see some residue of the cereal it came in around the edges of the inset glass \'jewel\'.',1,1,0);
 INSERT INTO equipment VALUES (20,'Rusty Band','',6,4,0,0,0,0,0,0,0,20,0,0,0,100,'This ring is made out of rusted iron.',1,1,0);
 
@@ -230,7 +230,7 @@ INSERT INTO monster VALUES (7,'Green Drake','green_drake.gif',40,3,8,4,8,4,7,13,
 INSERT INTO monster VALUES (8,'Rat','rat.gif',40,3,6,2,4,4,5,15,4,16,11,3,'Small mucky rodents that swarm wherever there is food to be had, Rats are capable scavengers and are usually present in any dark place.');
 INSERT INTO monster VALUES (9,'Arachnid','',80,3,6,2,6,2,4,14,5,18,13,2,'Arachnids are large spiders with small round bodies and long, thin legs. They gather in dark places and form colonies, although they prefer to hunt alone.');
 INSERT INTO monster VALUES (10,'Black Bat','',80,3,8,2,5,2,6,16,5,20,15,3,'Black bats are large underground creatures that navigate through the darkest passages with the aid of sonar, with which they hunt any prey that stumbles too close to their lair.');
-INSERT INTO monster VALUES (11,'Dust Mephit','',160,3,60,2,10,2,6,16,6,28,0,5,'Sickly humanoids four feet tall and comprised of dirt and grime, Dust Mephits are malicious little creatures who hate all things more beautiful than themselves. In the case of Dust Mephits, this is almost everything.');
+INSERT INTO monster VALUES (11,'Dust Mephit','dustmephit.gif',160,3,60,2,10,2,6,16,6,28,0,5,'Sickly humanoids four feet tall and comprised of dirt and grime, Dust Mephits are malicious little creatures who hate all things more beautiful than themselves. In the case of Dust Mephits, this is almost everything.');
 
 
 INSERT INTO monstertype VALUES (1,'Abberation');
