@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Globals.inc.php,v 1.30 2003/12/20 08:14:03 dolmant Exp $ */
+/* $Id: Globals.inc.php,v 1.31 2004/01/05 21:03:08 dolmant Exp $ */
 
 /*	CI globals.	*/
 
@@ -21,13 +21,6 @@ define('SECTION_ADMIN', 'admin');
 define('SECTION_USER', 'user');
 define('SECTION_FORUM', 'forum');
 define('SECTION_GAME', 'game');
-
-/* Groups */
-
-define('GROUP_ADMIN', 1);
-define('GROUP_SUPER', 2);
-define('GROUP_BANNED', 3);
-define('GROUP_MOD', 4);
 
 /* Forum specs */
 
