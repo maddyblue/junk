@@ -65,7 +65,7 @@ CREATE TABLE cor_job_equipmenttype (
 CREATE TABLE cor_job_joblv (
   cor_job bigint(10) unsigned NOT NULL default '0',
   cor_job_req bigint(10) unsigned NOT NULL default '0',
-  cor_job_lv smallint(5) unsigned NOT NULL default '0'
+  cor_joblv smallint(5) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
