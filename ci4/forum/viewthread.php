@@ -81,63 +81,70 @@ $res = $DBMain->Query('select forum_thread_forum, forum_thread_title, forum_thre
 
 $forumid = $res[0]['forum_thread_forum'];
 
-$canMod = canMod($forumid);
-
-echo getNavBar($forumid) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid) . '<p>';
-
-$newreply = makeLink('New Reply', 'a=newpost&t=' . $threadid);
-
-$offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
-
-$totpages = ceil(($res[0]['forum_thread_replies'] + 1) / FORUM_POSTS_PP);
-$curpage = floor($offset / FORUM_POSTS_PP) + 1;
-
-$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, FORUM_POSTS_PP, 'a=viewthread&t=' . $threadid);
-
-$array = postList($threadid, $offset, FORUM_POSTS_PP, $canMod);
-
-if(count($array))
+if(!canView($forumid))
 {
-	echo '<p>' . $pageDisp;
-	?>
-		<table class="tableMain" width="100%">
-			<tr class="tableRow">
-				<td width="150" class="tableCellTL">
-				</td>
-				<td class="tableCellTR" align="right">
-					<?php echo $newreply; ?>
-				</td>
-			</tr>
-
-			<?php echo getTable($array, false, false, false); ?>
-
-			<tr class="tableRow">
-				<td class="tableCellBL">
-				</td>
-				<td class="tableCellBR" align="right">
-					<?php echo $newreply; ?>
-				</td>
-			</tr>
-		</table>
-	<?php
-	echo '<p>' . $pageDisp;
-
-	if(LOGGED)
-	{
-		echo getTableForm('Quick Reply', array(
-			array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="4" cols="35" wrap="virtual" style="width:450px"')),
-
-			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')),
-			array('', array('type'=>'hidden', 'name'=>'t', 'val'=>$threadid)),
-			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
-		));
-
-		$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $threadid);
-		$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_forum, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . $forumid . ', ' . TIME . ')');
-	}
+	echo '<p>You cannot view this forum.';
 }
 else
-	echo '<br>Non-existent thread.';
+{
+	$canMod = canMod($forumid);
+
+	echo getNavBar($forumid) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid) . '<p>';
+
+	$newreply = makeLink('New Reply', 'a=newpost&t=' . $threadid);
+
+	$offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
+
+	$totpages = ceil(($res[0]['forum_thread_replies'] + 1) / FORUM_POSTS_PP);
+	$curpage = floor($offset / FORUM_POSTS_PP) + 1;
+
+	$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, FORUM_POSTS_PP, 'a=viewthread&t=' . $threadid);
+
+	$array = postList($threadid, $offset, FORUM_POSTS_PP, $canMod);
+
+	if(count($array))
+	{
+		echo '<p>' . $pageDisp;
+		?>
+			<table class="tableMain" width="100%">
+				<tr class="tableRow">
+					<td width="150" class="tableCellTL">
+					</td>
+					<td class="tableCellTR" align="right">
+						<?php echo $newreply; ?>
+					</td>
+				</tr>
+
+				<?php echo getTable($array, false, false, false); ?>
+
+				<tr class="tableRow">
+					<td class="tableCellBL">
+					</td>
+					<td class="tableCellBR" align="right">
+						<?php echo $newreply; ?>
+					</td>
+				</tr>
+			</table>
+		<?php
+		echo '<p>' . $pageDisp;
+
+		if(LOGGED)
+		{
+			echo getTableForm('Quick Reply', array(
+				array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="4" cols="35" wrap="virtual" style="width:450px"')),
+
+				array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')),
+				array('', array('type'=>'hidden', 'name'=>'t', 'val'=>$threadid)),
+				array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
+			));
+
+			$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $threadid);
+			$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_forum, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . $forumid . ', ' . TIME . ')');
+		}
+	}
+	else
+		echo '<br>Non-existent thread.';
+}
 
 update_session_action(0406, $threadid);
 
