@@ -775,4 +775,12 @@ function dirList($dir, $files = true, $dirs = true, $omitdotfiles = true)
 	return $ret;
 }
 
+function updatePlayerStats($pid == $GLOBALS['PLAYER']['player_id'])
+{
+	global $DBMain;
+
+	// we don't have items yet, so mod and nomod are the same
+	$DBMain->Query('update player set player_mod_hp=player_nomod_hp, player_mod_wp=player_nomod_wp, player_mod_str=player_nomod_str, player_mod_mag=player_nomod_mag, player_mod_def=player_nomod_def, player_mod_mgd=player_nomod_mgd, player_mod_agl=player_nomod_agl, player_mod_acc=player_nomod_acc where player_id=' . $pid);
+}
+
 ?>

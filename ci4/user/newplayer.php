@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newplayer.php,v 1.3 2004/01/05 09:35:31 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -118,6 +118,11 @@ if(LOGGED)
 			TIME . ', ' .
 			TIME .
 			')');
+
+			$pid = $DBMain->Query('select player_id from player where player_user=' . ID . ' and player_domain="' . $domain . '"');
+
+			// set the mod stats
+			updatePlayerStats($pid[0]['player_id']);
 
 			echo '<p>New player registered.';
 		}
