@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.62 2004/01/12 07:34:10 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.63 2004/01/12 07:35:28 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -706,7 +706,7 @@ function pageDisp($curpage, $totpages, $perpage, $id, $link)
 			$pageDisp .= ' ';
 
 		if($pages[$i][1] != 0)
-			$pageDisp .= makeLink($pages[$i][0], $link . $id . '&start=' . ($perpage * ($pages[$i][1] - 1)), SECTION_FORUM);
+			$pageDisp .= makeLink($pages[$i][0], $link . $id . '&start=' . ($perpage * ($pages[$i][1] - 1)));
 		else
 			$pageDisp .= $pages[$i][0];
 	}
