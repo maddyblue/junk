@@ -62,6 +62,8 @@ class SQLFormat extends DatabaseAccess {
 	Arguments:
 
 	Template - template data.
+	Handle - database connection handle.
+	Database - database the table is in.
 	Table - name of table in database.
 	Delim - Tag delimiters (i.e. "%" for "%stuff%").
 	IndexStart - At what column index to begin reading MySQL data from.
@@ -80,8 +82,17 @@ class SQLFormat extends DatabaseAccess {
 		$i = 0;
 		$j = 0;
 
+<<<<<<< SQLFormat.inc.php
+		$dbq = mysql_db_query($parameters{"Database"}, 
+													"select * from " . $table,
+													$parameters{"Handle"}
+												);
+
+    while ($row = mysql_fetch_assoc($dbq)) {
+=======
 		$dbq = mysql_db_query($this->database, "select * from " . $table);
 	 while ($row = mysql_fetch_assoc($dbq)) {
+>>>>>>> 1.2
 			$cp = $temp;
 			$parameters{"Hash"} = $row;
 		$data = $this->FormatFromHash($parameters);
