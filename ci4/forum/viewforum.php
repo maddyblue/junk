@@ -113,6 +113,13 @@ if(isset($_GET['forumid']))
 
 forumList($array, $forumid, $depth, $depth);
 
+$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forumid);
+
 echo getTable($array);
+
+if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
+{
+	echo '<p>' . makeLink('New Thread', '?a=newthread&forumid=' . $forumid);
+}
 
 ?>
