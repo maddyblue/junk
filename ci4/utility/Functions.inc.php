@@ -753,7 +753,7 @@ function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 		array_push($pages, array('&raquo;', $totpages));
 	}
 
-	$pageDisp = '';
+	$pageDisp = 'Page ' . $curpage . ' of ' . $totpages . ': ';
 
 	for($i = 0; $i < count($pages); $i++)
 	{
@@ -763,7 +763,7 @@ function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 		if($pages[$i][1] != 0)
 			$pageDisp .= makeLink($pages[$i][0], $link . '&page=' . $pages[$i][1], $section);
 		else
-			$pageDisp .= $pages[$i][0];
+			$pageDisp .= '<b>' . $pages[$i][0] . '</b>';
 	}
 
 	return $pageDisp;

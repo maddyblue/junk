@@ -98,7 +98,7 @@ else
 
 	$totpages = ceil(($res[0]['forum_thread_replies'] + 1) / FORUM_POSTS_PP);
 
-	$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, FORUM_POSTS_PP, 'a=viewthread&t=' . $threadid);
+	$pageDisp = pageDisp($curpage, $totpages, FORUM_POSTS_PP, 'a=viewthread&t=' . $threadid);
 
 	$array = postList($threadid, $curpage, FORUM_POSTS_PP, $canMod);
 
