@@ -32,12 +32,31 @@
  *
  */
 
-$e = isset($_GET['e']) ? intval($_GET['e']) : '0';
+$e = isset($_GET['e']) ? intval($_GET['e']) :
+	(isset($_POST['e']) ? intval($_POST['e']) : '0');
 
 $res = $db->query('select * from equipment, equipmenttype where equipment_id=' . $e . ' and equipmenttype_id=equipment_type');
 
 if(count($res))
 {
+	if(isset($_POST['e']))
+	{
+		$name = $res[0]['equipment_name'];
+		$cost = $res[0]['equipment_cost'];
+
+		if($cost > $PLAYER['player_money'])
+			echo '<p>You do not have enough money to purchase this.';
+		else
+		{
+			$db->query('insert into player_equipment (player_equipment_equipment, player_equipment_player) values (' . $res[0]['equipment_id'] . ', ' . $PLAYER['player_id'] . ')');
+			$db->query('update player set player_money = player_money - ' . $cost . ' where player_id=' . $PLAYER['player_id']);
+			$PLAYER['player_money'] -= $cost;
+			echo '<p>Purchased a ' . $name . '.';
+		}
+	}
+
+	echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
+
 	$stat = array(
 		array('HP', $res[0]['equipment_stat_hp']),
 		array('MP', $res[0]['equipment_stat_mp']),
@@ -68,11 +87,11 @@ if(count($res))
 
 	$buytext = getForm('', array(
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Purchase')),
-		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'buyequipment')),
+		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewequipmentdetails')),
 		array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
 	));
 
-	echo $buytext;
+	echo '<p>' . $buytext;
 	echo getTable($array);
 	echo '<p>' . $buytext;
 }
