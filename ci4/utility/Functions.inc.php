@@ -325,4 +325,31 @@ function getTime($ts = -1)
 	return date('d M y - H:i', $ts);
 }
 
+function setCIcookie($name, $value)
+{
+	// 60*60*24*7 = 604800 = 7 days
+	if(defined('IS_SECURE'))
+		setCIcookieReal($name, $value, '0');
+	else
+		setCIcookieReal($name, $value, '1');
+}
+
+function setCIcookieReal($name, $value, $secure)
+{
+	setCookie('CI_' . $name, $value, time() + 604800, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
+}
+
+function deleteCIcookie($name)
+{
+	if(defined('IS_SECURE'))
+		deleteCIcookieReal($name, '0');
+	else
+		deleteCIcookieReal($name, '1');
+}
+
+function deleteCIcookieReal($name, $secure)
+{
+	setCookie('CI_' . $name, '', 0, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
+}
+
 ?>
