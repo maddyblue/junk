@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.54 2003/12/19 09:17:23 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.55 2003/12/22 07:07:35 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -99,37 +99,6 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 		$val = makeLink($val, $link, $section);
 	}
 	return $val;
-}
-
-/* Creates a nice table from the given array...should be used everywhere.
- */
-function makeTable($arr, $skip = array())
-{
-	$list = array();
-	?><p><table1><tr1><?php
-	$width = 0;
-	while(list($val) = each($arr))
-	{
-		if($skip{$val}) continue;
-		$width++;
-		echo "\n";
-		?><td1><?php echo $val ?></td><?php
-		array_push($list, $val);
-	}
-	$depth = count($arr{$list[0]});
-	?></tr><?php
-	for($i1 = 0; $i1 < $depth; $i1++)
-	{
-		echo "\n";
-		?><tr2><?php
-		for($i2 = 0; $i2 < $width; $i2++)
-		{
-			echo "\n";
-			?><td2><?php echo $arr{$list[$i2]}[$i1] ?></td><?php
-		}
-		?></tr><?php
-	}
-	?></table><?php
 }
 
 /* This function takes lots of heavily nested arrays.
@@ -623,6 +592,14 @@ function parseTags(&$template)
 			$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
 		}
 	}
+}
+
+function makeSpaces($num)
+{
+	$ret = '';
+	while($num-- > 0)
+		$ret .= '&nbsp;';
+	return $ret;
 }
 
 ?>
