@@ -187,7 +187,7 @@ INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','CI_WWW_PATH
 INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','CI_WWW_PATH . SECTION_GAME . \'/?a=viewequipment\'',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','CI_WWW_PATH . SECTION_GAME . \'/?a=viewmonsters\'',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',30,'link','View Abilities','','CI_WWW_PATH . SECTION_GAME . \'/?a=viewabilities\'',0,0,'');
-INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','CI_WWW_PATH . \'/?a=domains\'',0,0,'');
+INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','CI_WWW_PATH . \'?a=domains\'',0,0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','CI_WWW_PATH',0,0,'');
 INSERT INTO site VALUES ('NAV',10,'link','Forum','','CI_WWW_PATH . SECTION_FORUM . \'/?a=viewforum\'',0,0,'');
 INSERT INTO site VALUES ('NAV',20,'link','User','','CI_WWW_PATH . SECTION_USER',0,0,'');
