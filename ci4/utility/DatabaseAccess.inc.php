@@ -64,11 +64,12 @@ class DatabaseAccess
 	}
 
 	/*	ReadTable: Given a query, execute that query, and retrieve
-		all data in row/column format.  We use a hash table of arrays,
-		i.e.
+		all data in row/column format.
 
-		$hash["Column 1"] = ["A", "B", "C", "D"]
-		$hash["Column 2"] = ["1", "2", "3", "4"]
+		$query[0]['key1'] = 'value01';
+		$query[0]['key2'] = 'value02';
+		$query[1]['key1'] = 'value11';
+		etc.
 
 		Expected parameters:
 			Handle - database connection to use.
@@ -85,7 +86,7 @@ class DatabaseAccess
 			$parameters['Query'],
 			$parameters['Handle']
 		);
-		if(mysql_error())
+		if($dbq == false)
 		{
 			global $message;
 			$message .= '<p>Error: ' . mysql_error() . '.
