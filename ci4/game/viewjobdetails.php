@@ -2,14 +2,14 @@
 
 $res = $DBMain->Query('select * from job where job_id=' . $_GET['job']);
 
-$items = $DBMain->Query('select itemtype_name from cor_job_itemtype, itemtype where cor_job=' . $_GET['job'] . ' and itemtype.itemtype_id=cor_itemtype order by itemtype_name');
+$equipment = $DBMain->Query('select equipmenttype_name from cor_job_equipmenttype, equipmenttype where cor_job=' . $_GET['job'] . ' and equipmenttype.equipmenttype_id=cor_equipmenttype order by equipmenttype_name');
 
-$itemlist = '';
+$equipmentlist = '';
 
-for($i = 0; $i < count($items['itemtype_name']); $i++)
+for($i = 0; $i < count($equipment['equipmenttype_name']); $i++)
 {
-	if($i) $itemlist .= ', ';
-	$itemlist .= $items['itemtype_name'][$i];
+	if($i) $equipmentlist .= ', ';
+	$equipmentlist .= $equipment['equipmenttype_name'][$i];
 }
 
 $jobs = $DBMain->Query('select job_name, job_id, cor_job_lv from cor_job_joblv, job where cor_job=' . $_GET['job'] . ' and cor_job_req=job.job_id order by job_name');
@@ -59,7 +59,7 @@ $array = array(
 	array('Gender', getGender($res['job_gender'][0])),
 	array('Required Level', $res['job_req_lv'][0]),
 	array('Wage', $res['job_wage'][0]),
-	array('Equippable Item Types', $itemlist),
+	array('Useable Equipment Types', $equipmentlist),
 	array('Prerequisite Job Levels', $joblist),
 	array('Battle Stats', getTable($stat, false)),
 	array('Level Up Stats', getTable($level, false)),
