@@ -232,8 +232,9 @@ INSERT INTO monstertype VALUES (9,'Undead');
 
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',10,'link','Reset','','\'a=reset\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',20,'link','Sync forums','','\'a=sync-forums\'','SECTION_ADMIN',1,1,'');
-INSERT INTO site VALUES ('ADMIN_SECTION_MENU',30,'link','Manage forums','','\'a=manage-forums\'','SECTION_ADMIN',1,1,'');
-INSERT INTO site VALUES ('ADMIN_SECTION_MENU',40,'link','Manage Groups','','\'a=manage-groups\'','SECTION_ADMIN',1,1,'');
+INSERT INTO site VALUES ('ADMIN_SECTION_MENU',30,'link','Reparse posts','','\'a=reparse-posts\'','SECTION_ADMIN',1,1,'');
+INSERT INTO site VALUES ('ADMIN_SECTION_MENU',40,'link','Manage forums','','\'a=manage-forums\'','SECTION_ADMIN',1,1,'');
+INSERT INTO site VALUES ('ADMIN_SECTION_MENU',50,'link','Manage Groups','','\'a=manage-groups\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('BATTLE_SECTION_MENU',0,'link','Battle','','\'a=battle\'','SECTION_BATTLE',1,0,'');
 INSERT INTO site VALUES ('BATTLE_SECTION_MENU',10,'link','New Battle','','\'a=newbattle\'','SECTION_BATTLE',1,0,'');
 INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'eval','newthreadLink() . newreplyLink()','','','',1,0,'f and t are never specified together, hence this works well');
@@ -262,6 +263,7 @@ INSERT INTO site VALUES ('NAV',50,'link','User','','','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('NAV',60,'link','Manual','','','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('NAV',70,'link','Admin','','','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('NAV',80,'link','[Login]','','\'a=login\'','SECTION_USER',-1,0,'');
+INSERT INTO site VALUES ('PLAYER_SECTION_NAV',0,'link','View Players','','\'a=viewplayers\'','SECTION_PLAYER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','\'a=newuser\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','My Info','','\'a=viewuserdetails&user=\' . ID','SECTION_USER',1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new player','','\'a=newplayer\'','SECTION_PLAYER',1,0,'');
@@ -275,7 +277,6 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_PROFILE',0,'eval','getProfile()','','','',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
-INSERT INTO site VALUES ('PLAYER_SECTION_NAV',0,'link','View Players','','\'a=viewplayers\'','SECTION_PLAYER',0,0,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
