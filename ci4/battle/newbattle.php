@@ -75,6 +75,7 @@ function newBattle($area)
 	// create the battle entities
 
 	$DBMain->Query('insert into battle_entity values (
+		"",
 		' . $batid . ',
 		' . $PLAYER['player_id'] . ',
 		1,
@@ -91,6 +92,7 @@ function newBattle($area)
 		' . $PLAYER['player_mod_mgd'] . ',
 		' . $PLAYER['player_mod_agl'] . ',
 		' . $PLAYER['player_mod_acc'] . '), (
+		"",
 		' . $batid . ',
 		' . $monster[0]['monster_id'] . ',
 		2,
