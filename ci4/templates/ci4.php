@@ -93,7 +93,7 @@ td
 	</table>
 </div>
 
-<div id="main" style="position:absolute; left:105px; right:5px; top:155px; border:solid 0px; border-color:#AAAAAA;">
+<div id="main" style="position:absolute; left:150px; right:5px; top:155px; border:solid 0px; border-color:#AAAAAA;">
 	<table width="100%" height="100%" valign="top">
 		<tr>
 			<td>
@@ -103,7 +103,7 @@ td
 	</table>
 </div>
 
-<div id="menus" style="position:absolute; left:5px; top: 155px; width:95;">
+<div id="menus" style="position:absolute; left:5px; top: 155px; width:145;">
 	<table width="100%" class="box">
 		<tr>
 			<td>
