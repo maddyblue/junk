@@ -43,7 +43,7 @@ if(count($ret) == 1)
 
 	$ret = $db->query('select floor(count(*)/' . $postsPP . ') + 1 as count from forum_post where forum_post_thread=' . $threadid . ' and forum_post_date < ' . $ret[0]['forum_post_date']);
 
-	echo '<meta http-equiv="refresh" content="0; url=?a=viewthread&t=' . $threadid . '&page=' . $ret[0]['count'] . '#' . $postid . '">';
+	echo '<meta http-equiv="refresh" content="0; url=?a=viewthread&amp;t=' . $threadid . '&amp;page=' . $ret[0]['count'] . '#' . $postid . '">';
 }
 else
 {
