@@ -5,8 +5,8 @@
 class DatabaseAccess
 {
 
-	/*	Connect: returns a handle to a database connection 
-	
+	/*	Connect: returns a handle to a database connection
+
 			Expected parameters:
 				SQLServer - server to connect to.
 				SQLUser - user to connect as.
@@ -23,7 +23,7 @@ class DatabaseAccess
 	}
 
 	/*	Disconnect: Closes a database connection
-			
+
 			Expected parameters:
 				handle - database connection to close.
 	*/
@@ -34,7 +34,7 @@ class DatabaseAccess
 	}
 
 	/*	ReadTable: Given a query, execute that query, and retrieve
-		all data in row/column format.  We use a hash table of arrays, 
+		all data in row/column format.  We use a hash table of arrays,
 		i.e.
 
 		$hash["Column 1"] = ["A", "B", "C", "D"]
@@ -48,7 +48,7 @@ class DatabaseAccess
 
 	function ReadTable($parameters)
 	{
-		$ret = "";
+		$ret = array();
 		$counter = 0;
 		$dbq = mysql_db_query(
 			$parameters{"Database"},
@@ -67,5 +67,5 @@ class DatabaseAccess
 		return $ret;
 	}
 };
-	
+
 ?>
