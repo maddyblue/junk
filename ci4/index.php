@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.54 2003/12/19 09:09:52 dolmant Exp $ */
+/* $Id: index.php,v 1.55 2003/12/19 09:11:51 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -189,6 +189,8 @@ else
 {
 	echo $content;
 }
+
+echo '<p>' . $message;
 
 flush();
 
