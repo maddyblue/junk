@@ -244,28 +244,38 @@ function getCharID($forumid, $domain)
 		return 0;
 }
 
-function getstat($stat, $id = -1, $look = "id", $list = "playerlist")
+function getGender($g)
 {
-	if($id == -1)
+	switch($g)
 	{
-		$id = CI_ID;
+		case 1: $ret = 'Male'; break;
+		case 0: $ret = 'Both'; break;
+		case -1: $ret = 'Female'; break;
+		default: $ret = ''; break;
 	}
-	$mydb = mysql_connect("localhost", "user", "usersql");
-	mysql_select_db("ci", $mydb);
-	$query = mysql_query("select $stat from $list where $look = '$id'");
-	return @mysql_result($query, 0, 0);
+	return $ret;
 }
 
-function getistat($stat, $id = -1, $list = "playerlist")
+function getTable($array, $withInit = true)
 {
-	if($id == -1)
+	$ret = '';
+
+	for($i = 0; $i < count($array); $i++)
 	{
-		$id = CI_ID;
+		$ret .= '<tr2>';
+		for($j = 0; $j < count($array[$i]); $j++)
+		{
+			$ret .= '<td2>' . $array[$i][$j] . '</td>';
+		}
+		$ret .= '</tr>';
 	}
-	$mydb = mysql_connect("localhost", "user", "usersql");
-	mysql_select_db("ci", $mydb);
-	$query = mysql_query("select $stat from $list where id = $id", $mydb);
-	return @mysql_result($query,0,0);
+
+	if($withInit)
+	{
+		$ret = '<table>' . $ret . '</table>';
+	}
+
+	return $ret;
 }
 
 ?>
