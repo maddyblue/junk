@@ -30,8 +30,6 @@
  *
  */
 
-require_once CI_FS_PATH . 'utility/Forum.inc.php';
-
 if(!LOGGED)
 {
 	echo '<p>You must be logged in to view your pms.';
