@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.55 2003/12/22 07:07:35 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.56 2004/01/05 04:38:16 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -203,20 +203,17 @@ function getFormField($arr)
 	return $str;
 }
 
-function getDomainName($id = -1)
+function getDomainName($domain = 0)
 {
-	if($id == -1)
-	{
-		$id = CI_DOMAIN;
-	}
+	if($domain == 0)
+		$domain = CI_DOMAIN;
 
-	global $DBMain;
-	$ret = $DBMain->Query('SELECT name FROM domain WHERE id=' . $id);
+	$name = getDBData('domain_name', $domain, 'domain_id', 'domain');
 
-	if(count($ret['name']) == 1)
-		return $ret['name'][0];
-
-	return '-None-';
+	if($name == '')
+		return '-None-';
+	else
+		return $name;
 }
 
 function getGender($g)
