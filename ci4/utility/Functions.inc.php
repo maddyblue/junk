@@ -522,18 +522,12 @@ function validateChars(&$text)
 /* Same as validateChars, except with a stricter alphabet. Also, die on a
  * mismatch instead of replacing with a space.
  */
-function validateCharsDie(&$text, $alphabet = 'abcdefghijklmnopqrstuvwxyz-')
+function validateCharsDie(&$text)
 {
-	$sizestr = strlen($text) - 1;
+	$matches = preg_match('/[^-a-z0-9]/', $text);
 
-	for($i = 0; $i <= $sizestr; $i++)
-	{
-		if(strstr($alphabet, $text[$i]))
-			continue;
-		// if $text contians a character not in $alphabet, don't do anything else
-		else
-			die('Invalid characters specified in input. This could be caused by invalid cookie data, thus it is recommended to clear your cookies.');
-	}
+	if($matches)
+		die('Invalid characters specified in input. This could be caused by invalid cookie data, thus it is recommended to clear your cookies.');
 }
 
 // --- Cookies ---
