@@ -8,11 +8,11 @@ mysqldump -u user --password=usersql -h faye ci4 \
 	ability \
 	abilitytype \
 	cor_job_ability \
-	cor_job_itemtype \
+	cor_job_equipmenttype \
 	cor_job_joblv \
-	cor_monster_item \
-	item \
-	itemtype \
+	cor_monster_drop \
+	equipment \
+	equipmenttype \
 	job \
 	monster \
 	monstertype \

@@ -70,58 +70,58 @@ CREATE TABLE cor_job_ability (
 
 
 --
--- Table structure for table 'cor_job_itemtype'
+-- Table structure for table 'cor_job_equipmenttype'
 --
 
-CREATE TABLE cor_job_itemtype (
+CREATE TABLE cor_job_equipmenttype (
   cor_job bigint(10) unsigned NOT NULL default '0',
-  cor_itemtype bigint(10) unsigned NOT NULL default '0'
+  cor_equipmenttype bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 --
--- Dumping data for table 'cor_job_itemtype'
+-- Dumping data for table 'cor_job_equipmenttype'
 --
 
 
-INSERT INTO cor_job_itemtype VALUES (1,0);
-INSERT INTO cor_job_itemtype VALUES (2,1);
-INSERT INTO cor_job_itemtype VALUES (2,2);
-INSERT INTO cor_job_itemtype VALUES (2,3);
-INSERT INTO cor_job_itemtype VALUES (2,4);
-INSERT INTO cor_job_itemtype VALUES (3,6);
-INSERT INTO cor_job_itemtype VALUES (3,5);
-INSERT INTO cor_job_itemtype VALUES (3,3);
-INSERT INTO cor_job_itemtype VALUES (3,4);
-INSERT INTO cor_job_itemtype VALUES (4,6);
-INSERT INTO cor_job_itemtype VALUES (4,7);
-INSERT INTO cor_job_itemtype VALUES (4,5);
-INSERT INTO cor_job_itemtype VALUES (4,3);
-INSERT INTO cor_job_itemtype VALUES (4,4);
-INSERT INTO cor_job_itemtype VALUES (5,6);
-INSERT INTO cor_job_itemtype VALUES (5,5);
-INSERT INTO cor_job_itemtype VALUES (5,3);
-INSERT INTO cor_job_itemtype VALUES (5,4);
-INSERT INTO cor_job_itemtype VALUES (5,7);
-INSERT INTO cor_job_itemtype VALUES (5,8);
-INSERT INTO cor_job_itemtype VALUES (6,6);
-INSERT INTO cor_job_itemtype VALUES (6,5);
-INSERT INTO cor_job_itemtype VALUES (6,3);
-INSERT INTO cor_job_itemtype VALUES (6,4);
-INSERT INTO cor_job_itemtype VALUES (6,7);
-INSERT INTO cor_job_itemtype VALUES (7,9);
-INSERT INTO cor_job_itemtype VALUES (7,3);
-INSERT INTO cor_job_itemtype VALUES (8,9);
-INSERT INTO cor_job_itemtype VALUES (8,4);
-INSERT INTO cor_job_itemtype VALUES (8,3);
-INSERT INTO cor_job_itemtype VALUES (9,10);
-INSERT INTO cor_job_itemtype VALUES (9,3);
-INSERT INTO cor_job_itemtype VALUES (9,11);
-INSERT INTO cor_job_itemtype VALUES (10,10);
-INSERT INTO cor_job_itemtype VALUES (10,3);
-INSERT INTO cor_job_itemtype VALUES (10,11);
-INSERT INTO cor_job_itemtype VALUES (11,10);
-INSERT INTO cor_job_itemtype VALUES (11,3);
-INSERT INTO cor_job_itemtype VALUES (11,11);
+INSERT INTO cor_job_equipmenttype VALUES (1,0);
+INSERT INTO cor_job_equipmenttype VALUES (2,1);
+INSERT INTO cor_job_equipmenttype VALUES (2,2);
+INSERT INTO cor_job_equipmenttype VALUES (2,3);
+INSERT INTO cor_job_equipmenttype VALUES (2,4);
+INSERT INTO cor_job_equipmenttype VALUES (3,6);
+INSERT INTO cor_job_equipmenttype VALUES (3,5);
+INSERT INTO cor_job_equipmenttype VALUES (3,3);
+INSERT INTO cor_job_equipmenttype VALUES (3,4);
+INSERT INTO cor_job_equipmenttype VALUES (4,6);
+INSERT INTO cor_job_equipmenttype VALUES (4,7);
+INSERT INTO cor_job_equipmenttype VALUES (4,5);
+INSERT INTO cor_job_equipmenttype VALUES (4,3);
+INSERT INTO cor_job_equipmenttype VALUES (4,4);
+INSERT INTO cor_job_equipmenttype VALUES (5,6);
+INSERT INTO cor_job_equipmenttype VALUES (5,5);
+INSERT INTO cor_job_equipmenttype VALUES (5,3);
+INSERT INTO cor_job_equipmenttype VALUES (5,4);
+INSERT INTO cor_job_equipmenttype VALUES (5,7);
+INSERT INTO cor_job_equipmenttype VALUES (5,8);
+INSERT INTO cor_job_equipmenttype VALUES (6,6);
+INSERT INTO cor_job_equipmenttype VALUES (6,5);
+INSERT INTO cor_job_equipmenttype VALUES (6,3);
+INSERT INTO cor_job_equipmenttype VALUES (6,4);
+INSERT INTO cor_job_equipmenttype VALUES (6,7);
+INSERT INTO cor_job_equipmenttype VALUES (7,9);
+INSERT INTO cor_job_equipmenttype VALUES (7,3);
+INSERT INTO cor_job_equipmenttype VALUES (8,9);
+INSERT INTO cor_job_equipmenttype VALUES (8,4);
+INSERT INTO cor_job_equipmenttype VALUES (8,3);
+INSERT INTO cor_job_equipmenttype VALUES (9,10);
+INSERT INTO cor_job_equipmenttype VALUES (9,3);
+INSERT INTO cor_job_equipmenttype VALUES (9,11);
+INSERT INTO cor_job_equipmenttype VALUES (10,10);
+INSERT INTO cor_job_equipmenttype VALUES (10,3);
+INSERT INTO cor_job_equipmenttype VALUES (10,11);
+INSERT INTO cor_job_equipmenttype VALUES (11,10);
+INSERT INTO cor_job_equipmenttype VALUES (11,3);
+INSERT INTO cor_job_equipmenttype VALUES (11,11);
 
 --
 -- Table structure for table 'cor_job_joblv'
@@ -151,99 +151,99 @@ INSERT INTO cor_job_joblv VALUES (10,12,9);
 INSERT INTO cor_job_joblv VALUES (11,12,9);
 
 --
--- Table structure for table 'cor_monster_item'
+-- Table structure for table 'cor_monster_drop'
 --
 
-CREATE TABLE cor_monster_item (
+CREATE TABLE cor_monster_drop (
   cor_monster bigint(10) unsigned NOT NULL default '0',
   cor_item bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 --
--- Dumping data for table 'cor_monster_item'
+-- Dumping data for table 'cor_monster_drop'
 --
 
 
 
 --
--- Table structure for table 'item'
+-- Table structure for table 'equipment'
 --
 
-CREATE TABLE item (
-  item_id bigint(10) unsigned NOT NULL auto_increment,
-  item_name varchar(100) NOT NULL default '',
-  item_stat_hp smallint(6) NOT NULL default '0',
-  item_stat_mp smallint(6) NOT NULL default '0',
-  item_stat_str smallint(6) NOT NULL default '0',
-  item_stat_mag smallint(6) NOT NULL default '0',
-  item_stat_def smallint(6) NOT NULL default '0',
-  item_stat_mgd smallint(6) NOT NULL default '0',
-  item_stat_agl smallint(6) NOT NULL default '0',
-  item_stat_acc smallint(6) NOT NULL default '0',
-  item_req_str smallint(5) unsigned NOT NULL default '0',
-  item_req_mag smallint(5) unsigned NOT NULL default '0',
-  item_req_agl smallint(5) unsigned NOT NULL default '0',
-  item_req_gender tinyint(1) NOT NULL default '0',
-  item_sell tinyint(1) NOT NULL default '1',
-  item_buy tinyint(1) NOT NULL default '1',
-  item_cost bigint(10) unsigned NOT NULL default '0',
-  item_desc text NOT NULL,
-  item_type bigint(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (item_id)
+CREATE TABLE equipment (
+  equipment_id bigint(10) unsigned NOT NULL auto_increment,
+  equipment_name varchar(100) NOT NULL default '',
+  equipment_stat_hp smallint(6) NOT NULL default '0',
+  equipment_stat_mp smallint(6) NOT NULL default '0',
+  equipment_stat_str smallint(6) NOT NULL default '0',
+  equipment_stat_mag smallint(6) NOT NULL default '0',
+  equipment_stat_def smallint(6) NOT NULL default '0',
+  equipment_stat_mgd smallint(6) NOT NULL default '0',
+  equipment_stat_agl smallint(6) NOT NULL default '0',
+  equipment_stat_acc smallint(6) NOT NULL default '0',
+  equipment_req_str smallint(5) unsigned NOT NULL default '0',
+  equipment_req_mag smallint(5) unsigned NOT NULL default '0',
+  equipment_req_agl smallint(5) unsigned NOT NULL default '0',
+  equipment_req_gender tinyint(1) NOT NULL default '0',
+  equipment_sell tinyint(1) NOT NULL default '1',
+  equipment_buy tinyint(1) NOT NULL default '1',
+  equipment_cost bigint(10) unsigned NOT NULL default '0',
+  equipment_desc text NOT NULL,
+  equipment_type bigint(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (equipment_id)
 ) TYPE=MyISAM;
 
 --
--- Dumping data for table 'item'
+-- Dumping data for table 'equipment'
 --
 
 
-INSERT INTO item VALUES (1,'Rusty Dagger',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A rusty old dagger probably found in the trash.',1);
-INSERT INTO item VALUES (2,'Sandals',0,0,0,0,5,0,0,0,0,0,0,0,1,1,50,'A few strips of leather and a hard base make up this poorly made piece of footwear.',3);
-INSERT INTO item VALUES (3,'Worn Boots',0,0,0,0,7,3,0,0,20,0,0,0,1,1,100,'Second hand leather boots, worn at the toe and heel but still useful despite this.',3);
-INSERT INTO item VALUES (4,'Butter Knife',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A blunt kitchen utensil with all the offensive power of a warm breeze, still it\'s better than being totally unarmed.',2);
-INSERT INTO item VALUES (5,'Wooden Sword',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A wooden practice sword used by squires, and citizens in the mock duels they stage.',6);
-INSERT INTO item VALUES (6,'Rusty Sword',0,0,10,0,0,0,0,0,20,0,0,0,1,1,100,'An old sword probably belonging to an elderly adventurer who didn\'t get too far. Despite the terrible rusting where the blade meets the crosspiece it should hold together long enough for your purposes.',6);
-INSERT INTO item VALUES (7,'Reed Stick',0,0,2,3,0,0,0,0,0,0,0,0,1,1,50,'A few reeds wrapped together around a small stick or pieve of bamboo make a small rod often used by children imitating the mages they sometimes see passing through town.',10);
-INSERT INTO item VALUES (8,'Walking Stick',0,0,4,6,0,0,0,0,0,20,0,0,1,1,100,'A walking stick probably once belonging to an old man and discarded in the gutter. When money is tight you have to make do with what you can find.',10);
-INSERT INTO item VALUES (9,'Hide Armor',0,0,0,0,5,0,0,0,0,0,0,0,1,1,50,'Armour made from the patched together hides of different animals. A favourite with many tribal communities it doesn\'t really cut it next to that shining chainmail but it will do for now.',4);
-INSERT INTO item VALUES (10,'Broken Armor',0,0,0,0,5,0,0,0,20,0,0,0,1,1,100,'Once a well made piece of armour this was discarded after a fight with irreperable damage. Whilst only a shadow of it\'s former glory you can still count on some protection from it.',4);
-INSERT INTO item VALUES (11,'Crude Bow',0,0,2,0,0,0,0,3,0,0,0,0,1,1,50,'A crudly built bow, probably constructed by one of the tribal races to imitate the archers from the civilised world.',9);
-INSERT INTO item VALUES (12,'Wooden Bow',0,0,4,0,0,0,0,6,0,0,0,0,1,1,100,'A fairly simple wooden bow, but it has the range and with a good enough archer will usually find it\'s mark.',9);
-INSERT INTO item VALUES (13,'Broken Buckler',0,0,0,0,4,1,0,0,0,0,0,0,1,1,50,'A buckler usually used for duelling, this one had been battered in a recent fight and discarded in favour of a new one, still the limited protection it offers will see you through until you can afford better gear.',5);
-INSERT INTO item VALUES (14,'Buckler',0,0,0,0,7,3,0,0,20,0,0,0,1,1,100,'A buckler usually used for duelling, it\'s small and offers little actual protection, but it\'s this or try and ward away blows with your arm.',5);
-INSERT INTO item VALUES (15,'Cloth Cap',0,0,0,0,3,2,0,0,0,0,0,0,1,1,50,' A basic peasents cap used to keep the rain off your head and your ears warm in winter.',7);
-INSERT INTO item VALUES (16,'Felt Hat',0,0,0,0,6,4,0,0,20,0,0,0,1,1,100,'A simple hat often worn by scribes or merchants in a poor attempt to flaunt their greater wealth over the peasents.',7);
-INSERT INTO item VALUES (17,'Torn Robe',0,0,0,1,1,3,0,0,0,0,0,0,1,1,50,'This robe is torn at the seams and gives the asppearence of a beggar, still you can feel a slight tingle whenever you don the garment.',11);
-INSERT INTO item VALUES (18,'Ragged Robe',0,0,0,2,2,6,0,0,0,20,0,0,1,1,100,'A poor quality robe, worn at the seams with stiches coming out everywhere, generally worn by children imitating mages or peasent adepts whilst practicing their base form of magic.',11);
-INSERT INTO item VALUES (19,'Toy Ring',3,2,0,0,0,0,0,0,0,0,0,0,1,1,50,'A fake children\'s toy ring, you can still see some residue of the cereal it came in around the edges of the inset glass \'jewel\'.',8);
-INSERT INTO item VALUES (20,'Rusty Band',6,4,0,0,0,0,0,0,20,0,0,0,1,1,100,'This ring is made out of rusted iron.',8);
+INSERT INTO equipment VALUES (1,'Rusty Dagger',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A rusty old dagger probably found in the trash.',1);
+INSERT INTO equipment VALUES (2,'Sandals',0,0,0,0,5,0,0,0,0,0,0,0,1,1,50,'A few strips of leather and a hard base make up this poorly made piece of footwear.',3);
+INSERT INTO equipment VALUES (3,'Worn Boots',0,0,0,0,7,3,0,0,20,0,0,0,1,1,100,'Second hand leather boots, worn at the toe and heel but still useful despite this.',3);
+INSERT INTO equipment VALUES (4,'Butter Knife',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A blunt kitchen utensil with all the offensive power of a warm breeze, still it\'s better than being totally unarmed.',2);
+INSERT INTO equipment VALUES (5,'Wooden Sword',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A wooden practice sword used by squires, and citizens in the mock duels they stage.',6);
+INSERT INTO equipment VALUES (6,'Rusty Sword',0,0,10,0,0,0,0,0,20,0,0,0,1,1,100,'An old sword probably belonging to an elderly adventurer who didn\'t get too far. Despite the terrible rusting where the blade meets the crosspiece it should hold together long enough for your purposes.',6);
+INSERT INTO equipment VALUES (7,'Reed Stick',0,0,2,3,0,0,0,0,0,0,0,0,1,1,50,'A few reeds wrapped together around a small stick or pieve of bamboo make a small rod often used by children imitating the mages they sometimes see passing through town.',10);
+INSERT INTO equipment VALUES (8,'Walking Stick',0,0,4,6,0,0,0,0,0,20,0,0,1,1,100,'A walking stick probably once belonging to an old man and discarded in the gutter. When money is tight you have to make do with what you can find.',10);
+INSERT INTO equipment VALUES (9,'Hide Armor',0,0,0,0,5,0,0,0,0,0,0,0,1,1,50,'Armour made from the patched together hides of different animals. A favourite with many tribal communities it doesn\'t really cut it next to that shining chainmail but it will do for now.',4);
+INSERT INTO equipment VALUES (10,'Broken Armor',0,0,0,0,5,0,0,0,20,0,0,0,1,1,100,'Once a well made piece of armour this was discarded after a fight with irreperable damage. Whilst only a shadow of it\'s former glory you can still count on some protection from it.',4);
+INSERT INTO equipment VALUES (11,'Crude Bow',0,0,2,0,0,0,0,3,0,0,0,0,1,1,50,'A crudly built bow, probably constructed by one of the tribal races to imitate the archers from the civilised world.',9);
+INSERT INTO equipment VALUES (12,'Wooden Bow',0,0,4,0,0,0,0,6,0,0,0,0,1,1,100,'A fairly simple wooden bow, but it has the range and with a good enough archer will usually find it\'s mark.',9);
+INSERT INTO equipment VALUES (13,'Broken Buckler',0,0,0,0,4,1,0,0,0,0,0,0,1,1,50,'A buckler usually used for duelling, this one had been battered in a recent fight and discarded in favour of a new one, still the limited protection it offers will see you through until you can afford better gear.',5);
+INSERT INTO equipment VALUES (14,'Buckler',0,0,0,0,7,3,0,0,20,0,0,0,1,1,100,'A buckler usually used for duelling, it\'s small and offers little actual protection, but it\'s this or try and ward away blows with your arm.',5);
+INSERT INTO equipment VALUES (15,'Cloth Cap',0,0,0,0,3,2,0,0,0,0,0,0,1,1,50,' A basic peasents cap used to keep the rain off your head and your ears warm in winter.',7);
+INSERT INTO equipment VALUES (16,'Felt Hat',0,0,0,0,6,4,0,0,20,0,0,0,1,1,100,'A simple hat often worn by scribes or merchants in a poor attempt to flaunt their greater wealth over the peasents.',7);
+INSERT INTO equipment VALUES (17,'Torn Robe',0,0,0,1,1,3,0,0,0,0,0,0,1,1,50,'This robe is torn at the seams and gives the asppearence of a beggar, still you can feel a slight tingle whenever you don the garment.',11);
+INSERT INTO equipment VALUES (18,'Ragged Robe',0,0,0,2,2,6,0,0,0,20,0,0,1,1,100,'A poor quality robe, worn at the seams with stiches coming out everywhere, generally worn by children imitating mages or peasent adepts whilst practicing their base form of magic.',11);
+INSERT INTO equipment VALUES (19,'Toy Ring',3,2,0,0,0,0,0,0,0,0,0,0,1,1,50,'A fake children\'s toy ring, you can still see some residue of the cereal it came in around the edges of the inset glass \'jewel\'.',8);
+INSERT INTO equipment VALUES (20,'Rusty Band',6,4,0,0,0,0,0,0,20,0,0,0,1,1,100,'This ring is made out of rusted iron.',8);
 
 --
--- Table structure for table 'itemtype'
+-- Table structure for table 'equipmenttype'
 --
 
-CREATE TABLE itemtype (
-  itemtype_id bigint(10) unsigned NOT NULL auto_increment,
-  itemtype_name varchar(100) NOT NULL default '',
-  PRIMARY KEY  (itemtype_id)
+CREATE TABLE equipmenttype (
+  equipmenttype_id bigint(10) unsigned NOT NULL auto_increment,
+  equipmenttype_name varchar(100) NOT NULL default '',
+  PRIMARY KEY  (equipmenttype_id)
 ) TYPE=MyISAM;
 
 --
--- Dumping data for table 'itemtype'
+-- Dumping data for table 'equipmenttype'
 --
 
 
-INSERT INTO itemtype VALUES (1,'Dagger');
-INSERT INTO itemtype VALUES (2,'Knife');
-INSERT INTO itemtype VALUES (3,'Footwear');
-INSERT INTO itemtype VALUES (4,'Armor');
-INSERT INTO itemtype VALUES (5,'Shield');
-INSERT INTO itemtype VALUES (6,'Sword');
-INSERT INTO itemtype VALUES (7,'Headwear');
-INSERT INTO itemtype VALUES (8,'Ring');
-INSERT INTO itemtype VALUES (9,'Bow');
-INSERT INTO itemtype VALUES (10,'Rod');
-INSERT INTO itemtype VALUES (11,'Robe');
+INSERT INTO equipmenttype VALUES (1,'Dagger');
+INSERT INTO equipmenttype VALUES (2,'Knife');
+INSERT INTO equipmenttype VALUES (3,'Footwear');
+INSERT INTO equipmenttype VALUES (4,'Armor');
+INSERT INTO equipmenttype VALUES (5,'Shield');
+INSERT INTO equipmenttype VALUES (6,'Sword');
+INSERT INTO equipmenttype VALUES (7,'Headwear');
+INSERT INTO equipmenttype VALUES (8,'Ring');
+INSERT INTO equipmenttype VALUES (9,'Bow');
+INSERT INTO equipmenttype VALUES (10,'Rod');
+INSERT INTO equipmenttype VALUES (11,'Robe');
 
 --
 -- Table structure for table 'job'
@@ -383,7 +383,7 @@ INSERT INTO site VALUES ('_PLAYER_LV',0,'eval','\'<a href=\"\' . CI_WWW_PATH . \
 INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','CI_WWW_ADDRESS . \'game/?a=viewjobs\'',0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','CI_WWW_ADDRESS',0,'');
 INSERT INTO site VALUES ('NAV',10,'link','Game','','CI_WWW_ADDRESS . \'game\'',0,'');
-INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Items','','CI_WWW_ADDRESS . \'game/?a=viewitems\'',0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','CI_WWW_ADDRESS . \'game/?a=viewequipment\'',0,'');
 INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=get action=index.php><p><input type=hidden name=a value=\' . $GLOBALS[\'aval\'] . \'><p><select name=t>\'','','',0,'');
 INSERT INTO site VALUES ('_SKIN_END',0,'eval','\'</select><br><input type=submit value=\"Skin\" class=\"submit\"></form>\'','','',0,'');
 INSERT INTO site VALUES ('_SKIN',0,'text','<CI_SKIN_START>\n<option><CISKINS><option>INSERT</option></CISKINS></option>\n<CI_SKIN_END>','','',0,'');
