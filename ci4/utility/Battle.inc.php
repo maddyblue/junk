@@ -40,6 +40,9 @@ define('OPTION_ABILITY', 2);
 define('TURN_NONE', -1);
 define('TURN_BAD_TARGET', -2);
 
+define('ENTITY_PLAYER', 1);
+define('ENTITY_MONSTER', 2);
+
 // Functions for use in battles
 
 // $src attacks $dest for battleDamage()
@@ -79,6 +82,8 @@ function battleDealDamage($d, &$dest)
 // $src uses $ability on $dest
 function battleAbility(&$src, &$dest, $ability)
 {
+	global $db;
+
 	// check for enough mp
 	if($src->mp < $ability['ability_mp'])
 	{

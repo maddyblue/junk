@@ -70,8 +70,8 @@ else
 
 		switch($e['battle_entity_type'])
 		{
-			case 1: array_push($entities, new Player($e, $entities)); break;
-			case 2: array_push($entities, new Monster($e, $entities)); break;
+			case ENTITY_PLAYER: array_push($entities, new Player($e, $entities)); break;
+			case ENTITY_MONSTER: array_push($entities, new Monster($e, $entities)); break;
 			default: array_push($entities, new Entity($e, $entities)); break;
 		}
 	}
