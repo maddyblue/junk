@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Globals.inc.php,v 1.31 2004/01/05 21:03:08 dolmant Exp $ */
+/* $Id: Globals.inc.php,v 1.32 2004/01/07 09:39:37 dolmant Exp $ */
 
 /*	CI globals.	*/
 
@@ -21,6 +21,7 @@ define('SECTION_ADMIN', 'admin');
 define('SECTION_USER', 'user');
 define('SECTION_FORUM', 'forum');
 define('SECTION_GAME', 'game');
+define('SECTION_MANUAL', 'manual');
 
 /* Forum specs */
 
