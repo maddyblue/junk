@@ -38,11 +38,11 @@ function postList($thread, $curpage, $postsPP, $canMod)
 
 	$array = array();
 
-	$posts = $DBMain->Query('select user_id, user_name, user_avatar_data, forum_post_date, forum_post_id, forum_post_text, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . (($curpage - 1) * $postsPP) . ', ' . $postsPP);
+	$posts = $DBMain->Query('select user_id, user_name, user_avatar_type, forum_post_date, forum_post_id, forum_post_text, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . (($curpage - 1) * $postsPP) . ', ' . $postsPP);
 
 	foreach($posts as $post)
 	{
-		$avatar = getAvatarImg($post['user_avatar_data']);
+		$avatar = getAvatar($post['user_id'], $post['user_avatar_type']);
 		$user = getUserlink($post['user_id'], decode($post['user_name']));
 		$user .= $avatar ? '<br>' . $avatar : '';
 		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';

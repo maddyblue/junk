@@ -142,11 +142,19 @@ function makePMLink()
 }
 
 // Returns an image link to the specified user's avatar.
-function getAvatar($id = ID)
+function getAvatar($id = ID, $type = '')
 {
-	$a = decode(getDBData('user_avatar_data'), $id);
+	if($type == '')
+		$type = getDBData('user_avatar_type', $id);
 
-	return getAvatarImg($a);
+	if(!$type)
+		return '';
+
+	return getAvatarImg(
+		($type == '1' ?
+			getDBData('user_avatar_data', $id) :
+			'avatar.php?i=' . $id
+	));
 }
 
 // Assume the given link is an avatar on CI; make a correctly linked image from it.

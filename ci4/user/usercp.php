@@ -95,6 +95,7 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz)
 
 		array('Avatar', array('type'=>'disptext', 'val'=>getAvatar())),
 		array('', array('type'=>'disptext', 'val'=>(makeLink('Change avatar', 'a=change-avatar') . ' (WITHOUT saving current profile changes!)'))),
+		array('', array('type'=>'disptext', 'val'=>(makeLink('Upload custom avatar', 'a=upload-avatar') . ' (WITHOUT saving current profile changes!)'))),
 		array('', array('type'=>'disptext', 'val'=>'<br>')),
 
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),

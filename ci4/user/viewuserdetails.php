@@ -54,7 +54,7 @@ if(count($res) == 1)
 
 	$array = array(
 		array('User', decode($res[0]['user_name'])),
-		array('Avatar', getAvatarImg($res[0]['user_avatar_data'])),
+		array('Avatar', getAvatar($user, $res[0]['user_avatar_type'])),
 		array('Register date', getTime($res[0]['user_register'])),
 		array('Last seen', getTime($res[0]['user_last'])),
 		array('Forum posts', $res[0]['user_posts']),

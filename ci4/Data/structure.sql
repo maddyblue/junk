@@ -487,7 +487,7 @@ CREATE TABLE user (
   user_register bigint(10) unsigned NOT NULL default '0',
   user_last bigint(10) unsigned NOT NULL default '0',
   user_last_session bigint(10) unsigned NOT NULL default '0',
-  user_avatar_type tinyint(1) unsigned NOT NULL default '0',
+  user_avatar_type varchar(20) NOT NULL default '',
   user_avatar_data blob NOT NULL,
   user_sig text NOT NULL,
   user_posts bigint(10) unsigned NOT NULL default '0',
