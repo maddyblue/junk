@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: sync-forums.php,v 1.3 2003/09/25 23:57:33 dolmant Exp $ */
+/* $Id: sync-forums.php,v 1.4 2003/12/19 07:44:25 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -42,11 +42,6 @@ foreach($threads as $thread)
 	$DBMain->Query('update forum_thread set forum_thread_replies=' . ($post[0]['count'] - 1) . ' where forum_thread_id=' . $thread['forum_thread_id']);
 
 	$count++;
-	if($count % 100 == 0)
-	{
-		echo $count . ', ';
-		flush();
-	}
 }
 
 echo 'done - ' . $count;
@@ -60,11 +55,12 @@ foreach($forums as $forum)
 	$thread = $DBMain->Query('select count(*) as count from forum_thread where forum_thread_forum=' . $forum['forum_forum_id']);
 	$post = $DBMain->Query('select count(*) as count from forum_thread, forum_post where forum_thread_id=forum_post_thread and forum_thread_forum=' . $forum['forum_forum_id']);
 	$lastpost = $DBMain->Query('select forum_post_id from forum_post, forum_thread where forum_thread_forum=' . $forum['forum_forum_id'] . ' and forum_thread_id=forum_post_thread order by forum_post_date desc limit 1');
-	$DBMain->Query('update forum_forum set forum_forum_last_post=0' . $lastpost[0]['forum_post_id'] . ', forum_forum_threads=' . $thread[0]['count'] . ', forum_forum_posts=' . $post[0]['count'] . ' where forum_forum_id=' . $forum['forum_forum_id']);
+
+	$last = $lastpost ? $lastpost[0]['forum_post_id'] : '0';
+
+	$DBMain->Query('update forum_forum set forum_forum_last_post=' . $last . ', forum_forum_threads=' . $thread[0]['count'] . ', forum_forum_posts=' . $post[0]['count'] . ' where forum_forum_id=' . $forum['forum_forum_id']);
 
 	$count++;
-	echo $count . ', ';
-	flush();
 }
 
 echo 'done - ' . $count;
@@ -79,11 +75,6 @@ foreach($users as $user)
 	$DBMain->Query('update user set user_posts=' . $post[0]['count'] . ' where user_id=' . $user['user_id']);
 
 	$count++;
-	if($count % 10 == 0)
-	{
-		echo $count . ', ';
-		flush();
-	}
 }
 
 echo 'done - ' . $count;
