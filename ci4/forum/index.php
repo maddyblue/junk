@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.2 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -34,6 +34,10 @@
 
 define('CI_SECTION', 'FORUM');
 define('CI_HOME_MOD', '../');
+
+if(!isset($_GET['a']) && !isset($_POST['a']))
+	$_GET['a'] = 'viewforum';
+
 require '../index.php';
 
 ?>
