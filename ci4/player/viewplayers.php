@@ -181,4 +181,6 @@ echo '<p>';
 
 echo getTableForm('Show Players:', $disp);
 
+update_session_action(0701);
+
 ?>

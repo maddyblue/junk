@@ -40,6 +40,7 @@
  * 04: forum
  * 05: game
  * 06: manual
+ * 07: player
  */
 
 $actionlist = array(
@@ -67,7 +68,6 @@ array(0307, 'makeLink(\'Veiwing their User CP\', \'a=usercp\', SECTION_USER)'),
 array(0308, 'makeLink(\'Viewing their PMs\', \'a=viewpms\', SECTION_USER)'),
 array(0309, 'makeLink(\'Viewing details of \' . decode(getDBData(\'user_name\', $d)), \'a=viewuserdetails&user=\' . $d, SECTION_USER)'),
 array(0310, 'makeLink(\'Viewing the user list\', \'a=viewusers\', SECTION_USER)'),
-array(0311, '\'Registering a new player\''),
 
 // forum
 array(0401, 'makeLink(\'Editing a post\', \'a=viewpost&p=\' . $d, SECTION_FORUM)'),
@@ -90,7 +90,12 @@ array(0551, 'makeLink(\'Changing Jobs\', \'a=changejobs\', SECTION_GAME)'),
 // manual
 array(0601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),
 array(0602, 'makeLink(\'Viewing the advanced skinning tutorial\', \'a=skinning-advanced\', SECTION_MANUAL)'),
-array(0603, 'makeLink(\'Viewing the IRC manual page\', \'a=irc\', SECTION_MANUAL)')
+array(0603, 'makeLink(\'Viewing the IRC manual page\', \'a=irc\', SECTION_MANUAL)'),
+
+// player
+array(0701, 'makeLink(\'Viewing the player list\', \'a=viewplayers\', SECTION_PLAYER)'),
+array(0702, 'makeLink(\'Viewing details of \' . decode(getDBData(\'player_name\', $d, \'player_id\', \'player\')), \'a=viewplayerdetails&player=\' . $d, SECTION_PLAYER)'),
+array(0703, '\'Registering a new player\'')
 
 );
 

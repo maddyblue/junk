@@ -138,6 +138,6 @@ if(LOGGED)
 else
 	echo '<p>You must be logged in to view this page.';
 
-update_session_action(0311);
+update_session_action(0703);
 
 ?>

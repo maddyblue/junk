@@ -146,6 +146,6 @@ if(count($res) == 1)
 else
 	echo '<p>Invalid player.';
 
-update_session_action(0309, $player);
+update_session_action(0702, $player);
 
 ?>
