@@ -44,6 +44,14 @@ function disp($subject, $text, $post)
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'editpost')),
 			array('', array('type'=>'hidden', 'name'=>'p', 'val'=>$post))
 		));
+
+	echo getTableForm('Delete Post?', array(
+			array('I\'m sure.', array('type'=>'checkbox', 'name'=>'sure')),
+
+			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Delete Post')),
+			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'deletepost')),
+			array('', array('type'=>'hidden', 'name'=>'p', 'val'=>$post))
+		));
 }
 
 $subject = '';

@@ -32,119 +32,52 @@
  *
  */
 
-$postid = isset($_GET['p']) ? $_GET['p'] : null;
+$postid = isset($_POST['p']) ? intval($_POST['p']) : '0';
+$sure = (isset($_POST['sure']) && $_POST['sure'] == 'on');
 
-if($postid != null)
+$res = $DBMain->Query('select * from forum_post where forum_post_id=' . $postid);
+
+if(!$sure)
+	echo '<p>Go back and click the checkbox indicating you are sure you want to delete this post.';
+else if(count($res))
 {
-  if(is_numeric($postid) && $postid >= 0)
-  {
-    if(isset($_POST['submit']))
-    {
-      if(canEdit($ret[0]['forum_post_user'], getDBData('forum_thread_forum', $ret[0]['forum_post_thread'], 'forum_thread_id', 'forum_thread'))
-      {
-        $deletethread = false;
+	$thread = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $res[0]['forum_post_thread']);
 
-        $res = $DBMain->Query('select forum_post_thread, forum_post_user from forum_post where forum_post_id ="' . $postid . '"');
+	$forumid = $thread[0]['forum_thread_forum'];
+	$threadid = $res[0]['forum_post_thread'];
+	$userid = $res[0]['forum_post_user'];
 
-        $threadid = $res['0']['forum_post_thread'];
+	// count($thread) is here just to be safe
+	if(canEdit($res[0]['forum_post_user'], $forumid) && count($thread))
+	{
+		if($thread[0]['forum_thread_first_post'] == $postid)
+		{
+			echo '<p>This is the first post of the thread. You will need to delete the thread.';
+			echo '<p>' . makeLink('Go here to delete the thread.', 'a=delete-thread&t=' . $threadid);
+		}
+		else
+		{
+			// decrement user post count
+			$DBMain->Query('update user set user_posts = user_posts - 1 where user_id=' . $userid);
 
-        $userid = $res['0']['forum_post_user'];
+			// delete post
+			$DBMain->Query('delete from forum_post where forum_post_id =' . $postid);
 
-        $res2 = $DBMain->Query('select forum_thread_first_post, forum_thread_last_post, forum_thread_forum from forum_thread where forum_thread_id ="' . $threadid . '"');
+			// update thread stats
+			$threadlast = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread=' . $threadid . ' order by forum_post_date desc limit 1');
+			$DBMain->Query('update forum_thread set forum_thread_last_post=' . $threadlast[0]['forum_post_id'] . ', forum_thread_replies = forum_thread_replies - 1 where forum_thread_id=' . $threadid);
 
-        $forumid = $res2['0']['forum_thread_forum'];
+			// update forum stats
+			$forumlast = $DBMain->Query('select forum_post_id from forum_post, forum_thread where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread order by forum_post_date desc limit 1');
+			$DBMain->Query('update forum_forum set forum_forum_last_post=' . $forumlast[0]['forum_post_id'] . ', forum_forum_posts = forum_forum_posts - 1 where forum_forum_id=' . $forumid);
 
-        if($res2['0']['forum_thread_first_post'] == $postid)
-        {
-          print "This is the first post of the thread.  You will need to delete the thread.";
-          print "<p>" . makeLink("Go here to delete the thread.", 'a=delete-thread&t=' . $threadid, SECTION_ADMIN);
-          $deletethread = true;
-        }
-        elseif($res2['0']['forum_thread_last_post'] == $postid)
-        {
-          $res = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread = "' . $threadid . '" and forum_post_id !="' . $postid . '" order by forum_post_date desc limit 1');
-
-          $DBMain->Query('update forum_thread set forum_thread_last_post="' . $res[0]['forum_post_id'] . '"');
-          print "Post was the last post of the thread.  Last post of the thread updated.";
-        }
-
-        if(!$deletethread)
-        {
-          $res = $DBMain->Query('select forum_forum_last_post from forum_forum where forum_forum_id ="' . $forumid . '"');
-
-          if($res['0']['forum_forum_last_post'] == $postid)
-          {
-            $res = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread = "' . $threadid . '" and forum_post_id !="' . $postid . '" order by forum_post_date desc limit 1');
-            $DBMain->Query('update forum_forum set forum_forum_last_post ="' . $res['0']['forum_post_id'] . '"');
-            print "<p>Post was the last post in the forum.  Last post in the forum updated.";
-          }
-
-          $DBMain->Query('update user set user_posts = user_posts - 1 where user_id = "' . $userid . '"');
-          print "<p>User post count updated.";
-
-          $DBMain->Query('update forum_forum set forum_forum_posts = forum_forum_posts - 1 where forum_forum_id ="' . $forumid . '"');
-          print "<p>Forum post count updated.";
-
-          $DBMain->Query('delete from forum_post where forum_post_id ="' . $postid . '"');
-          print "<p>Post is finally deleted.";
-        }
-      }
-      else
-      {
-        print "<p>You must be either the user who created the post or a moderator with permissions to delete this post.";
-      }
-    }
-    else
-    {
-    ?>
-      <form method="post">
-      Are you sure you want to delete this post?
-      <br>
-      <?
-      $array = array();
-
-      $post = $DBMain->Query('select user_id, user_name, user_avatar_data, forum_post_date, forum_post_id, forum_post_text, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date, forum_post_thread from forum_post, user where forum_post_id ="' . $postid . '" and forum_post_user=user_id');
-
-      $post = $post['0'];
-
-      $avatar = getAvatarImg($post['user_avatar_data']);
-      $user = getUserlink($post['user_id'], decode($post['user_name']));
-      $user .= $avatar ? '<br>' . $avatar : '';
-      $user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
-
-      $body = '<a name="' . $post['forum_post_id'] . '"></a><div class="small">' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
-      $body .= '<p>' . parsePostText($post['forum_post_text']);
-
-      if($post['user_sig'])
-      {
-        $body .= '<br>----------<br>' . parseSig($post['user_sig']);
-      }
-
-      if($post['forum_post_edit_user'] != 0)
-      {
-        $ul = $post['forum_post_edit_user'] == $post['user_id'] ? getUserLink($post['user_id'], decode($post['user_name'])) : getUserlink($post['forum_post_edit_user']);
-        $body .= '<p><i class="small">Last edited by ' . $ul . ' on ' . getTime($post['forum_post_edit_date']) . '.</i>';
-      }
-
-      array_push($array, array(
-                        $user,
-                        $body));
-
-      echo "<p>" . getTable($array, false, false, true);
-      ?>
-      <p><input type="submit" name="submit" value="Confirm">
-      </form>
-    <?
-    }
-  }
-  else
-  {
-    echo "Post id must be a positive integer number.";
-  }
+			echo '<p>Post deleted.';
+		}
+	}
+	else
+		echo '<p>You do not have permission to delete this post.';
 }
 else
-{
-  print "No post specified.";
-}
+	echo '<p>Invalid post id.';
 
 ?>
