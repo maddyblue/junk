@@ -124,7 +124,7 @@ function threadList($forumid)
 		{
 			array_push($array, array(
 				makeLink(decode($row['forum_thread_title']), '?a=viewthread&t=' . $row['forum_thread_id']),
-				getUsername($row['forum_thread_user']),
+				getUserlink($row['forum_thread_user']),
 				$row['forum_thread_replies'],
 				$row['forum_thread_views'],
 				forumLinkLastPost($row['forum_post_id'])
