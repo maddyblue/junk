@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: editpost.php,v 1.4 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id: editpost.php,v 1.5 2003/10/07 05:28:26 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -65,7 +65,7 @@ if(count($ret) != 1)
 {
 	echo '<p>Invalid post.';
 }
-else if(ID != $ret[0]['forum_post_user'])
+else if(!ADMIN && ID != $ret[0]['forum_post_user'])
 {
 	echo '<p>You must be either the user who created the post or a moderator with permissions to edit this post.';
 }
