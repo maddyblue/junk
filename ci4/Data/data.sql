@@ -160,12 +160,12 @@ INSERT INTO cor_job_joblv VALUES (2,1,4);
 
 
 
-INSERT INTO domain VALUES (1,'Defenestration','def',2,5);
 INSERT INTO domain VALUES (2,'Electrocution','elec',1,10);
-INSERT INTO domain VALUES (3,'Starvation','star',4,5);
 INSERT INTO domain VALUES (4,'Combustion','comb',1,5);
-INSERT INTO domain VALUES (5,'Torture','tort',4,10);
+INSERT INTO domain VALUES (1,'Defenestration','def',2,5);
 INSERT INTO domain VALUES (6,'Suffocation','suf',2,10);
+INSERT INTO domain VALUES (3,'Starvation','star',4,5);
+INSERT INTO domain VALUES (5,'Torture','tort',4,10);
 
 
 INSERT INTO equipment VALUES (1,'Rusty Dagger',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A rusty old dagger probably found in the trash.',1,0);
@@ -204,8 +204,8 @@ INSERT INTO equipmenttype VALUES (11,'Robe');
 
 
 INSERT INTO group_def VALUES (1,'Administrators',1,1,1,0);
-INSERT INTO group_def VALUES (2,'Super+Moderators',0,1,1,0);
-INSERT INTO group_def VALUES (3,'Banned',0,0,0,1);
+INSERT INTO group_def VALUES (2,'Super Moderators',0,1,1,0);
+INSERT INTO group_def VALUES (3,'Banned',0,0,0,0);
 INSERT INTO group_def VALUES (4,'Moderators',0,0,0,0);
 
 
@@ -259,6 +259,7 @@ INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'eval','newthreadLink() . newrep
 INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'link','View New Threads','','\'a=viewnew\'','SECTION_FORUM',1,0,'');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',0,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',10,'link','Smilies','','\'a=smilies\'','SECTION_FORUM',0,0,'');
+INSERT INTO site VALUES ('GAME_SECTION_MENU',0,'link','Change Job','','\'a=changejob\'','SECTION_GAME',1,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','\'a=viewjobs\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','\'a=viewequipment\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','\'a=viewmonsters\'','SECTION_GAME',0,0,'');
@@ -292,7 +293,6 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_PROFILE',0,'eval','getProfile()','','','',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
-INSERT INTO site VALUES ('GAME_SECTION_MENU',0,'link','Change Job','','\'a=changejob\'','SECTION_GAME',1,0,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
