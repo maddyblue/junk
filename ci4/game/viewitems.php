@@ -14,7 +14,7 @@ $array = array();
 array_push($array, array(
 	'Type',
 	'Item',
-	'Purchaseable',
+	'Purchasable',
 	'Cost',
 	'Description'
 ));
