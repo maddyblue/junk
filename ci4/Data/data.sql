@@ -263,7 +263,8 @@ INSERT INTO site VALUES ('NAV',40,'link','Player','','\'a=viewplayers\'','SECTIO
 INSERT INTO site VALUES ('NAV',50,'link','User','','','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('NAV',60,'link','Manual','','','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('NAV',70,'link','Admin','','','SECTION_ADMIN',1,1,'');
-INSERT INTO site VALUES ('NAV',80,'link','[Login]','','\'a=login\'','SECTION_USER',-1,0,'');
+INSERT INTO site VALUES ('NAV',80,'link','[Register User]','','\'a=newuser\'','SECTION_USER',-1,0,'');
+INSERT INTO site VALUES ('NAV',90,'link','[Login]','','\'a=login\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('PLAYER_SECTION_NAV',0,'link','View Players','','\'a=viewplayers\'','SECTION_PLAYER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','\'a=newuser\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','My Info','','\'a=viewuserdetails&user=\' . ID','SECTION_USER',1,0,'');
