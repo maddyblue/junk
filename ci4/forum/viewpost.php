@@ -32,12 +32,17 @@
 
 $postid = isset($_GET['p']) ? $_GET['p'] : 0;
 
-$ret = $DBMain->Query('select forum_post_thread from forum_post where forum_post_id=' . $postid);
+$ret = $DBMain->Query('select forum_post_thread, forum_post_date from forum_post where forum_post_id=' . $postid);
 
 if(count($ret) == 1)
 {
+	$threadid = $ret[0]['forum_post_thread'];
+	$postsPP = FORUM_POSTS_PP;
+
+	$ret = $DBMain->Query('select floor(count(*)/' . $postsPP . ') as count from forum_post where forum_post_thread=' . $threadid . ' and forum_post_date < ' . $ret[0]['forum_post_date']);
+	$offset = $ret[0]['count'] * $postsPP;
 	?>
-		<meta http-equiv="refresh" content="0;url=?a=viewthread&t=<?php echo $ret[0]['forum_post_thread']; ?>#<?php echo $postid?>">
+		<meta http-equiv="refresh" content="0;url=?a=viewthread&t=<?=$threadid?>&start=<?=$offset?>#<?=$postid?>">
 	<?php
 }
 else
