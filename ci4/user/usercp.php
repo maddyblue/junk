@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: usercp.php,v 1.7 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,12 +32,25 @@
  *
  */
 
-function disp($email, $sig)
+function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www)
 {
 		echo getTableForm('User Control Panel:', array(
+			array('Password', array('type'=>'password', 'name'=>'pass1')),
+			array('Password (verify)', array('type'=>'password', 'name'=>'pass2')),
+			array('', array('type'=>'disptext', 'val'=>'(Leave blank for no change.)')),
+			array('', array('type'=>'disptext', 'val'=>'<br>')),
+
 			array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
+			array('', array('type'=>'disptext', 'val'=>'Your email address will never be used publicly. It is used <b>only</b> to recover passwords.')),
 			array('Signature', array('type'=>'textarea', 'name'=>'sig', 'val'=>decode($sig))),
 			array('', array('type'=>'disptext', 'val'=>'Signature must be less than or equal to five lines long, may contain only non-formatted text and hyperlinks. Your sig will be edited by an admin or moderator if it is in any way obscene or unacceptable.')),
+			array('', array('type'=>'disptext', 'val'=>'<br>')),
+
+			array('AIM', array('type'=>'text', 'name'=>'aim', 'val'=>decode($aim))),
+			array('Yahoo', array('type'=>'text', 'name'=>'yahoo', 'val'=>decode($yahoo))),
+			array('ICQ', array('type'=>'text', 'name'=>'icq', 'val'=>decode($icq))),
+			array('MSN', array('type'=>'text', 'name'=>'msn', 'val'=>decode($msn))),
+			array('WWW', array('type'=>'text', 'name'=>'www', 'val'=>decode($www))),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'usercp'))
@@ -46,8 +59,30 @@ function disp($email, $sig)
 
 if(ID != 0 && LOGGED == true)
 {
-	$email = isset($_POST['email']) ? $_POST['email'] : '';
-	$sig = isset($_POST['sig']) ? $_POST['sig'] : '';
+	if(isset($_POST['submit']))
+	{
+		$email = isset($_POST['email']) ? encode($_POST['email']) : '';
+		$sig = isset($_POST['sig']) ? encode($_POST['sig']) : '';
+		$aim = isset($_POST['aim']) ? encode($_POST['aim']) : '';
+		$yahoo = isset($_POST['yahoo']) ? encode($_POST['yahoo']) : '';
+		$icq = isset($_POST['icq']) ? encode($_POST['icq']) : '';
+		$msn = isset($_POST['msn']) ? encode($_POST['msn']) : '';
+		$www = isset($_POST['www']) ? encode($_POST['www']) : '';
+		$pass1 = isset($_POST['pass1']) ? encode($_POST['pass1']) : '';
+		$pass2 = isset($_POST['pass2']) ? encode($_POST['pass2']) : '';
+	}
+	else
+	{
+		$ret = $DBMain->Query('select * from user where user_id=' . ID);
+
+		$email = $ret[0]['user_email'];
+		$sig = $ret[0]['user_sig'];
+		$aim = $ret[0]['user_aim'];
+		$yahoo = $ret[0]['user_yahoo'];
+		$icq = $ret[0]['user_icq'];
+		$msn = $ret[0]['user_msn'];
+		$www = $ret[0]['user_www'];
+	}
 
 	if(isset($_POST['submit']))
 	{
@@ -61,7 +96,7 @@ if(ID != 0 && LOGGED == true)
 			echo '<br>No email address: enter an address.';
 			$fail = true;
 		}
-		else if(!ereg("^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", $email))
+		else if(!ereg("^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", decode($email)))
 		{
 			echo '<br>Invalid email address.';
 			$fail = true;
@@ -78,16 +113,31 @@ if(ID != 0 && LOGGED == true)
 			$fail = true;
 		}
 
+		if(($pass1 || $pass2) && ($pass1 != $pass2))
+		{
+			echo '<br>Passwords do not match.';
+			$fail = true;
+		}
+
 		if($fail)
-			disp($email, $sig);
+			disp($email, $sig, $aim, $yahoo, $icq, $msn, $www);
 		else
 		{
-			$DBMain->Query('update user set user_email="' . encode($email) . '", user_sig="' . encode($sig) . '" where user_id=' . ID);
+			$DBMain->Query('update user set user_email="' . $email . '", user_sig="' . $sig . '", user_aim="' . $aim . '", user_yahoo="' . $yahoo . '", user_icq="' . $icq . '", user_msn="' . $msn . '", user_www="' . $www . '" where user_id=' . ID);
 			echo '<br>Userdata updated successfully.';
+
+			if($pass1)
+			{
+				$DBMain->Query('update user set user_pass=md5("' . $pass1 . '") where user_id=' . ID);
+				echo '<p>Password updated. You must now ' . makeLink('login', 'a=login') . ' again.';
+			}
+			// don't show this if password changed, since they won't have a valid login
+			else
+				disp($email, $sig, $aim, $yahoo, $icq, $msn, $www);
 		}
 	}
 	else
-		disp(getDBData('user_email'), getDBData('user_sig'));
+		disp($email, $sig, $aim, $yahoo, $icq, $msn, $www);
 }
 else
 {

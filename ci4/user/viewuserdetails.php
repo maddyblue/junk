@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewuserdetails.php,v 1.9 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -38,10 +38,17 @@ $res = $DBMain->Query('select * from user where user_id=' . $user);
 
 if(count($res) == 1)
 {
+	$www = decode($res[0]['user_www']);
+
 	$array = array(
 		array('User', decode($res[0]['user_name'])),
 		array('Register date', getTime($res[0]['user_register'])),
 		array('Forum posts', $res[0]['user_posts']),
+		array('AIM', decode($res[0]['user_aim'])),
+		array('Yahoo', decode($res[0]['user_yahoo'])),
+		array('ICQ', decode($res[0]['user_icq'])),
+		array('MSN', decode($res[0]['user_msn'])),
+		array('WWW', makeLink($www, $www, 'EXTERIOR')),
 		array('Signature', parseSig($res[0]['user_sig']))
 	);
 

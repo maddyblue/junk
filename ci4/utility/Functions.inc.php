@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.66 2004/01/12 07:55:29 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -332,24 +332,26 @@ function makeLink($text, $link, $section = '', $session = true)
 {
 	$ret = '<a href="';
 
-	if($section == '/')
-		$ret .= CI_WWW_PATH;
-	else if($section)
-		$ret .= CI_WWW_PATH . $section . '/';
-
-	if($link || !ID)
-	$ret .= '?';
-
-	if(!ID && $session)
+	if($section != 'EXTERIOR')
 	{
-		$ret .= 's=' . SESSION;
+		if($section == '/')
+			$ret .= CI_WWW_PATH;
+		else if($section)
+			$ret .= CI_WWW_PATH . $section . '/';
 
-		if($link)
-			$ret .= '&amp;';
+		if($link || !ID)
+		$ret .= '?';
+
+		if(!ID && $session)
+		{
+			$ret .= 's=' . SESSION;
+
+			if($link)
+				$ret .= '&amp;';
+		}
 	}
 
-	if($link)
-		$ret .= str_replace('&', '&amp;', $link);
+	$ret .= str_replace('&', '&amp;', $link);
 
 	$ret .= '">' . $text . '</a>';
 

@@ -406,6 +406,11 @@ CREATE TABLE user (
   user_avatar_data blob NOT NULL,
   user_sig text NOT NULL,
   user_posts bigint(10) unsigned NOT NULL default '0',
+  user_aim varchar(100) NOT NULL default '',
+  user_yahoo varchar(100) NOT NULL default '',
+  user_msn varchar(100) NOT NULL default '',
+  user_icq varchar(100) NOT NULL default '',
+  user_www varchar(200) NOT NULL default '',
   PRIMARY KEY  (user_id),
   UNIQUE KEY user_name (user_name)
 ) TYPE=MyISAM;
