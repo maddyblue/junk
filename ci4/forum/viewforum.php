@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.15 2003/09/27 04:39:01 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.16 2003/09/27 21:16:23 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -120,9 +120,14 @@ function newThread($t)
 	{
 		global $DBMain;
 
-		$r = $DBMain->Query('select count(*) as count from forum_view, forum_post where forum_post_thread=' . $t['forum_thread_id'] . ' and forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id'] . ' and forum_view_date > forum_post_date');
+		$r = $DBMain->Query('select count(*) as count from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id']);
 
 		if(!$r[0]['count'])
+			return true;
+
+		$r = $DBMain->Query('select count(*) as count from forum_view, forum_post where forum_post_thread=' . $t['forum_thread_id'] . ' and forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id'] . ' and forum_view_date < forum_post_date');
+
+		if($r[0]['count'])
 			return true;
 	}
 
