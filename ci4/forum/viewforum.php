@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.22 2003/12/20 09:18:36 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.23 2003/12/20 20:53:23 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -193,9 +193,7 @@ array_push($array, array(
 
 $depth = 2;
 
-$forumid = 0;
-if(isset($_GET['f']))
-	$forumid = $_GET['f'];
+$forumid = isset($_GET['f']) ? encode($_GET['f']) : '0';
 
 if(!canView($forumid))
 {
