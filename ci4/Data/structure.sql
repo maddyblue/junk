@@ -211,7 +211,6 @@ CREATE TABLE forum_thread (
 CREATE TABLE forum_view (
   forum_view_user bigint(10) unsigned NOT NULL default '0',
   forum_view_thread bigint(10) unsigned NOT NULL default '0',
-  forum_view_forum bigint(10) unsigned NOT NULL default '0',
   forum_view_date bigint(10) NOT NULL default '0'
 ) TYPE=MyISAM;
 

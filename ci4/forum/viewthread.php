@@ -139,7 +139,7 @@ else
 			));
 
 			$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $threadid);
-			$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_forum, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . $forumid . ', ' . TIME . ')');
+			$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . TIME . ')');
 		}
 	}
 	else
