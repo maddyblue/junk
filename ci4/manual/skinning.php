@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: skinning.php,v 1.1 2004/01/07 10:42:12 dolmant Exp $ */
+/* $Id: skinning.php,v 1.2 2004/01/07 10:49:25 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -31,6 +31,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+update_session_action(0601);
 
 ?>
 
