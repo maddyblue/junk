@@ -88,13 +88,15 @@ function forumReplace($text)
 	$patterns = array(
 		'&amp;lt;',
 		'&amp;gt;',
-		'&amp;amp;'
+		'&amp;amp;',
+		'&amp;quot;',
 	);
 
 	$replacements = array(
 		'&lt;',
 		'&gt;',
-		'&amp;'
+		'&amp;',
+		'&quot;',
 	);
 
 	$text = str_replace($patterns, $replacements, $text);
