@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: kuro5hin.php,v 1.6 2003/09/27 21:23:07 dolmant Exp $ -->
+<!-- $Id: kuro5hin.php,v 1.7 2003/09/27 21:29:24 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
@@ -226,7 +226,7 @@ a:active {
 						<tr>
 						<td width="100%">
 							<font face="verdana, arial, helvetica, sans-serif" color="#ffffff" size=2>
-								<?php echo makeLink('who\'s online', '?a=whosonline', SECTION_USER); ?>
+								<?php echo makeLink('who\'s online', 'a=whosonline', SECTION_USER); ?>
 							</font>
 						</td>
 					</tr>

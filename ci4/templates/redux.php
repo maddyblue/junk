@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: redux.php,v 1.20 2003/09/27 21:20:21 dolmant Exp $ -->
+<!-- $Id: redux.php,v 1.21 2003/09/27 21:29:24 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescent island ::
 <?php echo strtolower(CI_SECTION); ?>
@@ -251,7 +251,7 @@ td.block-light {
 			<table cellspacing="0" class="nav">
 				<tr>
 					<td class="block-dark">
-						<?php echo makeLink('who\'s online', '?a=whosonline', SECTION_USER); ?>
+						<?php echo makeLink('who\'s online', 'a=whosonline', SECTION_USER); ?>
 					</td>
 				</tr>
 				<tr>
