@@ -302,6 +302,12 @@ CREATE TABLE player (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE player_ability (
+  player_id bigint(10) unsigned NOT NULL default '0',
+  player_ability bigint(10) unsigned NOT NULL default '0'
+) TYPE=MyISAM;
+
+
 CREATE TABLE player_equipment (
   player_equipment_equipment bigint(10) unsigned NOT NULL default '0',
   player_equipment_player bigint(10) unsigned NOT NULL default '0'
@@ -311,6 +317,13 @@ CREATE TABLE player_equipment (
 CREATE TABLE player_item (
   player_item_item bigint(10) unsigned NOT NULL default '0',
   player_item_player bigint(10) unsigned NOT NULL default '0'
+) TYPE=MyISAM;
+
+
+CREATE TABLE player_job (
+  player_id bigint(10) unsigned NOT NULL default '0',
+  player_job bigint(10) unsigned NOT NULL default '0',
+  player_lv smallint(6) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
