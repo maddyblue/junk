@@ -8,7 +8,7 @@
 class GameMath
 {
 
-	function getExp($level)
+	function GetExp($level)
 	{
 
 		/* This array contains coefficients for the third-order polynomial
