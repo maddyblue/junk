@@ -97,9 +97,11 @@ function deleteForum($forumid, $delthreads, $delforums)
 if(isset($_POST['submit']))
 {
 	$forumid = isset($_POST['f']) ? intval($_POST['f']) : 0;
-	$sure = isset($_POST['sure']) && $_POST['sure'] == '1' ? true : false;
+	$sure = isset($_POST['sure']) && $_POST['sure'] == 'on' ? true : false;
 	$delthreads = isset($_POST['delthreads']) && $_POST['delthreads'] == '1' ? true : false;
 	$delforums = isset($_POST['delforums']) && $_POST['delforums'] == '1' ? true : false;
+
+	print_r($_POST);
 
 	$fail = false;
 
