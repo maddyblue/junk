@@ -32,13 +32,13 @@
  *
  */
 
-function postList($thread, $offset, $postsPP, $canMod)
+function postList($thread, $curpage, $postsPP, $canMod)
 {
 	global $DBMain;
 
 	$array = array();
 
-	$posts = $DBMain->Query('select user_id, user_name, user_avatar_data, forum_post_date, forum_post_id, forum_post_text, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . $offset . ', ' . $postsPP);
+	$posts = $DBMain->Query('select user_id, user_name, user_avatar_data, forum_post_date, forum_post_id, forum_post_text, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . (($curpage - 1) * $postsPP) . ', ' . $postsPP);
 
 	foreach($posts as $post)
 	{
@@ -93,14 +93,13 @@ else
 
 	$newreply = makeLink('New Reply', 'a=newpost&t=' . $threadid);
 
-	$offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
+	$curpage = isset($_GET['page']) ? encode($_GET['page']) : 1;
 
 	$totpages = ceil(($res[0]['forum_thread_replies'] + 1) / FORUM_POSTS_PP);
-	$curpage = floor($offset / FORUM_POSTS_PP) + 1;
 
 	$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, FORUM_POSTS_PP, 'a=viewthread&t=' . $threadid);
 
-	$array = postList($threadid, $offset, FORUM_POSTS_PP, $canMod);
+	$array = postList($threadid, $curpage, FORUM_POSTS_PP, $canMod);
 
 	if(count($array))
 	{

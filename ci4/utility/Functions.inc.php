@@ -670,6 +670,7 @@ function getProfile($start, $end, $dbcalls, $dbtime)
 
 // --- Pages ---
 
+// Note here that the first page is 1, not 0.
 function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 {
 	if($curpage > $totpages)
@@ -677,26 +678,33 @@ function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 
 	$pages = array();
 
+	// << and <
 	if($curpage > 1)
 	{
 		array_push($pages, array('&laquo;', 1));
 		array_push($pages, array('&lt;', $curpage - 1));
 	}
 
-	if($curpage == $totpages && $curpage > 2)
+	// curpage - 2
+	if($curpage > 2)
 		array_push($pages, array($curpage - 2, $curpage - 2));
 
+	// curpage - 1
 	if($curpage > 1)
 		array_push($pages, array($curpage - 1, $curpage - 1));
 
+	// curpage
 	array_push($pages, array($curpage, 0));
 
+	// curpage + 1
 	if(($totpages - $curpage) > 0)
 		array_push($pages, array($curpage + 1, $curpage + 1));
 
-	if($curpage == 1 && $totpages > 2)
+	// curpage + 2
+	if(($totpages - $curpage) > 1)
 		array_push($pages, array($curpage + 2, $curpage + 2));
 
+	// > and >>
 	if($curpage < $totpages)
 	{
 		array_push($pages, array('&gt;', $curpage + 1));
@@ -711,7 +719,7 @@ function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 			$pageDisp .= ' ';
 
 		if($pages[$i][1] != 0)
-			$pageDisp .= makeLink($pages[$i][0], $link . '&start=' . ($perpage * ($pages[$i][1] - 1)), $section);
+			$pageDisp .= makeLink($pages[$i][0], $link . '&page=' . $pages[$i][1], $section);
 		else
 			$pageDisp .= $pages[$i][0];
 	}

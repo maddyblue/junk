@@ -119,7 +119,7 @@ function forumList(&$array, $id, $topdepth, $depth, $uls)
 /* Return a linked list of pages.
  * $totpages - total number of pages
  * $disppages - list up to this many pages
- * $link - the page to link to. '&start=' . [page] will be added to this
+ * $link - the page to link to. '&page=' . [page] will be added to this
  * $section - the section to be passed to makeLink()
  */
 function pageList($totpages, $disppages, $perpage, $link, $section = '')
@@ -134,10 +134,10 @@ function pageList($totpages, $disppages, $perpage, $link, $section = '')
 
 	$i = 1;
 	for(; $i <= $disppages; $i++)
-		$pageList .= makeLink($i, $link . '&start=' . ($perpage * ($i - 1)), $section) . ' ';
+		$pageList .= makeLink($i, $link . '&page=' . $i, $section) . ' ';
 
 	if($i < $totpages)
-		$pageList .= '... ' . makeLink('Last page', $link . '&start=' . ($perpage * ($totpages - 1)), $section) . ' ';
+		$pageList .= '... ' . makeLink('Last page', $link . '&page=' . $totpages, $section) . ' ';
 
 	$pageList .= ')';
 
@@ -164,7 +164,7 @@ function newThread($t, $uls)
 	return false;
 }
 
-function threadList($forumid, $offset, $threadsPP, $uls)
+function threadList($forumid, $page, $threadsPP, $uls)
 {
 	global $DBMain;
 
@@ -188,7 +188,7 @@ function threadList($forumid, $offset, $threadsPP, $uls)
 	AND pfirst.forum_post_user = ufirst.user_id
 	AND plast.forum_post_user = ulast.user_id
 	ORDER BY plast.forum_post_date DESC
-	LIMIT ' . $offset . ', ' . $threadsPP);
+	LIMIT ' . (($page - 1) * $threadsPP) . ', ' . $threadsPP);
 
 	foreach($ret as $row)
 	{
@@ -258,16 +258,15 @@ else
 		if(canPost($forumid))
 			echo '<p>' . makeLink('New Thread', 'a=newthread&f=' . $forumid);
 
-		$offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
+		$curpage = isset($_GET['page']) ? encode($_GET['page']) : 1;
 		$threadsPP = FORUM_THREADS_PP;
 
-		$ret = $DBMain->Query('select ceiling(count(*)/' . $threadsPP . ') as count from forum_thread where forum_thread_forum=' . $forumid);
+		$ret = $DBMain->Query('select floor(count(*)/' . $threadsPP . ') + 1 as count from forum_thread where forum_thread_forum=' . $forumid);
 		$totpages = $ret[0]['count'];
-		$curpage = floor($offset / $threadsPP) + 1;
 
 		$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, 'a=viewforum&f=' . $forumid);
 
-		$array = threadList($forumid, $offset, $threadsPP, $lastSession);
+		$array = threadList($forumid, $curpage, $threadsPP, $lastSession);
 		echo '<p>' . $pageDisp;
 		echo '<p>' . getTable($array);
 		echo '<p>' . $pageDisp;
