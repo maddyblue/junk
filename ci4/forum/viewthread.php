@@ -79,14 +79,12 @@ $res = $DBMain->Query('select * from forum_thread where forum_thread_id=' . $thr
 
 echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), '?a=viewthread&t=' . $threadid) . '<p>';
 
-//$prev = $DBMain->Query('select forum_post_id from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit 1'
-
-//$navrow = array(makeLink('New Reply', '?a=newpost&t=' . $pthread), makeLink('Previous Thread', '?a=viewthread&t=') . (($pthread && $nthread) ? ' : ' : '') . makeLink('Next Thread', '?a=viewthread&t=' . $nthread));
+$navrow = array(makeLink('New Reply', '?a=newpost&t=' . $threadid), '');
 
 $array = postList($threadid);
 
-//array_unshift($array, $navrow);
-//array_push($array, $navrow);
+array_unshift($array, $navrow);
+array_push($array, $navrow);
 
 if(count($array))
 	echo getTable($array, false);
