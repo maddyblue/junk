@@ -79,7 +79,7 @@ echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[
 $newreply = makeLink('New Reply', '?a=newpost&t=' . $threadid);
 
 $offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
-$postsPP = 20;
+$postsPP = FORUM_POSTS_PP;
 
 $ret = $DBMain->Query('select ceiling(count(*)/' . $postsPP . ') as count from forum_post where forum_post_thread=' . $threadid);
 $totpages = $ret[0]['count'];
