@@ -46,7 +46,7 @@ function addForumEntry(&$array, $row, $depth, $uls)
 				makeSpaces($depth) . (newForum($row, $uls) ? '* ' : '') . makeLink(decode($row['forum_forum_name']), 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 				$row['forum_forum_threads'],
 				$row['forum_forum_posts'],
-				forumLinkLastPost($row['forum_forum_last_post'])
+				linkLastPost($row['forum_forum_last_post'], $row['user_id'], $row['user_name'], $row['forum_post_date'], $row['forum_thread_id'], $row['forum_thread_title'])
 			));
 			break;
 		case  1:
@@ -99,8 +99,11 @@ function forumList(&$array, $id, $topdepth, $depth, $uls)
 	global $DBMain;
 
 	$res = $DBMain->Query('
-	SELECT forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post
+	SELECT forum_forum_id, forum_forum_desc, forum_forum_type, forum_forum_name, forum_forum_threads, forum_forum_posts, forum_forum_last_post, user_name, user_id, forum_thread_id, forum_thread_title, forum_post_date
 	FROM forum_forum
+	LEFT JOIN forum_post ON forum_post_id = forum_forum_last_post
+	LEFT JOIN forum_thread ON forum_thread_id = forum_post_thread
+	LEFT JOIN user ON user_id = forum_post_user
 	WHERE forum_forum_parent = ' . $id . '
 	ORDER BY forum_forum_order');
 
@@ -203,7 +206,7 @@ function threadList($forumid, $page, $threadsPP, $uls)
 			getUserlink($row['ufi'], decode($row['ufn'])),
 			$row['forum_thread_replies'],
 			$row['forum_thread_views'],
-			forumLinkLastPost($row['forum_thread_last_post'], $row['uli'], decode($row['uln']), $row['pld'])
+			linkLastPost($row['forum_thread_last_post'], $row['uli'], $row['uln'], $row['pld'], '', '')
 		));
 	}
 

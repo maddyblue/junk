@@ -32,25 +32,24 @@
  *
  */
 
-function forumLinkLastPost($postid, $userid = '', $username = '', $date = '')
+function linkLastPost($postid, $userid, $username, $date, $threadid, $threadtitle)
 {
-	if(!$userid || !$username || !$date)
-	{
-		$res = $GLOBALS['DBMain']->Query('select forum_post_date, forum_post_user, user_name from forum_post, user where forum_post_user=user_id and forum_post_id=' . $postid);
+	$ret = '';
 
-		if(count($res))
+	if($postid)
+	{
+		if($threadid)
 			$ret =
-				getTime($res[0]['forum_post_date']) . ' ' .
-				getUserlink($res[0]['forum_post_user'], decode($res[0]['user_name'])) . ' ' .
+				makeLink(decode($threadtitle), 'a=viewthread&t=' . $threadid) . '<br>by ' .
+				getUserlink($userid, decode($username)) . ' ' .
+				getTime($date) . ' ' .
 				makeLink('-&gt;', 'a=viewpost&p=' . $postid);
 		else
-			$ret = 'No posts';
+			$ret =
+				getTime($date) . ' ' .
+				getUserlink($userid, decode($username)) . ' ' .
+				makeLink('-&gt;', 'a=viewpost&p=' . $postid);
 	}
-	else
-		$ret =
-			getTime($date) . ' ' .
-			getUserlink($userid, $username) . ' ' .
-			makeLink('-&gt;', 'a=viewpost&p=' . $postid);
 
 	return $ret;
 }
