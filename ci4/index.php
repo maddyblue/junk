@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.44 2003/09/27 03:38:19 dolmant Exp $ */
+/* $CI$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
