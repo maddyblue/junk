@@ -32,7 +32,7 @@
  *
  */
 
-function disp($subject, $post, $thread)
+function disp($post, $thread)
 {
 	global $db;
 
@@ -43,7 +43,6 @@ function disp($subject, $post, $thread)
 		$name = '';
 
 	echo getTableForm('New Reply' . $name, array(
-			array('Subject', array('type'=>'text', 'name'=>'subject', 'val'=>decode($subject))),
 			array('Post', array('type'=>'textarea', 'name'=>'post', 'val'=>decode($post))),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')),
@@ -98,13 +97,12 @@ else
 		if($fail)
 		{
 			echo '<br>Post creation failed.<br>';
-			disp($subject, $post, $thread);
+			disp($post, $thread);
 		}
 		else
 		{
-			$lastpost = $db->insert('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
+			$lastpost = $db->insert('insert into forum_post (forum_post_thread, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
 				$thread . ',' .
-				'"' . $subject . '",' .
 				'"' . $post . '",' .
 				ID . ',' .
 				TIME . ',' .
@@ -137,7 +135,7 @@ else
 			if(count($ret) == 1)
 				$post = '[quote]Originally posted by ' . getUsername($ret[0]['forum_post_user']) . ':' . "\n" . $ret[0]['forum_post_text'] . '[/quote]';
 		}
-		disp($subject, $post, $thread);
+		disp($post, $thread);
 	}
 }
 

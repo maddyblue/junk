@@ -116,9 +116,8 @@ else
 				')');
 			if($lastthread != FALSE)
 			{
-				$db->query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
+				$db->query('insert into forum_post (forum_post_thread, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
 					$lastthread . ',' .
-					'"' . $subject . '",' .
 					'"' . $post . '",' .
 					ID  . ',' .
 					TIME . ',' .
