@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: add-group.php,v 1.2 2004/01/07 07:00:03 dolmant Exp $ */
+/* $Id: add-group.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -32,25 +32,19 @@
  *
  */
 
-function addGroup($name)
+if(isset($_POST['submit']))
 {
-	global $DBMain;
+	$name = encode($_POST['name']);
 
 	$DBMain->Query('insert into group_def (group_def_name) values ("' . $name . '")');
 
-	$text =  $name . " Added";
+	echo decode($name) . ' added';
 
-	return $text;
-}
-
-if(isset($_POST['submit']))
-{
-	$name = $_POST['name'];
-
-	echo addGroup($name) . "<p>" . makeLink("Go back to Manage Groups", '?a=manage-groups');
+	echo '<p>' . makeLink('Go back to Manage Groups', '?a=manage-groups');
 }
 else
 {
-	echo "Please use " . makeLink("Manage Groups", '?a=manage-groups') . ".";
+	echo 'Please use ' . makeLink('Manage Groups', '?a=manage-groups') . '.';
 }
+
 ?>

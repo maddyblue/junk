@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: delete-group.php,v 1.2 2004/01/07 07:00:03 dolmant Exp $ */
+/* $Id: delete-group.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -32,27 +32,21 @@
  *
  */
 
-function deleteGroup($groupid)
+if (isset($_POST['submit']))
 {
-	global $DBMain;
+	$groupid = encode($_POST['g']);
 
 	$DBMain->Query('delete from group_user where group_user_group =' . $groupid);
 
-	$text = "Users removed from the group<p>";
+	echo 'Users removed from the group<p>';
 
 	$DBMain->Query('delete from group_def where group_def_id =' . $groupid);
 
-	$text .= "Group Deleted<p>";
+	echo 'Group Deleted';
 
-	return $text;
-}
-
-if (isset($_POST['submit']))
-{
-		$groupid = $_POST['g'];
-		echo deleteGroup($groupid) . "<p>" . makeLink("Go back to Manage Groups", '?a=manage-groups');
+	echo '<p>' . makeLink('Go back to Manage Groups', '?a=manage-groups');
 }
 else
-	echo "Please use " . makeLink("Manage Groups", '?a=manage-groups') . ".";
+	echo 'Please use ' . makeLink('Manage Groups', '?a=manage-groups') . '.';
 
 ?>

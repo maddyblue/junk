@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: edit-group-perms.php,v 1.2 2004/01/07 07:00:03 dolmant Exp $ */
+/* $Id: edit-group-perms.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -32,18 +32,19 @@
  *
  */
 
-if (isset($_POST['submit']))
+if(isset($_POST['submit']))
 {
-	$groupid = $_POST['g'];
-	$admin = ($_POST['admin'] == "on") ? '1' : '0';
-	$news = ($_POST['news'] == "on") ? '1' : '0';
-	$mod = ($_POST['mod'] == "on") ? '1' : '0';
-	$banned = ($_POST['banned'] == "on") ? '1' : '0';
+	$groupid = encode($_POST['g']);
+	$admin = ($_POST['admin'] == 'on') ? '1' : '0';
+	$news = ($_POST['news'] == 'on') ? '1' : '0';
+	$mod = ($_POST['mod'] == 'on') ? '1' : '0';
+	$banned = ($_POST['banned'] == 'on') ? '1' : '0';
 
-	$DBMain->Query('update group_def set group_def_admin="' . $admin . '", group_def_news="' . $news . '", group_def_mod="' . $mod . '", group_def_banned="' . $banned . '" where group_def_id=' . $groupid);
+	$DBMain->Query('update group_def set group_def_admin=' . $admin . ', group_def_news=' . $news . ', group_def_mod=' . $mod . ', group_def_banned=' . $banned . ' where group_def_id=' . $groupid);
 
-	echo "Permissions Updated<p>" . makeLink("Go back to Manage Group", '?a=manage-group&g=' . $groupid);
+	echo 'Permissions Updated<p>' . makeLink('Go back to Manage Group', '?a=manage-group&g=' . $groupid);
 }
 else
-	echo "Please use " . makeLink("Manage Groups", '?a=manage-groups') . ".";
+	echo 'Please use ' . makeLink('Manage Groups', '?a=manage-groups') . '.';
+
 ?>

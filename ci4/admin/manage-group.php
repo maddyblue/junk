@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: manage-group.php,v 1.3 2004/01/07 07:00:03 dolmant Exp $ */
+/* $Id: manage-group.php,v 1.4 2004/01/07 07:18:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -42,7 +42,7 @@ function groupUserListManage(&$array, $groupid)
 	{
 		$res = $DBMain->Query('select user_name from user where user_id=' . $row['group_user_user']);
 		array_push($array, array(
-			$res[0]['user_name'],
+			decode($res[0]['user_name']),
 			makeLink('Remove', 'a=remove-group-user&g=' . $groupid . '&user=' . $row['group_user_user'])
 		));
 	}
@@ -54,11 +54,11 @@ if($groupid)
 {
 	$res = $DBMain->Query('select * from group_def where group_def_id = ' . $groupid);
 
-	echo 'Manage ' . $res[0]['group_def_name'];
+	echo 'Manage ' . decode($res[0]['group_def_name']);
 
 	echo '<p>' .
 		getTableForm('Name Change', array(
-			array('Group Name', array('type'=>'text', 'name'=>'name', 'val'=>$res[0]['group_def_name'])),
+			array('Group Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($res[0]['group_def_name']))),
 			array('', array('type'=>'submit','name'=>'submit', 'val'=>'Update Name')),
 			array('', array('type'=>'hidden', 'name'=>'g', 'val'=>$groupid)),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'edit-group'))
@@ -101,7 +101,7 @@ if($groupid)
 		));
 
 	echo '<p>' .
-		getTableForm('Delete ' . $res[0]['group_def_name'], array(
+		getTableForm('Delete ' . decode($res[0]['group_def_name']), array(
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Delete')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'delete-group')),
 			array('', array('type'=>'hidden', 'name'=>'g', 'val'=>$groupid))

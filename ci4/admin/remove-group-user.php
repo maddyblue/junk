@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: remove-group-user.php,v 1.2 2004/01/07 07:00:03 dolmant Exp $ */
+/* $Id: remove-group-user.php,v 1.3 2004/01/07 07:18:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Bruno De Rosa
@@ -32,26 +32,19 @@
  *
  */
 
-function removeGroupUser($groupid, $userid)
+if(isset($_GET['g']) && isset($_GET['user']))
 {
-	global $DBMain;
+		$groupid = encode($_GET['g']);
+		$userid = encode($_GET['user']);
 
-	$DBMain->Query('delete from group_user where group_user_group ="' . $groupid . '" and group_user_user=' . $userid);
+		$DBMain->Query('delete from group_user where group_user_group ="' . $groupid . '" and group_user_user=' . $userid);
 
-	$text = "User removed from the group";
-
-	return $text;
-}
-
-if (isset($_GET['g']) && isset($_GET['user']))
-{
-		$groupid = $_GET['g'];
-		$userid = $_GET['user'];
-		echo removeGroupUser($groupid, $userid) . "<p>" . makeLink("Go back to Manage Group", '?a=manage-group&g=' . $groupid);
+		echo 'User removed from the group.';
+		echo '<p>' . makeLink('Go back to Manage Group', '?a=manage-group&g=' . $groupid);
 }
 else
 {
-	echo "Please use " . makeLink("Manage Groups", '?a=manage-groups') . ".";
+	echo 'Please use ' . makeLink('Manage Groups', '?a=manage-groups') . '.';
 }
 
 ?>
