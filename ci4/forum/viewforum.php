@@ -293,7 +293,10 @@ else
 	}
 
 	if(LOGGED)
+	{
 		echo '<p>' . makeLink('Mark all threads ' . ($forumid ? 'in this forum' : '') . ' as read.', 'a=viewforum&read=true&f=' . $forumid);
+		echo '<p>' . makeLink('View all new threads.', 'a=viewnew');
+	}
 }
 
 update_session_action(0405, $forumid);
