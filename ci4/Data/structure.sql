@@ -180,7 +180,7 @@ CREATE TABLE forum_post (
   forum_post_subject varchar(100) NOT NULL default '',
   forum_post_text text NOT NULL,
   forum_post_user bigint(10) unsigned NOT NULL default '0',
-  forum_post_ip varchar(8) NOT NULL default '',
+  forum_post_ip int(11) NOT NULL default '0',
   forum_post_date bigint(10) unsigned NOT NULL default '0',
   forum_post_edit_date bigint(10) unsigned NOT NULL default '0',
   forum_post_edit_user bigint(10) unsigned NOT NULL default '0',

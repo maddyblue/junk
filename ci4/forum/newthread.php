@@ -120,12 +120,13 @@ else
 			{
 				$lastthread = $ret[0]['forum_thread_id'];
 
-				$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date) values (' .
+				$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
 					$lastthread . ',' .
 					'"' . $subject . '",' .
 					'"' . $post . '",' .
 					ID  . ',' .
-					TIME .
+					TIME . ',' .
+					ip2long($_SERVER['REMOTE_ADDR']) .
 					')');
 				$res = $DBMain->Query('select forum_post_id from forum_post where forum_post_user=' . ID .' order by forum_post_date desc limit 1');
 				$lastpost = $res[0]['forum_post_id'];

@@ -102,12 +102,13 @@ else
 		}
 		else
 		{
-			$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date) values (' .
+			$DBMain->Query('insert into forum_post (forum_post_thread, forum_post_subject, forum_post_text, forum_post_user, forum_post_date, forum_post_ip) values (' .
 				$thread . ',' .
 				'"' . $subject . '",' .
 				'"' . $post . '",' .
 				ID . ',' .
-				TIME .
+				TIME . ',' .
+				ip2long($_SERVER['REMOTE_ADDR']) .
 				')');
 			$ret = $DBMain->Query('select forum_post_id from forum_post where forum_post_thread=' . $thread . ' and forum_post_user=' . ID . ' order by forum_post_date desc limit 1');
 			if(count($ret))
