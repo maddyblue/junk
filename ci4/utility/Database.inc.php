@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: Database.inc.php,v 1.6 2003/09/25 23:57:36 dolmant Exp $ */
+
 /*
  * Copyright (c) 2002 Matthew Jibson
  * All rights reserved.

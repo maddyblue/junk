@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: viewpost.php,v 1.3 2003/09/25 23:57:34 dolmant Exp $ */
+
 /*
  * Copyright (c) 2003 Matthew Jibson
  * All rights reserved.

@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: DatabaseAccess.inc.php,v 1.12 2003/09/25 23:57:36 dolmant Exp $ */
+
 /*
  * Copyright (c) 2002 David Yip
  * All rights reserved.

@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: viewforum.php,v 1.14 2003/09/25 23:57:34 dolmant Exp $ */
+
 /*
  * Copyright (c) 2003 Matthew Jibson
  * All rights reserved.

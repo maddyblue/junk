@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: Forum.inc.php,v 1.16 2003/09/25 23:57:36 dolmant Exp $ */
+
 /*
  * Copyright (c) 2003 Matthew Jibson
  * All rights reserved.

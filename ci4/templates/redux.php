@@ -3,6 +3,7 @@
 
 <html>
 <head>
+<!-- $Id: redux.php,v 1.18 2003/09/26 00:01:12 dolmant Exp $ -->
 <title>crescent island ::
 <?php echo strtolower(CI_SECTION); ?>
 <?php

@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: reset.php,v 1.4 2003/09/25 23:57:33 dolmant Exp $ */
+
 /*
  * Copyright (c) 2003 Matthew Jibson
  * All rights reserved.

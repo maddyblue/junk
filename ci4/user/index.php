@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: index.php,v 1.3 2003/09/25 23:57:35 dolmant Exp $ */
+
 /*
  * Copyright (c) 2003 Matthew Jibson
  * All rights reserved.

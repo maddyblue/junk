@@ -1,5 +1,6 @@
 <html>
 <head>
+<!-- $Id: kuro5hin.php,v 1.4 2003/09/26 00:01:12 dolmant Exp $ -->
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
 <!--

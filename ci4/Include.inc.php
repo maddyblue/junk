@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: Include.inc.php,v 1.15 2003/09/25 23:57:33 dolmant Exp $ */
+
 /*
  * Copyright (c) 2002 Matthew Jibson
  * All rights reserved.

@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: Globals.inc.php,v 1.28 2003/09/25 23:57:34 dolmant Exp $ */
+
 /*	CI globals.	*/
 
 /* All addresses (filesystem or www) must end in '/'. */

@@ -1,5 +1,7 @@
 <?php
 
+/* $Id: logout.php,v 1.3 2003/09/25 23:57:35 dolmant Exp $ */
+
 /*
  * Copyright (c) 2002 Matthew Jibson
  * All rights reserved.
