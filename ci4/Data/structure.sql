@@ -130,6 +130,7 @@ CREATE TABLE domain (
 CREATE TABLE equipment (
   equipment_id bigint(10) unsigned NOT NULL auto_increment,
   equipment_name varchar(100) NOT NULL default '',
+  equipment_image varchar(100) NOT NULL default '',
   equipment_stat_hp smallint(6) NOT NULL default '0',
   equipment_stat_mp smallint(6) NOT NULL default '0',
   equipment_stat_str smallint(6) NOT NULL default '0',
