@@ -5,11 +5,11 @@
 // Main database
 $CIConfigMain{'SQLUser'}       = 'user';
 $CIConfigMain{'SQLPassword'}   = 'usersql';
-$CIConfigMain{'SQLHost'}       = 'althalus';
+$CIConfigMain{'SQLHost'}       = '10.0.0.2';
 
 // Player server
 $CIConfigPlayer{'SQLUser'}       = 'user';
 $CIConfigPlayer{'SQLPassword'}   = 'usersql';
-$CIConfigPlayer{'SQLHost'}       = 'althalus';
+$CIConfigPlayer{'SQLHost'}       = '10.0.0.2';
 
 ?>
