@@ -22,46 +22,46 @@ if($aval)
 <style type="text/css">
 <!--
 body {
-  background-color: #D5D9DD;
+	background-color: #D5D9DD;
 }
 
 p, body, td, li, input, textarea, select {
-  font-family: Verdana, Arial, Helvetica, sans-serif;
-  font-size: 10px;
-  color: #333333;
-  letter-spacing: 1px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #333333;
+	letter-spacing: 1px;
 }
 
 input.text {
-  width: 285px;
-  background-color: #FFFFFF;
+	width: 285px;
+	background-color: #FFFFFF;
 }
 
 .submit {
-  padding-top: 2px;
-  height: 22px;
-  width: 88px;
-  color: #224488;
-  font-weight: bold;
-  background-image: url(<CI_TEMPLATE_DIR>/button.gif);
-  background-repeat: no-repeat;
-  cursor: pointer;
+	padding-top: 2px;
+	height: 22px;
+	width: 88px;
+	color: #224488;
+	font-weight: bold;
+	background-image: url(<CI_TEMPLATE_DIR>/button.gif);
+	background-repeat: no-repeat;
+	cursor: pointer;
 }
 
 blockquote {
-  width: 350px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-top: 1px solid #000000;
-  border-bottom: 1px solid #000000;
-  margin-left: 15px;
-  margin-right: 15px;
-  font-size: 9px;
-  letter-spacing: normal;
+	width: 350px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	margin-left: 15px;
+	margin-right: 15px;
+	font-size: 9px;
+	letter-spacing: normal;
 }
 
 textarea {
-  background-color: #FFFFFF;
+	background-color: #FFFFFF;
 }
 
 a {
@@ -74,16 +74,16 @@ a:hover {
 }
 
 table.block {
-  border: 1px solid #000000;
-  margin-bottom: 8px;
+	border: 1px solid #000000;
+	margin-bottom: 8px;
 }
 
 .nav {
-  width: 175px;
-  border: 1px solid #000000;
-  margin-bottom: 8px;
-  margin-left: 8px;
-  table-layout: fixed;
+	width: 175px;
+	border: 1px solid #000000;
+	margin-bottom: 8px;
+	margin-left: 8px;
+	table-layout: fixed;
 }
 
 .tdmain {
@@ -95,11 +95,11 @@ table.block {
 }
 
 .nav td {
-  padding: 5px;
-  padding-left: 8px;
-  font-weight: bold;
-  text-transform: lowercase;
-  overflow: hidden;
+	padding: 5px;
+	padding-left: 8px;
+	font-weight: bold;
+	text-transform: lowercase;
+	overflow: hidden;
 }
 
 .nav a {
@@ -107,11 +107,11 @@ table.block {
 }
 
 td.block-dark {
-  border-bottom: 1px solid #777777;
-  border-right: 1px solid #777777;
-  border-left: 1px solid #DDDDDD;
-  border-top: 1px solid #DDDDDD;
-  background-color: #C0C7CD;
+	border-bottom: 1px solid #777777;
+	border-right: 1px solid #777777;
+	border-left: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	background-color: #C0C7CD;
 }
 
 td.block-dark a {
@@ -119,11 +119,11 @@ td.block-dark a {
 }
 
 td.block-light {
-  border-bottom: 1px solid #888888;
-  border-right: 1px solid #888888;
-  border-left: 1px solid #FFFFFF;
-  border-top: 1px solid #FFFFFF;
-  background-color: #EEEEEE;
+	border-bottom: 1px solid #888888;
+	border-right: 1px solid #888888;
+	border-left: 1px solid #FFFFFF;
+	border-top: 1px solid #FFFFFF;
+	background-color: #EEEEEE;
 }
 
 .table1 {
@@ -189,7 +189,7 @@ td.block-light {
 				<tr>
 					<td align="right" valign="top" class="block-dark" style="padding-top: 3px; padding-bottom: 8px; padding-right: 8px;">
 						<div class="header">crescent island</div>
-  				</td>
+					</td>
 				</tr>
 				<tr>
 					<td align="left" valign="top" class="block-light" style="padding: 8px">
