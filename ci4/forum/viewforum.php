@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.31 2004/01/09 06:30:15 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.32 2004/01/09 23:08:46 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -132,7 +132,7 @@ function threadList($forumid, $offset, $threadsPP)
 		array_push($array, array(
 			(newThread($row) ? '* ' : '') .
 				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']),
-			getUserlink($row['ufi'], $row['ufn']),
+			getUserlink($row['ufi'], decode($row['ufn'])),
 			$row['forum_thread_replies'],
 			$row['forum_thread_views'],
 			forumLinkLastPost($row['forum_thread_last_post'], $row['uli'], decode($row['uln']), $row['pld'])
