@@ -35,7 +35,7 @@
 $e = isset($_GET['e']) ? intval($_GET['e']) :
 	(isset($_POST['e']) ? intval($_POST['e']) : '0');
 
-$res = $db->query('select * from equipment, equipmenttype where equipment_id=' . $e . ' and equipmenttype_id=equipment_type');
+$res = $db->query('select * from equipment, equipmenttype, equipmentclass where equipment_id=' . $e . ' and equipmenttype_id=equipment_type and equipmentclass_id=equipment_class');
 
 if(count($res))
 {
@@ -76,6 +76,7 @@ if(count($res))
 	$array = array(
 		array('Name', $res[0]['equipment_name'] . makeImg($res[0]['equipment_image'], 'images/equipment/')),
 		array('Type', makeLink($res[0]['equipmenttype_name'], 'a=viewequipment&type=' . $res[0]['equipmenttype_id'])),
+		array('Class', $res[0]['equipmentclass_name']),
 		array('Description', $res[0]['equipment_desc']),
 		array('Two Hand?', ($res[0]['equipment_twohand'] ? 'Yes' : 'No')),
 		array('Stat Changes', getTable($stat, false)),

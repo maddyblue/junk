@@ -51,11 +51,12 @@ if($type <= 0)
 }
 else
 {
-	$res = $db->query('select * from equipment, equipmenttype where equipment_type=equipmenttype_id and equipment_type=' . $type . ' order by equipmenttype_name, equipment_cost');
+	$res = $db->query('select * from equipment, equipmenttype, equipmentclass where equipment_type=equipmenttype_id and equipment_type=' . $type . ' and equipment_class=equipmentclass_id order by equipmentclass_name, equipment_cost');
 
 	array_push($array, array(
+		'Name',
 		'Type',
-		'Equipment',
+		'Class',
 		'Cost',
 		'Description'
 	));
@@ -63,8 +64,9 @@ else
 	for($i = 0; $i < count($res); $i++)
 	{
 		array_push($array, array(
-			makeLink($res[$i]['equipmenttype_name'], 'a=viewequipment&type=' . $res[$i]['equipmenttype_id']),
 			makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id']),
+			$res[$i]['equipmenttype_name'],
+			$res[$i]['equipmentclass_name'],
 			$res[$i]['equipment_cost'],
 			$res[$i]['equipment_desc']
 		));
