@@ -125,47 +125,53 @@ function makeTable($arr, $skip = array())
 }
 
 /* This function takes lots of heavily nested arrays.
- * I suggest looking at game/newchar.php as an example.
+ * I suggest looking at user/newchar.php as an example.
  */
-function makeTableForm($title, $arr, $descrip = '', $parms = '')
+function getTableForm($title, $arr, $descrip = '', $parms = '')
 {
-	?>
-		<form method="POST" action="index.php" <?php echo $parms ?>>
+	$ret = '';
+	$end = '';
+
+	$ret .= '<form method="POST" action="index.php" ' . $parms . '>
 		<table>
 			<tr>
-				<td colspan="<?php echo count($arr[0]) ?>">
-					<?php echo $title ?><?php if($descrip) echo ": $descrip" ?>
+				<td colspan="' . count($arr[0]) . '">
+					' . $title . ($descrip ? ': ' . $descrip : '') . '
 				</td>
-			</tr>
-	<?php
+			</tr>';
+
 	while(list(,$array) = each($arr))
 	{
-		if($array[1][0] != 'hidden')
+		if($array[1]['type'] != 'hidden')
 		{
-			?>
-				<tr>
+			$ret .= '<tr>
 					<td>
-						<?php echo $array[0] ?>
+						' . $array[0] . '
 					</td>
 					<td>
-						<?php echo makeFormField($array[1]) ?>
+						' . getFormField($array[1]) . '
 					</td>
-				</tr>
-			<?php
+				</tr>';
 		}
 		else
-			$end .= makeFormField($array[1]);
+			$end .= getFormField($array[1]);
 	}
-	?>
-		</table>
-		<?php echo $end ?>
-		</form>
-	<?php
+
+	$ret .= '</table>';
+	$ret .= $end;
+	$ret .= '</form>';
+
+	return $ret;
 }
 
 /* Fairly simple.  Just takes an associative array, and plugs in the values. */
-function makeFormField($arr)
+function getFormField($arr)
 {
+	$name = '';
+	$parms = '';
+	$val = '';
+	$type = '';
+
 	extract($arr);
 	if($type == 'textarea')
 	{
@@ -300,9 +306,14 @@ function makeImg($img, $prefix = '', $relative = false)
 	return ($img ? '<img src="' . ($relative ? '' : CI_WWW_PATH) . $prefix . $img . '">' : '');
 }
 
-function dump($var)
+function encode($input)
 {
-	return '<pre>' . var_dump($var) . '</pre>';
+	return htmlentities(urlencode($input));
 }
 
+function decode($output)
+{
+	// stripslashes might break stuff, i'm not sure
+	return stripslashes(htmlspecialchars(urldecode($output)));
+}
 ?>
