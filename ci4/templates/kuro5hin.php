@@ -233,7 +233,7 @@ a:active {
 
 			<table width="100%" border=0 cellpadding=3 cellspacing=0>
 				<tr>
-					<td valign="top" width="12" align="left">
+					<td valign="top" width="100%" align="left">
 						<CICONTENT>
 					</td>
 				</tr>
