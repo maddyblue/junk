@@ -51,9 +51,9 @@ CREATE TABLE cor_area_town (
 ) TYPE=MyISAM;
 
 
-CREATE TABLE cor_job_ability (
+CREATE TABLE cor_job_abilitytype (
   cor_job bigint(10) unsigned NOT NULL default '0',
-  cor_ability bigint(10) unsigned NOT NULL default '0'
+  cor_abilitytype bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
