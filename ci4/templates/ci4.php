@@ -106,8 +106,7 @@ td
 		<tr>
 			<td>
 				[ <CISUB>[ INSERT ]<br></CISUB> ]
-				<p><CISECTION>
-				<p><? echo (5*7) ?>
+				<p><CIAFFILIATES>INSERT<br></CIAFFILIATES>
 			</td>
 		</tr>
 	</table>
