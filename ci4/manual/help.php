@@ -36,13 +36,13 @@ update_session_action(0604);
 
 ?>
 
-<p><b>How can I help Crescent Island?</b> or <b>I want to contribute, but I don't know how to program.</b>
+<p/><b>How can I help Crescent Island?</b> or <b>I want to contribute, but I don't know how to program.</b>
 
-<p>There are many ways to help out at CI. You can contribute by testing and suggesting detailed impromevents to monsters, abilities, jobs and items. You can create images for abilities, jobs, monsters and items. You can suggest usability improvements. You can make mock-ups of new skins you want.
+<p/>There are many ways to help out at CI. You can contribute by testing and suggesting detailed impromevents to monsters, abilities, jobs and items. You can create images for abilities, jobs, monsters and items. You can suggest usability improvements. You can make mock-ups of new skins you want.
 
-<p><b>Images we need:</b>
+<p/><b>Images we need:</b>
 
-<p>Equipment:
+<p/>Equipment:
 
 <?php
 $images = array(
@@ -54,5 +54,5 @@ $images = array(
 );
 
 foreach($images as $i)
-	echo '<br>' . makeLink($i[0], $i[1], $i[2]);
+	echo '<br/>' . makeLink($i[0], $i[1], $i[2]);
 ?>

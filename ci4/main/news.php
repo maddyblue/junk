@@ -44,15 +44,15 @@ $res = $db->query($query);
 for($i = 0; $i < count($res); $i++)
 {
 	if($i)
-		echo '<p>-----';
+		echo '<p/>-----';
 
-	echo '<p><b>' . decode($res[$i]['forum_thread_title']) . '</b>';
-	echo '<br>By ' . getUserlink($res[$i]['user_id'], decode($res[$i]['user_name'])) . ' on ' . getTime($res[$i]['forum_thread_date']) . ':';
-	echo '<p>' . parsePostText($res[$i]['forum_post_text']);
-	echo '<p>' . makeLink($res[$i]['forum_thread_replies'] . ' replies', 'a=viewthread&t=' . $res[$i]['forum_thread_id'], SECTION_FORUM);
+	echo '<p/><b>' . decode($res[$i]['forum_thread_title']) . '</b>';
+	echo '<br/>By ' . getUserlink($res[$i]['user_id'], decode($res[$i]['user_name'])) . ' on ' . getTime($res[$i]['forum_thread_date']) . ':';
+	echo '<p/>' . parsePostText($res[$i]['forum_post_text']);
+	echo '<p/>' . makeLink($res[$i]['forum_thread_replies'] . ' replies', 'a=viewthread&t=' . $res[$i]['forum_thread_id'], SECTION_FORUM);
 }
 
-echo '<p>' . makeLink('Older news', 'a=viewforum&f=' . NEWSFORUM, SECTION_FORUM);
+echo '<p/>' . makeLink('Older news', 'a=viewforum&f=' . NEWSFORUM, SECTION_FORUM);
 
 update_session_action(0101);
 

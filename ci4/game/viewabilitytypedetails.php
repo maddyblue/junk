@@ -74,13 +74,13 @@ if(count($res))
 		$ap = $db->query('select * from player_abilitytype where player_abilitytype_type=' . $type . ' and player_abilitytype_player=' . $PLAYER['player_id']);
 
 		if(count($ap))
-			echo '<p>You have ' . $ap[0]['player_abilitytype_ap'] . ' remaining AP in ' . $res[0]['abilitytype_name'] . ', and ' . $ap[0]['player_abilitytype_aptot'] . ' total.';
+			echo '<p/>You have ' . $ap[0]['player_abilitytype_ap'] . ' remaining AP in ' . $res[0]['abilitytype_name'] . ', and ' . $ap[0]['player_abilitytype_aptot'] . ' total.';
 		else
-			echo '<p>You do not have any AP in ' . $res[0]['abilitytype_name'] . '.';
+			echo '<p/>You do not have any AP in ' . $res[0]['abilitytype_name'] . '.';
 	}
 }
 else
-	echo '<br>Invalid abilitytype ID.';
+	echo '<br/>Invalid abilitytype ID.';
 
 update_session_action(0501);
 

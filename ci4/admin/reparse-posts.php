@@ -41,7 +41,7 @@ if($start < 0)
 $per = 1000;
 $next = $start + $per;
 
-echo '<p>Reparsing forum posts ' . $start . ' to ' . $next . ':<br>';
+echo '<p/>Reparsing forum posts ' . $start . ' to ' . $next . ':<br/>';
 
 $posts = $db->query('select forum_post_id, forum_post_text from forum_post limit ' . $start . ', ' . $per);
 foreach($posts as $post)

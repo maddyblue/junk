@@ -41,7 +41,7 @@ if (isset($_POST['submit']))
 
 	echo decode($name) . ' updated';
 
-	echo '<p>' . makeLink('Go back to Manage Group', '?a=manage-group&g=' . $groupid);
+	echo '<p/>' . makeLink('Go back to Manage Group', '?a=manage-group&g=' . $groupid);
 }
 else
 	echo 'Please use ' . makeLink('Manage Groups', '?a=manage-groups') . '.';

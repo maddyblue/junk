@@ -48,7 +48,7 @@ if(count($res))
 
 		if($res[0]['job_req_lv'] > $PLAYER['player_lv'])
 		{
-			echo '<br>You are not yet at a high enough level to change to ' . $res[0]['job_name'] . '.';
+			echo '<br/>You are not yet at a high enough level to change to ' . $res[0]['job_name'] . '.';
 			$fail = true;
 		}
 
@@ -65,7 +65,7 @@ if(count($res))
 		if(count($failed))
 		{
 			foreach($failed as $entry)
-				echo '<br>You must be ' . $entry['job_name'] . ' level ' . $entry['cor_joblv'] . ', but you are level ' . ($entry['player_job_lv'] ? $entry['player_job_lv'] : '0') . '.';
+				echo '<br/>You must be ' . $entry['job_name'] . ' level ' . $entry['cor_joblv'] . ', but you are level ' . ($entry['player_job_lv'] ? $entry['player_job_lv'] : '0') . '.';
 			$fail = true;
 		}
 
@@ -87,12 +87,12 @@ if(count($res))
 			// unequip everything
 			$db->query('update player_equipment set player_equipment_equipped=0 where player_equipment_player=' . $PLAYER['player_id']);
 
-			echo '<p>Job change to ' . $res[0]['job_name'] . ' succeeded.';
-			echo '<br>All of your equipment has been unequipped.';
+			echo '<p/>Job change to ' . $res[0]['job_name'] . ' succeeded.';
+			echo '<br/>All of your equipment has been unequipped.';
 		}
 		else
 		{
-			echo '<br>Job change to ' . $res[0]['job_name'] . ' failed.';
+			echo '<br/>Job change to ' . $res[0]['job_name'] . ' failed.';
 		}
 	}
 
@@ -181,14 +181,14 @@ if(count($res))
 
 	if($PLAYER)
 	{
-		$change = '<p>' . getForm('', array(
+		$change = '<p/>' . getForm('', array(
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>('Change job to ' . $res[0]['job_name']))),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewjobdetails')),
 			array('', array('type'=>'hidden', 'name'=>'job', 'val'=>$job))
 		));
 
 		if(!isset($_POST['job']))
-			echo '<p>You are currently a ' . getDBData('job_name', $PLAYER['player_job'], 'job_id', 'job') . '.';
+			echo '<p/>You are currently a ' . getDBData('job_name', $PLAYER['player_job'], 'job_id', 'job') . '.';
 	}
 	else
 		$change = '';
@@ -198,7 +198,7 @@ if(count($res))
 	echo $change;
 }
 else
-	echo '<p>Invalid job ID.';
+	echo '<p/>Invalid job ID.';
 
 update_session_action(0504);
 

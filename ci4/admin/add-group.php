@@ -40,7 +40,7 @@ if(isset($_POST['submit']))
 
 	echo decode($name) . ' added';
 
-	echo '<p>' . makeLink('Go back to Manage Groups', '?a=manage-groups');
+	echo '<p/>' . makeLink('Go back to Manage Groups', '?a=manage-groups');
 }
 else
 {

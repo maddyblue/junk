@@ -56,7 +56,7 @@ if($groupid)
 
 	echo 'Manage ' . decode($res[0]['group_def_name']);
 
-	echo '<p>' .
+	echo '<p/>' .
 		getTableForm('Name Change', array(
 			array('Group Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($res[0]['group_def_name']))),
 			array('', array('type'=>'submit','name'=>'submit', 'val'=>'Update Name')),
@@ -65,7 +65,7 @@ if($groupid)
 		));
 
 
-	echo '<p>' .
+	echo '<p/>' .
 		getTableForm('Group Permissions', array(
 			array('Admin', array('name'=>'admin', 'type'=>'checkbox', 'val'=>($res[0]['group_def_admin']) ? 'checked' : 'unchecked')),
 			array('News', array('name'=>'news', 'type'=>'checkbox', 'val'=>($res[0]['group_def_news']) ? 'checked' : 'unchecked')),
@@ -88,11 +88,11 @@ if($groupid)
 
 	$res = $db->query('select group_def_name from group_def where group_def_id=' . $groupid);
 
-	echo '<p>Users';
+	echo '<p/>Users';
 
 	echo getTable($array);
 
-	echo '<p>' .
+	echo '<p/>' .
 		getTableForm('Add User to group', array(
 			array('User Name', array('type'=>'text', 'name'=>'name', 'val'=>'')),
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Add User')),
@@ -100,7 +100,7 @@ if($groupid)
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'add-group-user')),
 		));
 
-	echo '<p>' .
+	echo '<p/>' .
 		getTableForm('Delete ' . decode($res[0]['group_def_name']), array(
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Delete')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'delete-group')),
@@ -109,8 +109,8 @@ if($groupid)
 }
 else
 {
-	echo '<p>No group specified.';
+	echo '<p/>No group specified.';
 }
 
-echo '<p>' . makeLink('Go back to Manage Groups', '?a=manage-groups');
+echo '<p/>' . makeLink('Go back to Manage Groups', '?a=manage-groups');
 ?>

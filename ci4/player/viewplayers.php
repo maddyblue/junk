@@ -177,7 +177,7 @@ array_push($disp, array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewpla
 
 echo getTable($array);
 
-echo '<p>';
+echo '<p/>';
 
 echo getTableForm('Show Players:', $disp);
 

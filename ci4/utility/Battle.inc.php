@@ -52,7 +52,7 @@ function battleAttack(&$src, &$dest)
 
 	battleDealDamage($d, $dest);
 
-	echo '<p>' . $src->name . ' has attacked ' . $dest->name . ' for ' . $d . ' damage.';
+	echo '<p/>' . $src->name . ' has attacked ' . $dest->name . ' for ' . $d . ' damage.';
 
 	return true;
 }
@@ -87,7 +87,7 @@ function battleAbility(&$src, &$dest, $ability)
 	// check for enough mp
 	if($src->mp < $ability['ability_mp'])
 	{
-		echo '<p>' . $src->name . ' does not have enough MP to use ' . $ability['ability_name'] . ' (' . $src->mp . ' of ' . $ability['ability_mp'] . ' needed).';
+		echo '<p/>' . $src->name . ' does not have enough MP to use ' . $ability['ability_name'] . ' (' . $src->mp . ' of ' . $ability['ability_mp'] . ' needed).';
 		return false;
 	}
 	else

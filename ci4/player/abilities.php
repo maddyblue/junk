@@ -52,7 +52,7 @@ if($PLAYER)
 			}
 		}
 
-		echo '<p>Abilities updated.';
+		echo '<p/>Abilities updated.';
 	}
 
 	$res = $db->query('select player_ability.*, ability_name from player_ability, ability where player_ability_player=' . $PLAYER['player_id'] . ' and player_ability_ability=ability_id order by player_ability_order');
@@ -77,15 +77,15 @@ if($PLAYER)
 	$table = getTable($array);
 
 	echo getForm('Manage battle abilities:', array(
-		array('<p>', array('type'=>'disptext', 'val'=>$table)),
-		array('<p>', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
+		array('<p/>', array('type'=>'disptext', 'val'=>$table)),
+		array('<p/>', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
 		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'abilities'))
 	));
 
-	echo '<p>This form is used to set what abilities will be shown in what order during battle. Set the order to some positive integer in the order that you want them to be shown during battle (i.e. 1, 2, 3). If you do not want an ability to be available during battle, uncheck the box in the display column.';
+	echo '<p/>This form is used to set what abilities will be shown in what order during battle. Set the order to some positive integer in the order that you want them to be shown during battle (i.e. 1, 2, 3). If you do not want an ability to be available during battle, uncheck the box in the display column.';
 }
 else
-	echo '<p>You must switch to a domain with a player, or create a new one in this domain.';
+	echo '<p/>You must switch to a domain with a player, or create a new one in this domain.';
 
 update_session_action(0704);
 

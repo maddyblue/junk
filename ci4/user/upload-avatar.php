@@ -46,15 +46,15 @@ function checkFile($file, $image = true)
 	switch($error)
 	{
 		case UPLOAD_ERR_INI_SIZE:
-			echo '<br>' . $dispname . ': The file exceeds the upload size specified by this server.';
+			echo '<br/>' . $dispname . ': The file exceeds the upload size specified by this server.';
 			return false;
 			break;
 		case UPLOAD_ERR_PARTIAL:
-			echo '<br>' . $dispname . ': The file was only partially uploaded.';
+			echo '<br/>' . $dispname . ': The file was only partially uploaded.';
 			return false;
 			break;
 		case UPLOAD_ERR_NO_FILE:
-			echo '<br>' . $dispname . ': No file was uploaded.';
+			echo '<br/>' . $dispname . ': No file was uploaded.';
 			return false;
 			break;
 		default:
@@ -63,38 +63,38 @@ function checkFile($file, $image = true)
 
 	if($image && substr($type, 0, 5) != 'image')
 	{
-		echo '<br>' . $dispname . ': Uploaded file is not an image.';
+		echo '<br/>' . $dispname . ': Uploaded file is not an image.';
 		return false;
 	}
 
 	if(preg_match('/[^-a-z0-9\/]/', $type))
 	{
-		echo '<br>Type description contains invalid characters (a-z, 0-9, -, and / are valid): ' . $type;
+		echo '<br/>Type description contains invalid characters (a-z, 0-9, -, and / are valid): ' . $type;
 		return false;
 	}
 
 	if($fsize > 50000)
 	{
-		echo '<br>Filesize must be less than 50kB. Your image is ' . round($fsize / 1000) . 'kB.';
+		echo '<br/>Filesize must be less than 50kB. Your image is ' . round($fsize / 1000) . 'kB.';
 		return false;
 	}
 
 	$size = getimagesize($name);
 	if($size == FALSE)
 	{
-		echo '<br>File is not an image.';
+		echo '<br/>File is not an image.';
 		return false;
 	}
 
 	if($size[0] > 100 || $size[1] > 100)
 	{
-		echo '<br>Image size cannot be larger than 100x100. Your image is ' . $size[0] . 'x' . $size[1] . '.';
+		echo '<br/>Image size cannot be larger than 100x100. Your image is ' . $size[0] . 'x' . $size[1] . '.';
 		return false;
 	}
 
 	if(!is_uploaded_file($name))
 	{
-		echo '<br>' . $dispname . ': The specified file is not an uploaded file.';
+		echo '<br/>' . $dispname . ': The specified file is not an uploaded file.';
 		return false;
 	}
 
@@ -121,7 +121,7 @@ if(LOGGED)
 		if(!isset($_FILES['avatar']['name']))
 		{
 			$fail = true;
-			echo '<br>No avatar specified.';
+			echo '<br/>No avatar specified.';
 		}
 		else if(!checkFile($_FILES['avatar']))
 		{
@@ -140,11 +140,11 @@ if(LOGGED)
 
 				$db->query('update user set user_avatar_data="' . $data . '", user_avatar_type="' . $type . '" where user_id=' . ID);
 
-				echo '<p>Avatar upload complete.';
+				echo '<p/>Avatar upload complete.';
 			}
 			else
 			{
-				echo '<p>Error: could not open uploaded file.';
+				echo '<p/>Error: could not open uploaded file.';
 			}
 		}
 	}
@@ -153,7 +153,7 @@ if(LOGGED)
 }
 else
 {
-	echo '<p>You must be logged in to upload an avatar.';
+	echo '<p/>You must be logged in to upload an avatar.';
 }
 
 ?>

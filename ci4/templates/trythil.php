@@ -148,9 +148,9 @@
 			print "<div class=leftmenu>";
 		}
 	?>
-		<p>
+		<p/>
 		<center>
-		<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <CINAV><font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> INSERT <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br></CINAV> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font>
+		<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <CINAV><font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> INSERT <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/></CINAV> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font>
 		</center>
 	</div>
 
@@ -161,11 +161,11 @@
 			print "<div class=rightmenu>";
 		}
 	?>
-		<p>
+		<p/>
 		<center>
-		<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <CISECTION_MENU><font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> INSERT <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br></CISECTION_MENU> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br>
+		<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <CISECTION_MENU><font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> INSERT <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/></CISECTION_MENU> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/>
 
-		<br><CISECTION_NAV>INSERT<br></CISECTION_NAV>
+		<br/><CISECTION_NAV>INSERT<br/></CISECTION_NAV>
 		</center>
 	</div>
 
@@ -175,7 +175,7 @@
 
 			<tr>
 				<td align="center">
-					<br><hr color=#626BBC width=700><br>
+					<br/><hr color=#626BBC width=700><br/>
 					<table border=0 cellspacing=2 cellpadding=4 width=100%>
 						<tr>
 							<td valign="top" align="center">

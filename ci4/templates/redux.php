@@ -77,7 +77,7 @@
 					<? echo CI_SECTION; ?> nav
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<CISECTION_NAV>INSERT<br/></CISECTION_NAV><br>
+					<CISECTION_NAV>INSERT<br/></CISECTION_NAV><br/>
 				</div></div>
 			</div>
 

@@ -52,12 +52,12 @@ if(isset($_POST['submit']))
 
 	updatePlayerStats();
 
-	echo '<p>Equipment changed.';
+	echo '<p/>Equipment changed.';
 }
 
 
 if($PLAYER == false)
-	echo '<p>You must login to change your equipment.';
+	echo '<p/>You must login to change your equipment.';
 else
 {
 	// determine what the player can wear

@@ -62,7 +62,7 @@ function pageList($totpages, $disppages, $perpage, $link, $section = '')
 
 if(!LOGGED)
 {
-	echo '<p>This feature is only available to logged in users.';
+	echo '<p/>This feature is only available to logged in users.';
 }
 else
 {
@@ -95,7 +95,7 @@ else
 		));
 	}
 
-	echo '<p>New Threads:';
+	echo '<p/>New Threads:';
 	echo getTable($array);
 }
 

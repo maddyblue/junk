@@ -143,7 +143,7 @@ table.maintable {
 
 <body>
 
-<br>
+<br/>
 <a href="http://crescentisland.com"><b>Crescent Island</b></a>
 
 <table class="ciNavTable">
@@ -154,7 +154,7 @@ table.maintable {
 	</tr>
 </table>
 
-<p>
+<p/>
 
 <table class="maintable">
 	<tr>
@@ -184,7 +184,7 @@ table.maintable {
 						<?php
 							$pms = makePMLink();
 							if($pms)
-								echo $pms . '<br>';
+								echo $pms . '<br/>';
 
 							$res = $db->query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
 							for($i = 0; $i < count($res); $i++)
@@ -192,13 +192,13 @@ table.maintable {
 								if($res[$i]['player_id'] == $PLAYER['player_id'])
 									echo '* ';
 
-								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_PLAYER) . ' [' . makeLink($res[$i]['domain_abrev'], 'a=changedomain&domain=' . $res[$i]['domain_id'], SECTION_HOME) . ']<br>';
+								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_PLAYER) . ' [' . makeLink($res[$i]['domain_abrev'], 'a=changedomain&domain=' . $res[$i]['domain_id'], SECTION_HOME) . ']<br/>';
 							}
 						?>
 					</td>
 				</tr>
 			</table>
-			<p>
+			<p/>
 			<?php
 			}
 		?>
@@ -220,11 +220,11 @@ table.maintable {
 		<table class="boxcontents">
 			<tr>
 				<td>
-					<CISECTION_NAV>INSERT<br></CISECTION_NAV>
+					<CISECTION_NAV>INSERT<br/></CISECTION_NAV>
 				</td>
 			</tr>
 		</table>
-		<p>
+		<p/>
 
 		<table class="box">
 			<tr>
@@ -247,7 +247,7 @@ table.maintable {
 				</td>
 			</tr>
 		</table>
-		<p>
+		<p/>
 
 		<table class="box">
 			<tr>
@@ -271,7 +271,7 @@ table.maintable {
 				</td>
 			</tr>
 		</table>
-		<p>
+		<p/>
 
 		<table class="box">
 			<tr>
@@ -294,7 +294,7 @@ table.maintable {
 				</td>
 			</tr>
 		</table>
-		<p>
+		<p/>
 
 		</td>
 

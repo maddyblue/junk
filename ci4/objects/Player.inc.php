@@ -51,7 +51,7 @@ class Player extends Entity
 		// in a multi player battle, only the player whose turn it is can go
 		if(!$this->access)
 		{
-			echo '<p>It is not your turn. You must wait for ' . $this->name . ' to go.';
+			echo '<p/>It is not your turn. You must wait for ' . $this->name . ' to go.';
 			$this->turnDone = -1;
 			return;
 		}
@@ -151,7 +151,7 @@ class Player extends Entity
 				for($i = 0; $i < count($abs); $i++)
 					$db->query('update player_abilitytype set player_abilitytype_ap=player_abilitytype_ap+' . $ap . ', player_abilitytype_aptot=player_abilitytype_aptot+' . $ap . ' where player_abilitytype_player=' . $this->id . ' and player_abilitytype_type=' . $abs[$i]['cor_abilitytype']);
 
-				echo '<p>Gained ' . $exp . ' experience and ' . $ap . ' ap.';
+				echo '<p/>Gained ' . $exp . ' experience and ' . $ap . ' ap.';
 
 				$pexp = $ret[0]['player_exp'] + $exp;
 				$plv = $ret[0]['player_lv'];
@@ -170,7 +170,7 @@ class Player extends Entity
 					$db->query('update player set player_nomod_hp=player_nomod_hp+' . $hp . ', player_nomod_mp=player_nomod_mp+' . $mp . ', player_nomod_str=player_nomod_str+' . $str . ', player_nomod_mag=player_nomod_mag+' . $mag . ', player_nomod_def=player_nomod_def+' . $def . ', player_nomod_mgd=player_nomod_mgd+' . $mgd . ', player_nomod_agl=player_nomod_agl+' . $agl . ', player_nomod_acc=player_nomod_acc+' . $acc . ', player_lv=player_lv+1 where player_id=' . $this->id);
 					updatePlayerStats();
 
-					echo '<p>Level up to level ' . ($plv + 1) . '<br>Gains:<br>hp: ' . $hp . '<br>mp: ' . $mp . '<br>str: ' . $str . '<br>mag: ' . $mag . '<br>def: ' . $def . '<br>mgd: ' . $mgd . '<br>agl: ' . $agl . '<br>acc: ' . $acc;
+					echo '<p/>Level up to level ' . ($plv + 1) . '<br/>Gains:<br/>hp: ' . $hp . '<br/>mp: ' . $mp . '<br/>str: ' . $str . '<br/>mag: ' . $mag . '<br/>def: ' . $def . '<br/>mgd: ' . $mgd . '<br/>agl: ' . $agl . '<br/>acc: ' . $acc;
 				}
 
 				$ret = $db->query('select player_job_exp, player_job_lv from player_job where player_job_player=' . $this->id . ' and player_job_job=' . $job);
@@ -180,7 +180,7 @@ class Player extends Entity
 				if($jlv < getLevel($jexp))
 				{
 					$db->query('update player_job set player_job_lv=player_job_lv+1 where player_job_player=' . $this->id . ' and player_job_job=' . $job);
-					echo '<p>Reached ' . getDBData('job_name', $job, 'job_id', 'job') . ' level ' . ($jlv + 1) . '.';
+					echo '<p/>Reached ' . getDBData('job_name', $job, 'job_id', 'job') . ' level ' . ($jlv + 1) . '.';
 				}
 			}
 		}
@@ -192,7 +192,7 @@ class Player extends Entity
 
 			if($turn == TURN_BAD_TARGET)
 			{
-				echo '<p>Invalid target selected. Try again.';
+				echo '<p/>Invalid target selected. Try again.';
 			}
 
 			$enemies = $this->getEnemies();

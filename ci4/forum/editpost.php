@@ -64,16 +64,16 @@ $ret = $db->query('select * from forum_post where forum_post_id=' . $post);
 if(count($ret))
 {
 	$thread = $db->query('select * from forum_thread where forum_thread_id=' . $ret[0]['forum_post_thread']);
-	echo getNavBar($thread[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($thread[0]['forum_thread_title']), 'a=viewthread&t=' . $thread[0]['forum_thread_id']) . '<p>';
+	echo getNavBar($thread[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($thread[0]['forum_thread_title']), 'a=viewthread&t=' . $thread[0]['forum_thread_id']) . '<p/>';
 }
 
 if(count($ret) != 1)
 {
-	echo '<p>Invalid post.';
+	echo '<p/>Invalid post.';
 }
 else if(!canEdit($ret[0]['forum_post_user'], getDBData('forum_thread_forum', $ret[0]['forum_post_thread'], 'forum_thread_id', 'forum_thread')))
 {
-	echo '<p>You must be either the user who created the post or a moderator with permissions to edit this post.';
+	echo '<p/>You must be either the user who created the post or a moderator with permissions to edit this post.';
 }
 else
 {
@@ -89,13 +89,13 @@ else
 
 		if(!$text)
 		{
-			echo '<br>No post: enter a post.';
+			echo '<br/>No post: enter a post.';
 			$fail = true;
 		}
 
 		if($fail)
 		{
-			echo '<br>Post edit failed.<br>';
+			echo '<br/>Post edit failed.<br/>';
 			disp($text, $post);
 		}
 		else
@@ -108,8 +108,8 @@ else
 				' where forum_post_id=' . $post);
 
 				echo 'Post edited successfully.';
-				echo '<p>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $ret[0]['forum_post_thread']) . '.';
-				echo '<p>Go to the ' . makeLink('edited post', 'a=viewpost&p=' . $post) . '.';
+				echo '<p/>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $ret[0]['forum_post_thread']) . '.';
+				echo '<p/>Go to the ' . makeLink('edited post', 'a=viewpost&p=' . $post) . '.';
 		}
 	}
 	else

@@ -51,7 +51,7 @@ for($i = 0; $i < count($res); $i++)
 }
 
 if($PLAYER)
-	echo '<p>You are currently living in ' . getDBData('town_name', $PLAYER['player_town'], 'town_id', 'town') . '.';
+	echo '<p/>You are currently living in ' . getDBData('town_name', $PLAYER['player_town'], 'town_id', 'town') . '.';
 
 echo getTable($array);
 

@@ -50,9 +50,9 @@ if(count($res))
 		$cost = $res[0]['ability_ap_cost_init'] + $res[0]['ability_ap_cost_level'] * $level;
 
 		if(!count($p))
-			echo '<p>You do note have any AP in ' . $res[0]['abilitytype_name'] . '.';
+			echo '<p/>You do note have any AP in ' . $res[0]['abilitytype_name'] . '.';
 		else if($p[0]['player_abilitytype_ap'] < $cost)
-			echo '<p>You only have ' . $p[0]['player_abilitytype_ap'] . ' of the needed ' . $cost . ' AP to learn ' . $res[0]['ability_name'] . '.';
+			echo '<p/>You only have ' . $p[0]['player_abilitytype_ap'] . ' of the needed ' . $cost . ' AP to learn ' . $res[0]['ability_name'] . '.';
 		else
 		{
 			if(count($a))
@@ -62,7 +62,7 @@ if(count($res))
 
 			$db->query('update player_abilitytype set player_abilitytype_ap=player_abilitytype_ap - ' . $cost . ' where player_abilitytype_type=' . $res[0]['ability_type'] . ' and player_abilitytype_player=' . $PLAYER['player_id']);
 
-			echo '<p>Learned ' . $res[0]['ability_name'] . '.';
+			echo '<p/>Learned ' . $res[0]['ability_name'] . '.';
 		}
 	}
 
@@ -95,15 +95,15 @@ if(count($res))
 		if(count($a))
 		{
 			$level = $a[0]['player_ability_level'] + 1;
-			echo '<p>You currently know ' . $res[0]['ability_name'] . ' level ' . $a[0]['player_ability_level'] . '.';
+			echo '<p/>You currently know ' . $res[0]['ability_name'] . ' level ' . $a[0]['player_ability_level'] . '.';
 		}
 		else
 		{
 			$level = 1;
-			echo '<p>You do not know ' . $res[0]['ability_name'] . '.';
+			echo '<p/>You do not know ' . $res[0]['ability_name'] . '.';
 		}
 
-		$learn = '<p>' . getForm('', array(
+		$learn = '<p/>' . getForm('', array(
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>('Learn ' . $res[0]['ability_name'] . ' level ' . $level))),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewabilitydetails')),
 			array('', array('type'=>'hidden', 'name'=>'ability', 'val'=>$ability))
@@ -117,7 +117,7 @@ if(count($res))
 	echo $learn;
 }
 else
-	echo '<p>Invalid ability ID.';
+	echo '<p/>Invalid ability ID.';
 
 update_session_action(0501);
 

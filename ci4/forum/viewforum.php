@@ -35,7 +35,7 @@
 function addForumEntry(&$array, $row, $depth, $uls)
 {
 	if($row['forum_forum_desc'])
-		$desc = '<br>' . str_repeat('&nbsp;', 1 + $depth) . decode($row['forum_forum_desc']);
+		$desc = '<br/>' . str_repeat('&nbsp;', 1 + $depth) . decode($row['forum_forum_desc']);
 	else
 		$desc = '';
 
@@ -256,7 +256,7 @@ if($read)
 
 if(!canView($forumid))
 {
-	echo '<p>You cannot view this forum.';
+	echo '<p/>You cannot view this forum.';
 }
 else
 {
@@ -264,7 +264,7 @@ else
 
 	$lastSession = LOGGED ? $USER['user_last_session'] : 0;
 
-	echo '<p>';
+	echo '<p/>';
 
 	forumList($array, $forumid, $depth, $depth, $lastSession);
 
@@ -276,7 +276,7 @@ else
 	if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 	{
 		if(canPost($forumid))
-			echo '<p>' . makeLink('New Thread', 'a=newthread&f=' . $forumid);
+			echo '<p/>' . makeLink('New Thread', 'a=newthread&f=' . $forumid);
 
 		$curpage = isset($_GET['page']) ? intval($_GET['page']) : 1;
 		if($curpage < 1)
@@ -287,17 +287,17 @@ else
 		$ret = $db->query('select floor(count(*)/' . $threadsPP . ') + 1 as count from forum_thread where forum_thread_forum=' . $forumid);
 		$totpages = $ret[0]['count'];
 
-		$pageDisp = '<p>' . pageDisp($curpage, $totpages, $threadsPP, 'a=viewforum&f=' . $forumid);
+		$pageDisp = '<p/>' . pageDisp($curpage, $totpages, $threadsPP, 'a=viewforum&f=' . $forumid);
 
 		$array = threadList($forumid, $curpage, $threadsPP, $lastSession);
 		echo $pageDisp;
-		echo '<p>' . getTable($array);
+		echo '<p/>' . getTable($array);
 		echo $pageDisp;
 	}
 
 	if(LOGGED)
 	{
-		echo '<p>' . makeLink('Mark all threads ' . ($forumid ? 'in this forum' : '') . ' as read.', 'a=viewforum&read=true&f=' . $forumid);
+		echo '<p/>' . makeLink('Mark all threads ' . ($forumid ? 'in this forum' : '') . ' as read.', 'a=viewforum&read=true&f=' . $forumid);
 	}
 }
 

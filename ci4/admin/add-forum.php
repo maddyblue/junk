@@ -53,11 +53,11 @@ if(isset($_POST['submit']))
 	if(!$name)
 	{
 		$fail = true;
-		echo '<br>No name specified.';
+		echo '<br/>No name specified.';
 	}
 	if($fail)
 	{
-		echo '<br>Add failed.';
+		echo '<br/>Add failed.';
 		display($name, $desc);
 	}
 	else
@@ -71,7 +71,7 @@ if(isset($_POST['submit']))
 
 		$db->query('insert into forum_forum (forum_forum_name, forum_forum_desc, forum_forum_type, forum_forum_parent, forum_forum_order) values("' . $name . '", "' .  $desc . '", 0, 0, ' .  $order . ')');
 
-		echo '<p>&quot;' . decode($name) . '&quot; added.<p>';
+		echo '<p/>&quot;' . decode($name) . '&quot; added.<p/>';
 
 		echo makeLink('Go back to Manage Forums', 'a=manage-forums');
 	}

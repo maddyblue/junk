@@ -34,7 +34,7 @@
 
 if(!LOGGED)
 {
-	echo '<p>You must be logged in to view your pms.';
+	echo '<p/>You must be logged in to view your pms.';
 }
 else
 {
@@ -76,7 +76,7 @@ else
 	echo getForm('', array(array('',
 		array('type'=>'disptext', 'val'=>
 			(getTable($array) .
-			'<p>' .
+			'<p/>' .
 			getFormField(array('type'=>'submit', 'name'=>'delete', 'val'=>'Delete')) .
 			' Confirm Delete ' .
 			getFormField(array('type'=>'checkbox', 'name'=>'confirm')) .

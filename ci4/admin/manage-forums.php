@@ -35,7 +35,7 @@
 function addForumEntry(&$array, $row, $depth)
 {
 	if($row['forum_forum_desc'])
-		$desc = '<br>' . str_repeat('&nbsp;', 1 + $depth) . decode($row['forum_forum_desc']);
+		$desc = '<br/>' . str_repeat('&nbsp;', 1 + $depth) . decode($row['forum_forum_desc']);
 	else
 		$desc = '';
 
@@ -86,7 +86,7 @@ if(isset($_POST['submit']))
 			$db->query('update forum_forum set forum_forum_order=' . encode($_POST['order' . $id]) . ' where forum_forum_id=' . $id);
 	}
 
-	echo '<p>Order updated.';
+	echo '<p/>Order updated.';
 }
 
 $array = array();
@@ -103,13 +103,13 @@ forumListManage($array, '0', 0);
 echo '<form method="post" action="index.php">';
 
 echo getTable($array);
-echo '<p>';
+echo '<p/>';
 echo getFormField(array('type'=>'submit', 'name'=>'submit', 'val'=>'Save Changes'));
 echo getFormField(array('type'=>'hidden', 'name'=>'a', 'val'=>'manage-forums'));
 
 echo '</form>';
 
-echo '<p>' . makeLink('Add a forum', 'a=add-forum');
+echo '<p/>' . makeLink('Add a forum', 'a=add-forum');
 
 update_session_action(0200);
 

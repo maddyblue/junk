@@ -38,13 +38,13 @@ if (isset($_POST['submit']))
 
 	$db->query('delete from group_user where group_user_group =' . $groupid);
 
-	echo 'Users removed from the group<p>';
+	echo 'Users removed from the group<p/>';
 
 	$db->query('delete from group_def where group_def_id =' . $groupid);
 
 	echo 'Group Deleted';
 
-	echo '<p>' . makeLink('Go back to Manage Groups', '?a=manage-groups');
+	echo '<p/>' . makeLink('Go back to Manage Groups', '?a=manage-groups');
 }
 else
 	echo 'Please use ' . makeLink('Manage Groups', '?a=manage-groups') . '.';

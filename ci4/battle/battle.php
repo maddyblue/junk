@@ -44,11 +44,11 @@ require_once CI_FS_PATH . 'utility/Battle.inc.php';
  */
 
 if(!LOGGED)
-	echo '<p>You must be logged in to fight your battles.';
+	echo '<p/>You must be logged in to fight your battles.';
 else if(!$PLAYER)
-	echo '<p>No player in this domain. Switch to a domain containing a registered player.';
+	echo '<p/>No player in this domain. Switch to a domain containing a registered player.';
 else if(!$PLAYER['player_battle'])
-	echo '<p>You do not have an active battle. Create a new one.';
+	echo '<p/>You do not have an active battle. Create a new one.';
 else
 {
 	$ret = $db->query('select * from battle_entity where battle_entity_battle=' . $PLAYER['player_battle']);
@@ -160,7 +160,7 @@ else
 		{
 			$db->query('update battle set battle_end=' . TIME . ' where battle_id=' . $PLAYER['player_battle']);
 			$db->query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
-			echo '<p>Battle ended.';
+			echo '<p/>Battle ended.';
 			$done = true;
 		}
 	}

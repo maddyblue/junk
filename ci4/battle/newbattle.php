@@ -59,7 +59,7 @@ function newBattle($area)
 
 	if(!count($monster))
 	{
-		echo '<br>No monsters in the selected domain.';
+		echo '<br/>No monsters in the selected domain.';
 		return;
 	}
 
@@ -113,8 +113,8 @@ function newBattle($area)
 		' . $monster[0]['monster_lv'] . ')'
 	);
 
-	echo '<p>Starting battle...';
-	echo '<p>' . makeLink('Begin.', 'a=battle');
+	echo '<p/>Starting battle...';
+	echo '<p/>' . makeLink('Begin.', 'a=battle');
 	$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=?a=battle">';
 }
 
@@ -125,13 +125,13 @@ if(LOGGED)
 	if(!$PLAYER)
 	{
 		$fail = true;
-		echo '<p>You do not have a player in this domain. First ' . makeLink('register a new player', 'a=newplayer', SECTION_USER) . ', then ' . makeLink('switch domains', 'a=domains', SECTION_HOME) . '.';
+		echo '<p/>You do not have a player in this domain. First ' . makeLink('register a new player', 'a=newplayer', SECTION_USER) . ', then ' . makeLink('switch domains', 'a=domains', SECTION_HOME) . '.';
 	}
 	else if($PLAYER['player_battle'])
 	{
 		$fail = true;
-		echo '<p>You already have an active battle. You must complete it before starting another.';
-		echo '<p>Redirecting you there...';
+		echo '<p/>You already have an active battle. You must complete it before starting another.';
+		echo '<p/>Redirecting you there...';
 		$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="2; url=?a=battle">';
 	}
 
@@ -150,7 +150,7 @@ if(LOGGED)
 			if($ret[0]['count'] != '1')
 			{
 				$fail = true;
-				echo '<br>That area is not accessible from your current town.';
+				echo '<br/>That area is not accessible from your current town.';
 			}
 
 			if(!$fail)
@@ -159,7 +159,7 @@ if(LOGGED)
 			}
 			else
 			{
-				echo '<p>Battle creation failed.';
+				echo '<p/>Battle creation failed.';
 				disp($area);
 			}
 		}
@@ -168,6 +168,6 @@ if(LOGGED)
 	}
 }
 else
-	echo '<p>You must be logged in to start a new battle.';
+	echo '<p/>You must be logged in to start a new battle.';
 
 ?>

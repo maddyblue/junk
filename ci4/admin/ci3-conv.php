@@ -34,7 +34,7 @@
 
 set_time_limit(0);
 
-echo '<p><a href="?a=ci3-conv">Restart</a>';
+echo '<p/><a href="?a=ci3-conv">Restart</a>';
 
 $ci3 = new Database();
 $CI3Conf['user']     = 'ci4';
@@ -47,7 +47,7 @@ $step = isset($_GET['step']) ? intval($_GET['step']) : 0;
 
 if($step == 0)
 {
-	echo '<p>Clearing...';
+	echo '<p/>Clearing...';
 
 	$db->query('TRUNCATE `area`');
 	$db->query('TRUNCATE `cor_area_monster`');
@@ -63,13 +63,13 @@ if($step == 0)
 }
 else if($step == 1)
 {
-	echo '<p>Areas and Monsters...';
+	echo '<p/>Areas and Monsters...';
 
 	$areas = $ci3->query('select * from arealist');
 
 	foreach($areas as $area)
 	{
-		echo '<br>' . $area['name'] . ':';
+		echo '<br/>' . $area['name'] . ':';
 
 		$aid = $db->insert('insert into area (area_name, area_desc, area_order) values ("' . $area['name'] . '", "' . $area['description'] . '", ' . $area['lv'] . ')');
 
@@ -100,27 +100,27 @@ else if($step == 1)
 		}
 	}
 
-	echo '<br>Done...';
+	echo '<br/>Done...';
 
 	$step++;
 }
 else if($step == 2)
 {
-	echo '<p>Towns..';
+	echo '<p/>Towns..';
 
 	$towns = $ci3->query('select * from townlist');
 
 	foreach($towns as $town)
 	{
 		$db->insert('insert into town (town_name, town_lv, town_desc) values ("' . $town['name'] . '", ' . $town['level'] . ', "' . $town['summary'] . '")');
-		echo '<br>' . $town['name'];
+		echo '<br/>' . $town['name'];
 	}
 
 	$step++;
 }
 else if($step == 3)
 {
-	echo '<p>Equipment...';
+	echo '<p/>Equipment...';
 
 	$es = $ci3->query('select * from items');
 
@@ -164,7 +164,7 @@ else if($step == 3)
 
 		if($cont)
 		{
-			echo '<br>SKIP ' . $e['name'];
+			echo '<br/>SKIP ' . $e['name'];
 			continue;
 		}
 
@@ -205,36 +205,36 @@ else if($step == 3)
 			$stats['mgd'] .
 		')');
 
-		echo '<br>' . $e['name'];
+		echo '<br/>' . $e['name'];
 	}
 
 	$step++;
 
-	echo '<p>Done...';
+	echo '<p/>Done...';
 }
 else if($step == 4)
 {
-	echo '<p>Houses...';
+	echo '<p/>Houses...';
 
 	$houses = $ci3->query('select * from houselist');
 
 	foreach($houses as $house)
 	{
 		$db->insert('insert into house (house_name, house_lv, house_text, house_cost) values ("' . $house['name'] . '", ' . $house['level'] . ', "' . $house['bonuses'] . '", ' . $house['price'] . ')');
-		echo '<br>' . $house['name'];
+		echo '<br/>' . $house['name'];
 	}
 
 	$step++;
 
-	echo '<p>Done...';
+	echo '<p/>Done...';
 }
 else
 	$step = -1;
 
 if($step < 0)
-	echo '<p>Done.';
+	echo '<p/>Done.';
 else
-	echo '<p><a href="?a=ci3-conv&step=' . $step . '">Next</a>';
+	echo '<p/><a href="?a=ci3-conv&step=' . $step . '">Next</a>';
 
 update_session_action(0200);
 

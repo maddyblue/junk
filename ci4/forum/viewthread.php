@@ -44,8 +44,8 @@ function postList($thread, $curpage, $postsPP, $canMod)
 	{
 		$avatar = getAvatar($post['user_id'], $post['user_avatar_type']);
 		$user = getUserlink($post['user_id'], decode($post['user_name']));
-		$user .= $avatar ? '<br>' . $avatar : '';
-		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
+		$user .= $avatar ? '<br/>' . $avatar : '';
+		$user .= '<br/>' . getTime($post['forum_post_date']) . '<br/>';
 		$user .= makeLink('#', 'a=viewpost&p=' . $post['forum_post_id']) . ' ';
 		if(LOGGED)
 			$user .= makeLink('quote', 'a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
@@ -53,17 +53,17 @@ function postList($thread, $curpage, $postsPP, $canMod)
 			$user .= ' ' . makeLink('edit', 'a=editpost&p=' . $post['forum_post_id']);
 
 		$body = '<a name="' . $post['forum_post_id'] . '"></a>';
-		$body .= '<p>' . $post['forum_post_text_parsed'];
+		$body .= '<p/>' . $post['forum_post_text_parsed'];
 
 		if($post['user_sig'])
 		{
-			$body .= '<br>----------<br>' . parseSig($post['user_sig']);
+			$body .= '<br/>----------<br/>' . parseSig($post['user_sig']);
 		}
 
 		if($post['forum_post_edit_user'] != 0)
 		{
 			$ul = $post['forum_post_edit_user'] == $post['user_id'] ? getUserLink($post['user_id'], decode($post['user_name'])) : getUserlink($post['forum_post_edit_user']);
-			$body .= '<p><i class="small">Last edited by ' . $ul . ' on ' . getTime($post['forum_post_edit_date']) . '.</i>';
+			$body .= '<p/><i class="small">Last edited by ' . $ul . ' on ' . getTime($post['forum_post_edit_date']) . '.</i>';
 		}
 
 		array_push($array, array(
@@ -85,13 +85,13 @@ $forumid = $res[0]['forum_thread_forum'];
 
 if(!canView($forumid))
 {
-	echo '<p>You cannot view this forum.';
+	echo '<p/>You cannot view this forum.';
 }
 else
 {
 	$canMod = canMod($forumid);
 
-	echo getNavBar($forumid) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid) . '<p>';
+	echo getNavBar($forumid) . ' &gt; ' . makeLink(decode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid) . '<p/>';
 
 	$newreply = makeLink('New Reply', 'a=newpost&t=' . $threadid);
 
@@ -105,7 +105,7 @@ else
 
 	if(count($array))
 	{
-		echo '<p>' . $pageDisp;
+		echo '<p/>' . $pageDisp;
 		?>
 			<table class="tableMain" width="100%">
 				<tr class="tableRow">
@@ -127,7 +127,7 @@ else
 				</tr>
 			</table>
 		<?php
-		echo '<p>' . $pageDisp;
+		echo '<p/>' . $pageDisp;
 
 		if(LOGGED)
 		{
@@ -144,7 +144,7 @@ else
 		}
 	}
 	else
-		echo '<br>Non-existent thread.';
+		echo '<br/>Non-existent thread.';
 }
 
 update_session_action(0406, $threadid);

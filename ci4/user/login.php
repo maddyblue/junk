@@ -54,12 +54,12 @@ if(isset($_POST['submit']))
 
 	if(!$user)
 	{
-		echo '<br>No username specified.';
+		echo '<br/>No username specified.';
 		$fail = true;
 	}
 	if(!$pass)
 	{
-		echo '<br>No password specified.';
+		echo '<br/>No password specified.';
 		$fail = true;
 	}
 
@@ -72,23 +72,23 @@ if(isset($_POST['submit']))
 		setCIcookie('pass', $ret[0]['user_pass']);
 		$id = $ret[0]['user_id'];
 		$pass = $ret[0]['user_pass'];
-		echo '<p>Logged in successfully as ' . decode($user) . '.';
+		echo '<p/>Logged in successfully as ' . decode($user) . '.';
 
 		if($last)
 		{
-			echo '<p>Redirecting to <a href="' . $last . '">last location</a>...';
+			echo '<p/>Redirecting to <a href="' . $last . '">last location</a>...';
 			$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
 		}
 	}
 	else if($user && $pass)
 	{
-		echo '<br>Not a valid username/password combination. Try again.';
+		echo '<br/>Not a valid username/password combination. Try again.';
 		$fail = true;
 	}
 
 	if($fail)
 	{
-		echo '<br>Login failed.<br>';
+		echo '<br/>Login failed.<br/>';
 		display($user);
 	}
 }

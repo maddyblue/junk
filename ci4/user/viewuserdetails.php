@@ -73,15 +73,15 @@ if(count($res) == 1)
 
 	if(LOGGED)
 	{
-		echo makeLink('Send this user a PM.', 'a=sendpm&userid=' . $res[0]['user_id']) . '<br><br>';
+		echo makeLink('Send this user a PM.', 'a=sendpm&userid=' . $res[0]['user_id']) . '<br/><br/>';
 	}
 
 	echo getTable($array, false);
 
-	echo '<p>Players owned by this user:' . getTable($player);
+	echo '<p/>Players owned by this user:' . getTable($player);
 }
 else
-	echo '<p>Invalid user.';
+	echo '<p/>Invalid user.';
 
 update_session_action(0309, $user);
 

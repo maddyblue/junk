@@ -76,31 +76,31 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle)
 		array('Password', array('type'=>'password', 'name'=>'pass1')),
 		array('Password (verify)', array('type'=>'password', 'name'=>'pass2')),
 		array('', array('type'=>'disptext', 'val'=>'(Leave blank for no change.)')),
-		array('', array('type'=>'disptext', 'val'=>'<br>')),
+		array('', array('type'=>'disptext', 'val'=>'<br/>')),
 
 		array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
 		array('', array('type'=>'disptext', 'val'=>'Your email address will never be used publicly. It is used <b>only</b> to recover passwords.')),
 		array('Signature', array('type'=>'textarea', 'name'=>'sig', 'parms'=>' rows="5" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($sig))),
 		array('', array('type'=>'disptext', 'val'=>'Signature must be less than or equal to five lines long, may contain only non-formatted text and hyperlinks. Your sig will be edited by an admin or moderator if it is in any way obscene or unacceptable.')),
-		array('', array('type'=>'disptext', 'val'=>'<br>')),
+		array('', array('type'=>'disptext', 'val'=>'<br/>')),
 
 		array('Timezone', array('type'=>'select', 'name'=>'tz', 'val'=>$timezone)),
-		array('', array('type'=>'disptext', 'val'=>'<br>')),
+		array('', array('type'=>'disptext', 'val'=>'<br/>')),
 
 		array('AIM', array('type'=>'text', 'name'=>'aim', 'val'=>decode($aim))),
 		array('Yahoo', array('type'=>'text', 'name'=>'yahoo', 'val'=>decode($yahoo))),
 		array('ICQ', array('type'=>'text', 'name'=>'icq', 'val'=>decode($icq))),
 		array('MSN', array('type'=>'text', 'name'=>'msn', 'val'=>decode($msn))),
 		array('WWW', array('type'=>'text', 'name'=>'www', 'val'=>decode($www))),
-		array('', array('type'=>'disptext', 'val'=>'<br>')),
+		array('', array('type'=>'disptext', 'val'=>'<br/>')),
 
 		array('Verbose Battles', array('type'=>'checkbox', 'name'=>'battle', 'val'=>($battle ? 'checked' : ''))),
-		array('', array('type'=>'disptext', 'val'=>'<br>')),
+		array('', array('type'=>'disptext', 'val'=>'<br/>')),
 
 		array('Avatar', array('type'=>'disptext', 'val'=>getAvatar())),
 		array('', array('type'=>'disptext', 'val'=>(makeLink('Change avatar', 'a=change-avatar') . ' (WITHOUT saving current profile changes!)'))),
 		array('', array('type'=>'disptext', 'val'=>(makeLink('Upload custom avatar', 'a=upload-avatar') . ' (WITHOUT saving current profile changes!)'))),
-		array('', array('type'=>'disptext', 'val'=>'<br>')),
+		array('', array('type'=>'disptext', 'val'=>'<br/>')),
 
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
 		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'usercp'))
@@ -148,29 +148,29 @@ if(ID != 0 && LOGGED == true)
 		$res = $db->query('select count(*) as count from user where user_email="' . encode($email) . '" and user_id != ' . ID);
 		if(!$email)
 		{
-			echo '<br>No email address: enter an address.';
+			echo '<br/>No email address: enter an address.';
 			$fail = true;
 		}
 		else if(!ereg("^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", decode($email)))
 		{
-			echo '<br>Invalid email address.';
+			echo '<br/>Invalid email address.';
 			$fail = true;
 		}
 		else if($res[0]['count'] != '0')
 		{
-			echo '<br>Email address already registered: try another address.';
+			echo '<br/>Email address already registered: try another address.';
 			$fail = true;
 		}
 
 		if(substr_count($sig, "\n") > 4)
 		{
-			echo '<br>Signature has more than 5 lines.';
+			echo '<br/>Signature has more than 5 lines.';
 			$fail = true;
 		}
 
 		if(($pass1 || $pass2) && ($pass1 != $pass2))
 		{
-			echo '<br>Passwords do not match.';
+			echo '<br/>Passwords do not match.';
 			$fail = true;
 		}
 
@@ -179,12 +179,12 @@ if(ID != 0 && LOGGED == true)
 		else
 		{
 			$db->query('update user set user_email="' . $email . '", user_sig="' . $sig . '", user_aim="' . $aim . '", user_yahoo="' . $yahoo . '", user_icq="' . $icq . '", user_msn="' . $msn . '", user_www="' . $www . '", user_timezone="' . $tz . '", user_battle_verbose=' . $battle . ' where user_id=' . ID);
-			echo '<p>Userdata updated successfully.';
+			echo '<p/>Userdata updated successfully.';
 
 			if($pass1)
 			{
 				$db->query('update user set user_pass=md5("' . $pass1 . '") where user_id=' . ID);
-				echo '<p>Password updated. You must now ' . makeLink('login', 'a=login') . ' again.';
+				echo '<p/>Password updated. You must now ' . makeLink('login', 'a=login') . ' again.';
 			}
 			// don't show this if password changed, since they won't have a valid login
 			else
@@ -196,7 +196,7 @@ if(ID != 0 && LOGGED == true)
 }
 else
 {
-	echo '<p>You must be logged in to edit userdata.';
+	echo '<p/>You must be logged in to edit userdata.';
 }
 
 update_session_action(0307);

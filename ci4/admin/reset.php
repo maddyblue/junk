@@ -40,7 +40,7 @@ function reset_users()
 	$db->query('truncate table groups');
 	$db->query('truncate table player');
 
-	echo '<p>Users reset.';
+	echo '<p/>Users reset.';
 }
 
 function reset_forum()
@@ -52,7 +52,7 @@ function reset_forum()
 	$db->query('truncate table forum_forum');
 	$db->query('update user set user_posts=0');
 
-	echo '<p>Forum reset.';
+	echo '<p/>Forum reset.';
 }
 
 if(isset($_POST['forum_sure']))
@@ -72,7 +72,7 @@ echo getTableForm('Reset users', array(
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'reset'))
 ));
 
-echo '<br><br>';
+echo '<br/><br/>';
 
 echo getTableForm('Reset forum', array(
 	array('Are you sure?', array('type'=>'checkbox', 'name'=>'forum_sure')),

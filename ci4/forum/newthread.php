@@ -42,7 +42,7 @@ function disp($subject, $post, $forum)
 	else
 		$name = '';
 
-	echo '<p>' . getTableForm('New Thread' . $name, array(
+	echo '<p/>' . getTableForm('New Thread' . $name, array(
 			array('Subject', array('type'=>'text', 'name'=>'subject', 'parms'=>'size="45" maxlength="100" style="width:450px"', 'val'=>decode($subject))),
 			array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="15" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($post))),
 
@@ -69,11 +69,11 @@ echo getNavBar($forum);
 
 if(LOGGED == false)
 {
-	echo '<p>You must be logged in to create new threads.';
+	echo '<p/>You must be logged in to create new threads.';
 }
 else if(!canThread($forum))
 {
-	echo '<p>You do not have permissions to create new threads in this forum.';
+	echo '<p/>You do not have permissions to create new threads in this forum.';
 }
 else
 {
@@ -83,25 +83,25 @@ else
 
 		if(!$subject)
 		{
-			echo '<p>No subject: enter a subject.';
+			echo '<p/>No subject: enter a subject.';
 			$fail = true;
 		}
 
 		if(!$post)
 		{
-			echo '<p>No post: enter a post.';
+			echo '<p/>No post: enter a post.';
 			$fail = true;
 		}
 
 		if(!$forum)
 		{
-			echo '<p>No forum selected: navigate to a forum and try to post a new thread there.';
+			echo '<p/>No forum selected: navigate to a forum and try to post a new thread there.';
 			$fail = true;
 		}
 
 		if($fail)
 		{
-			echo '<br>Thread creation failed.<br>';
+			echo '<br/>Thread creation failed.<br/>';
 			disp($subject, $post, $forum);
 		}
 		else
@@ -133,13 +133,13 @@ else
 				$db->query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $lastthread);
 				$db->query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $lastthread . ', ' . TIME . ')');
 
-				echo '<p>Thread created successfully.';
-				echo '<p>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
-				echo '<p>Go to the ' . makeLink('created thread', 'a=viewthread&t=' . $lastthread) . '.';
+				echo '<p/>Thread created successfully.';
+				echo '<p/>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
+				echo '<p/>Go to the ' . makeLink('created thread', 'a=viewthread&t=' . $lastthread) . '.';
 			}
 			else
 			{
-				echo '<p>Thread creation failed.';
+				echo '<p/>Thread creation failed.';
 			}
 		}
 	}

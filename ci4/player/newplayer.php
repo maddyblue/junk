@@ -69,7 +69,7 @@ if(LOGGED)
 
 		if(!$name)
 		{
-			echo '<br>No player name entered.';
+			echo '<br/>No player name entered.';
 			$fail = true;
 		}
 
@@ -77,7 +77,7 @@ if(LOGGED)
 
 		if(!$dname)
 		{
-			echo '<br>Invalid domain selected.';
+			echo '<br/>Invalid domain selected.';
 			$fail = true;
 		}
 
@@ -85,7 +85,7 @@ if(LOGGED)
 
 		if(count($player))
 		{
-			echo '<br>You already have the player ' . decode($player[0]['player_name']) . ' registered on this domain. You may only have one player registered on a domain.';
+			echo '<br/>You already have the player ' . decode($player[0]['player_name']) . ' registered on this domain. You may only have one player registered on a domain.';
 			$fail = true;
 		}
 
@@ -93,19 +93,19 @@ if(LOGGED)
 
 		if(count($existing))
 		{
-			echo '<br>There is already a player with this name registered in this domain.';
+			echo '<br/>There is already a player with this name registered in this domain.';
 			$fail = true;
 		}
 
 		if($gender != 'M' && $gender != 'F')
 		{
-			echo '<br>Invalid gender.';
+			echo '<br/>Invalid gender.';
 			$fail = true;
 		}
 
 		if($fail)
 		{
-			echo '<br>Player registration failed.';
+			echo '<br/>Player registration failed.';
 			display($name, $domain, $gender);
 		}
 		else
@@ -129,14 +129,14 @@ if(LOGGED)
 			// set the mod stats
 			updatePlayerStats($pid[0]['player_id']);
 
-			echo '<p>New player registered.';
+			echo '<p/>New player registered.';
 		}
 	}
 	else
 		display($name, $domain, $gender);
 }
 else
-	echo '<p>You must be logged in to view this page.';
+	echo '<p/>You must be logged in to view this page.';
 
 update_session_action(0703);
 

@@ -69,7 +69,7 @@ function disp($base, $dir)
 		$dirselect .= '<option value="' . $entry . '"' . ($entry == $dir ? ' selected' : '') . '>' . $entry . '</option>';
 	}
 
-	echo '<p>' . makeLink('Clear avatar', 'a=change-avatar&img=clear');
+	echo '<p/>' . makeLink('Clear avatar', 'a=change-avatar&img=clear');
 
 	echo getTableForm('Section:', array(
 		array('', array('type'=>'select', 'name'=>'dir', 'val'=>$dirselect)),
@@ -95,14 +95,14 @@ function disp($base, $dir)
 		{
 			if($i % $tbllen == 0)
 				array_push($array, array('', '', '', ''));
-			$array[$i / $tbllen][$i % $tbllen] = makeImg($galbase . $entry) . '<br>' . makeLink('[set]', 'a=change-avatar&dir=' . $dir . '&img=' . $entry);
+			$array[$i / $tbllen][$i % $tbllen] = makeImg($galbase . $entry) . '<br/>' . makeLink('[set]', 'a=change-avatar&dir=' . $dir . '&img=' . $entry);
 			$i++;
 		}
 
 		echo getTable($array, false);
 	}
 	else if($dir != '')
-		echo '<p>A non-valid directory is selected. Choose another.';
+		echo '<p/>A non-valid directory is selected. Choose another.';
 
 }
 
@@ -117,7 +117,7 @@ if(ID != 0 && LOGGED == true)
 	if($img == 'clear')
 	{
 		$db->query('update user set user_avatar_type="" where user_id=' . ID);
-		echo '<p>Avatar cleared.';
+		echo '<p/>Avatar cleared.';
 	}
 	else if($img)
 	{
@@ -133,28 +133,28 @@ if(ID != 0 && LOGGED == true)
 		if(array_search($dir, $basedir) === false)
 		{
 			$fail = true;
-			echo '<br>Invalid directory.';
+			echo '<br/>Invalid directory.';
 		}
 		else if(array_search($img, $gallerydir) === false)
 		{
 			$fail = true;
-			echo '<br>Invalid image.';
+			echo '<br/>Invalid image.';
 		}
 		else if(!is_file(CI_FS_PATH . $base . $full))
 		{
 			$fail = true;
-			echo '<br>Invalid image aoeu.';
+			echo '<br/>Invalid image aoeu.';
 		}
 
 		if(!$fail)
 		{
 			// no encode/decode here, just set it as the filename, thus, mysql_escape_string is needed
 			$db->query('update user set user_avatar_data="' . mysql_escape_string($full) . '", user_avatar_type="1" where user_id=' . ID);
-			echo '<p>Avatar updated.';
+			echo '<p/>Avatar updated.';
 		}
 		else
 		{
-			echo '<p>Avatar update failed.';
+			echo '<p/>Avatar update failed.';
 			disp($base, $dir);
 		}
 
@@ -164,7 +164,7 @@ if(ID != 0 && LOGGED == true)
 }
 else
 {
-	echo '<p>You must be logged in to change your avatar.';
+	echo '<p/>You must be logged in to change your avatar.';
 }
 
 update_session_action(0307);

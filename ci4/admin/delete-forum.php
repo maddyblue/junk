@@ -62,13 +62,13 @@ function deleteForum($forumid, $delthreads, $delforums)
 
 		$db->query('delete from forum_thread where forum_thread_forum=' . $forumid);
 
-		echo '<br>Deleted all threads and posts from ' . $name;
+		echo '<br/>Deleted all threads and posts from ' . $name;
 	}
 	else
 	{
 		$db->query('update forum_thread set forum_thread_forum=' . $parent . ' where forum_thread_forum=' . $forumid);
 
-		echo '<br>Moved all threads from ' . $name . ' to its parent.';
+		echo '<br/>Moved all threads from ' . $name . ' to its parent.';
 	}
 
 	if($delforums)
@@ -80,18 +80,18 @@ function deleteForum($forumid, $delthreads, $delforums)
 
 		$db->query('delete from forum_forum where forum_forum_parent=' . $forumid);
 
-		echo '<br>Deleted all sub forums of ' . $name;
+		echo '<br/>Deleted all sub forums of ' . $name;
 	}
 	else
 	{
 		$db->query('update forum_forum set forum_forum_parent=' . $parent . ' where forum_forum_parent=' . $forumid);
 
-		echo '<br>Moved all sub forums of ' . $name . ' to its parent.';
+		echo '<br/>Moved all sub forums of ' . $name . ' to its parent.';
 	}
 
 	$db->query('delete from forum_forum where forum_forum_id=' . $forumid);
 
-	echo '<br>Deleted ' . $name . '.';
+	echo '<br/>Deleted ' . $name . '.';
 }
 
 if(isset($_POST['submit']))
@@ -108,21 +108,21 @@ if(isset($_POST['submit']))
 	if(!$forumid)
 	{
 		$fail = true;
-		echo '<br>No forum specified.';
+		echo '<br/>No forum specified.';
 	}
 
 	if(!$sure)
 	{
 		$fail = true;
-		echo '<br>Sure must be checked to continue.';
+		echo '<br/>Sure must be checked to continue.';
 	}
 
 	if(!$fail)
 	{
 		deleteForum($forumid, $delthreads, $delforums);
 
-		echo '<p>Forums deleted: you should run sync-forums.';
-		echo '<p>Also note that if you selected threads to be moved up, and the parent forum is a category and not a forum, said parent forum will still have ownership of the threads, so to view the moved threads, it would have to be made into a forum.';
+		echo '<p/>Forums deleted: you should run sync-forums.';
+		echo '<p/>Also note that if you selected threads to be moved up, and the parent forum is a category and not a forum, said parent forum will still have ownership of the threads, so to view the moved threads, it would have to be made into a forum.';
 	}
 	else
 		display($forumid);
@@ -132,7 +132,7 @@ else
 	$forumid = isset($_GET['f']) ? intval($_GET['f']) : '0';
 
 	if(!$forumid)
-		echo '<p>No forum specified.';
+		echo '<p/>No forum specified.';
 	else
 		display($forumid);
 }

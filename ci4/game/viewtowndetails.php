@@ -44,7 +44,7 @@ if(count($res))
 	if(isset($_POST['town']) && $PLAYER)
 	{
 		$db->query('update player set player_town=' . $town . ' where player_id=' . $PLAYER['player_id']);
-		echo '<p>You have moved to ' . $res[0]['town_name'] . '.';
+		echo '<p/>You have moved to ' . $res[0]['town_name'] . '.';
 		$PLAYER['player_town'] = $town;
 	}
 
@@ -71,14 +71,14 @@ if(count($res))
 
 	if($PLAYER)
 	{
-		$changetext = '<p>' . getForm('', array(
+		$changetext = '<p/>' . getForm('', array(
 				array('', array('type'=>'submit', 'name'=>'submit', 'val'=>('Move to ' . $res[0]['town_name']))),
 				array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewtowndetails')),
 				array('', array('type'=>'hidden', 'name'=>'town', 'val'=>$town))
 			));
 
 		if(!isset($_POST['town']))
-			echo '<p>You are currently living in ' . getDBData('town_name', $PLAYER['player_town'], 'town_id', 'town') . '.';
+			echo '<p/>You are currently living in ' . getDBData('town_name', $PLAYER['player_town'], 'town_id', 'town') . '.';
 	}
 	else
 		$changetext = '';
@@ -88,7 +88,7 @@ if(count($res))
 		echo $changetext;
 }
 else
-	echo '<p>Invalid town ID.';
+	echo '<p/>Invalid town ID.';
 
 update_session_action(0506);
 

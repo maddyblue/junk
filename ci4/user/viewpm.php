@@ -34,7 +34,7 @@
 
 if(!LOGGED)
 {
-	echo '<p>You must be logged in to view your pms.';
+	echo '<p/>You must be logged in to view your pms.';
 }
 else
 {
@@ -47,17 +47,17 @@ else
 
 	if(!count($res))
 	{
-		echo '<p>No message with that id.';
+		echo '<p/>No message with that id.';
 	}
 	else if(isset($_POST['delete']) && $confirm == 'on')
 	{
 		$db->query('delete from pm where pm_id=' . $pm);
-		echo '<p>Message deleted.' . '<p>' . makeLink('Return to pms.', 'a=viewpms');
+		echo '<p/>Message deleted.' . '<p/>' . makeLink('Return to pms.', 'a=viewpms');
 	}
 	else
 	{
 		if(isset($_POST['delete']))
-			echo '<p>You must check the confirm box to delete a pm.';
+			echo '<p/>You must check the confirm box to delete a pm.';
 
 		$db->query('update pm set pm_read=1 where pm_id=' . $pm);
 		$array = array(

@@ -69,30 +69,30 @@ if(isset($_POST['submit']))
 	if(!$forumid)
 	{
 		$fail = true;
-		echo '<br>No forum specified.';
+		echo '<br/>No forum specified.';
 	}
 
 	if(!$name)
 	{
 		$fail = true;
-		echo '<br>No name specified.';
+		echo '<br/>No name specified.';
 	}
 
 	if($parent == '')
 	{
 		$fail = true;
-		echo '<br>No parent specified.';
+		echo '<br/>No parent specified.';
 	}
 
 	if(!$fail)
 	{
 		$db->query('update forum_forum set forum_forum_name="' . $name . '", forum_forum_desc="' . $desc . '", forum_forum_type=' . $type . ', forum_forum_parent=' . $parent . ' where forum_forum_id=' . $forumid);
 
-		echo '<p>Forum updated.';
+		echo '<p/>Forum updated.';
 	}
 	else
 	{
-		echo '<p>Update failed.';
+		echo '<p/>Update failed.';
 		display($forumid, $name, $desc, $parent, $type);
 	}
 }

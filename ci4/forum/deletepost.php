@@ -38,7 +38,7 @@ $sure = (isset($_POST['sure']) && $_POST['sure'] == 'on');
 $res = $db->query('select * from forum_post where forum_post_id=' . $postid);
 
 if(!$sure)
-	echo '<p>Go back and click the checkbox indicating you are sure you want to delete this post.';
+	echo '<p/>Go back and click the checkbox indicating you are sure you want to delete this post.';
 else if(count($res))
 {
 	$thread = $db->query('select * from forum_thread where forum_thread_id=' . $res[0]['forum_post_thread']);
@@ -52,8 +52,8 @@ else if(count($res))
 	{
 		if($thread[0]['forum_thread_first_post'] == $postid)
 		{
-			echo '<p>This is the first post of the thread. You will need to delete the thread.';
-			echo '<p>' . makeLink('Go here to delete the thread.', 'a=delete-thread&t=' . $threadid);
+			echo '<p/>This is the first post of the thread. You will need to delete the thread.';
+			echo '<p/>' . makeLink('Go here to delete the thread.', 'a=delete-thread&t=' . $threadid);
 		}
 		else
 		{
@@ -71,13 +71,13 @@ else if(count($res))
 			$forumlast = $db->query('select forum_post_id from forum_post, forum_thread where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread order by forum_post_date desc limit 1');
 			$db->query('update forum_forum set forum_forum_last_post=' . $forumlast[0]['forum_post_id'] . ', forum_forum_posts = forum_forum_posts - 1 where forum_forum_id=' . $forumid);
 
-			echo '<p>Post deleted.';
+			echo '<p/>Post deleted.';
 		}
 	}
 	else
-		echo '<p>You do not have permission to delete this post.';
+		echo '<p/>You do not have permission to delete this post.';
 }
 else
-	echo '<p>Invalid post id.';
+	echo '<p/>Invalid post id.';
 
 ?>

@@ -45,13 +45,13 @@ if(count($res))
 		$cost = $res[0]['equipment_cost'];
 
 		if($cost > $PLAYER['player_money'])
-			echo '<p>You do not have enough gold to purchase this.';
+			echo '<p/>You do not have enough gold to purchase this.';
 		else
 		{
 			$db->query('insert into player_equipment (player_equipment_equipment, player_equipment_player) values (' . $res[0]['equipment_id'] . ', ' . $PLAYER['player_id'] . ')');
 			$db->query('update player set player_money = player_money - ' . $cost . ' where player_id=' . $PLAYER['player_id']);
 			$PLAYER['player_money'] -= $cost;
-			echo '<p>Purchased a ' . $name . '.';
+			echo '<p/>Purchased a ' . $name . '.';
 		}
 	}
 
@@ -88,13 +88,13 @@ if(count($res))
 
 	if($PLAYER)
 	{
-		$buytext = '<p>' . getForm('', array(
+		$buytext = '<p/>' . getForm('', array(
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Purchase')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewequipmentdetails')),
 			array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
 		));
 
-		echo '<p>You have ' . $PLAYER['player_money'] . ' gold.';
+		echo '<p/>You have ' . $PLAYER['player_money'] . ' gold.';
 	}
 	else
 		$buytext = '';
@@ -104,7 +104,7 @@ if(count($res))
 	echo $buytext;
 }
 else
-	echo '<p>Invalid equipment ID.';
+	echo '<p/>Invalid equipment ID.';
 
 update_session_action(0503);
 

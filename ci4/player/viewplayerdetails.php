@@ -73,7 +73,7 @@ if(count($res) == 1)
 		array('acc', $res[0]['player_nomod_acc'])
 	);
 
-	echo '<p>Stats <b>without</b> modifications from items, jobs, etc.:' . getTable($array, false);
+	echo '<p/>Stats <b>without</b> modifications from items, jobs, etc.:' . getTable($array, false);
 
 	$array = array(
 		array('hp', $res[0]['player_mod_hp']),
@@ -86,7 +86,7 @@ if(count($res) == 1)
 		array('acc', $res[0]['player_mod_acc'])
 	);
 
-	echo '<p>Stats <b>with</b> modifications from items, jobs, etc.:' . getTable($array, false);
+	echo '<p/>Stats <b>with</b> modifications from items, jobs, etc.:' . getTable($array, false);
 
 	// equipment
 
@@ -100,7 +100,7 @@ if(count($res) == 1)
 	foreach($res as $r)
 		array_push($array, array($r['equipmentclass_name'], makeLink($r['equipment_name'], 'a=viewequipmentdetails&e=' . $r['equipment_id'], SECTION_GAME)));
 
-	echo '<p>Equipped:' . getTable($array);
+	echo '<p/>Equipped:' . getTable($array);
 
 	// now make the job table
 
@@ -115,7 +115,7 @@ if(count($res) == 1)
 			$j['player_job_exp']
 		));
 
-	echo '<p>Jobs:';
+	echo '<p/>Jobs:';
 	echo getTable($array);
 
 	// ability type
@@ -127,7 +127,7 @@ if(count($res) == 1)
 	for($i = 0; $i < count($res); $i++)
 		array_push($array, array(makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id'], SECTION_GAME), $res[$i]['player_abilitytype_aptot'], $res[$i]['player_abilitytype_ap']));
 
-	echo '<p>Ability types:' . getTable($array);
+	echo '<p/>Ability types:' . getTable($array);
 
 	// abilities
 
@@ -142,11 +142,11 @@ if(count($res) == 1)
 			makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id'], SECTION_GAME)
 		));
 
-	echo '<p>Learned abilities:' . getTable($array);
+	echo '<p/>Learned abilities:' . getTable($array);
 
 	// equipment
 
-	echo '<p>Equipment:<p>';
+	echo '<p/>Equipment:<p/>';
 
 	$res = $db->query('select count(*) c, equipment_id, equipment_name from player_equipment, equipment where equipment_id=player_equipment_equipment and player_equipment_player=' . $player . ' group by equipment_id order by equipment_name');
 
@@ -162,7 +162,7 @@ if(count($res) == 1)
 	}
 }
 else
-	echo '<p>Invalid player.';
+	echo '<p/>Invalid player.';
 
 update_session_action(0702, $player);
 

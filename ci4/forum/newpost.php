@@ -65,11 +65,11 @@ $forum = getForumFromThread($thread);
 
 if(LOGGED == false)
 {
-	echo '<br>You must be logged in to post replies.';
+	echo '<br/>You must be logged in to post replies.';
 }
 else if(!canPost($forum))
 {
-	echo '<p>You do not have permissions to post in this forum.';
+	echo '<p/>You do not have permissions to post in this forum.';
 }
 else
 {
@@ -81,19 +81,19 @@ else
 
 		if(!$post)
 		{
-			echo '<br>No post: enter a post.';
+			echo '<br/>No post: enter a post.';
 			$fail = true;
 		}
 
 		if(!$thread)
 		{
-			echo '<br>No thread selected: navigate to a thread and post a new reply there.';
+			echo '<br/>No thread selected: navigate to a thread and post a new reply there.';
 			$fail = true;
 		}
 
 		if($fail)
 		{
-			echo '<br>Post creation failed.<br>';
+			echo '<br/>Post creation failed.<br/>';
 			disp($post, $thread);
 		}
 		else
@@ -114,14 +114,14 @@ else
 				$db->query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $thread);
 				$db->query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $thread . ', ' . TIME . ')');
 
-				echo '<p>Reply posted successfully.';
-				echo '<p>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
-				echo '<p>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $thread) . '.';
-				echo '<p>Go to the ' . makeLink('new post', 'a=viewpost&p=' . $lastpost) . '.';
+				echo '<p/>Reply posted successfully.';
+				echo '<p/>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
+				echo '<p/>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $thread) . '.';
+				echo '<p/>Go to the ' . makeLink('new post', 'a=viewpost&p=' . $lastpost) . '.';
 			}
 			else
 			{
-				echo '<br>Post creation failed.';
+				echo '<br/>Post creation failed.';
 			}
 		}
 	}

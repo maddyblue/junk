@@ -47,7 +47,7 @@ if(count($ret) == 1)
 }
 else
 {
-	echo '<p>Post does not exist.';
+	echo '<p/>Post does not exist.';
 }
 
 ?>

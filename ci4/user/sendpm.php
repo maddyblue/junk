@@ -48,7 +48,7 @@ function disp($to, $sub, $text)
 
 if(!LOGGED)
 {
-	echo '<p>You must be logged in to send a pm.';
+	echo '<p/>You must be logged in to send a pm.';
 }
 else
 {
@@ -63,13 +63,13 @@ else
 		if(!$userid)
 		{
 			$fail = true;
-			echo '<br>Invalid username for destination.';
+			echo '<br/>Invalid username for destination.';
 		}
 
 		if(!$sub)
 		{
 			$fail = true;
-			echo '<br>No subject specified.';
+			echo '<br/>No subject specified.';
 		}
 
 		if(!$fail)
@@ -83,7 +83,7 @@ else
 				0 .
 				')');
 
-			echo '<p>Message sent.';
+			echo '<p/>Message sent.';
 		}
 		else
 			disp($to, $sub, $text);

@@ -61,7 +61,7 @@ for($i = 0; $i < count($res); $i++)
 
 echo getTable($array);
 
-echo '<p>' . makeLink('Leave domains.', 'a=changedomain&domain=0');
+echo '<p/>' . makeLink('Leave domains.', 'a=changedomain&domain=0');
 
 update_session_action(0103);
 

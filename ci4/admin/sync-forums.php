@@ -32,7 +32,7 @@
  *
  */
 
-echo '<p>Updating thread replies, first post, and last post:<br>';
+echo '<p/>Updating thread replies, first post, and last post:<br/>';
 $count = 0;
 
 $threads = $db->query('select * from forum_thread');
@@ -43,7 +43,7 @@ foreach($threads as $thread)
 
 	if($last == '0')
 	{
-		echo 'deleting empty thread: ' . decode($thread['forum_thread_title']) . '<br>';
+		echo 'deleting empty thread: ' . decode($thread['forum_thread_title']) . '<br/>';
 		$db->query('delete from forum_thread where forum_thread_id=' . $thread['forum_thread_id']);
 		continue;
 	}
@@ -60,7 +60,7 @@ foreach($threads as $thread)
 
 echo 'done - ' . $count;
 
-echo '<p>Update forum thread and post count:<br>';
+echo '<p/>Update forum thread and post count:<br/>';
 $count = 0;
 
 $forums = $db->query('select * from forum_forum where forum_forum_type=0');
@@ -80,7 +80,7 @@ foreach($forums as $forum)
 
 echo 'done - ' . $count;
 
-echo '<p>Updating user post count:<br>';
+echo '<p/>Updating user post count:<br/>';
 $count = 0;
 
 $users = $db->query('select user_id from user');

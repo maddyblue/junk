@@ -74,12 +74,12 @@ else
 
 	if(isset($_GET['type']))
 	{
-		echo '<p>' . makeLink('View all types', 'a=viewequipment');
+		echo '<p/>' . makeLink('View all types', 'a=viewequipment');
 	}
 }
 
 if($PLAYER)
-	echo '<p>You have ' . $PLAYER['player_money'] . ' gold.';
+	echo '<p/>You have ' . $PLAYER['player_money'] . ' gold.';
 
 echo getTable($array);
 

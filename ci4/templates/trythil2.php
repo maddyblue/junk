@@ -136,7 +136,7 @@
 				if($pms)
 				{
 					echo '
-						<p>
+						<p/>
 
 						<table class="tableMain" bgcolor="#6E6E6E" border=0 cellspacing=0 cellpadding=0 width=350>
 							<tr>
@@ -250,7 +250,7 @@
 									<table class="tableMain" border=0 width=95%>
 										<tr>
 											<td>
-												<br>
+												<br/>
 												<CICONTENT>
 											</td>
 										</tr>

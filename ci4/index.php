@@ -175,7 +175,7 @@ validateCharsDie($t);
 $tfile = getTemplateFilename($t);
 if(!file_exists($tfile))
 {
-	$message .= '<p>The ' . $t . ' template does not exist. Reverting to default.';
+	$message .= '<p/>The ' . $t . ' template does not exist. Reverting to default.';
 	$t = CI_DEF_TEMPLATE;
 	$tfile = getTemplateFilename($t);
 }
@@ -204,7 +204,7 @@ if($contentdone)
 else
 {
 	if(CI_SECTION == 'ADMIN' && !ADMIN)
-		$content = '<p>You do not have permission to view this page.';
+		$content = '<p/>You do not have permission to view this page.';
 	else
 	{
 		if($aval)
@@ -241,13 +241,13 @@ echo $top;
 
 echo $content;
 
-echo '<p>' . $message;
+echo '<p/>' . $message;
 
 if(isset($_GET['sqlprofile']))
 {
 	foreach($db->queries as $q)
 	{
-		echo '<br>' . $q[1] . ': ' . $q[0];
+		echo '<br/>' . $q[1] . ': ' . $q[0];
 	}
 }
 
