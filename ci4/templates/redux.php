@@ -48,18 +48,6 @@ input.text {
 	cursor: pointer;
 }
 
-blockquote {
-	width: 350px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	border-top: 1px solid #000000;
-	border-bottom: 1px solid #000000;
-	margin-left: 15px;
-	margin-right: 15px;
-	font-size: 9px;
-	letter-spacing: normal;
-}
-
 textarea {
 	background-color: #FFFFFF;
 }
