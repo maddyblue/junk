@@ -474,8 +474,6 @@ function makeImg($img, $prefix = '', $relative = false)
 // Make inupt data safe. Must always be used for all $_GET and $_POST string data.
 function encode($input)
 {
-	validateChars($input);
-
 	return urlencode(htmlspecialchars($input));
 }
 
@@ -484,30 +482,11 @@ function encode($input)
  */
 function decode($output)
 {
-	return stripslashes(urldecode($output));
+	return urldecode($output);
 }
 
-/* Verifies that all chars in $text are one listed in $alphabet. If they are
- * not listed, replace them with a space. $alphabet is not is ASCII order so as
- * to make searching faster. Most used characters are closer to the front.
- */
-function validateChars(&$text)
-{
-	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890 ~`!@#$%^&*()[]{}_+=-,.<>?/|;:\'"' . chr(92) /* \ */ . chr(10) /* \n */;
-
-	$sizestr = strlen($text) - 1;
-
-	for($i = 0; $i <= $sizestr; $i++)
-	{
-		if(strstr($alphabet, $text[$i]))
-			continue;
-		else
-			$text[$i] = ' ';
-	}
-}
-
-/* Same as validateChars, except with a stricter alphabet. Also, die on a
- * mismatch instead of replacing with a space.
+/* Makes sure only alphanumeric characters are in $text. If something else is
+ * found, die.
  */
 function validateCharsDie(&$text)
 {
