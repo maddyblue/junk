@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: sendpm.php,v 1.4 2003/09/25 23:57:35 dolmant Exp $ */
+/* $Id: sendpm.php,v 1.5 2003/09/27 21:50:23 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -107,5 +107,7 @@ else
 		disp($user, $sub, '');
 	}
 }
+
+update_session_action(makeLink('Sending a PM', 'a=sendpm', SECTION_USER));
 
 ?>
