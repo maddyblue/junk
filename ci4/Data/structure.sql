@@ -35,15 +35,18 @@ CREATE TABLE battle (
   battle_start bigint(10) unsigned NOT NULL default '0',
   battle_end bigint(10) unsigned NOT NULL default '0',
   battle_log text NOT NULL,
+  battle_area bigint(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (battle_id)
 ) TYPE=MyISAM;
 
 
 CREATE TABLE battle_entity (
-  battle_entity_battle bigint(10) unsigned NOT NULL auto_increment,
+  battle_entity_battle bigint(10) unsigned NOT NULL default '0',
   battle_entity_id bigint(10) unsigned NOT NULL default '0',
   battle_entity_type tinyint(1) unsigned NOT NULL default '0',
+  battle_entity_team tinyint(1) unsigned NOT NULL default '0',
   battle_entity_name varchar(100) NOT NULL default '',
+  battle_entity_ct tinyint(3) unsigned NOT NULL default '0',
   battle_entity_max_hp smallint(6) unsigned NOT NULL default '0',
   battle_entity_max_mp smallint(6) unsigned NOT NULL default '0',
   battle_entity_hp smallint(6) unsigned NOT NULL default '0',
@@ -53,8 +56,7 @@ CREATE TABLE battle_entity (
   battle_entity_def smallint(6) unsigned NOT NULL default '0',
   battle_entity_mgd smallint(6) unsigned NOT NULL default '0',
   battle_entity_agl smallint(6) unsigned NOT NULL default '0',
-  battle_entity_acc smallint(6) unsigned NOT NULL default '0',
-  UNIQUE KEY battle_entity_battle (battle_entity_battle)
+  battle_entity_acc smallint(6) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
@@ -308,15 +310,23 @@ CREATE TABLE player (
   player_house bigint(10) unsigned NOT NULL default '0',
   player_lv smallint(6) unsigned NOT NULL default '0',
   player_exp bigint(10) unsigned NOT NULL default '0',
-  player_hp smallint(6) unsigned NOT NULL default '100',
-  player_mp smallint(6) unsigned NOT NULL default '50',
-  player_str smallint(6) unsigned NOT NULL default '10',
-  player_mag smallint(6) unsigned NOT NULL default '10',
-  player_def smallint(6) unsigned NOT NULL default '10',
-  player_mgd smallint(6) unsigned NOT NULL default '10',
-  player_agl smallint(6) unsigned NOT NULL default '10',
-  player_acc smallint(6) unsigned NOT NULL default '10',
+  player_nomod_hp smallint(6) unsigned NOT NULL default '100',
+  player_nomod_mp smallint(6) unsigned NOT NULL default '50',
+  player_nomod_str smallint(6) unsigned NOT NULL default '10',
+  player_nomod_mag smallint(6) unsigned NOT NULL default '10',
+  player_nomod_def smallint(6) unsigned NOT NULL default '10',
+  player_nomod_mgd smallint(6) unsigned NOT NULL default '10',
+  player_nomod_agl smallint(6) unsigned NOT NULL default '10',
+  player_nomod_acc smallint(6) unsigned NOT NULL default '10',
   player_gender tinyint(1) NOT NULL default '0',
+  player_mod_hp smallint(6) unsigned NOT NULL default '0',
+  player_mod_mp smallint(6) unsigned NOT NULL default '0',
+  player_mod_str smallint(6) unsigned NOT NULL default '0',
+  player_mod_def smallint(6) unsigned NOT NULL default '0',
+  player_mod_mag smallint(6) unsigned NOT NULL default '0',
+  player_mod_mgd smallint(6) unsigned NOT NULL default '0',
+  player_mod_agl smallint(6) unsigned NOT NULL default '0',
+  player_mod_acc smallint(6) unsigned NOT NULL default '0',
   PRIMARY KEY  (player_id)
 ) TYPE=MyISAM;
 
