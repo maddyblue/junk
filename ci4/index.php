@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.50 2003/10/03 03:40:51 dolmant Exp $ */
+/* $Id: index.php,v 1.51 2003/11/05 00:02:47 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -46,10 +46,7 @@ if(isset($_SERVER['HTTPS']))
 if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
 if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
 
-if(CI_SECTION == 'MAIN')
-	define('CI_SECTION_DIR', '/');
-else
-	define('CI_SECTION_DIR', strtolower(CI_SECTION) . '/');
+define('CI_SECTION_DIR', strtolower(CI_SECTION) . '/');
 
 require_once CI_HOME_MOD . 'Include.inc.php';
 

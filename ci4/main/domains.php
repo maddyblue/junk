@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: domains.php,v 1.6 2003/09/25 23:57:33 dolmant Exp $ */
+/* $Id: domains.php,v 1.1 2003/11/05 00:02:48 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
