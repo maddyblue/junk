@@ -84,7 +84,12 @@ a
 </div>
 
 <div id="domaintext" align="right" style="position:absolute; right:80px; top:28px; text-align:right; text-justify:right;">
-	@<CI_DOMAIN>
+	@<CI_DOMAIN><?
+		if(LOGGED == true && CI_DOMAIN != 0)
+		{
+			echo '<br><a href="' . CI_PATH . '/game/?a=viewplayer">' . getCharNameFD($bbuserid, CI_DOMAIN) . '</a> (' .
+		}
+	?>
 </div>
 
 <div id="toptext" style="position:absolute; left:100px; right:50px; top:100px; height:50;">
