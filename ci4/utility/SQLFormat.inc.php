@@ -12,8 +12,6 @@
 	*/
 
 
-require_once("DatabaseAccess.inc.php");
-
 class SQLFormat extends DatabaseAccess {
 
 	/*************************************
@@ -82,20 +80,15 @@ class SQLFormat extends DatabaseAccess {
 		$i = 0;
 		$j = 0;
 
-<<<<<<< SQLFormat.inc.php
 		$dbq = mysql_db_query($parameters{"Database"}, 
 													"select * from " . $table,
 													$parameters{"Handle"}
 												);
 
     while ($row = mysql_fetch_assoc($dbq)) {
-=======
-		$dbq = mysql_db_query($this->database, "select * from " . $table);
-	 while ($row = mysql_fetch_assoc($dbq)) {
->>>>>>> 1.2
 			$cp = $temp;
 			$parameters{"Hash"} = $row;
-		$data = $this->FormatFromHash($parameters);
+			$data = $this->FormatFromHash($parameters);
 			$fhtml[$j] = $data;
 			$j++;
 		}
