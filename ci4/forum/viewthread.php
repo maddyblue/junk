@@ -46,14 +46,15 @@ function parsePost($post)
 	}
 
 	$ereg = array(
+		array("\[url=(.+)\](.+)\[/url\]", "<a href=\"\\1\">\\2</a>"),
 		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>"),
-		array("\[quote\](.+)\[/quote\]", "<table class=\"tableMain\"><tr class=\"tableRow\"><td class=\"tableCellBR\">\\1</td></tr></table>"),
-		array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
+		array("\[quote\](.+)\[/quote\]", "<table class=\"tableMain\"><tr class=\"tableRow\"><td class=\"tableCellBR\">\\1</td></tr></table>")
+		//array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
 	);
 
 	foreach($ereg as $row)
 	{
-		while(eregi($row[0], $return) == true)
+//		while(eregi($row[0], $return) == true)
 			$return = eregi_replace($row[0], $row[1], $return);
 	}
 
