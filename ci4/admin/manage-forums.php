@@ -1,128 +1,113 @@
 <?php
 
-function makeSpaces($num)
+/* $Id: manage-forums.php,v 1.2 2003/12/22 07:08:57 dolmant Exp $ */
+
+/*
+ * Copyright (c) 2003 Bruno De Rosa
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    - Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    - Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+function addForumEntry(&$array, $row, $depth)
 {
-	$ret = '';
-	while($num-- > 0)
-		$ret .= '&nbsp;';
-	return $ret;
+	if($row['forum_forum_desc'])
+		$desc = '<br>' . makeSpaces(1 + $depth) . decode($row['forum_forum_desc']);
+	else
+		$desc = '';
+
+	switch($row['forum_forum_type'])
+	{
+		case '0':
+			array_push($array, array(
+				makeSpaces($depth) . decode($row['forum_forum_name']) . $desc,
+				getFormField(array('type'=>'input', 'name'=>('order' . $row['forum_forum_id']), 'val'=>$row['forum_forum_order'], 'parms'=>'size="3" maxlength="3" style="width:30px"')),
+				makeLink('Edit', 'a=edit-forum&f=' . $row['forum_forum_id']),
+				makeLink('Delete', 'a=delete-forum&f=' . $row['forum_forum_id'])
+			));
+			break;
+		case  '1':
+			array_push($array, array(
+				makeSpaces($depth) . '<b>' . decode($row['forum_forum_name']) . '</b>' . $desc,
+				getFormField(array('type'=>'input', 'name'=>('order' . $row['forum_forum_id']), 'val'=>$row['forum_forum_order'], 'parms'=>'size="3" maxlength="3" style="width:30px"')),
+				makeLink('Edit', 'a=edit-forum&f=' . $row['forum_forum_id']),
+				makeLink('Delete', 'a=delete-forum&f=' . $row['forum_forum_id'])
+			));
+			break;
+	}
 }
 
-function forumListManage (&$array, $id, $topdepth, $depth)
+function forumListManage(&$array, $id, $depth)
 {
 	global $DBMain;
 
 	$res = $DBMain->Query('select forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order, forum_forum_desc, forum_forum_id from forum_forum where forum_forum_parent = "' . $id . '" order by forum_forum_order');
 
-	if($id != 0 && $topdepth == $depth)
-	{
-		$top = $DBMain->Query('select forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order, forum_forum_desc, forum_forum_id from forum_forum where forum_forum_id = ' . $id);
-		if(count($top == 1))
-		{
-			$row = $top[0];
-
-			if($row['forum_forum_desc'])
-				$desc = '<br>' . $row['forum_forum_desc'];
-			else
-				$desc = '';
-
-			switch($row['forum_forum_type'])
-			{
-				case 0:
-					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], 'a=manage-forums&f=' . $row['forum_forum_id']) . $desc,
-						$row['forum_forum_type'],
-						$row['forum_forum_id'],
-						makeLink("Edit", 'a=edit-forum&f=' . $row['forum_forum_id']),
-						makeLink("Change", 'a=change-forum-type&f=' . $row['forum_forum_id']),
-						makeLink("Move Up", 'a=move-forum&dir=up&f=' . $row['forum_forum_id']),
-						makeLink("Move Down",'a=move-forum&dir=down&f=' . $row['forum_forum_id']),
-						makeLink("Change Parent", 'a=change-parent&f=' . $row['forum_forum_id']),
-						makeLink("Delete", 'a=delete-forum&f=' . $row['forum_forum_id'])
-					));
-					break;
-				case  1:
-					array_push($array, array(
-						makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', 'a=manage-forums&f=' . $row['forum_forum_id']) . $desc,
-						$row['forum_forum_type'],
-						$row['forum_forum_id'],
-						makeLink("Edit", 'a=edit-forum&f=' . $row['forum_forum_id']),
-						makeLink("Change", 'a=change-forum-type&f=' . $row['forum_forum_id']),
-						makeLink("Move Up", 'a=move-forum&dir=up&f=' . $row['forum_forum_id']),
-						makeLink("Move Down",'a=move-forum&dir=down&f=' . $row['forum_forum_id']),
-						makeLink("Change Parent", 'a=change-parent&f=' . $row['forum_forum_id']),
-						makeLink("Delete", 'a=delete-forum&f=' . $row['forum_forum_id'])
-					));
-					break;
-			}
-			$topdepth++;
-		}
-	}
 	foreach($res as $row)
 	{
-		if($row['forum_forum_desc'])
-			$desc = '<br>' . makeSpaces(1 + $topdepth - $depth) . $row['forum_forum_desc'];
-		else
-			$desc = '';
+		addForumEntry($array, $row, $depth);
 
-		switch($row['forum_forum_type'])
-		{
-			case 0:
-				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink($row['forum_forum_name'], 'a=manage-forums&f=' . $row['forum_forum_id']) . $desc,
-					$row['forum_forum_type'],
-					$row['forum_forum_id'],
-					makeLink("Edit", 'a=edit-forum&f=' . $row['forum_forum_id']),
-					makeLink("Change", 'a=change-forum-type&f=' . $row['forum_forum_id']),
-					makeLink("Move Up", 'a=move-forum&dir=up&f=' . $row['forum_forum_id']),
-					makeLink("Move Down",'a=move-forum&dir=down&f=' . $row['forum_forum_id']),
-					makeLink("Change Parent", 'a=change-parent&f=' . $row['forum_forum_id']),
-					makeLink("Delete", 'a=delete-forum&f=' . $row['forum_forum_id'])
-				));
-				break;
-			case  1:
-				array_push($array, array(
-					makeSpaces($topdepth - $depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', 'a=manage-forums&f=' . $row['forum_forum_id']) . $desc,
-					$row['forum_forum_type'],
-					$row['forum_forum_id'],
-					makeLink("Edit", 'a=edit-forum&f=' . $row['forum_forum_id']),
-					makeLink("Change", 'a=change-forum-type&f=' . $row['forum_forum_id']),
-					makeLink("Move Up", 'a=move-forum&dir=up&f=' . $row['forum_forum_id']),
-					makeLink("Move Down",'a=move-forum&dir=down&f=' . $row['forum_forum_id']),
-					makeLink("Change Parent", 'a=change-parent&f=' . $row['forum_forum_id']),
-					makeLink("Delete", 'a=delete-forum&f=' . $row['forum_forum_id'])
-				));
-				break;
-		}
-
-		if($depth > 1)
-			forumListManage($array, $row['forum_forum_id'], $topdepth, $depth - 1);
-
+		forumListManage($array, $row['forum_forum_id'], $depth + 1);
 	}
 }
 
-$forumid = 0;
-if(isset($_GET['f']))
-	$forumid = $_GET['f'];
+if(isset($_POST['submit']))
+{
+	$forums = $DBMain->Query('select forum_forum_id from forum_forum');
 
-$depth = 2;
+	foreach($forums as $forum)
+	{
+		$id = $forum['forum_forum_id'];
+
+		if(isset($_POST['order' . $id]))
+			$DBMain->Query('update forum_forum set forum_forum_order=' . encode($_POST['order' . $id]) . ' where forum_forum_id=' . $id);
+	}
+
+	echo '<p>Order updated.';
+}
+
 $array = array();
 
 array_push($array, array(
 	'Name',
-	'Type',
-	'ID',
+	'Order',
 	'Edit',
-	'Change',
-	'Move Up',
-	'Move Down',
-	'Change Parent',
 	'Delete'
 ));
 
-forumListManage($array, $forumid, $depth, $depth);
+forumListManage($array, '0', 0);
+
+echo '<form method="post" action="index.php">';
 
 echo getTable($array);
+echo '<p>';
+echo getFormField(array('type'=>'submit', 'name'=>'submit', 'val'=>'Save Changes'));
+echo getFormField(array('type'=>'hidden', 'name'=>'a', 'val'=>'manage-forums'));
 
-echo "<p>" . makeLink("Add a forum", "a=add-forum");
+echo '</form>';
+
+echo '<p>' . makeLink('Add a forum', 'a=add-forum');
 ?>
