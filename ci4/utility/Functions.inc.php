@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.60 2004/01/08 09:33:52 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.61 2004/01/08 09:54:49 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -109,6 +109,23 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 		$val = makeLink($val, $link, $section);
 	}
 	return $val;
+}
+
+function getSiteStringArray($tag, $useSecondary = false, $ignoreLink = false)
+{
+	$ret = array();
+
+	$parameters = getSiteArray($tag);
+
+	for($i = 0; $i < count($parameters); $i++)
+	{
+		$str = createSiteString($parameters, $i, $useSecondary, $ignoreLink);
+
+		if($str)
+			array_push($ret, $str);
+	}
+
+	return $ret;
 }
 
 /* This function takes lots of heavily nested arrays.
@@ -570,7 +587,7 @@ function parseTags(&$template)
 			$pos4 = strpos($insert, 'INSERT');
 			$inslen = strlen($insert);
 
-			$ret = getSiteArray($tag);
+			$ret = getSiteStringArray($tag);
 			$repl = '';
 			if(count($ret) > 0)
 			{
@@ -585,7 +602,7 @@ function parseTags(&$template)
 					}
 					if($i == count($ret) - 1)
 						$pos7 = $inslen - $pos6;
-					$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
+					$repl .= substr_replace($insert, $ret[$i], $pos6, $pos7);
 				}
 			}
 			$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
