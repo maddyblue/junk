@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newplayer.php,v 1.2 2004/01/05 09:31:48 dolmant Exp $ */
+/* $Id: newplayer.php,v 1.3 2004/01/05 09:35:31 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -75,17 +75,25 @@ if(LOGGED)
 
 		$dname = getDBData('domain_name', $domain, 'domain_id', 'domain');
 
-		$player = $DBMain->Query('select player_name from player where player_user=' . ID . ' and player_domain=' . $domain);
-
 		if(!$dname)
 		{
 			echo '<br>Invalid domain selected.';
 			$fail = true;
 		}
 
+		$player = $DBMain->Query('select player_name from player where player_user=' . ID . ' and player_domain=' . $domain);
+
 		if(count($player))
 		{
 			echo '<br>You already have the player ' . decode($player[0]['player_name']) . ' registered on this domain. You may only have one player registered on a domain.';
+			$fail = true;
+		}
+
+		$existing = $DBMain->Query('select player_id from player where player_name="' . $name . '" and player_domain=' . $domain);
+
+		if(count($existing))
+		{
+			echo '<br>There is already a player with this name registered in this domain.';
 			$fail = true;
 		}
 
