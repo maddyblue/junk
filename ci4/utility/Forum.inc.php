@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.22 2003/12/25 05:31:42 dolmant Exp $ */
+/* $Id: Forum.inc.php,v 1.23 2004/01/05 09:49:49 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -41,7 +41,7 @@ function forumLinkLastPost($postid, $userid = '', $username = '', $date = '')
 		if(count($res))
 			$ret =
 				getTime($res[0]['forum_post_date']) . ' ' .
-				getUserlink($res[0]['forum_post_user'], $res[0]['user_name']) . ' ' .
+				getUserlink($res[0]['forum_post_user'], decode($res[0]['user_name'])) . ' ' .
 				makeLink('-&gt;', 'a=viewpost&p=' . $postid);
 		else
 			$ret = 'No posts';
