@@ -169,6 +169,31 @@ if($contentdone)
 	else if($aval == 'logout')
 		update_session_action(0303);
 }
+// get content page
+else
+{
+	if(CI_SECTION == 'ADMIN' && !ADMIN)
+		echo '<p>You do not have permission to view this page.';
+	else
+	{
+		if($aval)
+		{
+			$a = CI_FS_PATH . CI_SECTION_DIR . $aval . '.php';
+
+			if(file_exists($a))
+			{
+				ob_start();
+				require $a;
+				$content = ob_get_contents();
+				ob_end_clean();
+			}
+			else
+			{
+				echo 'Non-existent action.';
+			}
+		}
+	}
+}
 
 // Template
 if(isset($_GET['template']))
@@ -207,42 +232,6 @@ ob_end_clean();
 $pos = strpos($template, '<CICONTENT>');
 $top = substr($template, 0, $pos - 1);
 $bottom = substr($template, $pos + 11); // 11 = length of <CICONTENT>
-
-// get content page
-if(!$contentdone)
-{
-	$permission = true;
-
-	if(CI_SECTION == 'ADMIN')
-	{
-		if(!ADMIN)
-			$permission = false;
-	}
-
-	if($permission)
-	{
-		if($aval)
-		{
-			$a = CI_FS_PATH . CI_SECTION_DIR . $aval . '.php';
-
-			if(file_exists($a))
-			{
-				ob_start();
-				require $a;
-				$content = ob_get_contents();
-				ob_end_clean();
-			}
-			else
-			{
-				echo 'Non-existent action.';
-			}
-		}
-	}
-	else
-	{
-		echo 'You do not have permission to view this page.';
-	}
-}
 
 parseTags($top);
 echo $top;
