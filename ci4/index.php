@@ -20,10 +20,20 @@ if(!$fd)
 setcookie('CI_TEMPLATE', $t, time() + 604800, $CI_PATH);
 $template = fread($fd, filesize(getTemplateName($t)));
 
-$logged = '>';
-$ret = $DB->Query('SELECT section,type,text,link FROM site where logged ' . $logged . '= 0' order by orderid);
-echo "<pre>";
-print_r($ret);
-echo "</pre>";
+$logged = '>'; // logged in
+
+$ret = $DB->Query('SELECT tag,type,repl FROM site_replace');
+for($i = 0; $i < sizeof($ret{'tag'}); $i++)
+{
+	switch($ret{'type'}{$i})
+	{
+		case 'eval' : eval('$repl = "' . $ret{'repl'}{$i} . '";'); break;
+	}
+	$template = str_replace('<CI' . $ret{'tag'}{$i} . '>', $repl, $template);
+}
+
+$ret = $DB->Query('SELECT section,type,text,link FROM site where logged ' . $logged . '= 0 order by orderid');
+
+echo $template;
 
 ?>
