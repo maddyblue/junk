@@ -76,7 +76,9 @@ else
 	}
 }
 
-echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
+if(LOGGED)
+	echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
+
 echo getTable($array);
 
 update_session_action(0503);
