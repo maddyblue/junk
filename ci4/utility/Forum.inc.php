@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.17 2003/12/16 09:07:17 dolmant Exp $ */
+/* $Id: Forum.inc.php,v 1.18 2003/12/19 09:17:59 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -34,13 +34,13 @@
 
 function forumLinkLastPost($postid)
 {
-	$ret = $GLOBALS['DBMain']->Query('select * from forum_post where forum_post_id=' . $postid);
+	$ret = $GLOBALS['DBMain']->Query('select * from forum_post, user where forum_post_user=user_id and forum_post_id=' . $postid);
 
 	if(count($ret) == 1)
 		return (
 			getTime($ret[0]['forum_post_date']) .
 			' ' .
-			getUserlink($ret[0]['forum_post_user']) .
+			getUserlink($ret[0]['forum_post_user'], $ret[0]['user_name']) .
 			' ' .
 			makeLink('-&gt;', 'a=viewpost&p=' . $ret[0]['forum_post_id'])
 		);
