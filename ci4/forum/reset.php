@@ -7,4 +7,6 @@ $DBMain->Query('update user set user_posts=0');
 $DBMain->Query('truncate table user');
 $DBMain->Query('truncate table forum_forum');
 
+echo '<p>Forums and users reset.';
+
 ?>

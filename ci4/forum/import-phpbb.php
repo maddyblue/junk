@@ -30,14 +30,26 @@
  *
  */
 
+function getuser($id)
+{
+	global $phpbbcon, $DBMain;
+	$qu = mysql_query('select username from phpbb_users where user_id=' . $id);
+	$r = $DBMain->Query('select user_id from user where user_name="' . encode(mysql_result($qu, 0, 'username')) . '"');
+	return $r[0]['user_id'];
+}
+
 set_time_limit(0);
-$topics = 0;
-$posts = 0;
+
+if(isset($_GET['reset']))
+	require 'reset.php';
 
 $phpbbcon = mysql_connect('localhost', 'root', '', true);
 mysql_select_db('forum', $phpbbcon);
 
 // import users
+
+echo '<p>Importing users:<br>';
+$count = 0;
 
 $q = mysql_query('select * from phpbb_users', $phpbbcon);
 while($row = mysql_fetch_assoc($q))
@@ -49,11 +61,27 @@ while($row = mysql_fetch_assoc($q))
 		      $row['user_regdate'] . ',' .
 		      $row['user_lastvisit'] .
 		')');
+
+	$count++;
+	if($count % 10 == 0)
+	{
+		echo $count . ', ';
+		flush();
+	}
 }
+
+echo 'done - ' . $count;
+
+echo '<p>Importing categories, forums, threads, and posts:<br>';
+$cats = 0;
+$forums = 0;
+$threads = 0;
+$posts = 0;
 
 $cat = mysql_query('select * from phpbb_categories', $phpbbcon);
 while($cat_row = mysql_fetch_assoc($cat))
 {
+	$cats++;
 	// insert category
 	$DBMain->Query('insert into forum_forum (forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order) values (' .
 	'"' . $cat_row['cat_title'] . '",' .
@@ -68,9 +96,11 @@ while($cat_row = mysql_fetch_assoc($cat))
 	$forum = mysql_query('select * from phpbb_forums where cat_id=' . $cat_row['cat_id'], $phpbbcon);
 	while($forum_row = mysql_fetch_assoc($forum))
 	{
+		$forums++;
 		// insert the forum
-		$DBMain->Query('insert into forum_forum (forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order) values (' .
+		$DBMain->Query('insert into forum_forum (forum_forum_name, forum_forum_desc, forum_forum_type, forum_forum_parent, forum_forum_order) values (' .
 		'"' . $forum_row['forum_name'] . '",' .
+		'"' . $forum_row['forum_desc'] . '",' .
 		0 . ',' .
 		$cat_parent . ',' .
 		$forum_row['forum_order'] .
@@ -82,7 +112,7 @@ while($cat_row = mysql_fetch_assoc($cat))
 		$topic = mysql_query('select * from phpbb_topics where forum_id=' . $forum_row['forum_id'], $phpbbcon);
 		while($topic_row = mysql_fetch_assoc($topic))
 		{
-			$topics++;
+			$threads++;
 			$DBMain->Query('insert into forum_thread (forum_thread_forum, forum_thread_title, forum_thread_user, forum_thread_date, forum_thread_views, forum_thread_type) values (' .
 			$forum_parent . ',' .
 			'"' . encode($topic_row['topic_title']) . '",' .
@@ -118,14 +148,11 @@ while($cat_row = mysql_fetch_assoc($cat))
 	}
 }
 
-echo "$topics, $posts";
+echo "<br>categories: $cats";
+echo "<br>forums: $forums";
+echo "<br>threads: $threads";
+echo "<br>posts: $posts";
 
-function getuser($id)
-{
-	global $phpbbcon, $DBMain;
-	$qu = mysql_query('select username from phpbb_users where user_id=' . $id);
-	$r = $DBMain->Query('select user_id from user where user_name="' . encode(mysql_result($qu, 0, 'username')) . '"');
-	return $r[0]['user_id'];
-}
+require 'sync.php';
 
 ?>
