@@ -37,7 +37,7 @@ function disp($to, $sub, $text)
 			array('To', array('type'=>'text', 'name'=>'to', 'val'=>decode($to))),
 			array('Subject', array('type'=>'text', 'name'=>'sub', 'val'=>decode($sub))),
 			array('Message', array('type'=>'textarea', 'name'=>'text', 'val'=>decode($text))),
-			array('', array('type'=>'disptext', 'val'=>'PMs support all ' . makeLink('tags that are supported in the forums', 'forum/?a=taglist', true) . '.')),
+			array('', array('type'=>'disptext', 'val'=>'PMs support all ' . makeLink('tags that are supported in the forums', SECTION_FORUM . '/?a=taglist', true) . '.')),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Send')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'sendpm'))
