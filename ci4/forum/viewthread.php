@@ -126,7 +126,7 @@ if(count($array))
 		));
 	}
 
-	update_session_action('Viewing thread ' . makeLink(encode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid, SECTION_FORUM));
+	update_session_action('Viewing thread ' . makeLink($res[0]['forum_thread_title'], 'a=viewthread&t=' . $threadid, SECTION_FORUM));
 }
 else
 	echo '<br>Non-existent thread.';
