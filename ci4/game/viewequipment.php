@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewequipment.php,v 1.5 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id: viewequipment.php,v 1.6 2004/01/07 02:38:29 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -38,8 +38,6 @@ if(isset($_GET['type']))
 	$query .= 'and equipment_type=' . $_GET['type'] . ' ';
 
 $query .= 'order by equipmenttype_name, equipment_cost';
-
-echo $query;
 
 $res = $DBMain->Query($query);
 
