@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.57 2004/01/05 22:13:15 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.58 2004/01/06 20:14:09 rayle Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -195,6 +195,9 @@ function getFormField($arr)
 			break;
 		case 'disptext':
 			$str = $val;
+			break;
+		case 'checkbox':
+			$str = '<input type="checkbox" name="' .$name . '" ' . $val . '>';
 			break;
 		default:
 			$str = '<input type="' . $type . '" name="' . $name . '" ' . $parms . ' value="' . $val . '">';
