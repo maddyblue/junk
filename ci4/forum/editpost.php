@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: editpost.php,v 1.6 2003/12/16 09:07:15 dolmant Exp $ */
+/* $Id: editpost.php,v 1.7 2003/12/20 20:52:17 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -48,16 +48,11 @@ function disp($subject, $text, $post)
 
 $subject = '';
 $text = '';
-$post = 0;
+$post = '0';
 
-if(isset($_POST['subject']))
-	$subject = encode($_POST['subject']);
-if(isset($_POST['text']))
-	$text = encode($_POST['text']);
-if(isset($_GET['p']))
-	$post = encode($_GET['p']);
-if(isset($_POST['p']))
-	$post = encode($_POST['p']);
+$subject = isset($_POST['subject']) ? encode($_POST['subject']) : '';
+$text = isset($_POST['text']) ? encode($_POST['text']) : '';
+$post = isset($_POST['p']) ? encode($_POST['p']) : (isset($_GET['p']) ? encode($_GET['p']) : '0');
 
 $ret = $DBMain->Query('select * from forum_post where forum_post_id=' . $post);
 
