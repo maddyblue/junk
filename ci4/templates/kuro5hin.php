@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: kuro5hin.php,v 1.8 2003/11/05 00:28:54 dolmant Exp $ -->
+<!-- $Id: kuro5hin.php,v 1.9 2004/01/06 09:57:47 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
@@ -15,8 +15,8 @@ body {
 
 p, body, td, li, input, textarea, select {
 	font-family: verdana, arial, helvetica, sans-serif;
-	font-size: 10px;
-	color: #222222;
+	font-size: 8pt;
+	color: #000000;
 }
 
 a {
@@ -24,25 +24,21 @@ a {
 }
 
 a:visited {
-	color: #4185aa;
+	color: #21659a;
 }
 
 a:active {
 	color: #c0c0c0;
 }
 
-.table1, .ciNavTable {
-	border-spacing: 0;
-	border: 0;
-	padding: 0;
-	width: 98%;
-	text-align: center;
-}
-
 .ciNavTable, .ciNavTable a {
+	border-spacing: 0px;
+	padding: 0px;
+	text-align: center;
+	width: 100%;
 	background-color: #eeeeee;
 	text-decoration: none;
-	color: #000;
+	color: #000000;
 }
 
 .tableMain {
@@ -75,8 +71,6 @@ a:active {
 	border-top: 1px solid #000000;
 }
 
-
-
 .tableCellTR, .tableCellR {
 	padding: 2px;
 	border-left: 1px solid #000000;
@@ -96,6 +90,52 @@ a:active {
 	border: 1px solid #000000;
 }
 
+td.ciNavTableTd {
+	border-top: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+
+td.box, td.box a {
+	width: 100%;
+	color: #ffffff;
+}
+
+table.box {
+	border-spacing: 0px;
+	padding: 0px;
+	width: 100%;
+	background-color: #000000;
+}
+
+table.boxinner {
+	border-spacing: 0px;
+	padding: 1px;
+	width: 100%;
+	background-color: #006699;
+}
+
+table.content {
+	border-spacing: 3px;
+	padding: 0px;
+	width: 100%;
+	background-color: #ffffff;
+}
+
+table.boxcontents {
+	border: 0px;
+	border-spacing: 0px;
+	padding: 1px;
+	width: 100%;
+}
+
+table.maintable {
+	border: 0px;
+	border-spacing: 5px;
+	padding: 0px;
+	width: 100%;
+}
+
 -->
 </style>
 </head>
@@ -104,36 +144,34 @@ a:active {
 
 <br>
 <a href="http://crescentisland.com"><b>Crescent Island</b></a>
+	[<?php
+		if(LOGGED)
+			echo decode(getDBData('user_name')) . '@';
+
+		echo getDomainName();
+	?>]
 
 <table class="ciNavTable">
 	<tr>
 		<td style="border: 1px solid #000000;">
-			<CINAV><td style="border-top: 1px solid #000000; border-right: 1px solid #000000;; border-bottom: 1px solid #000000;">INSERT</td></CINAV>
+			<CINAV><td class="ciNavTableTd">INSERT</td></CINAV>
 		</td>
-	</tr>
-</table>
-
-<table class="table1">
-	<tr>
-	<td align="right">
-		<b>we need your support:</b> donate via paypal
-	</td>
 	</tr>
 </table>
 
 <p>
 
-<table border=0 width="98%" align="center" cellpadding=5 cellspacing=0>
+<table class="maintable">
 	<tr>
 		<td valign="top" width="20%">
 
-		<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#000000">
+		<table class="box">
 			<tr>
 				<td width="100%">
-					<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#006699">
+					<table class="boxinner">
 						<tr>
-						<td width="100%">
-							<font face="verdana, arial, helvetica, sans-serif" color="#ffffff" size=2>section menu</font>
+						<td class="box">
+							Section Menu
 						</td>
 					</tr>
 					</table>
@@ -141,7 +179,7 @@ a:active {
 			</tr>
 		</table>
 
-		<table width="100%" border=0 cellpadding=1 cellspacing=0>
+		<table class="boxcontents">
 			<tr>
 				<td>
 					<CISECTION_MENU>INSERT<br></CISECTION_MENU>
@@ -150,13 +188,13 @@ a:active {
 		</table>
 		<p>
 
-		<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#000000">
+		<table class="box">
 			<tr>
 				<td width="100%">
-					<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#006699">
+					<table class="boxinner">
 						<tr>
-						<td width="100%">
-							<font face="verdana, arial, helvetica, sans-serif" color="#ffffff" size=2>section nav</font>
+						<td class="box">
+							Section Nav
 						</td>
 					</tr>
 					</table>
@@ -164,7 +202,7 @@ a:active {
 			</tr>
 		</table>
 
-		<table width="100%" border=0 cellpadding=1 cellspacing=0>
+		<table class="boxcontents">
 			<tr>
 				<td>
 					<CISECTION_NAV>INSERT<br></CISECTION_NAV>
@@ -173,13 +211,13 @@ a:active {
 		</table>
 		<p>
 
-		<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#000000">
+		<table class="box">
 			<tr>
 				<td width="100%">
-					<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#006699">
+					<table class="boxinner">
 						<tr>
-						<td width="100%">
-							<font face="verdana, arial, helvetica, sans-serif" color="#ffffff" size=2>server time</font>
+						<td class="box">
+							Server Time
 						</td>
 					</tr>
 					</table>
@@ -187,7 +225,7 @@ a:active {
 			</tr>
 		</table>
 
-		<table width="100%" border=0 cellpadding=1 cellspacing=0>
+		<table class="boxcontents">
 			<tr>
 				<td>
 					<?php echo date('d M y g:i a T', TIME); ?>
@@ -196,15 +234,13 @@ a:active {
 		</table>
 		<p>
 
-			<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#000000">
+		<table class="box">
 			<tr>
 				<td width="100%">
-					<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#006699">
+					<table class="boxinner">
 						<tr>
-						<td width="100%">
-							<font face="verdana, arial, helvetica, sans-serif" color="#ffffff" size=2>
-								<?php echo makeLink('who\'s online', 'a=whosonline', SECTION_USER); ?>
-							</font>
+						<td class="box">
+							<?php echo makeLink('Who\'s Online', 'a=whosonline', SECTION_USER); ?>
 						</td>
 					</tr>
 					</table>
@@ -212,7 +248,7 @@ a:active {
 			</tr>
 		</table>
 
-		<table width="100%" border=0 cellpadding=1 cellspacing=0>
+		<table class="boxcontents">
 			<tr>
 				<td>
 						<?php echo getNumActiveUsers(); ?> users,
@@ -220,18 +256,17 @@ a:active {
 				</td>
 			</tr>
 		</table>
-		<p>
 
 		</td>
 
-		<td valign="top" width="55%">
-			<table width="100%" border=0 cellpadding=1 cellspacing=0 align="center" bgcolor="#000000">
+		<td valign="top" width="80%">
+			<table class="box">
 				<tr>
 					<td>
-						<table width="100%" border=0 cellpadding=0 cellspacing=0 align="center" bgcolor="#006699">
+						<table class="boxinner">
 							<tr>
-								<td valign="middle">
-									<font face="verdana, arial, helvetica, sans-serif" size="+1" color="#ffffff"><b><?php echo strtolower(CI_SECTION);?></b></font>
+								<td valign="middle" class="box">
+									<b><?php echo strtolower(CI_SECTION);?></b>
 								</td>
 							</tr>
 						</table>
@@ -239,7 +274,7 @@ a:active {
 				</tr>
 			</table>
 
-			<table width="100%" border=0 cellpadding=3 cellspacing=0>
+			<table class="content">
 				<tr>
 					<td valign="top" width="100%" align="left">
 						<CICONTENT>
