@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Session.inc.php,v 1.8 2003/12/15 06:03:18 dolmant Exp $ */
+/* $Id: Session.inc.php,v 1.9 2003/12/29 09:27:55 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -36,8 +36,17 @@ function handle_session()
 {
 	close_sessions();
 
+	$sid = isset($_GET['s']) ? encode($_GET['s']) : (isset($_POST['s']) ? encode($_POST['s']) : '');
+
+	/* User probably just logged in. If they didn't just login, this won't do
+	 * anything malicious.
+	 */
+	if(ID && $sid)
+		$GLOBALS['DBMain']->Query('update session set session_user=' . ID . ' where session_id="' . $sid . '"');
+
 	if(ID)
 	{
+		if(!$sid)
 		$sid = getDBData('session_id', ID, 'session_user', 'session');
 
 		if(!$sid)
@@ -47,8 +56,6 @@ function handle_session()
 	}
 	else
 	{
-		$sid = isset($_GET['s']) ? decode($_GET['s']) : '';
-
 		if(session_exists($sid))
 			update_session($sid);
 		else
@@ -73,9 +80,6 @@ function start_session()
 		TIME . ',' .
 		TIME .
 		')');
-
-	if(LOGGED)
-		$DBMain->Query('delete from forum_view where forum_view_user=' . ID);
 }
 
 function update_session($sid)
@@ -84,8 +88,10 @@ function update_session($sid)
 
 	define('SESSION', $sid);
 
-	$DBMain->Query('update user set user_last=' . TIME . ' where user_id="' . ID . '"');
-	$DBMain->Query('update session set session_current=' . TIME . ', session_action="" where session_id="' . $sid . '"');
+	if(ID)
+		$DBMain->Query('update user set user_last=' . TIME . ' where user_id=' . ID . '');
+
+	$DBMain->Query('update session set session_current=' . TIME . ', session_action=0000 where session_id="' . $sid . '"');
 }
 
 function update_session_action($action, $data = '')
@@ -99,12 +105,13 @@ function close_sessions()
 {
 	global $DBMain;
 
-	// sessions that are 10 minutes old
+	// non guest sessions that are 10 minutes old
 	$ret = $DBMain->Query('select * from session where session_current < (' . TIME . ' - 600) and session_user > 0');
 
 	foreach($ret as $row)
 	{
 		$DBMain->Query('update user set user_last_session = ' . $row['session_current'] . ' where user_id = ' . $row['session_user']);
+		$DBMain->Query('delete from forum_view where forum_view_user=' . $row['session_user']);
 	}
 
 	// remove all sessions that are over 10 minutes old
