@@ -300,4 +300,9 @@ function makeImg($img, $prefix = '', $relative = false)
 	return ($img ? '<img src="' . ($relative ? '' : CI_WWW_PATH) . $prefix . $img . '">' : '');
 }
 
+function dump($var)
+{
+	return '<pre>' . var_dump($var) . '</pre>';
+}
+
 ?>
