@@ -38,7 +38,7 @@ function postList($thread, $offset, $postsPP, $canMod)
 
 	$array = array();
 
-	$posts = $DBMain->Query('select user_id, user_name, user_avatar_data, forum_post_date, forum_post_id, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . $offset . ', ' . $postsPP);
+	$posts = $DBMain->Query('select user_id, user_name, user_avatar_data, forum_post_date, forum_post_id, forum_post_text, forum_post_subject, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . $offset . ', ' . $postsPP);
 
 	foreach($posts as $post)
 	{
@@ -51,7 +51,7 @@ function postList($thread, $offset, $postsPP, $canMod)
 			$user .= ' ' . makeLink('edit', 'a=editpost&p=' . $post['forum_post_id']);
 
 		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class="small">' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
-		$body .= '<p>' . parsePost($post['forum_post_id']);
+		$body .= '<p>' . parsePostText($post['forum_post_text']);
 
 		if($post['user_sig'])
 		{
