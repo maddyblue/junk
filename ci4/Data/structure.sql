@@ -110,6 +110,22 @@ CREATE TABLE forum_forum (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE forum_mod (
+  forum_mod_forum bigint(10) unsigned NOT NULL default '0',
+  forum_mod_user bigint(10) unsigned NOT NULL default '0'
+) TYPE=MyISAM;
+
+
+CREATE TABLE forum_perm (
+  forum_perm_forum bigint(10) unsigned NOT NULL default '0',
+  forum_perm_group bigint(10) unsigned NOT NULL default '0',
+  forum_perm_view tinyint(1) unsigned NOT NULL default '0',
+  forum_perm_thread tinyint(1) unsigned NOT NULL default '0',
+  forum_perm_post tinyint(1) unsigned NOT NULL default '0',
+  forum_perm_mod tinyint(1) unsigned NOT NULL default '0'
+) TYPE=MyISAM;
+
+
 CREATE TABLE forum_post (
   forum_post_id bigint(10) unsigned NOT NULL auto_increment,
   forum_post_thread bigint(10) unsigned NOT NULL default '0',
@@ -150,6 +166,9 @@ CREATE TABLE forum_view (
 CREATE TABLE group_def (
   group_def_id bigint(10) unsigned NOT NULL auto_increment,
   group_def_name varchar(100) NOT NULL default '',
+  group_def_admin tinyint(1) unsigned NOT NULL default '0',
+  group_def_news tinyint(1) unsigned NOT NULL default '0',
+  group_def_mod tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (group_def_id)
 ) TYPE=MyISAM PACK_KEYS=0;
 
@@ -304,8 +323,8 @@ CREATE TABLE session (
   session_user bigint(10) unsigned NOT NULL default '0',
   session_start bigint(10) unsigned NOT NULL default '0',
   session_current bigint(10) unsigned NOT NULL default '0',
-  session_action varchar(100) NOT NULL default '',
-  session_action_data bigint(10) NOT NULL default '0',
+  session_action bigint(10) unsigned NOT NULL default '0',
+  session_action_data varchar(100) NOT NULL default '0',
   PRIMARY KEY  (session_id)
 ) TYPE=HEAP;
 
