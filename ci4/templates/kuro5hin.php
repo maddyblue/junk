@@ -191,6 +191,29 @@ a:active {
 		</table>
 		<p>
 
+		<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#000000">
+			<tr>
+				<td width="100%">
+					<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#006699">
+						<tr>
+						<td width="100%">
+							<font face="verdana, arial, helvetica, sans-serif" color="#ffffff" size=2>server time</font>
+						</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+		<table width="100%" border=0 cellpadding=1 cellspacing=0>
+			<tr>
+				<td>
+					<?php echo date('d M y g:i a T', TIME); ?>
+				</td>
+			</tr>
+		</table>
+		<p>
+
 		</td>
 
 		<td valign="top" width="55%">
