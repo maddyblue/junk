@@ -8,7 +8,7 @@ $seclower = strtolower(CI_SECTION);
 <head>
 <!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<title>crescent island ::
+<title>christmas island ::
 <?php
 echo $seclower;
 
@@ -185,7 +185,7 @@ td.block-light {
 								</td>
 								<td align="right">
 									<div class="header">
-										crescent island
+										<img src="<CI_TEMPLATE_DIR>/tree.jpg"><font color="red">christmas island</font><img src="<CI_TEMPLATE_DIR>/tree.jpg">
 									</div>
 								</td>
 							</tr>
