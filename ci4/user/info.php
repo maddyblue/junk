@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: info.php,v 1.6 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
