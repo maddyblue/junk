@@ -42,7 +42,7 @@ require_once CI_FS_PATH . 'utility/Database.inc.php';
 
 $db = new Database();
 
-$db->Connect($CIConfigMain, CI_DATABASE);
+$db->Connect($DBConf);
 
 $id = isset($_GET['i']) ? intval($_GET['i']) : 0;
 
