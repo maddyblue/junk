@@ -43,7 +43,7 @@ array_push($array, array(
 for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		decode($res[$i]['user_name']),
+		getUserlink($res[$i]['user_id']),
 		getTime($res[$i]['user_register']),
 	));
 }
