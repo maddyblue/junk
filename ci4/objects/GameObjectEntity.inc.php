@@ -12,7 +12,7 @@
 
 class GameObjectEntity extends GameObjectUnknown
 {
-	
+
 	// Equip: wrapper method, standardization of interface
 	// to Attributes associative array.
 
@@ -67,7 +67,7 @@ class GameObjectEntity extends GameObjectUnknown
 
 	function BroadcastEvent($parameters)
 	{
-			
+
 	}
 }
 

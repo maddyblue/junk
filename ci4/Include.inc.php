@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once $CI_HOME_MOD . 'config/Globals.inc.php';
 

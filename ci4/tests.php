@@ -21,7 +21,7 @@ $c->DoAction("1");
 
 print "<br>\n";
 
-/* Demonstrating DatabaseAccess object. 
+/* Demonstrating DatabaseAccess object.
 
 $db = new DatabaseAccess;
 

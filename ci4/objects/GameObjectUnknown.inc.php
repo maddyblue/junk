@@ -24,7 +24,7 @@ class GameObjectUnknown
 
 	function DoAction($act)
 	{
-		eval($this->Code{$act} . ";");		
+		eval($this->Code{$act} . ";");
 	}
 };
 

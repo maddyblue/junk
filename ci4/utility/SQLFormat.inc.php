@@ -80,12 +80,12 @@ class SQLFormat extends DatabaseAccess {
 		$i = 0;
 		$j = 0;
 
-		$dbq = mysql_db_query($parameters{"Database"}, 
+		$dbq = mysql_db_query($parameters{"Database"},
 													"select * from " . $table,
 													$parameters{"Handle"}
 												);
 
-    while ($row = mysql_fetch_assoc($dbq)) {
+	 while ($row = mysql_fetch_assoc($dbq)) {
 			$cp = $temp;
 			$parameters{"Hash"} = $row;
 			$data = $this->FormatFromHash($parameters);

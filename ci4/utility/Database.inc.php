@@ -1,4 +1,4 @@
-<?
+<?php
 
 /* Interface class for DatabaseAccess
  */

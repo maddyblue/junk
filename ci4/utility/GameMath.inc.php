@@ -12,7 +12,7 @@ class GameMath
 	{
 
 		/* This array contains coefficients for the third-order polynomial
-			
+
 				ax^3 + bx^2 + cx + d
 
 			 we use to model skill / experience curves.
