@@ -39,7 +39,7 @@ $res = $db->query('select * from equipment, equipmenttype where equipment_id=' .
 
 if(count($res))
 {
-	if(isset($_POST['e']))
+	if(LOGGED && isset($_POST['e']))
 	{
 		$name = $res[0]['equipment_name'];
 		$cost = $res[0]['equipment_cost'];
@@ -54,8 +54,6 @@ if(count($res))
 			echo '<p>Purchased a ' . $name . '.';
 		}
 	}
-
-	echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
 
 	$stat = array(
 		array('HP', $res[0]['equipment_stat_hp']),
@@ -91,9 +89,16 @@ if(count($res))
 		array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
 	));
 
-	echo '<p>' . $buytext;
+	if(LOGGED)
+	{
+		echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
+		echo '<p>' . $buytext;
+	}
+
 	echo getTable($array);
-	echo '<p>' . $buytext;
+
+	if(LOGGED)
+		echo '<p>' . $buytext;
 }
 else
 	echo '<p>Invalid equipment id.';
