@@ -3,7 +3,7 @@
 /* $Id$ */
 
 /*
- * Copyright (c) 2003 Matthew Jibson
+ * Copyright (c) 2004 Matthew Jibson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,47 +32,25 @@
  *
  */
 
-$query = 'select * from equipment, equipmenttype where equipment_type=equipmenttype_id ';
+$e = isset($_GET['e']) ? intval($_GET['e']) : '0';
 
-if(isset($_GET['type']))
-	$query .= 'and equipment_type=' . intval($_GET['type']) . ' ';
+$res = $DBMain->Query('select * from equipment where equipment_id=' . $e);
 
-$query .= 'order by equipmenttype_name, equipment_cost';
-
-$res = $DBMain->Query($query);
-
-$array = array();
-
-array_push($array, array(
-	'Type',
-	'Equipment',
-	'Purchasable',
-	'Cost',
-	'Description'
-));
-
-for($i = 0; $i < count($res); $i++)
+if($PLAYER == false)
+	echo '<p>You must be logged in to buy equipment.';
+else if(count($res))
 {
-	if($res[$i]['equipment_buy'] == 1)
-		$buytext = makeLink('Yes', 'a=buyequipment&e=' . $res[$i]['equipment_id']);
+	if($res[0]['equipment_cost'] > $PLAYER['player_money'])
+		echo '<p>You do not have enough money to purchase this.';
 	else
-		$buytext = 'No';
-
-	array_push($array, array(
-		makeLink($res[$i]['equipmenttype_name'], 'a=viewequipment&type=' . $res[$i]['equipmenttype_id']),
-		makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id']),
-		$buytext,
-		$res[$i]['equipment_cost'],
-		$res[$i]['equipment_desc']
-	));
+	{
+		$DBMain->Query('insert into player_equipment (player_equipment_equipment, player_equipment_player) values (' . $res[0]['equipment_id'] . ', ' . $PLAYER['player_id'] . ')');
+		$DBMain->Query('update player set player_money = player_money - ' . $res[0]['equipment_cost'] . ' where player_id=' . $PLAYER['player_id']);
+		echo '<p>Successfully purchased a ' . $res[0]['equipment_name'] . '.';
+	}
 }
-
-if(isset($_GET['type']))
-{
-	echo '<p>' . makeLink('View all types', 'a=viewequipment');
-}
-
-echo getTable($array);
+else
+	echo '<p>Invalid equipment id.';
 
 update_session_action(0503);
 

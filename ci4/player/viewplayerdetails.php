@@ -125,6 +125,23 @@ if(count($res) == 1)
 		array_push($array, array(makeLink($res[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $res[$i]['ability_id'], SECTION_GAME), makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id'], SECTION_GAME)));
 
 	echo '<p>Learned abilities:' . getTable($array);
+
+	// equipment
+
+	echo '<p>Equipment:<p>';
+
+	$res = $DBMain->Query('select count(*) c, equipment_id, equipment_name from player_equipment, equipment where equipment_id=player_equipment_equipment and player_equipment_player=' . $player . ' group by equipment_id order by equipment_name');
+
+	for($i = 0; $i < count($res); $i++)
+	{
+		if($i)
+			echo ', ';
+
+		echo makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id'], SECTION_GAME);
+
+		if($res[$i]['c'] > 1)
+			echo ' (' . $res[$i]['c'] . ')';
+	}
 }
 else
 	echo '<p>Invalid player.';

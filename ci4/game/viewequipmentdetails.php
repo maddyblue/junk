@@ -56,7 +56,7 @@ if(count($res))
 	);
 
 	if($res[0]['equipment_buy'] == 1)
-		$buytext = makeLink('Yes', 'a=buyequipment&equipment=' . $res[0]['equipment_id']);
+		$buytext = makeLink('Yes', 'a=buyequipment&e=' . $res[0]['equipment_id']);
 	else
 		$buytext = 'No';
 
