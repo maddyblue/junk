@@ -39,16 +39,16 @@ $res = $DBMain->Query('select * from user where user_id=' . $user);
 if(count($res) == 1)
 {
 	$www = decode($res[0]['user_www']);
-	$www = makeLink($www, $www, 'EXTERIOR');
+	$www = $www ? makeLink($www, $www, 'EXTERIOR') : '';
 
 	$aim = decode($res[0]['user_aim']);
-	$aim = makeLink($aim, 'aim:goim?screenname=' . $aim . '&message=Hello.', 'EXTERIOR');
+	$aim = $aim ? makeLink($aim, 'aim:goim?screenname=' . $aim . '&message=Hello.', 'EXTERIOR') : '';
 
 	$yahoo = decode($res[0]['user_yahoo']);
-	$yahoo = makeLink($yahoo, 'http://edit.yahoo.com/config/send_webmesg?.target=' . $yahoo . '&.src=pg', 'EXTERIOR');
+	$yahoo = $yahoo ? makeLink($yahoo, 'http://edit.yahoo.com/config/send_webmesg?.target=' . $yahoo . '&.src=pg', 'EXTERIOR') : '';
 
 	$icq = decode($res[0]['user_icq']);
-	$icq = makeLink($icq, 'http://wwp.icq.com/' . $icq . '#pager', 'EXTERIOR') . ' - ' . makeLink(makeImg('http://web.icq.com/whitepages/online?icq=' . $icq . '&img=5', '', true), 'http://wwp.icq.com/' . $icq . '#pager', 'EXTERIOR');
+	$icq = $icq ? makeLink($icq, 'http://wwp.icq.com/' . $icq . '#pager', 'EXTERIOR') . ' - ' . makeLink(makeImg('http://web.icq.com/whitepages/online?icq=' . $icq . '&img=5', '', true), 'http://wwp.icq.com/' . $icq . '#pager', 'EXTERIOR') : '';
 
 	$array = array(
 		array('User', decode($res[0]['user_name'])),
