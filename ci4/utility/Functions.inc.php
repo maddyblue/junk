@@ -84,6 +84,7 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 		case 'text': $val = $main; $link = ''; break;
 		case 'link': $val = $main; break;
 		case 'image': $val = '<img src="' . $main . '">'; break;
+		default: $val = ''; break;
 	}
 	if($link)
 	{
