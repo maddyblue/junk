@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.23 2004/01/05 09:49:49 dolmant Exp $ */
+/* $Id: Forum.inc.php,v 1.24 2004/01/08 07:34:31 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -354,23 +354,21 @@ function forumPerm($forum, $perm, $default = true)
 	if(ADMIN)
 		return true;
 
-	global $DBMain;
-
-	$groups = $DBMain->Query('select * from group_user where group_user_user=' . ID);
-
-	if(!count($groups))
-		$groups = array(array('group_user_group' => '0'));
+	global $DBMain, $GROUPS;
 
 	$ret = true;
 
-	foreach($groups as $group)
+	foreach($GROUPS as $group)
 	{
-		$res = getDBData('forum_perm_' . $perm, $forum, 'forum_perm_forum', 'forum_perm');
+		$result = $DBMain->Query('select forum_perm_' . $perm . ' perm from forum_perm where forum_perm_forum=' . $forum . ' and forum_perm_group=' . $group);
 
-		if($res == '1')
-			return true;
-		else if($res == '0')
-			$ret = false;
+		if(count($result))
+		{
+			if($result[0]['perm'] == '1')
+				return true;
+			else if($result[0]['perm'] == '0')
+				$ret = false;
+		}
 	}
 
 	// atleast one of the groups denied permission, and none of them allowed permission
