@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.61 2004/01/12 05:22:22 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -83,15 +83,20 @@ if(CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
 		$contentdone = true;
 }
 
-if(CI_SECTION == 'MAIN' && $aval == 'changedomain')
-	define('CI_DOMAIN', $_GET['domain']);
+if(CI_SECTION == 'MAIN' && $aval == 'changedomain' && isset($_GET['domain']))
+	$dom = encode($_GET['domain']);
 else
-	define('CI_DOMAIN', getCIcookie('domain'));
+	$dom = getCICookie('domain');
+
+if(!$dom)
+	$dom = '0';
+
+define('CI_DOMAIN', $dom);
 
 // check to see if we have a valid user
 
-$res = $DBMain->Query('select count(*) as count from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
-if($res[0]['count'] == 1)
+$res = $DBMain->Query('select * from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
+if(count($res))
 {
 	define('LOGGED', true);
 	define('LOGGED_DIR', '>');
@@ -102,6 +107,21 @@ if($res[0]['count'] == 1)
 	// set cookies to be alive for another week
 	setCIcookie('id', $id);
 	setCIcookie('pass', $pass);
+
+	// get all player data to save on erroneous getDBData calls
+	if(CI_DOMAIN)
+	{
+		$ret = $DBMain->Query('select * from player where player_user=' . ID . ' and player_domain=' . CI_DOMAIN);
+		if(count($ret))
+			$PLAYER = $ret[0];
+		else
+			$PLAYER = false;
+	}
+	else
+		$PLAYER = false;
+
+	// set user data
+	$USER = $res[0];
 }
 else
 {
@@ -109,6 +129,9 @@ else
 	define('LOGGED_DIR', '<');
 	define('ID', 0);
 	define('ADMIN', 0);
+
+	$PLAYER = false;
+	$USER = false;
 }
 
 handle_session();
