@@ -179,10 +179,29 @@ function updatePlayerStats($pid = 0)
 		$pid = $GLOBALS['PLAYER']['player_id'];
 	}
 
-	global $db;
+	global $db, $PLAYER;
 
-	// we don't have items yet, so mod and nomod are the same
-	$db->query('update player set player_mod_hp=player_nomod_hp, player_mod_mp=player_nomod_mp, player_mod_str=player_nomod_str, player_mod_mag=player_nomod_mag, player_mod_def=player_nomod_def, player_mod_mgd=player_nomod_mgd, player_mod_agl=player_nomod_agl, player_mod_acc=player_nomod_acc where player_id=' . $pid);
+	$stats = array('hp'=>$PLAYER['player_nomod_hp'], 'mp'=>$PLAYER['player_nomod_mp'], 'str'=>$PLAYER['player_nomod_str'], 'mag'=>$PLAYER['player_nomod_mag'], 'def'=>$PLAYER['player_nomod_def'], 'mgd'=>$PLAYER['player_nomod_mgd'], 'agl'=>$PLAYER['player_nomod_agl'], 'acc'=>$PLAYER['player_nomod_acc']);
+
+	// equipment
+
+	$res = $db->query('select sum(equipment_stat_hp) hp, sum(equipment_stat_mp) mp, sum(equipment_stat_str) str, sum(equipment_stat_mag) mag, sum(equipment_stat_def) def, sum(equipment_stat_mgd) mgd, sum(equipment_stat_agl) agl, sum(equipment_stat_acc) acc from equipment, player_equipment where equipment_id=player_equipment_equipment and player_equipment_equipped=1 and player_equipment_player=' . $pid . ' group by player_equipment_player');
+
+	foreach($stats as $key => $val)
+		$stats[$key] = $val + $res[0][$key];
+
+	// commit data
+
+	$db->query('update player set
+		player_mod_hp=' . $stats['hp'] . ',
+		player_mod_mp=' . $stats['mp'] . ',
+		player_mod_str=' . $stats['str'] . ',
+		player_mod_mag=' . $stats['mag'] . ',
+		player_mod_def=' . $stats['def'] . ',
+		player_mod_mgd=' . $stats['mgd'] . ',
+		player_mod_agl=' . $stats['agl'] . ',
+		player_mod_acc=' . $stats['acc'] . '
+		where player_id=' . $pid);
 }
 
 ?>

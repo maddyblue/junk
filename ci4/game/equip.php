@@ -50,6 +50,8 @@ if(isset($_POST['submit']))
 		}
 	}
 
+	updatePlayerStats();
+
 	echo '<p>Equipment changed.';
 }
 
