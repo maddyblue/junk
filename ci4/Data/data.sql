@@ -188,7 +188,7 @@ INSERT INTO monstertype VALUES (9,'Undead');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',0,'link','Import PHPBB forums','','\'a=import-phpbb\'','SECTION_ADMIN',0,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',10,'link','Reset','','\'a=reset\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('ADMIN_SECTION_MENU',20,'link','Sync forums','','\'a=sync-forums\'','SECTION_ADMIN',1,1,'');
-INSERT INTO site VALUES ('ADMIN_SECTION_MENU',40,'link','Groups','','\'a=group-user\'','SECTION_ADMIN',1,1,'');
+INSERT INTO site VALUES ('ADMIN_SECTION_MENU',40,'link','Manage Groups','','\'a=manage-groups\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'eval','newthreadLink() . newreplyLink()','','','',1,0,'f and t are never specified together, hence this works well');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',0,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','\'a=viewjobs\'','SECTION_GAME',0,0,'');
