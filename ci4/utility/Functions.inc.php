@@ -47,7 +47,7 @@ function getSiteArray($tag)
 {
 	global $DBMain;
 
-	return $DBMain->Query('SELECT site_type, site_main, site_secondary, site_link FROM site WHERE site_logged ' . LOGGED_DIR . '= 0 AND site_tag="' . $tag . '" ORDER BY site_orderid');
+	return $DBMain->Query('SELECT * FROM site WHERE site_logged ' . LOGGED_DIR . '= 0 AND site_tag="' . $tag . '" ORDER BY site_orderid');
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
