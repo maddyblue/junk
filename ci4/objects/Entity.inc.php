@@ -34,12 +34,15 @@
 
 class Entity
 {
+	var $entities;
+
 	var $uid;
 	var $id;
 	var $name;
 	var $team;
 	var $type;
 	var $ct;
+	var $turnDone;
 
 	var $maxhp;
 	var $maxmp;
@@ -52,14 +55,18 @@ class Entity
 	var $agl;
 	var $acc;
 
-	function Entity($e)
+	function Entity($e, &$entities)
 	{
+		// since this is passed by reference, it is just a pointer; no copy is made
+		$this->entities = &$entities;
+
 		$this->uid = $e['battle_entity_uid'];
 		$this->id = $e['battle_entity_id'];
 		$this->name = $e['battle_entity_name'];
 		$this->team = $e['battle_entity_team'];
 		$this->type = $e['battle_entity_type'];
 		$this->ct = $e['battle_entity_ct'];
+		$this->turnDone = true;
 
 		$this->maxhp = $e['battle_entity_max_hp'];
 		$this->maxmp = $e['battle_entity_max_mp'];
@@ -75,7 +82,7 @@ class Entity
 
 	// abstract functions
 
-	function takeTurn($entities) {}
+	function takeTurn() {}
 
 	// normal functions
 
@@ -88,7 +95,8 @@ class Entity
 	// called by the battle engine at the end of every entity's turn
 	function endTurn()
 	{
-		$this->ct = 0;
+		if($this->turnDone)
+			$this->ct = 0;
 	}
 
 	// use this to sync data back into the database
@@ -109,6 +117,34 @@ class Entity
 			battle_entity_agl=' . $this->agl . ',
 			battle_entity_acc=' . $this->acc . '
 			where battle_entity_uid=' . $this->uid);
+	}
+
+	// returns the array of entities not on this team
+	function getEnemies()
+	{
+		$enemies = array();
+
+		for($i = 0; $i < count($this->entities); $i++)
+		{
+			if($this->entities[$i]->team != $this->team)
+				array_push($enemies, &$this->entities[$i]);
+		}
+
+		return $enemies;
+	}
+
+	// returns the array of entities on this team
+	function getAllies()
+	{
+		$allies = array();
+
+		for($i = 0; $i < count($this->entities); $i++)
+		{
+			if($this->entities[$i]->team == $this->team)
+				array_push($allies, &$this->entities[$i]);
+		}
+
+		return $allies;
 	}
 }
 

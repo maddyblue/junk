@@ -34,4 +34,32 @@
 
 // Functions for use in battles
 
+// $src attacks $dest for battleDamage()
+function battleAttack(&$src, &$dest)
+{
+	$d = battleDamage($src, $dest);
+	$dest->hp -= $d;
+
+	if($dest->hp < 0)
+		$dest->hp = 0;
+
+	return $d;
+}
+
+// Returns the amount of damage dealt if $src attacked $dest
+function battleDamage(&$src, &$dest)
+{
+	$d = $src->str - $dest->def;
+
+	if($d < 0)
+		$d = 0;
+
+	return intval($d);
+}
+
+// $src uses $ability on $dest
+function battleAbility(&$src, &$dest, $ability)
+{
+}
+
 ?>

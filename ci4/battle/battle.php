@@ -54,14 +54,18 @@ else
 	$ret = $DBMain->Query('select * from battle_entity where battle_entity_battle=' . $PLAYER['player_battle']);
 
 	$entities = array();
+	$teams = array();
 
 	foreach($ret as $e)
 	{
+		// init team index to false for end of battle checking later on
+		$teams[$e['battle_entity_team']] = false;
+
 		switch($e['battle_entity_type'])
 		{
-			case 1: array_push($entities, new Player($e)); break;
-			case 2: array_push($entities, new Monster($e)); break;
-			default: array_push($entities, new Entity($e)); break;
+			case 1: array_push($entities, new Player($e, $entities)); break;
+			case 2: array_push($entities, new Monster($e, $entities)); break;
+			default: array_push($entities, new Entity($e, $entities)); break;
 		}
 	}
 
@@ -88,7 +92,7 @@ else
 	}
 
 	// the next entity can now take its turn
-	$entities[$turn]->takeTurn($entities);
+	$entities[$turn]->takeTurn();
 	$entities[$turn]->endTurn();
 
 	// turn is over, print current stats
@@ -98,12 +102,43 @@ else
 	for($i = 0; $i < count($entities); $i++)
 		array_push($res, array($entities[$i]->name, $entities[$i]->hp, $entities[$i]->mp));
 
-	echo getTable($res, false);
+	echo getTable($res);
+
+	/* turnDone set to false means that the entitiy who went has printed a form
+	 * for a player to submit, thus, don't do it here.
+	 */
+	if($entities[$turn]->turnDone)
+	{
+		echo getTableForm('', array(
+			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Continue')),
+			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'battle'))
+		));
+	}
 
 	// sync data back into table
 
 	for($i = 0; $i < count($entities); $i++)
 		$entities[$i]->sync();
+
+	// check for battle end - only one team has entities with more than 0 hp
+
+	for($i = 0; $i < count($entities); $i++)
+	{
+		if($entities[$i]->hp > 0)
+			$teams[$entities[$i]->team] = true;
+	}
+
+	$t = array_keys($teams, true);
+
+	// one or zero teams are still alive, end battle and clean up
+	if(count($t) <= 1)
+	{
+		$DBMain->Query('update battle set battle_end=' . TIME . ' where battle_id=' . $PLAYER['player_battle']);
+
+		$DBMain->Query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
+
+		echo '<p>Battle ended.';
+	}
 }
 
 ?>

@@ -34,17 +34,91 @@
 
 class Player extends Entity
 {
-	function takeTurn($entities)
+	function takeTurn()
 	{
-		// attack the first foe
-		for($i = 0; $i < count($entities); $i++)
+		/* Battle engine specifiers:
+		 * p = physical attack
+		 */
+
+		$options = array(/* option name, option id, battle engine specifier */);
+		array_push($options, array('Attack', 1, 'p'));
+
+		$option = isset($_POST['option']) ? encode($_POST['option']) : '';
+		$target = isset($_POST['target']) ? encode($_POST['target']) : '';
+		$optdata = isset($_POST['optdata']) ? encode($_POST['optdata']) : '';
+		$turn = -1;
+
+		if($option)
 		{
-			if($entities[$i]->team != $this->team)
+			for($i = 0; $i < count($options); $i++)
 			{
-				$d = battleAttack($this, $entities[$i]);
-				echo '<p>' . $this->name . ' attacked ' . $entities[$i]->name . ' for ' . $d . '.';
-				break;
+				if($options[$i][1] == $option)
+				{
+					// set turn to -2 so later on we can figure out possible errors
+					$turn = -2;
+
+					// make sure that a valid target has been specified
+					for($j = 0; $j < count($this->entities); $j++)
+					{
+						if($target == $this->entities[$j]->uid)
+						{
+							$turn = $i;
+							$target = &$this->entities[$j];
+							break;
+						}
+					}
+
+					break;
+				}
 			}
+		}
+
+		// player has selected a valid option
+		if($turn >= 0)
+		{
+			switch(substr($options[$turn][2], 0, 1))
+			{
+				// physical attack
+				case 'p':
+					$d = battleAttack($this, $target);
+					echo '<p>' . $this->name . ' has attacked ' . $target->name . ' for ' . $d . ' damage.';
+					break;
+			}
+		}
+		// player has selected an invalid option or has yet to select
+		else
+		{
+			// we need to compute results next turn - don't reset ct
+			$this->turnDone = false;
+
+			if($turn == -2)
+			{
+				echo '<p>Invalid target selected. Try again.';
+			}
+
+			$enemies = $this->getEnemies();
+			$allies = $this->getAllies();
+
+			$tsel = '';
+
+			foreach($enemies as $e)
+				$tsel .= '<option value="' . $e->uid . '">' . $e->name . ' (enemy) ' . ($e->hp <= 0 ? '[DEAD]' : '') . '</option>';
+
+			foreach($allies as $a)
+				$tsel .= '<option value="' . $a->uid . '">' . $a->name . ' (ally)</option>';
+
+			$osel = '';
+
+			foreach($options as $o)
+				$osel .= '<option value="' . $o[1] . '">' . $o[0] . '</option>';
+
+			echo getTableForm('', array(
+				array('Option', array('type'=>'select', 'name'=>'option', 'val'=>$osel)),
+				array('Target', array('type'=>'select', 'name'=>'target', 'val'=>$tsel)),
+
+				array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Continue')),
+				array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'battle'))
+			));
 		}
 	}
 }
