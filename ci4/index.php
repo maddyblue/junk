@@ -173,7 +173,7 @@ if($contentdone)
 else
 {
 	if(CI_SECTION == 'ADMIN' && !ADMIN)
-		echo '<p>You do not have permission to view this page.';
+		$content = '<p>You do not have permission to view this page.';
 	else
 	{
 		if($aval)
@@ -189,7 +189,7 @@ else
 			}
 			else
 			{
-				echo 'Non-existent action.';
+				$content = 'Non-existent action.';
 			}
 		}
 	}
