@@ -40,9 +40,6 @@ function getuser($id)
 
 set_time_limit(0);
 
-if(isset($_GET['reset']))
-	require 'reset.php';
-
 $phpbbcon = mysql_connect('localhost', 'root', '', true);
 mysql_select_db('forum', $phpbbcon);
 
