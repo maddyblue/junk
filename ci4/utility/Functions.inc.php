@@ -175,15 +175,18 @@ function getFormField($arr)
 
 	extract($arr);
 
-	switch($type)
+	if(!$parms)
 	{
-		case 'textarea':
-			$parms .= ' rows="15" cols="35" wrap="virtual" style="width:450px"';
-			break;
-		case 'text':
-		case 'password':
-			$parms = 'size="45" maxlength="100" style="width:450px"';
-			break;
+		switch($type)
+		{
+			case 'textarea':
+				$parms .= ' rows="15" cols="35" wrap="virtual" style="width:450px"';
+				break;
+			case 'text':
+			case 'password':
+				$parms = 'size="45" maxlength="100" style="width:450px"';
+				break;
+		}
 	}
 
 	switch($type)
