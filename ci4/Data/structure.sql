@@ -204,7 +204,8 @@ CREATE TABLE forum_post (
   forum_post_edit_user bigint(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (forum_post_id),
   KEY forum_post_thread (forum_post_thread),
-  KEY forum_post_user (forum_post_user)
+  KEY forum_post_user (forum_post_user),
+  KEY forum_post_date (forum_post_date)
 ) TYPE=MyISAM;
 
 
@@ -498,6 +499,8 @@ CREATE TABLE user (
   user_www varchar(200) NOT NULL default '',
   user_timezone varchar(4) NOT NULL default '',
   PRIMARY KEY  (user_id),
-  UNIQUE KEY user_name (user_name)
+  UNIQUE KEY user_name (user_name),
+  KEY user_register (user_register),
+  KEY user_last (user_last)
 ) TYPE=MyISAM;
 
