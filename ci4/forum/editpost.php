@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: editpost.php,v 1.5 2003/10/07 05:28:26 dolmant Exp $ */
+/* $Id: editpost.php,v 1.6 2003/12/16 09:07:15 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -65,7 +65,7 @@ if(count($ret) != 1)
 {
 	echo '<p>Invalid post.';
 }
-else if(!ADMIN && ID != $ret[0]['forum_post_user'])
+else if(!canEdit($ret[0]['forum_post_user'], getDBData('forum_thread_forum', $ret[0]['forum_post_thread'], 'forum_thread_id', 'forum_thread')))
 {
 	echo '<p>You must be either the user who created the post or a moderator with permissions to edit this post.';
 }

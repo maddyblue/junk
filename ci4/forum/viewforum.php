@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.18 2003/12/15 05:36:39 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.19 2003/12/16 09:07:15 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -42,6 +42,9 @@ function makeSpaces($num)
 
 function forumList(&$array, $id, $topdepth, $depth)
 {
+	if(!canView($id))
+		return;
+
 	global $DBMain;
 
 	$res = $DBMain->Query('select * from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
@@ -84,6 +87,9 @@ function forumList(&$array, $id, $topdepth, $depth)
 
 	foreach($res as $row)
 	{
+		if(!canView($row['forum_forum_id']))
+			continue;
+
 		if($row['forum_forum_desc'])
 			$desc = '<br>' . makeSpaces(1 + $topdepth - $depth) . $row['forum_forum_desc'];
 		else
@@ -191,33 +197,41 @@ $forumid = 0;
 if(isset($_GET['f']))
 	$forumid = $_GET['f'];
 
-echo getNavBar($forumid);
-
-echo '<p>';
-
-forumList($array, $forumid, $depth, $depth);
-
-$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forumid);
-
-echo getTable($array);
-
-if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
+if(!canView($forumid))
 {
-	echo '<p>' . makeLink('New Thread', 'a=newthread&f=' . $forumid);
+	echo '<p>You cannot view this forum.';
+}
+else
+{
+	echo getNavBar($forumid);
 
-	$offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
-	$threadsPP = FORUM_THREADS_PP;
+	echo '<p>';
 
-	$ret = $DBMain->Query('select ceiling(count(*)/' . $threadsPP . ') as count from forum_thread where forum_thread_forum=' . $forumid);
-	$totpages = $ret[0]['count'];
-	$curpage = floor($offset / $threadsPP) + 1;
+	forumList($array, $forumid, $depth, $depth);
 
-	$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, $forumid, 'a=viewforum&f=');
+	$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forumid);
 
-	$array = threadList($forumid, $offset, $threadsPP);
-	echo '<p>' . $pageDisp;
-	echo '<p>' . getTable($array);
-	echo '<p>' . $pageDisp;
+	echo getTable($array);
+
+	if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
+	{
+		if(canPost($forumid))
+			echo '<p>' . makeLink('New Thread', 'a=newthread&f=' . $forumid);
+
+		$offset = isset($_GET['start']) ? encode($_GET['start']) : 0;
+		$threadsPP = FORUM_THREADS_PP;
+
+		$ret = $DBMain->Query('select ceiling(count(*)/' . $threadsPP . ') as count from forum_thread where forum_thread_forum=' . $forumid);
+		$totpages = $ret[0]['count'];
+		$curpage = floor($offset / $threadsPP) + 1;
+
+		$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, $forumid, 'a=viewforum&f=');
+
+		$array = threadList($forumid, $offset, $threadsPP);
+		echo '<p>' . $pageDisp;
+		echo '<p>' . getTable($array);
+		echo '<p>' . $pageDisp;
+	}
 }
 
 ?>

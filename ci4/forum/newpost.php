@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newpost.php,v 1.10 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id: newpost.php,v 1.11 2003/12/16 09:07:15 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -55,7 +55,6 @@ function disp($subject, $post, $thread)
 $subject = '';
 $post = '';
 $thread = 0;
-$forum = 0;
 
 if(isset($_POST['subject']))
 	$subject = encode($_POST['subject']);
@@ -66,19 +65,20 @@ if(isset($_GET['t']))
 if(isset($_POST['t']))
 	$thread = encode($_POST['t']);
 
-$ret = $DBMain->Query('select forum_thread_forum from forum_thread where forum_thread_id=' . $thread);
-if(count($ret) == 1)
-{
-	$forum = $ret[0]['forum_thread_forum'];
-	echo getNavBar($forum);
-}
+$forum = getForumFromThread($thread);
 
 if(LOGGED == false)
 {
 	echo '<br>You must be logged in to post replies.';
 }
+else if(!canPost($forum))
+{
+	echo '<p>You do not have permissions to post in this forum.';
+}
 else
 {
+	echo getNavBar($forum);
+
 	if(isset($_POST['submit']))
 	{
 		$fail = false;

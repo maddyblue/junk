@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.16 2003/09/25 23:57:36 dolmant Exp $ */
+/* $Id: Forum.inc.php,v 1.17 2003/12/16 09:07:17 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -114,10 +114,12 @@ function newthreadLink()
 	{
 		global $DBMain;
 
-		$ret = $DBMain->Query('select forum_forum_type from forum_forum where forum_forum_id=' . $_GET['f']);
+		$f = encode($_GET['f']);
 
-		if(count($ret) == 1 && $ret[0]['forum_forum_type'] == 0)
-			$r = makeLink('New Thread', 'a=newthread&f=' . $_GET['f'], SECTION_FORUM);
+		$ret = $DBMain->Query('select forum_forum_type from forum_forum where forum_forum_id=' . $f);
+
+		if(count($ret) == 1 && $ret[0]['forum_forum_type'] == 0 && canThread($f))
+			$r = makeLink('New Thread', 'a=newthread&f=' . $f, SECTION_FORUM);
 	}
 
 	return $r;
@@ -128,7 +130,12 @@ function newreplyLink()
 	$r = '';
 
 	if(isset($_GET['t']))
-		$r = makeLink('New Reply', 'a=newpost&t=' . $_GET['t'], SECTION_FORUM);
+	{
+		$t = encode($_GET['t']);
+
+		if(canPost(getForumFromThread($t)))
+			$r = makeLink('New Reply', 'a=newpost&t=' . $t, SECTION_FORUM);
+	}
 
 	return $r;
 }
@@ -302,6 +309,78 @@ function parsePostText($post)
 	$return = forumReplace($return);
 
 	return $return;
+}
+
+function canView($forum)
+{
+	return forumPerm($forum, 'view');
+}
+
+function canThread($forum)
+{
+	return forumPerm($forum, 'thread');
+}
+
+function canPost($forum)
+{
+	return forumPerm($forum, 'post');
+}
+
+function canMod($forum)
+{
+	return forumPerm($forum, 'mod', false);
+}
+
+function canEdit($poster, $forum)
+{
+	if($poster == ID)
+		return true;
+
+	return canMod($forum);
+}
+
+/* Return the forum permission specified.
+ * Searches all groups this user is in, uses group with highest permissions.
+ */
+function forumPerm($forum, $perm, $default = true)
+{
+	if(ADMIN)
+		return true;
+
+	global $DBMain;
+
+	$groups = $DBMain->Query('select * from group_user where group_user_user=' . ID);
+
+	if(!count($groups))
+		$groups = array(array('group_user_group' => '0'));
+
+	$ret = true;
+
+	foreach($groups as $group)
+	{
+		$res = getDBData('forum_perm_' . $perm, $forum, 'forum_perm_forum', 'forum_perm');
+
+		if($res == '1')
+			return true;
+		else if($res == '0')
+			$ret = false;
+	}
+
+	// atleast one of the groups denied permission, and none of them allowed permission
+	if($ret == false)
+		return false;
+
+	// no permission specified for this forum and group: use default
+	if($forum == '0')
+		return $default;
+	// we aren't root, back up a level
+	else
+		return forumPerm(getDBData('forum_forum_parent', $forum, 'forum_forum_id', 'forum_forum'), $perm, $default);
+}
+
+function getForumFromThread($t)
+{
+	return getDBData('forum_thread_forum', $t, 'forum_thread_id', 'forum_thread');
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newthread.php,v 1.8 2003/11/27 04:23:33 dolmant Exp $ */
+/* $Id: newthread.php,v 1.9 2003/12/16 09:07:15 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -70,6 +70,10 @@ echo getNavBar($forum);
 if(LOGGED == false)
 {
 	echo '<p>You must be logged in to create new threads.';
+}
+else if(!canThread($forum))
+{
+	echo '<p>You do not have permissions to create new threads in this forum.';
 }
 else
 {
