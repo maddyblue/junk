@@ -1,5 +1,10 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+
 <html>
-	<head>
+<head>
+<!-- $Id: trythil2.php,v 1.3 2004/01/09 03:24:09 dolmant Exp $ -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">	<head>
 		<title>Crescent Island .:
 			<?php
 				if(LOGGED)
@@ -37,7 +42,7 @@
 			font-size: 12px;
 			font-weight: bold;
 			text-decoration: none;
-			color: #BCBCBC;
+			color: #E5E5E5;
 		}
 
 		.tableMain {
@@ -112,7 +117,7 @@
 						<table class="tableMain" border=0 width=100%>
 							<tr>
 								<td bgcolor="#7E7E7E" align="center">
-									<b> :: Active Users :: </b>
+									<b> :: <?php echo makeLink('Active Users', 'a=whosonline', SECTION_USER); ?> :: </b>
 								</td>
 							</tr>
 							<tr>
@@ -125,6 +130,36 @@
 					</td>
 				</tr>
 			</table>
+
+			<?php
+				$pms = makePMLink();
+				if($pms)
+				{
+					echo '
+						<p>
+
+						<table class="tableMain" bgcolor="#6E6E6E" border=0 cellspacing=0 cellpadding=0 width=350>
+							<tr>
+								<td valign="top">
+									<table class="tableMain" border=0 width=100%>
+										<tr>
+											<td bgcolor="#7E7E7E" align="center">
+												<b> :: New PMs :: </b>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												' . $pms . '
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					';
+				}
+			?>
+
 		</div>
 
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -143,10 +178,10 @@
 
 				<td valign="top" align="left" width="80%">
 					<center>
-					<table class="table1" width=100% border=1 bordercolor="#6E6E6E" cellpadding=3 cellspacing=0>
+					<table class="tableMain" width=100% border=1 bordercolor="#6E6E6E" cellpadding=3 cellspacing=0>
 						<tr>
 							<td class="td1" align="center">
-								<table border=0 width=100% class="table1">
+								<table border=0 width=100% class="tableMain">
 									<tr>
 										<td align="center" bgcolor="#6E6E6E">
 											<b> :: Options :: </b>
@@ -176,7 +211,7 @@
 											</tr>
 											<tr>
 											<td>
-												<table class="table1" border=0 width=100%>
+												<table class="tableMain" border=0 width=100%>
 													<tr>
 														<td align="center" bgcolor="#6E6E6E">
 															<b> :: General :: </b>
@@ -184,7 +219,7 @@
 													</tr>
 													<tr>
 														<td>
-												<table class="table1" border=0 width=100%>
+												<table class="tableMain" border=0 width=100%>
 											<?php
 												$items = getSiteArray('SECTION_NAV');
 												$cnt = 0;
@@ -212,9 +247,10 @@
 						<tr>
 							<td align="center">
 								<center>
-									<table class="table1" border=0 width=95%>
+									<table class="tableMain" border=0 width=95%>
 										<tr>
 											<td>
+												<p>
 												<CICONTENT>
 											</td>
 										</tr>
