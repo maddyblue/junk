@@ -83,25 +83,27 @@ if(count($res))
 		array('Cost', $res[0]['equipment_cost'])
 	);
 
-	$buytext = getForm('', array(
-		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Purchase')),
-		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewequipmentdetails')),
-		array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
-	));
+
 
 	if($PLAYER)
 	{
+		$buytext = '<p>' . getForm('', array(
+			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Purchase')),
+			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewequipmentdetails')),
+			array('', array('type'=>'hidden', 'name'=>'e', 'val'=>$e))
+		));
+
 		echo '<p>You have ' . $PLAYER['player_money'] . ' money.';
-		echo '<p>' . $buytext;
 	}
+	else
+		$buytext = '';
 
+	echo $buytext;
 	echo getTable($array);
-
-	if($PLAYER)
-		echo '<p>' . $buytext;
+	echo $buytext;
 }
 else
-	echo '<p>Invalid equipment id.';
+	echo '<p>Invalid equipment ID.';
 
 update_session_action(0503);
 
