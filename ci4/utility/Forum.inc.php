@@ -180,4 +180,67 @@ function pageDisp($curpage, $totpages, $perpage, $id, $link)
 	return $pageDisp;
 }
 
+function parsePost($post)
+{
+	global $DBMain;
+
+	$res = $DBMain->Query('select forum_post_text from forum_post where forum_post_id=' . $post);
+
+	if(count($res) == 1)
+		$return = parsePostText($res[0]['forum_post_text']);
+	else
+		$return = '';
+
+	return $return;
+}
+
+function parsePostText($post)
+{
+	$return = decode($post);
+
+	$return = nl2br($return);
+
+	// non-recursive replaces
+
+	$ereg = array(
+		array("\[url=(.+)\](.+)\[/url\]", "<a href=\"\\1\">\\2</a>"),
+		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>"),
+		array("\[img\](.+)\[/img\]", "<img src=\"\\1\">"),
+		array("\[b\](.+)\[/b\]", "<b>\\1</b>"),
+		array("\[u\](.+)\[/u\]", "<u>\\1</u>"),
+		array("\[i\](.+)\[/i\]", "<i>\\1</i>"),
+		array("\[font (.+)\](.+)\[/font\]", "<font \\1>\\2</font>"),
+		array("\[pre\](.+)\[/pre\]", "<pre>\\1</pre>"),
+		array("\[list\](.+)\[/list\]", "<ul>\\1</ul>"),
+		array("\[list=1\](.+)\[/list=1\]", "<ol type=\"1\">\\1</ol>"),
+		array("\[list=a\](.+)\[/list=a\]", "<ol type=\"a\">\\1</ol>")
+		//array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
+	);
+
+	foreach($ereg as $row)
+	{
+		$return = eregi_replace($row[0], $row[1], $return);
+	}
+
+	// recursive replaces
+
+	$ereg = array(
+		array("\[quote\](.+)\[/quote\]", "<table class=\"tableMain\"><tr class=\"tableRow\"><td class=\"tableCellBR\">\\1</td></tr></table>"),
+		// remove the <br /> tags that nl2br adds from <pre> blocks
+		array("<pre>(.*)<br />(.*)</pre>", "<pre>\\1\\2</pre>"),
+		// list items
+		array("<([ou]l.*)>(.*)\[li\](.+)</([ou]l)>", "<\\1>\\2<li>\\3</\\4>")
+	);
+
+	foreach($ereg as $row)
+	{
+		while(eregi($row[0], $return) == true)
+			$return = eregi_replace($row[0], $row[1], $return);
+	}
+
+	$return = forumReplace($return);
+
+	return $return;
+}
+
 ?>
