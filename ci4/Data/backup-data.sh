@@ -39,6 +39,7 @@ mysqldump -u root -t ci4 \
 	domain \
 	equipment \
 	equipmenttype \
+	group_def \
 	item \
 	job \
 	monster \

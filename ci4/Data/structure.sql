@@ -138,11 +138,16 @@ CREATE TABLE forum_thread (
 ) TYPE=MyISAM;
 
 
-CREATE TABLE groups (
-  group_id bigint(10) unsigned NOT NULL auto_increment,
-  group_name varchar(100) NOT NULL default '',
-  group_forum_supermod tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (group_id)
+CREATE TABLE group_def (
+  group_def_id bigint(10) unsigned NOT NULL auto_increment,
+  group_def_name varchar(100) NOT NULL default '',
+  PRIMARY KEY  (group_def_id)
+) TYPE=MyISAM PACK_KEYS=0;
+
+
+CREATE TABLE group_user (
+  group_user_user bigint(10) unsigned NOT NULL default '0',
+  group_user_group bigint(10) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
@@ -244,6 +249,7 @@ CREATE TABLE site (
   site_secondary text NOT NULL,
   site_link varchar(250) NOT NULL default '',
   site_logged tinyint(1) NOT NULL default '0',
+  site_admin tinyint(1) NOT NULL default '0',
   site_comment text NOT NULL
 ) TYPE=MyISAM;
 
