@@ -267,12 +267,12 @@ else
 		$ret = $DBMain->Query('select floor(count(*)/' . $threadsPP . ') + 1 as count from forum_thread where forum_thread_forum=' . $forumid);
 		$totpages = $ret[0]['count'];
 
-		$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, 'a=viewforum&f=' . $forumid);
+		$pageDisp = '<p>Page: ' . pageDisp($curpage, $totpages, $threadsPP, 'a=viewforum&f=' . $forumid);
 
 		$array = threadList($forumid, $curpage, $threadsPP, $lastSession);
-		echo '<p>' . $pageDisp;
+		echo $pageDisp;
 		echo '<p>' . getTable($array);
-		echo '<p>' . $pageDisp;
+		echo $pageDisp;
 	}
 }
 
