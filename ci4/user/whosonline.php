@@ -122,6 +122,7 @@ $array = array();
 
 array_push($array, array(
 	'Username',
+	'Host',
 	'Active Since',
 	'Last Seen',
 	'Current Action'
@@ -129,8 +130,17 @@ array_push($array, array(
 
 for($i = 0; $i < count($res); $i++)
 {
+	$ip = long2ip($res[$i]['session_ip']);
+	$host = gethostbyaddr($ip);
+
+	if($ip == $host)
+		$host = substr($host, 0, strrpos($host, '.')) . '.*';
+	else
+		$host = '*' . substr($host, strpos($host, '.'));
+
 	array_push($array, array(
 		getUserlink($res[$i]['session_user']),
+		$host,
 		getTime($res[$i]['session_start']),
 		getTime($res[$i]['session_current']),
 		getAction($res[$i]['session_action'], $res[$i]['session_action_data'])

@@ -73,8 +73,9 @@ function start_session()
 
 	define('SESSION', $sid);
 
-	$DBMain->Query('insert into session (session_id, session_user, session_start, session_current) values (' .
+	$DBMain->Query('insert into session (session_id, session_ip, session_user, session_start, session_current) values (' .
 		'"' . $sid . '",' .
+		ip2long($_SERVER['REMOTE_ADDR']) . ',' .
 		ID . ',' .
 		TIME . ',' .
 		TIME .
