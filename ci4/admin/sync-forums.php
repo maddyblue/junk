@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: sync-forums.php,v 1.4 2003/12/19 07:44:25 dolmant Exp $ */
+/* $Id: sync-forums.php,v 1.5 2003/12/19 09:10:17 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -42,6 +42,11 @@ foreach($threads as $thread)
 	$DBMain->Query('update forum_thread set forum_thread_replies=' . ($post[0]['count'] - 1) . ' where forum_thread_id=' . $thread['forum_thread_id']);
 
 	$count++;
+	if($count % 100 == 0)
+	{
+		echo $count . ', ';
+		flush();
+	}
 }
 
 echo 'done - ' . $count;
@@ -61,6 +66,8 @@ foreach($forums as $forum)
 	$DBMain->Query('update forum_forum set forum_forum_last_post=' . $last . ', forum_forum_threads=' . $thread[0]['count'] . ', forum_forum_posts=' . $post[0]['count'] . ' where forum_forum_id=' . $forum['forum_forum_id']);
 
 	$count++;
+	echo $count . ', ';
+	flush();
 }
 
 echo 'done - ' . $count;
@@ -75,6 +82,11 @@ foreach($users as $user)
 	$DBMain->Query('update user set user_posts=' . $post[0]['count'] . ' where user_id=' . $user['user_id']);
 
 	$count++;
+	if($count % 10 == 0)
+	{
+		echo $count . ', ';
+		flush();
+	}
 }
 
 echo 'done - ' . $count;
