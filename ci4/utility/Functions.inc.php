@@ -47,7 +47,7 @@ function getSiteArray($tag)
 {
 	global $DBMain;
 
-	return $DBMain->Query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag="' . $tag . '" order by site_orderid');
+	return $DBMain->Query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag="' . $tag . '" and site_admin <= ' . ADMIN . ' order by site_orderid');
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
@@ -368,13 +368,6 @@ function getCIcookie($name)
 	return $ret;
 }
 
-function notLogged()
-{
-	define('LOGGED', false);
-	define('LOGGED_DIR', '<');
-	define('ID', 0);
-}
-
 function getUsername($id)
 {
 	$ret = $GLOBALS['DBMain']->Query('select user_name from user where user_id=' . $id);
@@ -429,6 +422,18 @@ function getInputList()
 		$r .= '<input type="hidden" name="' . $key . '" value="' . $val . '">';
 
 	return $r;
+}
+
+function isInGroup($user, $group)
+{
+	global $DBMain;
+
+	$ret = $DBMain->Query('select * from group_user where group_user_user=' . $user . ' and group_user_group=' . $group);
+
+	if(count($ret))
+		return true;
+	else
+		return false;
 }
 
 ?>
