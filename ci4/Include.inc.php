@@ -10,14 +10,15 @@ require_once $CI_HOME . 'utility/Database.inc.php'; // needs to be after Databas
 require_once $CI_HOME . 'utility/SQLFormat.inc.php'; // needs to be after DatabaseAccess.inc.php
 require_once $CI_HOME . 'utility/GameMath.inc.php';
 require_once $CI_HOME . 'utility/URLUtil.inc.php';
+require_once $CI_HOME . 'utility/Functions.inc.php';
 
 require_once $CI_HOME . 'objects/GameObjectUnknown.inc.php';
 require_once $CI_HOME . 'objects/GameObjectEntity.inc.php'; // needs to be after GameObjectUnknown.inc.php
 
 // Setup database connections
-$DB = new Database;
-$DBItem = new Database;
-$DBAuction = new Database
+$DB = new Database();
+$DBItem = new Database();
+$DBAuction = new Database();
 
 $DB->Connect($CIConfig1, $CI_DATABASE);
 $DBItem->Connect($CIConfig2);
