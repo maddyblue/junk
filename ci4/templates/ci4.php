@@ -87,7 +87,7 @@ a
 	@<CI_DOMAIN><?
 		if(LOGGED == true && CI_DOMAIN != 0)
 		{
-			echo '<br><a href="' . CI_PATH . '/game/?a=viewplayer">' . getCharNameFD($bbuserid, CI_DOMAIN) . '</a> (' .
+			echo '<br><a href="' . CI_PATH . '/game/?a=viewplayer">' . getCharNameFD($bbuserid, CI_DOMAIN) . '</a> (' . getstat('lv') . ')';
 		}
 	?>
 </div>
