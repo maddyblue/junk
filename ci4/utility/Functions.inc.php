@@ -460,7 +460,12 @@ function parseSig($sig)
 
 function getUserlink($user)
 {
-	return makeLink(getUsername($user), 'a=viewuserdetails&user=' . $user, SECTION_USER);
+	$uname = getUsername($user);
+
+	if($uname)
+		return makeLink($uname, 'a=viewuserdetails&user=' . $user, SECTION_USER);
+	else
+		return 'Guest';
 }
 
 function getInputList()

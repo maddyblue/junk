@@ -203,10 +203,11 @@ INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','My Info','','\'a=viewuser
 INSERT INTO site VALUES ('USER_SECTION_MENU',10,'link','Login','','\'a=login\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',10,'link','User CP','','\'a=usercp\'','SECTION_USER',1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',20,'link','View PMs','','\'a=viewpms\'','SECTION_USER',1,0,'');
-INSERT INTO site VALUES ('USER_SECTION_MENU',20,'link','Logout','','\'a=logout\'','SECTION_USER',1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_MENU',30,'link','Send PM','','\'a=sendpm\'','SECTION_USER',1,0,'');
+INSERT INTO site VALUES ('USER_SECTION_MENU',40,'link','Logout','','\'a=logout\'','SECTION_USER',1,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewusers\'','SECTION_USER',0,0,'');
-INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
+INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
+INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_SKIN',0,'text','<CI_SKIN_START>\n<option><CISKINS><option>INSERT</option></CISKINS></option>\n<CI_SKIN_END>','','','',0,0,'');
 INSERT INTO site VALUES ('_SKIN_END',0,'eval','\'</select><br><input type=\"submit\" value=\"Skin\" class=\"submit\"></form>\'','','','',0,0,'');
 INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=\"get\" action=\"index.php\">\' . getInputList() . \'<select name=\"template\">\'','','','',0,0,'');

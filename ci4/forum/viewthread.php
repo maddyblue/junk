@@ -125,6 +125,8 @@ if(count($array))
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
 		));
 	}
+
+	update_session_action('Viewing thread ' . makeLink(encode($res[0]['forum_thread_title']), 'a=viewthread&t=' . $threadid, SECTION_FORUM));
 }
 else
 	echo '<br>Non-existent thread.';

@@ -30,43 +30,10 @@
  *
  */
 
-$action_list = array(
-	array('', ''),
-
-	//    section, action
-	array('FORUM', 'viewthread'),
-	array('FORUM', 'viewforum')
-);
-
-function action_lookup($section, $action)
-{
-	global $action_list;
-
-	for($i = 0; $i < count($action_list); $i++)
-	{
-		if($action_list[$i][0] == $section && $action_list[$i][1] == $action)
-			return $i;
-	}
-
-	return 0;
-}
-
-function action_rlookup_s($index)
-{
-	global $action_list;
-
-	return($action_list[$index][0]);
-}
-
-function action_lookup_a($index)
-{
-	global $action_list;
-
-	return($action_list[$index][1]);
-}
-
 function handle_session()
 {
+	close_sessions();
+
 	if(ID)
 	{
 		$sid = getDBData('session_id', ID, 'session_user', 'session');
@@ -98,11 +65,11 @@ function start_session()
 
 	define('SESSION', $sid);
 
-	$DBMain->Query('insert into session (session_id, session_user, session_start, session_action) values (' .
+	$DBMain->Query('insert into session (session_id, session_user, session_start, session_current) values (' .
 		'"' . $sid . '",' .
 		ID . ',' .
 		TIME . ',' .
-		action_lookup(CI_SECTION, ACTION) .
+		TIME .
 		')');
 }
 
@@ -112,7 +79,14 @@ function update_session($sid)
 
 	define('SESSION', $sid);
 
-	$DBMain->Query('update session set session_action=' . action_lookup(CI_SECTION, ACTION) . ' where session_id="' . $sid . '"');
+	$DBMain->Query('update session set session_current=' . TIME . ', session_action="" where session_id="' . $sid . '"');
+}
+
+function update_session_action($action)
+{
+	global $DBMain;
+
+	$DBMain->Query('update session set session_action="' . mysql_escape_string($action) . '" where session_id="' . SESSION . '"');
 }
 
 function close_sessions()
@@ -120,12 +94,31 @@ function close_sessions()
 	global $DBMain;
 
 	// remove all sessions that are over 10 minutes old
-	$DBMain->Query('delete from session where session_start < (' . TIME . ' + 600)');
+	$DBMain->Query('delete from session where session_current < (' . TIME . ' - 600)');
 }
 
 function session_exists($sid)
 {
 	return getDBData('session_id', $sid, 'session_id', 'session');
+}
+
+function getNumActiveUsers()
+{
+	return getNumActiveSessions('>');
+}
+
+function getNumActiveGuests()
+{
+	return getNumActiveSessions('=');
+}
+
+function getNumActiveSessions($dir)
+{
+	global $DBMain;
+
+	$res = $DBMain->Query('select count(*) as count from session where session_user ' . $dir . ' 0');
+
+	return $res[0]['count'];
 }
 
 ?>

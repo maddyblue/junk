@@ -257,7 +257,8 @@ CREATE TABLE session (
   session_id varchar(32) NOT NULL default '',
   session_user bigint(10) unsigned NOT NULL default '0',
   session_start bigint(10) unsigned NOT NULL default '0',
-  session_action bigint(10) unsigned NOT NULL default '0',
+  session_current bigint(10) unsigned NOT NULL default '0',
+  session_action varchar(100) NOT NULL default '',
   PRIMARY KEY  (session_id)
 ) TYPE=HEAP;
 

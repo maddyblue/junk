@@ -246,6 +246,19 @@ td.block-light {
 					</td>
 				</tr>
 			</table>
+			<table cellspacing="0" class="nav">
+				<tr>
+					<td class="block-dark">
+						who's online
+					</td>
+				</tr>
+				<tr>
+					<td class="block-light">
+						<?php echo getNumActiveUsers(); ?> users,
+						<?php echo getNumActiveGuests(); ?> guests
+					</td>
+				</tr>
+			</table>
 		</td>
 		<td width=8></td>
 	</tr>

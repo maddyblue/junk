@@ -199,4 +199,6 @@ if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 	echo '<p>' . $pageDisp;
 }
 
+update_session_action('Viewing ' . makeLink($forumid ? ($res[0]['forum_forum_name'] . ' forum') : 'forums', 'a=viewforum&f=' . $forumid, SECTION_FORUM));
+
 ?>
