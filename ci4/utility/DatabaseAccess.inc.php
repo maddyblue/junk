@@ -1,0 +1,5 @@
+<?php
+
+/*	Database-access functions.	*/
+
+?>
