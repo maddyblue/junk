@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.56 2004/01/05 04:38:16 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.57 2004/01/05 22:13:15 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -597,6 +597,38 @@ function makeSpaces($num)
 	while($num-- > 0)
 		$ret .= '&nbsp;';
 	return $ret;
+}
+
+function hasAdmin()
+{
+	return hasPermission('admin');
+}
+
+function hasNews()
+{
+	return hasPermission('news');
+}
+
+function hasSupermod()
+{
+	return hasPermission('mod');
+}
+
+function hasBanned()
+{
+	return hasPermission('banned');
+}
+
+function hasPermission($perm)
+{
+	global $DBMain;
+
+	$res = $DBMain->Query('select group_def_id from group_def, group_user where group_user_user=' . ID . ' and group_def_' . $perm . '=1');
+
+	if(count($res))
+		return true;
+	else
+		return false;
 }
 
 ?>
