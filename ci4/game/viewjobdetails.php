@@ -32,7 +32,70 @@
  *
  */
 
-$job = isset($_GET['job']) ? intval($_GET['job']) : '0';
+if(isset($_POST['job']))
+{
+	$job = intval($_POST['job']);
+
+	$fail = false;
+
+	$res = $db->query('select job_req_lv, job_name from job where job_id=' . $job);
+	if(!count($res))
+	{
+		echo '<br>Unknown job.';
+		$fail = true;
+	}
+
+	if($res[0]['job_req_lv'] > $PLAYER['player_lv'])
+	{
+		echo '<br>You are not yet at a high enough level to change to ' . $res[0]['job_name'] . '.';
+		$fail = true;
+	}
+
+	$failed = $db->query('select job_name, player_job_lv, cor_job_joblv.*
+		from cor_job_joblv, job
+		left join player_job on
+			player_job_player=' . $PLAYER['player_id'] . ' and
+			cor_job_req=player_job_job
+		where cor_job=' . $job . ' and
+			job_id=cor_job_req and
+			(player_job_lv is NULL or
+			player_job_lv < cor_joblv)');
+
+	if(count($failed))
+	{
+		foreach($failed as $entry)
+			echo '<br>You must be ' . $entry['job_name'] . ' level ' . $entry['cor_joblv'] . ', but you are level ' . ($entry['player_job_lv'] ? $entry['player_job_lv'] : '0') . '.';
+		$fail = true;
+	}
+
+	if(!$fail)
+	{
+		$db->query('update player set player_job=' . $job . ' where player_id=' . $PLAYER['player_id']);
+
+		// if this is the first time in this job, add the initial entries
+		$ret = $db->query('select player_job_job from player_job where player_job_player=' . $PLAYER['player_id'] . ' and player_job_job=' . $job);
+		if(count($ret) == 0)
+		{
+			$db->query('insert into player_job values (' . $PLAYER['player_id'] . ', ' . $job . ', 0, 0)');
+
+			$ret = $db->query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
+			for($i = 0; $i < count($ret); $i++)
+				$db->query('insert into player_abilitytype values (' . $PLAYER['player_id'] . ', ' . $ret[$i]['cor_abilitytype'] . ', 0, 0)');
+		}
+
+		// unequip everything
+		$db->query('update player_equipment set player_equipment_equipped=0 where player_equipment_player=' . $PLAYER['player_id']);
+
+		echo '<p>Job change to ' . $res[0]['job_name'] . ' succeeded.';
+		echo '<br>All of your equipment has been unequipped.';
+	}
+	else
+	{
+		echo '<br>Job change to ' . $res[0]['job_name'] . ' failed.';
+	}
+}
+else
+	$job = isset($_GET['job']) ? intval($_GET['job']) : '0';
 
 $res = $db->query('select * from job where job_id=' . $job);
 
@@ -119,7 +182,15 @@ $array = array(
 	array('Level Up Stats', getTable($level, false)),
 );
 
+$change = getForm('', array(
+	array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Change to this job')),
+	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewjobdetails')),
+	array('', array('type'=>'hidden', 'name'=>'job', 'val'=>$job))
+));
+
+echo '<p>' . $change;
 echo getTable($array);
+echo '<p>' . $change;
 
 update_session_action(0504);
 
