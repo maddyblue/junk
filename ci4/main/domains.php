@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: domains.php,v 1.3 2003/12/25 05:23:06 dolmant Exp $ */
+/* $Id: domains.php,v 1.4 2004/01/05 02:48:46 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -39,7 +39,7 @@ $array = array();
 
 array_push($array, array(
 	'Domain',
-	'Hours between EXPW drops',
+	'EXPW drop time (hours)',
 	'Maximum EXPW',
 	'Registered players in domain'
 ));
