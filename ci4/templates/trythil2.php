@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: trythil2.php,v 1.4 2004/01/09 03:26:55 dolmant Exp $ -->
+<!-- $Id: trythil2.php,v 1.5 2004/01/09 03:29:04 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">	<head>
 		<title>Crescent Island .:
 			<?php
@@ -26,7 +26,7 @@
 		p, body, td, li, input, textarea, select {
 			font-family: Trebuchet MS, Arial;
 			font-size: 12px;
-			line-height: 12px;
+			line-height: 13px;
 		}
 
 		a:link {
@@ -48,7 +48,7 @@
 		.tableMain {
 			font-family: Trebuchet MS, Arial;
 			font-size: 12px;
-			line-height: 12px;
+			line-height: 13px;
 			margin-top: -1px;
 			background-color: #5E5E5E;
 			border-spacing: 0px;
