@@ -118,16 +118,16 @@ td.block-light {
 	background-color: #EEEEEE;
 }
 
-.table1 {
-	border-spacing: 0px;
-	border-collapse: collapse;
-}
-
 .header {
 	font-size: 18px;
 }
 
-.td1 {
+.tableMain {
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+.tableHeaderCellL, .tableHeaderCell {
 	padding: 2px;
 	background-color: #DDDDDD;
 	font-weight: bold;
@@ -136,13 +136,7 @@ td.block-light {
 	border-top: 1px solid #000000;
 }
 
-.td2 {
-	padding: 2px;
-	border-left: 1px solid #000000;
-	border-top: 1px solid #000000;
-}
-
-.td1topright {
+.tableHeaderCellR {
 	padding: 2px;
 	background-color: #DDDDDD;
 	font-weight: bold;
@@ -152,21 +146,29 @@ td.block-light {
 	border-right: 1px solid #000000;
 }
 
-.td2topright, .tdright {
+.tableCell, .tableCellL, .tableCellTL {
+	padding: 2px;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+}
+
+
+
+.tableCellTR, .tableCellR {
 	padding: 2px;
 	border-left: 1px solid #000000;
 	border-top: 1px solid #000000;
 	border-right: 1px solid #000000;
 }
 
-.tdbottom {
+.tableCellB, .tableCellBL {
 	padding: 2px;
 	border-left: 1px solid #000000;
 	border-top: 1px solid #000000;
 	border-bottom: 1px solid #000000;
 }
 
-.tdbottomright {
+.tableCellBR {
 	padding: 2px;
 	border: 1px solid #000000;
 }
