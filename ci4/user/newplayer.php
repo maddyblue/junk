@@ -110,13 +110,14 @@ if(LOGGED)
 		}
 		else
 		{
-			$DBMain->Query('insert into player (player_user, player_name, player_gender, player_domain, player_register, player_last, player_job) values (' .
+			$DBMain->Query('insert into player (player_user, player_name, player_gender, player_domain, player_register, player_last, player_job, player_town) values (' .
 			ID . ', ' .
 			'"' . $name . '", ' .
 			($gender == 'M' ? '1' : '-1') . ', ' .
 			$domain . ', ' .
 			TIME . ', ' .
 			TIME . ', ' .
+			'1' . ', ' .
 			'1' .
 			')');
 
