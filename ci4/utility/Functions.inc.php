@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.51 2003/09/27 22:03:12 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.52 2003/12/15 05:26:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -542,6 +542,17 @@ function zeropad($str, $len)
 		$str = '0' . $str;
 
 	return $str;
+}
+
+function getProfile($start, $end, $dbcalls, $dbtime)
+{
+	$total = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
+	$script = $total - $dbtime;
+	$scriptper = $script / $total;
+
+	$ret = $total . 's, ' . $scriptper . '% PHP, ' . (1 - $scriptper) . '% SQL with ' . $dbcalls . ' queries';
+
+	return $ret;
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Database.inc.php,v 1.7 2003/11/27 05:07:12 dolmant Exp $ */
+/* $Id: Database.inc.php,v 1.8 2003/12/15 05:26:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -34,8 +34,11 @@
 
 class Database
 {
-	var $handle;
+	var $handle = null;
 	var $dbname;
+
+	var $queries = 0;
+	var $time = 0;
 
 	/*	Connect: returns a handle to a database connection
 
@@ -67,6 +70,7 @@ class Database
 	function Disconnect()
 	{
 		mysql_close($this->handle);
+		$this->handle = null;
 	}
 
 	/*	ReadTable: Given a query, execute that query, and retrieve
@@ -87,15 +91,21 @@ class Database
 	{
 		$db = $dbname ? $dbname : $this->dbname;
 
-		if(!$db) return;
+		if(!$db)
+			return;
 
-		$ret = array();
-		$rcount = 0;
+		$this->queries++;
+		$start = gettimeofday();
+
 		$dbq = mysql_db_query(
 			$db,
 			$query,
 			$this->handle
 		);
+
+		$end = gettimeofday();
+		$this->time += (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
+
 		if($dbq == false)
 		{
 			global $message;
@@ -103,6 +113,10 @@ class Database
 				<p>Query: ' . $query . '.';
 			return;
 		}
+
+		$ret = array();
+		$rcount = 0;
+
 		while($row = @mysql_fetch_assoc($dbq))
 		{
 			for($i = 0; $i < sizeof($row); $i++)
