@@ -352,4 +352,9 @@ function deleteCIcookieReal($name, $secure)
 	setCookie('CI_' . $name, '', 0, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
 }
 
+function getCIcookie($name)
+{
+	return $_COOKIE['CI_' . $name];
+}
+
 ?>
