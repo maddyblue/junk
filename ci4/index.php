@@ -95,7 +95,11 @@ define('CI_DOMAIN', $dom);
 
 // check to see if we have a valid user
 
-$res = $DBMain->Query('select * from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
+if($id && $pass)
+	$res = $DBMain->Query('select * from user where user_id="' . $id . '" and user_pass="' . $pass . '"');
+else
+	$res = array();
+
 if(count($res))
 {
 	define('LOGGED', true);
