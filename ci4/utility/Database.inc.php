@@ -117,7 +117,6 @@ class Database
 	function insert($query)
 	{
 		$ret = $this->query($query);
-		var_dump($ret);
 
 		if($ret === FALSE)
 			return $ret;
