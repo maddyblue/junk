@@ -1,6 +1,6 @@
 <?php
 
-if(!$SECTION) $SECTION = 'MAIN';
+if(!defined('SECTION')) define('SECTION', 'MAIN');
 require_once $CI_HOME_MOD . 'Include.inc.php';
 
 // Template
@@ -8,20 +8,21 @@ if($t);
 else if($CI_TEMPLATE)
 	$t = $CI_TEMPLATE;
 else
-	$t = $CI_DEF_TEMPLATE;
+	$t = CI_DEF_TEMPLATE;
 
 $fd = fopen(getTemplateName($t), 'r');
 if(!$fd)
 {
 	$message .= '<p>' . $t . ' template does not exist. Reverting to default.\n';
-	$t = $CI_DEF_TEMPLATE;
+	$t = CI_DEF_TEMPLATE;
 	$fd = fopen(getTemplateName($t), 'r');
 }
 setcookie('CI_TEMPLATE', $t, time() + 604800, $CI_PATH);
+define('CI_TEMPLATE', $t);
 $template = fread($fd, filesize(getTemplateName($t)));
 fclose($fd);
 ob_start();
-eval('?>' . $template . '<?');
+eval("?>" . $template); // " is used instaed of a ' due to JEdit php parsing problems
 $template = ob_get_contents();
 ob_end_clean();
 
@@ -36,7 +37,7 @@ if($a)
 		$content = fread($fd, filesize($a));
 		fclose($fd);
 		ob_start();
-		eval('?>' . $content . '<?');
+		eval("?>" . $content . "<?");
 		$content = ob_get_contents();
 		ob_end_clean();
 		$pos = strpos($template, '<CICONTENT>');
@@ -45,26 +46,19 @@ if($a)
 	}
 }
 
-
-$ret = $DB->Query('SELECT tag,type,repl FROM site_replace');
-for($i = 0; $i < sizeof($ret{'tag'}); $i++)
+while(preg_match('/<CI_([^>]+)>/', $template, $matches)) // find a <CI_XXX> tag
 {
-	switch($ret{'type'}{$i})
-	{
-		case 'eval': eval('$repl = "' . $ret{'repl'}{$i} . '";'); break;
-	}
-	$template = str_replace('<CI' . $ret{'tag'}{$i} . '>', $repl, $template);
+	$ret = getSiteArray($matches[1], true);
+	$val = createSiteString($ret);
+	$template = str_replace($matches[0], $val, $template);
 }
 
-$ret = $DB->Query('SELECT tag,type,text,link FROM site where logged ' . $logged . '= 0 order by orderid');
-
-while(preg_match('/<CI[^>]+>/', $template)) // find a <CIXXX> tag
+while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 {
-	$tag = '';
+	$tag = $matches[1];
 	$insert = '';
 	$pos = strpos($template, '<CI');
 	$pos1 = strpos($template, '>', $pos + 3);
-	$tag = substr($template, $pos + 3, $pos1 - $pos - 3);
 	$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
 
 	/*	Shouldn't have to do this, but it'll prevent infinite loops.
@@ -76,9 +70,9 @@ while(preg_match('/<CI[^>]+>/', $template)) // find a <CIXXX> tag
 		$template = substr_replace($template, '', $pos, $pos1 - $pos + 1);
 		continue;
 	}
-	$pos3 = $pos2 + 5 + strlen($tag);
-	$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
 
+	$pos3 = $pos2 + 5 + strlen($tag); // 5 to account for these chars: </CI>
+	$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
 	$pos4 = strpos($insert, 'INSERT');
 	$inslen = strlen($insert);
 
@@ -87,7 +81,7 @@ while(preg_match('/<CI[^>]+>/', $template)) // find a <CIXXX> tag
 		case 'SEC':
 		case 'SUB':
 		{
-			$gettag = $SECTION . $tag;
+			$gettag = SECTION . $tag;
 			break;
 		}
 		default:
@@ -97,11 +91,8 @@ while(preg_match('/<CI[^>]+>/', $template)) // find a <CIXXX> tag
 		}
 	}
 
-	$ret = $DB->Query('SELECT type,text,link FROM site where logged ' . $logged . '=0 AND tag=' . "'$gettag'" . ' ORDER BY orderid');
-	$ret{'link'} = preg_replace('/^(\^?)\$/', '\1' . strtolower($SECTION) . '/', $ret{'link'});
-	$ret{'link'} = preg_replace('/^\^/', $CI_PATH . '/', $ret{'link'});
-	$ret{'text'} = preg_replace('/^\^/', $CI_PATH . '/', $ret{'text'});
-	$repl = "";
+	$ret = getSiteArray($gettag, false);
+	$repl = '';
 	for($i = 0; $i < sizeof($ret{'type'}); $i++)
 	{
 		$pos6 = $pos4;
@@ -113,23 +104,8 @@ while(preg_match('/<CI[^>]+>/', $template)) // find a <CIXXX> tag
 		}
 		if($i == sizeof($ret{'type'}) - 1)
 			$pos7 = $inslen - $pos6;
-		echo "$pos6 - $pos7 - $insert\n";
-		switch($ret{'type'}{$i})
-		{
-			case 'text': $repl .= substr_replace($insert, $ret{'text'}{$i}, $pos6, $pos7); break;
-			case 'link': $repl .= substr_replace($insert, '<a href="' . $ret{'link'}{$i} . '">' . $ret{'text'}{$i} . '</a>', $pos6, $pos7); break;
-			case 'image':
-			{
-				if($ret{'link'}{$i})
-					$repl .= substr_replace($insert, '<a href="' . $ret{'link'}{$i} . '"><img src="' . $ret{'text'}{$i} . '"></a>', $pos6, $pos7);
-				else
-					$repl .= substr_replace($insert, '<img src="' . $ret{'text'}{$i} . '">', $pos6, $pos7);
-				break;
-			}
-		}
-		$template = str_replace('<CI' . $ret{'tag'}{$i} . '>', $repl, $template);
+		$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
 	}
-
 	$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
 }
 
