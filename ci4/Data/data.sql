@@ -59,6 +59,17 @@ INSERT INTO area VALUES (17,'Mausoleum','',17);
 INSERT INTO area VALUES (18,'Northwest Passage','',18);
 
 
+INSERT INTO cor_area_monster VALUES (1,1);
+INSERT INTO cor_area_monster VALUES (2,2);
+INSERT INTO cor_area_monster VALUES (1,3);
+INSERT INTO cor_area_monster VALUES (3,4);
+INSERT INTO cor_area_monster VALUES (3,5);
+INSERT INTO cor_area_monster VALUES (3,6);
+INSERT INTO cor_area_monster VALUES (4,7);
+INSERT INTO cor_area_monster VALUES (4,8);
+INSERT INTO cor_area_monster VALUES (5,9);
+INSERT INTO cor_area_monster VALUES (5,10);
+INSERT INTO cor_area_monster VALUES (6,11);
 
 
 INSERT INTO cor_area_town VALUES (1,1);

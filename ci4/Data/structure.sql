@@ -24,7 +24,7 @@ CREATE TABLE area (
   area_id bigint(10) unsigned NOT NULL auto_increment,
   area_name varchar(100) NOT NULL default '',
   area_desc text NOT NULL,
-  area_lv smallint(6) unsigned NOT NULL default '0',
+  area_order smallint(6) unsigned NOT NULL default '0',
   PRIMARY KEY  (area_id),
   UNIQUE KEY area_name (area_name)
 ) TYPE=MyISAM;
