@@ -224,6 +224,13 @@ CREATE TABLE group_user (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE house (
+  house_id bigint(10) unsigned NOT NULL auto_increment,
+  house_name varchar(100) NOT NULL default '',
+  PRIMARY KEY  (house_id)
+) TYPE=MyISAM;
+
+
 CREATE TABLE item (
   item_id bigint(10) unsigned NOT NULL auto_increment,
   item_name varchar(100) NOT NULL default '',

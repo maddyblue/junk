@@ -204,6 +204,8 @@ INSERT INTO group_def VALUES (4,'Moderators',0,0,0,0);
 
 
 
+
+
 INSERT INTO job VALUES (1,'Citizen',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The humble beginning of every adventurer as a common citizen or Crescent Island.');
 INSERT INTO job VALUES (2,'Squire',0,0,5,0,0,0,5,0,0,0,10,5,1,0,1,0,0,0,10,'A knights apprentice, eagerly awaiting the advent of his own knighthood.');
 INSERT INTO job VALUES (3,'Knight',0,0,5,0,5,0,0,5,0,0,10,5,2,2,2,1,0,1,20,'A knight of the realm, protector of the innocent and slayer of large scaly beasts.');

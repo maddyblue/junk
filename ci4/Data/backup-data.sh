@@ -43,6 +43,7 @@ mysqldump -u root -t ci4 \
 	equipment \
 	equipmenttype \
 	group_def \
+	house \
 	item \
 	job \
 	monster \
