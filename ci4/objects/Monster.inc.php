@@ -34,8 +34,18 @@
 
 class Monster extends Entity
 {
-	function takeTurn()
+	function takeTurn($entities)
 	{
+		// attack the first foe
+		for($i = 0; $i < count($entities); $i++)
+		{
+			if($entities[$i]->team != $this->team)
+			{
+				$d = battleAttack($this, $entities[$i]);
+				echo '<p>' . $this->name . ' attacked ' . $entities[$i]->name . ' for ' . $d . '.';
+				break;
+			}
+		}
 	}
 }
 

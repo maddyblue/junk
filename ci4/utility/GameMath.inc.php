@@ -32,21 +32,31 @@
  *
  */
 
-class Player extends Entity
+// Battles
+
+// $src attacks $dest for battleDamage()
+function battleAttack(&$src, &$dest)
 {
-	function takeTurn($entities)
-	{
-		// attack the first foe
-		for($i = 0; $i < count($entities); $i++)
-		{
-			if($entities[$i]->team != $this->team)
-			{
-				$d = battleAttack($this, $entities[$i]);
-				echo '<p>' . $this->name . ' attacked ' . $entities[$i]->name . ' for ' . $d . '.';
-				break;
-			}
-		}
-	}
+	$d = battleDamage($src, $dest);
+	$dest->hp -= $d;
+
+	if($dest->hp < 0)
+		$dest->hp = 0;
+
+	return $d;
 }
+
+// Returns the amount of HP dealt if $src attacked $dest
+function battleDamage($src, $dest)
+{
+	return 50;
+}
+
+// $src uses $ability on $dest
+function battleAbility(&$src, &$dest, $ability)
+{
+}
+
+// Experience and levels
 
 ?>

@@ -70,6 +70,8 @@ function newBattle($area)
 	$bat = $DBMain->Query('select battle_id from battle where battle_area="' . $area . '" and battle_start=' . TIME . ' limit 1');
 	$batid = $bat[0]['battle_id'];
 
+	$DBMain->Query('update player set player_battle=' . $batid . ' where player_id=' . $PLAYER['player_id']);
+
 	// create the battle entities
 
 	$DBMain->Query('insert into battle_entity values (
@@ -108,6 +110,8 @@ function newBattle($area)
 	);
 
 	echo '<p>Battle started.';
+
+	echo '<p>' . makeLink('Begin.', 'a=battle');
 }
 
 if(LOGGED)

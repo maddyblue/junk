@@ -3,7 +3,7 @@
 /* $Id$ */
 
 /*
- * Copyright (c) 2003 Matthew Jibson
+ * Copyright (c) 2004 Matthew Jibson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,16 +32,6 @@
  *
  */
 
-class Unit extends Entity
-{
-	//var $hp; // defined in Entity
-	var $mp;
-	var $str;
-	var $mag;
-	var $def;
-	var $mgd;
-	var $agl;
-	//var $acc; // defined in Entity
-}
+// Functions for use in battles
 
 ?>

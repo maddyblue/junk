@@ -34,23 +34,81 @@
 
 class Entity
 {
+	var $uid;
 	var $id;
 	var $name;
 	var $team;
 	var $type;
-
-	// everything must have hp, ct, and acc, too keep track of alive status and its turn
-	var $hp;
 	var $ct;
+
+	var $maxhp;
+	var $maxmp;
+	var $hp;
+	var $mp;
+	var $str;
+	var $mag;
+	var $def;
+	var $mgd;
+	var $agl;
 	var $acc;
 
-	// abstract
-	function takeTurn() {}
+	function Entity($e)
+	{
+		$this->uid = $e['battle_entity_uid'];
+		$this->id = $e['battle_entity_id'];
+		$this->name = $e['battle_entity_name'];
+		$this->team = $e['battle_entity_team'];
+		$this->type = $e['battle_entity_type'];
+		$this->ct = $e['battle_entity_ct'];
+
+		$this->maxhp = $e['battle_entity_max_hp'];
+		$this->maxmp = $e['battle_entity_max_mp'];
+		$this->hp = $e['battle_entity_hp'];
+		$this->mp = $e['battle_entity_mp'];
+		$this->str = $e['battle_entity_str'];
+		$this->mag = $e['battle_entity_mag'];
+		$this->def = $e['battle_entity_def'];
+		$this->mgd = $e['battle_entity_mgd'];
+		$this->agl = $e['battle_entity_agl'];
+		$this->acc = $e['battle_entity_acc'];
+	}
+
+	// abstract functions
+
+	function takeTurn($entities) {}
+
+	// normal functions
+
+	// accelerate one cycle
+	function accelTurn()
+	{
+		$this->ct = $this->ct + $this->acc;
+	}
 
 	// called by the battle engine at the end of every entity's turn
 	function endTurn()
 	{
-		$ct = 0;
+		$this->ct = 0;
+	}
+
+	// use this to sync data back into the database
+	function sync()
+	{
+		global $DBMain;
+
+		$DBMain->Query('update battle_entity set
+			battle_entity_ct=' . $this->ct . ',
+			battle_entity_max_hp=' . $this->maxhp . ',
+			battle_entity_max_mp=' . $this->maxmp . ',
+			battle_entity_hp=' . $this->hp . ',
+			battle_entity_mp=' . $this->mp . ',
+			battle_entity_str=' . $this->str . ',
+			battle_entity_mag=' . $this->mag . ',
+			battle_entity_def=' . $this->def . ',
+			battle_entity_mgd=' . $this->mgd . ',
+			battle_entity_agl=' . $this->agl . ',
+			battle_entity_acc=' . $this->acc . '
+			where battle_entity_uid=' . $this->uid);
 	}
 }
 
