@@ -144,22 +144,11 @@ table.maintable {
 
 <br>
 <a href="http://crescentisland.com"><b>Crescent Island</b></a>
-	[<?php
-		if(LOGGED)
-			echo decode($USER['user_name']) . '@';
-
-		echo getDomainName();
-	?>]
 
 <table class="ciNavTable">
 	<tr>
 		<td style="border: 1px solid #000000;">
 			<CINAV><td class="ciNavTableTd">INSERT</td></CINAV>
-			<?php
-				$pms = makePMLink();
-				if($pms)
-					echo '<td class="ciNavTableTd">' . $pms . '</td>';
-			?>
 		</td>
 	</tr>
 </table>
@@ -169,6 +158,49 @@ table.maintable {
 <table class="maintable">
 	<tr>
 		<td valign="top" width="15%">
+
+		<?php
+		if(LOGGED)
+		{
+			?>
+			<table class="box">
+				<tr>
+					<td width="100%">
+						<table class="boxinner">
+							<tr>
+							<td class="box">
+								<?php echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER); ?>
+							</td>
+						</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+
+			<table class="boxcontents">
+				<tr>
+					<td>
+						<?php
+							$pms = makePMLink();
+							if($pms)
+								echo $pms . '<br>';
+
+							$res = $DBMain->Query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
+							for($i = 0; $i < count($res); $i++)
+							{
+								if($res[$i]['player_id'] == $PLAYER['player_id'])
+									echo '* ';
+
+								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_USER) . ' [' . makeLink($res[$i]['domain_abrev'], 'a=changedomain&domain=' . $res[$i]['domain_id'], SECTION_HOME) . ']<br>';
+							}
+						?>
+					</td>
+				</tr>
+			</table>
+			<p>
+			<?php
+			}
+		?>
 
 		<table class="box">
 			<tr>
@@ -233,7 +265,7 @@ table.maintable {
 		<table class="boxcontents">
 			<tr>
 				<td>
-					<?php echo gmdate('d M y g:i a T', TIME + TZOFFSET); ?>
+					<?php echo gmdate('d M y g:i a', TIME + TZOFFSET); ?>
 				</td>
 			</tr>
 		</table>
