@@ -40,7 +40,7 @@ function forumLinkLastPost($postid)
 			' ' .
 			getUsername($ret[0]['forum_post_user']) .
 			' ' .
-			makeLink('-&gt;', '?a=viewpost&postid=' . $ret[0]['forum_post_id'])
+			makeLink('-&gt;', '?a=viewpost&p=' . $ret[0]['forum_post_id'])
 		);
 	else
 		return 'No posts';
@@ -54,7 +54,7 @@ function getNavBar($forum)
 	global $DBMain;
 	$res = $DBMain->Query('select * from forum_forum where forum_forum_id=' . $forum);
 
-	$ret = makeLink($res[0]['forum_forum_name'], '?a=viewforum&forumid=' . $res[0]['forum_forum_id']);
+	$ret = makeLink($res[0]['forum_forum_name'], '?a=viewforum&f=' . $res[0]['forum_forum_id']);
 
 	if($res[0]['forum_forum_parent'] != 0)
 		$ret = getNavBar($res[0]['forum_forum_parent']) . ' &gt; ' . $ret;
