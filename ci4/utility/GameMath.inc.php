@@ -34,4 +34,14 @@
 
 // Experience and levels
 
+function getLevel($exp)
+{
+	return (int)($exp / 100);
+}
+
+function getExp($level)
+{
+	return $level * 100;
+}
+
 ?>
