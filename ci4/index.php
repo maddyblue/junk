@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.55 2003/12/19 09:11:51 dolmant Exp $ */
+/* $Id: index.php,v 1.56 2003/12/20 08:10:03 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -48,9 +48,10 @@ if(isset($_SERVER['HTTPS']))
 if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
 if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
 
-define('CI_SECTION_DIR', strtolower(CI_SECTION) . '/');
-
 require_once CI_HOME_MOD . 'Include.inc.php';
+
+eval('$secDir = SECTION_' . strtoupper(CI_SECTION) . ';');
+define('CI_SECTION_DIR', $secDir . '/');
 
 $id = getCIcookie('id');
 $pass = getCIcookie('pass');
