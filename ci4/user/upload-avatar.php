@@ -144,7 +144,7 @@ if(LOGGED)
 			}
 			else
 			{
-				'<p>Error: could not open uploaded file.';
+				echo '<p>Error: could not open uploaded file.';
 			}
 		}
 	}
