@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.56 2003/12/20 08:10:03 dolmant Exp $ */
+/* $Id: index.php,v 1.57 2003/12/28 23:54:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -112,6 +112,18 @@ else
 }
 
 handle_session();
+
+/* $contentdone will only be set during log{in,out}; if we do
+ * update_session_action in those scripts, no ID has been set yet, thus, do
+ * update_session_action now.
+ */
+if($contentdone)
+{
+	if($aval =='login')
+		update_session_action(0302);
+	else if($aval == 'logout')
+		update_session_action(0303);
+}
 
 // Template
 if(isset($_GET['template']))
