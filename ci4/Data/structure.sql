@@ -8,6 +8,9 @@ CREATE TABLE ability (
   ability_ap_cost smallint(6) unsigned NOT NULL default '0',
   ability_effect text NOT NULL,
   ability_desc text NOT NULL,
+  ability_code_start text NOT NULL,
+  ability_code_turn text NOT NULL,
+  ability_code_end text NOT NULL,
   PRIMARY KEY  (ability_id)
 ) TYPE=MyISAM;
 
@@ -58,8 +61,20 @@ CREATE TABLE battle_entity (
   battle_entity_mgd smallint(6) unsigned NOT NULL default '0',
   battle_entity_agl smallint(6) unsigned NOT NULL default '0',
   battle_entity_acc smallint(6) unsigned NOT NULL default '0',
+  battle_entity_lv smallint(6) unsigned NOT NULL default '0',
   PRIMARY KEY  (battle_entity_uid),
   KEY battle_entity_battle (battle_entity_battle)
+) TYPE=MyISAM;
+
+
+CREATE TABLE battle_timer (
+  battle_timer_id bigint(10) unsigned NOT NULL auto_increment,
+  battle_timer_aid bigint(10) unsigned NOT NULL default '0',
+  battle_timer_dest bigint(10) unsigned NOT NULL default '0',
+  battle_timer_left tinyint(2) unsigned NOT NULL default '0',
+  battle_timer_data1 text NOT NULL,
+  battle_timer_data2 text NOT NULL,
+  PRIMARY KEY  (battle_timer_id)
 ) TYPE=MyISAM;
 
 
@@ -351,14 +366,17 @@ CREATE TABLE player (
 
 CREATE TABLE player_ability (
   player_ability_player bigint(10) unsigned NOT NULL default '0',
-  player_ability_ability bigint(10) unsigned NOT NULL default '0'
+  player_ability_ability bigint(10) unsigned NOT NULL default '0',
+  player_ability_display tinyint(1) unsigned NOT NULL default '0',
+  player_ability_order smallint(5) unsigned NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
 CREATE TABLE player_abilitytype (
   player_abilitytype_player bigint(10) unsigned NOT NULL default '0',
   player_abilitytype_type bigint(10) unsigned NOT NULL default '0',
-  player_abilitytype_ap smallint(6) unsigned NOT NULL default '0'
+  player_abilitytype_ap smallint(6) unsigned NOT NULL default '0',
+  player_abilitytype_aptot smallint(6) NOT NULL default '0'
 ) TYPE=MyISAM;
 
 
@@ -378,7 +396,9 @@ CREATE TABLE player_job (
   player_job_player bigint(10) unsigned NOT NULL default '0',
   player_job_job bigint(10) unsigned NOT NULL default '0',
   player_job_lv smallint(6) unsigned NOT NULL default '0',
-  player_job_exp bigint(10) unsigned NOT NULL default '0'
+  player_job_exp bigint(10) unsigned NOT NULL default '0',
+  KEY player_job_player (player_job_player),
+  KEY player_job_job (player_job_job)
 ) TYPE=MyISAM;
 
 
