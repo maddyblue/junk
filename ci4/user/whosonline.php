@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.9 2003/12/25 05:22:56 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.10 2003/12/25 05:30:00 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -52,7 +52,7 @@ array(0102, 'makeLink(\'Viewing the skins page\', \'a=skins\', SECTION_HOME)'),
 array(0103, 'makeLink(\'Viewing the domains page\', \'a=domains\', SECTION_HOME)'),
 
 // admin
-array(0200, 'In the Admin CP'),
+array(0200, '\'In the Admin CP\''),
 
 // user
 array(0301, 'makeLink(\'Viewing Who\\\'s online\', \'a=whosonline\', SECTION_USER)'),
