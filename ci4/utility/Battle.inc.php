@@ -49,12 +49,14 @@ function battleAttack(&$src, &$dest)
 // Returns the amount of damage dealt if $src attacked $dest
 function battleDamage(&$src, &$dest)
 {
-	$d = $src->str - $dest->def;
+	$s = (double)$src->str;
+	$d = (double)$dest->def;
+	$dmg = $s / $d * $s * rand(5, 15) / (double)10;
 
-	if($d < 0)
-		$d = 0;
+	if($dmg < 0)
+		$dmg = 0;
 
-	return intval($d);
+	return intval($dmg);
 }
 
 // $src uses $ability on $dest
