@@ -42,6 +42,7 @@ if(count($res) == 1)
 
 	$array = array(
 		array('User', decode($res[0]['user_name'])),
+		array('Avatar', getAvatarImg($res[0]['user_avatar_data'])),
 		array('Register date', getTime($res[0]['user_register'])),
 		array('Forum posts', $res[0]['user_posts']),
 		array('AIM', decode($res[0]['user_aim'])),
