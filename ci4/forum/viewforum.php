@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.24 2003/12/21 00:02:04 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.25 2003/12/22 07:12:16 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,18 +32,10 @@
  *
  */
 
-function makeSpaces($num)
-{
-	$ret = '';
-	while($num-- > 0)
-		$ret .= '&nbsp;';
-	return $ret;
-}
-
 function addForumEntry(&$array, $row, $depth)
 {
 	if($row['forum_forum_desc'])
-		$desc = '<br>' . makeSpaces(1 + $depth) . $row['forum_forum_desc'];
+		$desc = '<br>' . makeSpaces(1 + $depth) . decode($row['forum_forum_desc']);
 	else
 		$desc = '';
 
@@ -51,7 +43,7 @@ function addForumEntry(&$array, $row, $depth)
 	{
 		case 0:
 			array_push($array, array(
-				makeSpaces($depth) . makeLink($row['forum_forum_name'], 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+				makeSpaces($depth) . makeLink(decode($row['forum_forum_name']), 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 				$row['forum_forum_threads'],
 				$row['forum_forum_posts'],
 				forumLinkLastPost($row['forum_forum_last_post'])
@@ -59,7 +51,7 @@ function addForumEntry(&$array, $row, $depth)
 			break;
 		case  1:
 			array_push($array, array(
-				makeSpaces($depth) . makeLink('<b>' . $row['forum_forum_name'] . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
+				makeSpaces($depth) . makeLink('<b>' . decode($row['forum_forum_name']) . '</b>', 'a=viewforum&f=' . $row['forum_forum_id']) . $desc,
 				'',
 				'',
 				'',
