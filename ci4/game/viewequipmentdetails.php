@@ -65,6 +65,7 @@ if(count($res))
 		array('Type', makeLink($res[0]['equipmenttype_name'], 'a=viewequipment&type=' . $res[0]['equipmenttype_id'])),
 		array('Description', $res[0]['equipment_desc']),
 		array('Level', $res[0]['equipment_lv']),
+		array('Two Hand?', ($res[0]['equipment_twohand'] ? 'Yes' : 'No')),
 		array('Stat Changes', getTable($stat, false)),
 		array('Requirements', getTable($req, false)),
 		array('Can Buy?', $buytext),

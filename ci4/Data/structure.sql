@@ -149,6 +149,7 @@ CREATE TABLE equipment (
   equipment_desc text NOT NULL,
   equipment_type bigint(10) unsigned NOT NULL default '0',
   equipment_lv smallint(6) unsigned NOT NULL default '0',
+  equipment_twohand tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (equipment_id)
 ) TYPE=MyISAM;
 
@@ -156,8 +157,9 @@ CREATE TABLE equipment (
 CREATE TABLE equipmenttype (
   equipmenttype_id bigint(10) unsigned NOT NULL auto_increment,
   equipmenttype_name varchar(100) NOT NULL default '',
+  equipmenttype_class tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (equipmenttype_id)
-) TYPE=MyISAM;
+) TYPE=MyISAM COMMENT='class: 1=jewelry, 2=weapon, 3=armor';
 
 
 CREATE TABLE forum_forum (
