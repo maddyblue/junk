@@ -116,7 +116,10 @@ if(count($res))
 	{
 		$ret = $DBMain->Query('select * from player where player_user=' . ID . ' and player_domain=' . CI_DOMAIN);
 		if(count($ret))
+		{
 			$PLAYER = $ret[0];
+			$DBMain->Query('update player set player_last=' . TIME . ' where player_id=' . $PLAYER['player_id']);
+		}
 		else
 			$PLAYER = false;
 	}
