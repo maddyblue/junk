@@ -158,6 +158,37 @@ if(count($ret))
 else
 	$GROUPS = array('0');
 
+if(!isset($CI_HEAD))
+	$CI_HEAD = '';
+
+// Template
+if(isset($_GET['template']))
+	$t = $_GET['template'];
+else
+	$t = getCIcookie('template');
+
+if(!$t)
+	$t = CI_DEF_TEMPLATE;
+
+validateCharsDie($t);
+
+$tfile = getTemplateFilename($t);
+if(!file_exists($tfile))
+{
+	$message .= '<p>The ' . $t . ' template does not exist. Reverting to default.';
+	$t = CI_DEF_TEMPLATE;
+	$tfile = getTemplateFilename($t);
+}
+
+$fd = fopen($tfile, 'r');
+
+setCIcookie('template', $t);
+
+define('CI_TEMPLATE', $t);
+define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
+$template = fread($fd, filesize($tfile));
+fclose($fd);
+
 /* $contentdone will only be set during log{in,out}; if we do
  * update_session_action in those scripts, no ID has been set yet, thus, do
  * update_session_action now.
@@ -194,37 +225,6 @@ else
 		}
 	}
 }
-
-if(!isset($CI_HEAD))
-	$CI_HEAD = '';
-
-// Template
-if(isset($_GET['template']))
-	$t = $_GET['template'];
-else
-	$t = getCIcookie('template');
-
-if(!$t)
-	$t = CI_DEF_TEMPLATE;
-
-validateCharsDie($t);
-
-$tfile = getTemplateFilename($t);
-if(!file_exists($tfile))
-{
-	$message .= '<p>The ' . $t . ' template does not exist. Reverting to default.';
-	$t = CI_DEF_TEMPLATE;
-	$tfile = getTemplateFilename($t);
-}
-
-$fd = fopen($tfile, 'r');
-
-setCIcookie('template', $t);
-
-define('CI_TEMPLATE', $t);
-define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
-$template = fread($fd, filesize($tfile));
-fclose($fd);
 
 ob_start();
 eval('?>' . $template);
