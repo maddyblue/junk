@@ -67,9 +67,9 @@ function checkFile($file, $image = true)
 		return false;
 	}
 
-	if(preg_match('/[^a-z0-9\/]/', $type))
+	if(preg_match('/[^-a-z0-9\/]/', $type))
 	{
-		echo '<br>Type description contains invalid characters (a-z, 0-9, and / are valid): ' . $type;
+		echo '<br>Type description contains invalid characters (a-z, 0-9, -, and / are valid): ' . $type;
 		return false;
 	}
 
