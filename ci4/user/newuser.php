@@ -1,5 +1,24 @@
 <?php
 
+function display($name, $email)
+{
+	if(!defined('IS_SECURE'))
+	{
+		echo '<p><b>We highly suggest that you switch to the <a href="' . CI_WWW_ADDRESS_HTTPS . 'user/?a=newuser">secure version of this page</a> while registering. It will make your password and all other submitted data transfer over the Internet in a secure method.</b></p>';
+	}
+
+	echo
+		getTableForm('New User:', array(
+			array('Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($name))),
+			array('Password', array('type'=>'password', 'name'=>'pass1')),
+			array('Verify password', array('type'=>'password', 'name'=>'pass2')),
+			array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
+
+			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Register')),
+			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newuser'))
+		));
+}
+
 $name = isset($_POST['name']) ? encode($_POST['name']) : '';
 $email = isset($_POST['email']) ? encode($_POST['email']) : '';
 $pass1 = isset($_POST['pass1']) ? encode($_POST['pass1']) : '';
@@ -9,9 +28,15 @@ if(isset($_POST['submit']))
 {
 	$fail = false;
 
+	$res = $DBMain->Query('select count(*) as count from user where user_name="' . $name . '"');
 	if(!$name)
 	{
 		echo '<br>No name: enter a name.';
+		$fail = true;
+	}
+	else if($res['count'][0] != '0')
+	{
+		echo '<br>Username already registered: try another name.';
 		$fail = true;
 	}
 
@@ -31,6 +56,7 @@ if(isset($_POST['submit']))
 		$fail = true;
 	}
 
+	$res = $DBMain->Query('select count(*) as count from user where user_email="' . $email . '"');
 	if(!$email)
 	{
 		echo '<br>No email: enter an address.';
@@ -41,16 +67,24 @@ if(isset($_POST['submit']))
 		echo '<br>Invalid email address.';
 		$fail = true;
 	}
+	else if($res['count'][0] != '0')
+	{
+		echo '<br>Email address already registered: try another address.';
+		$fail = true;
+	}
+
+	if($fail)
+	{
+		echo '<br>User registration failed.<br>';
+		display($name, $email);
+	}
+	else
+	{
+		$DBMain->Query('insert into user (user_name, user_email, user_pass, user_register) values ("' . $name . '", "' . $email . '", md5("' . $pass1 . '"), ' . time() . ')');
+		echo '<br>User &quot;' . decode($name) . '&quot; successfully registered. Please login.';
+	}
 }
+else
+	display($name, $email);
 
-echo
-	getTableForm('New User:', array(
-		array('Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($name))),
-		array('Password', array('type'=>'password', 'name'=>'pass1')),
-		array('Verify password', array('type'=>'password', 'name'=>'pass2')),
-		array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
-
-		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Register')),
-		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newuser'))
-	));
 ?>
