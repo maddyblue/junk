@@ -77,7 +77,7 @@ if(isset($_POST['submit']))
 		if($last)
 		{
 			echo '<p>Redirecting to <a href="' . $last . '">last location</a>...';
-			echo '<meta http-equiv="refresh" content="0; url=' . $last . '">';
+			$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
 		}
 	}
 	else if($user && $pass)
