@@ -30,15 +30,8 @@
  *
  */
 
-?>
-
-<!--
-<td1>class="td1"</td1>
-<td2>class="td2"</td2>
--->
-
-<?php
 $_ld = strtolower(CI_DOMAIN);
+
 ?>
 
 <html>
