@@ -200,7 +200,7 @@ function parsePostText($post)
 
 	$return = nl2br($return);
 
-	// non-regex replaces
+	// non-nested replaces
 
 	$repl = array(
 		array('[url]', '[/url]', '<a href="$1">$1</a>'),
@@ -216,22 +216,24 @@ function parsePostText($post)
 
 	foreach($repl as $row)
 	{
+		$cur = 0;
 		while(
-			!(($cur = strpos($return, $row[0])) === false) &&
+			!(($cur = strpos($return, $row[0], $cur)) === false) &&
 			!(($next = strpos($return, $row[1], $cur + 1)) === false))
 		{
 			$len = $next - $cur;
 			$len_0 = strlen($row[0]);
 			$len_1 = strlen($row[1]);
 			$one = substr($return, $cur + $len_0, $len - $len_0);
-			$return = substr_replace($return, str_replace('$1', $one, $row[2]), $cur, $len + $len_1);
+			$new = str_replace('$1', $one, $row[2]);
+			$return = substr_replace($return, $new, $cur, $len + $len_1);
+			$cur += strlen($new);
 		}
 	}
 
 	// regex replaces
 
 	$ereg = array(
-		array("\[quote\](.+)\[/quote\]", "<table class=\"tableMain\"><tr class=\"tableRow\"><td class=\"tableCellBR\">\\1</td></tr></table>"),
 		// remove the <br /> tags that nl2br adds from <pre> blocks
 		array("<pre>(.*)<br />(.*)</pre>", "<pre>\\1\\2</pre>"),
 		// list items
@@ -242,6 +244,57 @@ function parsePostText($post)
 	{
 		while(eregi($row[0], $return) == true)
 			$return = eregi_replace($row[0], $row[1], $return);
+	}
+
+	// nested replaces
+
+	$repl = array(
+		array('[quote]', '[/quote]', '<table class="tableMain"><tr class="tableRow"><td class="tableCellBR">$1</td></tr></table>')
+	);
+
+	foreach($repl as $row)
+	{
+		$cur = 0;
+		while(!(($cur = strpos($return, $row[0], $cur)) === false))
+		{
+			$len_0 = strlen($row[0]);
+			$len_1 = strlen($row[1]);
+			$temp = $cur + $len_0;
+
+			$noexist = false;
+
+			while(true)
+			{
+				$next_0 = strpos($return, $row[0], $temp);
+				$next_1 = strpos($return, $row[1], $temp);
+
+				if($next_1 === false)
+				{
+					$noexist = true;
+					break;
+				}
+
+				if($next_0 === false || $next_0 > $next_1)
+				{
+					$next = $next_1;
+					break;
+				}
+
+				$temp = $next_1 + $len_1;
+			}
+
+			if($noexist)
+			{
+				$cur += $len_0;
+				break;
+			}
+
+			$len = $next - $cur;
+			$one = substr($return, $cur + $len_0, $len - $len_0);
+			$new = str_replace('$1', $one, $row[2]);
+			$return = substr_replace($return, $new, $cur, $len + $len_1);
+			$cur += $len_0;
+		}
 	}
 
 	$return = forumReplace($return);
