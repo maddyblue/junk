@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: trythil2.php,v 1.3 2004/01/09 03:24:09 dolmant Exp $ -->
+<!-- $Id: trythil2.php,v 1.4 2004/01/09 03:26:55 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">	<head>
 		<title>Crescent Island .:
 			<?php
@@ -250,7 +250,7 @@
 									<table class="tableMain" border=0 width=95%>
 										<tr>
 											<td>
-												<p>
+												<br>
 												<CICONTENT>
 											</td>
 										</tr>
