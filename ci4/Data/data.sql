@@ -134,6 +134,12 @@ INSERT INTO equipmenttype VALUES (10,'Rod');
 INSERT INTO equipmenttype VALUES (11,'Robe');
 
 
+INSERT INTO group_def VALUES (1,'Administrators');
+INSERT INTO group_def VALUES (2,'Super Moderators');
+INSERT INTO group_def VALUES (3,'Banned');
+INSERT INTO group_def VALUES (4,'Moderators');
+
+
 
 
 INSERT INTO job VALUES (1,'Citizen',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The humble beginning of every adventurer as a common citizen or Crescent Island.');
