@@ -34,8 +34,26 @@
 
 class Player extends Entity
 {
+	var $access;
+
+	function Player($e, &$entities)
+	{
+		Entity::Entity($e, &$entities);
+
+		$this->access = ($GLOBALS['PLAYER']['player_id'] == $this->id);
+		$this->name = decode($this->name);
+	}
+
 	function takeTurn()
 	{
+		// in a multi player battle, only the player whose turn it is can go
+		if(!$this->access)
+		{
+			echo '<p>It is not your turn. You must wait for ' . $this->name . ' to go.';
+			$this->turnDone = -1;
+			return;
+		}
+
 		/* Battle engine specifiers:
 		 * p = physical attack
 		 */
@@ -89,7 +107,7 @@ class Player extends Entity
 		else
 		{
 			// we need to compute results next turn - don't reset ct
-			$this->turnDone = false;
+			$this->turnDone = 0;
 
 			if($turn == -2)
 			{
@@ -120,6 +138,12 @@ class Player extends Entity
 				array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'battle'))
 			));
 		}
+	}
+
+	function endTurn()
+	{
+		if($this->access)
+			Entity::endTurn();
 	}
 }
 

@@ -100,14 +100,14 @@ else
 	$res = array(array('Entity', 'HP', 'MP'));
 
 	for($i = 0; $i < count($entities); $i++)
-		array_push($res, array($entities[$i]->name, $entities[$i]->hp, $entities[$i]->mp));
+		array_push($res,  array($entities[$i]->name, $entities[$i]->hp, $entities[$i]->mp));
 
 	echo getTable($res);
 
-	/* turnDone set to false means that the entitiy who went has printed a form
-	 * for a player to submit, thus, don't do it here.
+	/* turnDone set to 0 means that the entitiy who went has printed a form for a
+	 * player to submit, thus, don't do it here.
 	 */
-	if($entities[$turn]->turnDone)
+	if($entities[$turn]->turnDone != 0)
 	{
 		echo getTableForm('', array(
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Continue')),
@@ -115,29 +115,36 @@ else
 		));
 	}
 
-	// sync data back into table
-
-	for($i = 0; $i < count($entities); $i++)
-		$entities[$i]->sync();
-
-	// check for battle end - only one team has entities with more than 0 hp
-
-	for($i = 0; $i < count($entities); $i++)
+	/* In a multi player battle, turnDone = -1 means that the current player does
+	 * not control this turn, and must wait. Thus, don't do worry about end
+	 * battle.
+	 */
+	if($entities[$turn]->turnDone != -1)
 	{
-		if($entities[$i]->hp > 0)
-			$teams[$entities[$i]->team] = true;
-	}
+		// sync data back into table
 
-	$t = array_keys($teams, true);
+		for($i = 0; $i < count($entities); $i++)
+			$entities[$i]->sync();
 
-	// one or zero teams are still alive, end battle and clean up
-	if(count($t) <= 1)
-	{
-		$DBMain->Query('update battle set battle_end=' . TIME . ' where battle_id=' . $PLAYER['player_battle']);
+		// check for battle end - only one team has entities with more than 0 hp
 
-		$DBMain->Query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
+		for($i = 0; $i < count($entities); $i++)
+		{
+			if($entities[$i]->hp > 0)
+				$teams[$entities[$i]->team] = true;
+		}
 
-		echo '<p>Battle ended.';
+		$t = array_keys($teams, true);
+
+		// one or zero teams are still alive, end battle and clean up
+		if(count($t) <= 1)
+		{
+			$DBMain->Query('update battle set battle_end=' . TIME . ' where battle_id=' . $PLAYER['player_battle']);
+
+			$DBMain->Query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
+
+			echo '<p>Battle ended.';
+		}
 	}
 }
 

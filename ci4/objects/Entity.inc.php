@@ -66,7 +66,7 @@ class Entity
 		$this->team = $e['battle_entity_team'];
 		$this->type = $e['battle_entity_type'];
 		$this->ct = $e['battle_entity_ct'];
-		$this->turnDone = true;
+		$this->turnDone = 1;
 
 		$this->maxhp = $e['battle_entity_max_hp'];
 		$this->maxmp = $e['battle_entity_max_mp'];
@@ -95,7 +95,7 @@ class Entity
 	// called by the battle engine at the end of every entity's turn
 	function endTurn()
 	{
-		if($this->turnDone)
+		if($this->turnDone == 1)
 			$this->ct = 0;
 	}
 
