@@ -2,7 +2,7 @@
 
 /* $CI$ */
 /* $Ci$ */
-/* $Id: index.php,v 1.48 2003/10/03 03:39:53 dolmant Exp $ */
+/* $Id: index.php,v 1.49 2003/10/03 03:40:28 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
