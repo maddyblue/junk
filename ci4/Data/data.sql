@@ -186,7 +186,7 @@ INSERT INTO equipmenttype VALUES (11,'Robe');
 
 
 INSERT INTO group_def VALUES (1,'Administrators',1,1,1,0);
-INSERT INTO group_def VALUES (2,'Super Moderators',0,1,1,0);
+INSERT INTO group_def VALUES (2,'Super+Moderators',0,1,1,0);
 INSERT INTO group_def VALUES (3,'Banned',0,0,0,1);
 INSERT INTO group_def VALUES (4,'Moderators',0,0,0,0);
 
@@ -266,6 +266,7 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewus
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
+INSERT INTO site VALUES ('NAV',60,'link','Manual','','','SECTION_MANUAL',1,1,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
