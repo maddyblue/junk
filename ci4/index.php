@@ -72,39 +72,8 @@ if(CI_SECTION == 'ADMIN' && ADMIN != true)
 
 $message = '';
 
-// Template
-if(isset($_GET['t']))
-	$t = $_GET['t'];
-else if(isset($_COOKIE['CI_TEMPLATE']))
-	$t = $_COOKIE['CI_TEMPLATE'];
-else
-	$t = CI_DEF_TEMPLATE;
-
-$tfile = getTemplateFilename($t);
-if(!file_exists($tfile))
-{
-	$message .= '<p>The ' . $t . ' template does not exist. Reverting to default.';
-	$t = CI_DEF_TEMPLATE;
-	$tfile = getTemplateFilename($t);
-}
-
-$fd = fopen($tfile, 'r');
-
-setCookie('CI_TEMPLATE', $t, time() + 604800, CI_WWW_PATH);
-
-define('CI_TEMPLATE', $t);
-define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
-$template = fread($fd, filesize($tfile));
-fclose($fd);
-
-ob_start();
-eval('?>' . $template);
-$template = ob_get_contents();
-ob_end_clean();
-
 // Get content page
 $content = '';
-
 
 if(isset($_GET['a']))
 {
@@ -138,6 +107,36 @@ else
 	$aval = '';
 }
 $content .= $message;
+
+// Template
+if(isset($_GET['t']))
+	$t = $_GET['t'];
+else if(isset($_COOKIE['CI_TEMPLATE']))
+	$t = $_COOKIE['CI_TEMPLATE'];
+else
+	$t = CI_DEF_TEMPLATE;
+
+$tfile = getTemplateFilename($t);
+if(!file_exists($tfile))
+{
+	$message .= '<p>The ' . $t . ' template does not exist. Reverting to default.';
+	$t = CI_DEF_TEMPLATE;
+	$tfile = getTemplateFilename($t);
+}
+
+$fd = fopen($tfile, 'r');
+
+setCookie('CI_TEMPLATE', $t, time() + 604800, CI_WWW_PATH);
+
+define('CI_TEMPLATE', $t);
+define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
+$template = fread($fd, filesize($tfile));
+fclose($fd);
+
+ob_start();
+eval('?>' . $template);
+$template = ob_get_contents();
+ob_end_clean();
 
 // Add content page
 $pos = strpos($template, '<CICONTENT>');
