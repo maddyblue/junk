@@ -439,7 +439,7 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 function makeLink($text, $link, $section = '', $title = '')
 {
 	// if there's nothing to link, don't link anything
-	if(!$text || !$link)
+	if(!$text)
 		return '';
 
 	$ret = '<a href="';
