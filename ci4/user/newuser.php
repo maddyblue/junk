@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: newuser.php,v 1.11 2004/01/05 08:52:57 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -108,7 +108,8 @@ if(isset($_POST['submit']))
 	else
 	{
 		$DBMain->Query('insert into user (user_name, user_email, user_pass, user_register) values ("' . $name . '", "' . $email . '", md5("' . $pass1 . '"), ' . TIME . ')');
-		echo '<br>User &quot;' . decode($name) . '&quot; successfully registered. Please login.';
+		echo '<br>User &quot;' . decode($name) . '&quot; successfully registered. Please ' . makeLink('login', 'a=login') . '.';
+		echo '<br>After logging in, it is suggest that you complete your profile in the User Control Panel.';
 	}
 }
 else
