@@ -383,16 +383,7 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 		$ret .= '<tr class="tableRow">';
 		for($j = 0; $j < $cols; $j++)
 		{
-			if($j == 0)
-			{
-				if($i == ($rows - 1) && $lastLineFooter)
-					$ret .= '<td class="tableCellBL">';
-				else if($i == 0)
-					$ret .= '<td class="tableCellTL">';
-				else
-					$ret .= '<td class="tableCellL">';
-			}
-			else if($j == ($cols - 1))
+			if($j == ($cols - 1))
 			{
 				if($i == ($rows - 1) && $lastLineFooter)
 					$ret .= '<td class="tableCellBR">';
@@ -400,6 +391,15 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 					$ret .= '<td class="tableCellTR">';
 				else
 					$ret .= '<td class="tableCellR">';
+			}
+			else if($j == 0)
+			{
+				if($i == ($rows - 1) && $lastLineFooter)
+					$ret .= '<td class="tableCellBL">';
+				else if($i == 0)
+					$ret .= '<td class="tableCellTL">';
+				else
+					$ret .= '<td class="tableCellL">';
 			}
 			else if($i == ($rows - 1) && $lastLineFooter)
 				$ret .= '<td class="tableCellB">';
