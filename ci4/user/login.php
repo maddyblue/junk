@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: login.php,v 1.8 2003/12/28 23:54:15 dolmant Exp $ */
+/* $Id: login.php,v 1.9 2003/12/29 09:26:13 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -39,7 +39,8 @@ function display($user)
 		array('Password', array('type'=>'password', 'name'=>'pass')),
 
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Login')),
-		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'login'))
+		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'login')),
+		array('', array('type'=>'hidden', 'name'=>'s', 'val'=>(isset($_GET['s']) ? encode($_GET['s']) : '')))
 	));
 }
 
