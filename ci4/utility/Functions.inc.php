@@ -586,7 +586,7 @@ function getTime($ts = -1)
 	if($ts == -1)
 		$ts = TIME;
 
-	return date('d M y g:i a', $ts);
+	return gmdate('d M y g:i a', $ts + TZOFFSET);
 }
 
 // Returns the name of the specified domain.

@@ -125,6 +125,8 @@ if(count($res))
 
 	// set user data
 	$USER = $res[0];
+
+	define('TZOFFSET', $res[0]['user_timezone'] * 3600);
 }
 else
 {
@@ -132,6 +134,7 @@ else
 	define('LOGGED_DIR', '<');
 	define('ID', 0);
 	define('ADMIN', 0);
+	define('TZOFFSET', 0);
 
 	$PLAYER = false;
 	$USER = false;

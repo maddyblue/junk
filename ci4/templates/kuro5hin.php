@@ -233,7 +233,7 @@ table.maintable {
 		<table class="boxcontents">
 			<tr>
 				<td>
-					<?php echo date('d M y g:i a T', TIME); ?>
+					<?php echo gmdate('d M y g:i a T', TIME + TZOFFSET); ?>
 				</td>
 			</tr>
 		</table>

@@ -32,34 +32,74 @@
  *
  */
 
-function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www)
+function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz)
 {
-		echo getTableForm('User Control Panel:', array(
-			array('Password', array('type'=>'password', 'name'=>'pass1')),
-			array('Password (verify)', array('type'=>'password', 'name'=>'pass2')),
-			array('', array('type'=>'disptext', 'val'=>'(Leave blank for no change.)')),
-			array('', array('type'=>'disptext', 'val'=>'<br>')),
+	$tzarr = array(
+		array(-12, '(GMT -12:00) Eniwetok, Kwajalein'),
+		array(-11, '(GMT -11:00) Midway Island, Samoa'),
+		array(-10, '(GMT -10:00) Hawaii'),
+		array(-9, '(GMT -9:00) Alaska'),
+		array(-8, '(GMT -8:00) Pacific Time (US &amp; Canada)'),
+		array(-7, '(GMT -7:00) Mountain Time (US &amp; Canada)'),
+		array(-6, '(GMT -6:00) Central Time (US &amp; Canada), Mexico City'),
+		array(-5, '(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima'),
+		array(-4, '(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz'),
+		array(-3.5, '(GMT -3:30) Newfoundland'),
+		array(-3, '(GMT -3:00) Brazil, Buenos Aires, Georgetown'),
+		array(-2, '(GMT -2:00) Mid-Atlantic'),
+		array(-1, '(GMT -1:00 hour) Azores, Cape Verde Islands'),
+		array(0, '(GMT) Western Europe Time, London, Lisbon, Casablanca'),
+		array(1, '(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris'),
+		array(2, '(GMT +2:00) Kaliningrad, South Africa'),
+		array(3, '(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg'),
+		array(3.5, '(GMT +3:30) Tehran'),
+		array(4, '(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi'),
+		array(4.5, '(GMT +4:30) Kabul'),
+		array(5, '(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent'),
+		array(5.5, '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi'),
+		array(6, '(GMT +6:00) Almaty, Dhaka, Colombo'),
+		array(7, '(GMT +7:00) Bangkok, Hanoi, Jakarta'),
+		array(8, '(GMT +8:00) Beijing, Perth, Singapore, Hong Kong'),
+		array(9, '(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk'),
+		array(9.5, '(GMT +9:30) Adelaide, Darwin'),
+		array(10, '(GMT +10:00) Eastern Australia, Guam, Vladivostok'),
+		array(11, '(GMT +11:00) Magadan, Solomon Islands, New Caledonia'),
+		array(12, '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka')
+	);
 
-			array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
-			array('', array('type'=>'disptext', 'val'=>'Your email address will never be used publicly. It is used <b>only</b> to recover passwords.')),
-			array('Signature', array('type'=>'textarea', 'name'=>'sig', 'val'=>decode($sig))),
-			array('', array('type'=>'disptext', 'val'=>'Signature must be less than or equal to five lines long, may contain only non-formatted text and hyperlinks. Your sig will be edited by an admin or moderator if it is in any way obscene or unacceptable.')),
-			array('', array('type'=>'disptext', 'val'=>'<br>')),
+	$timezone = '';
 
-			array('AIM', array('type'=>'text', 'name'=>'aim', 'val'=>decode($aim))),
-			array('Yahoo', array('type'=>'text', 'name'=>'yahoo', 'val'=>decode($yahoo))),
-			array('ICQ', array('type'=>'text', 'name'=>'icq', 'val'=>decode($icq))),
-			array('MSN', array('type'=>'text', 'name'=>'msn', 'val'=>decode($msn))),
-			array('WWW', array('type'=>'text', 'name'=>'www', 'val'=>decode($www))),
-			array('', array('type'=>'disptext', 'val'=>'<br>')),
+	for($i = 0; $i < count($tzarr); $i++)
+		$timezone .= '<option value="' . $tzarr[$i][0] . '"' . ($tzarr[$i][0] == $tz ? ' selected' : '') . '>' . $tzarr[$i][1] . '</option>';
 
-			array('Avatar', array('type'=>'disptext', 'val'=>getAvatar())),
-			array('', array('type'=>'disptext', 'val'=>(makeLink('Change avatar', 'a=change-avatar') . ' (WITHOUT saving current profile changes!)'))),
-			array('', array('type'=>'disptext', 'val'=>'<br>')),
+	echo getTableForm('User Control Panel:', array(
+		array('Password', array('type'=>'password', 'name'=>'pass1')),
+		array('Password (verify)', array('type'=>'password', 'name'=>'pass2')),
+		array('', array('type'=>'disptext', 'val'=>'(Leave blank for no change.)')),
+		array('', array('type'=>'disptext', 'val'=>'<br>')),
 
-			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
-			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'usercp'))
-		));
+		array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
+		array('', array('type'=>'disptext', 'val'=>'Your email address will never be used publicly. It is used <b>only</b> to recover passwords.')),
+		array('Signature', array('type'=>'textarea', 'name'=>'sig', 'val'=>decode($sig))),
+		array('', array('type'=>'disptext', 'val'=>'Signature must be less than or equal to five lines long, may contain only non-formatted text and hyperlinks. Your sig will be edited by an admin or moderator if it is in any way obscene or unacceptable.')),
+		array('', array('type'=>'disptext', 'val'=>'<br>')),
+
+		array('Timezone', array('type'=>'select', 'name'=>'tz', 'val'=>$timezone)),
+
+		array('AIM', array('type'=>'text', 'name'=>'aim', 'val'=>decode($aim))),
+		array('Yahoo', array('type'=>'text', 'name'=>'yahoo', 'val'=>decode($yahoo))),
+		array('ICQ', array('type'=>'text', 'name'=>'icq', 'val'=>decode($icq))),
+		array('MSN', array('type'=>'text', 'name'=>'msn', 'val'=>decode($msn))),
+		array('WWW', array('type'=>'text', 'name'=>'www', 'val'=>decode($www))),
+		array('', array('type'=>'disptext', 'val'=>'<br>')),
+
+		array('Avatar', array('type'=>'disptext', 'val'=>getAvatar())),
+		array('', array('type'=>'disptext', 'val'=>(makeLink('Change avatar', 'a=change-avatar') . ' (WITHOUT saving current profile changes!)'))),
+		array('', array('type'=>'disptext', 'val'=>'<br>')),
+
+		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
+		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'usercp'))
+	));
 }
 
 if(ID != 0 && LOGGED == true)
@@ -73,6 +113,8 @@ if(ID != 0 && LOGGED == true)
 		$icq = isset($_POST['icq']) ? encode($_POST['icq']) : '';
 		$msn = isset($_POST['msn']) ? encode($_POST['msn']) : '';
 		$www = isset($_POST['www']) ? encode($_POST['www']) : '';
+		// $tz won't be checked later on, so force it to be a number
+		$tz = isset($_POST['tz']) ? floatval($_POST['tz']) : 0;
 		$pass1 = isset($_POST['pass1']) ? encode($_POST['pass1']) : '';
 		$pass2 = isset($_POST['pass2']) ? encode($_POST['pass2']) : '';
 	}
@@ -87,6 +129,7 @@ if(ID != 0 && LOGGED == true)
 		$icq = $ret[0]['user_icq'];
 		$msn = $ret[0]['user_msn'];
 		$www = $ret[0]['user_www'];
+		$tz = $ret[0]['user_timezone'];
 	}
 
 	if(isset($_POST['submit']))
@@ -125,10 +168,10 @@ if(ID != 0 && LOGGED == true)
 		}
 
 		if($fail)
-			disp($email, $sig, $aim, $yahoo, $icq, $msn, $www);
+			disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
 		else
 		{
-			$DBMain->Query('update user set user_email="' . $email . '", user_sig="' . $sig . '", user_aim="' . $aim . '", user_yahoo="' . $yahoo . '", user_icq="' . $icq . '", user_msn="' . $msn . '", user_www="' . $www . '" where user_id=' . ID);
+			$DBMain->Query('update user set user_email="' . $email . '", user_sig="' . $sig . '", user_aim="' . $aim . '", user_yahoo="' . $yahoo . '", user_icq="' . $icq . '", user_msn="' . $msn . '", user_www="' . $www . '", user_timezone="' . $tz . '" where user_id=' . ID);
 			echo '<br>Userdata updated successfully.';
 
 			if($pass1)
@@ -138,11 +181,11 @@ if(ID != 0 && LOGGED == true)
 			}
 			// don't show this if password changed, since they won't have a valid login
 			else
-				disp($email, $sig, $aim, $yahoo, $icq, $msn, $www);
+				disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
 		}
 	}
 	else
-		disp($email, $sig, $aim, $yahoo, $icq, $msn, $www);
+		disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
 }
 else
 {

@@ -458,6 +458,7 @@ CREATE TABLE user (
   user_msn varchar(100) NOT NULL default '',
   user_icq varchar(100) NOT NULL default '',
   user_www varchar(200) NOT NULL default '',
+  user_timezone varchar(4) NOT NULL default '',
   PRIMARY KEY  (user_id),
   UNIQUE KEY user_name (user_name)
 ) TYPE=MyISAM;

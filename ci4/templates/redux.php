@@ -279,7 +279,7 @@ td.block-light {
 				</tr>
 				<tr>
 					<td class="block-light">
-						<?php echo date('d M y g:i a T', TIME); ?>
+						<?php echo gmdate('d M y g:i a', TIME + TZOFFSET); ?>
 					</td>
 				</tr>
 			</table>
