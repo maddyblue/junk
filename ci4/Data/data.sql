@@ -5,21 +5,6 @@
 -- Server version	3.23.55
 
 --
--- Table structure for table 'ability'
---
-
-CREATE TABLE ability (
-  ability_id bigint(10) unsigned NOT NULL auto_increment,
-  ability_name varchar(100) NOT NULL default '',
-  ability_type bigint(10) unsigned NOT NULL default '0',
-  ability_req_job_lv smallint(5) unsigned NOT NULL default '0',
-  ability_ap_cost smallint(6) unsigned NOT NULL default '0',
-  ability_effect text NOT NULL,
-  ability_desc text NOT NULL,
-  PRIMARY KEY  (ability_id)
-) TYPE=MyISAM;
-
---
 -- Dumping data for table 'ability'
 --
 
@@ -50,17 +35,6 @@ INSERT INTO ability VALUES (23,'Force Missile',1,5,10,'Cast a weak magic spell w
 INSERT INTO ability VALUES (24,'Poison',1,10,10,'Inflicts poison status on the enemy','');
 
 --
--- Table structure for table 'abilitytype'
---
-
-CREATE TABLE abilitytype (
-  abilitytype_id bigint(10) unsigned NOT NULL auto_increment,
-  abilitytype_name varchar(100) NOT NULL default '',
-  abilitytype_desc text NOT NULL,
-  PRIMARY KEY  (abilitytype_id)
-) TYPE=MyISAM;
-
---
 -- Dumping data for table 'abilitytype'
 --
 
@@ -78,28 +52,10 @@ INSERT INTO abilitytype VALUES (10,'Aura','Light that envelopes a Paladin (or hi
 INSERT INTO abilitytype VALUES (11,'Sword Tech','Attacks with status lowering affects.');
 
 --
--- Table structure for table 'cor_job_ability'
---
-
-CREATE TABLE cor_job_ability (
-  cor_job bigint(10) unsigned NOT NULL default '0',
-  cor_ability bigint(10) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
-
---
 -- Dumping data for table 'cor_job_ability'
 --
 
 
-
---
--- Table structure for table 'cor_job_equipmenttype'
---
-
-CREATE TABLE cor_job_equipmenttype (
-  cor_job bigint(10) unsigned NOT NULL default '0',
-  cor_equipmenttype bigint(10) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
 
 --
 -- Dumping data for table 'cor_job_equipmenttype'
@@ -147,16 +103,6 @@ INSERT INTO cor_job_equipmenttype VALUES (11,3);
 INSERT INTO cor_job_equipmenttype VALUES (11,11);
 
 --
--- Table structure for table 'cor_job_joblv'
---
-
-CREATE TABLE cor_job_joblv (
-  cor_job bigint(10) unsigned NOT NULL default '0',
-  cor_job_req bigint(10) unsigned NOT NULL default '0',
-  cor_job_lv smallint(5) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
-
---
 -- Dumping data for table 'cor_job_joblv'
 --
 
@@ -174,47 +120,16 @@ INSERT INTO cor_job_joblv VALUES (10,12,9);
 INSERT INTO cor_job_joblv VALUES (11,12,9);
 
 --
--- Table structure for table 'cor_monster_drop'
---
-
-CREATE TABLE cor_monster_drop (
-  cor_monster bigint(10) unsigned NOT NULL default '0',
-  cor_drop bigint(10) unsigned NOT NULL default '0',
-  cor_type tinyint(1) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
-
---
 -- Dumping data for table 'cor_monster_drop'
 --
 
 
 
 --
--- Table structure for table 'equipment'
+-- Dumping data for table 'domain'
 --
 
-CREATE TABLE equipment (
-  equipment_id bigint(10) unsigned NOT NULL auto_increment,
-  equipment_name varchar(100) NOT NULL default '',
-  equipment_stat_hp smallint(6) NOT NULL default '0',
-  equipment_stat_mp smallint(6) NOT NULL default '0',
-  equipment_stat_str smallint(6) NOT NULL default '0',
-  equipment_stat_mag smallint(6) NOT NULL default '0',
-  equipment_stat_def smallint(6) NOT NULL default '0',
-  equipment_stat_mgd smallint(6) NOT NULL default '0',
-  equipment_stat_agl smallint(6) NOT NULL default '0',
-  equipment_stat_acc smallint(6) NOT NULL default '0',
-  equipment_req_str smallint(5) unsigned NOT NULL default '0',
-  equipment_req_mag smallint(5) unsigned NOT NULL default '0',
-  equipment_req_agl smallint(5) unsigned NOT NULL default '0',
-  equipment_req_gender tinyint(1) NOT NULL default '0',
-  equipment_sell tinyint(1) NOT NULL default '1',
-  equipment_buy tinyint(1) NOT NULL default '1',
-  equipment_cost bigint(10) unsigned NOT NULL default '0',
-  equipment_desc text NOT NULL,
-  equipment_type bigint(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (equipment_id)
-) TYPE=MyISAM;
+
 
 --
 -- Dumping data for table 'equipment'
@@ -243,16 +158,6 @@ INSERT INTO equipment VALUES (19,'Toy Ring',3,2,0,0,0,0,0,0,0,0,0,0,1,1,50,'A fa
 INSERT INTO equipment VALUES (20,'Rusty Band',6,4,0,0,0,0,0,0,20,0,0,0,1,1,100,'This ring is made out of rusted iron.',8);
 
 --
--- Table structure for table 'equipmenttype'
---
-
-CREATE TABLE equipmenttype (
-  equipmenttype_id bigint(10) unsigned NOT NULL auto_increment,
-  equipmenttype_name varchar(100) NOT NULL default '',
-  PRIMARY KEY  (equipmenttype_id)
-) TYPE=MyISAM;
-
---
 -- Dumping data for table 'equipmenttype'
 --
 
@@ -270,34 +175,10 @@ INSERT INTO equipmenttype VALUES (10,'Rod');
 INSERT INTO equipmenttype VALUES (11,'Robe');
 
 --
--- Table structure for table 'job'
+-- Dumping data for table 'item'
 --
 
-CREATE TABLE job (
-  job_id bigint(10) unsigned NOT NULL auto_increment,
-  job_name varchar(100) NOT NULL default '',
-  job_gender tinyint(1) NOT NULL default '0',
-  job_req_lv smallint(5) unsigned NOT NULL default '0',
-  job_stat_hp smallint(6) NOT NULL default '0',
-  job_stat_mp smallint(6) NOT NULL default '0',
-  job_stat_str smallint(6) NOT NULL default '0',
-  job_stat_mag smallint(6) NOT NULL default '0',
-  job_stat_def smallint(6) NOT NULL default '0',
-  job_stat_mgd smallint(6) NOT NULL default '0',
-  job_stat_agl smallint(6) NOT NULL default '0',
-  job_stat_acc smallint(6) NOT NULL default '0',
-  job_level_hp tinyint(3) unsigned NOT NULL default '0',
-  job_level_mp tinyint(3) unsigned NOT NULL default '0',
-  job_level_str tinyint(3) unsigned NOT NULL default '0',
-  job_level_mag tinyint(3) unsigned NOT NULL default '0',
-  job_level_def tinyint(3) unsigned NOT NULL default '0',
-  job_level_mgd tinyint(3) unsigned NOT NULL default '0',
-  job_level_agl tinyint(3) unsigned NOT NULL default '0',
-  job_level_acc tinyint(3) unsigned NOT NULL default '0',
-  job_wage smallint(5) unsigned NOT NULL default '0',
-  job_desc text NOT NULL,
-  PRIMARY KEY  (job_id)
-) TYPE=MyISAM;
+
 
 --
 -- Dumping data for table 'job'
@@ -317,38 +198,6 @@ INSERT INTO job VALUES (10,'White Mage',0,0,5,0,0,5,0,10,0,0,7,10,0,2,1,1,0,0,20
 INSERT INTO job VALUES (11,'Black Mage',0,0,5,0,0,10,0,5,0,0,7,10,0,2,1,1,0,0,20,' For good or evil the Black Mage walks the path of destruction, shattering earth and incinerating their enemies is their trade, but what is the price for such power?');
 
 --
--- Table structure for table 'monster'
---
-
-CREATE TABLE monster (
-  monster_id bigint(10) unsigned NOT NULL auto_increment,
-  monster_name varchar(100) NOT NULL default '',
-  monster_image varchar(100) NOT NULL default '',
-  monster_hp smallint(6) unsigned NOT NULL default '0',
-  monster_mp smallint(6) unsigned NOT NULL default '0',
-  monster_str smallint(6) unsigned NOT NULL default '0',
-  monster_mag smallint(6) unsigned NOT NULL default '0',
-  monster_def smallint(6) unsigned NOT NULL default '0',
-  monster_mgd smallint(6) unsigned NOT NULL default '0',
-  monster_agl smallint(6) unsigned NOT NULL default '0',
-  monster_acc smallint(6) unsigned NOT NULL default '0',
-  monster_lv smallint(4) unsigned NOT NULL default '0',
-  monster_exp tinyint(3) unsigned NOT NULL default '0',
-  monster_gil smallint(1) unsigned NOT NULL default '0',
-  monster_fire tinyint(3) NOT NULL default '0',
-  monster_ice tinyint(3) NOT NULL default '0',
-  monster_earth tinyint(3) NOT NULL default '0',
-  monster_wind tinyint(3) NOT NULL default '0',
-  monster_water tinyint(3) NOT NULL default '0',
-  monster_lightning tinyint(3) NOT NULL default '0',
-  monster_holy tinyint(3) NOT NULL default '0',
-  monster_dark tinyint(3) NOT NULL default '0',
-  monster_type bigint(10) unsigned NOT NULL default '0',
-  monster_desc text NOT NULL,
-  PRIMARY KEY  (monster_id)
-) TYPE=MyISAM;
-
---
 -- Dumping data for table 'monster'
 --
 
@@ -366,16 +215,6 @@ INSERT INTO monster VALUES (10,'Black Bat','',80,3,8,2,5,2,6,6,5,20,15,0,0,0,10,
 INSERT INTO monster VALUES (11,'Dust Mephit','',160,3,60,2,10,2,6,6,6,28,0,0,0,10,0,0,0,0,10,5,'Sickly humanoids four feet tall and comprised of dirt and grime, Dust Mephits are malicious little creatures who hate all things more beautiful than themselves. In the case of Dust Mephits, this is almost everything.');
 
 --
--- Table structure for table 'monstertype'
---
-
-CREATE TABLE monstertype (
-  monstertype_id bigint(10) unsigned NOT NULL auto_increment,
-  monstertype_name varchar(100) NOT NULL default '',
-  PRIMARY KEY  (monstertype_id)
-) TYPE=MyISAM;
-
---
 -- Dumping data for table 'monstertype'
 --
 
@@ -389,21 +228,6 @@ INSERT INTO monstertype VALUES (6,'Magical Beast');
 INSERT INTO monstertype VALUES (7,'Plant');
 INSERT INTO monstertype VALUES (8,'Phantom');
 INSERT INTO monstertype VALUES (9,'Undead');
-
---
--- Table structure for table 'site'
---
-
-CREATE TABLE site (
-  site_tag varchar(100) NOT NULL default '',
-  site_orderid smallint(5) unsigned NOT NULL default '0',
-  site_type varchar(100) NOT NULL default '',
-  site_main text NOT NULL,
-  site_secondary text NOT NULL,
-  site_link varchar(250) NOT NULL default '',
-  site_logged tinyint(1) NOT NULL default '0',
-  site_comment text NOT NULL
-) TYPE=MyISAM;
 
 --
 -- Dumping data for table 'site'
