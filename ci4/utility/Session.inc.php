@@ -78,7 +78,7 @@ function start_session()
 
 	if($ip == $host)
 		$host = substr($host, 0, strrpos($host, '.')) . '.*';
-	else
+	else if(strpos($host, '.') !== false)
 		$host = '*' . substr($host, strpos($host, '.'));
 
 	$db->query('insert into session (session_id, session_ip, session_host, session_user, session_start, session_current) values (' .
