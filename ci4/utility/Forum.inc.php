@@ -38,7 +38,7 @@ function forumLinkLastPost($postid)
 		return (
 			getTime($ret[0]['forum_post_date']) .
 			' ' .
-			makeLink(getUsername($ret[0]['forum_post_user']), 'user/?a=viewuserdetails&user=' . $ret[0]['forum_post_user'], true) .
+			getUserlink($ret[0]['forum_post_user']) .
 			' ' .
 			makeLink('-&gt;', '?a=viewpost&p=' . $ret[0]['forum_post_id'])
 		);
@@ -115,7 +115,7 @@ function newthreadLink()
 		$ret = $DBMain->Query('select forum_forum_type from forum_forum where forum_forum_id=' . $_GET['f']);
 
 		if(count($ret) == 1 && $ret[0]['forum_forum_type'] == 0)
-			$r = makeLink('New Thread', 'forum/?a=newthread&f=' . $_GET['f'], true);
+			$r = makeLink('New Thread', SECTION_FORUM . '/?a=newthread&f=' . $_GET['f'], true);
 	}
 
 	return $r;
@@ -126,7 +126,7 @@ function newreplyLink()
 	$r = '';
 
 	if(isset($_GET['t']))
-		$r = makeLink('New Reply', 'forum/?a=newpost&t=' . $_GET['t'], true);
+		$r = makeLink('New Reply', SECTION_FORUM . '/?a=newpost&t=' . $_GET['t'], true);
 
 	return $r;
 }
