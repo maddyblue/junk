@@ -6,7 +6,7 @@
 
 define('CI_FS_PATH', '/usr/local/www/data/ci4/');
 define('CI_WWW_DOMAIN', 'dolmant.net');
-define('CI_WWW_PATH', '/ci4/'); // '/' if root, and must begin with '/'
+define('CI_WWW_PATH', '/ci4/'); // '/' if root. must begin with '/'
 
 define('CI_DATABASE', 'ci4');
 define('CI_DEF_TEMPLATE', 'redux');
