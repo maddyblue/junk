@@ -150,7 +150,7 @@ INSERT INTO domain VALUES (3,'Starvation','star',4,5);
 INSERT INTO domain VALUES (5,'Torture','tort',4,10);
 
 
-INSERT INTO equipment VALUES (1,'Rusty Dagger','knife/rusty.gif',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A rusty old dagger probably found in the trash.',3,0,0);
+INSERT INTO equipment VALUES (1,'Rusty Dagger','dagger/rusty.gif',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A rusty old dagger probably found in the trash.',3,0,0);
 INSERT INTO equipment VALUES (2,'Sandals','',0,0,0,0,5,0,0,0,0,0,0,0,1,1,50,'A few strips of leather and a hard base make up this poorly made piece of footwear.',7,0,0);
 INSERT INTO equipment VALUES (3,'Worn Boots','',0,0,0,0,7,3,0,0,20,0,0,0,1,1,100,'Second hand leather boots, worn at the toe and heel but still useful despite this.',7,0,0);
 INSERT INTO equipment VALUES (4,'Butter Knife','knife/knife.gif',0,0,5,0,0,0,0,0,0,0,0,0,1,1,50,'A blunt kitchen utensil with all the offensive power of a warm breeze, still it\'s better than being totally unarmed.',3,0,0);
