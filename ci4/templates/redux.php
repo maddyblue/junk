@@ -188,14 +188,6 @@ td.block-light {
 								</td>
 								<td align="right">
 									<div class="header">
-										[<?php
-											if(LOGGED)
-											{
-												echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . ($PLAYER ? (':' . makeLink(decode($PLAYER['player_name']), 'a=viewplayerdetails', SECTION_USER)) : '') . '@';
-											}
-
-											echo makeLink(getDomainName(), 'a=domains', SECTION_HOME);
-										?>]
 										crescent island
 									</div>
 								</td>
@@ -228,6 +220,34 @@ td.block-light {
 					</td>
 				</tr>
 			</table>
+			<?php
+			if(LOGGED)
+			{
+				?>
+					<table cellspacing="0" class="nav">
+						<tr>
+							<td class="block-dark">
+								<?php echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER); ?>
+							</td>
+						</tr>
+						<tr>
+							<td class="block-light">
+								<?php
+									$res = $DBMain->Query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
+									for($i = 0; $i < count($res); $i++)
+									{
+										if($res[$i]['player_id'] == $PLAYER['player_id'])
+											echo '* ';
+
+										echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&p=' . $res[$i]['player_id'], SECTION_USER) . ' [' . makeLink($res[$i]['domain_abrev'], 'a=changedomain&domain=' . $res[$i]['domain_id'], SECTION_HOME) . ']<br>';
+									}
+								?>
+							</td>
+						</tr>
+					</table>
+				<?php
+			}
+			?>
 			<table cellspacing="0" class="nav">
 				<tr>
 					<td class="block-dark">
