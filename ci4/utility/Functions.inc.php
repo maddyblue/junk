@@ -775,8 +775,11 @@ function dirList($dir, $files = true, $dirs = true, $omitdotfiles = true)
 	return $ret;
 }
 
-function updatePlayerStats($pid == $GLOBALS['PLAYER']['player_id'])
+function updatePlayerStats($pid = 0)
 {
+	if(!$pid)
+		$pid = $GLOBALS['PLAYER']['player_id'];
+
 	global $DBMain;
 
 	// we don't have items yet, so mod and nomod are the same
