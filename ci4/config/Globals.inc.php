@@ -15,14 +15,4 @@ define('CI_FORUM_ADDRESS', CI_ADDRESS . '/forum');
 define('CI_FORUM_DATABASE', 'ciforum');
 define('CI_FORUM_ADMIN_GROUP', 6);
 
-/* Domain definitions
- * These are the column names in the ciforum database
- */
-define('CI_DOMAIN1', 'field14');
-define('CI_DOMAIN2', 'field15');
-define('CI_DOMAIN3', 'field16');
-define('CI_DOMAIN4', 'field17');
-define('CI_DOMAIN5', 'field18');
-define('CI_DOMAIN6', 'field19');
-
 ?>
