@@ -268,6 +268,7 @@ INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewus
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
+INSERT INTO site VALUES ('MANUAL_SECTION_MENU',10,'link','Advanced Skinning','','\'a=skinning-advanced\'','SECTION_MANUAL',0,0,'');
 
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');

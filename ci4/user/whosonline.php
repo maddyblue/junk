@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.14 2004/01/07 10:56:01 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.15 2004/01/12 04:05:34 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -87,6 +87,7 @@ array(0506, 'makeLink(\'Viewing Towns\', \'a=viewtowns\', SECTION_GAME)'),
 
 // manual
 array(0601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),
+array(0602, 'makeLink(\'Viewing the advanced skinning tutorial\', \'a=skinning-advanced\', SECTION_MANUAL)'),
 
 );
 
