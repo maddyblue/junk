@@ -60,6 +60,22 @@ if(count($res) == 1)
 	);
 
 	echo getTable($array, false);
+
+	// now make the job table
+
+	$res = $DBMain->Query('select job_id, job_name, player_job_lv, player_job_exp from player_job, job where player_job_player="' . $player . '" and job_id=player_job_job');
+
+	$array = array(array('Job', 'Level', 'Experience'));
+
+	foreach($res as $j)
+		array_push($array, array(
+			makeLink($j['job_name'], 'a=viewjobdetails&job=' . $j['job_id'], SECTION_GAME),
+			$j['player_job_lv'],
+			$j['player_job_exp']
+		));
+
+	echo '<p>Jobs:';
+	echo getTable($array);
 }
 else
 	echo '<p>Invalid player.';
