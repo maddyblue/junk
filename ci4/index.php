@@ -69,35 +69,31 @@ if(CI_SECTION == 'ADMIN' && ADMIN != true)
 	exit();
 }
 
-if(isset($_cookie[CI_COOKIE . '_domain']))
-{
-	define('CI_DOMAIN', $_cookie[CI_COOKIE . '_domain']);
-}
-else
-{
-	define('CI_DOMAIN', 0);
-}
-doCookie('domain', CI_DOMAIN);
-
 // Template
-if($t);
-else if($CI_TEMPLATE)
-	$t = $CI_TEMPLATE;
+if(isset($_GET['t']))
+	$t = $_GET['t'];
+else if(isset($_COOKIE['CI_TEMPLATE']))
+	$t = $_COOKIE['CI_TEMPLATE'];
 else
 	$t = CI_DEF_TEMPLATE;
 
-$fd = fopen(getTemplateName($t), 'r');
-if(!$fd)
+$tfile = getTemplateFilename($t);
+if(!file_exists($tfile))
 {
-	$message .= '<p>' . $t . ' template does not exist. Reverting to default.\n';
+	$message .= '<p>The ' . $t . ' template does not exist. Reverting to default.';
 	$t = CI_DEF_TEMPLATE;
-	$fd = fopen(getTemplateName($t), 'r');
+	$tfile = getTemplateFilename($t);
 }
-doCookie('TEMPLATE', $t);
+
+$fd = fopen($tfile, 'r');
+
+setCookie('CI_TEMPLATE', $t, time() + 604800, CI_WWW_PATH);
+
 define('CI_TEMPLATE', $t);
 define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
-$template = fread($fd, filesize(getTemplateName($t)));
+$template = fread($fd, filesize($tfile));
 fclose($fd);
+
 ob_start();
 eval('?>' . $template);
 $template = ob_get_contents();
@@ -192,21 +188,7 @@ $list = array('table1', 'tr1', 'td1', 'tr2', 'td2');
 while(list(,$val) = each($list))
 {
 	$left = substr($val, 0, -1);
-	$top = '<' . $val . '>';
-	$pos = strpos($template, $top);
-	if($pos === false) $repl = '';
-	else
-	{
-		$pos1 = strpos($template, '</' . $val . '>',$pos);
-		if($pos1 === false) $repl = '';
-		else
-		{
-			$len = strlen($top);
-			$repl = substr($template, $pos + $len, $pos1 - $pos - $len);
-			$template = substr_replace($template, '', $pos, $pos1 - $pos + $len + 1);
-		}
-	}
-	$template = str_replace('<' . $val, '<' . $left . ' ' . $repl, $template);
+	$template = str_replace('<' . $val, '<' . $left . ' class="' . $val . '"', $template);
 }
 
 echo $template;
