@@ -220,7 +220,7 @@ else
 {
 	echo getNavBar($forumid);
 
-	$lastSession = LOGGED ? getDBData('user_last_session') : 0;
+	$lastSession = LOGGED ? $USER['user_last_session'] : 0;
 
 	echo '<p>';
 

@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: redux.php,v 1.25 2004/01/12 05:29:36 dolmant Exp $ -->
+<!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescent island ::
 <?php echo strtolower(CI_SECTION); ?>
@@ -180,7 +180,7 @@ td.block-light {
 						<div class="header">
 						[<?php
 							if(LOGGED)
-								echo decode(getDBData('user_name')) . '@';
+								echo decode($USER['user_name']) . '@';
 
 							echo getDomainName();
 						?>]

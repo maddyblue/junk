@@ -3,7 +3,7 @@
 		<title>crescent island :.
 			<?php
 				if(LOGGED)
-					echo decode(getDBData('user_name')) . '@';
+					echo decode($USER['user_name']) . '@';
 
 				echo getDomainName();
 			?> .:

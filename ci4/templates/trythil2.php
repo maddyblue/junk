@@ -3,12 +3,12 @@
 
 <html>
 <head>
-<!-- $Id: trythil2.php,v 1.5 2004/01/09 03:29:04 dolmant Exp $ -->
+<!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">	<head>
 		<title>Crescent Island .:
 			<?php
 				if(LOGGED)
-					echo decode(getDBData('user_name')) . '@';
+					echo decode($USER['user_name']) . '@';
 
 				echo getDomainName();
 			?>

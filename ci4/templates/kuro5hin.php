@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: kuro5hin.php,v 1.11 2004/01/07 02:08:20 dolmant Exp $ -->
+<!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
@@ -146,7 +146,7 @@ table.maintable {
 <a href="http://crescentisland.com"><b>Crescent Island</b></a>
 	[<?php
 		if(LOGGED)
-			echo decode(getDBData('user_name')) . '@';
+			echo decode($USER['user_name']) . '@';
 
 		echo getDomainName();
 	?>]
