@@ -40,7 +40,8 @@ function display($user)
 
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Login')),
 		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'login')),
-		array('', array('type'=>'hidden', 'name'=>'s', 'val'=>(isset($_GET['s']) ? encode($_GET['s']) : '')))
+		array('', array('type'=>'hidden', 'name'=>'s', 'val'=>(isset($_GET['s']) ? $_GET['s'] : ''))),
+		array('', array('type'=>'hidden', 'name'=>'r', 'val'=>(isset($_GET['r']) ? $_GET['r'] : (isset($_POST['r']) ? $_POST['r'] : ''))))
 	));
 }
 
@@ -65,11 +66,19 @@ if(isset($_POST['submit']))
 	$ret = $db->query('select user_id, user_pass from user where user_name="' . $user . '" and user_pass=md5("' . $pass . '")');
 	if(count($ret) == 1)
 	{
+		$last = isset($_POST['r']) ? decode($_POST['r']) : '';
+
 		setCIcookie('id', $ret[0]['user_id']);
 		setCIcookie('pass', $ret[0]['user_pass']);
 		$id = $ret[0]['user_id'];
 		$pass = $ret[0]['user_pass'];
-		echo '<br>Logged in successfully as ' . decode($user) . '.';
+		echo '<p>Logged in successfully as ' . decode($user) . '.';
+
+		if($last)
+		{
+			echo '<p>Redirecting to <a href="' . $last . '">last location</a>...';
+			echo '<meta http-equiv="refresh" content="0; url=' . $last . '">';
+		}
 	}
 	else if($user && $pass)
 	{
