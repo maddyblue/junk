@@ -114,7 +114,7 @@ $newreply = makeLink('New Reply', '?a=newpost&t=' . $threadid);
 $offset = isset($_GET['start']) ? decode($_GET['start']) : 0;
 $postsPP = 20;
 
-$ret = $DBMain->Query('select ceil(count(*)/' . $postsPP . ') as count from forum_post where forum_post_thread=' . $threadid);
+$ret = $DBMain->Query('select ceiling(count(*)/' . $postsPP . ') as count from forum_post where forum_post_thread=' . $threadid);
 $totpages = $ret[0]['count'];
 $curpage = floor($offset / $postsPP) + 1;
 

@@ -187,7 +187,7 @@ if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 	$offset = isset($_GET['start']) ? decode($_GET['start']) : 0;
 	$threadsPP = 30;
 
-	$ret = $DBMain->Query('select ceil(count(*)/' . $threadsPP . ') as count from forum_thread where forum_thread_forum=' . $forumid);
+	$ret = $DBMain->Query('select ceiling(count(*)/' . $threadsPP . ') as count from forum_thread where forum_thread_forum=' . $forumid);
 	$totpages = $ret[0]['count'];
 	$curpage = floor($offset / $threadsPP) + 1;
 
