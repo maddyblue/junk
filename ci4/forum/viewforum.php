@@ -112,7 +112,7 @@ function forumList(&$array, $id, $topdepth, $depth)
 	}
 }
 
-function threadList($forumid)
+function threadList($forumid, $offset, $threadsPP)
 {
 	global $DBMain;
 
@@ -126,7 +126,7 @@ function threadList($forumid)
 		'Last Post'
 	));
 
-	$ret = $DBMain->Query('select * from forum_thread, forum_post where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread and forum_thread_last_post=forum_post_id order by forum_post_date desc limit 30');
+	$ret = $DBMain->Query('select * from forum_thread, forum_post where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread and forum_thread_last_post=forum_post_id order by forum_post_date desc limit ' . $offset . ', ' . $threadsPP);
 
 	if(count($ret))
 	{
@@ -184,8 +184,19 @@ if(count($res) == 1 && $res[0]['forum_forum_type'] == 0)
 {
 	echo '<p>' . makeLink('New Thread', '?a=newthread&f=' . $forumid);
 
-	$array = threadList($forumid);
+	$offset = isset($_GET['start']) ? decode($_GET['start']) : 0;
+	$threadsPP = 30;
+
+	$ret = $DBMain->Query('select ceil(count(*)/' . $threadsPP . ') as count from forum_thread where forum_thread_forum=' . $forumid);
+	$totpages = $ret[0]['count'];
+	$curpage = floor($offset / $threadsPP) + 1;
+
+	$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $threadsPP, $forumid, '/?a=viewforum&f=');
+
+	$array = threadList($forumid, $offset, $threadsPP);
+	echo '<p>' . $pageDisp;
 	echo '<p>' . getTable($array);
+	echo '<p>' . $pageDisp;
 }
 
 ?>

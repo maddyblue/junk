@@ -63,13 +63,13 @@ function parsePost($post)
 	return $return;
 }
 
-function postList($thread)
+function postList($thread, $offset, $postsPP)
 {
 	global $DBMain;
 
 	$array = array();
 
-	$posts = $DBMain->Query('select * from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit 30');
+	$posts = $DBMain->Query('select * from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . $offset . ', ' . $postsPP);
 
 	foreach($posts as $post)
 	{
@@ -111,10 +111,20 @@ echo getNavBar($res[0]['forum_thread_forum']) . ' &gt; ' . makeLink(decode($res[
 
 $newreply = makeLink('New Reply', '?a=newpost&t=' . $threadid);
 
-$array = postList($threadid);
+$offset = isset($_GET['start']) ? decode($_GET['start']) : 0;
+$postsPP = 20;
+
+$ret = $DBMain->Query('select ceil(count(*)/' . $postsPP . ') as count from forum_post where forum_post_thread=' . $threadid);
+$totpages = $ret[0]['count'];
+$curpage = floor($offset / $postsPP) + 1;
+
+$pageDisp = 'Page: ' . pageDisp($curpage, $totpages, $postsPP, $threadid, '/?a=viewthread&t=');
+
+$array = postList($threadid, $offset, $postsPP);
 
 if(count($array))
 {
+	echo '<p>' . $pageDisp;
 	?>
 		<table class="tableMain" width="100%">
 			<tr class="tableRow">
@@ -136,6 +146,7 @@ if(count($array))
 			</tr>
 		</table>
 	<?php
+	echo '<p>' . $pageDisp;
 }
 else
 	echo '<br>Non-existent thread.';
