@@ -181,7 +181,7 @@ td.block-light {
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="block">
 				<tr>
 					<td align="right" valign="top" class="block-dark" style="padding-top: 3px; padding-bottom: 8px; padding-right: 8px;">
-						<table width=100% border=0>
+						<table width="100%" border=0>
 							<tr>
 								<td align="left">
 									<div class="header"><?php echo $seclower; ?></div>
