@@ -258,6 +258,7 @@ INSERT INTO site VALUES ('BATTLE_SECTION_MENU',10,'link','New Battle','','\'a=ne
 INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'eval','newthreadLink() . newreplyLink()','','','',1,0,'f and t are never specified together, hence this works well');
 INSERT INTO site VALUES ('FORUM_SECTION_MENU',0,'link','View New Threads','','\'a=viewnew\'','SECTION_FORUM',1,0,'');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',0,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV',10,'link','Smilies','','\'a=smilies\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','\'a=viewjobs\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','\'a=viewequipment\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','\'a=viewmonsters\'','SECTION_GAME',0,0,'');

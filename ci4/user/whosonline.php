@@ -76,6 +76,7 @@ array(0403, 'makeLink(\'Creating a new thread\', \'a=viewforum&f=\' . $d, SECTIO
 array(0404, 'makeLink(\'Viewing the taglist\', \'a=taglist\', SECTION_FORUM)'),
 array(0405, 'makeLink(\'Viewing the \' . ($d == \'0\' ? \'forums\' : decode(getDBData(\'forum_forum_name\', $d, \'forum_forum_id\', \'forum_forum\')) . \' forum\'), \'a=viewforum&f=\' . $d, SECTION_FORUM)'),
 array(0406, 'makeLink(\'Viewing thread \' . decode(getDBData(\'forum_thread_title\', $d, \'forum_thread_id\', \'forum_thread\')), \'a=viewthread&t=\' . $d, SECTION_FORUM)'),
+array(0407, 'makeLink(\'Viewing the smilies\', \'a=smilies\', SECTION_FORUM)'),
 
 // game
 array(0501, 'makeLink(\'Viewing Abilities\', \'a=viewabilities\', SECTION_GAME)'),
