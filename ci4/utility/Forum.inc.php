@@ -208,8 +208,8 @@ function parsePostText($post)
 	{
 		$cur = 0;
 		while(
-			!(($cur = strpos($return, $row[0], $cur)) === false) &&
-			!(($next = strpos($return, $row[1], $cur + 1)) === false))
+			!(($cur = stripos($return, $row[0], $cur)) === false) &&
+			!(($next = stripos($return, $row[1], $cur + 1)) === false))
 		{
 			$len = $next - $cur;
 			$len_0 = strlen($row[0]);
@@ -245,7 +245,7 @@ function parsePostText($post)
 	foreach($repl as $row)
 	{
 		$cur = 0;
-		while(!(($cur = strpos($return, $row[0], $cur)) === false))
+		while(!(($cur = stripos($return, $row[0], $cur)) === false))
 		{
 			$len_0 = strlen($row[0]);
 			$len_1 = strlen($row[1]);
@@ -255,8 +255,8 @@ function parsePostText($post)
 
 			while(true)
 			{
-				$next_0 = strpos($return, $row[0], $temp);
-				$next_1 = strpos($return, $row[1], $temp);
+				$next_0 = stripos($return, $row[0], $temp);
+				$next_1 = stripos($return, $row[1], $temp);
 
 				if($next_1 === false)
 				{
