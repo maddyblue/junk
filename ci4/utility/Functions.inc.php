@@ -457,4 +457,14 @@ function getUserlink($user)
 	return makeLink(getUsername($user), 'user/?a=viewuserdetails&user=' . $user, true);
 }
 
+function getInputList()
+{
+	$r = '';
+	reset($_GET);
+	while(list($key, $val) = each($_GET))
+		$r .= '<input type="hidden" name="' . $key . '" value="' . $val . '">';
+
+	return $r;
+}
+
 ?>
