@@ -34,6 +34,10 @@
 
 define('CI_SECTION', 'BATTLE');
 define('CI_HOME_MOD', '../');
+
+if(!isset($_GET['a']) && !isset($_POST['a']))
+	$_GET['a'] = 'newbattle';
+
 require '../index.php';
 
 ?>

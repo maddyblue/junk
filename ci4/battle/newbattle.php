@@ -113,9 +113,9 @@ function newBattle($area)
 		' . $monster[0]['monster_lv'] . ')'
 	);
 
-	echo '<p>Battle started.';
-
+	echo '<p>Starting battle...';
 	echo '<p>' . makeLink('Begin.', 'a=battle');
+	echo '<meta http-equiv="refresh" content="0; url=?a=battle">';
 }
 
 if(LOGGED)
@@ -131,6 +131,8 @@ if(LOGGED)
 	{
 		$fail = true;
 		echo '<p>You already have an active battle. You must complete it before starting another.';
+		echo '<p>Redirecting you there...';
+		echo '<meta http-equiv="refresh" content="2; url=?a=battle">';
 	}
 
 	if(!$fail)
