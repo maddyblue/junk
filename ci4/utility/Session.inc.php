@@ -73,9 +73,18 @@ function start_session()
 
 	define('SESSION', $sid);
 
-	$DBMain->Query('insert into session (session_id, session_ip, session_user, session_start, session_current) values (' .
+	$ip = $_SERVER['REMOTE_ADDR'];
+	$host = gethostbyaddr($ip);
+
+	if($ip == $host)
+		$host = substr($host, 0, strrpos($host, '.')) . '.*';
+	else
+		$host = '*' . substr($host, strpos($host, '.'));
+
+	$DBMain->Query('insert into session (session_id, session_ip, session_host, session_user, session_start, session_current) values (' .
 		'"' . $sid . '",' .
-		ip2long($_SERVER['REMOTE_ADDR']) . ',' .
+		ip2long($ip) . ',' .
+		'"' . $host . '",' .
 		ID . ',' .
 		TIME . ',' .
 		TIME .
