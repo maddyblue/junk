@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Forum.inc.php,v 1.19 2003/12/20 09:18:34 dolmant Exp $ */
+/* $Id: Forum.inc.php,v 1.20 2003/12/22 07:07:54 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -388,6 +388,41 @@ function forumPerm($forum, $perm, $default = true)
 function getForumFromThread($t)
 {
 	return getDBData('forum_thread_forum', $t, 'forum_thread_id', 'forum_thread');
+}
+
+function listForums(&$array, $forum, $exclude = -1, $depth = 0)
+{
+	global $DBMain;
+
+	$res = $DBMain->Query('select forum_forum_id, forum_forum_name from forum_forum where forum_forum_parent=' . $forum . ' and forum_forum_id != ' . $exclude . ' order by forum_forum_order');
+
+	foreach($res as $row)
+	{
+		array_push($array, array($row['forum_forum_id'], $row['forum_forum_name'], $depth));
+		listForums($array, $row['forum_forum_id'], $exclude, $depth + 1);
+	}
+
+	return $array;
+}
+
+function makeForumSelect($forum, $parent)
+{
+	$array = array();
+
+	$forumList = listForums($array, '0', $forum);
+
+	$val = '<option value="0" ' . (!$parent ? 'selected' : '') . '>(No parent)</option>';
+
+	foreach($forumList as $row)
+	{
+		$pad = '--';
+		for($i = 0; $i < $row[2]; $i++)
+			$pad .= '--';
+
+		$val .= '<option value="' . $row[0] . '" ' . ($row[0] == $parent ? 'selected' : '') . '>' . $pad . $row[1] . '</option>';
+	}
+
+	return $val;
 }
 
 ?>
