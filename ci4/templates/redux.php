@@ -82,7 +82,6 @@ table.block {
 .nav td {
 	padding: 5px;
 	padding-left: 8px;
-	font-weight: bold;
 	text-transform: lowercase;
 	overflow: hidden;
 }
@@ -97,6 +96,7 @@ td.block-dark {
 	border-left: 1px solid #DDDDDD;
 	border-top: 1px solid #DDDDDD;
 	background-color: #C0C7CD;
+	font-weight: bold;
 }
 
 td.block-dark a {
@@ -231,6 +231,18 @@ td.block-light {
 				<tr>
 					<td class="block-light">
 						<CI_SKIN>
+					</td>
+				</tr>
+			</table>
+			<table cellspacing="0" class="nav">
+				<tr>
+					<td class="block-dark">
+						server time
+					</td>
+				</tr>
+				<tr>
+					<td class="block-light">
+						<?php echo getTime(TIME); ?>
 					</td>
 				</tr>
 			</table>
