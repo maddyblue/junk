@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Globals.inc.php,v 1.29 2003/12/20 08:04:05 dolmant Exp $ */
+/* $Id: Globals.inc.php,v 1.30 2003/12/20 08:14:03 dolmant Exp $ */
 
 /*	CI globals.	*/
 
@@ -15,6 +15,7 @@ define('CI_DEF_TEMPLATE', 'redux');
 
 /* Section alises */
 
+define('SECTION_HOME', '/');
 define('SECTION_MAIN', 'main');
 define('SECTION_ADMIN', 'admin');
 define('SECTION_USER', 'user');
