@@ -12,9 +12,6 @@ require_once CI_FS_PATH . 'utility/GameMath.inc.php';
 require_once CI_FS_PATH . 'utility/URLUtil.inc.php';
 require_once CI_FS_PATH . 'utility/Functions.inc.php';
 
-require_once CI_FS_PATH . 'objects/GameObjectUnknown.inc.php';
-require_once CI_FS_PATH . 'objects/GameObjectEntity.inc.php'; // needs to be after GameObjectUnknown.inc.php
-
 // Setup database connections
 $DBMain = new Database();
 
