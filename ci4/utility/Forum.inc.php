@@ -125,6 +125,7 @@ function forumReplace($text)
 		makeImg('mad.gif', CI_SMILIE_PATH),
 		makeImg('tounge.gif', CI_SMILIE_PATH),
 		makeImg('tounge.gif', CI_SMILIE_PATH),
+		makeImg('trout.gif', CI_SMILIE_PATH),
 		makeImg('x.gif', CI_SMILIE_PATH),
 		makeImg('x.gif', CI_SMILIE_PATH),
 		makeImg('ci.gif', CI_SMILIE_PATH)
