@@ -2,7 +2,7 @@ GUIDELINES FOR CI4 STRUCTURE
 ---------- --- --- ---------
 
 *	CI4 codebase layout uses an extremely strict file layout map.  Though this
-	can make things a bit annoying, it pays off with a much higher degree of 
+	can make things a bit annoying, it pays off with a much higher degree of
 	organization.
 
 	Please try to follow the existing layout as best as you can: place utility
@@ -16,5 +16,6 @@ GUIDELINES FOR CI4 STRUCTURE
 
 *	If you're doing artwork for CI4, please, please try to prefix your art
 	with some sort of unique identifier, i.e. your forum username, your initials,
-	whatever.  Binary diffs do strange things sometimes, and we don't want
-	weird art corruption.
+	whatever.  We will copy the images we will be using on the site to a standard
+	name (ie: dolmant_ci.gif (for a gif dolmant would make, for example) would
+	become ci.gif if we decided to use it on the site.
