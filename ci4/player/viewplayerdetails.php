@@ -67,7 +67,7 @@ if(count($res) == 1)
 		array('mp', $res[0]['player_nomod_mp']),
 		array('str', $res[0]['player_nomod_str']),
 		array('mag', $res[0]['player_nomod_mag']),
-		array('def', $res[0]['player_nomod_mag']),
+		array('def', $res[0]['player_nomod_def']),
 		array('mgd', $res[0]['player_nomod_mgd']),
 		array('agl', $res[0]['player_nomod_agl']),
 		array('acc', $res[0]['player_nomod_acc'])
@@ -80,7 +80,7 @@ if(count($res) == 1)
 		array('mp', $res[0]['player_mod_mp']),
 		array('str', $res[0]['player_mod_str']),
 		array('mag', $res[0]['player_mod_mag']),
-		array('def', $res[0]['player_mod_mag']),
+		array('def', $res[0]['player_mod_def']),
 		array('mgd', $res[0]['player_mod_mgd']),
 		array('agl', $res[0]['player_mod_agl']),
 		array('acc', $res[0]['player_mod_acc'])
