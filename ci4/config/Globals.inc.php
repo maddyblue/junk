@@ -22,6 +22,7 @@ define('SECTION_ADMIN', 'admin');
 define('SECTION_USER', 'user');
 define('SECTION_FORUM', 'forum');
 define('SECTION_GAME', 'game');
+define('SECTION_BATTLE', 'battle');
 define('SECTION_MANUAL', 'manual');
 
 /* Forum specs */
