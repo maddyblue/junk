@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Session.inc.php,v 1.6 2003/09/27 04:39:01 dolmant Exp $ */
+/* $Id: Session.inc.php,v 1.7 2003/09/27 04:56:05 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -75,7 +75,7 @@ function start_session()
 		')');
 
 	if(LOGGED)
-		$DBMain->Query('delete from forum_view where forum_views_user=' . ID);
+		$DBMain->Query('delete from forum_view where forum_view_user=' . ID);
 }
 
 function update_session($sid)
