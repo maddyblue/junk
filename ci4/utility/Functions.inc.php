@@ -439,6 +439,10 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
  */
 function makeLink($text, $link, $section = '', $session = true)
 {
+	// if there's nothing to link, don't link anything
+	if(!$text)
+		return '';
+
 	$ret = '<a href="';
 
 	if($section != 'EXTERIOR')
