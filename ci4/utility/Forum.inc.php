@@ -46,9 +46,12 @@ function linkLastPost($postid, $userid, $username, $date, $threadid = 0, $thread
 				makeLink('-&gt;', 'a=viewpost&p=' . $postid, '', $lastpost);
 		else
 			$ret =
-				getTime($date) . ' ' .
+				'<div class="small">' .
+				getTime($date) . 
+				'<br>by ' .
 				getUserlink($userid, decode($username)) . ' ' .
-				makeLink('-&gt;', 'a=viewpost&p=' . $postid, '', $lastpost);
+				makeLink('-&gt;', 'a=viewpost&p=' . $postid, '', $lastpost) .
+				'</div>';
 	}
 
 	return $ret;
