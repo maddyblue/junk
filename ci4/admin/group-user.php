@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: group-user.php,v 1.3 2003/12/25 05:23:13 dolmant Exp $ */
+/* $Id: group-user.php,v 1.4 2004/01/06 20:12:38 rayle Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -80,7 +80,5 @@ echo getTableForm('Add User to Group', array(
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Add')),
 		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'group-user'))
 	));
-
-update_session_action(0200);
 
 ?>
