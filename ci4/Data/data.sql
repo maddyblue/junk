@@ -238,18 +238,19 @@ INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE
 INSERT INTO site VALUES ('_DOMAIN',0,'eval','getDomainName()','','',0,'Domain.');
 INSERT INTO site VALUES ('_SECTION',0,'eval','CI_SECTION','','',0,'section');
 INSERT INTO site VALUES ('_PLAYER_LV',0,'eval','\'<a href=\"\' . CI_WWW_PATH . \'/game/?a=viewplayer\">\' . getCharNameFD(CI_ID, CI_DOMAIN) . \'</a> (\' . getstat(\'lv\') . \')\'','','',1,'playername(lv), hyperlinked to viewplayer');
-INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','CI_WWW_ADDRESS . \'game/?a=viewjobs\'',0,'');
-INSERT INTO site VALUES ('NAV',0,'link','Home','','CI_WWW_ADDRESS',0,'');
-INSERT INTO site VALUES ('NAV',20,'link','Game','','CI_WWW_ADDRESS . \'game\'',0,'');
-INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','CI_WWW_ADDRESS . \'game/?a=viewequipment\'',0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',0,'link','View Jobs','','CI_WWW_PATH . \'game/?a=viewjobs\'',0,'');
+INSERT INTO site VALUES ('NAV',0,'link','Home','','CI_WWW_PATH',0,'');
+INSERT INTO site VALUES ('NAV',20,'link','Game','','CI_WWW_PATH . \'game\'',0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','CI_WWW_PATH . \'game/?a=viewequipment\'',0,'');
 INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=get action=index.php><p><input type=hidden name=a value=\' . $GLOBALS[\'aval\'] . \'><p><select name=t>\'','','',0,'');
 INSERT INTO site VALUES ('_SKIN_END',0,'eval','\'</select><br><input type=submit value=\"Skin\" class=\"submit\"></form>\'','','',0,'');
 INSERT INTO site VALUES ('_SKIN',0,'text','<CI_SKIN_START>\n<option><CISKINS><option>INSERT</option></CISKINS></option>\n<CI_SKIN_END>','','',0,'');
 INSERT INTO site VALUES ('SKINS',0,'text','redux','','',0,'');
 INSERT INTO site VALUES ('SKINS',10,'text','earthtone','','',0,'');
-INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','CI_WWW_ADDRESS . \'game/?a=viewmonsters\'',0,'');
-INSERT INTO site VALUES ('GAME_SECTION_NAV',30,'link','View Abilities','','CI_WWW_ADDRESS . \'game/?a=viewabilities\'',0,'');
-INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','CI_WWW_ADDRESS . \'/?a=domains\'',0,'');
-INSERT INTO site VALUES ('NAV',10,'link','User','','CI_WWW_ADDRESS . \'user\'',0,'');
-INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','CI_WWW_ADDRESS . \'user/?a=newuser\'',-1,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','CI_WWW_PATH . \'game/?a=viewmonsters\'',0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',30,'link','View Abilities','','CI_WWW_PATH . \'game/?a=viewabilities\'',0,'');
+INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','CI_WWW_PATH . \'/?a=domains\'',0,'');
+INSERT INTO site VALUES ('NAV',10,'link','User','','CI_WWW_PATH . \'user\'',0,'');
+INSERT INTO site VALUES ('USER_SECTION_MENU',0,'link','Register new user','','CI_WWW_PATH . \'user/?a=newuser\'',-1,'');
+INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','CI_WWW_PATH . \'user/?a=viewusers\'',0,'');
 
