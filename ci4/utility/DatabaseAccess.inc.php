@@ -57,7 +57,8 @@ class DatabaseAccess
 		);
 		if(mysql_error())
 		{
-			echo 'Error: ' . mysql_error() . '.
+			global $message;
+			$message .= '<p>Error: ' . mysql_error() . '.
 				<p>Query: ' . $parameters{'Query'} . '.';
 			return;
 		}

@@ -17,4 +17,9 @@ $CIConfig3{"SQLUser"}       = "user";
 $CIConfig3{"SQLPassword"}   = "usersql";
 $CIConfig3{"SQLHost"}       = "localhost:33063";
 
+// Forum database
+$CIConfig4{"SQLUser"}       = "user";
+$CIConfig4{"SQLPassword"}   = "usersql";
+$CIConfig4{"SQLHost"}       = "localhost";
+
 ?>

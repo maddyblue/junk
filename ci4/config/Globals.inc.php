@@ -13,6 +13,7 @@ define('CI_TEMPLATE_LOC', 'templates');
 define('CI_FORUM_HOME', '/var/www/ci4/forum/');
 define('CI_FORUM_ADDRESS', CI_ADDRESS . '/forum');
 define('CI_FORUM_DATABASE', 'ciforum');
+define('CI_FORUM_ADMIN_GROUP', 6);
 
 /* Domain definitions
  * These are the column names in the ciforum database

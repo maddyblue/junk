@@ -106,8 +106,6 @@ td
 		<tr>
 			<td>
 				[ <CISUB>[ INSERT ]<br></CISUB> ]
-				<p><CIAFFILIATES>INSERT<br></CIAFFILIATES>
-				<p><CI_SECTION>
 			</td>
 		</tr>
 	</table>

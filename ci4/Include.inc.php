@@ -19,9 +19,11 @@ require_once CI_HOME . 'objects/GameObjectEntity.inc.php'; // needs to be after 
 $DB = new Database();
 $DBItem = new Database();
 $DBAuction = new Database();
+$DBForum = new Database();
 
 $DB->Connect($CIConfig1, CI_DATABASE);
 $DBItem->Connect($CIConfig2);
 $DBAuction->Connect($CIConfig3);
+$DBForum->Connect($CIConfig4, CI_FORUM_DATABASE);
 
 ?>

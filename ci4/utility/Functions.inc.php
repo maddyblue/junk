@@ -17,7 +17,7 @@ function getTemplateName($t)
  */
 function getSiteArray($tag, $single)
 {
-	global $DB, $logged;
+	global $DB;
 	if($single)
 		$name = 'site_replace';
 	else
@@ -25,7 +25,7 @@ function getSiteArray($tag, $single)
 		$name = 'site';
 		$order = 'ORDER BY orderid';
 	}
-	return $DB->Query('SELECT type,main,secondary,link FROM ' . $name . ' WHERE logged ' . $logged . '= 0 AND tag=' . "'$tag'" . ' ' . $order);
+	return $DB->Query('SELECT type,main,secondary,link FROM ' . $name . ' WHERE logged ' . LOGGED . '= 0 AND tag=' . "'$tag'" . ' ' . $order);
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
@@ -70,6 +70,34 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 	if($link)
 		$val = '<a href="' . $link . '">' . $val . '</a>';
 	return $val;
+}
+
+/* Creates a nice table from the given array...should be used everywhere. */
+function makeTable($arr)
+{
+	$width = count($arr);
+	$list = array();
+	?><p><table1><tr1><?
+	while(list($val) = each($arr))
+	{
+		echo "\n";
+		?><td1><? echo $val ?></td><?
+		array_push($list, $val);
+	}
+	$depth = count($arr{$list[0]});
+	?></tr><?
+	for($i1 = 0; $i1 < $depth; $i1++)
+	{
+		echo "\n";
+		?><tr2><?
+		for($i2 = 0; $i2 < $width; $i2++)
+		{
+			echo "\n";
+			?><td2><? echo $arr[$list[$i2]][$i1] ?></td><?
+		}
+		?></tr><?
+	}
+	?></table><?
 }
 
 ?>

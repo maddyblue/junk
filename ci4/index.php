@@ -3,6 +3,25 @@
 if(!defined('SECTION')) define('SECTION', 'MAIN');
 require_once $CI_HOME_MOD . 'Include.inc.php';
 
+// User stuff
+$ret = $DBForum->Query('SELECT username, usergroupid FROM user WHERE userid=' . "'$bbuserid'" . ' AND password=' . "'$bbpassword'");
+if(count($ret) == 0)
+	define('LOGGED', '<');
+else
+{
+	define('LOGGED', '>');
+	define('GROUPID', $ret{'usergroupid'}[0]);
+	if(GROUPID == CI_FORUM_ADMIN_GROUP)
+		define('ADMIN', true);
+	else
+		define('ADMIN', false);
+}
+if(SECTION == 'ADMIN' && ADMIN == false)
+{
+	echo '<p>Admins only here.\n';
+	exit();
+}
+
 // Template
 if($t);
 else if($CI_TEMPLATE)
@@ -26,11 +45,11 @@ eval("?>" . $template); // " is used instaed of a ' due to JEdit php parsing pro
 $template = ob_get_contents();
 ob_end_clean();
 
-$logged = '>'; // logged in
-
 // Add content page
+$content = '';
 if($a)
 {
+	$a = './' . $a . '.php';
 	$fd = fopen($a, 'r');
 	if($fd)
 	{
@@ -40,12 +59,14 @@ if($a)
 		eval("?>" . $content . "<?");
 		$content = ob_get_contents();
 		ob_end_clean();
-		$pos = strpos($template, '<CICONTENT>');
-		$template = substr_replace($template, $content, $pos, 11);
-		$template = str_replace('<CICONTENT>', '', $template);
 	}
 }
+$content .= $message;
+$pos = strpos($template, '<CICONTENT>');
+$template = substr_replace($template, $content, $pos, 11);
+$template = str_replace('<CICONTENT>', '', $template);
 
+// Single tags
 while(preg_match('/<CI_([^>]+)>/', $template, $matches)) // find a <CI_XXX> tag
 {
 	$ret = getSiteArray($matches[1], true);
@@ -53,6 +74,7 @@ while(preg_match('/<CI_([^>]+)>/', $template, $matches)) // find a <CI_XXX> tag
 	$template = str_replace($matches[0], $val, $template);
 }
 
+// Listed tags
 while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 {
 	$tag = $matches[1];
@@ -107,6 +129,27 @@ while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
 		$repl .= substr_replace($insert, createSiteString($ret, $i), $pos6, $pos7);
 	}
 	$template = substr_replace($template, $repl, $pos, $pos3 - $pos);
+}
+
+$list = array('table1', 'tr1', 'td1', 'tr2', 'td2');
+while(list(,$val) = each($list))
+{
+	$left = substr($val, 0, -1);
+	$top = '<' . $val . '>';
+	$pos = strpos($template, $top);
+	if($pos === false) $repl = '';
+	else
+	{
+		$pos1 = strpos($template, '</' . $val . '>',$pos);
+		if($pos1 === false) $repl = '';
+		else
+		{
+			$len = strlen($top);
+			$repl = substr($template, $pos + $len, $pos1 - $pos - $len);
+			$template = substr_replace($template, '', $pos, $pos1 - $pos + $len + 1);
+		}
+	}
+	$template = str_replace('<' . $val, '<' . $left . ' ' . $repl, $template);
 }
 
 echo $template;
