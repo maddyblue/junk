@@ -107,6 +107,7 @@ td
 			<td>
 				[ <CISUB>[ INSERT ]<br></CISUB> ]
 				<p><CISECTION>
+				<p><? echo (5*7) ?>
 			</td>
 		</tr>
 	</table>
