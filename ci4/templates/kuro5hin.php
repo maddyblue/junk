@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: kuro5hin.php,v 1.7 2003/09/27 21:29:24 dolmant Exp $ -->
+<!-- $Id: kuro5hin.php,v 1.8 2003/11/05 00:28:54 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
@@ -168,29 +168,6 @@ a:active {
 			<tr>
 				<td>
 					<CISECTION_NAV>INSERT<br></CISECTION_NAV>
-				</td>
-			</tr>
-		</table>
-		<p>
-
-		<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#000000">
-			<tr>
-				<td width="100%">
-					<table width="100%" border=0 cellpadding=1 cellspacing=0 bgcolor="#006699">
-						<tr>
-						<td width="100%">
-							<font face="verdana, arial, helvetica, sans-serif" color="#ffffff" size=2>skins</font>
-						</td>
-					</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-
-		<table width="100%" border=0 cellpadding=1 cellspacing=0>
-			<tr>
-				<td>
-					<CI_SKIN>
 				</td>
 			</tr>
 		</table>

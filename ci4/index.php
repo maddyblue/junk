@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.51 2003/11/05 00:02:47 dolmant Exp $ */
+/* $Id: index.php,v 1.52 2003/11/05 00:28:53 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -109,6 +109,32 @@ else
 
 handle_session();
 
+// Template
+if(isset($_GET['template']))
+	$t = $_GET['template'];
+else
+	$t = getCIcookie('template');
+
+if(!$t)
+	$t = CI_DEF_TEMPLATE;
+
+$tfile = getTemplateFilename($t);
+if(!file_exists($tfile))
+{
+	$message .= '<p>The ' . $t . ' template does not exist. Reverting to default.';
+	$t = CI_DEF_TEMPLATE;
+	$tfile = getTemplateFilename($t);
+}
+
+$fd = fopen($tfile, 'r');
+
+setCIcookie('template', $t);
+
+define('CI_TEMPLATE', $t);
+define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
+$template = fread($fd, filesize($tfile));
+fclose($fd);
+
 $permission = true;
 
 if(CI_SECTION == 'ADMIN')
@@ -122,7 +148,7 @@ if($permission)
 {
 	if(isset($aval) && $aval)
 	{
-			$a = './' . $aval . '.php';
+			$a = CI_FS_PATH . CI_SECTION_DIR . $aval . '.php';
 
 			if(file_exists($a))
 			{
@@ -149,32 +175,6 @@ else
 }
 
 $content .= $message;
-
-// Template
-if(isset($_GET['template']))
-	$t = $_GET['template'];
-else
-	$t = getCIcookie('template');
-
-if(!$t)
-	$t = CI_DEF_TEMPLATE;
-
-$tfile = getTemplateFilename($t);
-if(!file_exists($tfile))
-{
-	$message .= '<p>The ' . $t . ' template does not exist. Reverting to default.';
-	$t = CI_DEF_TEMPLATE;
-	$tfile = getTemplateFilename($t);
-}
-
-$fd = fopen($tfile, 'r');
-
-setCIcookie('template', $t);
-
-define('CI_TEMPLATE', $t);
-define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
-$template = fread($fd, filesize($tfile));
-fclose($fd);
 
 ob_start();
 eval('?>' . $template);

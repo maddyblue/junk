@@ -45,4 +45,5 @@ mysqldump -u root -t ci4 \
 	monster \
 	monstertype \
 	site \
+	skin \
 	| egrep -v "^-.*" > data.sql

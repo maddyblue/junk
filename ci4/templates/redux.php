@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<!-- $Id: redux.php,v 1.21 2003/09/27 21:29:24 dolmant Exp $ -->
+<!-- $Id: redux.php,v 1.22 2003/11/05 00:28:54 dolmant Exp $ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title>crescent island ::
 <?php echo strtolower(CI_SECTION); ?>
@@ -221,18 +221,6 @@ td.block-light {
 				<tr>
 					<td class="block-light">
 						<CISECTION_NAV>INSERT<br></CISECTION_NAV><br>
-					</td>
-				</tr>
-			</table>
-			<table cellspacing="0" class="nav">
-				<tr>
-					<td class="block-dark">
-						skin
-					</td>
-				</tr>
-				<tr>
-					<td class="block-light">
-						<CI_SKIN>
 					</td>
 				</tr>
 			</table>

@@ -190,6 +190,7 @@ INSERT INTO site VALUES ('GAME_SECTION_NAV',10,'link','View Equipment','','\'a=v
 INSERT INTO site VALUES ('GAME_SECTION_NAV',20,'link','View Monsters','','\'a=viewmonsters\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',30,'link','View Abilities','','\'a=viewabilities\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','\'a=domains\'','SECTION_MAIN',0,0,'');
+INSERT INTO site VALUES ('MAIN_SECTION_NAV',10,'link','Skins','','\'a=skins\'','SECTION_MAIN',0,0,'');
 INSERT INTO site VALUES ('NAV',0,'link','Home','','','SECTION_MAIN',0,0,'');
 INSERT INTO site VALUES ('NAV',10,'link','Login','','\'a=login\'','SECTION_USER',-1,0,'');
 INSERT INTO site VALUES ('NAV',20,'link','Forum','','\'a=viewforum\'','SECTION_FORUM',0,0,'');
@@ -208,8 +209,9 @@ INSERT INTO site VALUES ('USER_SECTION_MENU',40,'link','Logout','','\'a=logout\'
 INSERT INTO site VALUES ('USER_SECTION_NAV',0,'link','View Users','','\'a=viewusers\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',10,'link','View Active Users','','\'a=whosonline\'','SECTION_USER',0,0,'');
 INSERT INTO site VALUES ('USER_SECTION_NAV',20,'link','Remote Information','','\'a=info\'','SECTION_USER',0,0,'');
-INSERT INTO site VALUES ('_SKIN',0,'text','<CI_SKIN_START>\n<option><CISKINS><option>INSERT</option></CISKINS></option>\n<CI_SKIN_END>','','','',0,0,'');
-INSERT INTO site VALUES ('_SKIN_END',0,'eval','\'</select></div><div><input type=\"submit\" value=\"Skin\" class=\"submit\"></div></form>\'','','','',0,0,'');
-INSERT INTO site VALUES ('_SKIN_START',0,'eval','\'<form method=\"get\" action=\"index.php\">\' . getInputList() . \'<div><select name=\"template\">\'','','','',0,0,'');
 INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE','','','',0,0,'directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)');
+
+
+INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
+INSERT INTO skin VALUES ('kuro5hin','rusty','http://www.kuro5hin.org/');
 

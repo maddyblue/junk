@@ -285,6 +285,14 @@ CREATE TABLE site (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE skin (
+  skin_name varchar(100) NOT NULL default '',
+  skin_creator varchar(100) NOT NULL default '',
+  skin_www varchar(100) NOT NULL default '',
+  PRIMARY KEY  (skin_name)
+) TYPE=MyISAM;
+
+
 CREATE TABLE user (
   user_id bigint(10) unsigned NOT NULL auto_increment,
   user_name varchar(100) NOT NULL default '',
