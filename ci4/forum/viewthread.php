@@ -72,7 +72,7 @@ function postList($thread)
 
 	foreach($posts as $post)
 	{
-		$user = makeLink(decode($post['user_name']), 'user/?a=viewuserdetails&user=' . $post['user_id'], true);
+		$user = getUserlink($post['user_id']);
 		$user .= '<br>' . getTime($post['forum_post_date']) . '<br>';
 		$user .= makeLink('quote', '?a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
 		if($post['user_id'] == ID)
@@ -80,6 +80,11 @@ function postList($thread)
 
 		$body = '<a name="' . $post['forum_post_id'] . '"></a><div class="small">' . forumReplace(decode($post['forum_post_subject'])) . '</div>';
 		$body .= '<p>' . parsePost($post['forum_post_id']);
+
+		if($post['user_sig'])
+		{
+			$body .= '<br>----------<br>' . parseSig($post['user_sig']);
+		}
 
 		if($post['forum_post_edit_user'] != 0)
 		{
