@@ -58,8 +58,8 @@ textarea {
 a {
 	text-decoration: none;
 	color: #224488;
-
 }
+
 a:hover {
 	text-decoration: underline;
 }
@@ -150,8 +150,6 @@ td.block-light {
 	border-left: 1px solid #000000;
 	border-top: 1px solid #000000;
 }
-
-
 
 .tableCellTR, .tableCellR {
 	padding: 2px;
