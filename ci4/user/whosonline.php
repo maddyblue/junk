@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: whosonline.php,v 1.12 2004/01/05 09:20:27 dolmant Exp $ */
+/* $Id: whosonline.php,v 1.13 2004/01/07 10:49:40 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -39,6 +39,7 @@
  * 03: user
  * 04: forum
  * 05: game
+ * 06: manual
  */
 
 $actionlist = array(
@@ -75,6 +76,9 @@ array(0403, 'makeLink(\'Creating a new thread\', \'a=viewforum&f=\' . $d, SECTIO
 array(0404, 'makeLink(\'Viewing the taglist\', \'a=taglist\', SECTION_FORUM)'),
 array(0405, 'makeLink(\'Viewing the \' . ($d == \'0\' ? \'forums\' : decode(getDBData(\'forum_forum_name\', $d, \'forum_forum_id\', \'forum_forum\')) . \' forum\'), \'a=viewforum&f=\' . $d, SECTION_FORUM)'),
 array(0406, 'makeLink(\'Viewing thread \' . decode(getDBData(\'forum_thread_title\', $d, \'forum_thread_id\', \'forum_thread\')), \'a=viewthread&t=\' . $d, SECTION_FORUM)'),
+
+// manual
+array(0601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),
 
 );
 
