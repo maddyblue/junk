@@ -68,7 +68,7 @@ $gm = new GameMath;
 for($i = 0; $i <= $thresh; $i++)
 {
 	print "level $i to level " . ($i + 1) . ": ";
-	print round($gm->getExp($i + 1) - $gm->getExp($i));
+	print round($gm->GetExp($i + 1) - $gm->GetExp($i));
 	print "<br>\n";
 }
 
