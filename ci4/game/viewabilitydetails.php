@@ -81,6 +81,7 @@ if(count($res))
 	$array = array(
 		array('Ability', $res[0]['ability_name']),
 		array('Type', makeLink($res[0]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[0]['abilitytype_id'])),
+		array('MP', $res[0]['ability_mp']),
 		array('Description', $res[0]['ability_desc']),
 		array('Effect', $res[0]['ability_effect']),
 		array('Jobs that can learn this ability', $jobs),
