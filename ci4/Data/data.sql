@@ -147,8 +147,15 @@ INSERT INTO cor_job_equipmenttype VALUES (11,3);
 INSERT INTO cor_job_equipmenttype VALUES (11,11);
 
 
-INSERT INTO cor_job_joblv VALUES (4,11,3);
-INSERT INTO cor_job_joblv VALUES (6,10,3);
+INSERT INTO cor_job_joblv VALUES (11,9,8);
+INSERT INTO cor_job_joblv VALUES (10,9,8);
+INSERT INTO cor_job_joblv VALUES (8,7,8);
+INSERT INTO cor_job_joblv VALUES (3,2,8);
+INSERT INTO cor_job_joblv VALUES (4,3,8);
+INSERT INTO cor_job_joblv VALUES (5,3,8);
+INSERT INTO cor_job_joblv VALUES (9,1,4);
+INSERT INTO cor_job_joblv VALUES (7,1,4);
+INSERT INTO cor_job_joblv VALUES (2,1,4);
 
 
 
@@ -207,16 +214,15 @@ INSERT INTO group_def VALUES (4,'Moderators',0,0,0,0);
 
 
 INSERT INTO job VALUES (1,'Citizen',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The humble beginning of every adventurer as a common citizen or Crescent Island.');
-INSERT INTO job VALUES (2,'Squire',0,0,5,0,0,0,5,0,0,0,10,5,1,0,1,0,0,0,10,'A knights apprentice, eagerly awaiting the advent of his own knighthood.');
-INSERT INTO job VALUES (3,'Knight',0,0,5,0,5,0,0,5,0,0,10,5,2,2,2,1,0,1,20,'A knight of the realm, protector of the innocent and slayer of large scaly beasts.');
-INSERT INTO job VALUES (4,'Paladin',0,0,5,5,5,5,5,5,0,0,10,5,2,2,2,1,0,1,30,'A knight of the holy orders, sworn to uphold truth and justice.');
-INSERT INTO job VALUES (5,'Guardian',0,0,10,0,10,0,5,5,0,0,10,5,2,2,3,2,0,1,40,'A knight protector, sworn to defend his ward with courage and honour.');
-INSERT INTO job VALUES (6,'Sentinel',0,0,5,0,5,5,5,5,0,5,10,5,2,1,2,1,0,2,30,'The great protectors of the innocent, they quest endlessly to defend the world from both the evils of the mortal world and those beyond.');
-INSERT INTO job VALUES (7,'Archer',0,0,0,0,2,0,3,0,0,5,10,5,1,0,0,0,0,1,10,'Bow in hand the archer rains death on his quarry from afar.');
-INSERT INTO job VALUES (8,'Ranger',0,0,5,0,5,0,5,0,0,5,10,5,1,0,2,0,0,1,20,'The protector of nature with bow in hand, the ranger travels the world in harmony with nature and in defiance of his enemies.');
-INSERT INTO job VALUES (9,'Apprentice',0,0,0,0,0,5,0,5,0,0,7,10,0,1,1,0,0,0,10,'The young apprentice of a greater mage, seeking knowledge of arcana in dusty tomes and upon the field of battle.');
-INSERT INTO job VALUES (10,'White Mage',0,0,5,0,0,5,0,10,0,0,7,10,0,2,1,1,0,0,20,'Majestic healers and arcane protectors, White Mages seek to help the less fortunate wherever they go.');
-INSERT INTO job VALUES (11,'Black Mage',0,0,5,0,0,10,0,5,0,0,7,10,0,2,1,1,0,0,20,' For good or evil the Black Mage walks the path of destruction, shattering earth and incinerating their enemies is their trade, but what is the price for such power?');
+INSERT INTO job VALUES (2,'Squire',0,4,5,0,0,0,5,0,0,0,10,5,1,0,1,0,0,0,10,'A knights apprentice, eagerly awaiting the advent of his own knighthood.');
+INSERT INTO job VALUES (3,'Knight',0,12,5,0,5,0,0,5,0,0,10,5,2,2,2,1,0,1,20,'A knight of the realm, protector of the innocent and slayer of large scaly beasts.');
+INSERT INTO job VALUES (4,'Paladin',0,20,5,5,5,5,5,5,0,0,10,5,2,2,2,1,0,1,30,'A knight of the holy orders, sworn to uphold truth and justice.');
+INSERT INTO job VALUES (5,'Guardian',0,20,10,0,10,0,5,5,0,0,10,5,2,2,3,2,0,1,40,'A knight protector, sworn to defend his ward with courage and honour.');
+INSERT INTO job VALUES (7,'Archer',0,4,0,0,2,0,3,0,0,5,10,5,1,0,0,0,0,1,10,'Bow in hand the archer rains death on his quarry from afar.');
+INSERT INTO job VALUES (8,'Ranger',0,12,5,0,5,0,5,0,0,5,10,5,1,0,2,0,0,1,20,'The protector of nature with bow in hand, the ranger travels the world in harmony with nature and in defiance of his enemies.');
+INSERT INTO job VALUES (9,'Apprentice',0,4,0,0,0,5,0,5,0,0,7,10,0,1,1,0,0,0,10,'The young apprentice of a greater mage, seeking knowledge of arcana in dusty tomes and upon the field of battle.');
+INSERT INTO job VALUES (10,'White Mage',0,12,5,0,0,5,0,10,0,0,7,10,0,2,1,1,0,0,20,'Majestic healers and arcane protectors, White Mages seek to help the less fortunate wherever they go.');
+INSERT INTO job VALUES (11,'Black Mage',0,12,5,0,0,10,0,5,0,0,7,10,0,2,1,1,0,0,20,' For good or evil the Black Mage walks the path of destruction, shattering earth and incinerating their enemies is their trade, but what is the price for such power?');
 
 
 INSERT INTO monster VALUES (1,'Kobold','kobold.gif',5,3,3,3,4,2,3,3,1,20,5,5,'Often described as a cross between a lizard, a dog and a wet day, Kobolds are the meek cousins of the larger lizardmen, though they don\'t share the draconic blood that runs through the Lizardmen\'s veins. Kobolds are small humanoids with alligator like heads and grey mottled skin.');
