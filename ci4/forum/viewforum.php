@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewforum.php,v 1.14 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id: viewforum.php,v 1.15 2003/09/27 04:39:01 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -114,6 +114,21 @@ function forumList(&$array, $id, $topdepth, $depth)
 	}
 }
 
+function newThread($t)
+{
+	if(ID && $t['forum_post_date'] > getDBData('user_last_session'))
+	{
+		global $DBMain;
+
+		$r = $DBMain->Query('select count(*) as count from forum_view, forum_post where forum_post_thread=' . $t['forum_thread_id'] . ' and forum_view_user=' . ID . ' and forum_view_thread=' . $t['forum_thread_id'] . ' and forum_view_date > forum_post_date');
+
+		if(!$r[0]['count'])
+			return true;
+	}
+
+	return false;
+}
+
 function threadList($forumid, $offset, $threadsPP)
 {
 	global $DBMain;
@@ -130,20 +145,19 @@ function threadList($forumid, $offset, $threadsPP)
 
 	$ret = $DBMain->Query('select * from forum_thread, forum_post where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread and forum_thread_last_post=forum_post_id order by forum_post_date desc limit ' . $offset . ', ' . $threadsPP);
 
-	if(count($ret))
+	foreach($ret as $row)
 	{
-		foreach($ret as $row)
-		{
-			array_push($array, array(
+		array_push($array, array(
+			(newThread($row) ? '* ' : '') .
 				makeLink(decode($row['forum_thread_title']), 'a=viewthread&t=' . $row['forum_thread_id']),
-				getUserlink($row['forum_thread_user']),
-				$row['forum_thread_replies'],
-				$row['forum_thread_views'],
-				forumLinkLastPost($row['forum_post_id'])
-			));
-		}
+			getUserlink($row['forum_thread_user']),
+			$row['forum_thread_replies'],
+			$row['forum_thread_views'],
+			forumLinkLastPost($row['forum_post_id'])
+		));
 	}
-	else
+
+	if(!count($ret))
 	{
 		array_push($array, array(
 			'No threads',

@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Session.inc.php,v 1.5 2003/09/27 03:39:12 dolmant Exp $ */
+/* $Id: Session.inc.php,v 1.6 2003/09/27 04:39:01 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -73,6 +73,9 @@ function start_session()
 		TIME . ',' .
 		TIME .
 		')');
+
+	if(LOGGED)
+		$DBMain->Query('delete from forum_view where forum_views_user=' . ID);
 }
 
 function update_session($sid)
@@ -95,6 +98,14 @@ function update_session_action($action)
 function close_sessions()
 {
 	global $DBMain;
+
+	// sessions that are 10 minutes old
+	$ret = $DBMain->Query('select * from session where session_current < (' . TIME . ' - 600) and session_user > 0');
+
+	foreach($ret as $row)
+	{
+		$DBMain->Query('update user set user_last_session = ' . $row['session_current'] . ' where user_id = ' . $row['session_user']);
+	}
 
 	// remove all sessions that are over 10 minutes old
 	$DBMain->Query('delete from session where session_current < (' . TIME . ' - 600)');

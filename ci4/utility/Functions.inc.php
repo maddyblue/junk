@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: Functions.inc.php,v 1.49 2003/09/27 03:34:20 dolmant Exp $ */
+/* $Id: Functions.inc.php,v 1.50 2003/09/27 04:39:01 dolmant Exp $ */
 
 /*
  * Copyright (c) 2002 Matthew Jibson
@@ -427,6 +427,16 @@ function getUsername($id)
 		return decode($ret[0]['user_name']);
 	else
 		return '';
+}
+
+function getDBDataNum($field, $search = ID, $where = 'user_id', $table = 'user')
+{
+	$r = getDBData($field, $search, $where, $table);
+
+	if(!$r)
+		$r = '0';
+
+	return $r;
 }
 
 function getDBData($field, $search = ID, $where = 'user_id', $table = 'user')

@@ -138,6 +138,13 @@ CREATE TABLE forum_thread (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE forum_view (
+  forum_view_user bigint(10) unsigned NOT NULL default '0',
+  forum_view_thread bigint(10) unsigned NOT NULL default '0',
+  forum_view_date bigint(10) NOT NULL default '0'
+) TYPE=MyISAM;
+
+
 CREATE TABLE group_def (
   group_def_id bigint(10) unsigned NOT NULL auto_increment,
   group_def_name varchar(100) NOT NULL default '',
@@ -284,6 +291,7 @@ CREATE TABLE user (
   user_email varchar(100) NOT NULL default '',
   user_register bigint(10) unsigned NOT NULL default '0',
   user_last bigint(10) unsigned NOT NULL default '0',
+  user_last_session bigint(10) unsigned NOT NULL default '0',
   user_avatar_type tinyint(1) unsigned NOT NULL default '0',
   user_avatar_data blob NOT NULL,
   user_sig text NOT NULL,

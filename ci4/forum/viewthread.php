@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewthread.php,v 1.20 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id: viewthread.php,v 1.21 2003/09/27 04:39:01 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -126,6 +126,9 @@ if(count($array))
 			array('', array('type'=>'hidden', 'name'=>'t', 'val'=>$threadid)),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
 		));
+
+		$DBMain->Query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $threadid);
+		$DBMain->Query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $threadid . ', ' . TIME . ')');
 	}
 
 	update_session_action('Viewing thread ' . makeLink($res[0]['forum_thread_title'], 'a=viewthread&t=' . $threadid, SECTION_FORUM));
