@@ -50,6 +50,7 @@ if(count($res))
 	);
 
 	$req = array(
+		array('Level', $res[0]['equipment_req_lv']),
 		array('STR', $res[0]['equipment_req_str']),
 		array('MAG', $res[0]['equipment_req_mag']),
 		array('Gender', getGender($res[0]['equipment_req_gender']))
@@ -64,7 +65,6 @@ if(count($res))
 		array('Name', $res[0]['equipment_name'] . makeImg($res[0]['equipment_image'], 'images/equipment/')),
 		array('Type', makeLink($res[0]['equipmenttype_name'], 'a=viewequipment&type=' . $res[0]['equipmenttype_id'])),
 		array('Description', $res[0]['equipment_desc']),
-		array('Level', $res[0]['equipment_lv']),
 		array('Two Hand?', ($res[0]['equipment_twohand'] ? 'Yes' : 'No')),
 		array('Stat Changes', getTable($stat, false)),
 		array('Requirements', getTable($req, false)),
