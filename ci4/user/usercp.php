@@ -32,8 +32,7 @@
 
 function disp($email, $sig)
 {
-		echo
-		getTableForm('User Control Panel:', array(
+		echo getTableForm('User Control Panel:', array(
 			array('Email', array('type'=>'text', 'name'=>'email', 'val'=>decode($email))),
 			array('Signature', array('type'=>'textarea', 'name'=>'sig', 'val'=>decode($sig))),
 			array('', array('type'=>'disptext', 'val'=>'Signature must be less than or equal to five lines long, may contain only non-formatted text and hyperlinks. Your sig will be edited by an admin or moderator if it is in any way obscene or unacceptable.')),
