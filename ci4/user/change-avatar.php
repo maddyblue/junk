@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: usercp.php 6 2004-02-29 06:33:30Z dolmant $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2004 Matthew Jibson
@@ -31,6 +31,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
+function dirList($dir, $files = true, $dirs = true, $omitdotfiles = true)
+{
+	$ret = array();
+
+	$path = CI_FS_PATH . $dir;
+	if(substr($path, -1) != '/')
+		$path .= '/';
+
+	$d = dir($path);
+	while (false !== ($entry = $d->read()))
+	{
+		if($omitdotfiles && substr($entry, 0, 1) == '.')
+			continue;
+
+		if(($files && is_file($path . $entry)) ||
+			($dirs && is_dir($path . $entry)))
+			array_push($ret, $entry);
+	}
+	$d->close();
+
+	return $ret;
+}
 
 function disp($base, $dir)
 {
