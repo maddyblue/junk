@@ -32,7 +32,7 @@
 
 function display($name, $email)
 {
-	if(!defined('IS_SECURE'))
+	if(0 && !defined('IS_SECURE'))
 	{
 		echo '<p><b>We highly suggest that you switch to the <a href="' . CI_WWW_ADDRESS_HTTPS . 'user/?a=newuser">secure version of this page</a> while registering. It will make your password and all other submitted data transfer over the Internet in a secure method.</b></p>';
 	}
@@ -110,7 +110,7 @@ if(isset($_POST['submit']))
 	}
 	else
 	{
-		$DBMain->Query('insert into user (user_name, user_email, user_pass, user_register) values ("' . $name . '", "' . $email . '", md5("' . $pass1 . '"), ' . time() . ')');
+		$DBMain->Query('insert into user (user_name, user_email, user_pass, user_register) values ("' . $name . '", "' . $email . '", md5("' . $pass1 . '"), ' . TIME . ')');
 		echo '<br>User &quot;' . decode($name) . '&quot; successfully registered. Please login.';
 	}
 }
