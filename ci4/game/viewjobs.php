@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewjobs.php,v 1.8 2004/01/07 10:56:00 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -32,26 +32,51 @@
  *
  */
 
-$query = 'select * from job order by job_name';
+/* Get each job, as well as all required jobs for that job.
+ * Note that column j is this job, column job is the prereq.
+ */
+$query = 'SELECT j.job_name as jname, j.job_id as jid, j.job_req_lv as jreq, j.job_gender as jgen, job.job_id, job.job_name, cor_joblv
+FROM job j
+LEFT JOIN cor_job_joblv ON cor_job = j.job_id
+LEFT JOIN job ON cor_job_req = job.job_id
+ORDER BY j.job_req_lv, j.job_name, cor_joblv, job.job_name';
 $res = $DBMain->Query($query);
 
 $array = array();
 
 array_push($array, array(
 	'Job',
-	'Gender',
 	'Required Level',
-	'Description'
+	'Gender',
+	'Required Job Levels'
 ));
+
+$reqs = '';
 
 for($i = 0; $i < count($res); $i++)
 {
-	array_push($array, array(
-		makeLink($res[$i]['job_name'], 'a=viewjobdetails&job=' . $res[$i]['job_id']),
-		getGender($res[$i]['job_gender']),
-		$res[$i]['job_req_lv'],
-		$res[$i]['job_desc']
-	));
+	// if this row's job is the same as last row, build more of the job req list
+	if($i > 0 && $res[$i]['jid'] == $res[$i - 1]['jid'])
+	{
+		$reqs .= ', ' . makeLink($res[$i]['job_name'], 'a=viewjobdetails&job=' . $res[$i]['job_id']) . ' (' . $res[$i]['cor_joblv'] . ')';
+	}
+	// we are the first of this job type
+	else
+	{
+		$reqs = $res[$i]['job_id'] ? makeLink($res[$i]['job_name'], 'a=viewjobdetails&job=' . $res[$i]['job_id']) . ' (' . $res[$i]['cor_joblv'] . ')' : 'None';
+	}
+
+	// if the next job is _not_ the same as this one, add ourselves
+	if($i == count($res) - 1 || $res[$i + 1]['jid'] != $res[$i]['jid'])
+	{
+		array_push($array, array(
+			makeLink($res[$i]['jname'], 'a=viewjobdetails&job=' . $res[$i]['jid']),
+			$res[$i]['jreq'],
+			getGender($res[$i]['jgen']),
+			$reqs
+		));
+	}
+
 }
 
 echo getTable($array);
