@@ -131,12 +131,16 @@ if(count($res) == 1)
 
 	// abilities
 
-	$res = $db->query('select ability_id, ability_name, abilitytype_name, abilitytype_id from player_ability, ability, abilitytype where player_ability_player=' . $player . ' and player_ability_ability=ability_id and ability_type=abilitytype_id');
+	$res = $db->query('select ability_id, ability_name, abilitytype_name, abilitytype_id, player_ability_level from player_ability, ability, abilitytype where player_ability_player=' . $player . ' and player_ability_ability=ability_id and ability_type=abilitytype_id');
 
-	$array = array(array('Ability', 'Type'));
+	$array = array(array('Ability', 'Level', 'Type'));
 
 	for($i = 0; $i < count($res); $i++)
-		array_push($array, array(makeLink($res[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $res[$i]['ability_id'], SECTION_GAME), makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id'], SECTION_GAME)));
+		array_push($array, array(
+			makeLink($res[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $res[$i]['ability_id'], SECTION_GAME),
+			$res[$i]['player_ability_level'],
+			makeLink($res[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[$i]['abilitytype_id'], SECTION_GAME)
+		));
 
 	echo '<p>Learned abilities:' . getTable($array);
 
