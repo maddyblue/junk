@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewabilitydetails.php,v 1.1 2004/01/07 06:33:01 dolmant Exp $ */
+/* $Id: viewabilitydetails.php,v 1.2 2004/01/07 06:41:27 dolmant Exp $ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -52,7 +52,9 @@ $array = array(
 	array('Ability', $res[0]['ability_name']),
 	array('Type', makeLink($res[0]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[0]['abilitytype_id'])),
 	array('Description', $res[0]['ability_desc']),
-	array('Jobs that can learn this ability', $jobs)
+	array('Jobs that can learn this ability', $jobs),
+	array('Required Level', $res[0]['ability_req_lv']),
+	array('AP cost', $res[0]['ability_ap_cost'])
 );
 
 echo getTable($array);
