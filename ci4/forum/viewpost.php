@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: viewpost.php,v 1.3 2003/09/25 23:57:34 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -41,11 +41,9 @@ if(count($ret) == 1)
 	$threadid = $ret[0]['forum_post_thread'];
 	$postsPP = FORUM_POSTS_PP;
 
-	$ret = $DBMain->Query('select floor(count(*)/' . $postsPP . ') as count from forum_post where forum_post_thread=' . $threadid . ' and forum_post_date < ' . $ret[0]['forum_post_date']);
-	$offset = $ret[0]['count'] * $postsPP;
-	?>
-		<meta http-equiv="refresh" content="0;url=?a=viewthread&t=<?=$threadid?>&start=<?=$offset?>#<?=$postid?>">
-	<?php
+	$ret = $DBMain->Query('select floor(count(*)/' . $postsPP . ') + 1 as count from forum_post where forum_post_thread=' . $threadid . ' and forum_post_date < ' . $ret[0]['forum_post_date']);
+
+	echo '<meta http-equiv="refresh" content="0; url=?a=viewthread&t=' . $threadid . '&page=' . $ret[0]['count'] . '#' . $postid . '">';
 }
 else
 {
