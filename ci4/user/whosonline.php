@@ -93,6 +93,7 @@ array(0602, 'makeLink(\'Viewing the advanced skinning tutorial\', \'a=skinning-a
 array(0603, 'makeLink(\'Viewing the IRC manual page\', \'a=irc\', SECTION_MANUAL)'),
 array(0604, 'makeLink(\'Viewing the how to help page\', \'a=help\', SECTION_MANUAL)'),
 array(0605, 'makeLink(\'Reading about CI\', \'a=about\', SECTION_MANUAL)'),
+array(0606, 'makeLink(\'Reading about the CI Staff\', \'a=staff\', SECTION_MANUAL)'),
 
 // player
 array(0701, 'makeLink(\'Viewing the player list\', \'a=viewplayers\', SECTION_PLAYER)'),
