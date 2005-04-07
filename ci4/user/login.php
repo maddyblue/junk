@@ -74,7 +74,7 @@ if(isset($_POST['submit']))
 		$pass = $ret[0]['user_pass'];
 		echo '<p/>Logged in successfully as ' . decode($user) . '.';
 
-		if($last)
+		if($last && strpos($last, 'logout') === false)
 		{
 			echo '<p/>Redirecting to <a href="' . $last . '">last location</a>...';
 			$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
