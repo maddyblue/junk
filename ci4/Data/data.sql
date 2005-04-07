@@ -394,39 +394,22 @@ INSERT INTO group_def VALUES (4,'Moderators',0,0,0,0);
 
 
 INSERT INTO house VALUES (1,'Shack',0,0,'');
-INSERT INTO house VALUES (2,'Cottage',4000,10,'');
-INSERT INTO house VALUES (3,'Town house',5000,10,'');
-INSERT INTO house VALUES (4,'Villa',65000,75,'');
-INSERT INTO house VALUES (5,'Tower',10000,20,'');
-INSERT INTO house VALUES (6,'Stone Fort',8500,20,'');
-INSERT INTO house VALUES (7,'Castle',95000,100,'');
-INSERT INTO house VALUES (8,'Palace',110000,100,'');
-INSERT INTO house VALUES (9,'House',250,5,'');
-INSERT INTO house VALUES (10,'Ruler of Kingdom',175000,150,'');
-INSERT INTO house VALUES (11,'Hideout',26000,35,'');
-INSERT INTO house VALUES (12,'Mansion',22500,35,'');
-INSERT INTO house VALUES (13,'Keep',55000,50,'');
-INSERT INTO house VALUES (14,'Dungeon',45000,50,'');
-INSERT INTO house VALUES (15,'Fortress',73000,75,'');
-INSERT INTO house VALUES (16,'Leader of Village',18000,28,'');
-INSERT INTO house VALUES (17,'Lord of Town',60000,62,'');
-INSERT INTO house VALUES (18,'Shack',0,0,'');
-INSERT INTO house VALUES (19,'Cottage',4000,10,'+20 str\r\n+10 def\r\n-5 money');
-INSERT INTO house VALUES (20,'Town house',5000,10,'+20 mag\r\n+10 mgd\r\n-5 money');
-INSERT INTO house VALUES (21,'Villa',65000,75,'+75 mag\r\n+75 mgd\r\n+20 mp\r\n-45 money');
-INSERT INTO house VALUES (22,'Tower',10000,20,'+30 mag\r\n+20 mgd\r\n-10 money');
-INSERT INTO house VALUES (23,'Stone Fort',8500,20,'+30 str\r\n+20 def\r\n-10 money');
-INSERT INTO house VALUES (24,'Castle',95000,100,'+100 str\r\n+75 def\r\n+40 hp\r\n-60 money');
-INSERT INTO house VALUES (25,'Palace',110000,100,'+100 mag\r\n+75 mgd\r\n+40 mp\r\n-60 money');
-INSERT INTO house VALUES (26,'House',250,5,'+5 str\r\n+5 def\r\n+5 mag\r\n+5 mgd\r\n-2 money');
-INSERT INTO house VALUES (27,'Ruler of Kingdom',175000,150,'+75 str\r\n+75 def\r\n+75 mag\r\n+75 mgd\r\n+50 hp\r\n+50 mp\r\n-75 money');
-INSERT INTO house VALUES (28,'Hideout',26000,35,'+45 str\r\n+35 def\r\n-20 money');
-INSERT INTO house VALUES (29,'Mansion',22500,35,'+45 mag\r\n+30 mgd\r\n-20 money');
-INSERT INTO house VALUES (30,'Keep',55000,50,'+55 str\r\n+45 def\r\n+10 hp\r\n-30 money');
-INSERT INTO house VALUES (31,'Dungeon',45000,50,'+55 mag\r\n+45 mgd\r\n+10 mp\r\n-30 money');
-INSERT INTO house VALUES (32,'Fortress',73000,75,'+75 str\r\n+60 def\r\n+20 hp\r\n-45 money');
-INSERT INTO house VALUES (33,'Leader of Village',18000,28,'+40 str\r\n+30 def\r\n+40 mag\r\n+30 mgd\r\n-15 money');
-INSERT INTO house VALUES (34,'Lord of Town',60000,62,'+65 str\r\n+50 def\r\n+65 mag\r\n+50 mgd\r\n+15 hp\r\n+15 mp\r\n-38 money');
+INSERT INTO house VALUES (2,'Cottage',4000,10,'+20 str\r\n+10 def\r\n-5 money');
+INSERT INTO house VALUES (3,'Town house',5000,10,'+20 mag\r\n+10 mgd\r\n-5 money');
+INSERT INTO house VALUES (4,'Villa',65000,75,'+75 mag\r\n+75 mgd\r\n+20 mp\r\n-45 money');
+INSERT INTO house VALUES (5,'Tower',10000,20,'+30 mag\r\n+20 mgd\r\n-10 money');
+INSERT INTO house VALUES (6,'Stone Fort',8500,20,'+30 str\r\n+20 def\r\n-10 money');
+INSERT INTO house VALUES (7,'Castle',95000,100,'+100 str\r\n+75 def\r\n+40 hp\r\n-60 money');
+INSERT INTO house VALUES (8,'Palace',110000,100,'+100 mag\r\n+75 mgd\r\n+40 mp\r\n-60 money');
+INSERT INTO house VALUES (9,'House',250,5,'+5 str\r\n+5 def\r\n+5 mag\r\n+5 mgd\r\n-2 money');
+INSERT INTO house VALUES (10,'Ruler of Kingdom',175000,150,'+75 str\r\n+75 def\r\n+75 mag\r\n+75 mgd\r\n+50 hp\r\n+50 mp\r\n-75 money');
+INSERT INTO house VALUES (11,'Hideout',26000,35,'+45 str\r\n+35 def\r\n-20 money');
+INSERT INTO house VALUES (12,'Mansion',22500,35,'+45 mag\r\n+30 mgd\r\n-20 money');
+INSERT INTO house VALUES (13,'Keep',55000,50,'+55 str\r\n+45 def\r\n+10 hp\r\n-30 money');
+INSERT INTO house VALUES (14,'Dungeon',45000,50,'+55 mag\r\n+45 mgd\r\n+10 mp\r\n-30 money');
+INSERT INTO house VALUES (15,'Fortress',73000,75,'+75 str\r\n+60 def\r\n+20 hp\r\n-45 money');
+INSERT INTO house VALUES (16,'Leader of Village',18000,28,'+40 str\r\n+30 def\r\n+40 mag\r\n+30 mgd\r\n-15 money');
+INSERT INTO house VALUES (17,'Lord of Town',60000,62,'+65 str\r\n+50 def\r\n+65 mag\r\n+50 mgd\r\n+15 hp\r\n+15 mp\r\n-38 money');
 
 
 
