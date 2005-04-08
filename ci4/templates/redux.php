@@ -5,7 +5,11 @@
 
 <head>
 	<!-- $Id$ -->
-	<title>crescent island ::</title>
+	<title>
+		crescent island ::
+		<?php echo strtolower(CI_SECTION); ?>
+		<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
+	</title>
 	<CI_HEAD>
 
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
