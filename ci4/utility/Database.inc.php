@@ -99,8 +99,8 @@ class Database
 		if($dbq == false)
 		{
 			global $message;
-			$message .= '<p/>Error: ' . mysql_error() . '.
-				<p/>Query: ' . $query;
+			$message .= '<div class="error">Error: ' . mysql_error() . '.
+				<br/>Query: ' . $query . '</div>';
 			return;
 		}
 
