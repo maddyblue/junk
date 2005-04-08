@@ -613,6 +613,7 @@ INSERT INTO site VALUES ('_TEMPLATE_DIR',0,'eval','CI_TEMPLATE_WWW . CI_TEMPLATE
 
 INSERT INTO skin VALUES ('redux','ubik','http://werdizen.com/');
 INSERT INTO skin VALUES ('kuro5hin','rusty','http://www.kuro5hin.org/');
+INSERT INTO skin VALUES ('monobook','MediaWiki','http://wikipedia.sourceforge.net/');
 
 
 INSERT INTO town VALUES (1,'Midgar',0,'The cities of Midgar and Narshe are run-down, old, crappy cities. They provide no bonuses because they suck a lot. ',0,0,'','');
