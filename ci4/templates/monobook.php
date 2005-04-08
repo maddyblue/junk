@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
-		<title>CI</title>
+		<title>crescent island</title>
 		<CI_HEAD>
 		<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR>/main.css" />
 	</head>
@@ -62,6 +62,25 @@
 					</div>
 				</div>
 				<?php } ?>
+				<div class="portlet" id="p-nav">
+					<h5>server time</h5>
+					<div class="pBody">
+						<?php echo gmdate('d M y g:i a', TIME + TZOFFSET); ?>
+					</div>
+				</div>
+				<div class="portlet" id="p-nav">
+					<h5><?php echo makeLink('who\'s online', 'a=whosonline', SECTION_USER); ?></h5>
+					<div class="pBody">
+						<?php echo getNumActiveUsers(); ?> users,
+						<?php echo getNumActiveGuests(); ?> guests
+					</div>
+				</div>
+				<div class="portlet" id="p-nav">
+					<h5>render stats</h5>
+					<div class="pBody">
+						<CI_PROFILE>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>
