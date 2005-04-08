@@ -67,6 +67,9 @@ function handle_session()
 				start_session();
 		}
 	}
+
+	// default
+	$GLOBALS['PAGE_TITLE'] = '';
 }
 
 function start_session()
