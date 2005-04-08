@@ -2,7 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
-		<title>crescent island</title>
+		<title>
+			crescent island -
+			<?php echo strtolower(CI_SECTION); ?>
+			<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
+		</title>
 		<CI_HEAD>
 		<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR>/main.css" />
 	</head>
@@ -12,7 +16,7 @@
 				<div id="content">
 					<h1 class="firstHeading"><?php echo CI_SECTION; ?></h1>
 					<div id="bodyContent">
-						<div id="contentSub"><?php echo $aval; ?></div>
+						<div id="contentSub"><?php echo $GLOBALS['PAGE_TITLE']; ?></div>
 						<CICONTENT>
 						<div class="visualClear"></div>
 					</div>
