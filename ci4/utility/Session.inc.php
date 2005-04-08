@@ -119,11 +119,11 @@ function update_session($sid, $updateplayer = false)
 	$db->query($query);
 }
 
-function update_session_action($action, $data = '')
+function update_session_action($action, $data = '', $title = '')
 {
-	global $db;
+	$GLOBALS['db']->query('update session set session_action=' . $action . ', session_action_data="' . $data . '" where session_id="' . SESSION . '"');
 
-	$db->query('update session set session_action=' . $action . ', session_action_data="' . $data . '" where session_id="' . SESSION . '"');
+	$GLOBALS['PAGE_TITLE'] = $title ? $title : $GLOBALS['aval'];
 }
 
 function close_sessions()
