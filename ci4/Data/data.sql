@@ -561,10 +561,9 @@ INSERT INTO site VALUES ('ADMIN_SECTION_NAV',40,'link','Manage forums','','\'a=m
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV',50,'link','Manage Groups','','\'a=manage-groups\'','SECTION_ADMIN',1,1,'');
 INSERT INTO site VALUES ('BATTLE_SECTION_NAV',0,'link','Battle','','\'a=battle\'','SECTION_BATTLE',1,0,'');
 INSERT INTO site VALUES ('BATTLE_SECTION_NAV',10,'link','New Battle','','\'a=newbattle\'','SECTION_BATTLE',1,0,'');
-INSERT INTO site VALUES ('FORUM_SECTION_NAV',1,'eval','newthreadLink() . newreplyLink()','','','',1,0,'f and t are never specified together, hence this works well');
-INSERT INTO site VALUES ('FORUM_SECTION_NAV',2,'link','View New Threads','','\'a=viewnew\'','SECTION_FORUM',1,0,'');
-INSERT INTO site VALUES ('FORUM_SECTION_NAV',3,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
-INSERT INTO site VALUES ('FORUM_SECTION_NAV',4,'link','Smilies','','\'a=smilies\'','SECTION_FORUM',0,0,'');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV',1,'link','Smilies','','\'a=smilies\'','SECTION_FORUM',0,0,'');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV',2,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV',3,'link','View New Threads','','\'a=viewnew\'','SECTION_FORUM',1,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',1,'link','Manage Abilities','','\'a=abilities\'','SECTION_GAME',1,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',2,'link','Manage Equipment','','\'a=equip\'','SECTION_GAME',1,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',3,'link','View Abilities','','\'a=viewabilities\'','SECTION_GAME',0,0,'');
