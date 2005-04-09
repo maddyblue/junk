@@ -474,6 +474,15 @@ CREATE TABLE skin (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE stats (
+  stats_timestamp bigint(10) unsigned NOT NULL default '0',
+  stats_user bigint(10) unsigned NOT NULL default '0',
+  stats_action smallint(4) unsigned NOT NULL default '0',
+  stats_skin varchar(15) NOT NULL default '',
+  stats_ip bigint(11) NOT NULL default '0'
+) TYPE=MyISAM;
+
+
 CREATE TABLE town (
   town_id bigint(10) unsigned NOT NULL auto_increment,
   town_name varchar(100) NOT NULL default '',

@@ -226,6 +226,8 @@ else
 	}
 }
 
+$db->query('insert into stats values (' . TIME . ', ' . ID . ', ' . $SESSION_ACTION . ', "' . CI_TEMPLATE . '", ' . ip2long($_SERVER['REMOTE_ADDR']) . ')');
+
 ob_start();
 eval('?>' . $template);
 $template = ob_get_contents();

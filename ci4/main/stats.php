@@ -34,15 +34,19 @@
 
 $SecPerDay = 86400;
 $SecPerWeek = 604800;
+$PastDay = TIME - $SecPerDay;
+$PastWeek = TIME - $SecPerWeek;
 
 $stats = array(
+	array('Hits for the past day', 'select count(*) from stats where stats_timestamp > ' . $PastDay),
+	array('Total Hits', 'select count(*) from stats'),
 	array('Registered users', 'select count(*) from user'),
-	array('New users in the last week', 'select count(*) from user where user_register > (UNIX_TIMESTAMP() - ' . $SecPerWeek . ')'),
-	array('Active users for the past week', 'select count(*) from user where user_last > (UNIX_TIMESTAMP() - ' . $SecPerWeek . ')'),
-	array('Active users for the past day', 'select count(*) from user where user_last > (UNIX_TIMESTAMP() - ' . $SecPerDay . ')'),
+	array('New users in the last week', 'select count(*) from user where user_register > ' . $PastWeek),
+	array('Active users for the past week', 'select count(*) from user where user_last > ' . $PastWeek),
+	array('Active users for the past day', 'select count(*) from user where user_last > ' . $PastDay),
 	array('Forum posts', 'select count(*) from forum_post'),
-	array('Forum posts for the past week', 'select count(*) from forum_post where forum_post_date > (UNIX_TIMESTAMP() - ' . $SecPerWeek . ')'),
-	array('Forum posts for the past day', 'select count(*) from forum_post where forum_post_date > (UNIX_TIMESTAMP() - ' . $SecPerDay . ')'),
+	array('Forum posts for the past week', 'select count(*) from forum_post where forum_post_date > ' . $PastWeek),
+	array('Forum posts for the past day', 'select count(*) from forum_post where forum_post_date > ' . $PastDay),
 	array('Forum threads', 'select count(*) from forum_thread'),
 	array('Registered players', 'select count(*) from player'),
 	array('Battles', 'select count(*) from battle')

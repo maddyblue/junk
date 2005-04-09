@@ -70,6 +70,7 @@ function handle_session()
 
 	// default
 	$GLOBALS['PAGE_TITLE'] = '';
+	$GLOBALS['SESSION_ACTION'] = 0;
 }
 
 function start_session()
@@ -127,6 +128,7 @@ function update_session_action($action, $data = '', $title = '')
 	$GLOBALS['db']->query('update session set session_action=' . $action . ', session_action_data="' . $data . '" where session_id="' . SESSION . '"');
 
 	$GLOBALS['PAGE_TITLE'] = $title ? $title : $GLOBALS['aval'];
+	$GLOBALS['SESSION_ACTION'] = $action;
 }
 
 function close_sessions()
