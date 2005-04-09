@@ -573,6 +573,7 @@ INSERT INTO site VALUES ('GAME_SECTION_NAV',5,'link','View Equipment','','\'a=vi
 INSERT INTO site VALUES ('GAME_SECTION_NAV',6,'link','View Jobs','','\'a=viewjobs\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',7,'link','View Monsters','','\'a=viewmonsters\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',8,'link','View Towns','','\'a=viewtowns\'','SECTION_GAME',0,0,'');
+INSERT INTO site VALUES ('GAME_SECTION_NAV',9,'link','View Houses','','\'a=viewhouses\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',0,'link','Domains','','\'a=domains\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',10,'link','Skins','','\'a=skins\'','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('MAIN_SECTION_NAV',20,'link','Stats','','\'a=stats\'','SECTION_HOME',0,0,'');

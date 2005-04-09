@@ -85,6 +85,7 @@ array(0503, 'makeLink(\'Viewing Equipment\', \'a=viewequipment\', SECTION_GAME)'
 array(0504, 'makeLink(\'Viewing Jobs\', \'a=viewjobs\', SECTION_GAME)'),
 array(0505, 'makeLink(\'Viewing Monsters\', \'a=viewmonsters\', SECTION_GAME)'),
 array(0506, 'makeLink(\'Viewing Towns\', \'a=viewtowns\', SECTION_GAME)'),
+array(0507, 'makeLink(\'Viewing Houses\', \'a=viewhouses\', SECTION_GAME)'),
 array(0551, 'makeLink(\'Changing Jobs\', \'a=changejobs\', SECTION_GAME)'),
 
 // manual
