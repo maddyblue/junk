@@ -1,6 +1,6 @@
 <?php
 
-/* $Id: index.php,v 1.3 2003/09/25 23:57:35 dolmant Exp $ */
+/* $Id$ */
 
 /*
  * Copyright (c) 2003 Matthew Jibson
@@ -34,6 +34,10 @@
 
 define('CI_SECTION', 'USER');
 define('CI_HOME_MOD', '../');
+
+if(!isset($_GET['a']) && !isset($_POST['a']))
+	$_GET['a'] = 'viewuserdetails';
+
 require '../index.php';
 
 ?>
