@@ -28,11 +28,11 @@
 						<li><CINAV><li>INSERT</li></CINAV></li>
 					</ul>
 				</div>
-				<!-- <div class="portlet" id="p-logo">
-					<a style="background-image: url(image location);"
+				<div class="portlet" id="p-logo">
+					<a style="background-image: url(<CI_TEMPLATE_DIR>/wikiisland.gif);"
 						href=""
 						title=""></a>
-				</div> -->
+				</div>
 				<div class="portlet" id="p-nav">
 					<h5>section nav</h5>
 					<div class="pBody">
