@@ -52,7 +52,6 @@ array(0000, '\'Unknown\''),
 array(0101, 'makeLink(\'Viewing the news\', \'a=news\', SECTION_HOME)'),
 array(0102, 'makeLink(\'Viewing the skins page\', \'a=skins\', SECTION_HOME)'),
 array(0103, 'makeLink(\'Viewing the domains page\', \'a=domains\', SECTION_HOME)'),
-array(0104, 'makeLink(\'Changing their domain\', \'a=domains\', SECTION_HOME)'),
 
 // admin
 array(0200, '\'In the Admin CP\''),

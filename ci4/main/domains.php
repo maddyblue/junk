@@ -49,7 +49,7 @@ for($i = 0; $i < count($res); $i++)
 	$query = 'select count(*) as count from player where player_domain=' . $res[$i]['domain_id'];
 	$players = $db->query($query);
 
-	$name = makeLink($res[$i]['domain_name'], 'a=changedomain&domain=' . $res[$i]['domain_id']);
+	$name = makeLink($res[$i]['domain_name'], 'a=domains&domain=' . $res[$i]['domain_id']);
 
 	array_push($array, array(
 		$name,
@@ -61,7 +61,7 @@ for($i = 0; $i < count($res); $i++)
 
 echo getTable($array);
 
-echo '<p/>' . makeLink('Leave domains.', 'a=changedomain&domain=0');
+echo '<p/>' . makeLink('Leave domains.', 'a=domains&domain=0');
 
 update_session_action(0103);
 

@@ -43,7 +43,7 @@
 				</div>
 				<?php if(LOGGED) { ?>
 				<div class="portlet" id="p-nav">
-					<h5><?php echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER); ?></h5>
+					<h5><?php echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . ' - ' . ($USER['domain_abrev'] ? $USER['domain_abrev'] : 'no domain'); ?></h5>
 					<div class="pBody">
 						<ul>
 							<?php
@@ -59,7 +59,7 @@
 								if($res[$i]['player_id'] == $PLAYER['player_id'])
 									echo '* ';
 
-								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_GAME) . ' [' . makeLink($res[$i]['domain_abrev'], 'a=changedomain&domain=' . $res[$i]['domain_id'], SECTION_HOME) . ']</li>';
+								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_GAME) . ' [' . makeLink($res[$i]['domain_abrev'], $_SERVER['QUERY_STRING'] . '&domain=' . $res[$i]['domain_id']) . ']</li>';
 							}
 						?>
 						</ul>

@@ -85,17 +85,21 @@ if(CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
 		$contentdone = true;
 }
 
-if(CI_SECTION == 'MAIN' && $aval == 'changedomain' && isset($_GET['domain']))
+if(isset($_GET['domain']))
+{
 	$dom = intval($_GET['domain']);
+	$content .= '<div><b>Domain changed.</b></div>';
+}
 else
 	$dom = intval(getCICookie('domain'));
 
 define('CI_DOMAIN', $dom);
+setCIcookie('domain', $dom);
 
 // check to see if we have a valid user
 
 if($id && $pass)
-	$res = $db->query('select * from user where user_id=' . $id . ' and user_pass="' . $pass . '"');
+	$res = $db->query('select user.*, domain_abrev from user left join domain on domain_id=' . CI_DOMAIN . ' where user_id=' . $id . ' and user_pass="' . $pass . '"');
 else
 	$res = array();
 
@@ -204,7 +208,7 @@ if($contentdone)
 else
 {
 	if(CI_SECTION == 'ADMIN' && !ADMIN)
-		$content = '<p/>You do not have permission to view this page.';
+		$content .= '<p/>You do not have permission to view this page.';
 	else
 	{
 		if($aval)
@@ -215,12 +219,12 @@ else
 			{
 				ob_start();
 				require $a;
-				$content = ob_get_contents();
+				$content .= ob_get_contents();
 				ob_end_clean();
 			}
 			else
 			{
-				$content = 'Non-existent action.';
+				$content .= 'Non-existent action.';
 			}
 		}
 	}
