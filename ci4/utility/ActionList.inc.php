@@ -97,10 +97,10 @@ array(0605, 'makeLink(\'Reading about CI\', \'a=about\', SECTION_MANUAL)'),
 array(0606, 'makeLink(\'Reading about the CI Staff\', \'a=staff\', SECTION_MANUAL)'),
 
 // player
-array(0701, 'makeLink(\'Viewing the player list\', \'a=viewplayers\', SECTION_PLAYER)'),
-array(0702, 'makeLink(\'Viewing details of \' . decode(getDBData(\'player_name\', $d, \'player_id\', \'player\')), \'a=viewplayerdetails&player=\' . $d, SECTION_PLAYER)'),
+array(0701, 'makeLink(\'Viewing the player list\', \'a=viewplayers\', SECTION_GAME)'),
+array(0702, 'makeLink(\'Viewing details of \' . decode(getDBData(\'player_name\', $d, \'player_id\', \'player\')), \'a=viewplayerdetails&player=\' . $d, SECTION_GAME)'),
 array(0703, '\'Registering a new player\''),
-array(0704, 'makeLink(\'Managing their abilities\', \'a=abilities\', SECTION_PLAYER)')
+array(0704, 'makeLink(\'Managing their abilities\', \'a=abilities\', SECTION_GAME)')
 
 );
 
