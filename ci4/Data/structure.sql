@@ -343,7 +343,7 @@ CREATE TABLE monstertype (
   monstertype_id bigint(10) unsigned NOT NULL auto_increment,
   monstertype_name varchar(100) NOT NULL default '',
   PRIMARY KEY  (monstertype_id)
-) TYPE=MyISAM;
+) TYPE=MyISAM PACK_KEYS=0;
 
 
 CREATE TABLE player (
