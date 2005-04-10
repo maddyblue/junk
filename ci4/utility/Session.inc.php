@@ -59,7 +59,10 @@ function handle_session()
 			update_session($sid);
 		else
 		{
-			$sid = getDBData('session_id', ip2long($_SERVER['REMOTE_ADDR']), 'session_ip', 'session');
+			$res = $GLOBALS['db']->query('select session_id from session where session_user=0 and session_ip=' . ip2long($_SERVER['REMOTE_ADDR']));
+
+			if(count($res))
+				$sid = $res[0]['session_id'];
 
 			if($sid)
 				update_session($sid);
