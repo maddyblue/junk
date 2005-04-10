@@ -482,7 +482,10 @@ function encode($input)
  */
 function decode($output)
 {
-	return urldecode($output);
+	if(CI_WWW_DOMAIN == 'crescentisland.com')
+		return stripslashes(urldecode($output));
+	else
+		return urldecode($output);
 }
 
 /* Makes sure only alphanumeric characters are in $text. If something else is
