@@ -47,6 +47,8 @@ require_once CI_HOME_MOD . 'Include.inc.php';
 eval('$secDir = SECTION_' . strtoupper(CI_SECTION) . ';');
 define('CI_SECTION_DIR', $secDir . '/');
 
+define('REMOTE_ADDR', ip2long($_SERVER['REMOTE_ADDR']));
+
 $id = intval(getCIcookie('id'));
 $pass = getCIcookie('pass');
 
@@ -230,7 +232,7 @@ else
 	}
 }
 
-$db->query('insert into stats values (' . TIME . ', ' . ID . ', ' . $SESSION_ACTION . ', "' . CI_TEMPLATE . '", ' . ip2long($_SERVER['REMOTE_ADDR']) . ')');
+$db->query('insert into stats values (' . TIME . ', ' . ID . ', ' . $SESSION_ACTION . ', "' . CI_TEMPLATE . '", ' . REMOTE_ADDR . ')');
 
 ob_start();
 eval('?>' . $template);

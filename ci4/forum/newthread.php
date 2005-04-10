@@ -122,7 +122,7 @@ else
 					'"' . mysql_escape_string(parsePostText($_POST['post'])) . '",' .
 					ID  . ',' .
 					TIME . ',' .
-					ip2long($_SERVER['REMOTE_ADDR']) .
+					REMOTE_ADDR .
 					')');
 				$res = $db->query('select forum_post_id from forum_post where forum_post_user=' . ID .' order by forum_post_date desc limit 1');
 				$lastpost = $res[0]['forum_post_id'];

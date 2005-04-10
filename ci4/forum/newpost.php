@@ -104,7 +104,7 @@ else
 				'"' . mysql_escape_string(parsePostText($_POST['post'])) . '",' .
 				ID . ',' .
 				TIME . ',' .
-				ip2long($_SERVER['REMOTE_ADDR']) .
+				REMOTE_ADDR .
 				')');
 			if($lastpost != FALSE)
 			{

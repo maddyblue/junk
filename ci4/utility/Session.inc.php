@@ -59,7 +59,7 @@ function handle_session()
 			update_session($sid);
 		else
 		{
-			$res = $GLOBALS['db']->query('select session_id from session where session_user=0 and session_ip=' . ip2long($_SERVER['REMOTE_ADDR']));
+			$res = $GLOBALS['db']->query('select session_id from session where session_user=0 and session_ip=' . REMOTE_ADDR);
 
 			if(count($res))
 				$sid = $res[0]['session_id'];
@@ -97,7 +97,7 @@ function start_session()
 
 	$db->query('insert into session (session_id, session_ip, session_host, session_user, session_start, session_current) values (' .
 		'"' . $sid . '",' .
-		ip2long($ip) . ',' .
+		REMOTE_ADDR . ',' .
 		'"' . $host . '",' .
 		ID . ',' .
 		TIME . ',' .
