@@ -9,6 +9,7 @@
 		</title>
 		<CI_HEAD/>
 		<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR/>/main.css" />
+		<link rel="alternate" type="application/xml" title="rss" href="<?php echo CI_WWW_ADDRESS; ?>rss.php"/>
 	</head>
 	<body>
 		<div id="globalWrapper">
@@ -83,6 +84,7 @@
 					<h5>render stats</h5>
 					<div class="pBody">
 						<CI_PROFILE/>
+						<br/><?php echo makeLink('rss', CI_WWW_ADDRESS . 'rss.php', 'EXTERIOR'); ?>
 					</div>
 				</div>
 			</div>

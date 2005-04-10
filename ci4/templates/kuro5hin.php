@@ -5,6 +5,7 @@
 <head>
 <!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<link rel="alternate" type="application/xml" title="rss" href="<?php echo CI_WWW_ADDRESS; ?>rss.php"/>
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
 <!--
@@ -291,6 +292,7 @@ table.maintable {
 			<tr>
 				<td>
 						<CI_PROFILE/>
+						<br/><?php echo makeLink('rss', CI_WWW_ADDRESS . 'rss.php', 'EXTERIOR'); ?>
 				</td>
 			</tr>
 		</table>

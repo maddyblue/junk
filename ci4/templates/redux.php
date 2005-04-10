@@ -14,6 +14,7 @@
 
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
 	<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR/>/redux.css" />
+	<link rel="alternate" type="application/xml" title="rss" href="<?php echo CI_WWW_ADDRESS; ?>rss.php"/>
 </head>
 
 <body>
@@ -110,6 +111,7 @@
 				</div></div>
 				<div class="block-light"><div class="sidepad">
 					<CI_PROFILE/>
+					<br/><?php echo makeLink('rss', CI_WWW_ADDRESS . 'rss.php', 'EXTERIOR'); ?>
 				</div></div>
 			</div>
 
