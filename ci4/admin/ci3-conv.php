@@ -79,7 +79,7 @@ else if($step == 1)
 
 			if(count($monster) == 0)
 			{
-				echo ' (' . $monster_id . ')';
+				echo ' <b>(unknown id: ' . $monster_id . ')</b>';
 				continue;
 			}
 
@@ -93,10 +93,18 @@ else if($step == 1)
 			}
 			else $image = '';
 
-			$mid = $db->insert('insert into monster (monster_name, monster_image, monster_hp, monster_mp, monster_str, monster_def, monster_mag, monster_mgd, monster_exp, monster_lv, monster_gil) values ("' . $monster[0]['name'] . '", "' . $image . '", ' . $monster[0]['hp'] . ', ' . $monster[0]['mp'] . ', ' . $monster[0]['str'] . ', ' . $monster[0]['def'] . ', ' . $monster[0]['mag'] . ', ' . $monster[0]['mgd'] . ', ' . $monster[0]['exp'] . ', ' . $monster[0]['lv'] . ', ' . $monster[0]['gil'] . ')');
+			$res = $db->query('select monster_id from monster where monster_name="' . $monster[0]['name'] . '"');
+
+			if(count($res))
+				$mid = $res[0]['monster_id'];
+			else
+				$mid = $db->insert('insert into monster (monster_name, monster_image, monster_hp, monster_mp, monster_str, monster_def, monster_mag, monster_mgd, monster_exp, monster_lv, monster_gil) values ("' . $monster[0]['name'] . '", "' . $image . '", ' . $monster[0]['hp'] . ', ' . $monster[0]['mp'] . ', ' . $monster[0]['str'] . ', ' . $monster[0]['def'] . ', ' . $monster[0]['mag'] . ', ' . $monster[0]['mgd'] . ', ' . $monster[0]['exp'] . ', ' . $monster[0]['lv'] . ', ' . $monster[0]['gil'] . ')');
+
 			$db->query('insert into cor_area_monster values (' . $aid . ', ' . $mid . ')');
 
 			echo ' ' . $monster[0]['name'];
+			if(count($res))
+				echo '<b><-DUP!</b>';
 		}
 	}
 
