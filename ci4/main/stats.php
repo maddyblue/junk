@@ -62,6 +62,18 @@ foreach($stats as $s)
 
 echo getTable($table, false);
 
+echo '<p/>Active users in the last day:';
+
+$res = $db->query('select user_name, user_id from user where user_last > ' . $PastDay . ' order by user_name');
+
+for($i = 0; $i < count($res); $i++)
+{
+	if($i > 0)
+		echo ',';
+
+	echo ' ' . makeLink(decode($res[$i]['user_name']), 'a=viewuserdetails&user=' . $res[$i]['user_id'], SECTION_USER);
+}
+
 update_session_action(0104);
 
 ?>
