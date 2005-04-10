@@ -7,8 +7,8 @@
 			<?php echo strtolower(CI_SECTION); ?>
 			<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
 		</title>
-		<CI_HEAD>
-		<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR>/main.css" />
+		<CI_HEAD/>
+		<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR/>/main.css" />
 	</head>
 	<body>
 		<div id="globalWrapper">
@@ -29,7 +29,7 @@
 					</ul>
 				</div>
 				<div class="portlet" id="p-logo">
-					<a style="background-image: url(<CI_TEMPLATE_DIR>/wikiisland.gif);"
+					<a style="background-image: url(<CI_TEMPLATE_DIR/>/wikiisland.gif);"
 						href=""
 						title=""></a>
 				</div>
@@ -82,7 +82,7 @@
 				<div class="portlet" id="p-nav">
 					<h5>render stats</h5>
 					<div class="pBody">
-						<CI_PROFILE>
+						<CI_PROFILE/>
 					</div>
 				</div>
 			</div>

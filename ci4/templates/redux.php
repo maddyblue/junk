@@ -10,10 +10,10 @@
 		<?php echo strtolower(CI_SECTION); ?>
 		<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
 	</title>
-	<CI_HEAD>
+	<CI_HEAD/>
 
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
-	<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR>/redux.css" />
+	<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR/>/redux.css" />
 </head>
 
 <body>
@@ -109,7 +109,7 @@
 					render stats
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<CI_PROFILE>
+					<CI_PROFILE/>
 				</div></div>
 			</div>
 

@@ -138,7 +138,7 @@ table.maintable {
 
 -->
 </style>
-<CI_HEAD>
+<CI_HEAD/>
 </head>
 
 <body>
@@ -290,7 +290,7 @@ table.maintable {
 		<table class="boxcontents">
 			<tr>
 				<td>
-						<CI_PROFILE>
+						<CI_PROFILE/>
 				</td>
 			</tr>
 		</table>

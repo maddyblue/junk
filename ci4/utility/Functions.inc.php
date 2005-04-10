@@ -86,9 +86,9 @@ function parseTags(&$template)
 	{
 		$tag = $matches[1];
 
-		if(substr($tag, 0, 1) == '_')
+		if(substr($tag, 0, 1) == '_' && substr($tag, -1) == '/')
 		{
-			$ret = getSiteArray($matches[1]);
+			$ret = getSiteArray(substr($matches[1], 0, -1)); // substr( , , -1) removes the trailing /
 			$val = createSiteString($ret);
 			$template = str_replace($matches[0], $val, $template);
 		}
