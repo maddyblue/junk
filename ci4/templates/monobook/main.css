@@ -328,15 +328,6 @@ table.small { font-size: 100% }
 }
 
 /*
-** the navigation portlet
-*/
-
-#p-nav {
-    position:relative;
-    z-index:3;
-}
-
-/*
 ** the page-related actions- page/talk, edit etc
 */
 #p-cactions {

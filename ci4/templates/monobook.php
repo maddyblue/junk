@@ -33,7 +33,7 @@
 						href=""
 						title=""></a>
 				</div>
-				<div class="portlet" id="p-nav">
+				<div class="portlet">
 					<h5>section nav</h5>
 					<div class="pBody">
 						<ul>
@@ -42,7 +42,7 @@
 					</div>
 				</div>
 				<?php if(LOGGED) { ?>
-				<div class="portlet" id="p-nav">
+				<div class="portlet">
 					<h5><?php echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . ' - ' . ($USER['domain_abrev'] ? $USER['domain_abrev'] : 'no domain'); ?></h5>
 					<div class="pBody">
 						<ul>
@@ -66,20 +66,20 @@
 					</div>
 				</div>
 				<?php } ?>
-				<div class="portlet" id="p-nav">
+				<div class="portlet">
 					<h5>server time</h5>
 					<div class="pBody">
 						<?php echo gmdate('d M y g:i a', TIME + TZOFFSET); ?>
 					</div>
 				</div>
-				<div class="portlet" id="p-nav">
+				<div class="portlet">
 					<h5><?php echo makeLink('who\'s online', 'a=whosonline', SECTION_USER); ?></h5>
 					<div class="pBody">
 						<?php echo getNumActiveUsers(); ?> users,
 						<?php echo getNumActiveGuests(); ?> guests
 					</div>
 				</div>
-				<div class="portlet" id="p-nav">
+				<div class="portlet">
 					<h5>render stats</h5>
 					<div class="pBody">
 						<CI_PROFILE/>
