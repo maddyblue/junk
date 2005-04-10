@@ -12,7 +12,7 @@ define('CI_WWW_PATH', '/ci4/'); // '/' if root. must begin with '/'
 define('CI_AVATAR_PATH', 'images/avatar/');
 define('CI_SMILIE_PATH', 'images/smilies/');
 
-define('CI_DEF_TEMPLATE', 'redux');
+define('CI_DEF_TEMPLATE', 'monobook');
 
 /* Section alises */
 
