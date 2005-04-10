@@ -612,8 +612,8 @@ INSERT INTO skin VALUES ('kuro5hin','rusty','http://www.kuro5hin.org/');
 INSERT INTO skin VALUES ('monobook','MediaWiki','http://wikipedia.sourceforge.net/');
 
 
-INSERT INTO town VALUES (1,'Midgar',0,'The cities of Midgar and Narshe are run-down, old, crappy cities. They provide no bonuses because they suck a lot. ',0,0,'','');
-INSERT INTO town VALUES (2,'Narshe',0,'The cities of Midgar and Narshe are run-down, old, crappy cities. They provide no bonuses because they suck a lot. ',0,0,'','');
+INSERT INTO town VALUES (1,'Midgar',0,'A run-down, old slum.',0,0,'','');
+INSERT INTO town VALUES (2,'Narshe',0,'A forgotten mining town.',0,0,'','');
 INSERT INTO town VALUES (3,'Cosmo Canyon',5,'Cosmo Canyon is the training place of young warriors. Trained monks are very strong.',0,0,'','');
 INSERT INTO town VALUES (4,'Treno',10,'Treno is another city of darkness, but a central gambling point. Dancers and Bards are very populous around Treno and they make a lot of money.',0,0,'','');
 INSERT INTO town VALUES (5,'Alexandria',15,'Alexandria is a well rounded town that revolves mostly around fighting. Build up your strength if you move to Alexandria.',0,0,'','');
