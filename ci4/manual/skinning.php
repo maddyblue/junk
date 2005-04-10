@@ -53,10 +53,9 @@ update_session_action(0601);
 <p/>There are three required menu fields for every skin. They are:
 
 <p/><tt>&lt;CINAV&gt;
-<br/>&lt;CISECTION_MENU&gt;
 <br/>&lt;CISECTION_NAV&gt;</tt>
 
-<p/><tt>&lt;CINAV&gt;</tt> is for the main navigation bar. It does not change based on your location. <tt>&lt;CISECTION_MENU&gt;</tt> is mostly reserved for user specific actions (login, view PMs, fight battle). <tt>&lt;CISECTION_NAV&gt;</tt> is for static, global pages (view monsters, view towns). They all function in exactly the same way. These are all called listed tags because they correspond to a list of data to be inserted.
+<p/><tt>&lt;CINAV&gt;</tt> is for the main navigation bar. It does not change based on your location. <tt>&lt;CISECTION_NAV&gt;</tt> is for static, global pages (view monsters, view towns). They all function in exactly the same way. These are all called listed tags because they correspond to a list of data to be inserted.
 
 <p/>The full redux <tt>&lt;CINAV&gt;</tt> tag looks like this:
 
@@ -91,7 +90,7 @@ update_session_action(0601);
 
 <p/><b>Content and Single Tags</b>
 
-<p/>The fourth required tag is the main content tag: <tt>&lt;CICONTENT&gt;</tt>. It does <i>not</i> have a closing tag (<tt>&lt;/CICONTENT&gt;</tt>) or a <tt>INSERT</tt> block. It is a single tag. A single tag is simply replaced with it's value. In this case, it is replaced by the main page contents.
+<p/>The fourth required tag is the main content tag: <tt>&lt;CICONTENT/&gt;</tt>. It does <i>not</i> have a closing tag (since it ends with <tt>/&gt;</tt>) or a <tt>INSERT</tt> block. It is a single tag. A single tag is simply replaced with it's value. In this case, it is replaced by the main page contents.
 
 <p/><b>CSS Based Tables</b>
 
