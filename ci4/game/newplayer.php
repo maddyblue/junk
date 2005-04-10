@@ -32,7 +32,7 @@
  *
  */
 
-function display($name, $domain, $gender)
+function display($name, $domain, $gender, $town)
 {
 	global $db;
 
@@ -46,11 +46,19 @@ function display($name, $domain, $gender)
 	$genderlist = '<option ' . ($gender == 'M' ? 'selected' : '') . '>M</option>' .
 		'<option ' . ($gender == 'F' ? 'selected' : '') . '>F</option>';
 
+	$res = $db->query('select town_name, town_id from town where town_lv=0 order by rand()');
+
+	$townlist = '';
+
+	foreach($res as $t)
+		$townlist .= '<option value="' . $t['town_id'] . '"' . ($town == $t['town_id'] ? ' selected' : '') . '>' . $t['town_name'] . '</option>';
+
 	echo
 		getTableForm('New Player:', array(
 			array('Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($name))),
 			array('Domain', array('type'=>'select', 'name'=>'domain', 'val'=>$domainlist)),
 			array('Gender', array('type'=>'select', 'name'=>'gender', 'val'=>$genderlist)),
+			array('Initial Town', array('type'=>'select', 'name'=>'town', 'val'=>$townlist)),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Register')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newplayer'))
@@ -62,6 +70,7 @@ if(LOGGED)
 	$name = isset($_POST['name']) ? encode($_POST['name']) : '';
 	$domain = isset($_POST['domain']) ? intval($_POST['domain']) : '0';
 	$gender = isset($_POST['gender']) ? encode($_POST['gender']) : '';
+	$town = isset($_POST['town']) ? intval($_POST['town']) : '0';
 
 	if(isset($_POST['submit']))
 	{
@@ -78,6 +87,14 @@ if(LOGGED)
 		if(!$dname)
 		{
 			echo '<br/>Invalid domain selected.';
+			$fail = true;
+		}
+
+		$tname = getDBData('town_name', $town, 'town_id', 'town');
+
+		if(!$tname)
+		{
+			echo '<br/>Invalid town selected.';
 			$fail = true;
 		}
 
@@ -106,7 +123,7 @@ if(LOGGED)
 		if($fail)
 		{
 			echo '<br/>Player registration failed.';
-			display($name, $domain, $gender);
+			display($name, $domain, $gender, $town);
 		}
 		else
 		{
@@ -118,7 +135,7 @@ if(LOGGED)
 			TIME . ', ' .
 			TIME . ', ' .
 			'1' . ', ' .
-			'1' .
+			$town .
 			')');
 
 			$pid = $db->query('select player_id from player where player_user=' . ID . ' and player_domain="' . $domain . '"');
@@ -129,11 +146,11 @@ if(LOGGED)
 			// set the mod stats
 			updatePlayerStats($pid[0]['player_id']);
 
-			echo '<p/>New player registered.';
+			echo '<p/>' . decode($name) . ' has been registered in ' . $dname . ' and is living in ' . $tname . '.';
 		}
 	}
 	else
-		display($name, $domain, $gender);
+		display($name, $domain, $gender, $town);
 }
 else
 	echo '<p/>You must be logged in to view this page.';
