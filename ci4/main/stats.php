@@ -62,7 +62,7 @@ foreach($stats as $s)
 
 echo getTable($table, false);
 
-echo '<p/>Active users in the last day:';
+echo '<p/>Active users in the past day:';
 
 $res = $db->query('select user_name, user_id from user where user_last > ' . $PastDay . ' order by user_name');
 
