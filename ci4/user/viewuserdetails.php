@@ -83,6 +83,6 @@ if(count($res) == 1)
 else
 	echo '<p/>Invalid user.';
 
-update_session_action(0309, $user);
+update_session_action(0309, $user, count($res) ? 'View user details of ' . decode($res[0]['user_name']) : '');
 
 ?>
