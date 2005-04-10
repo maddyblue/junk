@@ -316,7 +316,7 @@ table.maintable {
 			<table class="content">
 				<tr>
 					<td valign="top" width="100%" align="left">
-						<CICONTENT>
+						<CICONTENT/>
 					</td>
 				</tr>
 			</table>

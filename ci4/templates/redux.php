@@ -31,7 +31,7 @@
 			</div></div>
 
 			<div class="block-light"><div class="content">
-				<CICONTENT>
+				<CICONTENT/>
 			</div></div>
 
 		</div>

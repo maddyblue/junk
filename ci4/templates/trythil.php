@@ -198,7 +198,7 @@
 												<tr>
 													<td valign="top" align="left">
 														<div class="normal">
-															<CICONTENT>
+															<CICONTENT/>
 														</div>
 
 													</td>

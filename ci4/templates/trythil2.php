@@ -251,7 +251,7 @@
 										<tr>
 											<td>
 												<br/>
-												<CICONTENT>
+												<CICONTENT/>
 											</td>
 										</tr>
 									</table>

@@ -17,7 +17,7 @@
 					<h1 class="firstHeading"><?php echo CI_SECTION; ?></h1>
 					<div id="bodyContent">
 						<div id="contentSub"><?php echo $GLOBALS['PAGE_TITLE']; ?></div>
-						<CICONTENT>
+						<CICONTENT/>
 						<div class="visualClear"></div>
 					</div>
 				</div>
