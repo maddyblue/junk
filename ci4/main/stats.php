@@ -62,4 +62,6 @@ foreach($stats as $s)
 
 echo getTable($table, false);
 
+update_session_action(0104);
+
 ?>
