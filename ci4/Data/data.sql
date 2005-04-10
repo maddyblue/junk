@@ -618,7 +618,7 @@ INSERT INTO town VALUES (3,'Cosmo Canyon',5,'Cosmo Canyon is the training place 
 INSERT INTO town VALUES (4,'Treno',10,'Treno is another city of darkness, but a central gambling point. Dancers and Bards are very populous around Treno and they make a lot of money.',0,0,'','');
 INSERT INTO town VALUES (5,'Alexandria',15,'Alexandria is a well rounded town that revolves mostly around fighting. Build up your strength if you move to Alexandria.',0,0,'','');
 INSERT INTO town VALUES (6,'Madain Sari',15,'Madain Sari, the home of all Summoners, will find a nice comfy place for you. If you\'re a summoner living in Madain Sari, you might want to think about opening a bank account.\r\nNote:\r\nYou must be a magic user to live here.  These include Summoner, Black Mage, White Mage, Dancer, and Bard.',0,0,'','');
-INSERT INTO town VALUES (7,'Potos Village',0,'Another default starting town, Potos Village is quiet, peaceful, and boring.',0,0,'','');
+INSERT INTO town VALUES (7,'Potos Village',0,'Just another town, Potos Village is quiet, peaceful, and boring.',0,0,'','');
 INSERT INTO town VALUES (8,'Tzen',35,'As you walk into Tzen you notice old houses and stone paths.  Old chimneys are puffing out smoke.',0,0,'','');
 INSERT INTO town VALUES (9,'Lindblum',55,'As you enter Lindblum you see taxis flying alongside you and people rebuilding their homes.',0,0,'','');
 INSERT INTO town VALUES (10,'Wutai',70,'...Watch your wallet...',0,0,'','');
