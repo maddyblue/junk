@@ -241,8 +241,18 @@ ob_end_clean();
 
 // Split the template into two halves, so we can do timed or incremental output in the content section
 $pos = strpos($template, '<CICONTENT>');
-$top = substr($template, 0, $pos - 1);
-$bottom = substr($template, $pos + 11); // 11 = length of <CICONTENT>
+
+if($pos !== false)
+{
+	$top = substr($template, 0, $pos - 1);
+	$bottom = substr($template, $pos + 11); // 11 = length of <CICONTENT>
+}
+else // handle templates that don't have <CICONTENT> (for template development/debugging)
+{
+	$top = $template;
+	$content = '';
+	$bottom = '';
+}
 
 parseTags($top);
 echo $top;
