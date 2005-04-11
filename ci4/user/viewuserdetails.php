@@ -38,6 +38,29 @@ $user = isset($_GET['user']) ? intval($_GET['user']) :
 $res = $db->query('select * from user where user_id=' . $user);
 $players = $db->query('select player_name, player_id, domain_id, domain_name from player, domain where player_user=' . $user . ' and domain_id=player_domain order by domain_expw_time, domain_expw_max');
 
+if(isset($_POST['delete']) && $_POST['delete'] == 'Delete' && isset($_POST['player']))
+{
+	$p = intval($_POST['player']);
+
+	if(!isset($_POST['confirm']) || !$_POST['confirm'] == 'on')
+		echo '<p/>You must check the confirm box to delete your player.';
+	else if(getDBData('player_user', $p, 'player_id', 'player') != ID)
+		echo '<p/>You do not own this player.';
+	else
+	{
+		$pdat = $db->query('select player_name, domain_name from player, domain where player_id=' . $p . ' and player_domain=domain_id');
+
+		$db->query('delete from player where player_id=' . $p);
+		$db->query('delete from player_ability where player_ability_player=' . $p);
+		$db->query('delete from player_abilitytype where player_abilitytype_player=' . $p);
+		$db->query('delete from player_equipment where player_equipment_player=' . $p);
+		$db->query('delete from player_item where player_item_player=' . $p);
+		$db->query('delete from player_job where player_job_player='. $p);
+
+		echo '<p/>' . decode($pdat[0]['player_name']) . ' has been deleted from the ' . $pdat[0]['domain_name'] . ' domain.';
+	}
+}
+
 if(count($res) == 1)
 {
 	$www = decode($res[0]['user_www']);
@@ -68,12 +91,28 @@ if(count($res) == 1)
 
 	$player = array(array('Player', 'Domain'));
 
+	if(ID == $user)
+		array_push($player[0], 'Destroy?');
+
 	foreach($players as $p)
-		array_push($player, array(makeLink(decode($p['player_name']), 'a=viewplayerdetails&player=' . $p['player_id'], SECTION_GAME), makeLink($p['domain_name'], 'a=domains', SECTION_HOME)));
+	{
+		$a = array(makeLink(decode($p['player_name']), 'a=viewplayerdetails&player=' . $p['player_id'], SECTION_GAME), makeLink($p['domain_name'], 'a=domains', SECTION_HOME));
+
+		if(ID == $user)
+			array_push($a, getForm('', array(
+				array('', array('type'=>'submit', 'name'=>'delete', 'val'=>'Delete')),
+				array(' Confirm', array('type'=>'checkbox', 'name'=>'confirm')),
+				array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewuserdetails')),
+				array('', array('type'=>'hidden', 'name'=>'player', 'val'=>$p['player_id']))
+				))
+			);
+
+		array_push($player, $a);
+	}
 
 	if(LOGGED)
 	{
-		echo makeLink('Send this user a PM.', 'a=sendpm&userid=' . $res[0]['user_id']) . '<br/><br/>';
+		echo '<p/>' . makeLink('Send this user a PM.', 'a=sendpm&userid=' . $res[0]['user_id']) . '<br/><br/>';
 	}
 
 	echo getTable($array, false);
