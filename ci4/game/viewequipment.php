@@ -64,7 +64,8 @@ else
 	for($i = 0; $i < count($res); $i++)
 	{
 		array_push($array, array(
-			makeImg($res[$i]['equipment_image'], 'images/equipment/' . $res[$i]['equipmenttype_name'] . '/') . ' ' . makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id']),
+			//makeImg($res[$i]['equipment_image'], 'images/equipment/' . $res[$i]['equipmenttype_name'] . '/') . ' ' .
+			makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id']),
 			$res[$i]['equipmenttype_name'],
 			$res[$i]['equipmentclass_name'],
 			$res[$i]['equipment_cost'],
