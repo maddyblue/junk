@@ -81,7 +81,7 @@ else
 if($PLAYER)
 	echo '<p/>You have ' . $PLAYER['player_money'] . ' gold.';
 
-echo getTable($array);
+echo '<p/>' . getTable($array);
 
 update_session_action(0503);
 

@@ -48,7 +48,7 @@ if(count($res))
 
 		if($res[0]['job_req_lv'] > $PLAYER['player_lv'])
 		{
-			echo '<br/>You are not yet at a high enough level to change to ' . $res[0]['job_name'] . '.';
+			echo '<p/>You are not yet at a high enough level to change to ' . $res[0]['job_name'] . '.';
 			$fail = true;
 		}
 
@@ -65,7 +65,7 @@ if(count($res))
 		if(count($failed))
 		{
 			foreach($failed as $entry)
-				echo '<br/>You must be ' . $entry['job_name'] . ' level ' . $entry['cor_joblv'] . ', but you are level ' . ($entry['player_job_lv'] ? $entry['player_job_lv'] : '0') . '.';
+				echo '<p/>You must be ' . $entry['job_name'] . ' level ' . $entry['cor_joblv'] . ', but you are level ' . ($entry['player_job_lv'] ? $entry['player_job_lv'] : '0') . '.';
 			$fail = true;
 		}
 
@@ -88,11 +88,11 @@ if(count($res))
 			$db->query('update player_equipment set player_equipment_equipped=0 where player_equipment_player=' . $PLAYER['player_id']);
 
 			echo '<p/>Job change to ' . $res[0]['job_name'] . ' succeeded.';
-			echo '<br/>All of your equipment has been unequipped.';
+			echo '<p/>All of your equipment has been unequipped.';
 		}
 		else
 		{
-			echo '<br/>Job change to ' . $res[0]['job_name'] . ' failed.';
+			echo '<p/>Job change to ' . $res[0]['job_name'] . ' failed.';
 		}
 	}
 
@@ -194,7 +194,7 @@ if(count($res))
 		$change = '';
 
 	echo $change;
-	echo getTable($array);
+	echo '<p/>' . getTable($array);
 	echo $change;
 }
 else

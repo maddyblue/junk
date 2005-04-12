@@ -82,7 +82,7 @@ for($i = 0; $i < count($res); $i++)
 if($PLAYER)
 	echo '<p/>You are currently a ' . getDBData('job_name', $PLAYER['player_job'], 'job_id', 'job') . '.';
 
-echo getTable($array);
+echo '<p/>' . getTable($array);
 
 update_session_action(0504);
 
