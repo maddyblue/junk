@@ -62,6 +62,6 @@ foreach($staff as $s)
 	));
 }
 
-echo '<b>Staff of Crescent Island</b><p/>' . getTable($array);
+echo '<p/><b>Staff of Crescent Island</b>' . getTable($array);
 
 ?>

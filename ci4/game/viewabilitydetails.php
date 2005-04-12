@@ -113,7 +113,7 @@ if(count($res))
 		$learn = '';
 
 	echo $learn;
-	echo '<p/>' . getTable($array);
+	echo getTable($array);
 	echo $learn;
 }
 else

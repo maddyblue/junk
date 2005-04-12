@@ -115,8 +115,7 @@ if(count($res) == 1)
 			$j['player_job_exp']
 		));
 
-	echo '<p/>Jobs:';
-	echo getTable($array);
+	echo '<p/>Jobs:' . getTable($array);
 
 	// ability type
 

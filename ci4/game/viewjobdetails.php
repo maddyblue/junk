@@ -194,7 +194,7 @@ if(count($res))
 		$change = '';
 
 	echo $change;
-	echo '<p/>' . getTable($array);
+	echo getTable($array);
 	echo $change;
 }
 else

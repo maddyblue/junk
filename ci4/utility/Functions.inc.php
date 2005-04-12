@@ -248,7 +248,7 @@ function getTableForm($title, $arr, $upload = false)
 	$ret = '';
 	$end = '';
 
-	$ret .= '<form method="post" action="index.php" ' . ($upload ? ' enctype="multipart/form-data"' : '') . '>
+	$ret .= '<p/><form method="post" action="index.php" ' . ($upload ? ' enctype="multipart/form-data"' : '') . '>
 		<table>
 			<tr>
 				<td colspan="' . count($arr[0]) . '">
@@ -414,9 +414,7 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 	}
 
 	if($withTableStructure)
-	{
-		$ret = '<table class="tableMain">' . $ret . '</table>';
-	}
+		$ret = '<p/><table class="tableMain">' . $ret . '</table>';
 
 	return $ret;
 }

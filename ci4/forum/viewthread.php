@@ -116,7 +116,7 @@ else
 					</td>
 				</tr>
 
-				<?php echo getTable($array, false, false, false); ?>
+				<p/><?php echo getTable($array, false, false, false); ?>
 
 				<tr class="tableRow">
 					<td class="tableCellBL">

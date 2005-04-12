@@ -56,8 +56,7 @@ if($groupid)
 
 	echo 'Manage ' . decode($res[0]['group_def_name']);
 
-	echo '<p/>' .
-		getTableForm('Name Change', array(
+	echo getTableForm('Name Change', array(
 			array('Group Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($res[0]['group_def_name']))),
 			array('', array('type'=>'submit','name'=>'submit', 'val'=>'Update Name')),
 			array('', array('type'=>'hidden', 'name'=>'g', 'val'=>$groupid)),
@@ -65,8 +64,7 @@ if($groupid)
 		));
 
 
-	echo '<p/>' .
-		getTableForm('Group Permissions', array(
+	echo getTableForm('Group Permissions', array(
 			array('Admin', array('name'=>'admin', 'type'=>'checkbox', 'val'=>($res[0]['group_def_admin']) ? 'checked' : 'unchecked')),
 			array('News', array('name'=>'news', 'type'=>'checkbox', 'val'=>($res[0]['group_def_news']) ? 'checked' : 'unchecked')),
 			array('Supermod', array('name'=>'mod', 'type'=>'checkbox', 'val'=>($res[0]['group_def_mod']) ? 'checked' : 'unchecked')),
@@ -92,16 +90,14 @@ if($groupid)
 
 	echo getTable($array);
 
-	echo '<p/>' .
-		getTableForm('Add User to group', array(
+	echo getTableForm('Add User to group', array(
 			array('User Name', array('type'=>'text', 'name'=>'name', 'val'=>'')),
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Add User')),
 			array('', array('type'=>'hidden', 'name'=>'g', 'val'=>$groupid)),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'add-group-user')),
 		));
 
-	echo '<p/>' .
-		getTableForm('Delete ' . decode($res[0]['group_def_name']), array(
+	echo getTableForm('Delete ' . decode($res[0]['group_def_name']), array(
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Delete')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'delete-group')),
 			array('', array('type'=>'hidden', 'name'=>'g', 'val'=>$groupid))

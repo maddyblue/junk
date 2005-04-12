@@ -100,7 +100,7 @@ if(count($res))
 		$buytext = '';
 
 	echo $buytext;
-	echo '<p/>' . getTable($array);
+	echo getTable($array);
 	echo $buytext;
 }
 else

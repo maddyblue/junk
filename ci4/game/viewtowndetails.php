@@ -84,7 +84,7 @@ if(count($res))
 		$changetext = '';
 
 	echo $changetext;
-	echo '<p/>' . getTable($array);
+	echo getTable($array);
 		echo $changetext;
 }
 else

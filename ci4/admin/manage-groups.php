@@ -58,8 +58,7 @@ groupListManage($array);
 
 echo getTable($array);
 
-echo '<p/>' .
-	getTableForm('Add Group', array(
+echo getTableForm('Add Group', array(
 		array('Group Name', array('type'=>'text','name'=>'name')),
 
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Add Group')),

@@ -115,7 +115,7 @@ if(count($res) == 1)
 		echo '<p/>' . makeLink('Send this user a PM.', 'a=sendpm&userid=' . $res[0]['user_id']);
 	}
 
-	echo '<p/>' . getTable($array, false);
+	echo getTable($array, false);
 
 	echo '<p/>Players owned by this user:' . getTable($player);
 }

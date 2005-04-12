@@ -291,7 +291,7 @@ else
 
 		$array = threadList($forumid, $curpage, $threadsPP, $lastSession);
 		echo $pageDisp;
-		echo '<p/>' . getTable($array);
+		echo getTable($array);
 		echo $pageDisp;
 	}
 
