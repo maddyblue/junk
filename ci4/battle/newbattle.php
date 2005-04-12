@@ -132,7 +132,7 @@ if(LOGGED)
 		$fail = true;
 		echo '<p/>You already have an active battle. You must complete it before starting another.';
 		echo '<p/>Redirecting you there...';
-		$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="2; url=?a=battle">';
+		$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="1; url=?a=battle">';
 	}
 
 	if(!$fail)
