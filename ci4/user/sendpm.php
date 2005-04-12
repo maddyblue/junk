@@ -63,13 +63,13 @@ else
 		if(!$userid)
 		{
 			$fail = true;
-			echo '<br/>Invalid username for destination.';
+			echo '<p/>Invalid username for destination.';
 		}
 
 		if(!$sub)
 		{
 			$fail = true;
-			echo '<br/>No subject specified.';
+			echo '<p/>No subject specified.';
 		}
 
 		if(!$fail)

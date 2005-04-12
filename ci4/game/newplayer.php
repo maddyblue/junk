@@ -78,7 +78,7 @@ if(LOGGED)
 
 		if(!$name)
 		{
-			echo '<br/>No player name entered.';
+			echo '<p/>No player name entered.';
 			$fail = true;
 		}
 
@@ -86,7 +86,7 @@ if(LOGGED)
 
 		if(!$dname)
 		{
-			echo '<br/>Invalid domain selected.';
+			echo '<p/>Invalid domain selected.';
 			$fail = true;
 		}
 
@@ -94,7 +94,7 @@ if(LOGGED)
 
 		if(!$tname)
 		{
-			echo '<br/>Invalid town selected.';
+			echo '<p/>Invalid town selected.';
 			$fail = true;
 		}
 
@@ -102,7 +102,7 @@ if(LOGGED)
 
 		if(count($player))
 		{
-			echo '<br/>You already have the player ' . decode($player[0]['player_name']) . ' registered on this domain. You may only have one player registered on a domain.';
+			echo '<p/>You already have the player ' . decode($player[0]['player_name']) . ' registered on this domain. You may only have one player registered on a domain.';
 			$fail = true;
 		}
 
@@ -110,19 +110,19 @@ if(LOGGED)
 
 		if(count($existing))
 		{
-			echo '<br/>There is already a player with this name registered in this domain.';
+			echo '<p/>There is already a player with this name registered in this domain.';
 			$fail = true;
 		}
 
 		if($gender != 'M' && $gender != 'F')
 		{
-			echo '<br/>Invalid gender.';
+			echo '<p/>Invalid gender.';
 			$fail = true;
 		}
 
 		if($fail)
 		{
-			echo '<br/>Player registration failed.';
+			echo '<p/>Player registration failed.';
 			display($name, $domain, $gender, $town);
 		}
 		else

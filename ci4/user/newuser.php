@@ -59,58 +59,58 @@ if(isset($_POST['submit']))
 	$res = $db->query('select count(*) as count from user where user_name="' . $name . '"');
 	if(!$name)
 	{
-		echo '<br/>No name: enter a name.';
+		echo '<p/>No name: enter a name.';
 		$fail = true;
 	}
 	else if($res[0]['count'] != '0')
 	{
-		echo '<br/>Username already registered: try another name.';
+		echo '<p/>Username already registered: try another name.';
 		$fail = true;
 	}
 
 	if(!$pass1)
 	{
-		echo '<br/>No password: enter a password';
+		echo '<p/>No password: enter a password';
 		$fail = true;
 	}
 	else if(!$pass2)
 	{
-		echo '<br/>No verification password: fill in both fields.';
+		echo '<p/>No verification password: fill in both fields.';
 		$fail = true;
 	}
 	else if($pass1 != $pass2)
 	{
-		echo '<br/>Passwords do not match.';
+		echo '<p/>Passwords do not match.';
 		$fail = true;
 	}
 
 	$res = $db->query('select count(*) as count from user where user_email="' . $email . '"');
 	if(!$email)
 	{
-		echo '<br/>No email: enter an address.';
+		echo '<p/>No email: enter an address.';
 		$fail = true;
 	}
 	else if(!ereg("^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", decode($email)))
 	{
-		echo '<br/>Invalid email address.';
+		echo '<p/>Invalid email address.';
 		$fail = true;
 	}
 	else if($res[0]['count'] != '0')
 	{
-		echo '<br/>Email address already registered: try another address.';
+		echo '<p/>Email address already registered: try another address.';
 		$fail = true;
 	}
 
 	if($fail)
 	{
-		echo '<br/>User registration failed.<br/>';
+		echo '<p/>User registration failed.';
 		display($name, $email);
 	}
 	else
 	{
 		$db->query('insert into user (user_name, user_email, user_pass, user_register) values ("' . $name . '", "' . $email . '", md5("' . $pass1 . '"), ' . TIME . ')');
-		echo '<br/>User &quot;' . decode($name) . '&quot; successfully registered. Please ' . makeLink('login', 'a=login') . '.';
-		echo '<br/>After logging in, it is suggest that you complete your profile in the User Control Panel.';
+		echo '<p/>User &quot;' . decode($name) . '&quot; successfully registered. Please ' . makeLink('login', 'a=login') . '.';
+		echo '<p/>After logging in, it is suggest that you complete your profile in the User Control Panel.';
 	}
 }
 else

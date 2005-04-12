@@ -53,11 +53,11 @@ if(isset($_POST['submit']))
 	if(!$name)
 	{
 		$fail = true;
-		echo '<br/>No name specified.';
+		echo '<p/>No name specified.';
 	}
 	if($fail)
 	{
-		echo '<br/>Add failed.';
+		echo '<p/>Add failed.';
 		display($name, $desc);
 	}
 	else

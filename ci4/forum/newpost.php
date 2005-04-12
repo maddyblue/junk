@@ -65,7 +65,7 @@ $forum = getForumFromThread($thread);
 
 if(LOGGED == false)
 {
-	echo '<br/>You must be logged in to post replies.';
+	echo '<p/>You must be logged in to post replies.';
 }
 else if(!canPost($forum))
 {
@@ -81,19 +81,19 @@ else
 
 		if(!$post)
 		{
-			echo '<br/>No post: enter a post.';
+			echo '<p/>No post: enter a post.';
 			$fail = true;
 		}
 
 		if(!$thread)
 		{
-			echo '<br/>No thread selected: navigate to a thread and post a new reply there.';
+			echo '<p/>No thread selected: navigate to a thread and post a new reply there.';
 			$fail = true;
 		}
 
 		if($fail)
 		{
-			echo '<br/>Post creation failed.<br/>';
+			echo '<p/>Post creation failed.';
 			disp($post, $thread);
 		}
 		else
@@ -121,7 +121,7 @@ else
 			}
 			else
 			{
-				echo '<br/>Post creation failed.';
+				echo '<p/>Post creation failed.';
 			}
 		}
 	}

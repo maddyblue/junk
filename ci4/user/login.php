@@ -54,12 +54,12 @@ if(isset($_POST['submit']))
 
 	if(!$user)
 	{
-		echo '<br/>No username specified.';
+		echo '<p/>No username specified.';
 		$fail = true;
 	}
 	if(!$pass)
 	{
-		echo '<br/>No password specified.';
+		echo '<p/>No password specified.';
 		$fail = true;
 	}
 
@@ -82,13 +82,13 @@ if(isset($_POST['submit']))
 	}
 	else if($user && $pass)
 	{
-		echo '<br/>Not a valid username/password combination. Try again.';
+		echo '<p/>Not a valid username/password combination. Try again.';
 		$fail = true;
 	}
 
 	if($fail)
 	{
-		echo '<br/>Login failed.<br/>';
+		echo '<p/>Login failed.';
 		display($user);
 	}
 }

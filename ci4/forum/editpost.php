@@ -89,13 +89,13 @@ else
 
 		if(!$text)
 		{
-			echo '<br/>No post: enter a post.';
+			echo '<p/>No post: enter a post.';
 			$fail = true;
 		}
 
 		if($fail)
 		{
-			echo '<br/>Post edit failed.<br/>';
+			echo '<p/>Post edit failed.';
 			disp($text, $post);
 		}
 		else
@@ -107,7 +107,7 @@ else
 				'forum_post_edit_user=' . ID .
 				' where forum_post_id=' . $post);
 
-				echo 'Post edited successfully.';
+				echo '<p/>Post edited successfully.';
 				echo '<p/>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $ret[0]['forum_post_thread']) . '.';
 				echo '<p/>Go to the ' . makeLink('edited post', 'a=viewpost&p=' . $post) . '.';
 		}

@@ -59,7 +59,7 @@ function newBattle($area)
 
 	if(!count($monster))
 	{
-		echo '<br/>No monsters in the selected domain.';
+		echo '<p/>No monsters in the selected domain.';
 		return;
 	}
 
@@ -150,7 +150,7 @@ if(LOGGED)
 			if($ret[0]['count'] != '1')
 			{
 				$fail = true;
-				echo '<br/>That area is not accessible from your current town.';
+				echo '<p/>That area is not accessible from your current town.';
 			}
 
 			if(!$fail)

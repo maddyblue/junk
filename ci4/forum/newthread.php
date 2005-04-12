@@ -101,7 +101,7 @@ else
 
 		if($fail)
 		{
-			echo '<br/>Thread creation failed.<br/>';
+			echo '<p/>Thread creation failed.';
 			disp($subject, $post, $forum);
 		}
 		else
