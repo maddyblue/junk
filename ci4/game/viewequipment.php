@@ -55,7 +55,6 @@ else
 
 	array_push($array, array(
 		'Name',
-		'Type',
 		'Class',
 		'Cost',
 		'Description'
@@ -66,15 +65,15 @@ else
 		array_push($array, array(
 			//makeImg($res[$i]['equipment_image'], 'images/equipment/' . $res[$i]['equipmenttype_name'] . '/') . ' ' .
 			makeLink($res[$i]['equipment_name'], 'a=viewequipmentdetails&e=' . $res[$i]['equipment_id']),
-			$res[$i]['equipmenttype_name'],
 			$res[$i]['equipmentclass_name'],
 			$res[$i]['equipment_cost'],
 			$res[$i]['equipment_desc']
 		));
 	}
 
-	if(isset($_GET['type']))
+	if($i)
 	{
+		$tname = $res[0]['equipmenttype_name'];
 		echo '<p/>' . makeLink('View all types', 'a=viewequipment');
 	}
 }
@@ -82,8 +81,13 @@ else
 if($PLAYER)
 	echo '<p/>You have ' . $PLAYER['player_money'] . ' gold.';
 
+if(isset($tname))
+	echo '<p/><b>Viewing type: ' . $tname . '</b>';
+else
+	$tname = 'all';
+
 echo getTable($array);
 
-update_session_action(0503);
+update_session_action(0503, '', 'Viewing equipment (' . $tname . ')');
 
 ?>
