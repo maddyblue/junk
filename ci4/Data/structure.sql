@@ -362,7 +362,7 @@ CREATE TABLE player (
   player_money bigint(10) unsigned NOT NULL default '0',
   player_nomod_hp smallint(6) unsigned NOT NULL default '100',
   player_nomod_mp smallint(6) unsigned NOT NULL default '50',
-  player_nomod_str smallint(6) unsigned NOT NULL default '10',
+  player_nomod_str smallint(6) unsigned NOT NULL default '20',
   player_nomod_mag smallint(6) unsigned NOT NULL default '10',
   player_nomod_def smallint(6) unsigned NOT NULL default '10',
   player_nomod_mgd smallint(6) unsigned NOT NULL default '10',
