@@ -133,17 +133,17 @@ if(ID != 0 && LOGGED == true)
 		if(array_search($dir, $basedir) === false)
 		{
 			$fail = true;
-			echo '<br/>Invalid directory.';
+			echo '<p/>Invalid directory.';
 		}
 		else if(array_search($img, $gallerydir) === false)
 		{
 			$fail = true;
-			echo '<br/>Invalid image.';
+			echo '<p/>Image is not in the gallery.';
 		}
 		else if(!is_file(CI_FS_PATH . $base . $full))
 		{
 			$fail = true;
-			echo '<br/>Invalid image aoeu.';
+			echo '<p/>Invalid image.';
 		}
 
 		if(!$fail)
