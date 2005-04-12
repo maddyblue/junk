@@ -46,11 +46,7 @@ update_session_action(0604);
 
 <?php
 $images = array(
-	array('Felt Hat', 'a=viewequipmentdetails&e=16', SECTION_GAME),
-	array('Torn Robe', 'a=viewequipmentdetails&e=17', SECTION_GAME),
-	array('Toy Ring', 'a=viewequipmentdetails&e=19', SECTION_GAME),
-	array('Rusty Band', 'a=viewequipmentdetails&e=20', SECTION_GAME),
-	array('Broken Buckler', 'a=viewequipmentdetails&e=13', SECTION_GAME),
+	//array('Felt Hat', 'a=viewequipmentdetails&e=16', SECTION_GAME),
 );
 
 foreach($images as $i)
