@@ -62,7 +62,7 @@ function battleDamage(&$src, &$dest)
 {
 	$s = (double)$src->str;
 	$d = (double)$dest->def;
-	$dmg = $s / $d * $s * drand(.5, 1.5);
+	$dmg = $s * drand(.8, 2.0) - $d * drand(.5, 1.1);
 
 	if($dmg < 0)
 		$dmg = 0;
