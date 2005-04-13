@@ -42,11 +42,13 @@ $res = $db->query('select player.*, user_name, domain_name, job_name, town_name,
 
 if(count($res) == 1)
 {
+	$pname = decode($res[0]['player_name']);
+
 	$house = $res[0]['house_name'] ? makeLink($res[0]['house_name'], 'a=viewhousedetails&house=' . $res[0]['player_house'], SECTION_GAME) : 'none';
 	$town = $res[0]['town_name'] ? makeLink($res[0]['town_name'], 'a=viewtowndetails&town=' . $res[0]['player_town'], SECTION_GAME) : 'none';
 
 	$array = array(
-		array('Player', decode($res[0]['player_name'])),
+		array('Player', $pname),
 		array('Owned by', makeLink(decode($res[0]['user_name']), 'a=viewuserdetails&user=' . $res[0]['player_user']), SECTION_USER),
 		array('Register date', getTime($res[0]['player_register'])),
 		array('Last active', getTime($res[0]['player_last'])),
@@ -163,6 +165,6 @@ if(count($res) == 1)
 else
 	echo '<p/>Invalid player.';
 
-update_session_action(0702, $player);
+update_session_action(0702, $player, isset($pname) ? 'Player details of ' . $pname : '');
 
 ?>
