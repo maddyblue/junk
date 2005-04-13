@@ -181,7 +181,7 @@ foreach($fields as $key => $value)
 	$i++;
 
 	if($i % $numcols == 0)
-		$dc .= '<tr align=right>';
+		$dc .= '<tr align="right">';
 
 	$dc .= '<td>' . $value . getFormField(array('type'=>'checkbox', 'val'=>(array_key_exists($key, $cols) ? 'checked' : ''), 'name'=>$key)) . '</td>';
 
@@ -189,7 +189,7 @@ foreach($fields as $key => $value)
 		$dc .= '</tr>';
 }
 
-if($i % $numcols == ($numcols - 1))
+if($i % $numcols != ($numcols - 1))
 	$dc .= '</tr>';
 
 $dc .= '</table>';
