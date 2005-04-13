@@ -32,6 +32,11 @@
  *
  */
 
+function sign($v)
+{
+	return ($v >= 0 ? '+' : '') . $v;
+}
+
 $player = isset($_GET['player']) ? intval($_GET['player']) :
 	(LOGGED ? $PLAYER['player_id'] : '0');
 
@@ -78,14 +83,14 @@ if(count($res) == 1)
 	echo '<p/>Stats <b>without</b> modifications from items, jobs, etc.:' . getTable($array, false);
 
 	$array = array(
-		array('hp', $res[0]['player_mod_hp']),
-		array('mp', $res[0]['player_mod_mp']),
-		array('str', $res[0]['player_mod_str']),
-		array('mag', $res[0]['player_mod_mag']),
-		array('def', $res[0]['player_mod_def']),
-		array('mgd', $res[0]['player_mod_mgd']),
-		array('agl', $res[0]['player_mod_agl']),
-		array('acc', $res[0]['player_mod_acc'])
+		array('hp', $res[0]['player_mod_hp'], $res[0]['player_nomod_hp'] . sign($res[0]['player_mod_hp'] - $res[0]['player_nomod_hp'])),
+		array('mp', $res[0]['player_mod_mp'], $res[0]['player_nomod_mp'] . sign($res[0]['player_mod_mp'] - $res[0]['player_nomod_mp'])),
+		array('str', $res[0]['player_mod_str'], $res[0]['player_nomod_str'] . sign($res[0]['player_mod_str'] - $res[0]['player_nomod_str'])),
+		array('mag', $res[0]['player_mod_mag'], $res[0]['player_nomod_mag'] . sign($res[0]['player_mod_mag'] - $res[0]['player_nomod_mag'])),
+		array('def', $res[0]['player_mod_def'], $res[0]['player_nomod_def'] . sign($res[0]['player_mod_def'] - $res[0]['player_nomod_def'])),
+		array('mgd', $res[0]['player_mod_mgd'], $res[0]['player_nomod_mgd'] . sign($res[0]['player_mod_mgd'] - $res[0]['player_nomod_mgd'])),
+		array('agl', $res[0]['player_mod_agl'], $res[0]['player_nomod_agl'] . sign($res[0]['player_mod_agl'] - $res[0]['player_nomod_agl'])),
+		array('acc', $res[0]['player_mod_acc'], $res[0]['player_nomod_acc'] . sign($res[0]['player_mod_acc'] - $res[0]['player_nomod_acc']))
 	);
 
 	echo '<p/>Stats <b>with</b> modifications from items, jobs, etc.:' . getTable($array, false);
