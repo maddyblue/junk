@@ -125,7 +125,7 @@ if(LOGGED)
 	if(!$PLAYER)
 	{
 		$fail = true;
-		echo '<p/>You do not have a player in this domain. First ' . makeLink('register a new player', 'a=newplayer', SECTION_USER) . ', then ' . makeLink('switch domains', 'a=domains', SECTION_HOME) . '.';
+		echo '<p/>You do not have a player in this domain. First ' . makeLink('register a new player', 'a=newplayer', SECTION_GAME) . ', then ' . makeLink('switch domains', 'a=domains', SECTION_HOME) . '.';
 	}
 	else if($PLAYER['player_battle'])
 	{
