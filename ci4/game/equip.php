@@ -50,6 +50,21 @@ if(isset($_POST['submit']))
 		}
 	}
 
+	// two-hand check, class 2 = main hand
+	$main = $db->query('select player_equipment_id, equipment_name from player_equipment, equipment where equipment_class=2 and equipment_id=player_equipment_equipment and equipment_twohand=1 and player_equipment_equipped=1 and player_equipment_player=' . $PLAYER['player_id']);
+
+	if(count($main))
+	{
+		// class 3 = off hand
+		$off = $db->query('select player_equipment_id, equipment_name from player_equipment, equipment where equipment_class=3 and equipment_id=player_equipment_equipment and player_equipment_equipped=1 and player_equipment_player=' . $PLAYER['player_id']);
+
+		if(count($off))
+		{
+			$db->query('update player_equipment set player_equipment_equipped=0 where player_equipment_id=' . $off[0]['player_equipment_id']);
+			echo '<p/>' . $main[0]['equipment_name'] . ' is two-handed. Your offhand (' . $off[0]['equipment_name'] . ') has been unequipped.';
+		}
+	}
+
 	updatePlayerStats();
 
 	echo '<p/>Equipment changed.';
