@@ -84,6 +84,6 @@ if($PLAYER)
 
 echo getTable($array);
 
-update_session_action(0504);
+update_session_action(504);
 
 ?>

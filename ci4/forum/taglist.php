@@ -77,6 +77,6 @@ foreach($array as $tag)
 
 echo getTable($disp);
 
-update_session_action(0404);
+update_session_action(404);
 
 ?>

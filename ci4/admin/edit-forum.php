@@ -108,6 +108,6 @@ else
 	}
 }
 
-update_session_action(0200);
+update_session_action(200);
 
 ?>

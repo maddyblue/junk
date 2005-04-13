@@ -88,6 +88,6 @@ else
 
 echo getTable($array);
 
-update_session_action(0503, '', 'Viewing equipment (' . $tname . ')');
+update_session_action(503, '', 'Viewing equipment (' . $tname . ')');
 
 ?>

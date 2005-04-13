@@ -82,6 +82,6 @@ if(count($res))
 else
 	echo '<p/>Invalid abilitytype ID.';
 
-update_session_action(0501);
+update_session_action(501);
 
 ?>

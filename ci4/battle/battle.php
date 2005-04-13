@@ -177,4 +177,6 @@ else
 	}
 }
 
+update_session_action(801);
+
 ?>

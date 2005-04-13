@@ -137,6 +137,6 @@ else
 	}
 }
 
-update_session_action(0402, $thread);
+update_session_action(402, $thread);
 
 ?>

@@ -244,6 +244,6 @@ if($step < 0)
 else
 	echo '<p/><a href="?a=ci3-conv&step=' . $step . '">Next</a>';
 
-update_session_action(0200);
+update_session_action(200);
 
 ?>

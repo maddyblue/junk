@@ -58,6 +58,6 @@ for($i = 0; $i < count($res); $i++)
 
 echo getTable($array);
 
-update_session_action(0102);
+update_session_action(102);
 
 ?>

@@ -99,6 +99,6 @@ else
 	echo getTable($array);
 }
 
-update_session_action(0405, 0);
+update_session_action(405, 0);
 
 ?>

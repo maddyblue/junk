@@ -170,4 +170,6 @@ if(LOGGED)
 else
 	echo '<p/>You must be logged in to start a new battle.';
 
+update_session_action(801);
+
 ?>

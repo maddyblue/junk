@@ -54,6 +54,6 @@ for($i = 0; $i < count($res); $i++)
 
 echo getTable($array);
 
-update_session_action(0507);
+update_session_action(507);
 
 ?>

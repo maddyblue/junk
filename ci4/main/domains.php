@@ -63,6 +63,6 @@ echo getTable($array);
 
 echo '<p/>' . makeLink('Leave domains.', 'a=domains&domain=0');
 
-update_session_action(0103);
+update_session_action(103);
 
 ?>

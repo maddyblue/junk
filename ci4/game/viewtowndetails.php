@@ -90,6 +90,6 @@ if(count($res))
 else
 	echo '<p/>Invalid town ID.';
 
-update_session_action(0506);
+update_session_action(506);
 
 ?>

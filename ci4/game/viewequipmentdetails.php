@@ -111,6 +111,6 @@ if(count($res))
 else
 	echo '<p/>Invalid equipment ID.';
 
-update_session_action(0503, '', isset($name) ? 'Equipment details of ' . $name : '');
+update_session_action(503, '', isset($name) ? 'Equipment details of ' . $name : '');
 
 ?>

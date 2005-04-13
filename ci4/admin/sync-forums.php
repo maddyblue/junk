@@ -94,6 +94,6 @@ foreach($users as $user)
 
 echo 'done - ' . $count;
 
-update_session_action(0200);
+update_session_action(200);
 
 ?>

@@ -132,6 +132,8 @@ function update_session_action($action, $data = '', $title = '')
 
 	$GLOBALS['PAGE_TITLE'] = $title ? $title : $GLOBALS['aval'];
 	$GLOBALS['SESSION_ACTION'] = $action;
+
+	echo "<p/>$action";
 }
 
 function close_sessions()

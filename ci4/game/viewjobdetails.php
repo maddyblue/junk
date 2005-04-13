@@ -200,6 +200,6 @@ if(count($res))
 else
 	echo '<p/>Invalid job ID.';
 
-update_session_action(0504, '', isset($res[0]['job_name']) ? 'Job details of ' . $res[0]['job_name'] : '');
+update_session_action(504, '', isset($res[0]['job_name']) ? 'Job details of ' . $res[0]['job_name'] : '');
 
 ?>

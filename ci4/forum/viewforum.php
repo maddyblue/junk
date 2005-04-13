@@ -306,6 +306,6 @@ $fname = decode(getDBData('forum_forum_name', $forumid, 'forum_forum_id', 'forum
 if(!$fname)
 	$fname = 'Home';
 
-update_session_action(0405, $forumid, $fname);
+update_session_action(405, $forumid, $fname);
 
 ?>

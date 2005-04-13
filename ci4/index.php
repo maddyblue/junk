@@ -202,9 +202,9 @@ fclose($fd);
 if($contentdone)
 {
 	if($aval =='login')
-		update_session_action(0302);
+		update_session_action(302);
 	else if($aval == 'logout')
-		update_session_action(0303);
+		update_session_action(303);
 }
 // get content page
 else

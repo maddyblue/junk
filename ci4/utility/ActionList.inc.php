@@ -34,73 +34,77 @@
 
 /* Numbers in this array are of type XXYY. XX is the section code, YY is the script code.
  * Section codes:
- * 01: main
- * 02: admin
- * 03: user
- * 04: forum
- * 05: game
- * 06: manual
- * 07: player
+ * 1: main
+ * 2: admin
+ * 3: user
+ * 4: forum
+ * 5: game
+ * 6: manual
+ * 7: player
+ * 8: battle
  */
 
 $actionlist = array(
 
 // special
-array(0000, '\'Unknown\''),
+array(0, '\'Unknown\''),
 
 // main
-array(0101, 'makeLink(\'Viewing the news\', \'a=news\', SECTION_HOME)'),
-array(0102, 'makeLink(\'Viewing the skins page\', \'a=skins\', SECTION_HOME)'),
-array(0103, 'makeLink(\'Viewing the domains page\', \'a=domains\', SECTION_HOME)'),
-array(0104, 'makeLink(\'Viewing the stats page\', \'a=stats\', SECTION_HOME)'),
+array(101, 'makeLink(\'Viewing the news\', \'a=news\', SECTION_HOME)'),
+array(102, 'makeLink(\'Viewing the skins page\', \'a=skins\', SECTION_HOME)'),
+array(103, 'makeLink(\'Viewing the domains page\', \'a=domains\', SECTION_HOME)'),
+array(104, 'makeLink(\'Viewing the stats page\', \'a=stats\', SECTION_HOME)'),
 
 // admin
-array(0200, '\'In the Admin CP\''),
+array(200, '\'In the Admin CP\''),
 
 // user
-array(0301, 'makeLink(\'Viewing Who\\\'s online\', \'a=whosonline\', SECTION_USER)'),
-array(0302, '\'Logging in\''),
-array(0303, '\'Logging out\''),
-array(0304, 'makeLink(\'Viewing their remote information\', \'a=info\', SECTION_USER)'),
-array(0305, '\'Registering a new user\''),
-array(0306, 'makeLink(\'Sending a PM\', \'a=sendpm\', SECTION_USER)'),
-array(0307, 'makeLink(\'Veiwing their User CP\', \'a=usercp\', SECTION_USER)'),
-array(0308, 'makeLink(\'Viewing their PMs\', \'a=viewpms\', SECTION_USER)'),
-array(0309, 'makeLink(\'Viewing details of \' . decode(getDBData(\'user_name\', $d)), \'a=viewuserdetails&user=\' . $d, SECTION_USER)'),
-array(0310, 'makeLink(\'Viewing the user list\', \'a=viewusers\', SECTION_USER)'),
+array(301, 'makeLink(\'Viewing Who\\\'s online\', \'a=whosonline\', SECTION_USER)'),
+array(302, '\'Logging in\''),
+array(303, '\'Logging out\''),
+array(304, 'makeLink(\'Viewing their remote information\', \'a=info\', SECTION_USER)'),
+array(305, '\'Registering a new user\''),
+array(306, 'makeLink(\'Sending a PM\', \'a=sendpm\', SECTION_USER)'),
+array(307, 'makeLink(\'Veiwing their User CP\', \'a=usercp\', SECTION_USER)'),
+array(308, 'makeLink(\'Viewing their PMs\', \'a=viewpms\', SECTION_USER)'),
+array(309, 'makeLink(\'Viewing details of \' . decode(getDBData(\'user_name\', $d)), \'a=viewuserdetails&user=\' . $d, SECTION_USER)'),
+array(310, 'makeLink(\'Viewing the user list\', \'a=viewusers\', SECTION_USER)'),
 
 // forum
-array(0401, 'makeLink(\'Editing a post\', \'a=viewpost&p=\' . $d, SECTION_FORUM)'),
-array(0402, 'makeLink(\'Replying to thread \' . decode(getDBData(\'forum_thread_title\', $d, \'forum_thread_id\', \'forum_thread\')), \'a=viewthread&t=\' . $d, SECTION_FORUM)'),
-array(0403, 'makeLink(\'Creating a new thread\', \'a=viewforum&f=\' . $d, SECTION_FORUM)'),
-array(0404, 'makeLink(\'Viewing the taglist\', \'a=taglist\', SECTION_FORUM)'),
-array(0405, 'makeLink(\'Viewing the \' . ($d == \'0\' ? \'forums\' : decode(getDBData(\'forum_forum_name\', $d, \'forum_forum_id\', \'forum_forum\')) . \' forum\'), \'a=viewforum&f=\' . $d, SECTION_FORUM)'),
-array(0406, 'makeLink(\'Viewing thread \' . decode(getDBData(\'forum_thread_title\', $d, \'forum_thread_id\', \'forum_thread\')), \'a=viewthread&t=\' . $d, SECTION_FORUM)'),
-array(0407, 'makeLink(\'Viewing the smilies\', \'a=smilies\', SECTION_FORUM)'),
+array(401, 'makeLink(\'Editing a post\', \'a=viewpost&p=\' . $d, SECTION_FORUM)'),
+array(402, 'makeLink(\'Replying to thread \' . decode(getDBData(\'forum_thread_title\', $d, \'forum_thread_id\', \'forum_thread\')), \'a=viewthread&t=\' . $d, SECTION_FORUM)'),
+array(403, 'makeLink(\'Creating a new thread\', \'a=viewforum&f=\' . $d, SECTION_FORUM)'),
+array(404, 'makeLink(\'Viewing the taglist\', \'a=taglist\', SECTION_FORUM)'),
+array(405, 'makeLink(\'Viewing the \' . ($d == \'0\' ? \'forums\' : decode(getDBData(\'forum_forum_name\', $d, \'forum_forum_id\', \'forum_forum\')) . \' forum\'), \'a=viewforum&f=\' . $d, SECTION_FORUM)'),
+array(406, 'makeLink(\'Viewing thread \' . decode(getDBData(\'forum_thread_title\', $d, \'forum_thread_id\', \'forum_thread\')), \'a=viewthread&t=\' . $d, SECTION_FORUM)'),
+array(407, 'makeLink(\'Viewing the smilies\', \'a=smilies\', SECTION_FORUM)'),
 
 // game
-array(0501, 'makeLink(\'Viewing Abilities\', \'a=viewabilities\', SECTION_GAME)'),
-array(0502, 'makeLink(\'Viewing Areas\', \'a=viewareas\', SECTION_GAME)'),
-array(0503, 'makeLink(\'Viewing Equipment\', \'a=viewequipment\', SECTION_GAME)'),
-array(0504, 'makeLink(\'Viewing Jobs\', \'a=viewjobs\', SECTION_GAME)'),
-array(0505, 'makeLink(\'Viewing Monsters\', \'a=viewmonsters\', SECTION_GAME)'),
-array(0506, 'makeLink(\'Viewing Towns\', \'a=viewtowns\', SECTION_GAME)'),
-array(0507, 'makeLink(\'Viewing Houses\', \'a=viewhouses\', SECTION_GAME)'),
-array(0551, 'makeLink(\'Changing Jobs\', \'a=changejobs\', SECTION_GAME)'),
+array(501, 'makeLink(\'Viewing Abilities\', \'a=viewabilities\', SECTION_GAME)'),
+array(502, 'makeLink(\'Viewing Areas\', \'a=viewareas\', SECTION_GAME)'),
+array(503, 'makeLink(\'Viewing Equipment\', \'a=viewequipment\', SECTION_GAME)'),
+array(504, 'makeLink(\'Viewing Jobs\', \'a=viewjobs\', SECTION_GAME)'),
+array(505, 'makeLink(\'Viewing Monsters\', \'a=viewmonsters\', SECTION_GAME)'),
+array(506, 'makeLink(\'Viewing Towns\', \'a=viewtowns\', SECTION_GAME)'),
+array(507, 'makeLink(\'Viewing Houses\', \'a=viewhouses\', SECTION_GAME)'),
+array(551, 'makeLink(\'Changing Jobs\', \'a=changejobs\', SECTION_GAME)'),
 
 // manual
-array(0601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),
-array(0602, 'makeLink(\'Viewing the advanced skinning tutorial\', \'a=skinning-advanced\', SECTION_MANUAL)'),
-array(0603, 'makeLink(\'Viewing the IRC manual page\', \'a=irc\', SECTION_MANUAL)'),
-array(0604, 'makeLink(\'Viewing the how to help page\', \'a=help\', SECTION_MANUAL)'),
-array(0605, 'makeLink(\'Reading about CI\', \'a=about\', SECTION_MANUAL)'),
-array(0606, 'makeLink(\'Reading about the CI Staff\', \'a=staff\', SECTION_MANUAL)'),
+array(601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),
+array(602, 'makeLink(\'Viewing the advanced skinning tutorial\', \'a=skinning-advanced\', SECTION_MANUAL)'),
+array(603, 'makeLink(\'Viewing the IRC manual page\', \'a=irc\', SECTION_MANUAL)'),
+array(604, 'makeLink(\'Viewing the how to help page\', \'a=help\', SECTION_MANUAL)'),
+array(605, 'makeLink(\'Reading about CI\', \'a=about\', SECTION_MANUAL)'),
+array(606, 'makeLink(\'Reading about the CI Staff\', \'a=staff\', SECTION_MANUAL)'),
 
 // player
-array(0701, 'makeLink(\'Viewing the player list\', \'a=viewplayers\', SECTION_GAME)'),
-array(0702, 'makeLink(\'Viewing details of \' . decode(getDBData(\'player_name\', $d, \'player_id\', \'player\')), \'a=viewplayerdetails&player=\' . $d, SECTION_GAME)'),
-array(0703, '\'Registering a new player\''),
-array(0704, 'makeLink(\'Managing their abilities\', \'a=abilities\', SECTION_GAME)')
+array(701, 'makeLink(\'Viewing the player list\', \'a=viewplayers\', SECTION_GAME)'),
+array(702, 'makeLink(\'Viewing details of \' . decode(getDBData(\'player_name\', $d, \'player_id\', \'player\')), \'a=viewplayerdetails&player=\' . $d, SECTION_GAME)'),
+array(703, '\'Registering a new player\''),
+array(704, 'makeLink(\'Managing their abilities\', \'a=abilities\', SECTION_GAME)'),
+
+// battle
+array(801, '\'Battling\'')
 
 );
 

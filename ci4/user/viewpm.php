@@ -84,6 +84,6 @@ else
 	}
 }
 
-update_session_action(0308);
+update_session_action(308);
 
 ?>

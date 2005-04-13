@@ -67,6 +67,6 @@ $array = array(
 
 echo getTable($array);
 
-update_session_action(0502);
+update_session_action(502);
 
 ?>

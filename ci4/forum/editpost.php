@@ -116,6 +116,6 @@ else
 		disp($text, $post);
 }
 
-update_session_action(0401, $post);
+update_session_action(401, $post);
 
 ?>

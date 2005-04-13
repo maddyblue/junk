@@ -217,6 +217,6 @@ echo '<p/><hr/>';
 
 echo getTableForm('<b>Show Players:</b>', $disp);
 
-update_session_action(0701);
+update_session_action(701);
 
 ?>

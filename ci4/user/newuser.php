@@ -116,6 +116,6 @@ if(isset($_POST['submit']))
 else
 	display($name, $email);
 
-update_session_action(0305);
+update_session_action(305);
 
 ?>

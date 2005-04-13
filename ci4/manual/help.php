@@ -32,7 +32,7 @@
 *
 */
 
-update_session_action(0604);
+update_session_action(604);
 
 ?>
 

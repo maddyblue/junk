@@ -147,6 +147,6 @@ else
 		echo '<p/>Non-existent thread.';
 }
 
-update_session_action(0406, $threadid, decode($res[0]['forum_thread_title']));
+update_session_action(406, $threadid, decode($res[0]['forum_thread_title']));
 
 ?>

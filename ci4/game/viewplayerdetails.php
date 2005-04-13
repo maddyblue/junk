@@ -170,6 +170,6 @@ if(count($res) == 1)
 else
 	echo '<p/>Invalid player.';
 
-update_session_action(0702, $player, isset($pname) ? 'Player details of ' . $pname : '');
+update_session_action(702, $player, isset($pname) ? 'Player details of ' . $pname : '');
 
 ?>
