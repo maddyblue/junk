@@ -380,9 +380,9 @@ INSERT INTO equipment VALUES (62,'Thick Vest','chest.gif',0,0,0,-15,30,15,0,0,0,
 INSERT INTO equipment VALUES (63,'Subzero Vest','chest.gif',0,0,0,0,100,100,0,0,0,0,0,0,0,18250,'',7,9,0);
 INSERT INTO equipment VALUES (64,'Brass Knuckles','',0,0,60,-20,30,0,0,0,0,0,0,0,0,10000,'',14,2,0);
 INSERT INTO equipment VALUES (65,'Gold Knuckles','',25,25,125,-20,75,50,0,0,0,0,0,0,0,15000,'',14,2,0);
-INSERT INTO equipment VALUES (66,'Bebe Gun','',0,0,25,0,-10,0,0,0,0,0,0,0,0,6000,'',9,2,0);
-INSERT INTO equipment VALUES (67,'Pistol','',0,0,55,0,-20,0,0,0,0,0,0,0,0,8700,'',9,2,0);
-INSERT INTO equipment VALUES (68,'Small Machine Gun','',0,0,75,0,-20,0,0,0,0,0,0,0,0,13200,'',9,2,0);
+INSERT INTO equipment VALUES (66,'Bebe Gun','snapshot.gif',0,0,25,0,-10,0,0,0,0,0,0,0,0,6000,'',9,2,0);
+INSERT INTO equipment VALUES (67,'Pistol','snapshot.gif',0,0,55,0,-20,0,0,0,0,0,0,0,0,8700,'',9,2,0);
+INSERT INTO equipment VALUES (68,'Small Machine Gun','snapshot.gif',0,0,75,0,-20,0,0,0,0,0,0,0,0,13200,'',9,2,0);
 INSERT INTO equipment VALUES (69,'Shiny Knuckles','',50,50,175,0,100,50,0,0,0,0,0,0,0,24550,'',14,2,0);
 INSERT INTO equipment VALUES (70,'Fake Ring','',0,0,0,0,10,10,0,0,0,0,0,0,0,500,'',1,1,0);
 INSERT INTO equipment VALUES (71,'Princess Ring','',0,0,0,0,20,15,0,0,0,0,0,0,0,2500,'',1,1,0);
@@ -438,7 +438,7 @@ INSERT INTO equipment VALUES (120,'Lucky Necklace','AmuletA.gif',44,33,-11,33,-2
 INSERT INTO equipment VALUES (121,'Shiny Talisman','AmuletA.gif',40,40,15,0,15,25,0,0,0,0,0,0,0,20000,'',15,11,0);
 INSERT INTO equipment VALUES (122,'Bracelet of Hope','',15,15,15,15,15,15,0,0,0,0,0,0,0,15000,'',1,1,0);
 INSERT INTO equipment VALUES (123,'Ring of Infinite Strength','',25,-25,75,-50,25,-50,0,0,0,0,0,0,0,35000,'',1,1,0);
-INSERT INTO equipment VALUES (124,'Prototype A3','',0,0,99,0,-10,0,0,0,0,0,0,0,0,18550,'',9,2,0);
+INSERT INTO equipment VALUES (124,'Prototype A3','snapshot.gif',0,0,99,0,-10,0,0,0,0,0,0,0,0,18550,'',9,2,0);
 INSERT INTO equipment VALUES (125,'Combat Visor','head.gif',50,0,0,0,75,75,0,0,0,0,0,0,0,50000,'',8,4,0);
 INSERT INTO equipment VALUES (126,'Skull Keeper','head.gif',-25,50,5,-10,40,60,0,0,0,0,0,0,0,20000,'',8,4,0);
 INSERT INTO equipment VALUES (127,'Karaoke Box','',0,25,55,0,25,50,0,0,0,0,0,0,0,11999,'',12,2,1);
