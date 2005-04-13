@@ -141,7 +141,7 @@ if(LOGGED)
 			$pid = $db->query('select player_id from player where player_user=' . ID . ' and player_domain="' . $domain . '"');
 
 			// create an entry in player_job
-			$db->query('insert into player_job values (' . $pid[0]['player_id'] . ', 1, 0, 0)');
+			$db->query('insert into player_job values (' . $pid[0]['player_id'] . ', 1, 1, 0)');
 
 			// set the mod stats
 			updatePlayerStats($pid[0]['player_id']);

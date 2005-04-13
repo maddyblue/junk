@@ -77,7 +77,7 @@ if(count($res))
 			$ret = $db->query('select player_job_job from player_job where player_job_player=' . $PLAYER['player_id'] . ' and player_job_job=' . $job);
 			if(count($ret) == 0)
 			{
-				$db->query('insert into player_job values (' . $PLAYER['player_id'] . ', ' . $job . ', 0, 0)');
+				$db->query('insert into player_job values (' . $PLAYER['player_id'] . ', ' . $job . ', 1, 0)');
 
 				$ret = $db->query('select cor_abilitytype from cor_job_abilitytype where cor_job=' . $job);
 				for($i = 0; $i < count($ret); $i++)
