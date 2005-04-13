@@ -39,9 +39,10 @@ $res = $db->query('select * from equipment, equipmenttype, equipmentclass where 
 
 if(count($res))
 {
+	$name = $res[0]['equipment_name'];
+
 	if($PLAYER && isset($_POST['e']))
 	{
-		$name = $res[0]['equipment_name'];
 		$cost = $res[0]['equipment_cost'];
 
 		if($cost > $PLAYER['player_money'])
@@ -74,7 +75,7 @@ if(count($res))
 	);
 
 	$array = array(
-		array('Name', makeImg($res[0]['equipment_image'], 'images/equipment/' . $res[0]['equipmenttype_name'] . '/') . ' ' . $res[0]['equipment_name']),
+		array('Name', makeImg($res[0]['equipment_image'], 'images/equipment/' . $res[0]['equipmenttype_name'] . '/') . ' ' . $name),
 		array('Type', makeLink($res[0]['equipmenttype_name'], 'a=viewequipment&type=' . $res[0]['equipmenttype_id'])),
 		array('Class', $res[0]['equipmentclass_name']),
 		array('Description', $res[0]['equipment_desc']),
@@ -95,6 +96,10 @@ if(count($res))
 		));
 
 		echo '<p/>You have ' . $PLAYER['player_money'] . ' gold.';
+
+		$res = $db->query('select count(*) from player_equipment where player_equipment_player=' . $PLAYER['player_id'] . ' and player_equipment_equipment=' . $e);
+
+		echo '<p/>You own ' . $res[0]['count(*)'] . ' of th' . ($res[0]['count(*)'] == 1 ? 'is' : 'ese') . '.';
 	}
 	else
 		$buytext = '';
@@ -106,6 +111,6 @@ if(count($res))
 else
 	echo '<p/>Invalid equipment ID.';
 
-update_session_action(0503);
+update_session_action(0503, '', isset($name) ? 'Equipment details of ' . $name : '');
 
 ?>
