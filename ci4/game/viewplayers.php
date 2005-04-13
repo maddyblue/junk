@@ -90,21 +90,25 @@ if($limit < 1)
 else if($limit > 50)
 	$limit = 50;
 
+$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+if($page < 1)
+	$page = 1;
+
+$start = ($page - 1) * $limit;
+
 $order = (isset($_POST['order']) && array_key_exists($_POST['order'], $fields)) ? $_POST['order'] : 'player_exp';
 
 $orderdir = (isset($_POST['orderdir']) && $_POST['orderdir'] == 'asc') ? 'asc' : 'desc';
 
-$query = 'select * from player, domain, user, job
+$query = 'from player, domain, user, job
 	left join town on town_id = player_town
 	left join house on house_id = player_house
 	where
 		player_job = job_id and
 		player_domain = domain_id and
-		player_user = user_id
-	order by ' . $order . ' ' . $orderdir .'
-	limit ' . $limit;
+		player_user = user_id';
 
-$res = $db->query($query);
+$res = $db->query('select * ' . $query . ' order by ' . $order . ' ' . $orderdir .' limit ' . $start . ', ' . $limit);
 
 foreach($res as $row)
 {
@@ -148,6 +152,10 @@ foreach($res as $row)
   array_push($array, $push);
 }
 
+$pres = $db->query('select count(*) ' . $query);
+$ptot = $pres[0]['count(*)'];
+$totpages = ceil($ptot / $limit);
+
 $disp = array();
 
 $orderby = '';
@@ -158,9 +166,13 @@ $limitsel = '';
 foreach(array(10, 25, 50) as $val)
 	$limitsel .= '<option value="' . $val . '" ' . ($val == $limit ? 'selected' : '') . '>' . $val . '</option>';
 
-//array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
+$pagesel = '';
+for($i = 1; $i <= $totpages; $i++)
+	$pagesel .= '<option value="' . $i . '" ' . ($i == $page ? 'selected' : '') . '>' . $i . '</option>';
+
 array_push($disp, array('Display Columns', array('type'=>'disptext')));
 
+$numcols = 4;
 $i = -1;
 $dc = '<table>';
 
@@ -168,16 +180,16 @@ foreach($fields as $key => $value)
 {
 	$i++;
 
-	if($i % 4 == 0)
+	if($i % $numcols == 0)
 		$dc .= '<tr align=right>';
 
 	$dc .= '<td>' . $value . getFormField(array('type'=>'checkbox', 'val'=>(array_key_exists($key, $cols) ? 'checked' : ''), 'name'=>$key)) . '</td>';
 
-	if($i % 4 == 3)
+	if($i % $numcols == ($numcols - 1))
 		$dc .= '</tr>';
 }
 
-if($i % 4 == 3)
+if($i % $numcols == ($numcols - 1))
 	$dc .= '</tr>';
 
 $dc .= '</table>';
@@ -185,17 +197,23 @@ $dc .= '</table>';
 array_push($disp, array('', array('type'=>'disptext', 'val'=>$dc)));
 
 array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
-array_push($disp, array('Order By', array('type'=>'select', 'name'=>'order', 'val'=>$orderby)));
-array_push($disp, array('Sort', array('type'=>'select', 'name'=>'orderdir', 'val'=>
+array_push($disp, array('Order by', array('type'=>'disptext', 'val'=>
+	getFormField(array('type'=>'select', 'name'=>'order', 'val'=>$orderby)) . ' ' .
+	getFormField(array('type'=>'select', 'name'=>'orderdir', 'val'=>
 	'<option value="desc" ' . ($orderdir == 'desc' ? 'selected' : '') . '>Descending</option>' .
-	'<option value="asc" ' . ($orderdir == 'asc' ? 'selected' : '') . '>Ascending</option>'
+	'<option value="asc" ' . ($orderdir == 'asc' ? 'selected' : '') . '>Ascending</option>'))
 )));
 array_push($disp, array('Results', array('type'=>'select', 'name'=>'limit', 'val'=>$limitsel)));
+array_push($disp, array('Page', array('type'=>'select', 'name'=>'page', 'val'=>$pagesel)));
 
 array_push($disp, array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Display')));
 array_push($disp, array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewplayers')));
 
 echo getTable($array);
+
+echo '<p/>Showing players ' . (($page - 1) * $limit + 1) . ' to ' . ($page * $limit) . ' of ' . $ptot . '.';
+
+echo '<p/><hr/>';
 
 echo getTableForm('<b>Show Players:</b>', $disp);
 
