@@ -181,12 +181,12 @@ function updatePlayerStats($pid = 0)
 
 	global $db;
 
-	$res = $db->query('select * from player where player_id=' . $pid);
+	$pres = $db->query('select * from player where player_id=' . $pid);
 
-	if(!count($res))
+	if(!count($pres))
 		return;
 
-	$stats = array('hp'=>$res[0]['player_nomod_hp'], 'mp'=>$res[0]['player_nomod_mp'], 'str'=>$res[0]['player_nomod_str'], 'mag'=>$res[0]['player_nomod_mag'], 'def'=>$res[0]['player_nomod_def'], 'mgd'=>$res[0]['player_nomod_mgd'], 'agl'=>$res[0]['player_nomod_agl'], 'acc'=>$res[0]['player_nomod_acc']);
+	$stats = array('hp'=>$pres[0]['player_nomod_hp'], 'mp'=>$pres[0]['player_nomod_mp'], 'str'=>$pres[0]['player_nomod_str'], 'mag'=>$pres[0]['player_nomod_mag'], 'def'=>$pres[0]['player_nomod_def'], 'mgd'=>$pres[0]['player_nomod_mgd'], 'agl'=>$pres[0]['player_nomod_agl'], 'acc'=>$pres[0]['player_nomod_acc']);
 
 	// equipment
 
@@ -195,6 +195,14 @@ function updatePlayerStats($pid = 0)
 	if(count($res))
 		foreach($stats as $key => $val)
 			$stats[$key] = $val + $res[0][$key];
+
+	// jobs
+
+	$res = $db->query('select job_stat_hp hp, job_stat_mp mp, job_stat_str str, job_stat_mag mag, job_stat_def def, job_stat_mgd mgd, job_stat_agl agl, job_stat_acc acc from job where job_id=' . $pres[0]['player_job']);
+
+	if(count($res))
+		foreach($stats as $key => $val)
+			$stats[$key] = $val + $res[0][$key] * $pres[0]['player_nomod_' . $key] / 100.0;
 
 	// commit data
 
