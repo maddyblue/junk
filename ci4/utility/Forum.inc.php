@@ -189,7 +189,7 @@ function parsePost($post)
 
 function parsePostText($post)
 {
-	$return = decode($post);
+	$return = htmlentities(decode($post));
 
 	$return = nl2br($return);
 
