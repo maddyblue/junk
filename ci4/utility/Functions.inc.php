@@ -336,10 +336,10 @@ function getFormField($arr)
 			$str = $val;
 			break;
 		case 'checkbox':
-			$str = '<input type="checkbox" name="' .$name . '" ' . $val . '>';
+			$str = '<input type="checkbox" name="' .$name . '" ' . $val . ' />';
 			break;
 		default:
-			$str = '<input type="' . $type . '" name="' . $name . '" ' . $parms . ' value="' . $val . '">';
+			$str = '<input type="' . $type . '" name="' . $name . '" ' . $parms . ' value="' . $val . '" />';
 			break;
 	}
 	return $str;
