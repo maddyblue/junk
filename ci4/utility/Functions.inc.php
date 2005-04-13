@@ -464,7 +464,7 @@ function makeLink($text, $link, $section = '', $title = '')
  */
 function makeImg($img, $prefix = '', $relative = false)
 {
-	return ($img ? '<img src="' . ($relative ? '' : CI_WWW_PATH) . $prefix . $img . '">' : '');
+	return ($img ? '<img alt="" src="' . ($relative ? '' : CI_WWW_PATH) . $prefix . $img . '" />' : '');
 }
 
 // --- Data control ---
