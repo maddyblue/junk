@@ -35,7 +35,7 @@
 $fields = array(
 	'player_name'=>'Name',
 	'user_name'=>'Owner',
-	'player_register'=>'Register Date',
+	'player_register'=>'Reg Date',
 	'player_last'=>'Last Active',
 	'domain_abrev'=>'Domain',
 	'player_gender'=>'Gender',
@@ -158,11 +158,31 @@ $limitsel = '';
 foreach(array(10, 25, 50) as $val)
 	$limitsel .= '<option value="' . $val . '" ' . ($val == $limit ? 'selected' : '') . '>' . $val . '</option>';
 
-array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
+//array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
 array_push($disp, array('Display Columns', array('type'=>'disptext')));
 
+$i = -1;
+$dc = '<table>';
+
 foreach($fields as $key => $value)
-	array_push($disp, array($value, array('type'=>'checkbox', 'val'=>(array_key_exists($key, $cols) ? 'checked' : ''), 'name'=>$key)));
+{
+	$i++;
+
+	if($i % 4 == 0)
+		$dc .= '<tr align=right>';
+
+	$dc .= '<td>' . $value . getFormField(array('type'=>'checkbox', 'val'=>(array_key_exists($key, $cols) ? 'checked' : ''), 'name'=>$key)) . '</td>';
+
+	if($i % 4 == 3)
+		$dc .= '</tr>';
+}
+
+if($i % 4 == 3)
+	$dc .= '</tr>';
+
+$dc .= '</table>';
+
+array_push($disp, array('', array('type'=>'disptext', 'val'=>$dc)));
 
 array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
 array_push($disp, array('Order By', array('type'=>'select', 'name'=>'order', 'val'=>$orderby)));
@@ -177,9 +197,7 @@ array_push($disp, array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewpla
 
 echo getTable($array);
 
-echo '<p/>';
-
-echo getTableForm('Show Players:', $disp);
+echo getTableForm('<b>Show Players:</b>', $disp);
 
 update_session_action(0701);
 
