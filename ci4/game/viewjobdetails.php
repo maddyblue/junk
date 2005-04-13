@@ -89,6 +89,8 @@ if(count($res))
 
 			echo '<p/>Job change to ' . $res[0]['job_name'] . ' succeeded.';
 			echo '<p/>All of your equipment has been unequipped.';
+
+			updatePlayerStats();
 		}
 		else
 		{
