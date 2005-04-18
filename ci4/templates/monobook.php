@@ -31,7 +31,7 @@
 				</div>
 				<div class="portlet" id="p-logo">
 					<a style="background-image: url(<CI_TEMPLATE_DIR/>/wikiisland.gif);"
-						href=""
+						href="<?php echo CI_WWW_ADDRESS; ?>"
 						title=""></a>
 				</div>
 				<div class="portlet">
