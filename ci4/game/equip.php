@@ -34,11 +34,6 @@
 
 if(isset($_POST['submit']))
 {
-	/* FIX ME FIX ME FIX ME FIX ME FIX ME
-	 * We don't do any equipment-job requirement checking here - just take what
-	 * we get from the browser and trust it. This should be fixed later.
-	 */
-
 	// unequip everything
 	$db->query('update player_equipment set player_equipment_equipped=0 where player_equipment_player=' . $PLAYER['player_id']);
 
@@ -64,6 +59,29 @@ if(isset($_POST['submit']))
 			echo '<p/>' . $main[0]['equipment_name'] . ' is two-handed. Your offhand (' . $off[0]['equipment_name'] . ') has been unequipped.';
 		}
 	}
+
+	// equipmenttype check
+
+	/* I'm sure there is some query to do this all in one step, but I couldn't figure it out. */
+
+	$res = $db->query('select cor_equipmenttype from cor_job_equipmenttype where cor_job=' . $PLAYER['player_job']);
+
+	$et = array();
+	foreach($res as $t)
+		$et[$t['cor_equipmenttype']] = true;
+
+	$res = $db->query('select player_equipment_id, equipment_name, equipment_type from player_equipment, equipment where player_equipment_player=' . $PLAYER['player_id'] . ' and player_equipment_equipped=1 and player_equipment_equipment=equipment_id');
+
+	foreach($res as $e)
+	{
+		if(!isset($et[$e['equipment_type']]))
+		{
+			echo '<p/>' . $e['equipment_name'] . ' unequipped: your current job cannot equip that type.';
+			$db->query('update player_equipment set player_equipment_equipped=0 where player_equipment_id=' . $e['player_equipment_id']);
+		}
+	}
+
+	// finish up
 
 	updatePlayerStats();
 
