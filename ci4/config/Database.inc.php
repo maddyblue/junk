@@ -4,9 +4,9 @@
 
 /*	MySQL database connection configuration.	*/
 
-$DBConf['user']     = 'ci4';
-$DBConf['pass']     = 'ci4sql';
-$DBConf['host']     = 'localhost';
+$DBConf['user']     = 'root';
+$DBConf['pass']     = '';
+$DBConf['host']     = 'althalus.dolmant.net';
 $DBConf['database'] = 'ci4';
 
 ?>
