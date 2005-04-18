@@ -42,10 +42,12 @@ function disp($post, $thread)
 	else
 		$name = '';
 
+	$reply = getFormField(array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')) . ' ' . getFormField(array('type'=>'submit', 'name'=>'preview', 'val'=>'Preview Post'));
+
 	echo getTableForm('New Reply' . $name, array(
 			array('Post', array('type'=>'textarea', 'name'=>'post', 'val'=>decode($post))),
 
-			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')),
+			array('', array('type'=>'disptext', 'val'=>$reply)),
 			array('', array('type'=>'hidden', 'name'=>'t', 'val'=>$thread)),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'newpost'))
 		));
@@ -75,7 +77,12 @@ else
 {
 	echo getNavBar($forum);
 
-	if(isset($_POST['submit']))
+	if(isset($_POST['preview']))
+	{
+		echo '<p/><b>Post preview:</b><p/>' . parsePostText($post) . '<hr/>';
+		disp($post, $thread);
+	}
+	else if(isset($_POST['submit']))
 	{
 		$fail = false;
 
