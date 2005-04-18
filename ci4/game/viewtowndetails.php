@@ -85,7 +85,7 @@ if(count($res))
 
 	echo $changetext;
 	echo getTable($array);
-		echo $changetext;
+	echo $changetext;
 }
 else
 	echo '<p/>Invalid town ID.';
