@@ -40,13 +40,13 @@ $array = array();
 array_push($array, array(
 	'House',
 	'Cost',
-	'Level'
+	'Required Level'
 ));
 
 for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		$res[$i]['house_name'],
+		makeLink($res[$i]['house_name'], 'a=viewhousedetails&house=' . $res[$i]['house_id']),
 		$res[$i]['house_cost'],
 		$res[$i]['house_lv']
 	));
