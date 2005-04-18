@@ -495,23 +495,23 @@ INSERT INTO group_def VALUES (3,'Banned',0,0,0,0);
 INSERT INTO group_def VALUES (4,'Moderators',0,0,0,0);
 
 
-INSERT INTO house VALUES (1,'Shack',0,0,'');
-INSERT INTO house VALUES (2,'Cottage',4000,10,'+20 str\r\n+10 def\r\n-5 money');
-INSERT INTO house VALUES (3,'Town house',5000,10,'+20 mag\r\n+10 mgd\r\n-5 money');
-INSERT INTO house VALUES (4,'Villa',65000,75,'+75 mag\r\n+75 mgd\r\n+20 mp\r\n-45 money');
-INSERT INTO house VALUES (5,'Tower',10000,20,'+30 mag\r\n+20 mgd\r\n-10 money');
-INSERT INTO house VALUES (6,'Stone Fort',8500,20,'+30 str\r\n+20 def\r\n-10 money');
-INSERT INTO house VALUES (7,'Castle',95000,100,'+100 str\r\n+75 def\r\n+40 hp\r\n-60 money');
-INSERT INTO house VALUES (8,'Palace',110000,100,'+100 mag\r\n+75 mgd\r\n+40 mp\r\n-60 money');
-INSERT INTO house VALUES (9,'House',250,5,'+5 str\r\n+5 def\r\n+5 mag\r\n+5 mgd\r\n-2 money');
-INSERT INTO house VALUES (10,'Ruler of Kingdom',175000,150,'+75 str\r\n+75 def\r\n+75 mag\r\n+75 mgd\r\n+50 hp\r\n+50 mp\r\n-75 money');
-INSERT INTO house VALUES (11,'Hideout',26000,35,'+45 str\r\n+35 def\r\n-20 money');
-INSERT INTO house VALUES (12,'Mansion',22500,35,'+45 mag\r\n+30 mgd\r\n-20 money');
-INSERT INTO house VALUES (13,'Keep',55000,50,'+55 str\r\n+45 def\r\n+10 hp\r\n-30 money');
-INSERT INTO house VALUES (14,'Dungeon',45000,50,'+55 mag\r\n+45 mgd\r\n+10 mp\r\n-30 money');
-INSERT INTO house VALUES (15,'Fortress',73000,75,'+75 str\r\n+60 def\r\n+20 hp\r\n-45 money');
-INSERT INTO house VALUES (16,'Leader of Village',18000,28,'+40 str\r\n+30 def\r\n+40 mag\r\n+30 mgd\r\n-15 money');
-INSERT INTO house VALUES (17,'Lord of Town',60000,62,'+65 str\r\n+50 def\r\n+65 mag\r\n+50 mgd\r\n+15 hp\r\n+15 mp\r\n-38 money');
+INSERT INTO house VALUES (1,'Shack',0,0,0,0,0,0,0,0,0,0,0);
+INSERT INTO house VALUES (2,'Cottage',4000,10,0,0,20,0,10,0,0,0,-5);
+INSERT INTO house VALUES (3,'Town house',5000,10,0,0,0,20,0,10,0,0,-5);
+INSERT INTO house VALUES (4,'Villa',65000,75,0,20,0,75,0,75,0,0,-45);
+INSERT INTO house VALUES (5,'Tower',10000,20,0,0,0,30,0,20,0,0,-10);
+INSERT INTO house VALUES (6,'Stone Fort',8500,20,0,0,30,0,20,0,0,0,-10);
+INSERT INTO house VALUES (7,'Castle',95000,100,40,0,100,0,75,0,0,0,-60);
+INSERT INTO house VALUES (8,'Palace',110000,100,0,40,0,100,0,75,0,0,-60);
+INSERT INTO house VALUES (9,'House',250,5,0,0,5,5,5,5,0,0,-2);
+INSERT INTO house VALUES (10,'Ruler of Kingdom',175000,150,50,50,75,75,75,75,0,0,-75);
+INSERT INTO house VALUES (11,'Hideout',26000,35,0,0,45,0,35,0,0,0,-20);
+INSERT INTO house VALUES (12,'Mansion',22500,35,0,0,0,45,0,30,0,0,-20);
+INSERT INTO house VALUES (13,'Keep',55000,50,10,0,55,0,45,0,0,0,-30);
+INSERT INTO house VALUES (14,'Dungeon',45000,50,0,10,0,55,0,45,0,0,-30);
+INSERT INTO house VALUES (15,'Fortress',73000,75,20,0,75,0,60,0,0,0,-45);
+INSERT INTO house VALUES (16,'Leader of Village',18000,28,0,0,40,40,30,30,0,0,-15);
+INSERT INTO house VALUES (17,'Lord of Town',60000,62,15,15,65,65,50,50,0,0,-38);
 
 
 

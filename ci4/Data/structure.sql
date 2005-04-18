@@ -268,7 +268,15 @@ CREATE TABLE house (
   house_name varchar(100) NOT NULL default '',
   house_cost bigint(10) unsigned NOT NULL default '0',
   house_lv smallint(6) unsigned NOT NULL default '0',
-  house_text text NOT NULL,
+  house_hp smallint(6) NOT NULL default '0',
+  house_mp smallint(6) NOT NULL default '0',
+  house_str smallint(6) NOT NULL default '0',
+  house_mag smallint(6) NOT NULL default '0',
+  house_def smallint(6) NOT NULL default '0',
+  house_mgd smallint(6) NOT NULL default '0',
+  house_agl smallint(6) NOT NULL default '0',
+  house_acc smallint(6) NOT NULL default '0',
+  house_money bigint(10) NOT NULL default '0',
   PRIMARY KEY  (house_id)
 ) TYPE=MyISAM;
 
