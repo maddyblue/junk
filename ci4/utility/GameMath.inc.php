@@ -36,12 +36,12 @@
 
 function getLevel($exp)
 {
-	return (int)($exp / 100);
+	return 1 + (int)($exp / 100);
 }
 
 function getExp($level)
 {
-	return $level * 100;
+	return ($level - 1) * 100;
 }
 
 ?>
