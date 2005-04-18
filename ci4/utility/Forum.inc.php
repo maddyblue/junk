@@ -197,7 +197,9 @@ function parsePostText($post)
 
 	$repl = array(
 		array('[url]', '[/url]', '<a href="$1">$1</a>'),
+		array('[URL]', '[/URL]', '<a href="$1">$1</a>'),
 		array('[img]', '[/img]', '<img src="$1">'),
+		array('[IMG]', '[/IMG]', '<img src="$1">'),
 		array('[b]', '[/b]', '<b>$1</b>'),
 		array('[u]', '[/u]', '<u>$1</u>'),
 		array('[i]', '[/i]', '<i>$1</i>'),
