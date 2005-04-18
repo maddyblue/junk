@@ -54,6 +54,8 @@ if(count($res))
 
 			$db->query('update player set player_house=' . $house . ', player_money=player_money-' . $res[0]['house_cost'] . ' where player_id=' . $PLAYER['player_id']);
 			echo '<p/>You have purchased a ' . $res[0]['house_name'] . '. You now have ' . $PLAYER['player_money'] . ' gold.';
+
+			updatePlayerStats();
 		}
 	}
 

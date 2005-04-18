@@ -204,6 +204,14 @@ function updatePlayerStats($pid = 0)
 		foreach($stats as $key => $val)
 			$stats[$key] = $val + $res[0][$key] * $pres[0]['player_nomod_' . $key] / 100.0;
 
+	// houses
+
+	$res = $db->query('select house_hp hp, house_mp mp, house_str str, house_mag mag, house_def def, house_mgd mgd, house_agl agl, house_acc acc from house where house_id=' . $pres[0]['player_house']);
+
+	if(count($res))
+		foreach($stats as $key => $val)
+			$stats[$key] = $val + $res[0][$key] * $pres[0]['player_nomod_' . $key] / 100.0;
+
 	// commit data
 
 	$db->query('update player set
