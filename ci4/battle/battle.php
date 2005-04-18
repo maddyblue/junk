@@ -51,7 +51,7 @@ else if(!$PLAYER['player_battle'])
 	echo '<p/>You do not have an active battle. Create a new one.';
 else
 {
-	$ret = $db->query('select * from battle_entity where battle_entity_battle=' . $PLAYER['player_battle']);
+	$ret = $db->query('select * from battle_entity where battle_entity_battle=' . $PLAYER['player_battle'] . ' order by battle_entity_dead asc');
 
 	if(count($ret) < 2)
 	{
@@ -84,7 +84,7 @@ else
 
 		for($i = 0; $i < count($entities); $i++)
 		{
-			if($entities[$i]->ct > $max && $entities[$i]->hp > 0)
+			if($entities[$i]->ct > $max && !$entities[$i]->dead)
 			{
 				$max = $entities[$i]->ct;
 				$turn = $i;
@@ -112,7 +112,20 @@ else
 	for($i = 0; $i < count($entities); $i++)
 	{
 		$a = array();
-		array_push($a, $entities[$i]->name);
+
+		switch($entities[$i]->type)
+		{
+			case ENTITY_PLAYER:
+				$name = makeLink($entities[$i]->name, 'a=viewplayerdetails&player=' . $entities[$i]->id, SECTION_GAME);
+				break;
+			case ENTITY_MONSTER:
+				$name = makeLink($entities[$i]->name, 'a=viewmonsterdetails&monster=' . $entities[$i]->id, SECTION_GAME);
+				break;
+			default:
+				$name = $entities[$i]->name;
+		}
+
+		array_push($a, $name);
 
 		if(!$USER['user_battle_verbose'])
 			array_push($a, $entities[$i]->hp, $entities[$i]->mp);

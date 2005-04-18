@@ -50,9 +50,9 @@ function battleAttack(&$src, &$dest)
 {
 	$d = battleDamage($src, $dest);
 
-	battleDealDamage($d, $dest);
-
 	echo '<p/>' . $src->name . ' has attacked ' . $dest->name . ' for ' . $d . ' damage.';
+
+	battleDealDamage($d, $dest, $src);
 
 	return true;
 }
@@ -70,13 +70,83 @@ function battleDamage(&$src, &$dest)
 	return intval($dmg);
 }
 
-// deals $d damage to $dest, making sure hp doesn't fall below 0
-function battleDealDamage($d, &$dest)
+// $src deals $d damage to $dest, making sure hp doesn't fall below 0
+// if $dest dies, mark it as dead
+// if src is a player and dest is a monster and src kills dest, src gets exp
+function battleDealDamage($d, &$dest, &$src)
 {
+	global $db;
+
 	$dest->hp -= $d;
 
 	if($dest->hp < 0)
 		$dest->hp = 0;
+
+	if($dest->hp == 0 && $dest->dead == 0)
+		echo '<p/>' . $dest->name . ' has been killed by ' . $src->name . '.';
+
+	// gain exp for src if necessary
+	// dest must have zero hp but not marked dead, which would mean it just died
+	if($src->type == ENTITY_PLAYER && $dest->type == ENTITY_MONSTER && $dest->hp == 0 && $dest->dead == 0)
+	{
+		$exp = getDBDataNum('monster_exp', $dest->id, 'monster_id', 'monster');
+
+		$ratio = $src->lv / $dest->lv;
+		$dif = $src->lv - $dest->lv;
+
+		// levels must be atleast 5 away
+		if(abs($dif) < 5)
+			$mult = 1;
+		// if the levels are not within 20% of eachother
+		else if($ratio < .8 || $ratio > 1.25)
+			$mult = $ratio;
+		else
+			$mult = 1;
+
+		$exp = (int)($exp / $mult);
+
+		$ret = $db->query('select * from player where player_id=' . $src->id);
+		$job = $ret[0]['player_job'];
+
+		$db->query('update player set player_exp=player_exp+' . $exp . ' where player_id=' . $src->id);
+		$db->query('update player_job set player_job_exp=player_job_exp+' . $exp . ' where player_job_player=' . $src->id . ' and player_job_job=' . $job);
+
+		echo '<p/>Gained ' . $exp . ' experience.';
+
+		$pexp = $ret[0]['player_exp'] + $exp;
+		$plv = $ret[0]['player_lv'];
+
+		if($plv < getLevel($pexp))
+		{
+			$hp = rand(5, 15);
+			$mp = rand(2, 8);
+			$str = rand(1, 3);
+			$mag = rand(1, 3);
+			$def = rand(1, 3);
+			$mgd = rand(1, 3);
+			$agl = rand(0, 1);
+			$acc = rand(0, 1);
+
+			$db->query('update player set player_nomod_hp=player_nomod_hp+' . $hp . ', player_nomod_mp=player_nomod_mp+' . $mp . ', player_nomod_str=player_nomod_str+' . $str . ', player_nomod_mag=player_nomod_mag+' . $mag . ', player_nomod_def=player_nomod_def+' . $def . ', player_nomod_mgd=player_nomod_mgd+' . $mgd . ', player_nomod_agl=player_nomod_agl+' . $agl . ', player_nomod_acc=player_nomod_acc+' . $acc . ', player_lv=player_lv+1 where player_id=' . $src->id);
+			updatePlayerStats();
+
+			echo '<p/>Level up to level ' . ($plv + 1) . '<br/>Gains:<br/>hp: ' . $hp . '<br/>mp: ' . $mp . '<br/>str: ' . $str . '<br/>mag: ' . $mag . '<br/>def: ' . $def . '<br/>mgd: ' . $mgd . '<br/>agl: ' . $agl . '<br/>acc: ' . $acc;
+		}
+
+		$ret = $db->query('select player_job_exp, player_job_lv from player_job where player_job_player=' . $src->id . ' and player_job_job=' . $job);
+		$jexp = $ret[0]['player_job_exp'];
+		$jlv = $ret[0]['player_job_lv'];
+
+		if($jlv < getLevel($jexp))
+		{
+			$db->query('update player_job set player_job_lv=player_job_lv+1 where player_job_player=' . $src->id . ' and player_job_job=' . $job);
+			echo '<p/>Reached ' . getDBData('job_name', $job, 'job_id', 'job') . ' level ' . ($jlv + 1) . '.';
+		}
+	}
+
+	// mark if dead
+	if($dest->hp == 0)
+		$dest->dead = 1;
 }
 
 // $src uses $ability on $dest

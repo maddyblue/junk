@@ -41,6 +41,7 @@ class Entity
 	var $name;
 	var $team;
 	var $type;
+	var $dead;
 	var $ct;
 	var $turnDone;
 
@@ -66,6 +67,7 @@ class Entity
 		$this->name = $e['battle_entity_name'];
 		$this->team = $e['battle_entity_team'];
 		$this->type = $e['battle_entity_type'];
+		$this->dead = $e['battle_entity_dead'];
 		$this->ct = $e['battle_entity_ct'];
 		$this->turnDone = 1;
 
@@ -107,6 +109,7 @@ class Entity
 		global $db;
 
 		$db->query('update battle_entity set
+			battle_entity_dead=' . $this->dead . ',
 			battle_entity_ct=' . $this->ct . ',
 			battle_entity_max_hp=' . $this->maxhp . ',
 			battle_entity_max_mp=' . $this->maxmp . ',
