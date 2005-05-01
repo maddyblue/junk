@@ -295,15 +295,34 @@ INSERT INTO cor_job_equipmenttype VALUES (4,2);
 INSERT INTO cor_job_equipmenttype VALUES (4,16);
 
 
-INSERT INTO cor_job_joblv VALUES (11,9,8);
-INSERT INTO cor_job_joblv VALUES (10,9,8);
-INSERT INTO cor_job_joblv VALUES (8,7,8);
-INSERT INTO cor_job_joblv VALUES (3,2,8);
-INSERT INTO cor_job_joblv VALUES (4,3,8);
-INSERT INTO cor_job_joblv VALUES (5,3,8);
-INSERT INTO cor_job_joblv VALUES (9,1,4);
-INSERT INTO cor_job_joblv VALUES (7,1,4);
-INSERT INTO cor_job_joblv VALUES (2,1,4);
+INSERT INTO cor_job_joblv VALUES (9,1,5);
+INSERT INTO cor_job_joblv VALUES (11,9,10);
+INSERT INTO cor_job_joblv VALUES (10,9,10);
+INSERT INTO cor_job_joblv VALUES (7,1,5);
+INSERT INTO cor_job_joblv VALUES (8,7,10);
+INSERT INTO cor_job_joblv VALUES (12,9,15);
+INSERT INTO cor_job_joblv VALUES (29,12,15);
+INSERT INTO cor_job_joblv VALUES (13,29,15);
+INSERT INTO cor_job_joblv VALUES (2,1,5);
+INSERT INTO cor_job_joblv VALUES (3,2,10);
+INSERT INTO cor_job_joblv VALUES (5,3,15);
+INSERT INTO cor_job_joblv VALUES (4,5,15);
+INSERT INTO cor_job_joblv VALUES (24,3,10);
+INSERT INTO cor_job_joblv VALUES (28,24,10);
+INSERT INTO cor_job_joblv VALUES (14,1,5);
+INSERT INTO cor_job_joblv VALUES (20,14,10);
+INSERT INTO cor_job_joblv VALUES (19,20,15);
+INSERT INTO cor_job_joblv VALUES (17,14,5);
+INSERT INTO cor_job_joblv VALUES (18,17,20);
+INSERT INTO cor_job_joblv VALUES (21,18,20);
+INSERT INTO cor_job_joblv VALUES (15,14,10);
+INSERT INTO cor_job_joblv VALUES (15,8,10);
+INSERT INTO cor_job_joblv VALUES (27,5,10);
+INSERT INTO cor_job_joblv VALUES (27,9,5);
+INSERT INTO cor_job_joblv VALUES (16,15,10);
+INSERT INTO cor_job_joblv VALUES (26,4,10);
+INSERT INTO cor_job_joblv VALUES (26,8,10);
+INSERT INTO cor_job_joblv VALUES (25,11,10);
 
 
 
@@ -516,16 +535,32 @@ INSERT INTO house VALUES (17,'Manor House',60000,62,15,15,65,65,50,50,0,0,-38);
 
 
 
-INSERT INTO job VALUES (1,'Citizen',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The humble beginning of every adventurer as a common citizen or Crescent Island.');
-INSERT INTO job VALUES (2,'Squire',0,4,5,0,0,0,5,0,0,0,10,5,1,0,1,0,0,0,10,'A knights apprentice, eagerly awaiting the advent of his own knighthood.');
-INSERT INTO job VALUES (3,'Knight',0,12,5,0,5,0,0,5,0,0,10,5,2,2,2,1,0,1,20,'A knight of the realm, protector of the innocent and slayer of large scaly beasts.');
-INSERT INTO job VALUES (4,'Paladin',0,20,5,5,5,5,5,5,0,0,10,5,2,2,2,1,0,1,30,'A knight of the holy orders, sworn to uphold truth and justice.');
-INSERT INTO job VALUES (5,'Guardian',0,20,10,0,10,0,5,5,0,0,10,5,2,2,3,2,0,1,40,'A knight protector, sworn to defend his ward with courage and honour.');
-INSERT INTO job VALUES (7,'Archer',0,4,0,0,2,0,3,0,0,5,10,5,1,0,0,0,0,1,10,'Bow in hand the archer rains death on his quarry from afar.');
-INSERT INTO job VALUES (8,'Ranger',0,12,5,0,5,0,5,0,0,5,10,5,1,0,2,0,0,1,20,'The protector of nature with bow in hand, the ranger travels the world in harmony with nature and in defiance of his enemies.');
-INSERT INTO job VALUES (9,'Apprentice',0,4,0,0,0,5,0,5,0,0,7,10,0,1,1,0,0,0,10,'The young apprentice of a greater mage, seeking knowledge of arcana in dusty tomes and upon the field of battle.');
-INSERT INTO job VALUES (10,'White Mage',0,12,5,0,0,5,0,10,0,0,7,10,0,2,1,1,0,0,20,'Majestic healers and arcane protectors, White Mages seek to help the less fortunate wherever they go.');
-INSERT INTO job VALUES (11,'Black Mage',0,12,5,0,0,10,0,5,0,0,7,10,0,2,1,1,0,0,20,' For good or evil the Black Mage walks the path of destruction, shattering earth and incinerating their enemies is their trade, but what is the price for such power?');
+INSERT INTO job VALUES (1,'Citizen',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The humble beginning of every adventurer as a common citizen or Crescent Island.');
+INSERT INTO job VALUES (2,'Squire',0,5,0,0,0,5,0,0,0,10,5,1,0,1,0,0,0,10,'A knights apprentice, eagerly awaiting the advent of his own knighthood.');
+INSERT INTO job VALUES (3,'Knight',0,5,0,5,0,0,5,0,0,10,5,2,2,2,1,0,1,20,'A knight of the realm, protector of the innocent and slayer of large scaly beasts.');
+INSERT INTO job VALUES (4,'Paladin',0,5,5,5,5,5,5,0,0,10,5,2,2,2,1,0,1,30,'A knight of the holy orders, sworn to uphold truth and justice.');
+INSERT INTO job VALUES (5,'Guardian',0,10,0,10,0,5,5,0,0,10,5,2,2,3,2,0,1,40,'A knight protector, sworn to defend his ward with courage and honour.');
+INSERT INTO job VALUES (7,'Archer',0,0,0,2,0,3,0,0,5,10,5,1,0,0,0,0,1,10,'Bow in hand the archer rains death on his quarry from afar.');
+INSERT INTO job VALUES (8,'Ranger',0,5,0,5,0,5,0,0,5,10,5,1,0,2,0,0,1,20,'The protector of nature with bow in hand, the ranger travels the world in harmony with nature and in defiance of his enemies.');
+INSERT INTO job VALUES (9,'Apprentice',0,0,0,0,5,0,5,0,0,7,10,0,1,1,0,0,0,10,'The young apprentice of a greater mage, seeking knowledge of arcana in dusty tomes and upon the field of battle.');
+INSERT INTO job VALUES (10,'White Mage',0,5,0,0,5,0,10,0,0,7,10,0,2,1,1,0,0,20,'Majestic healers and arcane protectors, White Mages seek to help the less fortunate wherever they go.');
+INSERT INTO job VALUES (11,'Black Mage',0,5,0,0,10,0,5,0,0,7,10,0,2,1,1,0,0,20,' For good or evil the Black Mage walks the path of destruction, shattering earth and incinerating their enemies is their trade, but what is the price for such power?');
+INSERT INTO job VALUES (12,'Caller',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (13,'Pillar',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (14,'Thief',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (15,'Ninja',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (16,'Assassin',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (17,'Gambler',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (18,'Card Shark',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (19,'Pirate',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (20,'Smuggler',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (21,'Privateer',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (24,'Dark Knight',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (25,'Necromancer',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (26,'Dragoon',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (27,'Samurai',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (28,'Fallen Paladin',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO job VALUES (29,'Summoner',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 
 INSERT INTO monster VALUES (1,'Small Rodent','SmallRodent.gif',55,5,15,5,10,5,0,10,1,20,25,3,'');
