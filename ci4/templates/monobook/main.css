@@ -199,8 +199,8 @@ span.subpages { display: block; }
 }
 
 /* small for tables and similar */
-.small, .small * { font-size: 80%; }
-table.small { font-size: 80% }
+.small, .small * { font-size: 90%; }
+table.small { font-size: 90% }
 
 /*
 ** keep the whitespace in front of the ^=, hides rule from konqueror
