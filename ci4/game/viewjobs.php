@@ -35,18 +35,17 @@
 /* Get each job, as well as all required jobs for that job.
  * Note that column j is this job, column job is the prereq.
  */
-$query = 'SELECT j.job_name as jname, j.job_id as jid, j.job_req_lv as jreq, j.job_gender as jgen, job.job_id, job.job_name, cor_joblv
+$query = 'SELECT j.job_name as jname, j.job_id as jid, j.job_gender as jgen, job.job_id, job.job_name, cor_joblv
 FROM job j
 LEFT JOIN cor_job_joblv ON cor_job = j.job_id
 LEFT JOIN job ON cor_job_req = job.job_id
-ORDER BY j.job_req_lv, j.job_name, cor_joblv, job.job_name';
+ORDER BY j.job_name, cor_joblv, job.job_name';
 $res = $db->query($query);
 
 $array = array();
 
 array_push($array, array(
 	'Job',
-	'Required Level',
 	'Gender',
 	'Required Job Levels'
 ));
@@ -71,7 +70,6 @@ for($i = 0; $i < count($res); $i++)
 	{
 		array_push($array, array(
 			makeLink($res[$i]['jname'], 'a=viewjobdetails&job=' . $res[$i]['jid']),
-			$res[$i]['jreq'],
 			getGender($res[$i]['jgen']),
 			$reqs
 		));

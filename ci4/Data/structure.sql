@@ -304,7 +304,6 @@ CREATE TABLE job (
   job_id bigint(10) unsigned NOT NULL auto_increment,
   job_name varchar(100) NOT NULL default '',
   job_gender tinyint(1) NOT NULL default '0',
-  job_req_lv smallint(5) unsigned NOT NULL default '0',
   job_stat_hp smallint(6) NOT NULL default '0',
   job_stat_mp smallint(6) NOT NULL default '0',
   job_stat_str smallint(6) NOT NULL default '0',
@@ -323,7 +322,8 @@ CREATE TABLE job (
   job_level_acc tinyint(3) unsigned NOT NULL default '0',
   job_wage smallint(5) unsigned NOT NULL default '0',
   job_desc text NOT NULL,
-  PRIMARY KEY  (job_id)
+  PRIMARY KEY  (job_id),
+  UNIQUE KEY job_name (job_name)
 ) TYPE=MyISAM;
 
 

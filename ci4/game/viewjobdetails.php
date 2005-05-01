@@ -46,12 +46,6 @@ if(count($res))
 
 		$fail = false;
 
-		if($res[0]['job_req_lv'] > $PLAYER['player_lv'])
-		{
-			echo '<p/>You are not yet at a high enough level to change to ' . $res[0]['job_name'] . '.';
-			$fail = true;
-		}
-
 		$failed = $db->query('select job_name, player_job_lv, cor_job_joblv.*
 			from cor_job_joblv, job
 			left join player_job on
@@ -172,7 +166,6 @@ if(count($res))
 		array('Job', $res[0]['job_name']),
 		array('Description', $res[0]['job_desc']),
 		array('Gender', getGender($res[0]['job_gender'])),
-		array('Required Level', $res[0]['job_req_lv']),
 		array('Wage', $res[0]['job_wage']),
 		array('Useable Equipment Types', $equipmentlist),
 		array('Useable Ability Types', $abilitylist),
