@@ -29,4 +29,4 @@
 
 # dump structure only (-d)
 
-mysqldump -u ci4 --password=ci4sql -d -f ci4 | egrep -v "^-.*" > structure.sql
+mysqldump -u root -h althalus.dolmant.net -d -f ci4 | egrep -v "^-.*" > structure.sql

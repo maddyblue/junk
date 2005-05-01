@@ -29,7 +29,7 @@
 
 # dump data of static tables
 
-mysqldump -u ci4 --password=ci4sql -t ci4 \
+mysqldump -u root -h althalus.dolmant.net -t ci4 \
 	ability \
 	abilitytype \
 	area \
