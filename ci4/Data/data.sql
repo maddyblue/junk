@@ -31,6 +31,22 @@ INSERT INTO abilitytype VALUES (11,'Sword Tech','Attacks with status lowering af
 INSERT INTO abilitytype VALUES (12,'Understudy','Studying under a greater mage, you can start to learn this powerful art, although sometimes it can be aggravating.');
 INSERT INTO abilitytype VALUES (13,'Tracking','Use terrain to out maneuver your opponent.');
 INSERT INTO abilitytype VALUES (14,'Protection','Training has shown you the different means of defending against a foe. But never forget that this does not always imply defense.');
+INSERT INTO abilitytype VALUES (15,'Calling','');
+INSERT INTO abilitytype VALUES (16,'Summoning','');
+INSERT INTO abilitytype VALUES (17,'Raising','');
+INSERT INTO abilitytype VALUES (18,'Dark Sword Tech','');
+INSERT INTO abilitytype VALUES (19,'Dark Aura','');
+INSERT INTO abilitytype VALUES (20,'Thievery','');
+INSERT INTO abilitytype VALUES (21,'Smuggling','');
+INSERT INTO abilitytype VALUES (22,'Pirating','');
+INSERT INTO abilitytype VALUES (23,'Gambling','');
+INSERT INTO abilitytype VALUES (24,'Sleight of Hand','');
+INSERT INTO abilitytype VALUES (25,'Privateering','');
+INSERT INTO abilitytype VALUES (26,'Ninjitsu','');
+INSERT INTO abilitytype VALUES (27,'Bushido','');
+INSERT INTO abilitytype VALUES (28,'Assassination','');
+INSERT INTO abilitytype VALUES (29,'Lancing','');
+INSERT INTO abilitytype VALUES (30,'Necromancy','');
 
 
 INSERT INTO area VALUES (1,'Swamps','Step on ants and kill small rodents.',1);
@@ -236,6 +252,22 @@ INSERT INTO cor_job_abilitytype VALUES (3,11);
 INSERT INTO cor_job_abilitytype VALUES (9,12);
 INSERT INTO cor_job_abilitytype VALUES (8,13);
 INSERT INTO cor_job_abilitytype VALUES (5,14);
+INSERT INTO cor_job_abilitytype VALUES (12,15);
+INSERT INTO cor_job_abilitytype VALUES (29,16);
+INSERT INTO cor_job_abilitytype VALUES (13,17);
+INSERT INTO cor_job_abilitytype VALUES (24,18);
+INSERT INTO cor_job_abilitytype VALUES (28,19);
+INSERT INTO cor_job_abilitytype VALUES (14,20);
+INSERT INTO cor_job_abilitytype VALUES (20,21);
+INSERT INTO cor_job_abilitytype VALUES (19,22);
+INSERT INTO cor_job_abilitytype VALUES (17,23);
+INSERT INTO cor_job_abilitytype VALUES (18,24);
+INSERT INTO cor_job_abilitytype VALUES (21,25);
+INSERT INTO cor_job_abilitytype VALUES (15,26);
+INSERT INTO cor_job_abilitytype VALUES (27,27);
+INSERT INTO cor_job_abilitytype VALUES (16,28);
+INSERT INTO cor_job_abilitytype VALUES (26,29);
+INSERT INTO cor_job_abilitytype VALUES (25,30);
 
 
 INSERT INTO cor_job_equipmenttype VALUES (1,11);
