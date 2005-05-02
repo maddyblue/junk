@@ -145,7 +145,7 @@ function battleDealDamage($d, &$dest, &$src)
 			echo '<p/>Level up to level ' . ($plv + 1) . '.<br/>Gains:<br/>hp: ' . $hp . '+' . $ehp . '<br/>mp: ' . $mp . '+' . $emp . '<br/>str: ' . $str . '+' . $estr . '<br/>mag: ' . $mag . '+' . $emag . '<br/>def: ' . $def . '+' . $edef . '<br/>mgd: ' . $mgd . '+' . $emgd . '<br/>agl: ' . $agl . '+' . $eagl . '<br/>acc: ' . $acc . '+' . $eacc;
 		}
 		else
-			echo ' Need ' . ($GLOBALS['PLAYER']['player_exp'] - $exp) . ' for next level.';
+			echo ' Need ' . (100 - ($GLOBALS['PLAYER']['player_exp'] % 100) - $exp) . ' for next level.';
 
 		$ret = $db->query('select player_job_exp, player_job_lv from player_job where player_job_player=' . $src->id . ' and player_job_job=' . $job);
 		$jexp = $ret[0]['player_job_exp'];
