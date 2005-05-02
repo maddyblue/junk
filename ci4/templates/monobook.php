@@ -26,7 +26,20 @@
 			<div id="column-one">
 				<div id="p-cactions" class="portlet">
 					<ul>
-						<li><CINAV><li>INSERT</li></CINAV></li>
+						<?php
+							$items = getSiteArray('NAV');
+							$count = count($items);
+
+							for($i = 0; $i < $count; $i++)
+							{
+								echo '<li';
+
+								if(strcasecmp(CI_SECTION, $items[$i]['site_main']) == 0)
+									echo ' class="selected"';
+
+								echo '>' . createSiteString($items, $i) . '</li>';
+							}
+						?>
 					</ul>
 				</div>
 				<div class="portlet" id="p-logo">
