@@ -174,6 +174,7 @@ else
 			$db->query('update battle set battle_end=' . TIME . ' where battle_id=' . $PLAYER['player_battle']);
 			$db->query('update player set player_battle=0 where player_battle=' . $PLAYER['player_battle']);
 			echo '<p/>Battle ended.';
+			echo '<p/>' . makeLink('Start a new battle in the same area.', 'a=newbattle&area=' . getDBDataNum('battle_area', $PLAYER['player_battle'], 'battle_id', 'battle'));
 			$done = true;
 		}
 	}

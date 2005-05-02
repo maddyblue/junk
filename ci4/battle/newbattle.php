@@ -36,11 +36,11 @@ function disp($area)
 {
 	global $db, $PLAYER;
 
-	$ret = $db->query('select area_id, area_name from area, cor_area_town where cor_area = area_id and cor_town=' . $PLAYER['player_town'] . ' order by area_order');
+	$ret = $db->query('select area_id, area_name, area_order from area, cor_area_town where cor_area = area_id and cor_town=' . $PLAYER['player_town'] . ' order by area_order');
 
 	$areaselect = '';
 	foreach($ret as $r)
-		$areaselect .= '<option value="' . $r['area_id'] . '"' . ($area == $r['area_id'] ? ' selected' : '') . '>' . $r['area_name'] . '</option>';
+		$areaselect .= '<option value="' . $r['area_id'] . '"' . ($area == $r['area_id'] ? ' selected' : '') . '>' . $r['area_name'] . ' (' . $r['area_order'] . ')</option>';
 
 	echo
 		getTableForm('New Battle:', array(
@@ -140,8 +140,9 @@ if(LOGGED)
 	if(!$fail)
 	{
 		$area = isset($_POST['area']) ? intval($_POST['area']) : '0';
+		$area = isset($_GET['area']) ? intval($_GET['area']) : $area;
 
-		if(isset($_POST['submit']))
+		if($area)
 		{
 			$fail = false;
 
