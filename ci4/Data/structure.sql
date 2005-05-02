@@ -37,7 +37,6 @@ CREATE TABLE battle (
   battle_id bigint(10) unsigned NOT NULL auto_increment,
   battle_start bigint(10) unsigned NOT NULL default '0',
   battle_end bigint(10) unsigned NOT NULL default '0',
-  battle_log text NOT NULL,
   battle_area bigint(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (battle_id)
 ) TYPE=MyISAM;
