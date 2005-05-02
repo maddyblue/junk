@@ -127,11 +127,25 @@ function battleDealDamage($d, &$dest, &$src)
 			$agl = rand(0, 1);
 			$acc = rand(0, 1);
 
-			$db->query('update player set player_nomod_hp=player_nomod_hp+' . $hp . ', player_nomod_mp=player_nomod_mp+' . $mp . ', player_nomod_str=player_nomod_str+' . $str . ', player_nomod_mag=player_nomod_mag+' . $mag . ', player_nomod_def=player_nomod_def+' . $def . ', player_nomod_mgd=player_nomod_mgd+' . $mgd . ', player_nomod_agl=player_nomod_agl+' . $agl . ', player_nomod_acc=player_nomod_acc+' . $acc . ', player_lv=player_lv+1 where player_id=' . $src->id);
+			$ret = $db->query('select job_level_hp, job_level_mp, job_level_str, job_level_mag, job_level_def, job_level_mgd, job_level_agl, job_level_acc from job where job_id=' . $GLOBALS['PLAYER']['player_job']);
+
+			$ehp = $ret[0]['job_level_hp'];
+			$emp = $ret[0]['job_level_mp'];
+			$estr = $ret[0]['job_level_str'];
+			$emag = $ret[0]['job_level_mag'];
+			$edef = $ret[0]['job_level_def'];
+			$emgd = $ret[0]['job_level_mgd'];
+			$eagl = $ret[0]['job_level_agl'];
+			$eacc = $ret[0]['job_level_acc'];
+
+			$db->query('update player set player_nomod_hp=player_nomod_hp+' . ($hp + $ehp) . ', player_nomod_mp=player_nomod_mp+' . $mp . ', player_nomod_str=player_nomod_str+' . ($str + $estr) . ', player_nomod_mag=player_nomod_mag+' . ($mag + $emag) . ', player_nomod_def=player_nomod_def+' . ($def + $edef) . ', player_nomod_mgd=player_nomod_mgd+' . ($mgd + $emgd) . ', player_nomod_agl=player_nomod_agl+' . ($agl + $eagl) . ', player_nomod_acc=player_nomod_acc+' . ($acc + $eacc) . ', player_lv=player_lv+1 where player_id=' . $src->id);
+			$GLOBALS['PLAYER']['player_lv'] += 1;
 			updatePlayerStats();
 
-			echo '<p/>Level up to level ' . ($plv + 1) . '<br/>Gains:<br/>hp: ' . $hp . '<br/>mp: ' . $mp . '<br/>str: ' . $str . '<br/>mag: ' . $mag . '<br/>def: ' . $def . '<br/>mgd: ' . $mgd . '<br/>agl: ' . $agl . '<br/>acc: ' . $acc;
+			echo '<p/>Level up to level ' . ($plv + 1) . '.<br/>Gains:<br/>hp: ' . $hp . '+' . $ehp . '<br/>mp: ' . $mp . '+' . $emp . '<br/>str: ' . $str . '+' . $estr . '<br/>mag: ' . $mag . '+' . $emag . '<br/>def: ' . $def . '+' . $edef . '<br/>mgd: ' . $mgd . '+' . $emgd . '<br/>agl: ' . $agl . '+' . $eagl . '<br/>acc: ' . $acc . '+' . $eacc;
 		}
+		else
+			echo ' Need ' . ($GLOBALS['PLAYER']['player_exp'] - $exp) . ' for next level.';
 
 		$ret = $db->query('select player_job_exp, player_job_lv from player_job where player_job_player=' . $src->id . ' and player_job_job=' . $job);
 		$jexp = $ret[0]['player_job_exp'];
