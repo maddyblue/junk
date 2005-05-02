@@ -863,7 +863,7 @@ INSERT INTO site VALUES ('MANUAL_SECTION_NAV',20,'link','IRC','','\'a=irc\'','SE
 INSERT INTO site VALUES ('MANUAL_SECTION_NAV',30,'link','Contributing to CI','','\'a=help\'','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('MANUAL_SECTION_NAV',40,'link','About CI','','\'a=about\'','SECTION_MANUAL',0,0,'');
 INSERT INTO site VALUES ('MANUAL_SECTION_NAV',50,'link','Staff','','\'a=staff\'','SECTION_MANUAL',0,0,'');
-INSERT INTO site VALUES ('NAV',0,'link','Home','','','SECTION_HOME',0,0,'');
+INSERT INTO site VALUES ('NAV',0,'link','Main','','','SECTION_HOME',0,0,'');
 INSERT INTO site VALUES ('NAV',10,'link','Forum','','\'a=viewforum\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('NAV',20,'link','Game','','\'a=viewplayers\'','SECTION_GAME',0,0,'');
 INSERT INTO site VALUES ('NAV',30,'link','Battle','','','SECTION_BATTLE',1,0,'');
