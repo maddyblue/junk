@@ -32,8 +32,27 @@
  *
  */
 
-$query = 'select * from user order by user_name';
+$limit = 25;
+
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+if($page < 1)
+	$page = 1;
+
+$start = ($page - 1) * $limit;
+
+$search = isset($_GET['search']) ? encode($_GET['search']) : '';
+
+$query = 'select SQL_CALC_FOUND_ROWS * from user ';
+
+if($search)
+	$query .= 'where user_name LIKE "%' . $search . '%" ';
+
+$query .= 'order by user_name limit ' . $start . ', ' . $limit;
 $res = $db->query($query);
+
+$pres = $db->query('select found_rows()');
+$ptot = $pres[0]['found_rows()'];
+$totpages = ceil($ptot / $limit);
 
 $array = array();
 
@@ -50,7 +69,17 @@ for($i = 0; $i < count($res); $i++)
 	));
 }
 
+$pageDisp = '<p/>' . pageDisp($page, $totpages, $limit, 'a=viewusers&search=' . $search);
+
+echo $pageDisp;
 echo getTable($array);
+echo $pageDisp;
+
+echo getTableForm('Search by user name:', array(
+	array('', array('type'=>'text', 'name'=>'search', 'val'=>$search)),
+	array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Search')),
+	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewusers')),
+), false, 'get');
 
 update_session_action(310);
 
