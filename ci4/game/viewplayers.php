@@ -124,7 +124,7 @@ if(isset($_GET['job']) && $_GET['job'])
 else
 	$job = 0;
 
-$res = $db->query('select * ' . $query . ' order by ' . $order . ' ' . $orderdir .' limit ' . $start . ', ' . $limit);
+$res = $db->query('select SQL_CALC_FOUND_ROWS * ' . $query . ' order by ' . $order . ' ' . $orderdir .' limit ' . $start . ', ' . $limit);
 
 foreach($res as $row)
 {
@@ -168,8 +168,8 @@ foreach($res as $row)
   array_push($array, $push);
 }
 
-$pres = $db->query('select count(*) ' . $query);
-$ptot = $pres[0]['count(*)'];
+$pres = $db->query('select found_rows()');
+$ptot = $pres[0]['found_rows()'];
 $totpages = ceil($ptot / $limit);
 
 $disp = array();
