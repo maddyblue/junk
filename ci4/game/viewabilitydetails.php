@@ -58,7 +58,7 @@ if(count($res))
 			if(count($a))
 				$db->query('update player_ability set player_ability_level=player_ability_level+1 where player_ability_ability=' . $ability . ' and player_ability_player=' . $PLAYER['player_id']);
 			else
-				$db->query('insert into player_ability (player_ability_player, player_ability_ability, player_ability_level) values (' . $PLAYER['player_id'] . ', ' . $ability . ', 1)');
+				$db->query('insert into player_ability (player_ability_player, player_ability_ability, player_ability_level, player_ability_display) values (' . $PLAYER['player_id'] . ', ' . $ability . ', 1, 1)');
 
 			$db->query('update player_abilitytype set player_abilitytype_ap=player_abilitytype_ap - ' . $cost . ' where player_abilitytype_type=' . $res[0]['ability_type'] . ' and player_abilitytype_player=' . $PLAYER['player_id']);
 
