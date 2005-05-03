@@ -103,8 +103,13 @@ if(count($res))
 			echo '<p/>You do not know ' . $res[0]['ability_name'] . '.';
 		}
 
+		$ap = $db->query('select player_abilitytype_ap from player_abilitytype where player_abilitytype_type=' . $res[0]['abilitytype_id'] . ' and player_abilitytype_player=' . $PLAYER['player_id']);
+
+		if(count($ap))
+			echo ' You have ' . $ap[0]['player_abilitytype_ap'] . ' remaining AP in ' . makeLink($res[0]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $res[0]['abilitytype_id']) . '.';
+
 		$learn = '<p/>' . getForm('', array(
-			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>('Learn ' . $res[0]['ability_name'] . ' level ' . $level))),
+			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>('Learn ' . $res[0]['ability_name'] . ' level ' . $level . ' for ' . ($res[0]['ability_ap_cost_init'] + ($level - 1) * $res[0]['ability_ap_cost_level']) . ' AP'))),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewabilitydetails')),
 			array('', array('type'=>'hidden', 'name'=>'ability', 'val'=>$ability))
 		));
