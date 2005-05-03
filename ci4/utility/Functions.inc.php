@@ -243,12 +243,12 @@ function getTemplateFilename($t)
 /* This function takes lots of heavily nested arrays.
  * I suggest looking at other code as an example.
  */
-function getTableForm($title, $arr, $upload = false)
+function getTableForm($title, $arr, $upload = false, $method = 'post')
 {
 	$ret = '';
 	$end = '';
 
-	$ret .= '<p/><form method="post" action="index.php" ' . ($upload ? ' enctype="multipart/form-data"' : '') . '>
+	$ret .= '<p/><form method="' . $method . '" action="index.php" ' . ($upload ? ' enctype="multipart/form-data"' : '') . '>
 		<table>
 			<tr>
 				<td colspan="' . count($arr[0]) . '">
