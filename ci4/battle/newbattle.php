@@ -65,10 +65,7 @@ function newBattle($area)
 
 	// we have the player, monster, and area, create the battle
 
-	$db->query('insert into battle (battle_start, battle_area) values (' . TIME . ', ' . $area . ')');
-
-	$bat = $db->query('select battle_id from battle where battle_area=' . $area . ' and battle_start=' . TIME . ' limit 1');
-	$batid = $bat[0]['battle_id'];
+	$batid = $db->insert('insert into battle (battle_start, battle_area) values (' . TIME . ', ' . $area . ')');
 
 	$db->query('update player set player_battle=' . $batid . ' where player_id=' . $PLAYER['player_id']);
 
