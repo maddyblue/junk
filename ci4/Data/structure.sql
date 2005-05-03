@@ -50,7 +50,7 @@ CREATE TABLE battle_entity (
   battle_entity_team tinyint(1) unsigned NOT NULL default '0',
   battle_entity_name varchar(100) NOT NULL default '',
   battle_entity_dead tinyint(1) NOT NULL default '0',
-  battle_entity_ct tinyint(3) unsigned NOT NULL default '0',
+  battle_entity_ct smallint(4) NOT NULL default '0',
   battle_entity_max_hp smallint(6) unsigned NOT NULL default '0',
   battle_entity_max_mp smallint(6) unsigned NOT NULL default '0',
   battle_entity_hp smallint(6) unsigned NOT NULL default '0',
