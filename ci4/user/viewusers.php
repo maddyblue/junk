@@ -58,14 +58,18 @@ $array = array();
 
 array_push($array, array(
 	'Username',
-	'Register date'
+	'Posts',
+	'Register Date',
+	'Last Active'
 ));
 
 for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
 		getUserlink($res[$i]['user_id']),
+		$res[$i]['user_posts'],
 		getTime($res[$i]['user_register']),
+		getTime($res[$i]['user_last']),
 	));
 }
 
