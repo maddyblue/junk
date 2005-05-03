@@ -43,9 +43,14 @@ if(count($res))
 {
 	if(isset($_POST['town']) && $PLAYER)
 	{
-		$db->query('update player set player_town=' . $town . ' where player_id=' . $PLAYER['player_id']);
-		echo '<p/>You have moved to ' . $res[0]['town_name'] . '.';
-		$PLAYER['player_town'] = $town;
+		if($PLAYER['player_battle'])
+			echo '<p/>You cannot move while in a battle.';
+		else
+		{
+			$db->query('update player set player_town=' . $town . ' where player_id=' . $PLAYER['player_id']);
+			echo '<p/>You have moved to ' . $res[0]['town_name'] . '.';
+			$PLAYER['player_town'] = $town;
+		}
 	}
 
 	$arealist = $db->query('select * from cor_area_town, area where cor_area=area_id and cor_town=' . $town);

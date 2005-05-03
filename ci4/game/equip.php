@@ -32,7 +32,11 @@
  *
  */
 
-if(isset($_POST['submit']))
+if($PLAYER['player_battle'])
+{
+	echo '<p/>You will not be able to change your equipment since you have an active battle.';
+}
+else if(isset($_POST['submit']))
 {
 	// unequip everything
 	$db->query('update player_equipment set player_equipment_equipped=0 where player_equipment_player=' . $PLAYER['player_id']);

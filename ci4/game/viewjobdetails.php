@@ -43,8 +43,13 @@ if(count($res))
 {
 	if(isset($_POST['job']) && $PLAYER)
 	{
-
 		$fail = false;
+
+		if($PLAYER['player_battle'])
+		{
+			echo '<p/>You cannot change job while in a battle.';
+			$fail = true;
+		}
 
 		$failed = $db->query('select job_name, player_job_lv, cor_job_joblv.*
 			from cor_job_joblv, job

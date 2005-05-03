@@ -49,7 +49,9 @@ if(count($res))
 		$level = count($a) ? $a[0]['player_ability_level'] : 0;
 		$cost = $res[0]['ability_ap_cost_init'] + $res[0]['ability_ap_cost_level'] * $level;
 
-		if(!count($p))
+		if($PLAYER['player_battle'])
+			echo '<p/>You cannot learn new abilities while in a battle.';
+		else if(!count($p))
 			echo '<p/>You do note have any AP in ' . $res[0]['abilitytype_name'] . '.';
 		else if($p[0]['player_abilitytype_ap'] < $cost)
 			echo '<p/>You only have ' . $p[0]['player_abilitytype_ap'] . ' of the needed ' . $cost . ' AP to learn ' . $res[0]['ability_name'] . '.';
