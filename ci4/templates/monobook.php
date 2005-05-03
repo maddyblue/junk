@@ -65,7 +65,7 @@
 							if($pms)
 								echo '<li class="usermessage">' . $pms . '</li>';
 
-							$res = $db->query('select player_name, player_lv, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
+							$res = $db->query('select player_name, player_lv, player_id, player_battle, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
 							for($i = 0; $i < count($res); $i++)
 							{
 								echo '<li';
@@ -73,7 +73,12 @@
 								if($res[$i]['player_id'] == $PLAYER['player_id'])
 									echo ' class="usermessage"';
 
-								echo '>' . makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_GAME) . ' (' . $res[$i]['player_lv'] . ') [' . makeLink($res[$i]['domain_abrev'], $_SERVER['QUERY_STRING'] . '&domain=' . $res[$i]['domain_id']) . ']</li>';
+								echo '>' . makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_GAME);
+
+								if($res[$i]['player_battle'])
+									echo '*';
+
+								echo ' (' . $res[$i]['player_lv'] . ') [' . makeLink($res[$i]['domain_abrev'], $_SERVER['QUERY_STRING'] . '&domain=' . $res[$i]['domain_id']) . ']</li>';
 							}
 						?>
 						</ul>
