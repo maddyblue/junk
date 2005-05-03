@@ -69,7 +69,7 @@ $header = array();
 
 $cols = array();
 
-foreach($_POST as $key => $value)
+foreach($_GET as $key => $value)
 {
 	if(strpos($key, '_') > 0)
 		$cols[$key] = $key;
@@ -84,21 +84,21 @@ foreach($cols as $col)
 
 array_push($array, $header);
 
-$limit = isset($_POST['limit']) ? intval($_POST['limit']) : 10;
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 if($limit < 1)
 	$limit = 1;
 else if($limit > 50)
 	$limit = 50;
 
-$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 if($page < 1)
 	$page = 1;
 
 $start = ($page - 1) * $limit;
 
-$order = (isset($_POST['order']) && array_key_exists($_POST['order'], $fields)) ? $_POST['order'] : 'player_exp';
+$order = (isset($_GET['order']) && array_key_exists($_GET['order'], $fields)) ? $_GET['order'] : 'player_exp';
 
-$orderdir = (isset($_POST['orderdir']) && $_POST['orderdir'] == 'asc') ? 'asc' : 'desc';
+$orderdir = (isset($_GET['orderdir']) && $_GET['orderdir'] == 'asc') ? 'asc' : 'desc';
 
 $query = 'from player, domain, user, job
 	left join town on town_id = player_town
@@ -211,11 +211,32 @@ array_push($disp, array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewpla
 
 echo getTable($array);
 
-echo '<p/>Showing players ' . (($page - 1) * $limit + 1) . ' to ' . ($page * $limit) . ' of ' . $ptot . '.';
+$pglim = $page * $limit;
+if($pglim > $ptot)
+	$pglim = $ptot;
+
+echo '<p/>Showing players ' . (($page - 1) * $limit + 1) . ' to ' . $pglim . ' of ' . $ptot . '.';
+
+echo '<p/>';
+
+$get = '';
+
+foreach($_GET as $k => $v)
+{
+	if($k == 'page')
+		continue;
+
+	$get .= '&' . $k . '=' . $v;
+}
+$get = substr($get, 1);
+
+$pageDisp = pageDisp($page, $totpages, $limit, $get);
+
+echo $pageDisp;
 
 echo '<p/><hr/>';
 
-echo getTableForm('<b>Show Players:</b>', $disp);
+echo getTableForm('<b>Show Players:</b>', $disp, false, 'get');
 
 update_session_action(701);
 
