@@ -108,6 +108,14 @@ $query = 'from player, domain, user, job
 		player_domain = domain_id and
 		player_user = user_id';
 
+if(isset($_GET['town']) && $_GET['town'])
+{
+	$town = intval($_GET['town']);
+	$query .= ' and player_town=' . $town;
+}
+else
+	$town = 0;
+
 $res = $db->query('select * ' . $query . ' order by ' . $order . ' ' . $orderdir .' limit ' . $start . ', ' . $limit);
 
 foreach($res as $row)
@@ -158,6 +166,11 @@ $totpages = ceil($ptot / $limit);
 
 $disp = array();
 
+$towns = $db->query('select town_name, town_id from town order by town_name');
+$townsel = '<option value="">-All-</option>';
+for($i = 0; $i < count($towns); $i++)
+	$townsel .= '<option value="' . $towns[$i]['town_id'] . '" ' . ($town == $towns[$i]['town_id'] ? 'selected' : '') . '>' . $towns[$i]['town_name'] . '</option>';
+
 $orderby = '';
 foreach($fields as $key => $value)
 	$orderby .= '<option value="' . $key . '" ' . ($order == $key ? 'selected' : '') . '>' . $value . '</option>';
@@ -195,6 +208,9 @@ if($i % $numcols != ($numcols - 1))
 $dc .= '</table>';
 
 array_push($disp, array('', array('type'=>'disptext', 'val'=>$dc)));
+
+array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
+array_push($disp, array('Town', array('type'=>'select', 'name'=>'town', 'val'=>$townsel)));
 
 array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
 array_push($disp, array('Order by', array('type'=>'disptext', 'val'=>
