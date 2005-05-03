@@ -116,6 +116,14 @@ if(isset($_GET['town']) && $_GET['town'])
 else
 	$town = 0;
 
+if(isset($_GET['job']) && $_GET['job'])
+{
+	$job = intval($_GET['job']);
+	$query .= ' and player_job=' . $job;
+}
+else
+	$job = 0;
+
 $res = $db->query('select * ' . $query . ' order by ' . $order . ' ' . $orderdir .' limit ' . $start . ', ' . $limit);
 
 foreach($res as $row)
@@ -171,6 +179,11 @@ $townsel = '<option value="">-All-</option>';
 for($i = 0; $i < count($towns); $i++)
 	$townsel .= '<option value="' . $towns[$i]['town_id'] . '" ' . ($town == $towns[$i]['town_id'] ? 'selected' : '') . '>' . $towns[$i]['town_name'] . '</option>';
 
+$jobs = $db->query('select job_name, job_id from job order by job_name');
+$jobsel = '<option value="">-All-</option>';
+for($i = 0; $i < count($jobs); $i++)
+	$jobsel .= '<option value="' . $jobs[$i]['job_id'] . '" ' . ($job == $jobs[$i]['job_id'] ? 'selected' : '') . '>' . $jobs[$i]['job_name'] . '</option>';
+
 $orderby = '';
 foreach($fields as $key => $value)
 	$orderby .= '<option value="' . $key . '" ' . ($order == $key ? 'selected' : '') . '>' . $value . '</option>';
@@ -211,6 +224,7 @@ array_push($disp, array('', array('type'=>'disptext', 'val'=>$dc)));
 
 array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
 array_push($disp, array('Town', array('type'=>'select', 'name'=>'town', 'val'=>$townsel)));
+array_push($disp, array('Job', array('type'=>'select', 'name'=>'job', 'val'=>$jobsel)));
 
 array_push($disp, array('', array('type'=>'disptext', 'val'=>'&nbsp;')));
 array_push($disp, array('Order by', array('type'=>'disptext', 'val'=>
