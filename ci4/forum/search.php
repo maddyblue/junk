@@ -87,4 +87,6 @@ echo getTableForm('Search the forum:', array(
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'search'))
 ), false, 'get');
 
+update_session_action(408);
+
 ?>
