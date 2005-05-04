@@ -840,6 +840,7 @@ INSERT INTO site VALUES ('BATTLE_SECTION_NAV',10,'link','New Battle','','\'a=new
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',1,'link','Smilies','','\'a=smilies\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',2,'link','Tag list','','\'a=taglist\'','SECTION_FORUM',0,0,'');
 INSERT INTO site VALUES ('FORUM_SECTION_NAV',3,'link','View New Threads','','\'a=viewnew\'','SECTION_FORUM',1,0,'');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV',4,'link','Search','','\'a=search\'','SECTION_FORUM',1,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',1,'link','Manage Abilities','','\'a=abilities\'','SECTION_GAME',1,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',2,'link','Manage Equipment','','\'a=equip\'','SECTION_GAME',1,0,'');
 INSERT INTO site VALUES ('GAME_SECTION_NAV',3,'link','View Abilities','','\'a=viewabilities\'','SECTION_GAME',0,0,'');
