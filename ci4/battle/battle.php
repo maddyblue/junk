@@ -79,7 +79,7 @@ else
 	// figure out who has the next turn
 	while(1)
 	{
-		$max = 99;
+		$max = CT_TURN - 1;
 		$turn = -1;
 
 		for($i = 0; $i < count($entities); $i++)
@@ -98,8 +98,12 @@ else
 			$entities[$i]->accelTurn();
 	}
 
+
+
 	// the next entity can now take its turn
+	$entities[$turn]->preTurn();
 	$entities[$turn]->takeTurn();
+	$entities[$turn]->postTurn();
 	$entities[$turn]->endTurn();
 
 	// turn is over, print current stats
@@ -176,6 +180,12 @@ else
 			echo '<p/>Battle ended.';
 			echo '<p/>' . makeLink('Start a new battle in the same area.', 'a=newbattle&area=' . getDBDataNum('battle_area', $PLAYER['player_battle'], 'battle_id', 'battle'));
 			$done = true;
+
+			// clear entities and timers
+			$res = $db->query('select battle_entity_uid from battle_entity where battle_entity_battle=' . $PLAYER['player_battle']);
+			for($i = 0; $i < count($res); $i++)
+				$db->query('delete from battle_timer where battle_timer_uid=' . $res[$i]['battle_entity_uid']);
+			$db->query('delete from battle_entity where battle_entity_battle=' . $PLAYER['player_battle']);
 		}
 	}
 

@@ -43,6 +43,14 @@ define('TURN_BAD_TARGET', -2);
 define('ENTITY_PLAYER', 1);
 define('ENTITY_MONSTER', 2);
 
+define('WHEN_BEFORE', -1);
+define('WHEN_AFTER', 1);
+
+define('EACH_EACH', 1);
+define('EACH_END', 2);
+
+define('CT_TURN', 100);
+
 // Functions for use in battles
 
 // $src attacks $dest for battleDamage()
@@ -188,6 +196,21 @@ function battleAbility(&$src, &$dest, $ability)
 function drand($a, $b)
 {
 	return $a + ($b - $a) * (rand(0, 100) / 100);
+}
+
+function spawnTimer(&$src, $turns, $when, $each, $code)
+{
+	$GLOBALS['db']->query('insert into battle_timer (battle_timer_uid, battle_timer_turns, battle_timer_when, battle_timer_each, battle_timer_code) values (' . $src->uid . ', ' . $turns . ', ' . $when . ', ' . $each . ', "' . mysql_escape_string($code) . '")');
+}
+
+// return an Entity with the specified uid. callers should use &getEntity(uid).
+function &getEntity($uid)
+{
+	global $entities;
+
+	for($i = 0; $i < count($entities); $i++)
+		if($entities[$i]->uid == $uid)
+			return $entities[$i];
 }
 
 ?>

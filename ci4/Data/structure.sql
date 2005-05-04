@@ -69,12 +69,13 @@ CREATE TABLE battle_entity (
 
 CREATE TABLE battle_timer (
   battle_timer_id bigint(10) unsigned NOT NULL auto_increment,
-  battle_timer_aid bigint(10) unsigned NOT NULL default '0',
-  battle_timer_dest bigint(10) unsigned NOT NULL default '0',
-  battle_timer_left tinyint(2) unsigned NOT NULL default '0',
-  battle_timer_data1 text NOT NULL,
-  battle_timer_data2 text NOT NULL,
-  PRIMARY KEY  (battle_timer_id)
+  battle_timer_uid bigint(10) unsigned NOT NULL default '0',
+  battle_timer_turns tinyint(2) unsigned NOT NULL default '0',
+  battle_timer_when tinyint(1) NOT NULL default '0',
+  battle_timer_each tinyint(1) NOT NULL default '0',
+  battle_timer_code text NOT NULL,
+  PRIMARY KEY  (battle_timer_id),
+  KEY battle_timer_uid (battle_timer_uid)
 ) TYPE=MyISAM;
 
 

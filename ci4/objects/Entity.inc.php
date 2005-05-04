@@ -100,7 +100,36 @@ class Entity
 	function endTurn()
 	{
 		if($this->turnDone == 1)
-			$this->ct = 0;
+			$this->ct -= CT_TURN;
+	}
+
+	function runTimers($when)
+	{
+		global $db;
+
+		$t = $db->query('select * from battle_timer where battle_timer_uid=' . $this->uid . ' and battle_timer_when=' . $when);
+
+		for($i = 0; $i < count($t); $i++)
+		{
+			if($t[$i]['battle_timer_each'] == EACH_EACH ||
+				($t[$i]['battle_timer_each'] == EACH_END && $t[$i]['battle_timer_turns'] == 1))
+			{
+				eval($t[$i]['battle_timer_code']);
+			}
+		}
+
+		$db->query('update battle_timer set battle_timer_turns = battle_timer_turns - 1 where battle_timer_uid=' . $this->uid . ' and battle_timer_when=' . $when);
+		$db->query('delete from battle_timer where battle_timer_uid=' . $this->uid . ' and battle_timer_turns=0');
+	}
+
+	function preTurn()
+	{
+		$this->runTimers(WHEN_BEFORE);
+	}
+
+	function postTurn()
+	{
+		$this->runTimers(WHEN_AFTER);
 	}
 
 	// use this to sync data back into the database
