@@ -65,4 +65,6 @@ foreach($res as $event)
 
 echo getTable($arr);
 
+update_session_action(105);
+
 ?>

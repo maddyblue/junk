@@ -54,6 +54,7 @@ array(101, 'makeLink(\'Viewing the news\', \'a=news\', SECTION_HOME)'),
 array(102, 'makeLink(\'Viewing the skins page\', \'a=skins\', SECTION_HOME)'),
 array(103, 'makeLink(\'Viewing the domains page\', \'a=domains\', SECTION_HOME)'),
 array(104, 'makeLink(\'Viewing the stats page\', \'a=stats\', SECTION_HOME)'),
+array(105, 'makeLink(\'Viewing the events page\', \'a=events\', SECTION_HOME)'),
 
 // admin
 array(200, '\'In the Admin CP\''),
