@@ -56,11 +56,16 @@ define('CT_TURN', 100);
 // $src attacks $dest for battleDamage()
 function battleAttack(&$src, &$dest)
 {
-	$d = battleDamage($src, $dest);
+	if(battleMiss($src, $dest))
+		echo '<p/>' . $src->name . ' missed while attacking ' . $dest->name . '.';
+	else
+	{
+		$d = battleDamage($src, $dest);
 
-	echo '<p/>' . $src->name . ' has attacked ' . $dest->name . ' for ' . $d . ' damage.';
+		echo '<p/>' . $src->name . ' has attacked ' . $dest->name . ' for ' . $d . ' damage.';
 
-	battleDealDamage($d, $dest, $src);
+		battleDealDamage($d, $dest, $src);
+	}
 
 	return true;
 }
@@ -169,6 +174,16 @@ function battleDealDamage($d, &$dest, &$src)
 	// mark if dead
 	if($dest->hp == 0)
 		$dest->dead = 1;
+}
+
+/* Returns true if src missed an attack against dest.
+ * This is found by first taking the ratio of src's agl to dest's agl.
+ * Then, multiplying that number by a random number between .5 and 2.0.
+ * If that number is < 80%, src missed.
+ */
+function battleMiss(&$src, &$dest)
+{
+	return ($src->agl / $dest->agl * drand(.5, 2.0)) < 0.8;
 }
 
 // $src uses $ability on $dest
