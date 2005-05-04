@@ -43,6 +43,7 @@ mysqldump -u root -h althalus.dolmant.net -t ci4 \
 	equipment \
 	equipmentclass \
 	equipmenttype \
+	event \
 	group_def \
 	house \
 	item \

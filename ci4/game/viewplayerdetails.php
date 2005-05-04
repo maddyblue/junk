@@ -59,6 +59,7 @@ if(count($res) == 1)
 		array('Last active', getTime($res[0]['player_last'])),
 		array('Gender', getGender($res[0]['player_gender'])),
 		array('Domain', makeLink($res[0]['domain_name'], 'a=domains', SECTION_HOME)),
+		array('EXPW', $res[0]['player_expw']),
 		array('Job', makeLink($res[0]['job_name'], 'a=viewjobdetails&job=' . $res[0]['player_job'], SECTION_GAME)),
 		array('Town', $town),
 		array('House', $house),

@@ -649,6 +649,10 @@ INSERT INTO equipmenttype VALUES (17,'cards');
 INSERT INTO equipmenttype VALUES (18,'katana');
 
 
+INSERT INTO event VALUES (1,'Job&nbsp;Wages',1115235929,'jobWages($id, $last);','Once every day (24 hours), players recieve a job wage, depending on their job. The domain the player is in does not matter. Wages are every 24 hours, regardless of domain speed.');
+INSERT INTO event VALUES (2,'EXPW&nbsp;Decrease',1115240288,'expwDecrease($id, $last);','Decrease expw by all players by one in each domain that needs it.');
+
+
 INSERT INTO group_def VALUES (1,'Administrators',1,1,1,0);
 INSERT INTO group_def VALUES (2,'Super Moderators',0,1,1,0);
 INSERT INTO group_def VALUES (3,'Banned',0,0,0,0);

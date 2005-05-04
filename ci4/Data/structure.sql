@@ -169,6 +169,17 @@ CREATE TABLE equipmenttype (
 ) TYPE=MyISAM;
 
 
+CREATE TABLE event (
+  event_id bigint(10) unsigned NOT NULL auto_increment,
+  event_name varchar(100) NOT NULL default '',
+  event_last bigint(10) unsigned NOT NULL default '0',
+  event_code text NOT NULL,
+  event_desc text NOT NULL,
+  PRIMARY KEY  (event_id),
+  UNIQUE KEY event_name (event_name)
+) TYPE=MyISAM;
+
+
 CREATE TABLE forum_forum (
   forum_forum_id bigint(10) unsigned NOT NULL auto_increment,
   forum_forum_name varchar(100) NOT NULL default '',
@@ -365,6 +376,7 @@ CREATE TABLE player (
   player_domain bigint(10) unsigned NOT NULL default '0',
   player_job bigint(10) unsigned NOT NULL default '0',
   player_battle bigint(10) unsigned NOT NULL default '0',
+  player_expw tinyint(2) unsigned NOT NULL default '0',
   player_town bigint(10) unsigned NOT NULL default '0',
   player_house bigint(10) unsigned NOT NULL default '0',
   player_lv smallint(6) unsigned NOT NULL default '1',
