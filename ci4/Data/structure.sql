@@ -214,7 +214,8 @@ CREATE TABLE forum_post (
   PRIMARY KEY  (forum_post_id),
   KEY forum_post_thread (forum_post_thread),
   KEY forum_post_user (forum_post_user),
-  KEY forum_post_date (forum_post_date)
+  KEY forum_post_date (forum_post_date),
+  FULLTEXT KEY forum_post_text_parsed (forum_post_text_parsed)
 ) TYPE=MyISAM;
 
 
