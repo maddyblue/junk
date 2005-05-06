@@ -98,11 +98,12 @@ function battleDealDamage($d, &$dest, &$src)
 	if($dest->hp == 0 && $dest->dead == 0)
 		echo '<p/>' . $dest->name . ' has been killed by ' . $src->name . '.';
 
-	// gain exp for src if necessary
+	// gain exp and gold for src if necessary
 	// dest must have zero hp but not marked dead, which would mean it just died
 	if($src->type == ENTITY_PLAYER && $dest->type == ENTITY_MONSTER && $dest->hp == 0 && $dest->dead == 0)
 	{
 		$exp = getDBDataNum('monster_exp', $dest->id, 'monster_id', 'monster');
+		$gold = rand(10, 15) * $exp;
 
 		$ratio = $src->lv / $dest->lv;
 		$dif = $src->lv - $dest->lv;
@@ -121,9 +122,10 @@ function battleDealDamage($d, &$dest, &$src)
 		$ret = $db->query('select * from player where player_id=' . $src->id);
 		$job = $ret[0]['player_job'];
 
-		$db->query('update player set player_exp=player_exp+' . $exp . ' where player_id=' . $src->id);
+		$db->query('update player set player_exp=player_exp+' . $exp . ', player_money=player_money+' . $gold . ' where player_id=' . $src->id);
 		$db->query('update player_job set player_job_exp=player_job_exp+' . $exp . ' where player_job_player=' . $src->id . ' and player_job_job=' . $job);
 
+		echo '<p/>Found ' . $gold . ' gold.';
 		echo '<p/>Gained ' . $exp . ' experience.';
 
 		$pexp = $ret[0]['player_exp'] + $exp;
