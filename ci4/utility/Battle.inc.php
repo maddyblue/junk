@@ -103,7 +103,7 @@ function battleDealDamage($d, &$dest, &$src)
 	if($src->type == ENTITY_PLAYER && $dest->type == ENTITY_MONSTER && $dest->hp == 0 && $dest->dead == 0)
 	{
 		$exp = getDBDataNum('monster_exp', $dest->id, 'monster_id', 'monster');
-		$gold = rand(10, 15) * $exp;
+		$gold = (int)(drand(10, 15) * $exp);
 
 		$ratio = $src->lv / $dest->lv;
 		$dif = $src->lv - $dest->lv;
@@ -180,12 +180,12 @@ function battleDealDamage($d, &$dest, &$src)
 
 /* Returns true if src missed an attack against dest.
  * This is found by first taking the ratio of src's agl to dest's agl.
- * Then, multiplying that number by a random number between .5 and 2.0.
- * If that number is < 80%, src missed.
+ * Then, multiplying that number by a random number.
+ * If that number is below a threshold percentage, src missed.
  */
 function battleMiss(&$src, &$dest)
 {
-	return ($src->agl / $dest->agl * drand(.5, 2.0)) < 0.8;
+	return ($src->agl / $dest->agl * drand(.75, 2.0)) < 0.9;
 }
 
 // $src uses $ability on $dest
