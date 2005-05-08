@@ -44,17 +44,16 @@ $start = ($page - 1) * $limit;
 
 if($search)
 {
-	$res = $db->query('select SQL_CALC_FOUND_ROWS forum_post_id, forum_post_text_parsed as text, user_name, user_id, forum_thread_id, forum_thread_title, forum_forum_id, forum_forum_name
-		from forum_post, forum_thread, forum_forum, user
+	$query = 'from forum_post, forum_thread, forum_forum, user
 		where
 			forum_post_user=user_id and
 			forum_post_thread=forum_thread_id and
 			forum_thread_forum=forum_forum_id and
-			match (forum_post_text_parsed) against ("' . $search . '")
-			limit ' . $start . ', ' . $limit
-	);
+			match (forum_post_text_parsed) against ("' . $search . '")';
 
-	$pres = $db->query('select found_rows()');
+	$res = $db->query('select forum_post_id, forum_post_text_parsed as text, user_name, user_id, forum_thread_id, forum_thread_title, forum_forum_id, forum_forum_name ' . $query . ' limit ' . $start . ', ' . $limit);
+
+	$pres = $db->query('select count(*) as `found_rows()` ' . $query);
 	$ptot = $pres[0]['found_rows()'];
 	$totpages = ceil($ptot / $limit);
 	$pglim = $page * $limit;
