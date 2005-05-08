@@ -32,7 +32,7 @@
  *
  */
 
-$search = isset($_GET['search']) ? mysql_escape_string($_GET['search']) : '';
+$search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
 
 $limit = 25;
 
@@ -49,7 +49,7 @@ if($search)
 			forum_post_user=user_id and
 			forum_post_thread=forum_thread_id and
 			forum_thread_forum=forum_forum_id and
-			match (forum_post_text_parsed) against ("' . $search . '")';
+			match (forum_post_text_parsed) against ("' . mysql_escape_string($search) . '")';
 
 	$res = $db->query('select forum_post_id, forum_post_text_parsed as text, user_name, user_id, forum_thread_id, forum_thread_title, forum_forum_id, forum_forum_name ' . $query . ' limit ' . $start . ', ' . $limit);
 
@@ -60,7 +60,7 @@ if($search)
 	if($pglim > $ptot)
 		$pglim = $ptot;
 
-	$pageDisp = '<p/>' . pageDisp($page, $totpages, $limit, 'a=search&search=' . $_GET['search']);
+	$pageDisp = '<p/>' . pageDisp($page, $totpages, $limit, 'a=search&search=' . $search);
 
 	echo '<p/>Showing results ' . (($page - 1) * $limit + 1) . ' to ' . $pglim . ' of ' . $ptot . '.';
 
