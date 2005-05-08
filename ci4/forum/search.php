@@ -32,7 +32,10 @@
  *
  */
 
-$search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
+if(CI_WWW_DOMAIN == 'crescentisland.com')
+	$search = isset($_GET['search']) ? stripslashes(htmlspecialchars($_GET['search'])) : '';
+else
+	$search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
 
 $limit = 25;
 
