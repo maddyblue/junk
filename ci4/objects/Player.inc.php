@@ -134,13 +134,12 @@ class Player extends Entity
 
 				echo '<p/>Gained ' . $ap . ' ap.';
 			}
+
+			$this->turnDone = 1;
 		}
 		// player has selected an invalid option or has yet to select
 		else
 		{
-			// we need to compute results next turn - don't reset ct
-			$this->turnDone = 0;
-
 			if($turn == TURN_BAD_TARGET)
 			{
 				echo '<p/>Invalid target selected. Try again.';

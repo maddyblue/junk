@@ -98,11 +98,14 @@ else
 			$entities[$i]->accelTurn();
 	}
 
-
-
 	// the next entity can now take its turn
+
 	$entities[$turn]->preTurn();
-	$entities[$turn]->takeTurn();
+
+	// if the timers didn't set turnDone
+	if(!$entities[$turn]->turnDone)
+		$entities[$turn]->takeTurn();
+
 	$entities[$turn]->postTurn();
 	$entities[$turn]->endTurn();
 
@@ -162,11 +165,11 @@ else
 		for($i = 0; $i < count($entities); $i++)
 			$entities[$i]->sync();
 
-		// check for battle end - only one team has entities with more than 0 hp
+		// check for battle end - only one team has entities that are not dead
 
 		for($i = 0; $i < count($entities); $i++)
 		{
-			if($entities[$i]->hp > 0)
+			if($entities[$i]->dead != 1)
 				$teams[$entities[$i]->team] = true;
 		}
 
@@ -189,9 +192,7 @@ else
 		}
 	}
 
-	/* turnDone set to 0 means that the entitiy who went has printed a form for a
-	 * player to submit, thus, don't do it here.
-	 */
+	// turnDone set to 0 means that the entitiy who went needs to do something next time
 	if(!isset($done) && $entities[$turn]->turnDone != 0)
 	{
 		echo getTableForm('', array(

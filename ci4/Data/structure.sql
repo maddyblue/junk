@@ -72,8 +72,8 @@ CREATE TABLE battle_timer (
   battle_timer_uid bigint(10) unsigned NOT NULL default '0',
   battle_timer_turns tinyint(2) unsigned NOT NULL default '0',
   battle_timer_when tinyint(1) NOT NULL default '0',
-  battle_timer_each tinyint(1) NOT NULL default '0',
-  battle_timer_code text NOT NULL,
+  battle_timer_each_code text NOT NULL,
+  battle_timer_end_code text NOT NULL,
   PRIMARY KEY  (battle_timer_id),
   KEY battle_timer_uid (battle_timer_uid)
 ) TYPE=MyISAM;

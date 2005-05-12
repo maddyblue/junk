@@ -69,7 +69,7 @@ class Entity
 		$this->type = $e['battle_entity_type'];
 		$this->dead = $e['battle_entity_dead'];
 		$this->ct = $e['battle_entity_ct'];
-		$this->turnDone = 1;
+		$this->turnDone = 0;
 
 		$this->maxhp = $e['battle_entity_max_hp'];
 		$this->maxmp = $e['battle_entity_max_mp'];
@@ -111,11 +111,9 @@ class Entity
 
 		for($i = 0; $i < count($t); $i++)
 		{
-			if($t[$i]['battle_timer_each'] == EACH_EACH ||
-				($t[$i]['battle_timer_each'] == EACH_END && $t[$i]['battle_timer_turns'] == 1))
-			{
-				eval($t[$i]['battle_timer_code']);
-			}
+			$turns = $t[$i]['battle_timer_turns'];
+
+			eval($t[$i]['battle_timer_' . ($turns == 1 ? 'end' : 'each') . '_code']);
 		}
 
 		$db->query('update battle_timer set battle_timer_turns = battle_timer_turns - 1 where battle_timer_uid=' . $this->uid . ' and battle_timer_when=' . $when);

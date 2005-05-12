@@ -215,9 +215,9 @@ function drand($a, $b)
 	return $a + ($b - $a) * (rand(0, 100) / 100);
 }
 
-function spawnTimer(&$src, $turns, $when, $each, $code)
+function spawnTimer(&$src, $turns, $when, $eachcode, $endcode)
 {
-	$GLOBALS['db']->query('insert into battle_timer (battle_timer_uid, battle_timer_turns, battle_timer_when, battle_timer_each, battle_timer_code) values (' . $src->uid . ', ' . $turns . ', ' . $when . ', ' . $each . ', "' . mysql_escape_string($code) . '")');
+	$GLOBALS['db']->query('insert into battle_timer (battle_timer_uid, battle_timer_turns, battle_timer_when, battle_timer_each_code, battle_timer_end_code) values (' . $src->uid . ', ' . $turns . ', ' . $when . ', "' . mysql_escape_string($eachcode) . '", "' . mysql_escape_string($endcode) . '")');
 }
 
 // return an Entity with the specified uid. callers should use &getEntity(uid).

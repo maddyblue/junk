@@ -45,6 +45,8 @@ class Monster extends Entity
 				break;
 			}
 		}
+
+		$this->turnDone = 1;
 	}
 }
 
