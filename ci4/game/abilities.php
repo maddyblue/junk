@@ -48,7 +48,7 @@ if($PLAYER)
 				$d = (isset($_POST['d' . $a]) && $_POST['d' . $a] == 'on') ? '1' : '0';
 
 				// commit
-				$db->query('update player_ability set player_ability_order=' . intval($val) . ', player_ability_display=' . $d . ' where player_ability_player=' . $PLAYER['player_id'] . ' and player_ability_ability=' . $a);
+				$db->query('update player_ability set player_ability_order=' . intval($val) . ', player_ability_display=' . $d . ' where player_ability_player=' . $PLAYER['player_id'] . ' and player_ability_id=' . $a);
 			}
 		}
 
@@ -69,8 +69,8 @@ if($PLAYER)
 		array_push($array, array(
 			makeLink($res[$i]['ability_name'], 'a=viewabilitydetails&ability=' . $res[$i]['player_ability_ability'], SECTION_GAME),
 			$res[$i]['player_ability_level'],
-			getFormField(array('type'=>'text', 'parms'=>'size="3" maxlength="3" style="width:30px"', 'name'=>('o' . $res[$i]['player_ability_ability']), 'val'=>$res[$i]['player_ability_order'])),
-			getFormField(array('type'=>'checkbox', 'name'=>('d' . $res[$i]['player_ability_ability']), 'val'=>($res[$i]['player_ability_display'] ? 'checked' : '')))
+			getFormField(array('type'=>'text', 'parms'=>'size="3" maxlength="3" style="width:30px"', 'name'=>('o' . $res[$i]['player_ability_id']), 'val'=>$res[$i]['player_ability_order'])),
+			getFormField(array('type'=>'checkbox', 'name'=>('d' . $res[$i]['player_ability_id']), 'val'=>($res[$i]['player_ability_display'] ? 'checked' : '')))
 		));
 	}
 

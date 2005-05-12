@@ -43,11 +43,13 @@ if(count($res))
 {
 	if(isset($_POST['ability']))
 	{
-		$a = $db->query('select * from player_ability where player_ability_player=' . $PLAYER['player_id'] . ' and player_ability_ability=' . $ability);
+		$a = $db->query('select * from player_ability where player_ability_player=' . $PLAYER['player_id'] . ' and player_ability_ability=' . $ability . ' order by player_ability_level desc limit 1');
 		$p = $db->query('select * from player_abilitytype where player_abilitytype_player=' . $PLAYER['player_id'] . ' and player_abilitytype_type=' . $res[0]['ability_type']);
 
 		$level = count($a) ? $a[0]['player_ability_level'] : 0;
 		$cost = $res[0]['ability_ap_cost_init'] + $res[0]['ability_ap_cost_level'] * $level;
+
+		$level += 1;
 
 		if($PLAYER['player_battle'])
 			echo '<p/>You cannot learn new abilities while in a battle.';
@@ -57,14 +59,11 @@ if(count($res))
 			echo '<p/>You only have ' . $p[0]['player_abilitytype_ap'] . ' of the needed ' . $cost . ' AP to learn ' . $res[0]['ability_name'] . '.';
 		else
 		{
-			if(count($a))
-				$db->query('update player_ability set player_ability_level=player_ability_level+1 where player_ability_ability=' . $ability . ' and player_ability_player=' . $PLAYER['player_id']);
-			else
-				$db->query('insert into player_ability (player_ability_player, player_ability_ability, player_ability_level, player_ability_display) values (' . $PLAYER['player_id'] . ', ' . $ability . ', 1, 1)');
+			$db->query('insert into player_ability (player_ability_player, player_ability_ability, player_ability_level, player_ability_display) values (' . $PLAYER['player_id'] . ', ' . $ability . ', ' . $level . ', 1)');
 
 			$db->query('update player_abilitytype set player_abilitytype_ap=player_abilitytype_ap - ' . $cost . ' where player_abilitytype_type=' . $res[0]['ability_type'] . ' and player_abilitytype_player=' . $PLAYER['player_id']);
 
-			echo '<p/>Learned ' . $res[0]['ability_name'] . '.';
+			echo '<p/>Learned ' . $res[0]['ability_name'] . ' level ' . $level . '.';
 		}
 	}
 
@@ -92,7 +91,7 @@ if(count($res))
 
 	if($PLAYER)
 	{
-		$a = $db->query('select * from player_ability where player_ability_player=' . $PLAYER['player_id'] . ' and player_ability_ability=' . $ability);
+		$a = $db->query('select * from player_ability where player_ability_player=' . $PLAYER['player_id'] . ' and player_ability_ability=' . $ability . ' order by player_ability_level desc limit 1');
 
 		if(count($a))
 		{

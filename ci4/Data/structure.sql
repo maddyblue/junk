@@ -406,11 +406,14 @@ CREATE TABLE player (
 
 
 CREATE TABLE player_ability (
+  player_ability_id bigint(10) unsigned NOT NULL auto_increment,
   player_ability_player bigint(10) unsigned NOT NULL default '0',
   player_ability_ability bigint(10) unsigned NOT NULL default '0',
   player_ability_level tinyint(2) unsigned NOT NULL default '0',
   player_ability_display tinyint(1) unsigned NOT NULL default '0',
-  player_ability_order smallint(5) unsigned NOT NULL default '0'
+  player_ability_order smallint(5) unsigned NOT NULL default '0',
+  PRIMARY KEY  (player_ability_id),
+  KEY player_ability_player (player_ability_player)
 ) TYPE=MyISAM;
 
 
