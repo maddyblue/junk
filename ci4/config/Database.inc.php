@@ -6,7 +6,7 @@
 
 $DBConf['user']     = 'root';
 $DBConf['pass']     = '';
-$DBConf['host']     = 'althalus.dolmant.net';
+$DBConf['host']     = '127.0.0.1';
 $DBConf['database'] = 'ci4';
 
 ?>
