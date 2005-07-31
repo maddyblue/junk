@@ -116,7 +116,7 @@ if(ID != 0 && LOGGED == true)
 
 	if($img == 'clear')
 	{
-		$db->query('update user set user_avatar_type="" where user_id=' . ID);
+		$db->query('update users set user_avatar_type=\'\' where user_id=' . ID);
 		echo '<p/>Avatar cleared.';
 	}
 	else if($img)
@@ -148,8 +148,8 @@ if(ID != 0 && LOGGED == true)
 
 		if(!$fail)
 		{
-			// no encode/decode here, just set it as the filename, thus, mysql_escape_string is needed
-			$db->query('update user set user_avatar_data="' . mysql_escape_string($full) . '", user_avatar_type="1" where user_id=' . ID);
+			// no encode/decode here, just set it as the filename, thus, pg_escape_string is needed
+			$db->query('update users set user_avatar_data=\'' . pg_escape_string($full) . '\', user_avatar_type=\'1\' where user_id=' . ID);
 			echo '<p/>Avatar updated.';
 		}
 		else

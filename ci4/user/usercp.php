@@ -126,7 +126,7 @@ if(ID != 0 && LOGGED == true)
 	}
 	else
 	{
-		$ret = $db->query('select * from user where user_id=' . ID);
+		$ret = $db->query('select * from users where user_id=' . ID);
 
 		$email = $ret[0]['user_email'];
 		$sig = $ret[0]['user_sig'];
@@ -145,7 +145,7 @@ if(ID != 0 && LOGGED == true)
 
 		$fail = false;
 
-		$res = $db->query('select count(*) as count from user where user_email="' . encode($email) . '" and user_id != ' . ID);
+		$res = $db->query('select count(*) as count from users where user_email=\'' . encode($email) . '\' and user_id != ' . ID);
 		if(!$email)
 		{
 			echo '<p/>No email address: enter an address.';
@@ -178,12 +178,12 @@ if(ID != 0 && LOGGED == true)
 			disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
 		else
 		{
-			$db->query('update user set user_email="' . $email . '", user_sig="' . $sig . '", user_aim="' . $aim . '", user_yahoo="' . $yahoo . '", user_icq="' . $icq . '", user_msn="' . $msn . '", user_www="' . $www . '", user_timezone="' . $tz . '", user_battle_verbose=' . $battle . ' where user_id=' . ID);
+			$db->query('update users set user_email=\'' . $email . '\', user_sig=\'' . $sig . '\', user_aim=\'' . $aim . '\', user_yahoo=\'' . $yahoo . '\', user_icq=\'' . $icq . '\', user_msn=\'' . $msn . '\', user_www=\'' . $www . '\', user_timezone=\'' . $tz . '\', user_battle_verbose=' . $battle . ' where user_id=' . ID);
 			echo '<p/>Userdata updated successfully.';
 
 			if($pass1)
 			{
-				$db->query('update user set user_pass=md5("' . $pass1 . '") where user_id=' . ID);
+				$db->query('update users set user_pass=\'' . md5($pass1) . '\' where user_id=' . ID);
 				echo '<p/>Password updated. You must now ' . makeLink('login', 'a=login') . ' again.';
 			}
 			// don't show this if password changed, since they won't have a valid login

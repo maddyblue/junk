@@ -83,11 +83,11 @@ echo 'done - ' . $count;
 echo '<p/>Updating user post count:<br/>';
 $count = 0;
 
-$users = $db->query('select user_id from user');
+$users = $db->query('select user_id from users');
 foreach($users as $user)
 {
 	$post = $db->query('select count(*) as count from forum_post where forum_post_user=' . $user['user_id']);
-	$db->query('update user set user_posts=' . $post[0]['count'] . ' where user_id=' . $user['user_id']);
+	$db->query('update users set user_posts=' . $post[0]['count'] . ' where user_id=' . $user['user_id']);
 
 	$count++;
 }

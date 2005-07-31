@@ -78,15 +78,9 @@ if(isset($_POST['submit']))
 		echo '<br/>No name specified.';
 	}
 
-	if($parent == '')
-	{
-		$fail = true;
-		echo '<br/>No parent specified.';
-	}
-
 	if(!$fail)
 	{
-		$db->query('update forum_forum set forum_forum_name="' . $name . '", forum_forum_desc="' . $desc . '", forum_forum_type=' . $type . ', forum_forum_parent=' . $parent . ' where forum_forum_id=' . $forumid);
+		$db->query('update forum_forum set forum_forum_name=\'' . $name . '\', forum_forum_desc=\'' . $desc . '\', forum_forum_type=' . $type . ', forum_forum_parent=' . $parent . ' where forum_forum_id=' . $forumid);
 
 		echo '<p/>Forum updated.';
 	}

@@ -62,7 +62,7 @@ class Player extends Entity
 		array_push($options, array('Attack', $oid++, OPTION_ATTACK));
 
 		// get all fields, but also get the ability level as "lv", so that monsters' abilities will be able to use battleAbility()
-		$abilities = $db->query('select *, player_ability_level lv from player_ability, ability where player_ability_player=' . $this->id . ' and player_ability_display=1 and player_ability_ability=ability_id order by player_ability_order');
+		$abilities = $db->query('select *, player_ability_level as lv from player_ability, ability where player_ability_player=' . $this->id . ' and player_ability_display=1 and player_ability_ability=ability_id order by player_ability_order');
 
 		for($i = 0; $i < count($abilities); $i++)
 			array_push(

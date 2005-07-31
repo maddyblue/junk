@@ -55,7 +55,7 @@ function newBattle($area)
 {
 	global $PLAYER, $db;
 
-	$monster = $db->query('select * from monster, cor_area_monster where cor_area=' . $area . ' and cor_monster=monster_id order by rand() limit 1');
+	$monster = $db->query('select * from monster, cor_area_monster where cor_area=' . $area . ' and cor_monster=monster_id order by random() limit 1');
 
 	if(!count($monster))
 	{
@@ -65,19 +65,39 @@ function newBattle($area)
 
 	// we have the player, monster, and area, create the battle
 
-	$batid = $db->insert('insert into battle (battle_start, battle_area) values (' . TIME . ', ' . $area . ')');
+	$batid = $db->insert('insert into battle (battle_start, battle_area) values (' . TIME . ', ' . $area . ')', 'battle');
 
 	$db->query('update player set player_battle=' . $batid . ' where player_id=' . $PLAYER['player_id']);
 
 	// create the battle entities
 
-	$db->query('insert into battle_entity values (
-		"",
+	$q = 'insert into battle_entity (
+		battle_entity_battle,
+		battle_entity_id ,
+		battle_entity_type,
+		battle_entity_team,
+		battle_entity_name,
+		battle_entity_dead,
+		battle_entity_ct,
+		battle_entity_max_hp,
+		battle_entity_max_mp,
+		battle_entity_hp,
+		battle_entity_mp,
+		battle_entity_str,
+		battle_entity_mag,
+		battle_entity_def,
+		battle_entity_mgd,
+		battle_entity_agl,
+		battle_entity_acc,
+		battle_entity_lv
+	) values (' ;
+
+	$db->query($q . '
 		' . $batid . ',
 		' . $PLAYER['player_id'] . ',
 		1,
 		1,
-		"' . $PLAYER['player_name'] . '",
+		\'' . $PLAYER['player_name'] . '\',
 		0,
 		' . rand(0, 100) . ',
 		' . $PLAYER['player_mod_hp'] . ',
@@ -90,13 +110,15 @@ function newBattle($area)
 		' . $PLAYER['player_mod_mgd'] . ',
 		' . $PLAYER['player_mod_agl'] . ',
 		' . $PLAYER['player_mod_acc'] . ',
-		' . $PLAYER['player_lv'] . '), (
-		"",
+		' . $PLAYER['player_lv'] . ')'
+	);
+
+	$db->query($q . '
 		' . $batid . ',
 		' . $monster[0]['monster_id'] . ',
 		2,
 		2,
-		"' . $monster[0]['monster_name'] . '",
+		\'' . $monster[0]['monster_name'] . '\',
 		0,
 		' . rand(0, 100) . ',
 		' . $monster[0]['monster_hp'] . ',
@@ -145,7 +167,8 @@ if(LOGGED)
 
 			global $db, $PLAYER;
 
-			$ret = $db->query('select count(*) count from cor_area_town where cor_area = ' . $area . ' and cor_town=' . $PLAYER['player_town']);
+			$ret = $db->query('select count(*) as count from cor_area_town where cor_area = ' . $area . ' and cor_town=' . $PLAYER['player_town']);
+			print_r($ret);
 
 			if($ret[0]['count'] != '1')
 			{

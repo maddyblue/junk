@@ -54,7 +54,7 @@ function getUsername($id)
 {
 	global $db;
 
-	$ret = $db->query('select user_name from user where user_id=' . $id);
+	$ret = $db->query('select user_name from users where user_id=' . $id);
 
 	if(count($ret) == 1)
 		return decode($ret[0]['user_name']);
@@ -190,7 +190,7 @@ function updatePlayerStats($pid = 0)
 
 	// equipment
 
-	$res = $db->query('select sum(equipment_stat_hp) hp, sum(equipment_stat_mp) mp, sum(equipment_stat_str) str, sum(equipment_stat_mag) mag, sum(equipment_stat_def) def, sum(equipment_stat_mgd) mgd, sum(equipment_stat_agl) agl, sum(equipment_stat_acc) acc from equipment, player_equipment where equipment_id=player_equipment_equipment and player_equipment_equipped=1 and player_equipment_player=' . $pid . ' group by player_equipment_player');
+	$res = $db->query('select sum(equipment_stat_hp) as hp, sum(equipment_stat_mp) as mp, sum(equipment_stat_str) as str, sum(equipment_stat_mag) as mag, sum(equipment_stat_def) as def, sum(equipment_stat_mgd) as mgd, sum(equipment_stat_agl) as agl, sum(equipment_stat_acc) as acc from equipment, player_equipment where equipment_id=player_equipment_equipment and player_equipment_equipped=1 and player_equipment_player=' . $pid . ' group by player_equipment_player');
 
 	if(count($res))
 		foreach($stats as $key => $val)
@@ -198,7 +198,7 @@ function updatePlayerStats($pid = 0)
 
 	// jobs
 
-	$res = $db->query('select job_stat_hp hp, job_stat_mp mp, job_stat_str str, job_stat_mag mag, job_stat_def def, job_stat_mgd mgd, job_stat_agl agl, job_stat_acc acc from job where job_id=' . $pres[0]['player_job']);
+	$res = $db->query('select job_stat_hp as hp, job_stat_mp as mp, job_stat_str as str, job_stat_mag as mag, job_stat_def as def, job_stat_mgd as mgd, job_stat_agl as agl, job_stat_acc as acc from job where job_id=' . $pres[0]['player_job']);
 
 	if(count($res))
 		foreach($stats as $key => $val)
@@ -206,7 +206,7 @@ function updatePlayerStats($pid = 0)
 
 	// houses
 
-	$res = $db->query('select house_hp hp, house_mp mp, house_str str, house_mag mag, house_def def, house_mgd mgd, house_agl agl, house_acc acc from house where house_id=' . $pres[0]['player_house']);
+	$res = $db->query('select house_hp as hp, house_mp as mp, house_str as str, house_mag as mag, house_def as def, house_mgd as mgd, house_agl as agl, house_acc as acc from house where house_id=' . $pres[0]['player_house']);
 
 	if(count($res))
 		foreach($stats as $key => $val)

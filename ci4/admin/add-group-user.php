@@ -53,7 +53,7 @@ if (isset($_POST['submit']))
 	$groupid = encode($_POST['g']);
 	$username = encode($_POST['name']);
 
-	$res = $db->query('select user_id from user where user_name = "' . $username . '"');
+	$res = $db->query('select user_id from users where user_name = "' . $username . '"');
 
 	if ($res)
 		echo addGroupUser($groupid, $res[0]['user_id']);

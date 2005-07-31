@@ -56,7 +56,7 @@ if(isset($_POST['submit']))
 {
 	$fail = false;
 
-	$res = $db->query('select count(*) as count from user where user_name="' . $name . '"');
+	$res = $db->query('select count(*) as count from users where user_name=\'' . $name . '\'');
 	if(!$name)
 	{
 		echo '<p/>No name: enter a name.';
@@ -84,7 +84,7 @@ if(isset($_POST['submit']))
 		$fail = true;
 	}
 
-	$res = $db->query('select count(*) as count from user where user_email="' . $email . '"');
+	$res = $db->query('select count(*) as count from users where user_email=\'' . $email . '\'');
 	if(!$email)
 	{
 		echo '<p/>No email: enter an address.';
@@ -108,7 +108,7 @@ if(isset($_POST['submit']))
 	}
 	else
 	{
-		$db->query('insert into user (user_name, user_email, user_pass, user_register) values ("' . $name . '", "' . $email . '", md5("' . $pass1 . '"), ' . TIME . ')');
+		$db->query('insert into users (user_name, user_email, user_pass, user_register) values (\'' . $name . '\', \'' . $email . '\', \'' . md5($pass1) . '\', ' . TIME . ')');
 		echo '<p/>User &quot;' . decode($name) . '&quot; successfully registered. Please ' . makeLink('login', 'a=login') . '.';
 		echo '<p/>After logging in, it is suggest that you complete your profile in the User Control Panel.';
 	}

@@ -63,7 +63,7 @@ if(isset($_POST['submit']))
 		$fail = true;
 	}
 
-	$ret = $db->query('select user_id, user_pass from user where user_name="' . $user . '" and user_pass=md5("' . $pass . '")');
+	$ret = $db->query('select user_id, user_pass from users where user_name=\'' . $user . '\' and user_pass=\'' . md5($pass) . '\'');
 	if(count($ret) == 1)
 	{
 		$last = isset($_POST['r']) ? decode($_POST['r']) : '';

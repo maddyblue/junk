@@ -66,8 +66,8 @@ if(!LOGGED)
 }
 else
 {
-	$res = $db->query('select forum_thread_replies, forum_thread_id, forum_thread_title, forum_forum_name, user_id, user_name, plast.forum_post_date, plast.forum_post_text, forum_forum_id, plast.forum_post_id, pfirst.forum_post_text pft
-	FROM forum_thread, forum_forum, forum_post plast, forum_post pfirst, user
+	$res = $db->query('select forum_thread_replies, forum_thread_id, forum_thread_title, forum_forum_name, user_id, user_name, plast.forum_post_date, plast.forum_post_text, forum_forum_id, plast.forum_post_id, pfirst.forum_post_text as pft
+	FROM forum_forum, forum_post plast, forum_post pfirst, users, forum_thread
 	LEFT JOIN forum_view ON forum_view_user=' . ID . ' and forum_view_thread=forum_thread_id
 	WHERE forum_thread_forum=forum_forum_id
 		and forum_thread_last_post=plast.forum_post_id
@@ -87,7 +87,7 @@ else
 			$pageList = '<font class="small">' . $pageList . '</font>';
 
 		array_push($array, array(
-			makeLink('-&gt;', 'a=viewpost&p=' . $res[$i]['forum_post_id'], '', decode($res[$i]['forum_post_text'])) . ' ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id'], '', true, decode($res[$i]['pft'])) . $pageList,
+			makeLink('-&gt;', 'a=viewpost&p=' . $res[$i]['forum_post_id'] . '#' . $res[$i]['forum_post_id'], '', decode($res[$i]['forum_post_text'])) . ' ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id'], '', true, decode($res[$i]['pft'])) . $pageList,
 			makeLink(decode($res[$i]['forum_forum_name']), 'a=viewforum&f=' . $res[$i]['forum_forum_id']),
 			$res[$i]['forum_thread_replies'],
 			getUserlink($res[$i]['user_id'], decode($res[$i]['user_name'])),

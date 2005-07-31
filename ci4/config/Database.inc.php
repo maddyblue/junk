@@ -4,9 +4,9 @@
 
 /*	MySQL database connection configuration.	*/
 
-$DBConf['user']     = 'root';
-$DBConf['pass']     = '';
-$DBConf['host']     = '127.0.0.1';
+$DBConf['user']     = 'dolmant';
+$DBConf['pass']     = 'tnamlod';
+$DBConf['host']     = 'localhost';
 $DBConf['database'] = 'ci4';
 
 ?>

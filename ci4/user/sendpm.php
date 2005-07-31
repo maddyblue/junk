@@ -77,8 +77,8 @@ else
 			$db->query('insert into pm (pm_from, pm_to, pm_subject, pm_text, pm_date, pm_read) values (' .
 				ID . ',' .
 				$userid . ',' .
-				'"' . $sub . '",' .
-				'"' . $text . '",' .
+				'\'' . $sub . '\',' .
+				'\'' . $text . '\',' .
 				TIME . ',' .
 				0 .
 				')');

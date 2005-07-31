@@ -35,8 +35,7 @@
 class Database
 {
 	var $handle = null;
-
-	var $db;
+	var $resource;
 
 	var $queries = array();
 	var $time = 0;
@@ -46,14 +45,12 @@ class Database
 
 	function connect($params)
 	{
-		$this->handle = mysql_connect(
-			$params['host'],
-			$params['user'],
-			$params['pass']
+		$this->handle = pg_connect('
+			host=' . $params['host'] . '
+			user=' . $params['user'] . '
+			password=' . $params['pass'] . '
+			dbname=' . $params['database']
 		);
-
-		//mysql_select_db($params['database'], $this->handle);
-		$this->db = $params['database'];
 
 		return $this->handle;
 	}
@@ -63,7 +60,7 @@ class Database
 
 	function disconnect()
 	{
-		mysql_close($this->handle);
+		pg_close($this->handle);
 		$this->handle = null;
 	}
 
@@ -76,7 +73,6 @@ class Database
 		etc.
 
 		Expected parameters:
-			Handle - database connection to use.
 			Query - query to execute.
 	*/
 
@@ -84,11 +80,8 @@ class Database
 	{
 		$start = gettimeofday();
 
-		$dbq = mysql_db_query(
-			$this->db,
-			$query,
-			$this->handle
-		);
+		pg_send_query($this->handle, $query);
+		$this->resource = pg_get_result($this->handle);
 
 		$end = gettimeofday();
 		$time = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
@@ -96,44 +89,43 @@ class Database
 		$this->time += $time;
 		array_push($this->queries,array($query, $time));
 
-		if($dbq == false)
+		if(pg_result_error($this->resource))
 		{
 			global $message;
-			$message .= '<div class="error">Error: ' . mysql_error() . '.
+			$message .= '<div class="error">Error: ' . pg_result_error($this->resource) . '.
 				<br/>Query: ' . $query . '</div>';
-			return;
+			$ret = false;
 		}
-
-		$ret = array();
-
-		for($rcount = 0; $row = @mysql_fetch_assoc($dbq); $rcount++)
+		else
 		{
-			for($i = 0; $i < sizeof($row); $i++)
+			$ret = array();
+
+			for($rcount = 0; $row = pg_fetch_assoc($this->resource); $rcount++)
 			{
-				$ret[$rcount][key($row)] = $row[key($row)];
-				next($row);
+				for($i = 0; $i < sizeof($row); $i++)
+				{
+					$ret[$rcount][key($row)] = $row[key($row)];
+					next($row);
+				}
 			}
 		}
 
-		if(is_resource($dbq))
-			mysql_free_result($dbq);
+		pg_free_result($this->resource);
 
 		return $ret;
 	}
 
-	function insert($query)
+	function insert($query, $seq)
 	{
 		$ret = $this->query($query);
 
-		if($ret === FALSE)
-			return $ret;
+		if($ret !== false)
+		{
+			$result = $this->query("select currval('${seq}_${seq}_id_seq') as lastid");
+			$ret = $result[0]['lastid'];
+		}
 
-		return $this->insertId();
-	}
-
-	function insertId()
-	{
-		return mysql_insert_id($this->handle);
+		return $ret;
 	}
 }
 

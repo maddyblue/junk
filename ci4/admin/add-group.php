@@ -36,7 +36,7 @@ if(isset($_POST['submit']))
 {
 	$name = encode($_POST['name']);
 
-	$db->query('insert into group_def (group_def_name) values ("' . $name . '")');
+	$db->query('insert into group_def (group_def_name) values (\'' . $name . '\')');
 
 	echo decode($name) . ' added';
 

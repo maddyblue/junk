@@ -72,7 +72,7 @@ for($i = 0; $i < count($res); $i++)
 {
 	$admin = ADMIN ? (' - ' . long2ip($res[$i]['session_ip'])) : '';
 	array_push($array, array(
-		getUserlink($res[$i]['session_user']),
+		getUserlink($res[$i]['session_uid']),
 		$res[$i]['session_host'] . $admin,
 		getTime($res[$i]['session_start']),
 		getTime($res[$i]['session_current']),

@@ -37,7 +37,7 @@ if (isset($_POST['submit']))
 	$groupid = encode($_POST['g']);
 	$name = encode($_POST['name']);
 
-	$db->query('update group_def set group_def_name="' . $name . '" where group_def_id=' . $groupid);
+	$db->query('update group_def set group_def_name=\'' . $name . '\' where group_def_id=' . $groupid);
 
 	echo decode($name) . ' updated';
 

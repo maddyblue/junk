@@ -43,14 +43,14 @@ function linkLastPost($postid, $userid, $username, $date, $threadid = 0, $thread
 				makeLink(decode($threadtitle), 'a=viewthread&t=' . $threadid, '', $firstpost) . '<br/>by ' .
 				getUserlink($userid, decode($username)) . ' ' .
 				getTime($date) . ' ' .
-				makeLink('-&gt;', 'a=viewpost&p=' . $postid, '', $lastpost);
+				makeLink('-&gt;', "a=viewpost&p=$postid#$postid", '', $lastpost);
 		else
 			$ret =
 				'<div class="small">' .
 				getTime($date) .
 				'<br/>by ' .
 				getUserlink($userid, decode($username)) . ' ' .
-				makeLink('-&gt;', 'a=viewpost&p=' . $postid, '', $lastpost) .
+				makeLink('-&gt;', "a=viewpost&p=$postid#$postid", '', $lastpost) .
 				'</div>';
 	}
 
@@ -84,7 +84,7 @@ function updateFromPost($post)
 	$thread = $res[0]['forum_post_thread'];
 
 	// bump post count
-	$db->query('update user set user_posts=user_posts+1 where user_id=' . $res[0]['forum_post_user']);
+	$db->query('update users set user_posts=user_posts+1 where user_id=' . $res[0]['forum_post_user']);
 
 	$res = $db->query('select forum_thread_forum from forum_thread where forum_thread_id=' . $thread);
 	$forum = $res[0]['forum_thread_forum'];
@@ -358,7 +358,7 @@ function forumPerm($forum, $perm, $default = true)
 
 	foreach($GROUPS as $group)
 	{
-		$result = $db->query('select forum_perm_' . $perm . ' perm from forum_perm where forum_perm_forum=' . $forum . ' and forum_perm_group=' . $group);
+		$result = $db->query('select forum_perm_' . $perm . ' as perm from forum_perm where forum_perm_forum=' . $forum . ' and forum_perm_group=' . $group);
 
 		if(count($result))
 		{

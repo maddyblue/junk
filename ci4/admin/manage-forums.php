@@ -64,7 +64,7 @@ function forumListManage(&$array, $id, $depth)
 {
 	global $db;
 
-	$res = $db->query('select forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order, forum_forum_desc, forum_forum_id from forum_forum where forum_forum_parent = "' . $id . '" order by forum_forum_order');
+	$res = $db->query('select forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order, forum_forum_desc, forum_forum_id from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
 
 	foreach($res as $row)
 	{

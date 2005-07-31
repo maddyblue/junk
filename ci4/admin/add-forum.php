@@ -69,7 +69,7 @@ if(isset($_POST['submit']))
 		else
 			$order = 1;
 
-		$db->query('insert into forum_forum (forum_forum_name, forum_forum_desc, forum_forum_type, forum_forum_parent, forum_forum_order) values("' . $name . '", "' .  $desc . '", 0, 0, ' .  $order . ')');
+		$db->query('insert into forum_forum (forum_forum_name, forum_forum_desc, forum_forum_type, forum_forum_parent, forum_forum_order) values(\'' . $name . '\', \'' .  $desc . '\', 0, 0, ' .  $order . ')');
 
 		echo '<p/>&quot;' . decode($name) . '&quot; added.<p/>';
 

@@ -38,22 +38,21 @@ function postList($thread, $curpage, $postsPP, $canMod)
 
 	$array = array();
 
-	$posts = $db->query('select user_id, user_name, user_avatar_type, forum_post_date, forum_post_id, forum_post_text, forum_post_text_parsed, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, user where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . (($curpage - 1) * $postsPP) . ', ' . $postsPP);
+	$posts = $db->query('select user_id, user_name, user_avatar_type, forum_post_date, forum_post_id, forum_post_text, forum_post_text_parsed, user_sig, forum_post_edit_user, forum_post_edit_date from forum_post, users where forum_post_thread = ' . $thread . ' and forum_post_user=user_id order by forum_post_date limit ' . $postsPP . ' offset ' . (($curpage - 1) * $postsPP));
 
 	foreach($posts as $post)
 	{
 		$avatar = getAvatar($post['user_id'], $post['user_avatar_type']);
-		$user = getUserlink($post['user_id'], decode($post['user_name']));
+		$user = '<a name="' . $post['forum_post_id'] . '">' . getUserlink($post['user_id'], decode($post['user_name'])) . '</a>';
 		$user .= $avatar ? '<br/>' . $avatar : '';
 		$user .= '<br/>' . getTime($post['forum_post_date']) . '<br/>';
-		$user .= makeLink('#', 'a=viewpost&p=' . $post['forum_post_id']) . ' ';
+		$user .= makeLink('#', 'a=viewpost&p=' . $post['forum_post_id'] . '#' . $post['forum_post_id']) . ' ';
 		if(LOGGED)
 			$user .= makeLink('quote', 'a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
 		if(ID == $post['user_id'] || $canMod) // <- exactly the same as canEdit, but saves us a few DB calls per post
 			$user .= ' ' . makeLink('edit', 'a=editpost&p=' . $post['forum_post_id']);
 
-		$body = '<a name="' . $post['forum_post_id'] . '"></a>';
-		$body .= '<p/>' . $post['forum_post_text_parsed'];
+		$body = '<p/>' . $post['forum_post_text_parsed'];
 
 		if($post['user_sig'])
 		{

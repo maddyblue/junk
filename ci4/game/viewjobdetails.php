@@ -52,7 +52,7 @@ if(count($res))
 		}
 
 		$failed = $db->query('select job_name, player_job_lv, cor_job_joblv.*
-			from cor_job_joblv, job
+			from job, cor_job_joblv
 			left join player_job on
 				player_job_player=' . $PLAYER['player_id'] . ' and
 				cor_job_req=player_job_job

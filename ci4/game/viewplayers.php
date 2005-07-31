@@ -100,7 +100,7 @@ $order = (isset($_GET['order']) && array_key_exists($_GET['order'], $fields)) ? 
 
 $orderdir = (isset($_GET['orderdir']) && $_GET['orderdir'] == 'asc') ? 'asc' : 'desc';
 
-$query = 'from player, domain, user, job
+$query = 'from player, domain, users, job
 	left join town on town_id = player_town
 	left join house on house_id = player_house
 	where
@@ -124,7 +124,7 @@ if(isset($_GET['job']) && $_GET['job'])
 else
 	$job = 0;
 
-$res = $db->query('select * ' . $query . ' order by ' . $order . ' ' . $orderdir .' limit ' . $start . ', ' . $limit);
+$res = $db->query('select * ' . $query . ' order by ' . $order . ' ' . $orderdir .' limit ' . $limit . ' offset ' . $start);
 
 foreach($res as $row)
 {
@@ -168,8 +168,8 @@ foreach($res as $row)
   array_push($array, $push);
 }
 
-$pres = $db->query('select count(*) as `found_rows()` '. $query);
-$ptot = $pres[0]['found_rows()'];
+$pres = $db->query('select count(*) as count '. $query);
+$ptot = count($pres) ? $pres[0]['count'] : 0;
 $totpages = ceil($ptot / $limit);
 
 $disp = array();

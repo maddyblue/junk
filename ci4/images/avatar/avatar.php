@@ -46,7 +46,7 @@ $db->Connect($DBConf);
 
 $id = isset($_GET['i']) ? intval($_GET['i']) : 0;
 
-$im = $db->query('select user_avatar_type, user_avatar_data from user where user_id=' . $id);
+$im = $db->query('select user_avatar_type, user_avatar_data from users where user_id=' . $id);
 
 header('Content-type: ' . $im[0]['user_avatar_type']);
 echo $im[0]['user_avatar_data'];

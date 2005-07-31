@@ -135,10 +135,10 @@ if(LOGGED)
 			$fd = fopen($name, 'r');
 			if($fd)
 			{
-				$data = mysql_escape_string(fread($fd, filesize($name)));
+				$data = pg_escape_string(fread($fd, filesize($name)));
 				fclose($fd);
 
-				$db->query('update user set user_avatar_data="' . $data . '", user_avatar_type="' . $type . '" where user_id=' . ID);
+				$db->query('update users set user_avatar_data=\'' . $data . '\', user_avatar_type=\'' . $type . '\' where user_id=' . ID);
 
 				echo '<p/>Avatar upload complete.';
 			}

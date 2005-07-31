@@ -58,7 +58,7 @@ else if(count($res))
 		else
 		{
 			// decrement user post count
-			$db->query('update user set user_posts = user_posts - 1 where user_id=' . $userid);
+			$db->query('update users set user_posts = user_posts - 1 where user_id=' . $userid);
 
 			// delete post
 			$db->query('delete from forum_post where forum_post_id =' . $postid);

@@ -107,12 +107,12 @@ else
 		{
 			$lastpost = $db->insert('insert into forum_post (forum_post_thread, forum_post_text, forum_post_text_parsed, forum_post_user, forum_post_date, forum_post_ip) values (' .
 				$thread . ',' .
-				'"' . $post . '",' .
-				'"' . mysql_escape_string(parsePostText($_POST['post'])) . '",' .
+				'\'' . $post . '\',' .
+				'\'' . pg_escape_string(parsePostText($_POST['post'])) . '\',' .
 				ID . ',' .
 				TIME . ',' .
 				REMOTE_ADDR .
-				')');
+				')', 'forum_post');
 			if($lastpost != FALSE)
 			{
 				updateFromPost($lastpost);

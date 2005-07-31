@@ -52,12 +52,12 @@ if($search)
 			forum_post_user=user_id and
 			forum_post_thread=forum_thread_id and
 			forum_thread_forum=forum_forum_id and
-			match (forum_post_text_parsed) against ("' . mysql_escape_string($search) . '")';
+			match (forum_post_text_parsed) against ("' . pg_escape_string($search) . '")';
 
 	$res = $db->query('select forum_post_id, forum_post_text_parsed as text, user_name, user_id, forum_thread_id, forum_thread_title, forum_forum_id, forum_forum_name ' . $query . ' limit ' . $start . ', ' . $limit);
 
-	$pres = $db->query('select count(*) as `found_rows()` ' . $query);
-	$ptot = $pres[0]['found_rows()'];
+	$pres = $db->query('select count(*) as count ' . $query);
+	$ptot = $pres[0]['count'];
 	$totpages = ceil($ptot / $limit);
 	$pglim = $page * $limit;
 	if($pglim > $ptot)
@@ -71,7 +71,7 @@ if($search)
 
 	for($i = 0; $i < count($res); $i++)
 	{
-		echo '<hr/><p/>' . makeLink('-&gt;', 'a=viewpost&p=' . $res[$i]['forum_post_id']) .
+		echo '<hr/><p/>' . makeLink('-&gt;', 'a=viewpost&p=' . $res[$i]['forum_post_id'] . '#' . $res[$i]['forum_post_id']) .
 		' ' . makeLink(decode($res[$i]['forum_forum_name']), 'a=viewforum&f=' . $res[$i]['forum_forum_id']) .
 		': ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id']) .
 		' by ' . makeLink(decode($res[$i]['user_name']), 'a=viewuserdetails&user=' . $res[$i]['user_id'], SECTION_USER) .
@@ -83,11 +83,15 @@ if($search)
 	echo $pageDisp;
 }
 
+/*
 echo getTableForm('Search the forum:', array(
 	array('', array('type'=>'text', 'name'=>'search', 'val'=>$search)),
 	array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Search')),
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'search'))
 ), false, 'get');
+*/
+
+echo '<p/>Searching is not working [yet], due to the switch to PostgreSQL.';
 
 update_session_action(408);
 

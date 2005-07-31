@@ -32,38 +32,56 @@
  *
  */
 
+if(ADMIN)
+	echo '<p/>' . makeLink('Update Events', 'a=event&update');
+
 require_once CI_FS_PATH . 'utility/Event.inc.php';
+
+$query = 'select distinct on (eventlog_event) * from event left join eventlog on event_id=eventlog_event order by eventlog_event, eventlog_time desc';
 
 if(isset($_GET['update']))
 {
-	$res = $db->query('select * from event');
+	$res = $db->query($query);
 
 	foreach($res as $event)
 	{
 		$id = $event['event_id'];
-		$last = $event['event_last'];
+		$last = $event['eventlog_time'];
 		eval($event['event_code']);
 	}
 
 	echo '<p/>Events updated.';
 }
 
-$arr = array(array(
+$event = array(array(
 	'Event', 'Last Update', 'Description'
 ));
 
-$res = $db->query('select * from event');
+$res = $db->query($query);
 
-foreach($res as $event)
-{
-	array_push($arr, array(
-		$event['event_name'],
-		getTime($event['event_last']),
-		$event['event_desc']
+foreach($res as $e)
+	array_push($event, array(
+		$e['event_name'],
+		getTime($e['eventlog_time']),
+		$e['event_desc']
 	));
-}
 
-echo getTable($arr);
+echo getTable($event);
+
+$log = array(array(
+	'Event', 'Run Date'
+));
+
+$res = $db->query('select eventlog.*, event_name from eventlog, event where event_id=eventlog_event and eventlog_time > ' . (TIME - 86400) . ' order by eventlog_time desc');
+
+foreach($res as $e)
+	array_push($log, array(
+		$e['event_name'],
+		getTime($e['eventlog_time'])
+	));
+
+echo '<p/>Past events for the last 24 hours:';
+echo getTable($log);
 
 update_session_action(105);
 

@@ -42,15 +42,15 @@ $start = ($page - 1) * $limit;
 
 $search = isset($_GET['search']) ? encode($_GET['search']) : '';
 
-$query = 'from user ';
+$query = 'from users ';
 
 if($search)
-	$query .= 'where user_name LIKE "%' . $search . '%" ';
+	$query .= 'where user_name LIKE \'%' . $search . '%\' ';
 
-$res = $db->query('select * ' . $query . ' order by user_name limit ' . $start . ', ' . $limit);
+$res = $db->query('select * ' . $query . ' order by user_name limit ' . $limit . ' offset ' . $start);
 
-$pres = $db->query('select count(*) as `found_rows()` ' . $query);
-$ptot = $pres[0]['found_rows()'];
+$pres = $db->query('select count(*) as count ' . $query);
+$ptot = $pres[0]['count'];
 $totpages = ceil($ptot / $limit);
 
 $array = array();

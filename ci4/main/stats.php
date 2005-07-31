@@ -38,18 +38,18 @@ $PastDay = TIME - $SecPerDay;
 $PastWeek = TIME - $SecPerWeek;
 
 $stats = array(
-	array('Hits for the past day', 'select count(*) from stats where stats_timestamp > ' . $PastDay),
-	array('Total Hits', 'select count(*) from stats'),
-	array('Registered users', 'select count(*) from user'),
-	array('New users in the last week', 'select count(*) from user where user_register > ' . $PastWeek),
-	array('Active users for the past week', 'select count(*) from user where user_last > ' . $PastWeek),
-	array('Active users for the past day', 'select count(*) from user where user_last > ' . $PastDay),
-	array('Forum posts', 'select count(*) from forum_post'),
-	array('Forum posts for the past week', 'select count(*) from forum_post where forum_post_date > ' . $PastWeek),
-	array('Forum posts for the past day', 'select count(*) from forum_post where forum_post_date > ' . $PastDay),
-	array('Forum threads', 'select count(*) from forum_thread'),
-	array('Registered players', 'select count(*) from player'),
-	array('Battles', 'select count(*) from battle')
+	array('Hits for the past day', 'select count(*) as count from stats where stats_timestamp > ' . $PastDay),
+	array('Total Hits', 'select count(*) as count from stats'),
+	array('Registered users', 'select count(*) as count from users'),
+	array('New users in the last week', 'select count(*) as count from users where user_register > ' . $PastWeek),
+	array('Active users for the past week', 'select count(*) as count from users where user_last > ' . $PastWeek),
+	array('Active users for the past day', 'select count(*) as count from users where user_last > ' . $PastDay),
+	array('Forum posts', 'select count(*) as count from forum_post'),
+	array('Forum posts for the past week', 'select count(*) as count from forum_post where forum_post_date > ' . $PastWeek),
+	array('Forum posts for the past day', 'select count(*) as count from forum_post where forum_post_date > ' . $PastDay),
+	array('Forum threads', 'select count(*) as count from forum_thread'),
+	array('Registered players', 'select count(*) as count from player'),
+	array('Battles', 'select count(*) as count from battle')
 );
 
 $table = array();
@@ -57,14 +57,14 @@ $table = array();
 foreach($stats as $s)
 {
 	$r = $db->query($s[1]);
-	array_push($table, array($s[0], $r[0]['count(*)']));
+	array_push($table, array($s[0], $r[0]['count']));
 }
 
 echo getTable($table, false);
 
 echo '<p/>Active users in the past day:';
 
-$res = $db->query('select user_name, user_id from user where user_last > ' . $PastDay . ' order by user_name');
+$res = $db->query('select user_name, user_id from users where user_last > ' . $PastDay . ' order by user_name');
 
 for($i = 0; $i < count($res); $i++)
 {

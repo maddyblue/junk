@@ -40,7 +40,7 @@ function groupUserListManage(&$array, $groupid)
 
 	foreach($res as $row)
 	{
-		$res = $db->query('select user_name from user where user_id=' . $row['group_user_user']);
+		$res = $db->query('select user_name from users where user_id=' . $row['group_user_user']);
 		array_push($array, array(
 			decode($res[0]['user_name']),
 			makeLink('Remove', 'a=remove-group-user&g=' . $groupid . '&user=' . $row['group_user_user'])

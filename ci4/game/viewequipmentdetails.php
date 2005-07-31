@@ -97,9 +97,9 @@ if(count($res))
 
 		echo '<p/>You have ' . $PLAYER['player_money'] . ' gold.';
 
-		$res = $db->query('select count(*) from player_equipment where player_equipment_player=' . $PLAYER['player_id'] . ' and player_equipment_equipment=' . $e);
+		$res = $db->query('select count(*) as count from player_equipment where player_equipment_player=' . $PLAYER['player_id'] . ' and player_equipment_equipment=' . $e);
 
-		echo '<p/>You own ' . $res[0]['count(*)'] . ' of th' . ($res[0]['count(*)'] == 1 ? 'is' : 'ese') . '.';
+		echo '<p/>You own ' . $res[0]['count'] . ' of th' . ($res[0]['count'] == 1 ? 'is' : 'ese') . '.';
 	}
 	else
 		$buytext = '';

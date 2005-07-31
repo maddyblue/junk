@@ -38,7 +38,7 @@ if(!LOGGED)
 $ppp = 10; // posts per page
 $offset = 0;
 
-$query = 'select user_name, user_id, forum_thread.*, forum_post.* from forum_thread, user, forum_post where forum_thread_forum=' . NEWSFORUM . ' and forum_thread_first_post=forum_post_id and forum_post_user=user_id order by forum_post_date desc limit ' . $offset . ', ' . $ppp;
+$query = 'select user_name, user_id, forum_thread.*, forum_post.* from forum_thread, users, forum_post where forum_thread_forum=' . NEWSFORUM . ' and forum_thread_first_post=forum_post_id and forum_post_user=user_id order by forum_post_date desc limit ' . $ppp . ' offset ' . $offset;
 $res = $db->query($query);
 
 for($i = 0; $i < count($res); $i++)

@@ -43,10 +43,10 @@ $next = $start + $per;
 
 echo '<p/>Reparsing forum posts ' . $start . ' to ' . $next . ':<br/>';
 
-$posts = $db->query('select forum_post_id, forum_post_text from forum_post limit ' . $start . ', ' . $per);
+$posts = $db->query('select forum_post_id, forum_post_text from forum_post limit ' . $per . ' offset ' . $start);
 foreach($posts as $post)
 {
-	$db->query('update forum_post set forum_post_text_parsed="' . mysql_escape_string(parsePostText($post['forum_post_text'])) . '" where forum_post_id=' . $post['forum_post_id']);
+	$db->query('update forum_post set forum_post_text_parsed=\'' . pg_escape_string(parsePostText($post['forum_post_text'])) . '\' where forum_post_id=' . $post['forum_post_id']);
 }
 
 if(count($posts) < $per)

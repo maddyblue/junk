@@ -35,9 +35,9 @@
 $secPerDay = 86400; // 60second/min * 60minutes/hr * 24hrs/day = seconds/day
 $secPerHour = 3600; // 60 * 60
 
-function updateEventTime($id)
+function logEvent($event)
 {
-	$GLOBALS['db']->query('update event set event_last=' . TIME . ' where event_id=' . $id);
+	$GLOBALS['db']->query('insert into eventlog values (' . $event . ', ' . TIME . ')');
 }
 
 function jobWages($id, $last)
@@ -55,7 +55,7 @@ function jobWages($id, $last)
 
 		echo '<p/>All players paid for ' . $days . ' days wages.';
 
-		updateEventTime($id);
+		logEvent($id);
 	}
 	else
 		echo '<p/>Not yet time for job wages to be paid.';
@@ -78,11 +78,12 @@ function expwDecrease($id, $last)
 			if($dec)
 			{
 				$db->query('update player set player_expw=player_expw-' . $dec . ' where player_domain=' . $res[$i]['domain_id']);
+				$db->query('update player set player_expw=0 where player_expw < 0');
 				echo '<p/>' . $res[$i]['domain_name'] . ' expw decreased by ' . $dec . '.';
 			}
 		}
 
-		updateEventTime($id);
+		logEvent($id);
 	}
 	else
 		echo '<p/>Not yet time to decrease expw.';

@@ -71,7 +71,7 @@ else if($step == 1)
 	{
 		echo '<br/>' . $area['name'] . ':';
 
-		$aid = $db->insert('insert into area (area_name, area_desc, area_order) values ("' . $area['name'] . '", "' . $area['description'] . '", ' . $area['lv'] . ')');
+		$aid = $db->insert('insert into area (area_name, area_desc, area_order) values ("' . $area['name'] . '", "' . $area['description'] . '", ' . $area['lv'] . ')', 'area');
 
 		foreach(explode("\n", $area['monsters']) as $monster_id)
 		{

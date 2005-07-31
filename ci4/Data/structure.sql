@@ -1,550 +1,993 @@
+--
+-- PostgreSQL database dump
+--
 
+SET client_encoding = 'SQL_ASCII';
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: _postgresql
+--
+
+COMMENT ON SCHEMA public IS 'Standard public schema';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: pg_file_length(text); Type: FUNCTION; Schema: public; Owner: dolmant
+--
+
+CREATE FUNCTION pg_file_length(text) RETURNS bigint
+    AS $_$SELECT len FROM pg_file_stat($1) AS s(len int8, c timestamp, a timestamp, m timestamp, i bool)$_$
+    LANGUAGE sql STRICT;
+
+
+--
+-- Name: pg_file_rename(text, text); Type: FUNCTION; Schema: public; Owner: dolmant
+--
+
+CREATE FUNCTION pg_file_rename(text, text) RETURNS boolean
+    AS $_$SELECT pg_file_rename($1, $2, NULL); $_$
+    LANGUAGE sql STRICT;
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = true;
+
+--
+-- Name: ability; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE ability (
-  ability_id bigint(10) unsigned NOT NULL auto_increment,
-  ability_name varchar(100) NOT NULL default '',
-  ability_image varchar(50) NOT NULL default '',
-  ability_type bigint(10) unsigned NOT NULL default '0',
-  ability_mp smallint(6) unsigned NOT NULL default '0',
-  ability_ap_cost_init smallint(6) unsigned NOT NULL default '0',
-  ability_ap_cost_level smallint(6) unsigned NOT NULL default '0',
-  ability_effect text NOT NULL,
-  ability_desc text NOT NULL,
-  ability_code text NOT NULL,
-  PRIMARY KEY  (ability_id)
-) TYPE=MyISAM;
+    ability_id bigserial NOT NULL,
+    ability_name character varying(100),
+    ability_image character varying(50),
+    ability_type bigint DEFAULT (0)::bigint,
+    ability_mp integer DEFAULT 0,
+    ability_ap_cost_init integer DEFAULT 0,
+    ability_ap_cost_level integer DEFAULT 0,
+    ability_effect text,
+    ability_desc text,
+    ability_code text
+);
 
+
+--
+-- Name: abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE abilitytype (
-  abilitytype_id bigint(10) unsigned NOT NULL auto_increment,
-  abilitytype_name varchar(100) NOT NULL default '',
-  abilitytype_desc text NOT NULL,
-  PRIMARY KEY  (abilitytype_id)
-) TYPE=MyISAM;
+    abilitytype_id bigserial NOT NULL,
+    abilitytype_name character varying(100),
+    abilitytype_desc text
+);
 
+
+--
+-- Name: area; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE area (
-  area_id bigint(10) unsigned NOT NULL auto_increment,
-  area_name varchar(100) NOT NULL default '',
-  area_desc text NOT NULL,
-  area_order smallint(6) unsigned NOT NULL default '0',
-  PRIMARY KEY  (area_id),
-  UNIQUE KEY area_name (area_name)
-) TYPE=MyISAM;
+    area_id bigserial NOT NULL,
+    area_name character varying(100),
+    area_desc text,
+    area_order integer DEFAULT 0
+);
 
+
+--
+-- Name: battle; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE battle (
-  battle_id bigint(10) unsigned NOT NULL auto_increment,
-  battle_start bigint(10) unsigned NOT NULL default '0',
-  battle_end bigint(10) unsigned NOT NULL default '0',
-  battle_area bigint(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (battle_id)
-) TYPE=MyISAM;
+    battle_id bigserial NOT NULL,
+    battle_start bigint DEFAULT (0)::bigint,
+    battle_end bigint DEFAULT (0)::bigint,
+    battle_area bigint DEFAULT (0)::bigint
+);
 
+
+--
+-- Name: battle_entity; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE battle_entity (
-  battle_entity_uid bigint(10) unsigned NOT NULL auto_increment,
-  battle_entity_battle bigint(10) unsigned NOT NULL default '0',
-  battle_entity_id bigint(10) unsigned NOT NULL default '0',
-  battle_entity_type tinyint(1) unsigned NOT NULL default '0',
-  battle_entity_team tinyint(1) unsigned NOT NULL default '0',
-  battle_entity_name varchar(100) NOT NULL default '',
-  battle_entity_dead tinyint(1) NOT NULL default '0',
-  battle_entity_ct smallint(4) NOT NULL default '0',
-  battle_entity_max_hp smallint(6) unsigned NOT NULL default '0',
-  battle_entity_max_mp smallint(6) unsigned NOT NULL default '0',
-  battle_entity_hp smallint(6) unsigned NOT NULL default '0',
-  battle_entity_mp smallint(6) unsigned NOT NULL default '0',
-  battle_entity_str smallint(6) unsigned NOT NULL default '0',
-  battle_entity_mag smallint(6) unsigned NOT NULL default '0',
-  battle_entity_def smallint(6) unsigned NOT NULL default '0',
-  battle_entity_mgd smallint(6) unsigned NOT NULL default '0',
-  battle_entity_agl smallint(6) unsigned NOT NULL default '0',
-  battle_entity_acc smallint(6) unsigned NOT NULL default '0',
-  battle_entity_lv smallint(6) unsigned NOT NULL default '0',
-  PRIMARY KEY  (battle_entity_uid),
-  KEY battle_entity_battle (battle_entity_battle)
-) TYPE=MyISAM;
+    battle_entity_uid bigserial NOT NULL,
+    battle_entity_battle bigint DEFAULT (0)::bigint,
+    battle_entity_id bigint DEFAULT (0)::bigint,
+    battle_entity_type integer DEFAULT 0,
+    battle_entity_team integer DEFAULT 0,
+    battle_entity_name character varying(100),
+    battle_entity_dead integer DEFAULT 0,
+    battle_entity_ct integer DEFAULT 0,
+    battle_entity_max_hp integer DEFAULT 0,
+    battle_entity_max_mp integer DEFAULT 0,
+    battle_entity_hp integer DEFAULT 0,
+    battle_entity_mp integer DEFAULT 0,
+    battle_entity_str integer DEFAULT 0,
+    battle_entity_mag integer DEFAULT 0,
+    battle_entity_def integer DEFAULT 0,
+    battle_entity_mgd integer DEFAULT 0,
+    battle_entity_agl integer DEFAULT 0,
+    battle_entity_acc integer DEFAULT 0,
+    battle_entity_lv integer DEFAULT 0
+);
 
+
+--
+-- Name: battle_timer; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE battle_timer (
-  battle_timer_id bigint(10) unsigned NOT NULL auto_increment,
-  battle_timer_uid bigint(10) unsigned NOT NULL default '0',
-  battle_timer_turns tinyint(2) unsigned NOT NULL default '0',
-  battle_timer_when tinyint(1) NOT NULL default '0',
-  battle_timer_each_code text NOT NULL,
-  battle_timer_end_code text NOT NULL,
-  PRIMARY KEY  (battle_timer_id),
-  KEY battle_timer_uid (battle_timer_uid)
-) TYPE=MyISAM;
+    battle_timer_id bigserial NOT NULL,
+    battle_timer_uid bigint DEFAULT (0)::bigint,
+    battle_timer_turns integer DEFAULT 0,
+    battle_timer_when integer DEFAULT 0,
+    battle_timer_each_code text,
+    battle_timer_end_code text
+);
 
+
+--
+-- Name: cor_area_monster; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE cor_area_monster (
-  cor_area bigint(10) unsigned NOT NULL default '0',
-  cor_monster bigint(10) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    cor_area bigint DEFAULT (0)::bigint,
+    cor_monster bigint
+);
 
+
+--
+-- Name: cor_area_town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE cor_area_town (
-  cor_area bigint(10) unsigned NOT NULL default '0',
-  cor_town bigint(10) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    cor_area bigint DEFAULT (0)::bigint,
+    cor_town bigint
+);
 
+
+--
+-- Name: cor_job_abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE cor_job_abilitytype (
-  cor_job bigint(10) unsigned NOT NULL default '0',
-  cor_abilitytype bigint(10) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    cor_job bigint DEFAULT (0)::bigint,
+    cor_abilitytype bigint
+);
 
+
+--
+-- Name: cor_job_equipmenttype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE cor_job_equipmenttype (
-  cor_job bigint(10) unsigned NOT NULL default '0',
-  cor_equipmenttype bigint(10) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    cor_job bigint DEFAULT (0)::bigint,
+    cor_equipmenttype bigint
+);
 
+
+--
+-- Name: cor_job_joblv; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE cor_job_joblv (
-  cor_job bigint(10) unsigned NOT NULL default '0',
-  cor_job_req bigint(10) unsigned NOT NULL default '0',
-  cor_joblv smallint(5) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    cor_job bigint DEFAULT (0)::bigint,
+    cor_job_req bigint DEFAULT (0)::bigint,
+    cor_joblv integer
+);
 
+
+--
+-- Name: cor_monster_drop; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE cor_monster_drop (
-  cor_monster bigint(10) unsigned NOT NULL default '0',
-  cor_drop bigint(10) unsigned NOT NULL default '0',
-  cor_type tinyint(1) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    cor_monster bigint DEFAULT (0)::bigint,
+    cor_drop bigint DEFAULT (0)::bigint,
+    cor_type integer
+);
 
 
-CREATE TABLE domain (
-  domain_id bigint(10) unsigned NOT NULL auto_increment,
-  domain_name varchar(100) NOT NULL default '',
-  domain_abrev varchar(5) NOT NULL default '',
-  domain_expw_time tinyint(1) unsigned NOT NULL default '0',
-  domain_expw_max tinyint(2) unsigned NOT NULL default '0',
-  PRIMARY KEY  (domain_id),
-  UNIQUE KEY domain_name (domain_name)
-) TYPE=MyISAM;
+--
+-- Name: domain; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
+CREATE TABLE "domain" (
+    domain_id bigserial NOT NULL,
+    domain_name character varying(100),
+    domain_abrev character varying(5),
+    domain_expw_time integer DEFAULT 0,
+    domain_expw_max integer DEFAULT 0
+);
+
+
+--
+-- Name: equipment; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE equipment (
-  equipment_id bigint(10) unsigned NOT NULL auto_increment,
-  equipment_name varchar(100) NOT NULL default '',
-  equipment_image varchar(100) NOT NULL default '',
-  equipment_stat_hp smallint(6) NOT NULL default '0',
-  equipment_stat_mp smallint(6) NOT NULL default '0',
-  equipment_stat_str smallint(6) NOT NULL default '0',
-  equipment_stat_mag smallint(6) NOT NULL default '0',
-  equipment_stat_def smallint(6) NOT NULL default '0',
-  equipment_stat_mgd smallint(6) NOT NULL default '0',
-  equipment_stat_agl smallint(6) NOT NULL default '0',
-  equipment_stat_acc smallint(6) NOT NULL default '0',
-  equipment_req_lv smallint(6) unsigned NOT NULL default '0',
-  equipment_req_str smallint(5) unsigned NOT NULL default '0',
-  equipment_req_mag smallint(5) unsigned NOT NULL default '0',
-  equipment_req_agl smallint(5) unsigned NOT NULL default '0',
-  equipment_req_gender tinyint(1) NOT NULL default '0',
-  equipment_cost bigint(10) unsigned NOT NULL default '0',
-  equipment_desc text NOT NULL,
-  equipment_type bigint(10) unsigned NOT NULL default '0',
-  equipment_class bigint(10) unsigned NOT NULL default '0',
-  equipment_twohand tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (equipment_id),
-  UNIQUE KEY equipment_name (equipment_name)
-) TYPE=MyISAM;
+    equipment_id bigserial NOT NULL,
+    equipment_name character varying(100),
+    equipment_image character varying(100),
+    equipment_stat_hp integer DEFAULT 0,
+    equipment_stat_mp integer DEFAULT 0,
+    equipment_stat_str integer DEFAULT 0,
+    equipment_stat_mag integer DEFAULT 0,
+    equipment_stat_def integer DEFAULT 0,
+    equipment_stat_mgd integer DEFAULT 0,
+    equipment_stat_agl integer DEFAULT 0,
+    equipment_stat_acc integer DEFAULT 0,
+    equipment_req_lv integer DEFAULT 0,
+    equipment_req_str integer DEFAULT 0,
+    equipment_req_mag integer DEFAULT 0,
+    equipment_req_agl integer DEFAULT 0,
+    equipment_req_gender integer DEFAULT 0,
+    equipment_cost bigint DEFAULT (0)::bigint,
+    equipment_desc text,
+    equipment_type bigint DEFAULT (0)::bigint,
+    equipment_class bigint DEFAULT (0)::bigint,
+    equipment_twohand integer DEFAULT 0
+);
 
+
+--
+-- Name: equipmentclass; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE equipmentclass (
-  equipmentclass_id bigint(10) unsigned NOT NULL auto_increment,
-  equipmentclass_name varchar(25) NOT NULL default '',
-  PRIMARY KEY  (equipmentclass_id)
-) TYPE=MyISAM;
+    equipmentclass_id bigserial NOT NULL,
+    equipmentclass_name character varying(25)
+);
 
+
+--
+-- Name: equipmenttype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE equipmenttype (
-  equipmenttype_id bigint(10) unsigned NOT NULL auto_increment,
-  equipmenttype_name varchar(100) NOT NULL default '',
-  PRIMARY KEY  (equipmenttype_id)
-) TYPE=MyISAM;
+    equipmenttype_id bigserial NOT NULL,
+    equipmenttype_name character varying(100)
+);
 
+
+--
+-- Name: event; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE event (
-  event_id bigint(10) unsigned NOT NULL auto_increment,
-  event_name varchar(100) NOT NULL default '',
-  event_last bigint(10) unsigned NOT NULL default '0',
-  event_code text NOT NULL,
-  event_desc text NOT NULL,
-  PRIMARY KEY  (event_id),
-  UNIQUE KEY event_name (event_name)
-) TYPE=MyISAM;
+    event_id bigserial NOT NULL,
+    event_name character varying(100),
+    event_code text,
+    event_desc text
+);
 
+
+--
+-- Name: eventlog; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE TABLE eventlog (
+    eventlog_event integer,
+    eventlog_time integer
+);
+
+
+--
+-- Name: forum_forum; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE forum_forum (
-  forum_forum_id bigint(10) unsigned NOT NULL auto_increment,
-  forum_forum_name varchar(100) NOT NULL default '',
-  forum_forum_desc varchar(100) NOT NULL default '',
-  forum_forum_type tinyint(1) unsigned NOT NULL default '0',
-  forum_forum_parent bigint(10) unsigned NOT NULL default '0',
-  forum_forum_order tinyint(2) unsigned NOT NULL default '0',
-  forum_forum_threads bigint(10) unsigned NOT NULL default '0',
-  forum_forum_posts bigint(10) unsigned NOT NULL default '0',
-  forum_forum_last_post bigint(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (forum_forum_id),
-  KEY forum_forum_last_post (forum_forum_last_post),
-  KEY forum_forum_parent (forum_forum_parent)
-) TYPE=MyISAM;
+    forum_forum_id bigserial NOT NULL,
+    forum_forum_name character varying(100),
+    forum_forum_desc character varying(100),
+    forum_forum_type integer DEFAULT 0,
+    forum_forum_parent bigint DEFAULT (0)::bigint,
+    forum_forum_order integer DEFAULT 0,
+    forum_forum_threads bigint DEFAULT (0)::bigint,
+    forum_forum_posts bigint DEFAULT (0)::bigint,
+    forum_forum_last_post bigint DEFAULT (0)::bigint
+);
 
+
+--
+-- Name: forum_mod; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE forum_mod (
-  forum_mod_forum bigint(10) unsigned NOT NULL default '0',
-  forum_mod_user bigint(10) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    forum_mod_forum bigint DEFAULT (0)::bigint,
+    forum_mod_user bigint
+);
 
+
+--
+-- Name: forum_perm; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE forum_perm (
-  forum_perm_forum bigint(10) unsigned NOT NULL default '0',
-  forum_perm_group bigint(10) unsigned NOT NULL default '0',
-  forum_perm_view tinyint(1) unsigned NOT NULL default '0',
-  forum_perm_thread tinyint(1) unsigned NOT NULL default '0',
-  forum_perm_post tinyint(1) unsigned NOT NULL default '0',
-  forum_perm_mod tinyint(1) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    forum_perm_forum bigint DEFAULT (0)::bigint,
+    forum_perm_group bigint DEFAULT (0)::bigint,
+    forum_perm_view integer DEFAULT 0,
+    forum_perm_thread integer DEFAULT 0,
+    forum_perm_post integer DEFAULT 0,
+    forum_perm_mod integer
+);
 
+
+--
+-- Name: forum_post; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE forum_post (
-  forum_post_id bigint(10) unsigned NOT NULL auto_increment,
-  forum_post_thread bigint(10) unsigned NOT NULL default '0',
-  forum_post_text text NOT NULL,
-  forum_post_text_parsed text NOT NULL,
-  forum_post_user bigint(10) unsigned NOT NULL default '0',
-  forum_post_ip int(11) NOT NULL default '0',
-  forum_post_date bigint(10) unsigned NOT NULL default '0',
-  forum_post_edit_date bigint(10) unsigned NOT NULL default '0',
-  forum_post_edit_user bigint(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (forum_post_id),
-  KEY forum_post_thread (forum_post_thread),
-  KEY forum_post_user (forum_post_user),
-  KEY forum_post_date (forum_post_date),
-  FULLTEXT KEY forum_post_text_parsed (forum_post_text_parsed)
-) TYPE=MyISAM;
+    forum_post_id bigserial NOT NULL,
+    forum_post_thread bigint DEFAULT (0)::bigint,
+    forum_post_text text,
+    forum_post_text_parsed text,
+    forum_post_user bigint DEFAULT (0)::bigint,
+    forum_post_ip character varying(11),
+    forum_post_date bigint DEFAULT (0)::bigint,
+    forum_post_edit_date bigint DEFAULT (0)::bigint,
+    forum_post_edit_user bigint DEFAULT (0)::bigint
+);
 
+
+--
+-- Name: forum_thread; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE forum_thread (
-  forum_thread_id bigint(10) unsigned NOT NULL auto_increment,
-  forum_thread_forum bigint(10) unsigned NOT NULL default '0',
-  forum_thread_title varchar(100) NOT NULL default '',
-  forum_thread_user bigint(10) unsigned NOT NULL default '0',
-  forum_thread_date bigint(10) unsigned NOT NULL default '0',
-  forum_thread_replies bigint(10) unsigned NOT NULL default '0',
-  forum_thread_views bigint(10) unsigned NOT NULL default '0',
-  forum_thread_first_post bigint(10) unsigned NOT NULL default '0',
-  forum_thread_last_post bigint(10) unsigned NOT NULL default '0',
-  forum_thread_type tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (forum_thread_id),
-  KEY forum_thread_forum (forum_thread_forum),
-  KEY forum_thread_first_post (forum_thread_first_post),
-  KEY forum_thread_last_post (forum_thread_last_post),
-  KEY forum_thread_user (forum_thread_user)
-) TYPE=MyISAM;
+    forum_thread_id bigserial NOT NULL,
+    forum_thread_forum bigint DEFAULT (0)::bigint,
+    forum_thread_title character varying(100),
+    forum_thread_user bigint DEFAULT (0)::bigint,
+    forum_thread_date bigint DEFAULT (0)::bigint,
+    forum_thread_replies bigint DEFAULT (0)::bigint,
+    forum_thread_views bigint DEFAULT (0)::bigint,
+    forum_thread_first_post bigint DEFAULT (0)::bigint,
+    forum_thread_last_post bigint DEFAULT (0)::bigint,
+    forum_thread_type integer DEFAULT 0
+);
 
+
+--
+-- Name: forum_view; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE forum_view (
-  forum_view_user bigint(10) unsigned NOT NULL default '0',
-  forum_view_thread bigint(10) unsigned NOT NULL default '0',
-  forum_view_date bigint(10) NOT NULL default '0'
-) TYPE=MyISAM;
+    forum_view_user bigint DEFAULT (0)::bigint,
+    forum_view_thread bigint DEFAULT (0)::bigint,
+    forum_view_date bigint
+);
 
+
+--
+-- Name: group_def; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE group_def (
-  group_def_id bigint(10) unsigned NOT NULL auto_increment,
-  group_def_name varchar(100) NOT NULL default '',
-  group_def_admin tinyint(1) unsigned NOT NULL default '0',
-  group_def_news tinyint(1) unsigned NOT NULL default '0',
-  group_def_mod tinyint(1) unsigned NOT NULL default '0',
-  group_def_banned tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (group_def_id),
-  KEY group_def_admin (group_def_admin)
-) TYPE=MyISAM PACK_KEYS=0;
+    group_def_id bigserial NOT NULL,
+    group_def_name character varying(100),
+    group_def_admin integer DEFAULT 0,
+    group_def_news integer DEFAULT 0,
+    group_def_mod integer DEFAULT 0,
+    group_def_banned integer DEFAULT 0
+);
 
+
+--
+-- Name: group_user; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE group_user (
-  group_user_user bigint(10) unsigned NOT NULL default '0',
-  group_user_group bigint(10) unsigned NOT NULL default '0',
-  KEY group_user_user (group_user_user),
-  KEY group_user_group (group_user_group)
-) TYPE=MyISAM;
+    group_user_user bigint DEFAULT (0)::bigint,
+    group_user_group bigint
+);
 
+
+--
+-- Name: house; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE house (
-  house_id bigint(10) unsigned NOT NULL auto_increment,
-  house_name varchar(100) NOT NULL default '',
-  house_cost bigint(10) unsigned NOT NULL default '0',
-  house_lv smallint(6) unsigned NOT NULL default '0',
-  house_hp smallint(6) NOT NULL default '0',
-  house_mp smallint(6) NOT NULL default '0',
-  house_str smallint(6) NOT NULL default '0',
-  house_mag smallint(6) NOT NULL default '0',
-  house_def smallint(6) NOT NULL default '0',
-  house_mgd smallint(6) NOT NULL default '0',
-  house_agl smallint(6) NOT NULL default '0',
-  house_acc smallint(6) NOT NULL default '0',
-  house_money bigint(10) NOT NULL default '0',
-  PRIMARY KEY  (house_id)
-) TYPE=MyISAM;
+    house_id bigserial NOT NULL,
+    house_name character varying(100),
+    house_cost bigint DEFAULT (0)::bigint,
+    house_lv integer DEFAULT 0,
+    house_hp integer DEFAULT 0,
+    house_mp integer DEFAULT 0,
+    house_str integer DEFAULT 0,
+    house_mag integer DEFAULT 0,
+    house_def integer DEFAULT 0,
+    house_mgd integer DEFAULT 0,
+    house_agl integer DEFAULT 0,
+    house_acc integer DEFAULT 0,
+    house_money bigint DEFAULT (0)::bigint
+);
 
+
+--
+-- Name: item; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE item (
-  item_id bigint(10) unsigned NOT NULL auto_increment,
-  item_name varchar(100) NOT NULL default '',
-  item_desc text NOT NULL,
-  item_lv smallint(6) unsigned NOT NULL default '0',
-  item_useBattle tinyint(1) unsigned NOT NULL default '0',
-  item_useWorld tinyint(1) unsigned NOT NULL default '0',
-  item_codeBattle text NOT NULL,
-  item_codeWorld text NOT NULL,
-  item_buy tinyint(1) unsigned NOT NULL default '0',
-  item_sell tinyint(1) unsigned NOT NULL default '0',
-  item_cost bigint(10) unsigned NOT NULL default '0',
-  item_size smallint(6) unsigned NOT NULL default '0',
-  item_mass smallint(6) unsigned NOT NULL default '0',
-  PRIMARY KEY  (item_id)
-) TYPE=MyISAM;
+    item_id bigserial NOT NULL,
+    item_name character varying(100),
+    item_desc text,
+    item_lv integer DEFAULT 0,
+    item_usebattle integer DEFAULT 0,
+    item_useworld integer DEFAULT 0,
+    item_codebattle text,
+    item_codeworld text,
+    item_buy integer DEFAULT 0,
+    item_sell integer DEFAULT 0,
+    item_cost bigint DEFAULT (0)::bigint,
+    item_size integer DEFAULT 0,
+    item_mass integer DEFAULT 0
+);
 
+
+--
+-- Name: job; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE job (
-  job_id bigint(10) unsigned NOT NULL auto_increment,
-  job_name varchar(100) NOT NULL default '',
-  job_gender tinyint(1) NOT NULL default '0',
-  job_stat_hp smallint(6) NOT NULL default '0',
-  job_stat_mp smallint(6) NOT NULL default '0',
-  job_stat_str smallint(6) NOT NULL default '0',
-  job_stat_mag smallint(6) NOT NULL default '0',
-  job_stat_def smallint(6) NOT NULL default '0',
-  job_stat_mgd smallint(6) NOT NULL default '0',
-  job_stat_agl smallint(6) NOT NULL default '0',
-  job_stat_acc smallint(6) NOT NULL default '0',
-  job_level_hp tinyint(3) unsigned NOT NULL default '0',
-  job_level_mp tinyint(3) unsigned NOT NULL default '0',
-  job_level_str tinyint(3) unsigned NOT NULL default '0',
-  job_level_mag tinyint(3) unsigned NOT NULL default '0',
-  job_level_def tinyint(3) unsigned NOT NULL default '0',
-  job_level_mgd tinyint(3) unsigned NOT NULL default '0',
-  job_level_agl tinyint(3) unsigned NOT NULL default '0',
-  job_level_acc tinyint(3) unsigned NOT NULL default '0',
-  job_wage smallint(5) unsigned NOT NULL default '0',
-  job_desc text NOT NULL,
-  PRIMARY KEY  (job_id),
-  UNIQUE KEY job_name (job_name)
-) TYPE=MyISAM;
+    job_id bigserial NOT NULL,
+    job_name character varying(100),
+    job_gender integer DEFAULT 0,
+    job_stat_hp integer DEFAULT 0,
+    job_stat_mp integer DEFAULT 0,
+    job_stat_str integer DEFAULT 0,
+    job_stat_mag integer DEFAULT 0,
+    job_stat_def integer DEFAULT 0,
+    job_stat_mgd integer DEFAULT 0,
+    job_stat_agl integer DEFAULT 0,
+    job_stat_acc integer DEFAULT 0,
+    job_level_hp integer DEFAULT 0,
+    job_level_mp integer DEFAULT 0,
+    job_level_str integer DEFAULT 0,
+    job_level_mag integer DEFAULT 0,
+    job_level_def integer DEFAULT 0,
+    job_level_mgd integer DEFAULT 0,
+    job_level_agl integer DEFAULT 0,
+    job_level_acc integer DEFAULT 0,
+    job_wage integer DEFAULT 0,
+    job_desc text
+);
 
+
+--
+-- Name: monster; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE monster (
-  monster_id bigint(10) unsigned NOT NULL auto_increment,
-  monster_name varchar(100) NOT NULL default '',
-  monster_image varchar(100) NOT NULL default '',
-  monster_hp smallint(6) unsigned NOT NULL default '0',
-  monster_mp smallint(6) unsigned NOT NULL default '0',
-  monster_str smallint(6) unsigned NOT NULL default '0',
-  monster_mag smallint(6) unsigned NOT NULL default '0',
-  monster_def smallint(6) unsigned NOT NULL default '0',
-  monster_mgd smallint(6) unsigned NOT NULL default '0',
-  monster_agl smallint(6) unsigned NOT NULL default '0',
-  monster_acc smallint(6) unsigned NOT NULL default '0',
-  monster_lv smallint(4) unsigned NOT NULL default '0',
-  monster_exp tinyint(3) unsigned NOT NULL default '0',
-  monster_gil smallint(1) unsigned NOT NULL default '0',
-  monster_type bigint(10) unsigned NOT NULL default '0',
-  monster_desc text NOT NULL,
-  PRIMARY KEY  (monster_id)
-) TYPE=MyISAM;
+    monster_id bigserial NOT NULL,
+    monster_name character varying(100),
+    monster_image character varying(100),
+    monster_hp integer DEFAULT 0,
+    monster_mp integer DEFAULT 0,
+    monster_str integer DEFAULT 0,
+    monster_mag integer DEFAULT 0,
+    monster_def integer DEFAULT 0,
+    monster_mgd integer DEFAULT 0,
+    monster_agl integer DEFAULT 0,
+    monster_acc integer DEFAULT 0,
+    monster_lv integer DEFAULT 0,
+    monster_exp integer DEFAULT 0,
+    monster_gil integer DEFAULT 0,
+    monster_type bigint DEFAULT (0)::bigint,
+    monster_desc text
+);
 
+
+--
+-- Name: monstertype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE monstertype (
-  monstertype_id bigint(10) unsigned NOT NULL auto_increment,
-  monstertype_name varchar(100) NOT NULL default '',
-  PRIMARY KEY  (monstertype_id)
-) TYPE=MyISAM PACK_KEYS=0;
+    monstertype_id bigserial NOT NULL,
+    monstertype_name character varying(100)
+);
 
+
+--
+-- Name: player; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE player (
-  player_id bigint(10) unsigned NOT NULL auto_increment,
-  player_name varchar(100) NOT NULL default '',
-  player_user bigint(10) unsigned NOT NULL default '0',
-  player_register bigint(10) unsigned NOT NULL default '0',
-  player_last bigint(10) unsigned NOT NULL default '0',
-  player_domain bigint(10) unsigned NOT NULL default '0',
-  player_job bigint(10) unsigned NOT NULL default '0',
-  player_battle bigint(10) unsigned NOT NULL default '0',
-  player_expw tinyint(2) unsigned NOT NULL default '0',
-  player_town bigint(10) unsigned NOT NULL default '0',
-  player_house bigint(10) unsigned NOT NULL default '0',
-  player_lv smallint(6) unsigned NOT NULL default '1',
-  player_exp bigint(10) unsigned NOT NULL default '0',
-  player_money bigint(10) unsigned NOT NULL default '0',
-  player_nomod_hp smallint(6) unsigned NOT NULL default '100',
-  player_nomod_mp smallint(6) unsigned NOT NULL default '50',
-  player_nomod_str smallint(6) unsigned NOT NULL default '20',
-  player_nomod_mag smallint(6) unsigned NOT NULL default '10',
-  player_nomod_def smallint(6) unsigned NOT NULL default '10',
-  player_nomod_mgd smallint(6) unsigned NOT NULL default '10',
-  player_nomod_agl smallint(6) unsigned NOT NULL default '10',
-  player_nomod_acc smallint(6) unsigned NOT NULL default '10',
-  player_gender tinyint(1) NOT NULL default '0',
-  player_mod_hp smallint(6) unsigned NOT NULL default '0',
-  player_mod_mp smallint(6) unsigned NOT NULL default '0',
-  player_mod_str smallint(6) unsigned NOT NULL default '0',
-  player_mod_def smallint(6) unsigned NOT NULL default '0',
-  player_mod_mag smallint(6) unsigned NOT NULL default '0',
-  player_mod_mgd smallint(6) unsigned NOT NULL default '0',
-  player_mod_agl smallint(6) unsigned NOT NULL default '0',
-  player_mod_acc smallint(6) unsigned NOT NULL default '0',
-  PRIMARY KEY  (player_id),
-  KEY player_user (player_user),
-  KEY player_battle (player_battle)
-) TYPE=MyISAM;
+    player_id bigserial NOT NULL,
+    player_name character varying(100),
+    player_user bigint DEFAULT (0)::bigint,
+    player_register bigint DEFAULT (0)::bigint,
+    player_last bigint DEFAULT (0)::bigint,
+    player_domain bigint DEFAULT (0)::bigint,
+    player_job bigint DEFAULT (0)::bigint,
+    player_battle bigint DEFAULT (0)::bigint,
+    player_expw integer DEFAULT 0,
+    player_town bigint DEFAULT (0)::bigint,
+    player_house bigint DEFAULT (0)::bigint,
+    player_lv integer DEFAULT 1,
+    player_exp bigint DEFAULT (0)::bigint,
+    player_money bigint DEFAULT (0)::bigint,
+    player_nomod_hp integer DEFAULT 100,
+    player_nomod_mp integer DEFAULT 50,
+    player_nomod_str integer DEFAULT 20,
+    player_nomod_mag integer DEFAULT 10,
+    player_nomod_def integer DEFAULT 10,
+    player_nomod_mgd integer DEFAULT 10,
+    player_nomod_agl integer DEFAULT 10,
+    player_nomod_acc integer DEFAULT 10,
+    player_gender integer DEFAULT 0,
+    player_mod_hp integer DEFAULT 0,
+    player_mod_mp integer DEFAULT 0,
+    player_mod_str integer DEFAULT 0,
+    player_mod_def integer DEFAULT 0,
+    player_mod_mag integer DEFAULT 0,
+    player_mod_mgd integer DEFAULT 0,
+    player_mod_agl integer DEFAULT 0,
+    player_mod_acc integer DEFAULT 0
+);
 
+
+--
+-- Name: player_ability; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE player_ability (
-  player_ability_id bigint(10) unsigned NOT NULL auto_increment,
-  player_ability_player bigint(10) unsigned NOT NULL default '0',
-  player_ability_ability bigint(10) unsigned NOT NULL default '0',
-  player_ability_level tinyint(2) unsigned NOT NULL default '0',
-  player_ability_display tinyint(1) unsigned NOT NULL default '0',
-  player_ability_order smallint(5) unsigned NOT NULL default '0',
-  PRIMARY KEY  (player_ability_id),
-  KEY player_ability_player (player_ability_player)
-) TYPE=MyISAM;
+    player_ability_id bigserial NOT NULL,
+    player_ability_player bigint DEFAULT (0)::bigint,
+    player_ability_ability bigint DEFAULT (0)::bigint,
+    player_ability_level integer DEFAULT 0,
+    player_ability_display integer DEFAULT 0,
+    player_ability_order integer DEFAULT 0
+);
 
+
+--
+-- Name: player_abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE player_abilitytype (
-  player_abilitytype_player bigint(10) unsigned NOT NULL default '0',
-  player_abilitytype_type bigint(10) unsigned NOT NULL default '0',
-  player_abilitytype_ap smallint(6) unsigned NOT NULL default '0',
-  player_abilitytype_aptot smallint(6) NOT NULL default '0'
-) TYPE=MyISAM;
+    player_abilitytype_player bigint DEFAULT (0)::bigint,
+    player_abilitytype_type bigint DEFAULT (0)::bigint,
+    player_abilitytype_ap integer DEFAULT 0,
+    player_abilitytype_aptot integer
+);
 
+
+--
+-- Name: player_equipment; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE player_equipment (
-  player_equipment_id bigint(10) unsigned NOT NULL auto_increment,
-  player_equipment_equipment bigint(10) unsigned NOT NULL default '0',
-  player_equipment_player bigint(10) unsigned NOT NULL default '0',
-  player_equipment_equipped tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (player_equipment_id)
-) TYPE=MyISAM;
+    player_equipment_id bigserial NOT NULL,
+    player_equipment_equipment bigint DEFAULT (0)::bigint,
+    player_equipment_player bigint DEFAULT (0)::bigint,
+    player_equipment_equipped integer DEFAULT 0
+);
 
+
+--
+-- Name: player_item; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE player_item (
-  player_item_item bigint(10) unsigned NOT NULL default '0',
-  player_item_player bigint(10) unsigned NOT NULL default '0'
-) TYPE=MyISAM;
+    player_item_item bigint DEFAULT (0)::bigint,
+    player_item_player bigint
+);
 
+
+--
+-- Name: player_job; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE player_job (
-  player_job_player bigint(10) unsigned NOT NULL default '0',
-  player_job_job bigint(10) unsigned NOT NULL default '0',
-  player_job_lv smallint(6) unsigned NOT NULL default '0',
-  player_job_exp bigint(10) unsigned NOT NULL default '0',
-  KEY player_job_player (player_job_player),
-  KEY player_job_job (player_job_job)
-) TYPE=MyISAM;
+    player_job_player bigint DEFAULT (0)::bigint,
+    player_job_job bigint DEFAULT (0)::bigint,
+    player_job_lv integer DEFAULT 0,
+    player_job_exp bigint
+);
 
+
+--
+-- Name: pm; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE pm (
-  pm_id bigint(10) unsigned NOT NULL auto_increment,
-  pm_from bigint(10) unsigned NOT NULL default '0',
-  pm_to bigint(10) unsigned NOT NULL default '0',
-  pm_date bigint(10) unsigned NOT NULL default '0',
-  pm_read tinyint(1) unsigned NOT NULL default '0',
-  pm_subject varchar(100) NOT NULL default '',
-  pm_text text NOT NULL,
-  PRIMARY KEY  (pm_id),
-  KEY pm_read (pm_read),
-  KEY pm_to (pm_to)
-) TYPE=MyISAM;
+    pm_id bigserial NOT NULL,
+    pm_from bigint DEFAULT (0)::bigint,
+    pm_to bigint DEFAULT (0)::bigint,
+    pm_date bigint DEFAULT (0)::bigint,
+    pm_read integer DEFAULT 0,
+    pm_subject character varying(100),
+    pm_text text
+);
 
 
-CREATE TABLE session (
-  session_id varchar(32) NOT NULL default '',
-  session_ip int(11) NOT NULL default '0',
-  session_host varchar(100) NOT NULL default '',
-  session_user bigint(10) unsigned NOT NULL default '0',
-  session_start bigint(10) unsigned NOT NULL default '0',
-  session_current bigint(10) unsigned NOT NULL default '0',
-  session_action bigint(10) unsigned NOT NULL default '0',
-  session_action_data varchar(100) NOT NULL default '0',
-  PRIMARY KEY  (session_id)
-) TYPE=HEAP;
+--
+-- Name: session; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
+CREATE TABLE "session" (
+    session_id character varying(32) NOT NULL,
+    session_ip character varying(11),
+    session_host character varying(100),
+    session_uid bigint DEFAULT (0)::bigint,
+    session_start bigint DEFAULT (0)::bigint,
+    session_current bigint DEFAULT (0)::bigint,
+    session_action bigint DEFAULT (0)::bigint,
+    session_action_data character varying(100)
+);
+
+
+--
+-- Name: site; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE site (
-  site_tag varchar(100) NOT NULL default '',
-  site_orderid smallint(5) unsigned NOT NULL default '0',
-  site_type varchar(100) NOT NULL default '',
-  site_main text NOT NULL,
-  site_secondary text NOT NULL,
-  site_link varchar(250) NOT NULL default '',
-  site_section varchar(100) NOT NULL default '',
-  site_logged tinyint(1) NOT NULL default '0',
-  site_admin tinyint(1) NOT NULL default '0',
-  site_comment text NOT NULL
-) TYPE=MyISAM;
+    site_tag character varying(100),
+    site_orderid integer DEFAULT 0,
+    site_type character varying(100),
+    site_main text,
+    site_secondary text,
+    site_link character varying(250),
+    site_section character varying(100),
+    site_logged integer DEFAULT 0,
+    site_admin integer DEFAULT 0,
+    site_comment text
+);
 
+
+--
+-- Name: skin; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE skin (
-  skin_name varchar(100) NOT NULL default '',
-  skin_creator varchar(100) NOT NULL default '',
-  skin_www varchar(100) NOT NULL default '',
-  PRIMARY KEY  (skin_name)
-) TYPE=MyISAM;
+    skin_name character varying(100) NOT NULL,
+    skin_creator character varying(100),
+    skin_www character varying(100)
+);
 
+
+--
+-- Name: stats; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE stats (
-  stats_timestamp bigint(10) unsigned NOT NULL default '0',
-  stats_user bigint(10) unsigned NOT NULL default '0',
-  stats_action smallint(4) unsigned NOT NULL default '0',
-  stats_skin varchar(15) NOT NULL default '',
-  stats_ip bigint(11) NOT NULL default '0'
-) TYPE=MyISAM;
+    stats_timestamp bigint DEFAULT (0)::bigint,
+    stats_user bigint DEFAULT (0)::bigint,
+    stats_action integer DEFAULT 0,
+    stats_skin character varying(15),
+    stats_ip character varying(11)
+);
 
+
+--
+-- Name: town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
 
 CREATE TABLE town (
-  town_id bigint(10) unsigned NOT NULL auto_increment,
-  town_name varchar(100) NOT NULL default '',
-  town_lv smallint(6) unsigned NOT NULL default '0',
-  town_desc text NOT NULL,
-  town_item_min_lv smallint(6) unsigned NOT NULL default '0',
-  town_item_max_lv smallint(6) unsigned NOT NULL default '0',
-  town_reqs text NOT NULL,
-  town_reqs_desc text NOT NULL,
-  PRIMARY KEY  (town_id),
-  UNIQUE KEY town_name (town_name)
-) TYPE=MyISAM PACK_KEYS=0;
+    town_id bigserial NOT NULL,
+    town_name character varying(100),
+    town_lv integer DEFAULT 0,
+    town_desc text,
+    town_item_min_lv integer DEFAULT 0,
+    town_item_max_lv integer DEFAULT 0,
+    town_reqs text,
+    town_reqs_desc text
+);
 
 
-CREATE TABLE user (
-  user_id bigint(10) unsigned NOT NULL auto_increment,
-  user_name varchar(100) NOT NULL default '',
-  user_pass varchar(100) NOT NULL default '',
-  user_email varchar(100) NOT NULL default '',
-  user_register bigint(10) unsigned NOT NULL default '0',
-  user_last bigint(10) unsigned NOT NULL default '0',
-  user_last_session bigint(10) unsigned NOT NULL default '0',
-  user_avatar_type varchar(20) NOT NULL default '',
-  user_avatar_data blob NOT NULL,
-  user_sig text NOT NULL,
-  user_posts bigint(10) unsigned NOT NULL default '0',
-  user_aim varchar(100) NOT NULL default '',
-  user_yahoo varchar(100) NOT NULL default '',
-  user_msn varchar(100) NOT NULL default '',
-  user_icq varchar(100) NOT NULL default '',
-  user_www varchar(200) NOT NULL default '',
-  user_timezone varchar(4) NOT NULL default '',
-  user_battle_verbose tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (user_id),
-  UNIQUE KEY user_name (user_name),
-  KEY user_register (user_register),
-  KEY user_last (user_last),
-  KEY user_pass (user_pass)
-) TYPE=MyISAM;
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE TABLE users (
+    user_id bigserial NOT NULL,
+    user_name character varying(100),
+    user_pass character varying(100),
+    user_email character varying(100),
+    user_register bigint DEFAULT (0)::bigint,
+    user_last bigint DEFAULT (0)::bigint,
+    user_last_session bigint DEFAULT (0)::bigint,
+    user_avatar_type character varying(20),
+    user_avatar_data bytea,
+    user_sig text,
+    user_posts bigint DEFAULT (0)::bigint,
+    user_aim character varying(100),
+    user_yahoo character varying(100),
+    user_msn character varying(100),
+    user_icq character varying(100),
+    user_www character varying(200),
+    user_timezone character varying(4),
+    user_battle_verbose integer DEFAULT 0
+);
+
+
+--
+-- Name: ability_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY ability
+    ADD CONSTRAINT ability_pkey PRIMARY KEY (ability_id);
+
+
+--
+-- Name: abilitytype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY abilitytype
+    ADD CONSTRAINT abilitytype_pkey PRIMARY KEY (abilitytype_id);
+
+
+--
+-- Name: area_area_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY area
+    ADD CONSTRAINT area_area_name_key UNIQUE (area_name);
+
+
+--
+-- Name: area_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY area
+    ADD CONSTRAINT area_pkey PRIMARY KEY (area_id);
+
+
+--
+-- Name: battle_entity_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY battle_entity
+    ADD CONSTRAINT battle_entity_pkey PRIMARY KEY (battle_entity_uid);
+
+
+--
+-- Name: battle_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY battle
+    ADD CONSTRAINT battle_pkey PRIMARY KEY (battle_id);
+
+
+--
+-- Name: battle_timer_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY battle_timer
+    ADD CONSTRAINT battle_timer_pkey PRIMARY KEY (battle_timer_id);
+
+
+--
+-- Name: domain_domain_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY "domain"
+    ADD CONSTRAINT domain_domain_name_key UNIQUE (domain_name);
+
+
+--
+-- Name: domain_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY "domain"
+    ADD CONSTRAINT domain_pkey PRIMARY KEY (domain_id);
+
+
+--
+-- Name: equipment_equipment_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY equipment
+    ADD CONSTRAINT equipment_equipment_name_key UNIQUE (equipment_name);
+
+
+--
+-- Name: equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY equipment
+    ADD CONSTRAINT equipment_pkey PRIMARY KEY (equipment_id);
+
+
+--
+-- Name: equipmentclass_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY equipmentclass
+    ADD CONSTRAINT equipmentclass_pkey PRIMARY KEY (equipmentclass_id);
+
+
+--
+-- Name: equipmenttype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY equipmenttype
+    ADD CONSTRAINT equipmenttype_pkey PRIMARY KEY (equipmenttype_id);
+
+
+--
+-- Name: event_event_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY event
+    ADD CONSTRAINT event_event_name_key UNIQUE (event_name);
+
+
+--
+-- Name: event_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY event
+    ADD CONSTRAINT event_pkey PRIMARY KEY (event_id);
+
+
+--
+-- Name: forum_forum_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY forum_forum
+    ADD CONSTRAINT forum_forum_pkey PRIMARY KEY (forum_forum_id);
+
+
+--
+-- Name: forum_post_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY forum_post
+    ADD CONSTRAINT forum_post_pkey PRIMARY KEY (forum_post_id);
+
+
+--
+-- Name: forum_thread_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY forum_thread
+    ADD CONSTRAINT forum_thread_pkey PRIMARY KEY (forum_thread_id);
+
+
+--
+-- Name: group_def_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY group_def
+    ADD CONSTRAINT group_def_pkey PRIMARY KEY (group_def_id);
+
+
+--
+-- Name: house_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY house
+    ADD CONSTRAINT house_pkey PRIMARY KEY (house_id);
+
+
+--
+-- Name: item_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY item
+    ADD CONSTRAINT item_pkey PRIMARY KEY (item_id);
+
+
+--
+-- Name: job_job_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY job
+    ADD CONSTRAINT job_job_name_key UNIQUE (job_name);
+
+
+--
+-- Name: job_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY job
+    ADD CONSTRAINT job_pkey PRIMARY KEY (job_id);
+
+
+--
+-- Name: monster_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY monster
+    ADD CONSTRAINT monster_pkey PRIMARY KEY (monster_id);
+
+
+--
+-- Name: monstertype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY monstertype
+    ADD CONSTRAINT monstertype_pkey PRIMARY KEY (monstertype_id);
+
+
+--
+-- Name: player_ability_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY player_ability
+    ADD CONSTRAINT player_ability_pkey PRIMARY KEY (player_ability_id);
+
+
+--
+-- Name: player_equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY player_equipment
+    ADD CONSTRAINT player_equipment_pkey PRIMARY KEY (player_equipment_id);
+
+
+--
+-- Name: player_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY player
+    ADD CONSTRAINT player_pkey PRIMARY KEY (player_id);
+
+
+--
+-- Name: pm_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY pm
+    ADD CONSTRAINT pm_pkey PRIMARY KEY (pm_id);
+
+
+--
+-- Name: session_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY "session"
+    ADD CONSTRAINT session_pkey PRIMARY KEY (session_id);
+
+
+--
+-- Name: skin_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY skin
+    ADD CONSTRAINT skin_pkey PRIMARY KEY (skin_name);
+
+
+--
+-- Name: town_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY town
+    ADD CONSTRAINT town_pkey PRIMARY KEY (town_id);
+
+
+--
+-- Name: town_town_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY town
+    ADD CONSTRAINT town_town_name_key UNIQUE (town_name);
+
+
+--
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: users_user_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_user_name_key UNIQUE (user_name);
+
+
+--
+-- PostgreSQL database dump complete
+--
 

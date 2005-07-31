@@ -101,7 +101,7 @@ setCIcookie('domain', $dom);
 // check to see if we have a valid user
 
 if($id && $pass)
-	$res = $db->query('select user.*, domain_abrev from user left join domain on domain_id=' . CI_DOMAIN . ' where user_id=' . $id . ' and user_pass="' . $pass . '"');
+	$res = $db->query('select users.*, domain_abrev from users left join domain on domain_id=' . CI_DOMAIN . ' where user_id=' . $id . ' and user_pass=\'' . $pass . '\'');
 else
 	$res = array();
 
@@ -232,7 +232,7 @@ else
 	}
 }
 
-$db->query('insert into stats values (' . TIME . ', ' . ID . ', ' . $SESSION_ACTION . ', "' . CI_TEMPLATE . '", ' . REMOTE_ADDR . ')');
+$db->query('insert into stats values (' . TIME . ', ' . ID . ', ' . $SESSION_ACTION . ', \'' . CI_TEMPLATE . '\', ' . REMOTE_ADDR . ')');
 
 ob_start();
 eval('?>' . $template);
@@ -261,7 +261,7 @@ echo $content;
 
 echo '<p/>' . $message;
 
-if(isset($_GET['sqlprofile']))
+if(isset($_GET['sqlprofile']) || true)
 {
 	foreach($db->queries as $q)
 	{

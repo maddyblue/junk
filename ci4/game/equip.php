@@ -45,7 +45,7 @@ else if(isset($_POST['submit']))
 	{
 		if(is_int($key) && $key > 0 && intval($val) > 0)
 		{
-			$db->query('update player_equipment set player_equipment_equipped=1 where player_equipment_id=' . $val . ' and player_equipment_player=' . $PLAYER['player_id']);
+			$db->query('update player_equipment set player_equipment_equipped=1 where player_equipment_id=' . $val);
 		}
 	}
 
@@ -117,9 +117,9 @@ else
 
 	// get all equipment, and mark if unwearable
 	$res = $db->query('
-		select * from player_equipment, equipment, equipmenttype, equipmentclass
+		select distinct on (equipment_id) equipmentclass_name, player_equipment_id, player_equipment_equipped, equipment_name from player_equipment, equipment, equipmenttype, equipmentclass
 		where player_equipment_player=' . $PLAYER['player_id'] . ' and equipment_id=player_equipment_equipment and equipmenttype_id=equipment_type and equipmentclass_id=equipment_class ' . $jobq . '
-		group by equipment_id order by equipment_req_lv
+		order by equipment_id, player_equipment_equipped desc
 	');
 
 	// go through the results and group by class

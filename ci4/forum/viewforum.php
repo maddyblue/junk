@@ -72,8 +72,8 @@ function newForum($f, $uls)
 				3) new posts after the last view time of a thread
 		*/
 		$ret = $db->query('
-		SELECT count(*) count
-		FROM forum_thread, forum_post
+		SELECT count(*) as count
+		FROM forum_post, forum_thread
 		LEFT JOIN forum_view ON
 			forum_view_thread=forum_thread_id
 			AND forum_view_user=' . ID . '
@@ -103,7 +103,7 @@ function forumList(&$array, $id, $topdepth, $depth, $uls)
 	FROM forum_forum
 	LEFT JOIN forum_post ON forum_post_id = forum_forum_last_post
 	LEFT JOIN forum_thread ON forum_thread_id = forum_post_thread
-	LEFT JOIN user ON user_id = forum_post_user
+	LEFT JOIN users ON user_id = forum_post_user
 	WHERE forum_forum_parent = ' . $id . '
 	ORDER BY forum_forum_order');
 
@@ -183,22 +183,22 @@ function threadList($forumid, $page, $threadsPP, $uls)
 
 	// simultaneously get usernames and post data for first and last post by doing complex self-joins
 	$ret = $db->query('
-	SELECT forum_thread.*, plast.forum_post_date pld, ufirst.user_name ufn, ufirst.user_id ufi, ulast.user_name uln, ulast.user_id uli
-	FROM forum_thread, forum_post pfirst, forum_post plast, user ufirst, user ulast
+	SELECT forum_thread.*, plast.forum_post_date as pld, ufirst.user_name as ufn, ufirst.user_id as ufi, ulast.user_name as uln, ulast.user_id as uli
+	FROM forum_thread, forum_post pfirst, forum_post plast, users ufirst, users ulast
 	WHERE forum_thread_forum=' . $forumid . '
 	AND pfirst.forum_post_id = forum_thread_first_post
 	AND plast.forum_post_id = forum_thread_last_post
 	AND pfirst.forum_post_user = ufirst.user_id
 	AND plast.forum_post_user = ulast.user_id
 	ORDER BY plast.forum_post_date DESC
-	LIMIT ' . (($page - 1) * $threadsPP) . ', ' . $threadsPP);
+	LIMIT ' . $threadsPP . ' OFFSET ' . (($page - 1) * $threadsPP));
 
 	foreach($ret as $row)
 	{
 		$totpages = ceil(($row['forum_thread_replies'] + 1) / FORUM_POSTS_PP);
 		$pageList = pageList($totpages, FORUM_THREAD_PAGES, FORUM_POSTS_PP, 'a=viewthread&t=' . $row['forum_thread_id']);
 		if($pageList)
-			$pageList = '<font class="small">' . $pageList . '</font>';
+			$pageList = '<font class=small>' . $pageList . '</font>';
 
 		array_push($array, array(
 			(newThread($row, $uls) ? '* ' : '') .
@@ -240,7 +240,7 @@ $read = isset($_GET['read']) && $_GET['read'] == 'true' && LOGGED ? true : false
 
 if($read)
 {
-	$where = $forumid == 0 ? '' : ' and forum_thread_forum="' . $forumid . '"';
+	$where = $forumid == 0 ? '' : ' and forum_thread_forum=' . $forumid;
 
 	$db->query('delete from forum_view where forum_view_user=' . ID);
 

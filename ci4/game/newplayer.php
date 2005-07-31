@@ -46,7 +46,7 @@ function display($name, $domain, $gender, $town)
 	$genderlist = '<option ' . ($gender == 'M' ? 'selected' : '') . '>M</option>' .
 		'<option ' . ($gender == 'F' ? 'selected' : '') . '>F</option>';
 
-	$res = $db->query('select town_name, town_id from town where town_lv=0 order by rand()');
+	$res = $db->query('select town_name, town_id from town where town_lv=0 order by random()');
 
 	$townlist = '';
 
@@ -106,7 +106,7 @@ if(LOGGED)
 			$fail = true;
 		}
 
-		$existing = $db->query('select player_id from player where player_name="' . $name . '" and player_domain=' . $domain);
+		$existing = $db->query('select player_id from player where player_name=\'' . $name . '\' and player_domain=' . $domain);
 
 		if(count($existing))
 		{
@@ -129,7 +129,7 @@ if(LOGGED)
 		{
 			$db->query('insert into player (player_user, player_name, player_gender, player_domain, player_register, player_last, player_job, player_town) values (' .
 			ID . ', ' .
-			'"' . $name . '", ' .
+			'\'' . $name . '\', ' .
 			($gender == 'M' ? '1' : '-1') . ', ' .
 			$domain . ', ' .
 			TIME . ', ' .
@@ -138,7 +138,7 @@ if(LOGGED)
 			$town .
 			')');
 
-			$pid = $db->query('select player_id from player where player_user=' . ID . ' and player_domain="' . $domain . '"');
+			$pid = $db->query('select player_id from player where player_user=' . ID . ' and player_domain=' . $domain);
 
 			// create an entry in player_job
 			$db->query('insert into player_job values (' . $pid[0]['player_id'] . ', 1, 1, 0)');

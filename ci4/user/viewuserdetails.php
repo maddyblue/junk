@@ -58,7 +58,7 @@ if(isset($_POST['delete']) && $_POST['delete'] == 'Delete' && isset($_POST['play
 $user = isset($_GET['user']) ? intval($_GET['user']) :
 	(LOGGED ? $USER['user_id'] : '0');
 
-$res = $db->query('select * from user where user_id=' . $user);
+$res = $db->query('select * from users where user_id=' . $user);
 $players = $db->query('select player_name, player_id, domain_id, domain_name from player, domain where player_user=' . $user . ' and domain_id=player_domain order by domain_expw_time, domain_expw_max');
 
 if(count($res) == 1)

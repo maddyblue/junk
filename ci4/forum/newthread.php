@@ -109,17 +109,17 @@ else
 
 			$lastthread = $db->insert('insert into forum_thread (forum_thread_forum, forum_thread_title, forum_thread_user, forum_thread_date, forum_thread_type) values (' .
 				$forum . ',' .
-				'"' . $subject . '",' .
+				'\'' . $subject . '\',' .
 				ID . ',' .
 				TIME . ',' .
 				'1' .
-				')');
+				')', 'forum_thread');
 			if($lastthread != FALSE)
 			{
 				$db->query('insert into forum_post (forum_post_thread, forum_post_text, forum_post_text_parsed, forum_post_user, forum_post_date, forum_post_ip) values (' .
 					$lastthread . ',' .
-					'"' . $post . '",' .
-					'"' . mysql_escape_string(parsePostText($_POST['post'])) . '",' .
+					'\'' . $post . '\',' .
+					'\'' . pg_escape_string(parsePostText($_POST['post'])) . '\',' .
 					ID  . ',' .
 					TIME . ',' .
 					REMOTE_ADDR .

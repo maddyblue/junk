@@ -7,7 +7,7 @@
 /* All addresses (filesystem or www) must end in '/'. */
 
 define('CI_FS_PATH', '/htdocs/ci4/');
-define('CI_WWW_DOMAIN', 'mythran.dolmant.net');
+define('CI_WWW_DOMAIN', 'localhost');
 define('CI_WWW_PATH', '/ci4/'); // '/' if root. must begin with '/'
 define('CI_AVATAR_PATH', 'images/avatar/');
 define('CI_SMILIE_PATH', 'images/smilies/');
@@ -30,7 +30,7 @@ define('SECTION_MANUAL', 'manual');
 define('FORUM_THREADS_PP', 30);
 define('FORUM_POSTS_PP', 20);
 define('FORUM_THREAD_PAGES', 15);
-define('NEWSFORUM', 9);
+define('NEWSFORUM', 1);
 
 /* Don't mess with these */
 

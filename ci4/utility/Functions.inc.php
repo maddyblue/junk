@@ -158,7 +158,7 @@ function getSiteArray($tag)
 			break;
 	}
 
-	return $db->query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag="' . $tag . '" and site_admin <= ' . ADMIN . ' order by site_orderid');
+	return $db->query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag=\'' . $tag . '\' and site_admin <= ' . ADMIN . ' order by site_orderid');
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
@@ -511,7 +511,7 @@ function setCIcookie($name, $value)
 function setCIcookieReal($name, $value, $secure)
 {
 	// 60*60*24*7 = 604800 = 7 days
-	setCookie('CI_' . $name, $value, TIME + 604800, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
+	setCookie('CI_' . $name, $value, TIME + 604800, CI_WWW_PATH);
 }
 
 // Clear a cookie made with setCICookie.
@@ -525,7 +525,7 @@ function deleteCIcookie($name)
 
 function deleteCIcookieReal($name, $secure)
 {
-	setCookie('CI_' . $name, '', 0, CI_WWW_PATH, '.' . CI_WWW_DOMAIN, $secure);
+	setCookie('CI_' . $name, '', 0, CI_WWW_PATH);
 }
 
 // Retrieve a cookie set with setCICookie.
@@ -544,7 +544,9 @@ function getCIcookie($name)
 // Formats the given timestamp in the standard format.
 function getTime($ts = -1)
 {
-	if($ts == -1)
+	if($ts == '')
+		return 'Never';
+	else if($ts == -1)
 		$ts = TIME;
 
 	return str_replace(' ', '&nbsp;', gmdate('d M y g:i a', $ts + TZOFFSET));
@@ -570,11 +572,11 @@ function getDomainName($domain = 0)
  * user's data, this works: getDBData('user_name'). But, with the $USER
  * variable, this should never be called with just one argument.
  */
-function getDBData($field, $search = ID, $where = 'user_id', $table = 'user')
+function getDBData($field, $search = ID, $where = 'user_id', $table = 'users')
 {
 	global $db;
 
-	$ret = $db->query('select ' . $field . ' from ' . $table . ' where ' . $where . '="' . $search . '"');
+	$ret = $db->query('select ' . $field . ' from ' . $table . ' where ' . $where . '=\'' . $search . '\'');
 
 	if(count($ret) > 0)
 		return $ret[0][$field];

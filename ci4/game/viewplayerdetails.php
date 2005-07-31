@@ -40,7 +40,7 @@ function sign($v)
 $player = isset($_GET['player']) ? intval($_GET['player']) :
 	(LOGGED ? $PLAYER['player_id'] : '0');
 
-$res = $db->query('select player.*, user_name, domain_name, job_name, town_name, house_name from player, user, domain, job
+$res = $db->query('select player.*, user_name, domain_name, job_name, town_name, house_name from job, users, domain, player
 	left join town on town_id=player_town
 	left join house on house_id=player_house
 	where player_id=' . $player . ' and player_domain=domain_id and player_job=job_id and player_user=user_id');
@@ -112,7 +112,7 @@ if(count($res) == 1)
 
 	// now make the job table
 
-	$res = $db->query('select job_id, job_name, player_job_lv, player_job_exp from player_job, job where player_job_player="' . $player . '" and job_id=player_job_job');
+	$res = $db->query('select job_id, job_name, player_job_lv, player_job_exp from player_job, job where player_job_player=' . $player . ' and job_id=player_job_job');
 
 	$array = array(array('Job', 'Level', 'Experience'));
 
@@ -155,7 +155,7 @@ if(count($res) == 1)
 
 	echo '<p/>Equipment:<p/>';
 
-	$res = $db->query('select count(*) c, equipment_id, equipment_name from player_equipment, equipment where equipment_id=player_equipment_equipment and player_equipment_player=' . $player . ' group by equipment_id order by equipment_name');
+	$res = $db->query('select count(*) as c, equipment_id, equipment_name from player_equipment, equipment where equipment_id=player_equipment_equipment and player_equipment_player=' . $player . ' group by equipment_id, equipment_name order by equipment_name');
 
 	for($i = 0; $i < count($res); $i++)
 	{

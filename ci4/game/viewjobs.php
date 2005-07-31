@@ -78,7 +78,7 @@ for($i = 0; $i < count($res); $i++)
 		$reqs = $res[$i]['job_id'] ? makeLink($res[$i]['job_name'], 'a=viewjobdetails&job=' . $res[$i]['job_id']) . ' (' . $res[$i]['cor_joblv'] . ')' : 'None';
 	}
 
-	if($res[$i]['player_job_lv'] < $res[$i]['cor_joblv'])
+	if(!$PLAYER || $res[$i]['player_job_lv'] < $res[$i]['cor_joblv'])
 		$available = '';
 
 	// if the next job is _not_ the same as this one, add ourselves

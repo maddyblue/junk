@@ -46,7 +46,7 @@ function handle_session()
 	else if(ID)
 	{
 		if(!$sid)
-			$sid = getDBData('session_id', ID, 'session_user', 'session');
+			$sid = getDBData('session_id', ID, 'session_uid', 'session');
 
 		if(!$sid)
 			start_session();
@@ -59,7 +59,7 @@ function handle_session()
 			update_session($sid);
 		else
 		{
-			$res = $GLOBALS['db']->query('select session_id from session where session_user=0 and session_ip=' . REMOTE_ADDR);
+			$res = $GLOBALS['db']->query('select session_id from session where session_uid=0 and session_ip=' . REMOTE_ADDR);
 
 			if(count($res))
 				$sid = $res[0]['session_id'];
@@ -95,10 +95,10 @@ function start_session()
 	else if(strpos($host, '.') !== false)
 		$host = '*' . substr($host, strpos($host, '.'));
 
-	$db->query('insert into session (session_id, session_ip, session_host, session_user, session_start, session_current) values (' .
-		'"' . $sid . '",' .
+	$db->query('insert into session (session_id, session_ip, session_host, session_uid, session_start, session_current) values (' .
+		'\'' . $sid . '\',' .
 		REMOTE_ADDR . ',' .
-		'"' . $host . '",' .
+		'\'' . $host . '\',' .
 		ID . ',' .
 		TIME . ',' .
 		TIME .
@@ -112,23 +112,23 @@ function update_session($sid, $updateplayer = false)
 	define('SESSION', $sid);
 
 	if(ID)
-		$db->query('update user set user_last=' . TIME . ' where user_id=' . ID . '');
+		$db->query('update users set user_last=' . TIME . ' where user_id=' . ID . '');
 
 	if(!$updateplayer)
-		$query = 'update session set session_current=' . TIME . ', session_action=0000 where session_id="' . $sid . '"';
+		$query = 'update session set session_current=' . TIME . ', session_action=0 where session_id=\'' . $sid . '\'';
 	/* This is called when the user has just logged in. If they manually set a
 	 * session in their GET or POST, a session hijacking cannot occur, due to the
-	 * session_user=0 in the where clause.
+	 * session_uid=0 in the where clause.
 	 */
 	else
-		$query = 'update session set session_current=' . TIME . ', session_action=0000, session_user=' . ID . ' where session_id="' . $sid . '" and session_user=0';
+		$query = 'update session set session_current=' . TIME . ', session_action=0, session_uid=' . ID . ' where session_id=\'' . $sid . '\' and session_uid=0';
 
 	$db->query($query);
 }
 
 function update_session_action($action, $data = '', $title = '')
 {
-	$GLOBALS['db']->query('update session set session_action=' . $action . ', session_action_data="' . $data . '" where session_id="' . SESSION . '"');
+	$GLOBALS['db']->query('update session set session_action=' . $action . ', session_action_data=\'' . $data . '\' where session_id=\'' . SESSION . '\'');
 
 	$GLOBALS['PAGE_TITLE'] = $title ? $title : $GLOBALS['aval'];
 	$GLOBALS['SESSION_ACTION'] = $action;
@@ -139,12 +139,12 @@ function close_sessions()
 	global $db;
 
 	// non guest sessions that are 10 minutes old
-	$ret = $db->query('select * from session where session_current < (' . TIME . ' - 600) and session_user > 0');
+	$ret = $db->query('select * from session where session_current < (' . TIME . ' - 600) and session_uid > 0');
 
 	foreach($ret as $row)
 	{
-		$db->query('update user set user_last_session = ' . $row['session_current'] . ' where user_id = ' . $row['session_user']);
-		$db->query('delete from forum_view where forum_view_user=' . $row['session_user']);
+		$db->query('update users set user_last_session = ' . $row['session_current'] . ' where user_id = ' . $row['session_uid']);
+		$db->query('delete from forum_view where forum_view_user=' . $row['session_uid']);
 	}
 
 	// remove all sessions that are over 10 minutes old
@@ -170,7 +170,7 @@ function getNumActiveSessions($dir)
 {
 	global $db;
 
-	$res = $db->query('select count(*) as count from session where session_user ' . $dir . ' 0');
+	$res = $db->query('select count(*) as count from session where session_uid ' . $dir . ' 0');
 
 	return $res[0]['count'];
 }

@@ -36,7 +36,7 @@ function reset_users()
 {
 	global $db;
 
-	$db->query('truncate table user');
+	$db->query('truncate table users');
 	$db->query('truncate table groups');
 	$db->query('truncate table player');
 
@@ -50,7 +50,7 @@ function reset_forum()
 	$db->query('truncate table forum_post');
 	$db->query('truncate table forum_thread');
 	$db->query('truncate table forum_forum');
-	$db->query('update user set user_posts=0');
+	$db->query('update users set user_posts=0');
 
 	echo '<p/>Forum reset.';
 }
