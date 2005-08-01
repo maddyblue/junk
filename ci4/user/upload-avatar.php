@@ -135,7 +135,7 @@ if(LOGGED)
 			$fd = fopen($name, 'r');
 			if($fd)
 			{
-				$data = pg_escape_string(fread($fd, filesize($name)));
+				$data = pg_escape_bytea(fread($fd, filesize($name)));
 				fclose($fd);
 
 				$db->query('update users set user_avatar_data=\'' . $data . '\', user_avatar_type=\'' . $type . '\' where user_id=' . ID);
