@@ -988,6 +988,342 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: ability_ability_type_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY ability
+    ADD CONSTRAINT ability_ability_type_fkey FOREIGN KEY (ability_type) REFERENCES abilitytype(abilitytype_id);
+
+
+--
+-- Name: battle_entity_battle_entity_battle_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY battle_entity
+    ADD CONSTRAINT battle_entity_battle_entity_battle_fkey FOREIGN KEY (battle_entity_battle) REFERENCES battle(battle_id);
+
+
+--
+-- Name: cor_area_monster_cor_area_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_area_monster
+    ADD CONSTRAINT cor_area_monster_cor_area_fkey FOREIGN KEY (cor_area) REFERENCES area(area_id);
+
+
+--
+-- Name: cor_area_monster_cor_monster_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_area_monster
+    ADD CONSTRAINT cor_area_monster_cor_monster_fkey FOREIGN KEY (cor_monster) REFERENCES monster(monster_id);
+
+
+--
+-- Name: cor_area_town_cor_area_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_area_town
+    ADD CONSTRAINT cor_area_town_cor_area_fkey FOREIGN KEY (cor_area) REFERENCES area(area_id);
+
+
+--
+-- Name: cor_area_town_cor_town_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_area_town
+    ADD CONSTRAINT cor_area_town_cor_town_fkey FOREIGN KEY (cor_town) REFERENCES town(town_id);
+
+
+--
+-- Name: cor_job_abilitytype_cor_abilitytype_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_job_abilitytype
+    ADD CONSTRAINT cor_job_abilitytype_cor_abilitytype_fkey FOREIGN KEY (cor_abilitytype) REFERENCES abilitytype(abilitytype_id);
+
+
+--
+-- Name: cor_job_abilitytype_cor_job_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_job_abilitytype
+    ADD CONSTRAINT cor_job_abilitytype_cor_job_fkey FOREIGN KEY (cor_job) REFERENCES job(job_id);
+
+
+--
+-- Name: cor_job_equipmenttype_cor_equipmenttype_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_job_equipmenttype
+    ADD CONSTRAINT cor_job_equipmenttype_cor_equipmenttype_fkey FOREIGN KEY (cor_equipmenttype) REFERENCES equipmenttype(equipmenttype_id);
+
+
+--
+-- Name: cor_job_equipmenttype_cor_job_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_job_equipmenttype
+    ADD CONSTRAINT cor_job_equipmenttype_cor_job_fkey FOREIGN KEY (cor_job) REFERENCES job(job_id);
+
+
+--
+-- Name: cor_job_joblv_cor_job_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_job_joblv
+    ADD CONSTRAINT cor_job_joblv_cor_job_fkey FOREIGN KEY (cor_job) REFERENCES job(job_id);
+
+
+--
+-- Name: cor_job_joblv_cor_job_req_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_job_joblv
+    ADD CONSTRAINT cor_job_joblv_cor_job_req_fkey FOREIGN KEY (cor_job_req) REFERENCES job(job_id);
+
+
+--
+-- Name: cor_monster_drop_cor_monster_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY cor_monster_drop
+    ADD CONSTRAINT cor_monster_drop_cor_monster_fkey FOREIGN KEY (cor_monster) REFERENCES monster(monster_id);
+
+
+--
+-- Name: equipment_equipment_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY equipment
+    ADD CONSTRAINT equipment_equipment_class_fkey FOREIGN KEY (equipment_class) REFERENCES equipmentclass(equipmentclass_id);
+
+
+--
+-- Name: equipment_equipment_type_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY equipment
+    ADD CONSTRAINT equipment_equipment_type_fkey FOREIGN KEY (equipment_type) REFERENCES equipmenttype(equipmenttype_id);
+
+
+--
+-- Name: eventlog_eventlog_event_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT eventlog_eventlog_event_fkey FOREIGN KEY (eventlog_event) REFERENCES event(event_id);
+
+
+--
+-- Name: forum_mod_forum_mod_forum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_mod
+    ADD CONSTRAINT forum_mod_forum_mod_forum_fkey FOREIGN KEY (forum_mod_forum) REFERENCES forum_forum(forum_forum_id);
+
+
+--
+-- Name: forum_mod_forum_mod_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_mod
+    ADD CONSTRAINT forum_mod_forum_mod_user_fkey FOREIGN KEY (forum_mod_user) REFERENCES users(user_id);
+
+
+--
+-- Name: forum_perm_forum_perm_forum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_perm
+    ADD CONSTRAINT forum_perm_forum_perm_forum_fkey FOREIGN KEY (forum_perm_forum) REFERENCES forum_forum(forum_forum_id);
+
+
+--
+-- Name: forum_perm_forum_perm_group_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_perm
+    ADD CONSTRAINT forum_perm_forum_perm_group_fkey FOREIGN KEY (forum_perm_group) REFERENCES group_def(group_def_id);
+
+
+--
+-- Name: forum_post_forum_post_thread_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_post
+    ADD CONSTRAINT forum_post_forum_post_thread_fkey FOREIGN KEY (forum_post_thread) REFERENCES forum_thread(forum_thread_id);
+
+
+--
+-- Name: forum_post_forum_post_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_post
+    ADD CONSTRAINT forum_post_forum_post_user_fkey FOREIGN KEY (forum_post_user) REFERENCES users(user_id);
+
+
+--
+-- Name: forum_thread_forum_thread_forum_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_thread
+    ADD CONSTRAINT forum_thread_forum_thread_forum_fkey FOREIGN KEY (forum_thread_forum) REFERENCES forum_forum(forum_forum_id);
+
+
+--
+-- Name: forum_thread_forum_thread_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_thread
+    ADD CONSTRAINT forum_thread_forum_thread_user_fkey FOREIGN KEY (forum_thread_user) REFERENCES users(user_id);
+
+
+--
+-- Name: forum_view_forum_view_thread_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_view
+    ADD CONSTRAINT forum_view_forum_view_thread_fkey FOREIGN KEY (forum_view_thread) REFERENCES forum_thread(forum_thread_id);
+
+
+--
+-- Name: forum_view_forum_view_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY forum_view
+    ADD CONSTRAINT forum_view_forum_view_user_fkey FOREIGN KEY (forum_view_user) REFERENCES users(user_id);
+
+
+--
+-- Name: group_user_group_user_group_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY group_user
+    ADD CONSTRAINT group_user_group_user_group_fkey FOREIGN KEY (group_user_group) REFERENCES group_def(group_def_id);
+
+
+--
+-- Name: group_user_group_user_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY group_user
+    ADD CONSTRAINT group_user_group_user_user_fkey FOREIGN KEY (group_user_user) REFERENCES users(user_id);
+
+
+--
+-- Name: monster_monster_type_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY monster
+    ADD CONSTRAINT monster_monster_type_fkey FOREIGN KEY (monster_type) REFERENCES monstertype(monstertype_id);
+
+
+--
+-- Name: player_ability_player_ability_ability_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_ability
+    ADD CONSTRAINT player_ability_player_ability_ability_fkey FOREIGN KEY (player_ability_ability) REFERENCES ability(ability_id);
+
+
+--
+-- Name: player_ability_player_ability_player_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_ability
+    ADD CONSTRAINT player_ability_player_ability_player_fkey FOREIGN KEY (player_ability_player) REFERENCES player(player_id);
+
+
+--
+-- Name: player_abilitytype_player_abilitytype_player_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_abilitytype
+    ADD CONSTRAINT player_abilitytype_player_abilitytype_player_fkey FOREIGN KEY (player_abilitytype_player) REFERENCES player(player_id);
+
+
+--
+-- Name: player_abilitytype_player_abilitytype_type_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_abilitytype
+    ADD CONSTRAINT player_abilitytype_player_abilitytype_type_fkey FOREIGN KEY (player_abilitytype_type) REFERENCES abilitytype(abilitytype_id);
+
+
+--
+-- Name: player_equipment_player_equipment_equipment_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_equipment
+    ADD CONSTRAINT player_equipment_player_equipment_equipment_fkey FOREIGN KEY (player_equipment_equipment) REFERENCES equipment(equipment_id);
+
+
+--
+-- Name: player_equipment_player_equipment_player_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_equipment
+    ADD CONSTRAINT player_equipment_player_equipment_player_fkey FOREIGN KEY (player_equipment_player) REFERENCES player(player_id);
+
+
+--
+-- Name: player_item_player_item_item_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_item
+    ADD CONSTRAINT player_item_player_item_item_fkey FOREIGN KEY (player_item_item) REFERENCES item(item_id);
+
+
+--
+-- Name: player_item_player_item_player_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_item
+    ADD CONSTRAINT player_item_player_item_player_fkey FOREIGN KEY (player_item_player) REFERENCES player(player_id);
+
+
+--
+-- Name: player_job_player_job_job_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_job
+    ADD CONSTRAINT player_job_player_job_job_fkey FOREIGN KEY (player_job_job) REFERENCES job(job_id);
+
+
+--
+-- Name: player_job_player_job_player_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player_job
+    ADD CONSTRAINT player_job_player_job_player_fkey FOREIGN KEY (player_job_player) REFERENCES player(player_id);
+
+
+--
+-- Name: player_player_domain_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY player
+    ADD CONSTRAINT player_player_domain_fkey FOREIGN KEY (player_domain) REFERENCES "domain"(domain_id);
+
+
+--
+-- Name: pm_pm_from_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY pm
+    ADD CONSTRAINT pm_pm_from_fkey FOREIGN KEY (pm_from) REFERENCES users(user_id);
+
+
+--
+-- Name: pm_pm_to_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+--
+
+ALTER TABLE ONLY pm
+    ADD CONSTRAINT pm_pm_to_fkey FOREIGN KEY (pm_to) REFERENCES users(user_id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
