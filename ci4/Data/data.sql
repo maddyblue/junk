@@ -1,3 +1,4 @@
+truncate table ability;
 --
 -- PostgreSQL database dump
 --
@@ -12,7 +13,7 @@ SET search_path = public, pg_catalog;
 -- Name: ability_ability_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('ability', 'ability_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('ability', 'ability_id'), 24, true);
 
 
 --
@@ -45,6 +46,8 @@ COPY ability (ability_id, ability_name, ability_image, ability_type, ability_mp,
 -- PostgreSQL database dump complete
 --
 
+select setval('ability_ability_id_seq', max(ability_id)) from ability;
+truncate table abilitytype;
 --
 -- PostgreSQL database dump
 --
@@ -59,7 +62,7 @@ SET search_path = public, pg_catalog;
 -- Name: abilitytype_abilitytype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('abilitytype', 'abilitytype_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('abilitytype', 'abilitytype_id'), 30, true);
 
 
 --
@@ -99,6 +102,8 @@ COPY abilitytype (abilitytype_id, abilitytype_name, abilitytype_desc) FROM stdin
 -- PostgreSQL database dump complete
 --
 
+select setval('abilitytype_abilitytype_id_seq', max(abilitytype_id)) from abilitytype;
+truncate table area;
 --
 -- PostgreSQL database dump
 --
@@ -113,7 +118,7 @@ SET search_path = public, pg_catalog;
 -- Name: area_area_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('area', 'area_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('area', 'area_id'), 26, true);
 
 
 --
@@ -154,6 +159,8 @@ COPY area (area_id, area_name, area_desc, area_order) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('area_area_id_seq', max(area_id)) from area;
+truncate table cor_area_monster;
 --
 -- PostgreSQL database dump
 --
@@ -290,6 +297,8 @@ COPY cor_area_monster (cor_area, cor_monster) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('cor_area_monster_cor_area_monster_id_seq', max(cor_area_monster_id)) from cor_area_monster;
+truncate table cor_area_town;
 --
 -- PostgreSQL database dump
 --
@@ -360,6 +369,8 @@ COPY cor_area_town (cor_area, cor_town) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('cor_area_town_cor_area_town_id_seq', max(cor_area_town_id)) from cor_area_town;
+truncate table cor_job_abilitytype;
 --
 -- PostgreSQL database dump
 --
@@ -407,6 +418,8 @@ COPY cor_job_abilitytype (cor_job, cor_abilitytype) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('cor_job_abilitytype_cor_job_abilitytype_id_seq', max(cor_job_abilitytype_id)) from cor_job_abilitytype;
+truncate table cor_job_equipmenttype;
 --
 -- PostgreSQL database dump
 --
@@ -595,6 +608,8 @@ COPY cor_job_equipmenttype (cor_job, cor_equipmenttype) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('cor_job_equipmenttype_cor_job_equipmenttype_id_seq', max(cor_job_equipmenttype_id)) from cor_job_equipmenttype;
+truncate table cor_job_joblv;
 --
 -- PostgreSQL database dump
 --
@@ -645,6 +660,8 @@ COPY cor_job_joblv (cor_job, cor_job_req, cor_joblv) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('cor_job_joblv_cor_job_joblv_id_seq', max(cor_job_joblv_id)) from cor_job_joblv;
+truncate table cor_monster_drop;
 --
 -- PostgreSQL database dump
 --
@@ -667,6 +684,8 @@ COPY cor_monster_drop (cor_monster, cor_drop, cor_type) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('cor_monster_drop_cor_monster_drop_id_seq', max(cor_monster_drop_id)) from cor_monster_drop;
+truncate table domain;
 --
 -- PostgreSQL database dump
 --
@@ -681,7 +700,7 @@ SET search_path = public, pg_catalog;
 -- Name: domain_domain_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('"domain"', 'domain_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('"domain"', 'domain_id'), 6, true);
 
 
 --
@@ -702,6 +721,8 @@ COPY "domain" (domain_id, domain_name, domain_abrev, domain_expw_time, domain_ex
 -- PostgreSQL database dump complete
 --
 
+select setval('domain_domain_id_seq', max(domain_id)) from domain;
+truncate table equipment;
 --
 -- PostgreSQL database dump
 --
@@ -716,7 +737,7 @@ SET search_path = public, pg_catalog;
 -- Name: equipment_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipment', 'equipment_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipment', 'equipment_id'), 139, true);
 
 
 --
@@ -869,6 +890,8 @@ COPY equipment (equipment_id, equipment_name, equipment_image, equipment_stat_hp
 -- PostgreSQL database dump complete
 --
 
+select setval('equipment_equipment_id_seq', max(equipment_id)) from equipment;
+truncate table equipmentclass;
 --
 -- PostgreSQL database dump
 --
@@ -883,7 +906,7 @@ SET search_path = public, pg_catalog;
 -- Name: equipmentclass_equipmentclass_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipmentclass', 'equipmentclass_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipmentclass', 'equipmentclass_id'), 11, true);
 
 
 --
@@ -909,6 +932,8 @@ COPY equipmentclass (equipmentclass_id, equipmentclass_name) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('equipmentclass_equipmentclass_id_seq', max(equipmentclass_id)) from equipmentclass;
+truncate table equipmenttype;
 --
 -- PostgreSQL database dump
 --
@@ -923,7 +948,7 @@ SET search_path = public, pg_catalog;
 -- Name: equipmenttype_equipmenttype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipmenttype', 'equipmenttype_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipmenttype', 'equipmenttype_id'), 18, true);
 
 
 --
@@ -956,6 +981,8 @@ COPY equipmenttype (equipmenttype_id, equipmenttype_name) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('equipmenttype_equipmenttype_id_seq', max(equipmenttype_id)) from equipmenttype;
+truncate table event;
 --
 -- PostgreSQL database dump
 --
@@ -970,7 +997,7 @@ SET search_path = public, pg_catalog;
 -- Name: event_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('event', 'event_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('event', 'event_id'), 2, true);
 
 
 --
@@ -987,6 +1014,8 @@ COPY event (event_id, event_name, event_code, event_desc) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('event_event_id_seq', max(event_id)) from event;
+truncate table group_def;
 --
 -- PostgreSQL database dump
 --
@@ -1001,7 +1030,7 @@ SET search_path = public, pg_catalog;
 -- Name: group_def_group_def_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('group_def', 'group_def_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('group_def', 'group_def_id'), 4, true);
 
 
 --
@@ -1020,6 +1049,8 @@ COPY group_def (group_def_id, group_def_name, group_def_admin, group_def_news, g
 -- PostgreSQL database dump complete
 --
 
+select setval('group_def_group_def_id_seq', max(group_def_id)) from group_def;
+truncate table house;
 --
 -- PostgreSQL database dump
 --
@@ -1034,7 +1065,7 @@ SET search_path = public, pg_catalog;
 -- Name: house_house_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('house', 'house_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('house', 'house_id'), 17, true);
 
 
 --
@@ -1066,6 +1097,8 @@ COPY house (house_id, house_name, house_cost, house_lv, house_hp, house_mp, hous
 -- PostgreSQL database dump complete
 --
 
+select setval('house_house_id_seq', max(house_id)) from house;
+truncate table item;
 --
 -- PostgreSQL database dump
 --
@@ -1095,6 +1128,8 @@ COPY item (item_id, item_name, item_desc, item_lv, item_usebattle, item_useworld
 -- PostgreSQL database dump complete
 --
 
+select setval('item_item_id_seq', max(item_id)) from item;
+truncate table job;
 --
 -- PostgreSQL database dump
 --
@@ -1109,7 +1144,7 @@ SET search_path = public, pg_catalog;
 -- Name: job_job_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('job', 'job_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('job', 'job_id'), 29, true);
 
 
 --
@@ -1150,6 +1185,8 @@ COPY job (job_id, job_name, job_gender, job_stat_hp, job_stat_mp, job_stat_str, 
 -- PostgreSQL database dump complete
 --
 
+select setval('job_job_id_seq', max(job_id)) from job;
+truncate table monster;
 --
 -- PostgreSQL database dump
 --
@@ -1164,7 +1201,7 @@ SET search_path = public, pg_catalog;
 -- Name: monster_monster_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('monster', 'monster_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('monster', 'monster_id'), 112, true);
 
 
 --
@@ -1291,6 +1328,8 @@ COPY monster (monster_id, monster_name, monster_image, monster_hp, monster_mp, m
 -- PostgreSQL database dump complete
 --
 
+select setval('monster_monster_id_seq', max(monster_id)) from monster;
+truncate table monstertype;
 --
 -- PostgreSQL database dump
 --
@@ -1305,7 +1344,7 @@ SET search_path = public, pg_catalog;
 -- Name: monstertype_monstertype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('monstertype', 'monstertype_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('monstertype', 'monstertype_id'), 10, true);
 
 
 --
@@ -1330,6 +1369,8 @@ COPY monstertype (monstertype_id, monstertype_name) FROM stdin;
 -- PostgreSQL database dump complete
 --
 
+select setval('monstertype_monstertype_id_seq', max(monstertype_id)) from monstertype;
+truncate table site;
 --
 -- PostgreSQL database dump
 --
@@ -1400,6 +1441,7 @@ USER_SECTION_NAV	8	link	View Users		'a=viewusers'	SECTION_USER	0	0
 _HEAD	0	eval	$GLOBALS['CI_HEAD']				0	0	
 _PROFILE	0	eval	getProfile()				0	0	
 _TEMPLATE_DIR	0	eval	CI_TEMPLATE_WWW . CI_TEMPLATE				0	0	directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)
+ADMIN_SECTION_NAV	60	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
 \.
 
 
@@ -1407,6 +1449,8 @@ _TEMPLATE_DIR	0	eval	CI_TEMPLATE_WWW . CI_TEMPLATE				0	0	directory the template
 -- PostgreSQL database dump complete
 --
 
+select setval('site_site_id_seq', max(site_id)) from site;
+truncate table skin;
 --
 -- PostgreSQL database dump
 --
@@ -1432,6 +1476,8 @@ monobook	MediaWiki	http://wikipedia.sourceforge.net/
 -- PostgreSQL database dump complete
 --
 
+select setval('skin_skin_id_seq', max(skin_id)) from skin;
+truncate table town;
 --
 -- PostgreSQL database dump
 --
@@ -1446,7 +1492,7 @@ SET search_path = public, pg_catalog;
 -- Name: town_town_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
 --
 
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('town', 'town_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('town', 'town_id'), 17, true);
 
 
 --
@@ -1478,3 +1524,4 @@ COPY town (town_id, town_name, town_lv, town_desc, town_item_min_lv, town_item_m
 -- PostgreSQL database dump complete
 --
 
+select setval('town_town_id_seq', max(town_id)) from town;
