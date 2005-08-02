@@ -44,6 +44,8 @@ if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
 
 require_once CI_HOME_MOD . 'Include.inc.php';
 
+close_sessions();
+
 eval('$secDir = SECTION_' . strtoupper(CI_SECTION) . ';');
 define('CI_SECTION_DIR', $secDir . '/');
 

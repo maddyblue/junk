@@ -25,12 +25,13 @@ define('SECTION_GAME', 'game');
 define('SECTION_BATTLE', 'battle');
 define('SECTION_MANUAL', 'manual');
 
-/* Forum specs */
+/* Preferences */
 
 define('FORUM_THREADS_PP', 30);
 define('FORUM_POSTS_PP', 20);
 define('FORUM_THREAD_PAGES', 15);
 define('NEWSFORUM', 1);
+define('SESSION_TIMEOUT', 600); // in seconds
 
 /* Don't mess with these */
 

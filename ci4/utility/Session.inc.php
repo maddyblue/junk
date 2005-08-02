@@ -34,8 +34,6 @@
 
 function handle_session()
 {
-	close_sessions();
-
 	$sid = isset($_GET['s']) ? encode($_GET['s']) : (isset($_POST['s']) ? encode($_POST['s']) : '');
 
 	/* User probably just logged in. If they didn't just login, this won't do
@@ -138,8 +136,10 @@ function close_sessions()
 {
 	global $db;
 
-	// non guest sessions that are 10 minutes old
-	$ret = $db->query('select * from session where session_current < (' . TIME . ' - 600) and session_uid > 0');
+	$to = TIME - SESSION_TIMEOUT;
+
+	// non guest sessions that are over the timeout
+	$ret = $db->query('select * from session where session_current < ' . $to . ' and session_uid > 0');
 
 	foreach($ret as $row)
 	{
@@ -147,8 +147,8 @@ function close_sessions()
 		$db->query('delete from forum_view where forum_view_user=' . $row['session_uid']);
 	}
 
-	// remove all sessions that are over 10 minutes old
-	$db->query('delete from session where session_current < (' . TIME . ' - 600)');
+	// remove all sessions that are over the timeout
+	$db->query('delete from session where session_current < ' . $to);
 }
 
 function session_exists($sid)
