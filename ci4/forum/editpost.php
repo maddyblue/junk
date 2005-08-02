@@ -107,9 +107,9 @@ else
 				'forum_post_edit_user=' . ID .
 				' where forum_post_id=' . $post);
 
-				echo '<p/>Post edited successfully.';
-				echo '<p/>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $ret[0]['forum_post_thread']) . '.';
-				echo '<p/>Go to the ' . makePostLink('edited post', $post) . '.';
+			echo '<p/>Post edited successfully.';
+			echo '<p/>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $ret[0]['forum_post_thread']) . '.';
+			echo '<p/>Go to the ' . makePostLink('edited post', $post) . '.';
 		}
 	}
 	else
