@@ -81,7 +81,6 @@ class Database
 		$start = gettimeofday();
 
 		pg_send_query($this->handle, $query);
-		$this->resource = pg_get_result($this->handle);
 
 		$end = gettimeofday();
 		$time = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
@@ -89,28 +88,33 @@ class Database
 		$this->time += $time;
 		array_push($this->queries,array($query, $time));
 
-		if(pg_result_error($this->resource))
-		{
-			global $message;
-			$message .= '<div class="error">Error: ' . pg_result_error($this->resource) . '.
-				<br/>Query: ' . $query . '</div>';
-			$ret = false;
-		}
-		else
-		{
-			$ret = array();
+		$rcount = 0;
+		$ret = array();
 
-			for($rcount = 0; $row = pg_fetch_assoc($this->resource); $rcount++)
+		while($this->resource = pg_get_result($this->handle))
+		{
+
+			if(pg_result_error($this->resource))
 			{
-				for($i = 0; $i < sizeof($row); $i++)
+				global $message;
+				$message .= '<div class="error">Error: ' . pg_result_error($this->resource) . '.
+					<br/>Query: ' . $query . '</div>';
+				$ret = false;
+			}
+			else
+			{
+				for(; $row = pg_fetch_assoc($this->resource); $rcount++)
 				{
-					$ret[$rcount][key($row)] = $row[key($row)];
-					next($row);
+					for($i = 0; $i < sizeof($row); $i++)
+					{
+						$ret[$rcount][key($row)] = $row[key($row)];
+						next($row);
+					}
 				}
 			}
-		}
 
-		pg_free_result($this->resource);
+			pg_free_result($this->resource);
+		}
 
 		return $ret;
 	}
