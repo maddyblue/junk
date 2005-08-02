@@ -261,7 +261,7 @@ echo $content;
 
 echo '<p/>' . $message;
 
-if(isset($_GET['sqlprofile']) || true)
+if(isset($_GET['sqlprofile']))
 {
 	foreach($db->queries as $q)
 	{
