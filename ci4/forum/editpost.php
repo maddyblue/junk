@@ -109,7 +109,7 @@ else
 
 				echo '<p/>Post edited successfully.';
 				echo '<p/>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $ret[0]['forum_post_thread']) . '.';
-				echo '<p/>Go to the ' . makeLink('edited post', 'a=viewpost&p=' . $post) . '.';
+				echo '<p/>Go to the ' . makePostLink('edited post', $post) . '.';
 		}
 	}
 	else

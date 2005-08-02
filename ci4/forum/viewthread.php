@@ -46,7 +46,7 @@ function postList($thread, $curpage, $postsPP, $canMod)
 		$user = '<a name="' . $post['forum_post_id'] . '">' . getUserlink($post['user_id'], decode($post['user_name'])) . '</a>';
 		$user .= $avatar ? '<br/>' . $avatar : '';
 		$user .= '<br/>' . getTime($post['forum_post_date']) . '<br/>';
-		$user .= makeLink('#', 'a=viewpost&p=' . $post['forum_post_id'] . '#' . $post['forum_post_id']) . ' ';
+		$user .= makePostLink('#', $post['forum_post_id']) . ' ';
 		if(LOGGED)
 			$user .= makeLink('quote', 'a=newpost&t=' . $thread . '&q=' . $post['forum_post_id']);
 		if(ID == $post['user_id'] || $canMod) // <- exactly the same as canEdit, but saves us a few DB calls per post

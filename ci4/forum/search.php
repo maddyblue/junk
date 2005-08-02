@@ -71,7 +71,7 @@ if($search)
 
 	for($i = 0; $i < count($res); $i++)
 	{
-		echo '<hr/><p/>' . makeLink('-&gt;', 'a=viewpost&p=' . $res[$i]['forum_post_id'] . '#' . $res[$i]['forum_post_id']) .
+		echo '<hr/><p/>' . makePostLink('-&gt;', $res[$i]['forum_post_id']) .
 		' ' . makeLink(decode($res[$i]['forum_forum_name']), 'a=viewforum&f=' . $res[$i]['forum_forum_id']) .
 		': ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id']) .
 		' by ' . makeLink(decode($res[$i]['user_name']), 'a=viewuserdetails&user=' . $res[$i]['user_id'], SECTION_USER) .

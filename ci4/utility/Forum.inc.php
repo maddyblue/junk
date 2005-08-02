@@ -440,4 +440,9 @@ function parseSig($sig)
 	return $sig;
 }
 
+function makePostLink($text, $post)
+{
+	return makeLink($text, 'a=viewpost&p=' . $post . '#' . $post, SECTION_FORUM);
+}
+
 ?>

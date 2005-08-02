@@ -124,8 +124,8 @@ else
 				echo '<p/>Reply posted successfully.';
 				echo '<p/>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
 				echo '<p/>Return to the ' . makeLink('previous thread', 'a=viewthread&t=' . $thread) . '.';
-				echo '<p/>Go to the ' . makeLink('new post', 'a=viewpost&p=' . $lastpost) . ' (auto redirecting...).';
-				$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="2; url=?a=viewpost&amp;p=' . $lastpost . '">';
+				echo '<p/>Go to the ' . makePostLink('new post', $lastpost) . ' (auto redirecting...).';
+				$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="2; url=?a=viewpost&amp;p=' . $lastpost . '#' . $lastpost . '">';
 			}
 			else
 			{
