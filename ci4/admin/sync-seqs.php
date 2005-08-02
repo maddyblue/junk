@@ -46,4 +46,6 @@ foreach($ret as $s)
 	echo "<br/>$m";
 }
 
+update_session_action(200);
+
 ?>
