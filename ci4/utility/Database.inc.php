@@ -118,10 +118,11 @@ class Database
 	function insert($query, $seq)
 	{
 		$ret = $this->query($query);
+		$s = $seq == 'user' ? 's' : '';
 
 		if($ret !== false)
 		{
-			$result = $this->query("select currval('${seq}_${seq}_id_seq') as lastid");
+			$result = $this->query("select currval('${seq}${s}_${seq}_id_seq') as lastid");
 			$ret = $result[0]['lastid'];
 		}
 
