@@ -247,11 +247,14 @@ if($read)
 	// insert all threads with a last post date after the last ending session
 	$res = $db->query('select forum_thread_id from forum_thread, forum_post where forum_thread_last_post=forum_post_id and forum_post_date > ' . $USER['user_last_session'] . $where);
 
-	$s = '';
-	for($i = 0; $i < count($res); $i++)
-		$s .= '(' . ID . ', ' . $res[$i]['forum_thread_id'] . ', ' . TIME . '),';
+	if(count($res))
+	{
+		$s = '';
+		for($i = 0; $i < count($res); $i++)
+			$s .= '(' . ID . ', ' . $res[$i]['forum_thread_id'] . ', ' . TIME . '),';
 
-	$db->query('insert into forum_view values ' . substr($s, 0, -1));
+		$db->query('insert into forum_view values ' . substr($s, 0, -1));
+	}
 }
 
 if(!canView($forumid))
