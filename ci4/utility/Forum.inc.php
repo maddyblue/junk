@@ -445,4 +445,18 @@ function makePostLink($text, $post)
 	return makeLink($text, 'a=viewpost&p=' . $post . '#' . $post, SECTION_FORUM);
 }
 
+function parsePostWords($id, $text)
+{
+	$query = '';
+
+	preg_match_all('/[\'a-zA-Z0-9_-]+/', decode($text), $res);
+
+	$u = array_unique($res[0]);
+
+	foreach($u as $p)
+		$query .= 'insert into forum_word values (' . $id . ', \'' . str_replace("'", "\\'", $p) . "');\n";
+
+	$GLOBALS['db']->update($query);
+}
+
 ?>

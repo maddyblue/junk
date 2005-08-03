@@ -365,16 +365,6 @@ CREATE TABLE forum_view (
 
 
 --
--- Name: forum_word; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
---
-
-CREATE TABLE forum_word (
-    forum_word_post bigint,
-    forum_word_word text
-);
-
-
---
 -- Name: group_def; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
@@ -995,13 +985,6 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_user_name_key UNIQUE (user_name);
-
-
---
--- Name: forum_word_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
---
-
-CREATE INDEX forum_word_index ON forum_word USING btree (forum_word_word);
 
 
 --

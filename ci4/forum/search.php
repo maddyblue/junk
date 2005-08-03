@@ -81,11 +81,15 @@ if($search)
 	echo $pageDisp;
 }
 
+/*
 echo getTableForm('Search the forum:', array(
 	array('', array('type'=>'text', 'name'=>'search', 'val'=>$search)),
 	array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Search')),
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'search'))
 ), false, 'get');
+*/
+
+echo '<p/>Search currently disabled.';
 
 update_session_action(408);
 

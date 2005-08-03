@@ -33,7 +33,7 @@
  */
 
 set_time_limit(0);
-$index_name = 'forum_word_index';
+$index_name = 'word_index';
 
 $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
 if($start < 0)
@@ -54,29 +54,13 @@ if($start == 0)
 echo '<p/>Reparsing forum_word posts ' . $start . ' to ' . $next . '.';
 
 $posts = $db->query('select forum_post_id, forum_post_text from forum_post limit ' . $per . ' offset ' . $start);
+
 foreach($posts as $post)
-{
-	//$query = "begin;\n";
-	$query = '';
-	//$query .= 'delete from forum_word where forum_word_post=' . $post['forum_post_id'] . ";\n";
-
-	preg_match_all('/[\'a-zA-Z0-9_-]+/', decode($post['forum_post_text']), $res);
-
-	$u = array_unique($res[0]);
-
-	foreach($u as $p)
-		$query .= 'insert into forum_word values (' . $post['forum_post_id'] . ', \'' . str_replace("'", "\\'", $p) . "');\n";
-
-	//$query .= 'commit;';
-
-	$db->update($query);
-}
+	parsePostWords($post['forum_post_id'], $post['forum_post_text'], true);
 
 if(count($posts) < $per)
 {
 	echo '<p/>Creating the index.';
-
-	$_GET['sqlprofile'] = 'hi';
 	$db->update('create index ' . $index_name . ' on forum_word (forum_word_word)');
 
 	echo '<p/>Done.';
