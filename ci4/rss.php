@@ -49,10 +49,10 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>
   <channel>
 
     <title>Crescent Island</title>
-    <link>http://crescentisland.com/</link>
+    <link>' . CI_WWW_ADDRESS . '</link>
     <description>Online Tactics Gaming.</description>
     <language>en-us</language>
-    <managingEditor>dolmant@crescentisland.com</managingEditor>';
+    <managingEditor>dolmant@gmail.com</managingEditor>';
 
 $f = isset($_GET['f']) ? intval($_GET['f']) : NEWSFORUM;
 
