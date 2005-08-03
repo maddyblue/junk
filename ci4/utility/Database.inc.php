@@ -76,32 +76,25 @@ class Database
 			Query - query to execute.
 	*/
 
-	function query($query)
+	function query($query, $expect_return = true)
 	{
 		$start = gettimeofday();
 
 		pg_send_query($this->handle, $query);
-
-		$end = gettimeofday();
-		$time = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
-
-		$this->time += $time;
-		array_push($this->queries,array($query, $time));
 
 		$rcount = 0;
 		$ret = array();
 
 		while($this->resource = pg_get_result($this->handle))
 		{
-
 			if(pg_result_error($this->resource))
 			{
 				global $message;
 				$message .= '<div class="error">Error: ' . pg_result_error($this->resource) . '.
-					<br/>Query: ' . $query . '</div>';
+					<br/>Query: <pre>' . $query . '</pre></div>';
 				$ret = false;
 			}
-			else
+			else if($expect_return)
 			{
 				for(; $row = pg_fetch_assoc($this->resource); $rcount++)
 				{
@@ -116,12 +109,23 @@ class Database
 			pg_free_result($this->resource);
 		}
 
+		$end = gettimeofday();
+		$time = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
+
+		$this->time += $time;
+		array_push($this->queries,array($query, $time));
+
 		return $ret;
 	}
 
-	function insert($query, $seq)
+	function update($query)
 	{
-		$ret = $this->query($query);
+		$this->query($query, false);
+	}
+
+	function insert($query)
+	{
+		$ret = $this->query($query, false);
 		$s = $seq == 'user' ? 's' : '';
 
 		if($ret !== false)
