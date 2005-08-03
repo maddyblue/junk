@@ -21,27 +21,11 @@ delete from monstertype;
 delete from site;
 delete from skin;
 delete from town;
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: abilitytype_abilitytype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('abilitytype', 'abilitytype_id'), 30, true);
-
-
---
--- Data for Name: abilitytype; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY abilitytype (abilitytype_id, abilitytype_name, abilitytype_desc) FROM stdin;
 1	Black Magic	Damaging magic.
 2	White Magic	Healing magic.
@@ -69,33 +53,11 @@ COPY abilitytype (abilitytype_id, abilitytype_name, abilitytype_desc) FROM stdin
 29	Lancing	
 30	Necromancy	
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: area_area_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('area', 'area_id'), 26, true);
-
-
---
--- Data for Name: area; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY area (area_id, area_name, area_desc, area_order) FROM stdin;
 1	Swamps	Step on ants and kill small rodents.	1
 2	Middle Ocean	Sail across the ocean and fight the monsters that climb on board.	3
@@ -124,68 +86,24 @@ COPY area (area_id, area_name, area_desc, area_order) FROM stdin;
 25	Schania	The beauty of this land is well guarded.	105
 26	Nether Plane	You cannot win.	150
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: domain_domain_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('"domain"', 'domain_id'), 6, true);
-
-
---
--- Data for Name: domain; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY "domain" (domain_id, domain_name, domain_abrev, domain_expw_time, domain_expw_max) FROM stdin;
-2	Electrocution	elec	1	10
-4	Combustion	comb	1	5
 1	Defenestration	def	2	5
-6	Suffocation	suf	2	10
+2	Electrocution	elec	1	10
 3	Starvation	star	4	5
+4	Combustion	comb	1	5
 5	Torture	tort	4	10
+6	Suffocation	suf	2	10
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: equipmentclass_equipmentclass_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipmentclass', 'equipmentclass_id'), 11, true);
-
-
---
--- Data for Name: equipmentclass; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY equipmentclass (equipmentclass_id, equipmentclass_name) FROM stdin;
 1	Ring
 2	Hand&nbsp;(Main)
@@ -199,33 +117,11 @@ COPY equipmentclass (equipmentclass_id, equipmentclass_name) FROM stdin;
 10	Back
 11	Neck
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: equipmenttype_equipmenttype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipmenttype', 'equipmenttype_id'), 18, true);
-
-
---
--- Data for Name: equipmenttype; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY equipmenttype (equipmenttype_id, equipmenttype_name) FROM stdin;
 1	ring
 2	sword
@@ -246,97 +142,31 @@ COPY equipmenttype (equipmenttype_id, equipmenttype_name) FROM stdin;
 17	cards
 18	katana
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: event_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('event', 'event_id'), 2, true);
-
-
---
--- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY event (event_id, event_name, event_code, event_desc) FROM stdin;
 1	Job&nbsp;Wages	jobWages($id, $last);	Once every day (24 hours), players recieve a job wage, depending on their job. The domain the player is in does not matter. Wages are every 24 hours, regardless of domain speed.
 2	EXPW&nbsp;Decrease	expwDecrease($id, $last);	Decrease expw by all players by one in each domain that needs it.
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: group_def_group_def_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('group_def', 'group_def_id'), 4, true);
-
-
---
--- Data for Name: group_def; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY group_def (group_def_id, group_def_name, group_def_admin, group_def_news, group_def_mod, group_def_banned) FROM stdin;
 1	Administrators	1	1	1	0
 2	Super Moderators	0	1	1	0
 3	Banned	0	0	0	0
 4	Moderators	0	0	0	0
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: house_house_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('house', 'house_id'), 17, true);
-
-
---
--- Data for Name: house; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY house (house_id, house_name, house_cost, house_lv, house_hp, house_mp, house_str, house_mag, house_def, house_mgd, house_agl, house_acc, house_money) FROM stdin;
 1	Shack	0	0	0	0	0	0	0	0	0	0	0
 2	Cottage	4000	10	0	0	20	0	10	0	0	0	-5
@@ -356,62 +186,18 @@ COPY house (house_id, house_name, house_cost, house_lv, house_hp, house_mp, hous
 16	Leader's Abode	18000	28	0	0	40	40	30	30	0	0	-15
 17	Manor House	60000	62	15	15	65	65	50	50	0	0	-38
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: item_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('item', 'item_id'), 1, false);
-
-
---
--- Data for Name: item; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY item (item_id, item_name, item_desc, item_lv, item_usebattle, item_useworld, item_codebattle, item_codeworld, item_buy, item_sell, item_cost, item_size, item_mass) FROM stdin;
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: job_job_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('job', 'job_id'), 29, true);
-
-
---
--- Data for Name: job; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY job (job_id, job_name, job_gender, job_stat_hp, job_stat_mp, job_stat_str, job_stat_mag, job_stat_def, job_stat_mgd, job_stat_agl, job_stat_acc, job_level_hp, job_level_mp, job_level_str, job_level_mag, job_level_def, job_level_mgd, job_level_agl, job_level_acc, job_wage, job_desc) FROM stdin;
 1	Citizen	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	The humble beginning of every adventurer as a common citizen or Crescent Island.
 2	Squire	0	5	0	0	0	5	0	0	0	10	5	1	0	1	0	0	0	10	A knights apprentice, eagerly awaiting the advent of his own knighthood.
@@ -440,33 +226,11 @@ COPY job (job_id, job_name, job_gender, job_stat_hp, job_stat_mp, job_stat_str, 
 28	Fallen Paladin	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
 29	Summoner	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: monstertype_monstertype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('monstertype', 'monstertype_id'), 10, true);
-
-
---
--- Data for Name: monstertype; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY monstertype (monstertype_id, monstertype_name) FROM stdin;
 1	Abberation
 2	Bug
@@ -479,27 +243,13 @@ COPY monstertype (monstertype_id, monstertype_name) FROM stdin;
 9	Undead
 10	Mechanical
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Data for Name: site; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY site (site_tag, site_orderid, site_type, site_main, site_secondary, site_link, site_section, site_logged, site_admin, site_comment) FROM stdin;
+_TEMPLATE_DIR	0	eval	CI_TEMPLATE_WWW . CI_TEMPLATE				0	0	directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)
+ADMIN_SECTION_NAV	60	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
 ADMIN_SECTION_NAV	10	link	Reset		'a=reset'	SECTION_ADMIN	1	1	
 ADMIN_SECTION_NAV	20	link	Sync forums		'a=sync-forums'	SECTION_ADMIN	1	1	
 ADMIN_SECTION_NAV	30	link	Reparse posts		'a=reparse-posts'	SECTION_ADMIN	1	1	
@@ -509,106 +259,18 @@ BATTLE_SECTION_NAV	0	link	Battle		'a=battle'	SECTION_BATTLE	1	0
 BATTLE_SECTION_NAV	10	link	New Battle		'a=newbattle'	SECTION_BATTLE	1	0	
 FORUM_SECTION_NAV	1	link	Smilies		'a=smilies'	SECTION_FORUM	0	0	
 FORUM_SECTION_NAV	2	link	Tag list		'a=taglist'	SECTION_FORUM	0	0	
-FORUM_SECTION_NAV	3	link	View New Threads		'a=viewnew'	SECTION_FORUM	1	0	
-FORUM_SECTION_NAV	4	link	Search		'a=search'	SECTION_FORUM	1	0	
-GAME_SECTION_NAV	1	link	Manage Abilities		'a=abilities'	SECTION_GAME	1	0	
-GAME_SECTION_NAV	2	link	Manage Equipment		'a=equip'	SECTION_GAME	1	0	
-GAME_SECTION_NAV	3	link	View Abilities		'a=viewabilities'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	4	link	View Ability Types		'a=viewabilitytypes'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	5	link	View Areas		'a=viewareas'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	6	link	View Equipment		'a=viewequipment'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	7	link	View Houses		'a=viewhouses'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	8	link	View Jobs		'a=viewjobs'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	9	link	View Monsters		'a=viewmonsters'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	10	link	View Players		'a=viewplayers'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	11	link	View Towns		'a=viewtowns'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	100	link	Register new player		'a=newplayer'	SECTION_GAME	1	0	
-MAIN_SECTION_NAV	1	link	Domains		'a=domains'	SECTION_HOME	0	0	
-MAIN_SECTION_NAV	2	link	Events		'a=event'	SECTION_HOME	0	0	
-MAIN_SECTION_NAV	3	link	Skins		'a=skins'	SECTION_HOME	0	0	
-MAIN_SECTION_NAV	4	link	Stats		'a=stats'	SECTION_HOME	0	0	
-MANUAL_SECTION_NAV	0	link	Skinning		'a=skinning'	SECTION_MANUAL	0	0	
-MANUAL_SECTION_NAV	10	link	Advanced Skinning		'a=skinning-advanced'	SECTION_MANUAL	0	0	
-MANUAL_SECTION_NAV	20	link	IRC		'a=irc'	SECTION_MANUAL	0	0	
-MANUAL_SECTION_NAV	30	link	Contributing to CI		'a=help'	SECTION_MANUAL	0	0	
-MANUAL_SECTION_NAV	40	link	About CI		'a=about'	SECTION_MANUAL	0	0	
-MANUAL_SECTION_NAV	50	link	Staff		'a=staff'	SECTION_MANUAL	0	0	
-NAV	0	link	Main			SECTION_HOME	0	0	
-NAV	10	link	Forum		'a=viewforum'	SECTION_FORUM	0	0	
-NAV	20	link	Game		'a=viewplayers'	SECTION_GAME	0	0	
-NAV	30	link	Battle			SECTION_BATTLE	1	0	
-NAV	50	link	User			SECTION_USER	-1	0	
-NAV	50	link	User		'a=viewuserdetails&user=' . ID	SECTION_USER	1	0	
-NAV	60	link	Manual			SECTION_MANUAL	0	0	
-NAV	70	link	Admin			SECTION_ADMIN	1	1	
-NAV	80	link	[Register User]		'a=newuser'	SECTION_USER	-1	0	
-NAV	90	link	[Login]		'a=login&r=' . encode($_SERVER['REQUEST_URI'])	SECTION_USER	-1	0	
-NAV	90	link	[Logout]		'a=logout'	SECTION_USER	1	0	
-USER_SECTION_NAV	1	link	My Info		'a=viewuserdetails&user=' . ID	SECTION_USER	1	0	
-USER_SECTION_NAV	2	link	Register new user		'a=newuser'	SECTION_USER	-1	0	
-USER_SECTION_NAV	3	link	Remote Information		'a=info'	SECTION_USER	0	0	
-USER_SECTION_NAV	4	link	Send PM		'a=sendpm'	SECTION_USER	1	0	
-USER_SECTION_NAV	5	link	User CP		'a=usercp'	SECTION_USER	1	0	
-USER_SECTION_NAV	6	link	View Active Users		'a=whosonline'	SECTION_USER	0	0	
-USER_SECTION_NAV	7	link	View PMs		'a=viewpms'	SECTION_USER	1	0	
-USER_SECTION_NAV	8	link	View Users		'a=viewusers'	SECTION_USER	0	0	
-_HEAD	0	eval	$GLOBALS['CI_HEAD']				0	0	
-_PROFILE	0	eval	getProfile()				0	0	
-_TEMPLATE_DIR	0	eval	CI_TEMPLATE_WWW . CI_TEMPLATE				0	0	directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)
-ADMIN_SECTION_NAV	60	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Data for Name: skin; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY skin (skin_name, skin_creator, skin_www) FROM stdin;
-redux	ubik	http://werdizen.com/
-kuro5hin	rusty	http://www.kuro5hin.org/
-monobook	MediaWiki	http://wikipedia.sourceforge.net/
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: town_town_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('town', 'town_id'), 17, true);
-
-
---
--- Data for Name: town; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY town (town_id, town_name, town_lv, town_desc, town_item_min_lv, town_item_max_lv, town_reqs, town_reqs_desc) FROM stdin;
 1	Midgar	0	A run-down, old slum.	0	0		
 2	Narshe	0	A forgotten mining town.	0	0		
@@ -628,33 +290,11 @@ COPY town (town_id, town_name, town_lv, town_desc, town_item_min_lv, town_item_m
 16	Burmecia	140	Bring your bell and watch out for the fallen statues.	0	0		
 17	Kakariko Village	175	Watch out for those chickens... o.O	0	0		
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: ability_ability_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('ability', 'ability_id'), 24, true);
-
-
---
--- Data for Name: ability; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY ability (ability_id, ability_name, ability_image, ability_type, ability_mp, ability_ap_cost_init, ability_ap_cost_level, ability_effect, ability_desc, ability_code) FROM stdin;
 1	Retreat		8	0	10	5	You will leave the battle if your agility * rand(.5, lv) &gt; other's agility.	Discretion is the better part of valour and sometimes it is to your advantage to exercise this fact. Retreat allows you to withdraw from battle, if you can outrun your enemy, that is.	$r = $src->agl * drand(.5, $lv);\r\nif($r > $dest->agl)\r\n{\r\n $src->dead = 1;\r\n $db->query('delete from battle_entity where battle_entity_uid=' . $src->uid);\r\n if($src->type == ENTITY_PLAYER)\r\n  $db->query('update player set player_battle=0 where player_id=' . $src->id);\r\n echo '<p>' . $src->name . ' has retreated from battle.';\r\n $src->name = $src->name . ' [retreated]';\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' tried to retreat, but was not able to.';
 2	Errantry		8	0	10	10	If (the natural logarithm of your strength) < lv + rand(1, 3), your strength will be multiplied by 1.5 and you will attack. Otherwise nothing will happen.	Young Knights are often spirited on to greater feats of strength by their youthful exuberance, leading to a rush of adrenaline. While useful early on later it becomes useless as the knight relies more on finess than mindless attacking.	$ln = log($src->str);\r\n$r = drand(1, 3);\r\nif($ln < $r + $lv)\r\n{\r\n $src->str = (int)($src->str * 1.5);\r\n echo '<p>' . $src->name . ' has been errant, increasing their strength to ' . $src->str . '.';\r\n battleAttack($src, $dest);\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' is not very errant...';
@@ -674,34 +314,30 @@ COPY ability (ability_id, ability_name, ability_image, ability_type, ability_mp,
 18	Dispel		2	0	10	0	Removes debuffs from target.		
 23	Force Missile		1	0	10	0	Cast a weak magic spell with no elemental		
 24	Poison		1	0	10	0	Inflicts poison status on the enemy		
+1	Retreat		8	0	10	5	You will leave the battle if your agility * rand(.5, lv) &gt; other's agility.	Discretion is the better part of valour and sometimes it is to your advantage to exercise this fact. Retreat allows you to withdraw from battle, if you can outrun your enemy, that is.	$r = $src->agl * drand(.5, $lv);\r\nif($r > $dest->agl)\r\n{\r\n $src->dead = 1;\r\n $db->query('delete from battle_entity where battle_entity_uid=' . $src->uid);\r\n if($src->type == ENTITY_PLAYER)\r\n  $db->query('update player set player_battle=0 where player_id=' . $src->id);\r\n echo '<p>' . $src->name . ' has retreated from battle.';\r\n $src->name = $src->name . ' [retreated]';\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' tried to retreat, but was not able to.';
+2	Errantry		8	0	10	10	If (the natural logarithm of your strength) < lv + rand(1, 3), your strength will be multiplied by 1.5 and you will attack. Otherwise nothing will happen.	Young Knights are often spirited on to greater feats of strength by their youthful exuberance, leading to a rush of adrenaline. While useful early on later it becomes useless as the knight relies more on finess than mindless attacking.	$ln = log($src->str);\r\n$r = drand(1, 3);\r\nif($ln < $r + $lv)\r\n{\r\n $src->str = (int)($src->str * 1.5);\r\n echo '<p>' . $src->name . ' has been errant, increasing their strength to ' . $src->str . '.';\r\n battleAttack($src, $dest);\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' is not very errant...';
+3	Power Break		11	0	10	0	This decreased the enemy's str by at most 25%. The monster's level is subtracted from your level, and the difference multiplied by a random number is how much it decreased. If the amount is negative, nothing happens.	To thwart the enemies attack is to leave them unable to oppose your victory over them, Power Break reduces your opponants strength leaving them less capable of inflicting damage.	
+5	Aura Of Fortitude		10	0	20	0	Def will increase by 20 percent for 3 rounds.	An aura of fortitude surround thee, showing your faith and protecting you from the blows of you enemies.	
+6	Mighty Aura		10	0	30	0	Atk will increase by 20 percent for 3 rounds.	An aura infused with divine strength to aid the users blows in combat.	
+7	Aura of Devoutness		10	0	50	0	Mdef will increase by 20 percent for 3 rounds.	An aura of devout worship surrounds you, using the power of your devout faith to protect you from the magic of your enemies.	
+8	Aura Of Vigilance		10	0	30	0	Acc will increase by 20 percent for 3 rounds	With patience and vigilance you become empowered with a divine foresight, allowing you to strike with greater clarity.	
+9	Aura Of Grace		10	0	50	0	Agl will increase by 20 percent for 3 rounds.	Infused with an aura of divine grace you become swift and agile, easily avoiding the blows of your opponants.	
+11	Armor Break		11	0	40	0	Same idea as Power Break, but def gets decreased by a maximum of 25%	A heavy strike against your opponants defence breaks through their armour, leaving them weaker towards your strikes.	
+12	Charge		9	0	10	10	A regular attack is increased by (lv + 1) * 1.2, but it takes lv turns to charge up. 	By slowly charging up your attack you may unleash your inner energy with the blow that will strike for greater damage.	$smod = 1.2 * ($lv + 1);\r\nspawnTimer($src, $lv, WHEN_BEFORE, '$this->turnDone=1;\r\necho \\'<p/>\\' . $this->name .  \\' is charging...\\' . ($turns - 1) . \\' turn\\' . ($turns == 2 ? \\'\\' : \\'s\\') . \\' left.\\';',\r\n'echo \\'<p/>\\' . $this->name . \\' has charged!\\';\r\n$old = $this->str;\r\n$this->str *= ' . $smod . ';\r\n$dest = &getEntity(' . $dest->uid . ');\r\nbattleAttack($this, $dest);\r\n$this->str = $old;\r\n$this->turnDone = 1;');\r\necho '<p/>' . $src->name . ' is charging...';
+13	Sureshot		9	0	10	10	A regular attack with agility multiplied by lv + 1.	By focusing for a moment you can better percieve the path of your prey.	$old = $src->agl;\r\n$src->agl *= $lv + 1;\r\necho '<p/>Sureshot: ' . $src->name . '\\'s agility increased to ' . $src->agl . ' for this attack.';\r\nbattleAttack($src, $dest);\r\n$src->agl = $old;
+14	Eagle Eye		9	0	20	15	ACC is increased by a factor of 1.2 * lv for the duration of the battle.	Focusing the mind you become like an eagle, soaring majestically in your mind before seeing with flawless vision your prey.	$src->agl = (int)($src->agl * 1.2 * $lv);\necho '<p/>Eagle Eye: ' . $src->name . '\\'s agl increased to ' . $src->agl . ' for the remainder of the battle.';
+15	Cure		2	0	5	0	Cast a weak healing magic spell		
+16	Fire	fire.gif	1	0	5	0	Cast a weak fire elemental magic spell		
+17	Regen		2	0	10	0	Slowly regains life over time.		
+18	Dispel		2	0	10	0	Removes debuffs from target.		
+23	Force Missile		1	0	10	0	Cast a weak magic spell with no elemental		
+24	Poison		1	0	10	0	Inflicts poison status on the enemy		
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: equipment_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipment', 'equipment_id'), 139, true);
-
-
---
--- Data for Name: equipment; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY equipment (equipment_id, equipment_name, equipment_image, equipment_stat_hp, equipment_stat_mp, equipment_stat_str, equipment_stat_mag, equipment_stat_def, equipment_stat_mgd, equipment_stat_agl, equipment_stat_acc, equipment_req_lv, equipment_req_str, equipment_req_mag, equipment_req_agl, equipment_req_gender, equipment_cost, equipment_desc, equipment_type, equipment_class, equipment_twohand) FROM stdin;
 1	Small Knife	knife.gif	0	0	10	0	0	0	0	0	0	0	0	0	0	500	A small knife, not much to say about it. Can be used as a basic weapon, or to cut bread, whatever.	3	2	0
 2	Stronger Knife	knife.gif	0	0	15	0	0	0	0	0	0	0	0	0	0	750	The blade has been tempured to decrease flexability of the metal.	3	2	0
@@ -842,33 +478,11 @@ COPY equipment (equipment_id, equipment_name, equipment_image, equipment_stat_hp
 138	Concealed Knife	knife.gif	5	0	50	0	0	10	0	0	0	0	0	0	0	10000	This knife is actually a device which connects to the users forearm, allowing at the flick of the wrist an instant weapon.	3	2	0
 139	Danger Dagger	knife.gif	0	0	65	0	-25	0	0	0	0	0	0	0	0	12500	Due to the lack of hand guard, this dagger lowers defence, you dont want to attempt stabbing with this, you might slice your fingers off.	3	2	0
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Name: monster_monster_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dolmant
---
-
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('monster', 'monster_id'), 112, true);
-
-
---
--- Data for Name: monster; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY monster (monster_id, monster_name, monster_image, monster_hp, monster_mp, monster_str, monster_mag, monster_def, monster_mgd, monster_agl, monster_acc, monster_lv, monster_exp, monster_gil, monster_type, monster_desc) FROM stdin;
 1	Small Rodent	SmallRodent.gif	55	5	15	5	10	5	10	10	1	20	25	3	
 2	Snake	Snake.gif	75	5	25	5	5	0	10	10	1	20	25	3	
@@ -983,26 +597,10 @@ COPY monster (monster_id, monster_name, monster_image, monster_hp, monster_mp, m
 111	Nether Essence	NetherEssense.gif	65535	50000	35000	35000	35000	35000	72	72	125	20	1	1	
 112	Ultimate Being	bijou.gif	65535	65535	65535	65535	65535	65535	85	85	150	50	1	1	
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Data for Name: cor_area_monster; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY cor_area_monster (cor_area, cor_monster) FROM stdin;
 1	1
 1	2
@@ -1012,9 +610,9 @@ COPY cor_area_monster (cor_area, cor_monster) FROM stdin;
 3	6
 3	7
 3	8
-4	9
 4	10
 4	11
+4	9
 5	12
 5	13
 5	14
@@ -1030,11 +628,11 @@ COPY cor_area_monster (cor_area, cor_monster) FROM stdin;
 8	24
 8	25
 9	1
-9	6
 9	26
 9	27
 9	28
 9	29
+9	6
 10	30
 10	31
 10	32
@@ -1102,12 +700,12 @@ COPY cor_area_monster (cor_area, cor_monster) FROM stdin;
 23	94
 23	95
 23	96
-24	97
-24	98
-24	99
 24	100
 24	101
 24	102
+24	97
+24	98
+24	99
 25	103
 25	104
 25	105
@@ -1119,63 +717,47 @@ COPY cor_area_monster (cor_area, cor_monster) FROM stdin;
 26	111
 26	112
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Data for Name: cor_area_town; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY cor_area_town (cor_area, cor_town) FROM stdin;
 1	1
-2	1
-3	2
-4	2
 1	2
 1	7
+2	1
+3	2
+3	3
 3	7
+4	2
+4	3
 5	7
 6	2
-4	3
 7	3
-3	3
 7	4
 8	4
 9	4
+9	5
+10	14
 10	5
 11	5
-9	5
 11	6
-13	6
 13	14
-15	14
-10	14
-14	8
+13	6
 13	8
-15	8
 14	13
+14	8
 15	13
-16	13
+15	14
+15	8
 15	9
-16	9
-17	9
 16	10
+16	13
+16	9
 17	10
-18	10
 17	11
+17	9
+18	10
 18	11
 19	11
 19	12
@@ -1184,321 +766,251 @@ COPY cor_area_town (cor_area, cor_town) FROM stdin;
 22	15
 23	15
 24	16
-25	16
-26	17
 24	17
+25	16
 25	17
+26	17
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Data for Name: cor_job_abilitytype; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY cor_job_abilitytype (cor_job, cor_abilitytype) FROM stdin;
-7	9
-4	10
-11	1
 2	8
-10	2
 3	11
-9	12
-8	13
+4	10
 5	14
+7	9
+8	13
+9	12
+10	2
+11	1
 12	15
-29	16
 13	17
-24	18
-28	19
 14	20
-20	21
-19	22
+15	26
+16	28
 17	23
 18	24
+19	22
+20	21
 21	25
-15	26
-27	27
-16	28
-26	29
+24	18
 25	30
+26	29
+27	27
+28	19
+29	16
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Data for Name: cor_job_equipmenttype; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY cor_job_equipmenttype (cor_job, cor_equipmenttype) FROM stdin;
 1	11
 1	3
-9	11
-9	3
-9	1
-9	15
-7	11
-7	7
-7	5
-7	3
+2	10
 2	11
+2	15
 2	3
 2	7
-2	15
-2	10
-11	11
-11	15
-11	3
-11	1
-11	4
+3	10
 3	11
+3	2
 3	3
 3	7
 3	8
-3	10
-3	2
-8	15
-8	5
-8	11
-8	3
-8	7
-8	13
-10	15
-10	11
-10	1
-10	4
-5	15
+4	1
+4	10
+4	11
+4	14
+4	15
+4	16
+4	2
+4	3
+4	6
+4	7
+4	8
+5	1
+5	10
 5	11
+5	15
+5	2
 5	3
 5	7
 5	8
-5	1
-5	10
-5	2
-4	15
-4	11
-4	3
-4	14
-4	7
-4	8
-4	6
-4	1
-4	10
-4	2
-4	16
-16	5
-16	11
-16	3
-16	18
-16	14
-16	7
-12	15
-16	2
-16	13
-12	11
-12	3
+7	11
+7	3
+7	5
+7	7
+8	11
+8	13
+8	15
+8	3
+8	5
+8	7
+9	1
+9	11
+9	15
+9	3
+10	1
+10	11
+10	15
+10	4
+11	1
+11	11
+11	15
+11	3
+11	4
 12	1
+12	11
+12	15
+12	3
 12	4
+13	1
+13	11
+13	15
+13	3
+13	4
+14	11
+14	14
+14	3
+15	11
+15	13
+15	14
+15	2
+15	3
+15	5
+16	11
+16	13
+16	14
+16	18
+16	2
+16	3
+16	5
+16	7
+17	1
+17	11
+17	13
+17	15
+17	17
+17	3
+17	9
+18	1
+18	13
+18	14
 18	15
 18	17
 18	3
-18	9
-18	14
 18	7
-18	1
-18	13
-24	15
-24	11
-24	3
-24	14
-24	7
-24	8
-24	1
-24	10
-24	2
-26	15
-26	11
-26	3
-28	15
-26	7
-26	8
-26	6
-26	1
-26	10
-26	2
-28	11
-28	3
-28	9
-28	7
-28	8
-28	1
-28	10
-28	2
-28	16
-17	15
-17	17
-17	11
-17	3
-17	9
-17	1
-17	13
-25	15
-25	11
-25	3
-25	1
-25	4
-15	5
-15	11
-15	3
-15	14
-15	2
-15	13
-13	15
-13	11
-13	3
-13	1
-13	4
-19	15
-19	11
-19	3
+18	9
 19	1
-19	2
-19	7
+19	11
 19	14
+19	15
+19	2
+19	3
+19	7
 19	9
+20	1
+20	11
+20	16
+20	3
+20	7
+20	9
+21	1
+21	11
 21	15
+21	16
 21	17
 21	3
-21	11
-21	1
-21	9
 21	7
-21	16
-27	15
+21	9
+24	1
+24	10
+24	11
+24	14
+24	15
+24	2
+24	3
+24	7
+24	8
+25	1
+25	11
+25	15
+25	3
+25	4
+26	1
+26	10
+26	11
+26	15
+26	2
+26	3
+26	6
+26	7
+26	8
 27	11
-27	3
-27	18
-27	7
-27	2
 27	13
+27	15
+27	18
+27	2
+27	3
 27	6
+27	7
 27	8
-20	11
-20	3
-20	9
-20	1
-20	16
-20	7
+28	1
+28	10
+28	11
+28	15
+28	16
+28	2
+28	3
+28	7
+28	8
+28	9
+29	1
+29	11
 29	15
 29	3
-29	11
-29	1
 29	4
-14	11
-14	3
-14	14
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Data for Name: cor_job_joblv; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY cor_job_joblv (cor_job, cor_job_req, cor_joblv) FROM stdin;
-9	1	5
-11	9	10
-10	9	10
-7	1	5
-8	7	10
-12	9	15
-29	12	15
-13	29	15
 2	1	5
 3	2	10
-5	3	15
 4	5	15
-24	3	10
-28	24	10
+5	3	15
+7	1	5
+8	7	10
+9	1	5
+10	9	10
+11	9	10
+12	9	15
+13	29	15
 14	1	5
-20	14	10
-19	20	15
-17	14	5
-18	17	20
-21	18	20
 15	14	10
 15	8	10
-27	5	10
-27	9	5
 16	15	10
+17	14	5
+18	17	20
+19	20	15
+20	14	10
+21	18	20
+24	3	10
+25	11	10
 26	4	10
 26	8	10
-25	11	10
+27	5	10
+27	9	5
+28	24	10
+29	12	15
 \.
-
-
---
--- PostgreSQL database dump complete
---
-
---
--- PostgreSQL database dump
---
-
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
 SET search_path = public, pg_catalog;
-
---
--- Data for Name: cor_monster_drop; Type: TABLE DATA; Schema: public; Owner: dolmant
---
-
 COPY cor_monster_drop (cor_monster, cor_drop, cor_type) FROM stdin;
 \.
-
-
---
--- PostgreSQL database dump complete
---
-

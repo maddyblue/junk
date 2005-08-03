@@ -8,6 +8,7 @@ all="${group1} ${group2} ${group3}"
 rev="${group3} ${group2} ${group1}"
 
 o=data.sql
+t=temp.sql
 rm -f $o
 
 for i in $rev
@@ -17,5 +18,11 @@ done
 
 for i in $all
 do
-	pg_dump -a -O -x -U dolmant -t $i ci4 >> $o
+	pg_dump -a -O -x -U dolmant -t $i ci4 | \
+		grep -v "^-" | grep -v "^$" > $t
+	grep -B 10 "COPY" $t > $t.top
+	grep "^[0-9].*$" $t | sort -n > $t.mid
+	grep -A 10 "\\\." $t > $t.bot
+	cat $t.top $t.mid $t.bot >> $o
+	rm $t $t.top $t.mid $t.bot
 done
