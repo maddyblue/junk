@@ -150,10 +150,10 @@ if(LOGGED)
 	}
 	else if($PLAYER['player_battle'])
 	{
+		$_GET['a'] = 'battle';
+		require('battle.php');
+
 		$fail = true;
-		echo '<p/>You already have an active battle. You must complete it before starting another.';
-		echo '<p/>Redirecting you there...';
-		$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="1; url=?a=battle">';
 	}
 
 	if(!$fail)
@@ -193,6 +193,7 @@ if(LOGGED)
 else
 	echo '<p/>You must be logged in to start a new battle.';
 
-update_session_action(801);
+if($_GET['a'] != 'battle') // don't overwrite title if in a real battle
+	update_session_action(801, '', 'Create New Battle');
 
 ?>

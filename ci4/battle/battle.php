@@ -138,7 +138,7 @@ else
 			array_push($a, $entities[$i]->hp, $entities[$i]->mp);
 		else
 			array_push($a,
-				$entities[$i]->hp . '/' . $entities[$i]->maxhp,
+				'<b>' . $entities[$i]->hp . '</b>/' . $entities[$i]->maxhp,
 				$entities[$i]->mp . '/' . $entities[$i]->maxmp,
 				$entities[$i]->ct,
 				$entities[$i]->str,
@@ -202,6 +202,6 @@ else
 	}
 }
 
-update_session_action(801);
+update_session_action(801, '', 'Battle');
 
 ?>
