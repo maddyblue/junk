@@ -74,6 +74,18 @@ class Player extends Entity
 				$abilities[$i]
 			));
 
+		$items = $db->query('select distinct on (player_item_item) * from player_item, item where player_item_player=' . $this->id . ' and player_item_item=item_id and item_usebattle=TRUE order by player_item_item, item_name');
+
+		for($i = 0; $i < count($items); $i++)
+			array_push(
+				$options,
+				array($items[$i]['item_name'],
+				$oid++,
+				OPTION_ITEM,
+				// store the item for easy access later on in an undisplayed 4th field
+				$items[$i]
+		));
+
 		$option = isset($_POST['option']) ? intval($_POST['option']) : '0';
 		$target = isset($_POST['target']) ? intval($_POST['target']) : '0';
 		$optdata = isset($_POST['optdata']) ? encode($_POST['optdata']) : '';
@@ -114,6 +126,9 @@ class Player extends Entity
 					break;
 				case OPTION_ABILITY:
 					$valid = battleAbility($this, $target, $options[$turn][3]);
+					break;
+				case OPTION_ITEM:
+					$valid = battleItem($this, $target, $options[$turn][3]);
 					break;
 				default:
 					$valid = false;

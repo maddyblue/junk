@@ -190,8 +190,9 @@ SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('item', 'item_id'), 1, false);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('item', 'item_id'), 1, true);
 COPY item (item_id, item_name, item_desc, item_usebattle, item_useworld, item_codebattle, item_codeworld, item_cost, item_sellable) FROM stdin;
+1	Potion	Restore 100 HP to target.	t	f	echo '<p/>' . $src->name . ' uses a potion on ' . $dest->name . '.';\nbattleHeal($dest, 100);		100	t
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
@@ -268,10 +269,11 @@ GAME_SECTION_NAV	13	link	View Ability Types		'a=viewabilitytypes'	SECTION_GAME	0
 GAME_SECTION_NAV	14	link	View Areas		'a=viewareas'	SECTION_GAME	0	0	
 GAME_SECTION_NAV	15	link	View Equipment		'a=viewequipment'	SECTION_GAME	0	0	
 GAME_SECTION_NAV	16	link	View Houses		'a=viewhouses'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	17	link	View Jobs		'a=viewjobs'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	18	link	View Monsters		'a=viewmonsters'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	19	link	View Players		'a=viewplayers'	SECTION_GAME	0	0	
-GAME_SECTION_NAV	20	link	View Towns		'a=viewtowns'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	17	link	View Items		'a=viewitems'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	18	link	View Jobs		'a=viewjobs'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	19	link	View Monsters		'a=viewmonsters'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	20	link	View Players		'a=viewplayers'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	21	link	View Towns		'a=viewtowns'	SECTION_GAME	0	0	
 MAIN_SECTION_NAV	10	link	Domains		'a=domains'	SECTION_HOME	0	0	
 MAIN_SECTION_NAV	11	link	Events		'a=event'	SECTION_HOME	0	0	
 MAIN_SECTION_NAV	12	link	Skins		'a=skins'	SECTION_HOME	0	0	

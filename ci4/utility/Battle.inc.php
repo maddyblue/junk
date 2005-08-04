@@ -36,6 +36,7 @@
 
 define('OPTION_ATTACK', 1);
 define('OPTION_ABILITY', 2);
+define('OPTION_ITEM', 3);
 
 define('TURN_NONE', -1);
 define('TURN_BAD_TARGET', -2);
@@ -81,6 +82,18 @@ function battleDamage(&$src, &$dest)
 		$dmg = 0;
 
 	return intval($dmg);
+}
+
+function battleHeal(&$dest, $hp)
+{
+	$diff = $dest->maxhp - $dest->hp;
+
+	if($hp > $diff)
+		$hp = $diff;
+
+	$dest->hp += $hp;
+
+	echo '<p/>' . $dest->name . ' has gained ' . $hp . ' HP.';
 }
 
 // $src deals $d damage to $dest, making sure hp doesn't fall below 0
@@ -205,6 +218,18 @@ function battleAbility(&$src, &$dest, $ability)
 	$lv = $ability['lv'];
 
 	eval($ability['ability_code']);
+
+	return true;
+}
+
+function battleItem(&$src, &$dest, $item)
+{
+	global $db;
+
+	eval($item['item_codebattle']);
+
+	if($src->type == ENTITY_PLAYER)
+		$db->query('delete from player_item where player_item_id=' . $item['player_item_id']);
 
 	return true;
 }
