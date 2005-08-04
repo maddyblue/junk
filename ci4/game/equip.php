@@ -168,4 +168,6 @@ else
 	echo getTableForm('Equip:', $arr);
 }
 
+update_session_action(705, '', 'Manage Equipment');
+
 ?>

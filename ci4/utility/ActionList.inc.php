@@ -103,6 +103,7 @@ array(701, 'makeLink(\'Viewing the player list\', \'a=viewplayers\', SECTION_GAM
 array(702, 'makeLink(\'Viewing details of \' . decode(getDBData(\'player_name\', $d, \'player_id\', \'player\')), \'a=viewplayerdetails&player=\' . $d, SECTION_GAME)'),
 array(703, '\'Registering a new player\''),
 array(704, 'makeLink(\'Managing their abilities\', \'a=abilities\', SECTION_GAME)'),
+array(705, 'makeLink(\'Managing their equipment\', \'a=equipment\', SECTION_GAME)'),
 
 // battle
 array(801, '\'Battling\'')
