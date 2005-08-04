@@ -148,8 +148,7 @@ if(ID != 0 && LOGGED == true)
 		$res = $db->query('select count(*) as count from users where user_email=\'' . encode($email) . '\' and user_id != ' . ID);
 		if(!$email)
 		{
-			echo '<p/>No email address: enter an address.';
-			$fail = true;
+			echo '<p/>No email address: you will not be able to recover your password if you lose it.';
 		}
 		else if(!ereg("^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", decode($email)))
 		{
