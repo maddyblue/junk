@@ -415,18 +415,14 @@ CREATE TABLE house (
 
 CREATE TABLE item (
     item_id bigserial NOT NULL,
-    item_name character varying(100),
+    item_name character varying(25),
     item_desc text,
-    item_lv integer DEFAULT 0,
-    item_usebattle integer DEFAULT 0,
-    item_useworld integer DEFAULT 0,
+    item_usebattle boolean,
+    item_useworld boolean,
     item_codebattle text,
     item_codeworld text,
-    item_buy integer DEFAULT 0,
-    item_sell integer DEFAULT 0,
-    item_cost bigint DEFAULT (0)::bigint,
-    item_size integer DEFAULT 0,
-    item_mass integer DEFAULT 0
+    item_cost integer,
+    item_sellable boolean
 );
 
 
@@ -575,8 +571,9 @@ CREATE TABLE player_equipment (
 --
 
 CREATE TABLE player_item (
-    player_item_item bigint DEFAULT (0)::bigint,
-    player_item_player bigint
+    player_item_player bigint,
+    player_item_id bigserial NOT NULL,
+    player_item_item bigint DEFAULT (0)::bigint
 );
 
 
