@@ -100,7 +100,7 @@ $order = (isset($_GET['order']) && array_key_exists($_GET['order'], $fields)) ? 
 
 $orderdir = (isset($_GET['orderdir']) && $_GET['orderdir'] == 'asc') ? 'asc' : 'desc';
 
-$query = 'from player, domain, users, job
+$query = 'from domain, users, job, player
 	left join town on town_id = player_town
 	left join house on house_id = player_house
 	where
