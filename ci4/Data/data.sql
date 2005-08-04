@@ -191,7 +191,7 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('item', 'item_id'), 1, false);
-COPY item (item_id, item_name, item_desc, item_lv, item_usebattle, item_useworld, item_codebattle, item_codeworld, item_buy, item_sell, item_cost, item_size, item_mass) FROM stdin;
+COPY item (item_id, item_name, item_desc, item_usebattle, item_useworld, item_codebattle, item_codeworld, item_cost, item_sellable) FROM stdin;
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
@@ -248,23 +248,71 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 COPY site (site_tag, site_orderid, site_type, site_main, site_secondary, site_link, site_section, site_logged, site_admin, site_comment) FROM stdin;
+ADMIN_SECTION_NAV	10	link	Manage groups		'a=manage-groups'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	11	link	Manage forums		'a=manage-forums'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	12	link	Reparse posts		'a=reparse-posts'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	13	link	Reset		'a=reset'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	14	link	Sync forums		'a=sync-forums'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	15	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
+BATTLE_SECTION_NAV	10	link	Battle		'a=battle'	SECTION_BATTLE	1	0	
+BATTLE_SECTION_NAV	11	link	New Battle		'a=newbattle'	SECTION_BATTLE	1	0	
+FORUM_SECTION_NAV	10	link	Search		'a=search'	SECTION_FORUM	1	0	
+FORUM_SECTION_NAV	11	link	Smilies		'a=smilies'	SECTION_FORUM	0	0	
+FORUM_SECTION_NAV	12	link	Tag list		'a=taglist'	SECTION_FORUM	0	0	
+FORUM_SECTION_NAV	13	link	View New Threads		'a=viewnew'	SECTION_FORUM	1	0	
+GAME_SECTION_NAV	0	link	Register new player		'a=newplayer'	SECTION_GAME	1	0	
+GAME_SECTION_NAV	10	link	Manage Abilities		'a=abilities'	SECTION_GAME	1	0	
+GAME_SECTION_NAV	11	link	Manage Equipment		'a=equip'	SECTION_GAME	1	0	
+GAME_SECTION_NAV	12	link	View Abilities		'a=viewabilities'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	13	link	View Ability Types		'a=viewabilitytypes'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	14	link	View Areas		'a=viewareas'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	15	link	View Equipment		'a=viewequipment'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	16	link	View Houses		'a=viewhouses'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	17	link	View Jobs		'a=viewjobs'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	18	link	View Monsters		'a=viewmonsters'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	19	link	View Players		'a=viewplayers'	SECTION_GAME	0	0	
+GAME_SECTION_NAV	20	link	View Towns		'a=viewtowns'	SECTION_GAME	0	0	
+MAIN_SECTION_NAV	10	link	Domains		'a=domains'	SECTION_HOME	0	0	
+MAIN_SECTION_NAV	11	link	Events		'a=event'	SECTION_HOME	0	0	
+MAIN_SECTION_NAV	12	link	Skins		'a=skins'	SECTION_HOME	0	0	
+MAIN_SECTION_NAV	13	link	Stats		'a=stats'	SECTION_HOME	0	0	
+MANUAL_SECTION_NAV	10	link	Skinning		'a=skinning'	SECTION_MANUAL	0	0	
+MANUAL_SECTION_NAV	11	link	Advanced Skinning		'a=skinning-advanced'	SECTION_MANUAL	0	0	
+MANUAL_SECTION_NAV	12	link	IRC		'a=irc'	SECTION_MANUAL	0	0	
+MANUAL_SECTION_NAV	13	link	Contributing to CI		'a=help'	SECTION_MANUAL	0	0	
+MANUAL_SECTION_NAV	14	link	About CI		'a=about'	SECTION_MANUAL	0	0	
+MANUAL_SECTION_NAV	15	link	Staff		'a=staff'	SECTION_MANUAL	0	0	
+NAV	10	link	Main			SECTION_HOME	0	0	
+NAV	11	link	Forum		'a=viewforum'	SECTION_FORUM	0	0	
+NAV	12	link	Game		'a=viewplayers'	SECTION_GAME	0	0	
+NAV	13	link	Battle			SECTION_BATTLE	1	0	
+NAV	14	link	User			SECTION_USER	-1	0	
+NAV	15	link	User		'a=viewuserdetails&user=' . ID	SECTION_USER	1	0	
+NAV	16	link	Manual			SECTION_MANUAL	0	0	
+NAV	17	link	Admin			SECTION_ADMIN	1	1	
+NAV	18	link	[Register User]		'a=newuser'	SECTION_USER	-1	0	
+NAV	19	link	[Login]		'a=login&r=' . encode($_SERVER['REQUEST_URI'])	SECTION_USER	-1	0	
+NAV	19	link	[Logout]		'a=logout'	SECTION_USER	1	0	
+USER_SECTION_NAV	10	link	My Info		'a=viewuserdetails&user=' . ID	SECTION_USER	1	0	
+USER_SECTION_NAV	11	link	Register new user		'a=newuser'	SECTION_USER	-1	0	
+USER_SECTION_NAV	12	link	Remote Information		'a=info'	SECTION_USER	0	0	
+USER_SECTION_NAV	13	link	Send PM		'a=sendpm'	SECTION_USER	1	0	
+USER_SECTION_NAV	14	link	User CP		'a=usercp'	SECTION_USER	1	0	
+USER_SECTION_NAV	15	link	View Active Users		'a=whosonline'	SECTION_USER	0	0	
+USER_SECTION_NAV	16	link	View PMs		'a=viewpms'	SECTION_USER	1	0	
+USER_SECTION_NAV	17	link	View Users		'a=viewusers'	SECTION_USER	0	0	
+_HEAD	0	eval	$GLOBALS['CI_HEAD']				0	0	
+_PROFILE	0	eval	getProfile()				0	0	
 _TEMPLATE_DIR	0	eval	CI_TEMPLATE_WWW . CI_TEMPLATE				0	0	directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)
-ADMIN_SECTION_NAV	60	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	10	link	Reset		'a=reset'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	20	link	Sync forums		'a=sync-forums'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	30	link	Reparse posts		'a=reparse-posts'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	40	link	Manage forums		'a=manage-forums'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	50	link	Manage Groups		'a=manage-groups'	SECTION_ADMIN	1	1	
-BATTLE_SECTION_NAV	0	link	Battle		'a=battle'	SECTION_BATTLE	1	0	
-BATTLE_SECTION_NAV	10	link	New Battle		'a=newbattle'	SECTION_BATTLE	1	0	
-FORUM_SECTION_NAV	1	link	Smilies		'a=smilies'	SECTION_FORUM	0	0	
-FORUM_SECTION_NAV	2	link	Tag list		'a=taglist'	SECTION_FORUM	0	0	
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 COPY skin (skin_name, skin_creator, skin_www) FROM stdin;
+kuro5hin	rusty	http://www.kuro5hin.org/
+monobook	MediaWiki	http://wikipedia.sourceforge.net/
+redux	ubik	http://werdizen.com/
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
@@ -296,24 +344,6 @@ SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('ability', 'ability_id'), 24, true);
 COPY ability (ability_id, ability_name, ability_image, ability_type, ability_mp, ability_ap_cost_init, ability_ap_cost_level, ability_effect, ability_desc, ability_code) FROM stdin;
-1	Retreat		8	0	10	5	You will leave the battle if your agility * rand(.5, lv) &gt; other's agility.	Discretion is the better part of valour and sometimes it is to your advantage to exercise this fact. Retreat allows you to withdraw from battle, if you can outrun your enemy, that is.	$r = $src->agl * drand(.5, $lv);\r\nif($r > $dest->agl)\r\n{\r\n $src->dead = 1;\r\n $db->query('delete from battle_entity where battle_entity_uid=' . $src->uid);\r\n if($src->type == ENTITY_PLAYER)\r\n  $db->query('update player set player_battle=0 where player_id=' . $src->id);\r\n echo '<p>' . $src->name . ' has retreated from battle.';\r\n $src->name = $src->name . ' [retreated]';\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' tried to retreat, but was not able to.';
-2	Errantry		8	0	10	10	If (the natural logarithm of your strength) < lv + rand(1, 3), your strength will be multiplied by 1.5 and you will attack. Otherwise nothing will happen.	Young Knights are often spirited on to greater feats of strength by their youthful exuberance, leading to a rush of adrenaline. While useful early on later it becomes useless as the knight relies more on finess than mindless attacking.	$ln = log($src->str);\r\n$r = drand(1, 3);\r\nif($ln < $r + $lv)\r\n{\r\n $src->str = (int)($src->str * 1.5);\r\n echo '<p>' . $src->name . ' has been errant, increasing their strength to ' . $src->str . '.';\r\n battleAttack($src, $dest);\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' is not very errant...';
-3	Power Break		11	0	10	0	This decreased the enemy's str by at most 25%. The monster's level is subtracted from your level, and the difference multiplied by a random number is how much it decreased. If the amount is negative, nothing happens.	To thwart the enemies attack is to leave them unable to oppose your victory over them, Power Break reduces your opponants strength leaving them less capable of inflicting damage.	
-5	Aura Of Fortitude		10	0	20	0	Def will increase by 20 percent for 3 rounds.	An aura of fortitude surround thee, showing your faith and protecting you from the blows of you enemies.	
-6	Mighty Aura		10	0	30	0	Atk will increase by 20 percent for 3 rounds.	An aura infused with divine strength to aid the users blows in combat.	
-7	Aura of Devoutness		10	0	50	0	Mdef will increase by 20 percent for 3 rounds.	An aura of devout worship surrounds you, using the power of your devout faith to protect you from the magic of your enemies.	
-8	Aura Of Vigilance		10	0	30	0	Acc will increase by 20 percent for 3 rounds	With patience and vigilance you become empowered with a divine foresight, allowing you to strike with greater clarity.	
-9	Aura Of Grace		10	0	50	0	Agl will increase by 20 percent for 3 rounds.	Infused with an aura of divine grace you become swift and agile, easily avoiding the blows of your opponants.	
-11	Armor Break		11	0	40	0	Same idea as Power Break, but def gets decreased by a maximum of 25%	A heavy strike against your opponants defence breaks through their armour, leaving them weaker towards your strikes.	
-12	Charge		9	0	10	10	A regular attack is increased by (lv + 1) * 1.2, but it takes lv turns to charge up. 	By slowly charging up your attack you may unleash your inner energy with the blow that will strike for greater damage.	$smod = 1.2 * ($lv + 1);\r\nspawnTimer($src, $lv, WHEN_BEFORE, '$this->turnDone=1;\r\necho \\'<p/>\\' . $this->name .  \\' is charging...\\' . ($turns - 1) . \\' turn\\' . ($turns == 2 ? \\'\\' : \\'s\\') . \\' left.\\';',\r\n'echo \\'<p/>\\' . $this->name . \\' has charged!\\';\r\n$old = $this->str;\r\n$this->str *= ' . $smod . ';\r\n$dest = &getEntity(' . $dest->uid . ');\r\nbattleAttack($this, $dest);\r\n$this->str = $old;\r\n$this->turnDone = 1;');\r\necho '<p/>' . $src->name . ' is charging...';
-13	Sureshot		9	0	10	10	A regular attack with agility multiplied by lv + 1.	By focusing for a moment you can better percieve the path of your prey.	$old = $src->agl;\r\n$src->agl *= $lv + 1;\r\necho '<p/>Sureshot: ' . $src->name . '\\'s agility increased to ' . $src->agl . ' for this attack.';\r\nbattleAttack($src, $dest);\r\n$src->agl = $old;
-14	Eagle Eye		9	0	20	15	ACC is increased by a factor of 1.2 * lv for the duration of the battle.	Focusing the mind you become like an eagle, soaring majestically in your mind before seeing with flawless vision your prey.	$src->agl = (int)($src->agl * 1.2 * $lv);\necho '<p/>Eagle Eye: ' . $src->name . '\\'s agl increased to ' . $src->agl . ' for the remainder of the battle.';
-15	Cure		2	0	5	0	Cast a weak healing magic spell		
-16	Fire	fire.gif	1	0	5	0	Cast a weak fire elemental magic spell		
-17	Regen		2	0	10	0	Slowly regains life over time.		
-18	Dispel		2	0	10	0	Removes debuffs from target.		
-23	Force Missile		1	0	10	0	Cast a weak magic spell with no elemental		
-24	Poison		1	0	10	0	Inflicts poison status on the enemy		
 1	Retreat		8	0	10	5	You will leave the battle if your agility * rand(.5, lv) &gt; other's agility.	Discretion is the better part of valour and sometimes it is to your advantage to exercise this fact. Retreat allows you to withdraw from battle, if you can outrun your enemy, that is.	$r = $src->agl * drand(.5, $lv);\r\nif($r > $dest->agl)\r\n{\r\n $src->dead = 1;\r\n $db->query('delete from battle_entity where battle_entity_uid=' . $src->uid);\r\n if($src->type == ENTITY_PLAYER)\r\n  $db->query('update player set player_battle=0 where player_id=' . $src->id);\r\n echo '<p>' . $src->name . ' has retreated from battle.';\r\n $src->name = $src->name . ' [retreated]';\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' tried to retreat, but was not able to.';
 2	Errantry		8	0	10	10	If (the natural logarithm of your strength) < lv + rand(1, 3), your strength will be multiplied by 1.5 and you will attack. Otherwise nothing will happen.	Young Knights are often spirited on to greater feats of strength by their youthful exuberance, leading to a rush of adrenaline. While useful early on later it becomes useless as the knight relies more on finess than mindless attacking.	$ln = log($src->str);\r\n$r = drand(1, 3);\r\nif($ln < $r + $lv)\r\n{\r\n $src->str = (int)($src->str * 1.5);\r\n echo '<p>' . $src->name . ' has been errant, increasing their strength to ' . $src->str . '.';\r\n battleAttack($src, $dest);\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' is not very errant...';
 3	Power Break		11	0	10	0	This decreased the enemy's str by at most 25%. The monster's level is subtracted from your level, and the difference multiplied by a random number is how much it decreased. If the amount is negative, nothing happens.	To thwart the enemies attack is to leave them unable to oppose your victory over them, Power Break reduces your opponants strength leaving them less capable of inflicting damage.	
