@@ -87,8 +87,7 @@ if(isset($_POST['submit']))
 	$res = $db->query('select count(*) as count from users where user_email=\'' . $email . '\'');
 	if(!$email)
 	{
-		echo '<p/>No email: enter an address.';
-		$fail = true;
+		echo '<p/>No email address: if you lose your password, there is no way to recover it. You can set your password in the User CP.';
 	}
 	else if(!ereg("^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", decode($email)))
 	{
