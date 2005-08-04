@@ -123,7 +123,7 @@ class Database
 		$this->query($query, false);
 	}
 
-	function insert($query)
+	function insert($query, $seq)
 	{
 		$ret = $this->query($query, false);
 		$s = $seq == 'user' ? 's' : '';
