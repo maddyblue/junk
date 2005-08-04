@@ -74,12 +74,12 @@ class Player extends Entity
 				$abilities[$i]
 			));
 
-		$items = $db->query('select distinct on (player_item_item) * from player_item, item where player_item_player=' . $this->id . ' and player_item_item=item_id and item_usebattle=TRUE order by player_item_item, item_name');
+		$items = $db->query('select count(*), max(player_item_id) as player_item_id, item_name, item_codebattle from player_item, item where player_item_item=item_id and player_item_player=' . $this->id . ' group by player_item_item, item_name, item_codebattle');
 
 		for($i = 0; $i < count($items); $i++)
 			array_push(
 				$options,
-				array($items[$i]['item_name'],
+				array($items[$i]['item_name'] . ' (' . $items[$i]['count'] . ')',
 				$oid++,
 				OPTION_ITEM,
 				// store the item for easy access later on in an undisplayed 4th field
