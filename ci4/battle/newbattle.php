@@ -168,7 +168,6 @@ if(LOGGED)
 			global $db, $PLAYER;
 
 			$ret = $db->query('select count(*) as count from cor_area_town where cor_area = ' . $area . ' and cor_town=' . $PLAYER['player_town']);
-			print_r($ret);
 
 			if($ret[0]['count'] != '1')
 			{
