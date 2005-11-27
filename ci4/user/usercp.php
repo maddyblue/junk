@@ -107,7 +107,7 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle)
 	));
 }
 
-if(ID != 0 && LOGGED == true)
+if(LOGGED)
 {
 	if(isset($_POST['submit']))
 	{
