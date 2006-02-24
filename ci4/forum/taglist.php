@@ -39,29 +39,21 @@ $array = array('[i]italics[/i]',
 '[url]http://crescentisland.com[/url]',
 '[url=http://crescentisland.com]Crescent Island[/url]',
 '[quote]Hi, I said something![/quote]',
-'[pre]
-test
+'[pre]test
 1
  2
   3
    4
-<tag>stuff</tag>
-[/pre]',
-'[list]
-[li]1
+<tag>stuff</tag>[/pre]',
+'[list][li]1
 [li]2
-[li]3
-[/list]',
-'[list=1]
-[li]1
+[li]3[/list]',
+'[list=1][li]1
 [li]2
-[li]3
-[/list=1]',
-'[list=a]
-[li]1
+[li]3[/list=1]',
+'[list=a][li]1
 [li]2
-[li]3
-[/list=a]');
+[li]3[/list=a]');
 
 $disp = array();
 
