@@ -35,7 +35,7 @@
 $array = array('[i]italics[/i]',
 '[b]bold[/b]',
 '[u]underline[/u]',
-'[img]http://crescentisland.com/images/monster/grat.gif[/img]',
+'[img]http://crescentisland.com/images/monster/ChaosDragon.gif[/img]',
 '[url]http://crescentisland.com[/url]',
 '[url=http://crescentisland.com]Crescent Island[/url]',
 '[quote]Hi, I said something![/quote]',
