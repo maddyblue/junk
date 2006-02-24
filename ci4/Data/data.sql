@@ -149,7 +149,7 @@ SET search_path = public, pg_catalog;
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('event', 'event_id'), 2, true);
 COPY event (event_id, event_name, event_code, event_desc) FROM stdin;
 1	Job&nbsp;Wages	jobWages($id, $last);	Once every day (24 hours), players recieve a job wage, depending on their job. The domain the player is in does not matter. Wages are every 24 hours, regardless of domain speed.
-2	EXPW&nbsp;Decrease	expwDecrease($id, $last);	Decrease expw by all players by one in each domain that needs it.
+2	EXPW&nbsp;Decrease	expwDecrease($id, $last);	Decrease experience weight for all players.
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
