@@ -73,7 +73,7 @@ function expwDecrease($id, $last)
 
 		for($i = 0; $i < count($res); $i++)
 		{
-			$dec = (int)($hours / $res[$i]['domain_expw_time']);
+			$dec = $hours / $res[$i]['domain_expw_time'];
 
 			if($dec)
 			{

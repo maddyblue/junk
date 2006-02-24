@@ -509,7 +509,7 @@ CREATE TABLE player (
     player_domain bigint DEFAULT (0)::bigint,
     player_job bigint DEFAULT (0)::bigint,
     player_battle bigint DEFAULT (0)::bigint,
-    player_expw integer DEFAULT 0,
+    player_expw real DEFAULT 0,
     player_town bigint DEFAULT (0)::bigint,
     player_house bigint DEFAULT (0)::bigint,
     player_lv integer DEFAULT 1,

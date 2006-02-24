@@ -37,7 +37,7 @@ if(ADMIN)
 
 require_once CI_FS_PATH . 'utility/Event.inc.php';
 
-$query = 'select distinct on (eventlog_event) * from event left join eventlog on event_id=eventlog_event order by eventlog_event, eventlog_time desc';
+$query = 'select distinct on (event_id) * from event left join eventlog on event_id=eventlog_event order by event_id, eventlog_time desc';
 
 if(isset($_GET['update']))
 {
@@ -47,6 +47,7 @@ if(isset($_GET['update']))
 	{
 		$id = $event['event_id'];
 		$last = $event['eventlog_time'];
+		if(!$last) $last = TIME - (24 * 60 * 60); // if no previous event, set to 1 day ago
 		eval($event['event_code']);
 	}
 
@@ -57,6 +58,7 @@ $event = array(array(
 	'Event', 'Last Update', 'Description'
 ));
 
+// re-run if we updated the events - we'll need the new times
 $res = $db->query($query);
 
 foreach($res as $e)
