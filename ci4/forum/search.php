@@ -81,6 +81,7 @@ if($search)
 	echo $pageDisp;
 }
 
+// This works, but is disabled until I find a way that performs better in Postgre.
 /*
 echo getTableForm('Search the forum:', array(
 	array('', array('type'=>'text', 'name'=>'search', 'val'=>$search)),
