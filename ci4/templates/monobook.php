@@ -10,6 +10,7 @@
 		<CI_HEAD/>
 		<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR/>/main.css" />
 		<link rel="alternate" type="application/xml" title="rss" href="<?php echo CI_WWW_ADDRESS; ?>rss.php"/>
+		<script src="http://www.google-analytics.com/urchin.js" type="text/javascript" />
 	</head>
 	<body>
 		<div id="globalWrapper">
