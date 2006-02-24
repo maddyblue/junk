@@ -256,6 +256,7 @@ ADMIN_SECTION_NAV	12	link	Reparse posts		'a=reparse-posts'	SECTION_ADMIN	1	1
 ADMIN_SECTION_NAV	13	link	Reset		'a=reset'	SECTION_ADMIN	1	1	
 ADMIN_SECTION_NAV	14	link	Sync forums		'a=sync-forums'	SECTION_ADMIN	1	1	
 ADMIN_SECTION_NAV	15	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	16	link	Sync data		'a=sync-data'	SECTION_ADMIN	1	1	
 BATTLE_SECTION_NAV	10	link	Battle		'a=battle'	SECTION_BATTLE	1	0	
 BATTLE_SECTION_NAV	11	link	New Battle		'a=newbattle'	SECTION_BATTLE	1	0	
 FORUM_SECTION_NAV	10	link	Search		'a=search'	SECTION_FORUM	1	0	

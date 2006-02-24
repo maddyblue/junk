@@ -39,7 +39,7 @@ $PastWeek = TIME - $SecPerWeek;
 
 $stats = array(
 	array('Hits for the past day', 'select count(*) as count from stats where stats_timestamp > ' . $PastDay),
-	array('Total Hits', 'select count(*) as count from stats'),
+	array('Total Hits', 'select data_val_int as count from data where data_name=\'hits\''),
 	array('Registered users', 'select count(*) as count from users'),
 	array('New users in the last week', 'select count(*) as count from users where user_register > ' . $PastWeek),
 	array('Active users for the past week', 'select count(*) as count from users where user_last > ' . $PastWeek),

@@ -235,6 +235,7 @@ else
 }
 
 $db->query('insert into stats values (' . TIME . ', ' . ID . ', ' . $SESSION_ACTION . ', \'' . CI_TEMPLATE . '\', ' . REMOTE_ADDR . ')');
+$db->query('update data set data_val_int=data_val_int+1 where data_name=\'hits\'');
 
 ob_start();
 eval('?>' . $template);

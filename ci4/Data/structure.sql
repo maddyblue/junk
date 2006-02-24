@@ -175,6 +175,21 @@ CREATE TABLE cor_monster_drop (
 );
 
 
+SET default_with_oids = false;
+
+--
+-- Name: data; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE TABLE data (
+    data_name character varying NOT NULL,
+    data_val_text text,
+    data_val_int bigint
+);
+
+
+SET default_with_oids = true;
+
 --
 -- Name: domain; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
@@ -750,6 +765,14 @@ ALTER TABLE ONLY battle
 
 ALTER TABLE ONLY battle_timer
     ADD CONSTRAINT battle_timer_pkey PRIMARY KEY (battle_timer_id);
+
+
+--
+-- Name: data_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE ONLY data
+    ADD CONSTRAINT data_pkey PRIMARY KEY (data_name);
 
 
 --
