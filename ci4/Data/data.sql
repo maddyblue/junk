@@ -190,9 +190,10 @@ SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('item', 'item_id'), 1, true);
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('item', 'item_id'), 2, true);
 COPY item (item_id, item_name, item_desc, item_usebattle, item_useworld, item_codebattle, item_codeworld, item_cost, item_sellable) FROM stdin;
 1	Potion	Restore 100 HP to target.	t	f	echo '<p/>' . $src->name . ' uses a potion on ' . $dest->name . '.';\nbattleHeal($dest, 100);		100	t
+2	High Potion	Restores 250 HP to target.	t	f	echo '<p/>' . $src->name . ' uses a potion on ' . $dest->name . '.';\nbattleHeal($dest, 100);		500	t
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
