@@ -18,7 +18,7 @@ done
 
 for i in $all
 do
-	pg_dump -a -O -x -U dolmant -t $i ci4 | \
+	pg_dump -a -O -x -U $1 -h $2 -t $i $3 | \
 		grep -v "^-" | grep -v "^$" > $t
 	head -n 5 $t > $t.top
 	sed 1,5d $t | sed '$d' | sort -n > $t.mid
