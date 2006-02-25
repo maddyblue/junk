@@ -53,6 +53,8 @@ deleteCIcookie('pass');
 $id = '';
 $pass = '';
 
+update_session_action(303);
+
 ?>
 
 Cookies cleared: user logged out.

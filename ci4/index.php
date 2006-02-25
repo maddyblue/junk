@@ -71,24 +71,6 @@ if(!$aval && CI_SECTION == 'MAIN')
 
 define('ACTION', $aval);
 
-if(CI_SECTION == 'USER' && ($aval == 'login' || $aval == 'logout'))
-{
-		$a = './' . $aval . '.php';
-
-		$fd = fopen($a, 'r');
-		if($fd)
-		{
-			$content = fread($fd, filesize($a));
-			fclose($fd);
-			ob_start();
-			eval('?>' . $content);
-			$content = ob_get_contents();
-			ob_end_clean();
-		}
-
-		$contentdone = true;
-}
-
 if(isset($_GET['domain']))
 {
 	$dom = intval($_GET['domain']);
@@ -197,39 +179,24 @@ define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
 $template = fread($fd, filesize($tfile));
 fclose($fd);
 
-/* $contentdone will only be set during log{in,out}; if we do
- * update_session_action in those scripts, no ID has been set yet, thus, do
- * update_session_action now.
- */
-if($contentdone)
-{
-	if($aval =='login')
-		update_session_action(302);
-	else if($aval == 'logout')
-		update_session_action(303);
-}
-// get content page
+if(CI_SECTION == 'ADMIN' && !ADMIN)
+	$content .= '<p/>You do not have permission to view this page.';
 else
 {
-	if(CI_SECTION == 'ADMIN' && !ADMIN)
-		$content .= '<p/>You do not have permission to view this page.';
-	else
+	if($aval)
 	{
-		if($aval)
-		{
-			$a = CI_FS_PATH . CI_SECTION_DIR . $aval . '.php';
+		$a = CI_FS_PATH . CI_SECTION_DIR . $aval . '.php';
 
-			if(file_exists($a))
-			{
-				ob_start();
-				require $a;
-				$content .= ob_get_contents();
-				ob_end_clean();
-			}
-			else
-			{
-				$content .= 'Non-existent action.';
-			}
+		if(file_exists($a))
+		{
+			ob_start();
+			require $a;
+			$content .= ob_get_contents();
+			ob_end_clean();
+		}
+		else
+		{
+			$content .= 'Non-existent action.';
 		}
 	}
 }
