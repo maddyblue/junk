@@ -32,6 +32,31 @@
  *
  */
 
+function makeJoblist($job, $depth)
+{
+	global $db;
+	$ret = '';
+
+	$jobs = $db->query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $job . ' and cor_job_req=job.job_id order by job_name');
+
+	for($i = 0; $i < count($jobs); $i++)
+	{
+		if($i || $depth)
+			$ret .= '<br/>';
+
+		for($k = 0; $k < $depth; $k++)
+			$ret .= '&nbsp;&nbsp;';
+
+		$ret .= makeLink($jobs[$i]['job_name'], 'a=viewjobdetails&job=' . $jobs[$i]['job_id']) . ' (' . $jobs[$i]['cor_joblv'] . ')';
+		$ret .= makeJoblist($jobs[$i]['job_id'], $depth + 1);
+	}
+
+	if(!$depth && !$ret)
+		$ret = 'None';
+
+	return $ret;
+}
+
 $job = isset($_GET['job']) ? intval($_GET['job']) : '0';
 
 if(isset($_POST['job']))
@@ -116,6 +141,7 @@ if(count($res))
 
 	$abilities = $db->query('select abilitytype_name, abilitytype_id from job, abilitytype, cor_job_abilitytype where job_id=cor_job and cor_abilitytype=abilitytype_id and job_id=' . $job);
 	$abilitylist = '';
+
 	for($i = 0; $i < count($abilities); $i++)
 	{
 		if($i)
@@ -124,24 +150,10 @@ if(count($res))
 		$abilitylist .= makeLink($abilities[$i]['abilitytype_name'], 'a=viewabilitytypedetails&type=' . $abilities[$i]['abilitytype_id']);
 	}
 
-	$jobs = $db->query('select job_name, job_id, cor_joblv from cor_job_joblv, job where cor_job=' . $job . ' and cor_job_req=job.job_id order by job_name');
+	if(!$abilitylist)
+		$abilitylist = 'None';
 
-	$joblist = '';
-
-	if(count($jobs) == 0)
-	{
-		$joblist .= 'None';
-	}
-	else
-	{
-		for($i = 0; $i < count($jobs); $i++)
-		{
-			if($i)
-				$joblist .= ', ';
-
-			$joblist .= makeLink($jobs[$i]['job_name'], 'a=viewjobdetails&job=' . $jobs[$i]['job_id']) . ' (' . $jobs[$i]['cor_joblv'] . ')';
-		}
-	}
+	$joblist = makeJoblist($job, 0);
 
 	$stat = array(
 		array('HP', $res[0]['job_stat_hp'] . '%'),
