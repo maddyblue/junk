@@ -192,7 +192,7 @@ if(LOGGED)
 else
 	echo '<p/>You must be logged in to start a new battle.';
 
-if($_GET['a'] != 'battle') // don't overwrite title if in a real battle
+if(isset($_GET['a']) && $_GET['a'] != 'battle') // don't overwrite title if in a real battle
 	update_session_action(801, '', 'Create New Battle');
 
 ?>
