@@ -228,6 +228,11 @@ function updatePlayerStats($pid = 0)
 
 function handle_login()
 {
+	define('TIME', time());
+	define('REMOTE_ADDR', ip2long($_SERVER['REMOTE_ADDR']));
+
+	close_sessions();
+
 	global $PLAYER, $USER, $db;
 
 	if(isset($_GET['domain']))
@@ -290,6 +295,8 @@ function handle_login()
 		$PLAYER = false;
 		$USER = false;
 	}
+
+	handle_session();
 }
 
 ?>

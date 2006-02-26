@@ -37,19 +37,13 @@ $time_start = gettimeofday();
 // turn on all errors
 error_reporting(E_ALL);
 
-define('TIME', time());
-
 if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
 if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
 
 require_once CI_HOME_MOD . 'Include.inc.php';
 
-close_sessions();
-
 eval('$secDir = SECTION_' . strtoupper(CI_SECTION) . ';');
 define('CI_SECTION_DIR', $secDir . '/');
-
-define('REMOTE_ADDR', ip2long($_SERVER['REMOTE_ADDR']));
 
 $message = '';
 $content = '';
@@ -60,8 +54,6 @@ if(isset($_GET['domain']))
 	$content .= '<div><b>Domain changed.</b></div>';
 
 setCIcookie('domain', CI_DOMAIN);
-
-handle_session();
 
 $aval = '';
 
