@@ -77,10 +77,10 @@ if(isset($_POST['submit']))
 
 		echo '<p/>Logged in successfully as ' . decode($user) . '.';
 
-		if($last && strpos($last, 'logout') === false)
+		if($last && strpos($last, 'logout') === false && strpos($last, 'ajax') === false)
 		{
 			echo '<p/>Redirecting to <a href="' . $last . '">last location</a>...';
-			$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
+			$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="10; url=' . $last . '">';
 		}
 	}
 	else if($user && $pass)
