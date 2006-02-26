@@ -72,6 +72,9 @@ if(isset($_POST['submit']))
 		setCIcookie('pass', $ret[0]['user_pass']);
 		$id = $ret[0]['user_id'];
 		$pass = $ret[0]['user_pass'];
+
+		$db->query('update session set session_uid=' . $id . ' where session_id=\'' . SESSION . '\' and session_uid=0');
+
 		echo '<p/>Logged in successfully as ' . decode($user) . '.';
 
 		if($last && strpos($last, 'logout') === false)

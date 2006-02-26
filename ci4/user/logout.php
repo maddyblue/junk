@@ -44,7 +44,7 @@ if(count($res))
 	$db->query('delete from forum_view where forum_view_user=' . $id);
 
 	// now delete the session. a new one will be created for an guest user.
-	$db->query('delete from session where session_uid=' . $id);
+	$db->query('delete from session where session_id=\'' . SESSION . '\'');
 }
 
 deleteCIcookie('id');

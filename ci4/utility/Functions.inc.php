@@ -442,9 +442,6 @@ function makeLink($text, $link, $section = '', $title = '')
 			$ret .= CI_WWW_PATH . $section . '/';
 
 		$ret .= '?';
-
-		if(!LOGGED)
-			$ret .= 's=' . SESSION . '&amp;';
 	}
 
 	$ret .= str_replace('&', '&amp;', $link) . '"';

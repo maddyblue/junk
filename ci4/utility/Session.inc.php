@@ -34,17 +34,9 @@
 
 function handle_session()
 {
-	$sid = isset($_GET['s']) ? encode($_GET['s']) : (isset($_POST['s']) ? encode($_POST['s']) : '');
-
-	/* User probably just logged in. If they didn't just login, this won't do
-	 * anything malicious.
-	 */
-	if(ID && $sid)
-		update_session($sid, true);
-	else if(ID)
+	if(ID)
 	{
-		if(!$sid)
-			$sid = getDBData('session_id', ID, 'session_uid', 'session');
+		$sid = getDBData('session_id', ID, 'session_uid', 'session');
 
 		if(!$sid)
 			start_session();
@@ -53,20 +45,12 @@ function handle_session()
 	}
 	else
 	{
-		if(session_exists($sid))
-			update_session($sid);
+		$res = $GLOBALS['db']->query('select session_id from session where session_uid=0 and session_ip=' . REMOTE_ADDR);
+
+		if(count($res))
+			update_session($res[0]['session_id']);
 		else
-		{
-			$res = $GLOBALS['db']->query('select session_id from session where session_uid=0 and session_ip=' . REMOTE_ADDR);
-
-			if(count($res))
-				$sid = $res[0]['session_id'];
-
-			if($sid)
-				update_session($sid);
-			else
-				start_session();
-		}
+			start_session();
 	}
 
 	// default
@@ -103,7 +87,7 @@ function start_session()
 		')');
 }
 
-function update_session($sid, $updateplayer = false)
+function update_session($sid)
 {
 	global $db;
 
@@ -112,16 +96,7 @@ function update_session($sid, $updateplayer = false)
 	if(ID)
 		$db->query('update users set user_last=' . TIME . ' where user_id=' . ID . '');
 
-	if(!$updateplayer)
-		$query = 'update session set session_current=' . TIME . ', session_action=0 where session_id=\'' . $sid . '\'';
-	/* This is called when the user has just logged in. If they manually set a
-	 * session in their GET or POST, a session hijacking cannot occur, due to the
-	 * session_uid=0 in the where clause.
-	 */
-	else
-		$query = 'update session set session_current=' . TIME . ', session_action=0, session_uid=' . ID . ' where session_id=\'' . $sid . '\' and session_uid=0';
-
-	$db->query($query);
+	$db->query('update session set session_current=' . TIME . ', session_action=0 where session_id=\'' . $sid . '\'');
 }
 
 function update_session_action($action, $data = '', $title = '')
