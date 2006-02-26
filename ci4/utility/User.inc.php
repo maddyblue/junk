@@ -226,4 +226,70 @@ function updatePlayerStats($pid = 0)
 		where player_id=' . $pid);
 }
 
+function handle_login()
+{
+	global $PLAYER, $USER, $db;
+
+	if(isset($_GET['domain']))
+		$dom = intval($_GET['domain']);
+	else
+		$dom = intval(getCICookie('domain'));
+
+	define('CI_DOMAIN', $dom);
+
+	$id = intval(getCIcookie('id'));
+	$pass = getCIcookie('pass');
+
+	// check to see if we have a valid user
+
+	if($id && $pass)
+		$res = $db->query('select users.*, domain_abrev from users left join domain on domain_id=' . CI_DOMAIN . ' where user_id=' . $id . ' and user_pass=\'' . $pass . '\'');
+	else
+		$res = array();
+
+	if(count($res))
+	{
+		define('LOGGED', true);
+		define('LOGGED_DIR', '>');
+		define('ID', $id);
+
+		define('ADMIN', (hasAdmin() ? 1 : 0));
+
+		// set cookies to be alive for another week
+		setCIcookie('id', $id);
+		setCIcookie('pass', $pass);
+
+		// get all player data to save on erroneous getDBData calls
+		if(CI_DOMAIN)
+		{
+			$ret = $db->query('select * from player where player_user=' . ID . ' and player_domain=' . CI_DOMAIN);
+			if(count($ret))
+			{
+				$PLAYER = $ret[0];
+				$db->query('update player set player_last=' . TIME . ' where player_id=' . $PLAYER['player_id']);
+			}
+			else
+				$PLAYER = false;
+		}
+		else
+			$PLAYER = false;
+
+		// set user data
+		$USER = $res[0];
+
+		define('TZOFFSET', $res[0]['user_timezone'] * 3600);
+	}
+	else
+	{
+		define('LOGGED', false);
+		define('LOGGED_DIR', '<');
+		define('ID', 0);
+		define('ADMIN', 0);
+		define('TZOFFSET', 0);
+
+		$PLAYER = false;
+		$USER = false;
+	}
+}
+
 ?>
