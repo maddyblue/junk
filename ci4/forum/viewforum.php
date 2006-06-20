@@ -249,11 +249,8 @@ if($read)
 
 	if(count($res))
 	{
-		$s = '';
 		for($i = 0; $i < count($res); $i++)
-			$s .= '(' . ID . ', ' . $res[$i]['forum_thread_id'] . ', ' . TIME . '),';
-
-		$db->query('insert into forum_view values ' . substr($s, 0, -1));
+			$db->query('insert into forum_view values (' . ID . ', ' . $res[$i]['forum_thread_id'] . ', ' . TIME . ')');
 	}
 }
 
