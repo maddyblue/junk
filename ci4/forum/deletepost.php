@@ -58,18 +58,18 @@ else if(count($res))
 		else
 		{
 			// decrement user post count
-			$db->query('update users set user_posts = user_posts - 1 where user_id=' . $userid);
+			$db->update('update users set user_posts = user_posts - 1 where user_id=' . $userid);
 
 			// delete post
-			$db->query('delete from forum_post where forum_post_id =' . $postid);
+			$db->update('delete from forum_post where forum_post_id =' . $postid);
 
 			// update thread stats
 			$threadlast = $db->query('select forum_post_id from forum_post where forum_post_thread=' . $threadid . ' order by forum_post_date desc limit 1');
-			$db->query('update forum_thread set forum_thread_last_post=' . $threadlast[0]['forum_post_id'] . ', forum_thread_replies = forum_thread_replies - 1 where forum_thread_id=' . $threadid);
+			$db->update('update forum_thread set forum_thread_last_post=' . $threadlast[0]['forum_post_id'] . ', forum_thread_replies = forum_thread_replies - 1 where forum_thread_id=' . $threadid);
 
 			// update forum stats
 			$forumlast = $db->query('select forum_post_id from forum_post, forum_thread where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread order by forum_post_date desc limit 1');
-			$db->query('update forum_forum set forum_forum_last_post=' . $forumlast[0]['forum_post_id'] . ', forum_forum_posts = forum_forum_posts - 1 where forum_forum_id=' . $forumid);
+			$db->update('update forum_forum set forum_forum_last_post=' . $forumlast[0]['forum_post_id'] . ', forum_forum_posts = forum_forum_posts - 1 where forum_forum_id=' . $forumid);
 
 			echo '<p/>Post deleted.';
 		}
