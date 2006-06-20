@@ -71,6 +71,9 @@ else if(count($res))
 			$forumlast = $db->query('select forum_post_id from forum_post, forum_thread where forum_thread_forum=' . $forumid . ' and forum_thread_id=forum_post_thread order by forum_post_date desc limit 1');
 			$db->update('update forum_forum set forum_forum_last_post=' . $forumlast[0]['forum_post_id'] . ', forum_forum_posts = forum_forum_posts - 1 where forum_forum_id=' . $forumid);
 
+			// delete words
+			parsePostWords($postid, '', true);
+
 			echo '<p/>Post deleted.';
 		}
 	}

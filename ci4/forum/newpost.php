@@ -116,10 +116,11 @@ else
 			if($lastpost != FALSE)
 			{
 				updateFromPost($lastpost);
-				$db->query('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
+				$db->update('update forum_thread set forum_thread_replies=forum_thread_replies+1 where forum_thread_id=' . $thread);
 
-				$db->query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $thread);
-				$db->query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $thread . ', ' . TIME . ')');
+				$db->update('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $thread);
+				$db->update('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $thread . ', ' . TIME . ')');
+				parsePostWords($lastpost, $_POST['post']);
 
 				echo '<p/>Reply posted successfully.';
 				echo '<p/>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
