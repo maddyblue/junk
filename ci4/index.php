@@ -69,19 +69,6 @@ if(!$aval && CI_SECTION == 'MAIN')
 
 define('ACTION', $aval);
 
-// groups
-$ret = $db->query('select group_user_group from group_user where group_user_user=' . ID);
-
-if(count($ret))
-{
-	$GROUPS = array();
-
-	for($i = 0; $i < count($ret); $i++)
-		array_push($GROUPS, $ret[$i]['group_user_group']);
-}
-else
-	$GROUPS = array('0');
-
 if(!isset($CI_HEAD))
 	$CI_HEAD = '';
 

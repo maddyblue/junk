@@ -111,7 +111,7 @@
 				</div></div>
 				<div class="block-light"><div class="sidepad">
 					<CI_PROFILE/>
-					<br/><?php echo makeLink('rss', CI_WWW_ADDRESS . 'rss.php', 'EXTERIOR'); ?>
+					<br/><?php echo makeLink('rss', CI_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
 				</div></div>
 			</div>
 

@@ -292,7 +292,7 @@ table.maintable {
 			<tr>
 				<td>
 						<CI_PROFILE/>
-						<br/><?php echo makeLink('rss', CI_WWW_ADDRESS . 'rss.php', 'EXTERIOR'); ?>
+						<br/><?php echo makeLink('rss', CI_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
 				</td>
 			</tr>
 		</table>

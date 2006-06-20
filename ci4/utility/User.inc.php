@@ -233,7 +233,7 @@ function handle_login()
 
 	close_sessions();
 
-	global $PLAYER, $USER, $db;
+	global $PLAYER, $USER, $GROUPS, $db;
 
 	if(isset($_GET['domain']))
 		$dom = intval($_GET['domain']);
@@ -295,6 +295,19 @@ function handle_login()
 		$PLAYER = false;
 		$USER = false;
 	}
+
+	// groups
+	$ret = $db->query('select group_user_group from group_user where group_user_user=' . ID);
+
+	if(count($ret))
+	{
+		$GROUPS = array();
+
+		for($i = 0; $i < count($ret); $i++)
+			array_push($GROUPS, $ret[$i]['group_user_group']);
+	}
+	else
+		$GROUPS = array('0');
 
 	handle_session();
 }

@@ -34,14 +34,14 @@
 
 define('CI_HOME_MOD', '');
 
-require_once CI_HOME_MOD . 'config/Globals.inc.php';
-require_once CI_FS_PATH . 'config/Database.inc.php';
-require_once CI_FS_PATH . 'utility/Database.inc.php';
-require_once CI_FS_PATH . 'utility/Functions.inc.php';
-require_once CI_FS_PATH . 'utility/Forum.inc.php';
+require_once CI_HOME_MOD . 'Include.inc.php';
 
-$db = new Database();
-$db->Connect($DBConf);
+handle_login();
+
+$f = isset($_GET['f']) ? intval($_GET['f']) : NEWSFORUM;
+
+if(!canView($f))
+	exit;
 
 echo '<?xml version="1.0" encoding="ISO-8859-1"?>
 
@@ -53,8 +53,6 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>
     <description>Online Tactics Gaming.</description>
     <language>en-us</language>
     <managingEditor>dolmant@gmail.com</managingEditor>';
-
-$f = isset($_GET['f']) ? intval($_GET['f']) : NEWSFORUM;
 
 $query = 'select user_name, user_id, forum_thread.*, forum_post.*, forum_forum_name from forum_thread, users, forum_post, forum_forum where forum_thread_forum=' . $f . ' and forum_thread_first_post=forum_post_id and forum_post_user=user_id and forum_forum_id=forum_thread_forum order by forum_post_date desc limit 5';
 $res = $db->query($query);
