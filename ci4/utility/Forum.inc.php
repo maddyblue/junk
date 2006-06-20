@@ -48,8 +48,8 @@ function linkLastPost($postid, $userid, $username, $date, $threadid = 0, $thread
 			$ret =
 				'<div class="small">' .
 				getTime($date) .
-				'<br/>by ' .
-				getUserlink($userid, decode($username)) . ' ' .
+				'<br/>by&nbsp;' .
+				getUserlink($userid, decode($username)) . '&nbsp;' .
 				makeLink('-&gt;', "a=viewpost&p=$postid#$postid", '', $lastpost) .
 				'</div>';
 	}
@@ -445,16 +445,34 @@ function makePostLink($text, $post)
 	return makeLink($text, 'a=viewpost&p=' . $post . '#' . $post, SECTION_FORUM);
 }
 
+$searchRegex = '/[\'a-zA-Z0-9_-]+/';
 function parsePostWords($id, $text)
 {
-	$query = '';
+	global $db;
 
-	preg_match_all('/[\'a-zA-Z0-9_-]+/', decode($text), $res);
+	$res = $db->query('select forum_thread_title from forum_thread where forum_thread_first_post=' . $id);
+
+	if(count($res))
+		$text = $res[0]['forum_thread_title'] . ' ' . $text;
+
+	preg_match_all($searchRegex, decode(strtolower($text)), $res);
 
 	$u = array_unique($res[0]);
 
+	$i = 0;
+	$query = '';
+
 	foreach($u as $p)
-		$query .= 'insert into forum_word values (' . $id . ', \'' . str_replace("'", "\\'", $p) . "');\n";
+	{
+		$query .= 'insert into forum_word values (' . $id . ', \'' . pg_escape_string($p) . "');\n";
+
+		if($i++ == 100)
+		{
+			$GLOBALS['db']->update($query);
+			$query = '';
+			$i = 0;
+		}
+	}
 
 	$GLOBALS['db']->update($query);
 }

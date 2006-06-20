@@ -338,6 +338,9 @@ function getFormField($arr)
 		case 'checkbox':
 			$str = '<input type="checkbox" name="' .$name . '" ' . $val . ' />';
 			break;
+		case 'null':
+			$str = '';
+			break;
 		default:
 			$str = '<input type="' . $type . '" name="' . $name . '" ' . $parms . ' value="' . $val . '" />';
 			break;
