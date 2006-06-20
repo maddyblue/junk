@@ -33,7 +33,7 @@
  */
 
 $search = isset($_GET['search']) ? stripslashes(htmlspecialchars($_GET['search'])) : '';
-$user = isset($_GET['user']) ? stripslashes(htmlspecialchars($_GET['user'])) : '';
+$user = isset($_GET['user']) ? encode($_GET['user']) : '';
 
 $limit = 25;
 
@@ -87,7 +87,7 @@ if($search || $user)
 
 	echo '<p/>Showing results ' . (($page - 1) * $limit + 1) . ' to ' . $pglim . ' of ' . $ptot;
 	if($search) echo ' for query &quot;' . $search . '&quot;';
-	if($user) echo ' by user &quot;' . $user . '&quot;';
+	if($user) echo ' by user &quot;' . decode($user) . '&quot;';
 	echo '.';
 
 	echo $pageDisp;
@@ -109,7 +109,7 @@ if($search || $user)
 echo getTableForm('Search the forum:', array(
 	array('Post or thread text:', array('type'=>'text', 'name'=>'search', 'val'=>$search)),
 	array('and/or', array('type'=>'null')),
-	array('Posted by user:', array('type'=>'text', 'name'=>'user', 'val'=>$user)),
+	array('Posted by user:', array('type'=>'text', 'name'=>'user', 'val'=>decode($user))),
 	array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Search')),
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'search'))
 ), false, 'get');
