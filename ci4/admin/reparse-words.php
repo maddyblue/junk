@@ -51,7 +51,7 @@ if($start == 0)
 	$db->update('truncate table forum_word');
 }
 
-echo '<p/>Reparsing forum_word posts ' . $start . ' to ' . $next . '.';
+echo '<p/>Reparsing forum_word posts ' . $start . ' to ' . ($next - 1) . '.';
 
 $posts = $db->query('select forum_post_id, forum_post_text from forum_post limit ' . $per . ' offset ' . $start);
 
