@@ -74,6 +74,6 @@ for($i = 0; $i < count($res); $i++)
 	echo ' ' . makeLink(decode($res[$i]['user_name']), 'a=viewuserdetails&user=' . $res[$i]['user_id'], SECTION_USER);
 }
 
-update_session_action(104);
+update_session_action(104, '', 'Statistics');
 
 ?>

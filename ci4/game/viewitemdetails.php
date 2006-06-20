@@ -92,4 +92,6 @@ if(count($res))
 else
 	echo '<p/>Invalid item ID.';
 
+update_session_action(508, '', 'Item Details');
+
 ?>

@@ -62,6 +62,6 @@ for($i = 0; $i < count($res); $i++)
 
 echo getTable($array);
 
-update_session_action(502);
+update_session_action(502, '', 'Areas');
 
 ?>

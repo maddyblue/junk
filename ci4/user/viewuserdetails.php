@@ -61,7 +61,7 @@ $user = isset($_GET['user']) ? intval($_GET['user']) :
 $res = $db->query('select * from users where user_id=' . $user);
 $players = $db->query('select player_name, player_id, domain_id, domain_name from player, domain where player_user=' . $user . ' and domain_id=player_domain order by domain_expw_time, domain_expw_max');
 
-update_session_action(309, $user, count($res) ? 'View user details of ' . decode($res[0]['user_name']) : '');
+update_session_action(309, $user, count($res) ? 'User details of ' . decode($res[0]['user_name']) : '');
 
 if(count($res) == 1)
 {

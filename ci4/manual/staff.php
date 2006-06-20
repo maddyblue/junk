@@ -32,7 +32,7 @@
 *
 */
 
-update_session_action(606);
+update_session_action(606, '', 'Staff');
 
 $staff = array(
 	array('Dolmant', true, 'Head Developer'),

@@ -167,6 +167,6 @@ else
 	echo '<p/>You must be logged in to change your avatar.';
 }
 
-update_session_action(307);
+update_session_action(307, '', 'Change Avatar');
 
 ?>

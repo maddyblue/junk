@@ -98,6 +98,6 @@ if(isset($_POST['submit']))
 else
 	display($user);
 
-update_session_action(302);
+update_session_action(302, '', 'Login');
 
 ?>

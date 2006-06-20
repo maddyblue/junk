@@ -101,6 +101,6 @@ echo getTable($array);
 if($PLAYER)
 	echo '<p/>A * next to the job name means your player can change to that job.';
 
-update_session_action(504);
+update_session_action(504, '', 'Jobs');
 
 ?>

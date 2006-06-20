@@ -268,6 +268,6 @@ echo '<p/><hr/>';
 
 echo getTableForm('<b>Show Players:</b>', $disp, false, 'get');
 
-update_session_action(701);
+update_session_action(701, '', 'Players');
 
 ?>

@@ -40,6 +40,6 @@ $array = array(
 
 echo getTable($array, false);
 
-update_session_action(304);
+update_session_action(304, '', 'Remote Information');
 
 ?>

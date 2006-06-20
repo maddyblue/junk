@@ -56,6 +56,6 @@ for($i = 0; $i < count($res); $i++)
 
 echo getTable($array);
 
-update_session_action(505);
+update_session_action(505, '', 'Monsters');
 
 ?>

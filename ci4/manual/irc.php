@@ -32,7 +32,7 @@
 *
 */
 
-update_session_action(603);
+update_session_action(603, '', 'IRC');
 
 ?>
 

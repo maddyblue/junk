@@ -111,6 +111,6 @@ echo '</form>';
 
 echo '<p/>' . makeLink('Add a forum', 'a=add-forum');
 
-update_session_action(200);
+update_session_action(200, '', 'Manage Forums');
 
 ?>

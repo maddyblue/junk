@@ -32,7 +32,7 @@
  *
  */
 
-update_session_action(601);
+update_session_action(601, '', 'Basic Skinning');
 
 ?>
 

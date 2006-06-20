@@ -32,7 +32,7 @@
 *
 */
 
-update_session_action(604);
+update_session_action(604, '', 'Helping CI');
 
 ?>
 

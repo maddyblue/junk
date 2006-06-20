@@ -55,6 +55,6 @@ if($PLAYER)
 
 echo getTable($array);
 
-update_session_action(506);
+update_session_action(506, '', 'Towns');
 
 ?>

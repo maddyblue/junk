@@ -68,6 +68,6 @@ if(count($posts) < $per)
 else
 	echo '<meta http-equiv="refresh" content="0; url=?a=reparse-words&start=' . $next . '">';
 
-update_session_action(200);
+update_session_action(200, '', 'Reparse Words');
 
 ?>

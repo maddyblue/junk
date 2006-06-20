@@ -32,7 +32,7 @@
  *
  */
 
-update_session_action(602);
+update_session_action(602, '', 'Advanced Skinning');
 
 ?>
 

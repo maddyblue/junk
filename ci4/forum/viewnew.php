@@ -99,6 +99,6 @@ else
 	echo getTable($array);
 }
 
-update_session_action(405, 0, 'View New Posts');
+update_session_action(405, 0, 'New Posts');
 
 ?>

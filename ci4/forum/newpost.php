@@ -145,6 +145,6 @@ else
 	}
 }
 
-update_session_action(402, $thread);
+update_session_action(402, $thread, 'New Post');
 
 ?>

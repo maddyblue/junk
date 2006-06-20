@@ -84,6 +84,6 @@ echo getTableForm('Search by user name:', array(
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewusers')),
 ), false, 'get');
 
-update_session_action(310);
+update_session_action(310, '', 'Users');
 
 ?>

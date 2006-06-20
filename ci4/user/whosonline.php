@@ -53,7 +53,7 @@ function getAction($a, $d)
 	return $ret;
 }
 
-update_session_action(301);
+update_session_action(301, '', 'Who\'s Online');
 
 $query = 'select * from session order by session_current';
 $res = $db->query($query);

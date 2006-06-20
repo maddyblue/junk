@@ -120,6 +120,6 @@ if(isset($_POST['submit']))
 else
 	display($name, $email);
 
-update_session_action(305);
+update_session_action(305, '', 'New User');
 
 ?>

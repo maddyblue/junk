@@ -92,6 +92,6 @@ echo getTableForm('Search the forum:', array(
 
 echo '<p/>Search currently disabled.';
 
-update_session_action(408);
+update_session_action(408, '', 'Search');
 
 ?>

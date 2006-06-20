@@ -86,6 +86,6 @@ else
 	)));
 }
 
-update_session_action(308);
+update_session_action(308, '', 'Private Messages');
 
 ?>

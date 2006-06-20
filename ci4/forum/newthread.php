@@ -147,6 +147,6 @@ else
 		disp($subject, $post, $forum);
 }
 
-update_session_action(403, $forum);
+update_session_action(403, $forum, 'New Thread');
 
 ?>

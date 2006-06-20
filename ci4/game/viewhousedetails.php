@@ -104,6 +104,6 @@ if(count($res))
 else
 	echo '<p/>Invalid house ID.';
 
-update_session_action(507);
+update_session_action(507, '', 'House Details');
 
 ?>

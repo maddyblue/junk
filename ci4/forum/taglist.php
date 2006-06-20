@@ -69,6 +69,6 @@ foreach($array as $tag)
 
 echo getTable($disp);
 
-update_session_action(404);
+update_session_action(404, '', 'Tag List');
 
 ?>

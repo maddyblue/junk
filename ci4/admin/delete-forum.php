@@ -137,6 +137,6 @@ else
 		display($forumid);
 }
 
-update_session_action(200);
+update_session_action(200, '', 'Delete Forum');
 
 ?>

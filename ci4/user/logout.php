@@ -53,7 +53,7 @@ deleteCIcookie('pass');
 $id = '';
 $pass = '';
 
-update_session_action(303);
+update_session_action(303, '', 'Logout');
 
 ?>
 

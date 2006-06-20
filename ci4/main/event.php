@@ -85,6 +85,6 @@ foreach($res as $e)
 echo '<p/>Past events for the last 24 hours:';
 echo getTable($log);
 
-update_session_action(105);
+update_session_action(105, '', 'Events');
 
 ?>

@@ -41,6 +41,6 @@ $db->update('update data set data_val_int=' . $ret[0]['count'] . ' where data_na
 
 echo '<p/>Done.';
 
-update_session_action(200);
+update_session_action(200, '', 'Sync Data');
 
 ?>

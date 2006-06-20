@@ -89,6 +89,7 @@ array(504, 'makeLink(\'Viewing Jobs\', \'a=viewjobs\', SECTION_GAME)'),
 array(505, 'makeLink(\'Viewing Monsters\', \'a=viewmonsters\', SECTION_GAME)'),
 array(506, 'makeLink(\'Viewing Towns\', \'a=viewtowns\', SECTION_GAME)'),
 array(507, 'makeLink(\'Viewing Houses\', \'a=viewhouses\', SECTION_GAME)'),
+array(508, 'makeLink(\'Viewing Items\', \'a=viewitems\', SECTION_GAME)'),
 
 // manual
 array(601, 'makeLink(\'Viewing the basic skinning tutorial\', \'a=skinning\', SECTION_MANUAL)'),

@@ -82,6 +82,6 @@ echo getTableForm('Reset forum', array(
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'reset'))
 ));
 
-update_session_action(200);
+update_session_action(200, '', 'Reset');
 
 ?>

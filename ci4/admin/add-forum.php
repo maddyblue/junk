@@ -79,6 +79,6 @@ if(isset($_POST['submit']))
 else
 	display('', '');
 
-update_session_action(200);
+update_session_action(200, '', 'Add Forum');
 
 ?>

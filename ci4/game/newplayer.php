@@ -155,6 +155,6 @@ if(LOGGED)
 else
 	echo '<p/>You must be logged in to view this page.';
 
-update_session_action(703);
+update_session_action(703, '', 'New Player');
 
 ?>

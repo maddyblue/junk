@@ -102,6 +102,6 @@ else
 	}
 }
 
-update_session_action(200);
+update_session_action(200, '', 'Edit Forum');
 
 ?>

@@ -54,6 +54,6 @@ for($i = 0; $i < count($res); $i++)
 
 echo '<p/>' . makeLink('Older news', 'a=viewforum&f=' . NEWSFORUM, SECTION_FORUM);
 
-update_session_action(101);
+update_session_action(101, '', 'News');
 
 ?>
