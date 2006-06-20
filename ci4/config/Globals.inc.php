@@ -30,7 +30,7 @@ define('SECTION_MANUAL', 'manual');
 define('FORUM_THREADS_PP', 30);
 define('FORUM_POSTS_PP', 20);
 define('FORUM_THREAD_PAGES', 15);
-define('NEWSFORUM', 1);
+define('NEWSFORUM', 9);
 define('SESSION_TIMEOUT', 600); // in seconds
 
 /* Don't mess with these */
