@@ -82,7 +82,6 @@ class Database
 
 		pg_send_query($this->handle, $query);
 
-		$rcount = 0;
 		$ret = array();
 
 		while($this->resource = pg_get_result($this->handle))
@@ -96,14 +95,8 @@ class Database
 			}
 			else if($expect_return)
 			{
-				for(; $row = pg_fetch_assoc($this->resource); $rcount++)
-				{
-					for($i = 0; $i < sizeof($row); $i++)
-					{
-						$ret[$rcount][key($row)] = $row[key($row)];
-						next($row);
-					}
-				}
+				while($row = pg_fetch_assoc($this->resource))
+					array_push($ret, $row);
 			}
 
 			pg_free_result($this->resource);
