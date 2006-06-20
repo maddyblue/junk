@@ -117,6 +117,8 @@ if(count($res) == 1)
 		echo '<p/>' . makeLink('Send this user a PM.', 'a=sendpm&userid=' . $res[0]['user_id']);
 	}
 
+	echo '<p/>' . makeLink('Find forum posts by this user.', 'a=search&user=' . $res[0]['user_name'], SECTION_FORUM);
+
 	echo getTable($array, false);
 
 	echo '<p/>Players owned by this user:' . getTable($player);
