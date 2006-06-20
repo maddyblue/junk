@@ -34,24 +34,30 @@
 
 $id = getCIcookie('id');
 $pass = getCIcookie('pass');
-$res = $db->query('select * from users where user_id=' . $id . ' and user_pass=\'' . $pass . '\'');
 
-// if and only if we are who we say we are, close the session
-if(count($res))
+if($id && $pass)
 {
-	// do everything that both {update|close}_session do
-	$db->query('update users set user_last = ' . TIME . ', user_last_session = ' . TIME . ' where user_id = ' . $id);
-	$db->query('delete from forum_view where forum_view_user=' . $id);
+	$res = $db->query('select * from users where user_id=' . $id . ' and user_pass=\'' . $pass . '\'');
 
-	// now delete the session. a new one will be created for an guest user.
-	$db->query('delete from session where session_id=\'' . SESSION . '\'');
+	// if and only if we are who we say we are, close the session
+	if(count($res))
+	{
+		// do everything that both {update|close}_session do
+		$db->query('update users set user_last = ' . TIME . ', user_last_session = ' . TIME . ' where user_id = ' . $id);
+		$db->query('delete from forum_view where forum_view_user=' . $id);
+
+		// now delete the session. a new one will be created for an guest user.
+		$db->query('delete from session where session_id=\'' . SESSION . '\'');
+	}
+
+	deleteCIcookie('id');
+	deleteCIcookie('pass');
+
+	$id = '';
+	$pass = '';
+
+	$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=index.php?a=logout">';
 }
-
-deleteCIcookie('id');
-deleteCIcookie('pass');
-
-$id = '';
-$pass = '';
 
 update_session_action(303, '', 'Logout');
 

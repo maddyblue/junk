@@ -77,10 +77,17 @@ if(isset($_POST['submit']))
 
 		echo '<p/>Logged in successfully as ' . decode($user) . '.';
 
-		if($last && strpos($last, 'logout') === false && strpos($last, 'ajax') === false)
+		if(strpos($last, 'ajax') === false)
 		{
-			echo '<p/>Redirecting to <a href="' . $last . '">last location</a>...';
-			$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="10; url=' . $last . '">';
+			if($last && strpos($last, 'logout') === false)
+			{
+				echo '<p/>Redirecting to <a href="' . $last . '">last location</a>...';
+				$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
+			}
+			else
+			{
+				$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=index.php?a=login">';
+			}
 		}
 	}
 	else if($user && $pass)
@@ -94,6 +101,10 @@ if(isset($_POST['submit']))
 		echo '<p/>Login failed.';
 		display($user);
 	}
+}
+else if(LOGGED)
+{
+	echo '<p/>Logged in successfully as ' . $USER['user_name'] . '.';
 }
 else
 	display($user);
