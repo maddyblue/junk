@@ -429,7 +429,6 @@ function parseSig($sig)
 
 	$ereg = array(
 		array("\[url\](.+)\[/url\]", "<a href=\"\\1\">\\1</a>")
-		//array("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\">\\0</a>") // replace URLs with links (from php.net)
 	);
 
 	foreach($ereg as $row)
