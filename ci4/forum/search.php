@@ -33,6 +33,7 @@
  */
 
 $search = isset($_GET['search']) ? stripslashes(htmlspecialchars($_GET['search'])) : '';
+$user = isset($_GET['user']) ? stripslashes(htmlspecialchars($_GET['user'])) : '';
 
 $limit = 25;
 
@@ -42,17 +43,38 @@ if($page < 1)
 
 $start = ($page - 1) * $limit;
 
-if($search)
+if($search || $user)
 {
-	$query = 'from forum_word, forum_post, forum_thread, forum_forum, users
-		where
-			forum_word_word LIKE \'%' . pg_escape_string($search) . '%\' and
-			forum_word_post=forum_post_id and
-			forum_post_user=user_id and
-			forum_post_thread=forum_thread_id and
-			forum_thread_forum=forum_forum_id';
+	$query = 'from forum_post, forum_thread, forum_forum, users where ';
 
-	$res = $db->query('select forum_post_id, forum_post_text_parsed as text, forum_post_date, user_name, user_id, forum_thread_id, forum_thread_title, forum_forum_id, forum_forum_name ' . $query . ' order by forum_post_date desc limit ' . $limit . ' offset ' . $start);
+	if($user)
+		$query .= 'user_name=\'' . pg_escape_string($user) . '\' ';
+
+	if($user && $search)
+		$query .= 'and ';
+
+	if($search)
+	{
+		preg_match_all($searchRegex, decode(strtolower($search)), $res);
+		$u = array_unique($res[0]);
+		for($i = 0; $i < count($u); $i++)
+		{
+			if($i) $query .= 'and ';
+			$query .= 'forum_post_id in (select forum_word_post from forum_word where forum_word_word = \'' . pg_escape_string($u[$i]) . '\') ';
+		}
+	}
+
+	$query .= 'and
+		forum_post_user=user_id and
+		forum_post_thread=forum_thread_id and
+		forum_thread_forum=forum_forum_id';
+
+	$res = $db->query('
+		select
+			forum_post_id, forum_post_text_parsed as text, forum_post_date, user_name, user_id, forum_thread_id, forum_thread_title, forum_forum_id, forum_forum_name ' .
+		$query
+			. '
+		order by forum_post_date desc limit ' . $limit . ' offset ' . $start);
 
 	$pres = $db->query('select count(*) as count ' . $query);
 	$ptot = $pres[0]['count'];
@@ -61,19 +83,22 @@ if($search)
 	if($pglim > $ptot)
 		$pglim = $ptot;
 
-	$pageDisp = '<p/>' . pageDisp($page, $totpages, $limit, 'a=search&search=' . $search);
+	$pageDisp = '<p/>' . pageDisp($page, $totpages, $limit, 'a=search&search=' . $search . '&user=' . $user);
 
-	echo '<p/>Showing results ' . (($page - 1) * $limit + 1) . ' to ' . $pglim . ' of ' . $ptot . ' for query &quot;' . $search . '&quot;.';
+	echo '<p/>Showing results ' . (($page - 1) * $limit + 1) . ' to ' . $pglim . ' of ' . $ptot;
+	if($search) echo ' for query &quot;' . $search . '&quot;';
+	if($user) echo ' by user &quot;' . $user . '&quot;';
+	echo '.';
 
 	echo $pageDisp;
 
 	for($i = 0; $i < count($res); $i++)
 	{
 		echo '<hr/><p/>' . makePostLink('-&gt;', $res[$i]['forum_post_id']) .
-		' ' . makeLink(decode($res[$i]['forum_forum_name']), 'a=viewforum&f=' . $res[$i]['forum_forum_id']) .
-		': ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id']) .
-		' by ' . makeLink(decode($res[$i]['user_name']), 'a=viewuserdetails&user=' . $res[$i]['user_id'], SECTION_USER) . ' on ' . getTime($res[$i]['forum_post_date']) .
-		'<br/>' . $res[$i]['text'];
+			' ' . makeLink(decode($res[$i]['forum_forum_name']), 'a=viewforum&f=' . $res[$i]['forum_forum_id']) .
+			': ' . makeLink(decode($res[$i]['forum_thread_title']), 'a=viewthread&t=' . $res[$i]['forum_thread_id']) .
+			' by ' . makeLink(decode($res[$i]['user_name']), 'a=viewuserdetails&user=' . $res[$i]['user_id'], SECTION_USER) . ' on ' . getTime($res[$i]['forum_post_date']) .
+			'<br/>' . $res[$i]['text'];
 	}
 
 	echo '<hr/>';
@@ -81,17 +106,18 @@ if($search)
 	echo $pageDisp;
 }
 
-// This works, but is disabled until I find a way that performs better in Postgre.
-/*
 echo getTableForm('Search the forum:', array(
-	array('', array('type'=>'text', 'name'=>'search', 'val'=>$search)),
+	array('Post or thread text:', array('type'=>'text', 'name'=>'search', 'val'=>$search)),
+	array('and/or', array('type'=>'null')),
+	array('Posted by user:', array('type'=>'text', 'name'=>'user', 'val'=>$user)),
 	array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Search')),
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'search'))
 ), false, 'get');
-*/
-
-echo '<p/>Search currently disabled.';
 
 update_session_action(408, '', 'Search');
 
 ?>
+
+<p/>For text search: done on whole words only. If you search for &quot;any&quot, there will not be results from &quot;anywhere&quot; or &quot;anyone&quot;, etc. Thread titles and posts are searched. Not case sensitive. Valid characters are letters, numbers, apostrophe('), underscore(_), and dash(-).
+<p/>For user search: done on exact user name.
+<p/>Both fields are optional. Sorted by most recent date.
