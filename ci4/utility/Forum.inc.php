@@ -445,9 +445,12 @@ function makePostLink($text, $post)
 }
 
 $searchRegex = '/[\'a-zA-Z0-9_-]+/';
-function parsePostWords($id, $text)
+function parsePostWords($id, $text, $del = false)
 {
-	global $db;
+	global $db, $searchRegex;
+
+	if($del)
+		$db->update('delete from forum_word where forum_word_post=' . $id);
 
 	$res = $db->query('select forum_thread_title from forum_thread where forum_thread_first_post=' . $id);
 
