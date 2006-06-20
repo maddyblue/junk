@@ -2,7 +2,7 @@
 
 /* $Id$ */
 
-/*	MySQL database connection configuration.	*/
+/*	PostgreSQL database connection configuration.	*/
 
 $DBConf['user']     = 'dolmant';
 $DBConf['pass']     = 'tnamlod';
