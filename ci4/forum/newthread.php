@@ -116,22 +116,22 @@ else
 				')', 'forum_thread');
 			if($lastthread != FALSE)
 			{
-				$db->query('insert into forum_post (forum_post_thread, forum_post_text, forum_post_text_parsed, forum_post_user, forum_post_date, forum_post_ip) values (' .
+				$postText = parsePostText($_POST['post']);
+				$lastpost = $db->insert('insert into forum_post (forum_post_thread, forum_post_text, forum_post_text_parsed, forum_post_user, forum_post_date, forum_post_ip) values (' .
 					$lastthread . ',' .
 					'\'' . $post . '\',' .
-					'\'' . pg_escape_string(parsePostText($_POST['post'])) . '\',' .
+					'\'' . pg_escape_string($postText) . '\',' .
 					ID  . ',' .
 					TIME . ',' .
 					REMOTE_ADDR .
-					')');
-				$res = $db->query('select forum_post_id from forum_post where forum_post_user=' . ID .' order by forum_post_date desc limit 1');
-				$lastpost = $res[0]['forum_post_id'];
-				$db->query('update forum_thread set forum_thread_first_post=' . $lastpost . ' where forum_thread_id=' . $lastthread);
+					')', 'forum_post');
+				$db->update('update forum_thread set forum_thread_first_post=' . $lastpost . ' where forum_thread_id=' . $lastthread);
 				updateFromPost($lastpost);
-				$db->query('update forum_forum set forum_forum_threads=forum_forum_threads+1 where forum_forum_id=' . $forum);
+				$db->update('update forum_forum set forum_forum_threads=forum_forum_threads+1 where forum_forum_id=' . $forum);
 
-				$db->query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $lastthread);
-				$db->query('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $lastthread . ', ' . TIME . ')');
+				$db->update('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $lastthread);
+				$db->update('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $lastthread . ', ' . TIME . ')');
+				parsePostWords($lastpost, $_POST['post']);
 
 				echo '<p/>Thread created successfully.';
 				echo '<p/>Return to the ' . makeLink('previous forum', 'a=viewforum&f=' . $forum) . '.';
