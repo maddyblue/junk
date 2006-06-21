@@ -79,7 +79,7 @@ echo getTable($array);
 echo $pageDisp;
 
 echo getTableForm('Search by user name:', array(
-	array('', array('type'=>'text', 'name'=>'search', 'val'=>$search)),
+	array('', array('type'=>'text', 'name'=>'search', 'val'=>decode($search))),
 	array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Search')),
 	array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewusers')),
 ), false, 'get');
