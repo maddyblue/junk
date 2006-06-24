@@ -119,7 +119,7 @@ function hasPermission($perm)
 {
 	global $db;
 
-	$res = $db->query('select group_def_id from group_def, group_user where group_user_user=' . ID . ' and group_def_' . $perm . '=1');
+	$res = $db->query('select group_def_id from group_def, group_user where group_user_user=' . ID . ' and group_def_' . $perm . '=1 and group_user_group=group_def_id');
 
 	if(count($res))
 		return true;
