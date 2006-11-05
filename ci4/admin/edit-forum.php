@@ -34,23 +34,13 @@
 
 function display($forumid, $name, $desc, $parent, $type)
 {
-	$fs = '';
-	$cs = '';
-
-	if($type)
-		$cs = 'selected';
-	else
-		$fs = 'selected';
-
-	$typesel = '<option value="0" ' . $fs . '>forum</option><option value="1" ' . $cs . '>category</option>';
-
 	echo getTableForm('Edit forum', array(
 		array('Name', array('type'=>'text', 'name'=>'name', 'val'=>decode($name))),
 		array('Desc', array('type'=>'text', 'name'=>'desc', 'val'=>decode($desc))),
-		array('Type', array('type'=>'select', 'name'=>'type', 'val'=>$typesel)),
+		array('Type', array('type'=>'select', 'name'=>'type', 'val'=>makeForumTypeSelect($type))),
 		array('Parent', array('type'=>'select', 'name'=>'parent','val'=>makeForumSelect($forumid, $parent))),
 
-		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Edit')),
+		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
 		array('', array('type'=>'hidden', 'name'=>'f', 'val'=>$forumid)),
 		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'edit-forum'))
 	));
@@ -69,13 +59,13 @@ if(isset($_POST['submit']))
 	if(!$forumid)
 	{
 		$fail = true;
-		echo '<br/>No forum specified.';
+		echo '<p/>No forum specified.';
 	}
 
 	if(!$name)
 	{
 		$fail = true;
-		echo '<br/>No name specified.';
+		echo '<p/>No name specified.';
 	}
 
 	if(!$fail)
@@ -85,10 +75,9 @@ if(isset($_POST['submit']))
 		echo '<p/>Forum updated.';
 	}
 	else
-	{
 		echo '<p/>Update failed.';
-		display($forumid, $name, $desc, $parent, $type);
-	}
+
+	display($forumid, $name, $desc, $parent, $type);
 }
 else
 {

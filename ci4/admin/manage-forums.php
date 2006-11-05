@@ -39,30 +39,19 @@ function addForumEntry(&$array, $row, $depth)
 	else
 		$desc = '';
 
-	switch($row['forum_forum_type'])
-	{
-		case '0':
-			array_push($array, array(
-				str_repeat('&nbsp;', $depth) . decode($row['forum_forum_name']) . $desc,
-				getFormField(array('type'=>'input', 'name'=>('order' . $row['forum_forum_id']), 'val'=>$row['forum_forum_order'], 'parms'=>'size="3" maxlength="3" style="width:30px"')),
-				makeLink('Edit', 'a=edit-forum&f=' . $row['forum_forum_id']),
-				makeLink('Delete', 'a=delete-forum&f=' . $row['forum_forum_id'])
-			));
-			break;
-		case  '1':
-			array_push($array, array(
-				str_repeat('&nbsp;', $depth) . '<b>' . decode($row['forum_forum_name']) . '</b>' . $desc,
-				getFormField(array('type'=>'input', 'name'=>('order' . $row['forum_forum_id']), 'val'=>$row['forum_forum_order'], 'parms'=>'size="3" maxlength="3" style="width:30px"')),
-				makeLink('Edit', 'a=edit-forum&f=' . $row['forum_forum_id']),
-				makeLink('Delete', 'a=delete-forum&f=' . $row['forum_forum_id'])
-			));
-			break;
-	}
+	array_push($array, array(
+		str_repeat('&nbsp;', $depth) . ($row['forum_forum_type'] ? '<b>' : '') . decode($row['forum_forum_name']) . ($row['forum_forum_type'] ? '</b>' : '') . $desc,
+		getFormField(array('type'=>'input', 'name'=>('order' . $row['forum_forum_id']), 'val'=>$row['forum_forum_order'], 'parms'=>'size="3" maxlength="3" style="width:30px"')),
+		getFormField(array('type'=>'select', 'name'=>('type' . $row['forum_forum_id']), 'val'=>makeForumTypeSelect($row['forum_forum_type']))),
+		getFormField(array('type'=>'select', 'name'=>('parent' . $row['forum_forum_id']), 'val'=>makeForumSelect($row['forum_forum_id'], $row['forum_forum_parent']))),
+		makeLink('Edit...', 'a=edit-forum&f=' . $row['forum_forum_id']),
+		makeLink('Delete...', 'a=delete-forum&f=' . $row['forum_forum_id'])
+	));
 }
 
 function forumListManage(&$array, $id, $depth)
 {
-	global $db;
+	global $db, $seen;
 
 	$res = $db->query('select forum_forum_name, forum_forum_type, forum_forum_parent, forum_forum_order, forum_forum_desc, forum_forum_id from forum_forum where forum_forum_parent = ' . $id . ' order by forum_forum_order');
 
@@ -71,6 +60,8 @@ function forumListManage(&$array, $id, $depth)
 		addForumEntry($array, $row, $depth);
 
 		forumListManage($array, $row['forum_forum_id'], $depth + 1);
+
+		array_push($seen, $row['forum_forum_id']);
 	}
 }
 
@@ -82,27 +73,50 @@ if(isset($_POST['submit']))
 	{
 		$id = $forum['forum_forum_id'];
 
-		if(isset($_POST['order' . $id]))
-			$db->query('update forum_forum set forum_forum_order=' . encode($_POST['order' . $id]) . ' where forum_forum_id=' . $id);
+		$db->query('update forum_forum set
+			forum_forum_order=' . intval($_POST['order' . $id]) . ',
+			forum_forum_type=' . intval($_POST['type' . $id]) . ',
+			forum_forum_parent=' . intval($_POST['parent' . $id]) . '
+			where forum_forum_id=' . $id);
 	}
 
-	echo '<p/>Order updated.';
+	echo '<p/>Forums updated.';
 }
 
-$array = array();
-
-array_push($array, array(
+$orphaned = $array = array(array(
 	'Name',
 	'Order',
+	'Type',
+	'Parent',
 	'Edit',
 	'Delete'
 ));
 
+$seen = array();
+
 forumListManage($array, '0', 0);
+
+$res = $db->query('select * from forum_forum');
+
+foreach($res as $f)
+{
+	if(!in_array($f['forum_forum_id'], $seen))
+		addForumEntry($orphaned, $f, 0);
+}
 
 echo '<form method="post" action="index.php">';
 
-echo getTable($array);
+if(count($array) > 1)
+	echo getTable($array);
+else
+	echo '<p/>No forums.';
+
+if(count($orphaned) > 1)
+{
+	echo '<p/><b>Orphaned Forums:</b> (an orphan is any entry with no link to the top, &quot(No Parent)&quot;, forum)';
+	echo getTable($orphaned);
+}
+
 echo '<p/>';
 echo getFormField(array('type'=>'submit', 'name'=>'submit', 'val'=>'Save Changes'));
 echo getFormField(array('type'=>'hidden', 'name'=>'a', 'val'=>'manage-forums'));

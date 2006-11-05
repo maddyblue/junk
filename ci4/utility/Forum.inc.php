@@ -401,24 +401,33 @@ function listForums(&$array, $forum, $exclude = -1, $depth = 0)
 	return $array;
 }
 
-function makeForumSelect($forum, $parent)
+function makeForumSelect($forum, $parent, $orphan = true)
 {
 	$array = array();
 
 	$forumList = listForums($array, '0', $forum);
+	$selected = !$parent;
 
 	$val = '<option value="0" ' . (!$parent ? 'selected' : '') . '>(No parent)</option>';
 
 	foreach($forumList as $row)
 	{
-		$pad = '--';
-		for($i = 0; $i < $row[2]; $i++)
-			$pad .= '--';
+		$pad = str_repeat('--', $row[2] + 1);
 
 		$val .= '<option value="' . $row[0] . '" ' . ($row[0] == $parent ? 'selected' : '') . '>' . $pad . $row[1] . '</option>';
+
+		$selected = $selected || $row[0] == $parent;
 	}
 
+	if($orphan)
+		$val .= '<option value="-1" ' . ($selected ? '' : 'selected') . '>(Orphan)</option>';
+
 	return $val;
+}
+
+function makeForumTypeSelect($type)
+{
+	return '<option value="0" ' . ($type ? '' : 'selected') . '>forum</option><option value="1" ' . ($type ? 'selected' : '') . '>category</option>';
 }
 
 function parseSig($sig)
