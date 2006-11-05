@@ -42,8 +42,22 @@ function groupListManage(&$array)
 	{
 		array_push($array, array(
 			decode($row['group_def_name']),
-			makeLink('Manage', 'a=manage-group&g=' . $row['group_def_id'])
+			makeLink('Manage', 'a=edit-group&g=' . $row['group_def_id'])
 		));
+	}
+}
+
+$name = isset($_POST['name']) ? encode($_POST['name']) : '';
+
+if(isset($_POST['submit']))
+{
+	$res = $db->query('select count(*) as count from group_def where group_def_name=\''. $name . '\'');
+	if($res[0]['count'] > 0)
+		echo '<p/>A group with that name already exists.';
+	else
+	{
+		$db->update('insert into group_def (group_def_name) values (\'' . $name . '\')');
+		echo '<p/> Group ' . decode($name) . ' added.';
 	}
 }
 
@@ -59,10 +73,11 @@ groupListManage($array);
 echo getTable($array);
 
 echo getTableForm('Add Group', array(
-		array('Group Name', array('type'=>'text','name'=>'name')),
-
+		array('Group Name', array('type'=>'text','name'=>'name', 'val'=>decode($name))),
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Add Group')),
-		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'add-group'))
-	));
+		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'manage-groups'))
+));
+
+update_session_action(200, '', 'Manage Groups');
 
 ?>
