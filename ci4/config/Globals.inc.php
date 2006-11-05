@@ -7,7 +7,7 @@
 /* All addresses (filesystem or www) must end in '/'. */
 
 define('CI_FS_PATH', '/htdocs/ci4/');
-define('CI_WWW_DOMAIN', 'localhost');
+define('CI_WWW_DOMAIN', '192.168.1.101');
 define('CI_WWW_PATH', '/ci4/'); // '/' if root. must begin with '/'
 define('CI_AVATAR_PATH', 'images/avatar/');
 define('CI_SMILIE_PATH', 'images/smilies/');
