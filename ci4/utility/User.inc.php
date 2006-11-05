@@ -90,43 +90,6 @@ function isInGroup($user, $group)
 		return false;
 }
 
-// Does the current user have admin privs?
-function hasAdmin()
-{
-	return hasPermission('admin');
-}
-
-// Can the current user post news?
-function hasNews()
-{
-	return hasPermission('news');
-}
-
-// Is the current user a supermod?
-function hasSupermod()
-{
-	return hasPermission('mod');
-}
-
-// Is the current user banned?
-function hasBanned()
-{
-	return hasPermission('banned');
-}
-
-// Return if the current user has specified the permission.
-function hasPermission($perm)
-{
-	global $db;
-
-	$res = $db->query('select group_def_id from group_def, group_user where group_user_user=' . ID . ' and group_def_' . $perm . '=1 and group_user_group=group_def_id');
-
-	if(count($res))
-		return true;
-	else
-		return false;
-}
-
 // Create the private message links. Used by the skins.
 function makePMLink()
 {
@@ -233,7 +196,7 @@ function handle_login()
 
 	close_sessions();
 
-	global $PLAYER, $USER, $GROUPS, $db;
+	global $PLAYER, $USER, $GROUPS, $PERMISSIONS, $db;
 
 	if(isset($_GET['domain']))
 		$dom = intval($_GET['domain']);
@@ -257,8 +220,6 @@ function handle_login()
 		define('LOGGED', true);
 		define('LOGGED_DIR', '>');
 		define('ID', $id);
-
-		define('ADMIN', (hasAdmin() ? 1 : 0));
 
 		// set cookies to be alive for another week
 		setCIcookie('id', $id);
@@ -289,7 +250,6 @@ function handle_login()
 		define('LOGGED', false);
 		define('LOGGED_DIR', '<');
 		define('ID', 0);
-		define('ADMIN', 0);
 		define('TZOFFSET', 0);
 
 		$PLAYER = false;
@@ -297,17 +257,31 @@ function handle_login()
 	}
 
 	// groups
-	$ret = $db->query('select group_user_group from group_user where group_user_user=' . ID);
+	$ret = $db->query('select * from group_user, group_def where group_user_user=' . ID . ' and group_user_group=group_def_id');
+	$GROUPS = array();
+	$PERMISSIONS = array(
+		'admin' => false,
+		'mod' => false,
+		'news' => false,
+		'banned' => false
+	);
 
 	if(count($ret))
 	{
-		$GROUPS = array();
-
 		for($i = 0; $i < count($ret); $i++)
-			array_push($GROUPS, $ret[$i]['group_user_group']);
+		{
+			$GROUPS[] = $ret[$i]['group_user_group'];
+
+			foreach($PERMISSIONS as $key => $value)
+				$PERMISSIONS[$key] = $value || $ret[$i]['group_def_' . $key] == '1';
+		}
 	}
-	else
-		$GROUPS = array('0');
+
+	define('ADMIN', $PERMISSIONS['admin'] ? '1' : '0');
+
+	if(ADMIN)
+		foreach($PERMISSIONS as $key => $value)
+			$PERMISSIONS[$key] = true;
 
 	handle_session();
 }
