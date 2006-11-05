@@ -480,7 +480,7 @@ function encode($input)
  */
 function decode($output)
 {
-	return urldecode($output);
+	return stripslashes(urldecode($output));
 }
 
 /* Makes sure only alphanumeric characters are in $text. If something else is
