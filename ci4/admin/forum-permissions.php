@@ -59,10 +59,10 @@ if(isset($_POST['submit-save']))
 
 			$forum = $_POST['forum' . $pid];
 			$group = $_POST['group' . $pid];
-			$view    = isset($_POST['view'    . $pid]) && $_POST['view'    . $pid] == 'on' ? 1 : 0;
-			$post    = isset($_POST['post'    . $pid]) && $_POST['post'    . $pid] == 'on' ? 1 : 0;
-			$thread  = isset($_POST['thread'  . $pid]) && $_POST['thread'  . $pid] == 'on' ? 1 : 0;
-			$mod     = isset($_POST['mod'     . $pid]) && $_POST['mod'     . $pid] == 'on' ? 1 : 0;
+			$view   = isset($_POST['view'   . $pid]) && $_POST['view'   . $pid] == 'on' ? 1 : 0;
+			$post   = isset($_POST['post'   . $pid]) && $_POST['post'   . $pid] == 'on' ? 1 : 0;
+			$thread = isset($_POST['thread' . $pid]) && $_POST['thread' . $pid] == 'on' ? 1 : 0;
+			$mod    = isset($_POST['mod'    . $pid]) && $_POST['mod'    . $pid] == 'on' ? 1 : 0;
 
 			if($forum == '' || $group == '')
 				continue;
