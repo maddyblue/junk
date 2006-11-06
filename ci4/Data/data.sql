@@ -149,7 +149,7 @@ SET search_path = public, pg_catalog;
 SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('event', 'event_id'), 2, true);
 COPY event (event_id, event_name, event_code, event_desc) FROM stdin;
 1	Job&nbsp;Wages	jobWages($id, $last);	Once every day (24 hours), players recieve a job wage, depending on their job. The domain the player is in does not matter. Wages are every 24 hours, regardless of domain speed.
-2	EXPW&nbsp;Decrease	expwDecrease($id, $last);	Decrease experience weight for all players.
+2	EXPW&nbsp;Decrease	expwDecrease($id, $last);	Decrease expw by all players by one in each domain that needs it.
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
@@ -250,13 +250,15 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 COPY site (site_tag, site_orderid, site_type, site_main, site_secondary, site_link, site_section, site_logged, site_admin, site_comment) FROM stdin;
-ADMIN_SECTION_NAV	10	link	Manage groups		'a=manage-groups'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	11	link	Manage forums		'a=manage-forums'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	12	link	Reparse posts		'a=reparse-posts'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	13	link	Reset		'a=reset'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	14	link	Sync forums		'a=sync-forums'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	15	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	16	link	Sync data		'a=sync-data'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	1	link	Forum Permissions		'a=forum-permissions'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	2	link	Manage forums		'a=manage-forums'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	3	link	Manage groups		'a=manage-groups'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	4	link	Reparse posts		'a=reparse-posts'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	5	link	Reparse words		'a=reparse-words'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	6	link	Reset		'a=reset'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	7	link	Sync data		'a=sync-data'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	8	link	Sync forums		'a=sync-forums'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	9	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
 BATTLE_SECTION_NAV	10	link	Battle		'a=battle'	SECTION_BATTLE	1	0	
 BATTLE_SECTION_NAV	11	link	New Battle		'a=newbattle'	SECTION_BATTLE	1	0	
 FORUM_SECTION_NAV	10	link	Search		'a=search'	SECTION_FORUM	1	0	

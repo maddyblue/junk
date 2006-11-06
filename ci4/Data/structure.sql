@@ -10,7 +10,7 @@ SET client_min_messages = warning;
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: _postgresql
 --
 
-COMMENT ON SCHEMA public IS 'Standard public namespace';
+COMMENT ON SCHEMA public IS 'Standard public schema';
 
 
 SET search_path = public, pg_catalog;
@@ -175,8 +175,6 @@ CREATE TABLE cor_monster_drop (
 );
 
 
-SET default_with_oids = false;
-
 --
 -- Name: data; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
@@ -187,8 +185,6 @@ CREATE TABLE data (
     data_val_int bigint
 );
 
-
-SET default_with_oids = true;
 
 --
 -- Name: domain; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
@@ -311,7 +307,8 @@ CREATE TABLE forum_perm (
     forum_perm_view integer DEFAULT 0,
     forum_perm_thread integer DEFAULT 0,
     forum_perm_post integer DEFAULT 0,
-    forum_perm_mod integer
+    forum_perm_mod integer DEFAULT 0,
+    forum_perm_id bigserial NOT NULL
 );
 
 
@@ -768,14 +765,6 @@ ALTER TABLE ONLY battle_timer
 
 
 --
--- Name: data_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
---
-
-ALTER TABLE ONLY data
-    ADD CONSTRAINT data_pkey PRIMARY KEY (data_name);
-
-
---
 -- Name: domain_domain_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
@@ -997,6 +986,27 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_user_name_key UNIQUE (user_name);
+
+
+--
+-- Name: forum_word_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE INDEX forum_word_index ON forum_word USING btree (forum_word_word);
+
+
+--
+-- Name: stats_timestamp_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE INDEX stats_timestamp_index ON stats USING btree (stats_timestamp);
+
+
+--
+-- Name: word_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE INDEX word_index ON forum_word USING btree (forum_word_word);
 
 
 --
