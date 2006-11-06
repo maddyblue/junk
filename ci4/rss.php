@@ -64,9 +64,7 @@ for($i = 0; $i < count($res); $i++)
 		'<link>' . CI_WWW_ADDRESS . 'forum/?a=viewthread&amp;t=' . $res[$i]['forum_thread_id'] . '</link>' .
 		'<category>' . decode($res[$i]['forum_forum_name']) . '</category>' .
 		'<pubDate>' . gmdate('D, j M Y H:i:s') . ' GMT</pubDate>' .
-		'<description><![CDATA[' .
-		parsePostText($res[$i]['forum_post_text']) .
-		']]></description>' .
+		'<description><![CDATA[' . parsePostText($res[$i]['forum_post_text']) . ']]></description>' .
 		'</item>';
 }
 
