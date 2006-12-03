@@ -54,7 +54,7 @@ if(count($res))
 		if($PLAYER['player_battle'])
 			echo '<p/>You cannot learn new abilities while in a battle.';
 		else if(!count($p))
-			echo '<p/>You do note have any AP in ' . $res[0]['abilitytype_name'] . '.';
+			echo '<p/>You do not have any AP in ' . $res[0]['abilitytype_name'] . '.';
 		else if($p[0]['player_abilitytype_ap'] < $cost)
 			echo '<p/>You only have ' . $p[0]['player_abilitytype_ap'] . ' of the needed ' . $cost . ' AP to learn ' . $res[0]['ability_name'] . '.';
 		else
