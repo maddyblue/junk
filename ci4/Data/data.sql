@@ -631,7 +631,7 @@ COPY monster (monster_id, monster_name, monster_image, monster_hp, monster_mp, m
 109	Force of Chaos		17800	1500	3500	1600	3950	3400	60	60	99	25	1500	1	
 110	Chaos Dragon	ChaosDragon.gif	50000	10000	10000	10000	10000	10000	72	72	125	20	1	4	
 111	Nether Essence	NetherEssense.gif	65535	50000	35000	35000	35000	35000	72	72	125	20	1	1	
-112	Ultimate Being	bijou.gif	65535	65535	65535	65535	65535	65535	85	85	150	50	1	1	
+112	Ultimate Being		65535	65535	65535	65535	65535	65535	85	85	150	50	1	1	
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
