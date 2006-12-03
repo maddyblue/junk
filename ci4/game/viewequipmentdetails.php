@@ -75,7 +75,7 @@ if(count($res))
 	);
 
 	$array = array(
-		array('Name', makeImg($res[0]['equipment_image'], 'images/equipment/' . $res[0]['equipmenttype_name'] . '/') . ' ' . $name),
+		array('Name', $name . ' ' . makeImg($res[0]['equipment_image'], 'images/equipment/' . $res[0]['equipmenttype_name'] . '/')),
 		array('Type', makeLink($res[0]['equipmenttype_name'], 'a=viewequipment&type=' . $res[0]['equipmenttype_id'])),
 		array('Class', $res[0]['equipmentclass_name']),
 		array('Description', $res[0]['equipment_desc']),
