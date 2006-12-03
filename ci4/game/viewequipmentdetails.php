@@ -85,8 +85,6 @@ if(count($res))
 		array('Cost', $res[0]['equipment_cost'])
 	);
 
-
-
 	if($PLAYER)
 	{
 		$buytext = '<p/>' . getForm('', array(
