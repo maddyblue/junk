@@ -403,7 +403,7 @@ function listForums(&$array, $forum, $exclude = -1, $depth = 0)
 
 // $exclude = 0 means to exclude oneself, ie: $exclude = $forum
 // to exclude nothing, pass $exclude = -1
-function makeForumSelect($forum, $parent, $orphan = true, $exclude = 0)
+function makeForumSelect($forum, $parent, $orphan = true, $exclude = 0, $noparent = true)
 {
 	$array = array();
 
@@ -413,7 +413,10 @@ function makeForumSelect($forum, $parent, $orphan = true, $exclude = 0)
 	$forumList = listForums($array, '0', $exclude);
 	$selected = !$parent;
 
-	$val = '<option value="0" ' . (!$parent ? 'selected' : '') . '>(No parent)</option>';
+	$val = '';
+
+	if($noparent)
+		$val .= '<option value="0" ' . (!$parent ? 'selected' : '') . '>(No parent)</option>';
 
 	foreach($forumList as $row)
 	{
