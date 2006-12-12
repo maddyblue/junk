@@ -4,6 +4,20 @@
 
 /* ARC globals. */
 
+/*  -- README! --
+ *
+ * There are three important settings to define:
+ *
+ * ARC_WWW_DOMAIN, ARC_WWW_PATH, NEWSFORUM
+ *
+ * If the site is accessed by:
+ * http://www.arc.com/arcsoftware/
+ * Then ARC_WWW_DOMAIN is 'www.arc.com' and
+ * ARC_WWW_PATH is '/arcsoftware/'.
+ *
+ * NEWSFORUM is the id of the forum for news. Set this after you have made some forums.
+ */
+
 /* All addresses (filesystem or www) must end in '/'. */
 
 define('ARC_WWW_DOMAIN', 'your.domain.com');
@@ -29,7 +43,7 @@ define('SECTION_MANUAL', 'manual');
 define('FORUM_THREADS_PP', 30);
 define('FORUM_POSTS_PP', 20);
 define('FORUM_THREAD_PAGES', 10);
-define('NEWSFORUM', 9);
+define('NEWSFORUM', 0);
 define('SESSION_TIMEOUT', 600); // in seconds
 
 /* Don't mess with these */
