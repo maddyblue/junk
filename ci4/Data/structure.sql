@@ -1003,13 +1003,6 @@ CREATE INDEX stats_timestamp_index ON stats USING btree (stats_timestamp);
 
 
 --
--- Name: word_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
---
-
-CREATE INDEX word_index ON forum_word USING btree (forum_word_word);
-
-
---
 -- Name: player_item_player_item_item_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
 --
 
