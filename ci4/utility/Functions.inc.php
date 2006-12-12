@@ -428,8 +428,8 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
 
 /* Make a link to $link, displaying $text.
  * $section - leave as '' for current section. Change to SECTION_[name] (ie:
- *  SECTION_USER) to link to a different section. Use EXTERIOR as $section if
- *  you want to link off site.
+ * SECTION_USER) to link to a different section. Use EXTERIOR as $section if
+ * you want to link off site.
  */
 function makeLink($text, $link, $section = '', $title = '')
 {
@@ -461,8 +461,7 @@ function makeLink($text, $link, $section = '', $title = '')
 
 /* Make an image of $img. Add $prefix before the image location.
  * $relative - if the image location is with respect to the current directory,
- *  set this to true. Otherwise, it is assumed the image is linked to
- *  ARC_WWW_PATH.
+ * set this to true. Otherwise, it is assumed the image is linked to ARC_WWW_PATH.
  */
 function makeImg($img, $prefix = '', $relative = false)
 {
