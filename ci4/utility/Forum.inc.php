@@ -120,18 +120,18 @@ function forumReplace($text)
 		'&gt;',
 		'&amp;',
 		'&quot;',
-		makeImg('happy.gif', CI_SMILIE_PATH),
-		makeImg('vhappy.gif', CI_SMILIE_PATH),
-		makeImg('wink.gif', CI_SMILIE_PATH),
-		makeImg('sad.gif', CI_SMILIE_PATH),
-		makeImg('slanted.gif', CI_SMILIE_PATH),
-		makeImg('mad.gif', CI_SMILIE_PATH),
-		makeImg('tounge.gif', CI_SMILIE_PATH),
-		makeImg('tounge.gif', CI_SMILIE_PATH),
-		makeImg('trout.gif', CI_SMILIE_PATH),
-		makeImg('x.gif', CI_SMILIE_PATH),
-		makeImg('x.gif', CI_SMILIE_PATH),
-		makeImg('ci.gif', CI_SMILIE_PATH)
+		makeImg('happy.gif', ARC_SMILIE_PATH),
+		makeImg('vhappy.gif', ARC_SMILIE_PATH),
+		makeImg('wink.gif', ARC_SMILIE_PATH),
+		makeImg('sad.gif', ARC_SMILIE_PATH),
+		makeImg('slanted.gif', ARC_SMILIE_PATH),
+		makeImg('mad.gif', ARC_SMILIE_PATH),
+		makeImg('tounge.gif', ARC_SMILIE_PATH),
+		makeImg('tounge.gif', ARC_SMILIE_PATH),
+		makeImg('trout.gif', ARC_SMILIE_PATH),
+		makeImg('x.gif', ARC_SMILIE_PATH),
+		makeImg('x.gif', ARC_SMILIE_PATH),
+		makeImg('ci.gif', ARC_SMILIE_PATH)
 	);
 
 	$text = str_replace($patterns, $replacements, $text);

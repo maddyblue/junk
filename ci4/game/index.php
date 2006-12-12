@@ -32,8 +32,8 @@
  *
  */
 
-define('CI_SECTION', 'GAME');
-define('CI_HOME_MOD', '../');
+define('ARC_SECTION', 'GAME');
+define('ARC_HOME_MOD', '../');
 
 if(!isset($_GET['a']) && !isset($_POST['a']))
 	$_GET['a'] = 'viewplayers';

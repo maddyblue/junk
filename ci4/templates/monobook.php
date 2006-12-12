@@ -4,21 +4,21 @@
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
 		<title>
 			crescent island -
-			<?php echo strtolower(CI_SECTION); ?>
+			<?php echo strtolower(ARC_SECTION); ?>
 			<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
 		</title>
-		<CI_HEAD/>
-		<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR/>/main.css" />
-		<link rel="alternate" type="application/xml" title="rss" href="<?php echo CI_WWW_ADDRESS; ?>rss.php"/>
+		<ARC_HEAD/>
+		<link rel="stylesheet" type="text/css" href="<ARC_TEMPLATE_DIR/>/main.css" />
+		<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_ADDRESS; ?>rss.php"/>
 	</head>
 	<body>
 		<div id="globalWrapper">
 			<div id="column-content">
 				<div id="content">
-					<h1 class="firstHeading"><?php echo CI_SECTION; ?></h1>
+					<h1 class="firstHeading"><?php echo ARC_SECTION; ?></h1>
 					<div id="bodyContent">
 						<div id="contentSub"><?php echo $GLOBALS['PAGE_TITLE']; ?></div>
-						<CICONTENT/>
+						<ARCCONTENT/>
 						<div class="visualClear"></div>
 					</div>
 				</div>
@@ -34,7 +34,7 @@
 							{
 								echo '<li';
 
-								if(strcasecmp(CI_SECTION, $items[$i]['site_main']) == 0)
+								if(strcasecmp(ARC_SECTION, $items[$i]['site_main']) == 0)
 									echo ' class="selected"';
 
 								echo '>' . createSiteString($items, $i) . '</li>';
@@ -43,15 +43,15 @@
 					</ul>
 				</div>
 				<div class="portlet" id="p-logo">
-					<a style="background-image: url(<CI_TEMPLATE_DIR/>/wikiisland.gif);"
-						href="<?php echo CI_WWW_ADDRESS; ?>"
+					<a style="background-image: url(<ARC_TEMPLATE_DIR/>/wikiisland.gif);"
+						href="<?php echo ARC_WWW_ADDRESS; ?>"
 						title=""></a>
 				</div>
 				<div class="portlet">
 					<h5>section nav</h5>
 					<div class="pBody">
 						<ul>
-							<li><CISECTION_NAV><li>INSERT</li></CISECTION_NAV></li>
+							<li><ARCSECTION_NAV><li>INSERT</li></ARCSECTION_NAV></li>
 						</ul>
 					</div>
 				</div>
@@ -101,8 +101,8 @@
 				<div class="portlet">
 					<h5>render stats</h5>
 					<div class="pBody">
-						<CI_PROFILE/>
-						<br/><?php echo makeLink('rss', CI_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
+						<ARC_PROFILE/>
+						<br/><?php echo makeLink('rss', ARC_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
 					</div>
 				</div>
 			</div>

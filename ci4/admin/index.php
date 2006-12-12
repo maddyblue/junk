@@ -32,8 +32,8 @@
  *
  */
 
-define('CI_SECTION', 'ADMIN');
-define('CI_HOME_MOD', '../');
+define('ARC_SECTION', 'ADMIN');
+define('ARC_HOME_MOD', '../');
 require '../index.php';
 
 ?>

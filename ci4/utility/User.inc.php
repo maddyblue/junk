@@ -125,7 +125,7 @@ function getAvatar($id = ID, $type = '')
 // Assume the given link is an avatar on CI; make a correctly linked image from it.
 function getAvatarImg($img)
 {
-	$ret = $img ? makeImg($img, CI_AVATAR_PATH) : '';
+	$ret = $img ? makeImg($img, ARC_AVATAR_PATH) : '';
 
 	return $ret;
 }
@@ -201,17 +201,17 @@ function handle_login()
 	if(isset($_GET['domain']))
 		$dom = intval($_GET['domain']);
 	else
-		$dom = intval(getCICookie('domain'));
+		$dom = intval(getARCcookie('domain'));
 
-	define('CI_DOMAIN', $dom);
+	define('ARC_DOMAIN', $dom);
 
-	$id = intval(getCIcookie('id'));
-	$pass = getCIcookie('pass');
+	$id = intval(getARCcookie('id'));
+	$pass = getARCcookie('pass');
 
 	// check to see if we have a valid user
 
 	if($id && $pass)
-		$res = $db->query('select users.*, domain_abrev from users left join domain on domain_id=' . CI_DOMAIN . ' where user_id=' . $id . ' and user_pass=\'' . $pass . '\'');
+		$res = $db->query('select users.*, domain_abrev from users left join domain on domain_id=' . ARC_DOMAIN . ' where user_id=' . $id . ' and user_pass=\'' . $pass . '\'');
 	else
 		$res = array();
 
@@ -222,13 +222,13 @@ function handle_login()
 		define('ID', $id);
 
 		// set cookies to be alive for another week
-		setCIcookie('id', $id);
-		setCIcookie('pass', $pass);
+		setARCcookie('id', $id);
+		setARCcookie('pass', $pass);
 
 		// get all player data to save on erroneous getDBData calls
-		if(CI_DOMAIN)
+		if(ARC_DOMAIN)
 		{
-			$ret = $db->query('select * from player where player_user=' . ID . ' and player_domain=' . CI_DOMAIN);
+			$ret = $db->query('select * from player where player_user=' . ID . ' and player_domain=' . ARC_DOMAIN);
 			if(count($ret))
 			{
 				$PLAYER = $ret[0];

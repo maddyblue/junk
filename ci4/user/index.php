@@ -32,8 +32,8 @@
  *
  */
 
-define('CI_SECTION', 'USER');
-define('CI_HOME_MOD', '../');
+define('ARC_SECTION', 'USER');
+define('ARC_HOME_MOD', '../');
 
 if(!isset($_GET['a']) && !isset($_POST['a']))
 	$_GET['a'] = 'viewuserdetails';

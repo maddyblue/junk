@@ -307,9 +307,9 @@ USER_SECTION_NAV	14	link	User CP		'a=usercp'	SECTION_USER	1	0
 USER_SECTION_NAV	15	link	View Active Users		'a=whosonline'	SECTION_USER	0	0	
 USER_SECTION_NAV	16	link	View PMs		'a=viewpms'	SECTION_USER	1	0	
 USER_SECTION_NAV	17	link	View Users		'a=viewusers'	SECTION_USER	0	0	
-_HEAD	0	eval	$GLOBALS['CI_HEAD']				0	0	
+_HEAD	0	eval	$GLOBALS['ARC_HEAD']				0	0	
 _PROFILE	0	eval	getProfile()				0	0	
-_TEMPLATE_DIR	0	eval	CI_TEMPLATE_WWW . CI_TEMPLATE				0	0	directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)
+_TEMPLATE_DIR	0	eval	ARC_TEMPLATE_WWW . ARC_TEMPLATE				0	0	directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;

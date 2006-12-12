@@ -7,14 +7,14 @@
 	<!-- $Id$ -->
 	<title>
 		crescent island ::
-		<?php echo strtolower(CI_SECTION); ?>
+		<?php echo strtolower(ARC_SECTION); ?>
 		<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
 	</title>
-	<CI_HEAD/>
+	<ARC_HEAD/>
 
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
-	<link rel="stylesheet" type="text/css" href="<CI_TEMPLATE_DIR/>/redux.css" />
-	<link rel="alternate" type="application/xml" title="rss" href="<?php echo CI_WWW_ADDRESS; ?>rss.php"/>
+	<link rel="stylesheet" type="text/css" href="<ARC_TEMPLATE_DIR/>/redux.css" />
+	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_ADDRESS; ?>rss.php"/>
 </head>
 
 <body>
@@ -25,14 +25,14 @@
 
 			<div class="block-dark"><div class="header">
 				<table style="width: 100%;"><tr><td>
-					<?php echo CI_SECTION; ?>
+					<?php echo ARC_SECTION; ?>
 				</td><td style="text-align: right;">
 					crescent island
 				</td></tr></table>
 			</div></div>
 
 			<div class="block-light"><div class="content">
-				<CICONTENT/>
+				<ARCCONTENT/>
 			</div></div>
 
 		</div>
@@ -46,7 +46,7 @@
 					nav
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<CINAV>INSERT<br/></CINAV>
+					<ARCNAV>INSERT<br/></ARCNAV>
 				</div></div>
 			</div>
 
@@ -79,10 +79,10 @@
 
 			<div class="sidebox">
 				<div class="block-dark"><div class="sidepad">
-					<? echo CI_SECTION; ?> nav
+					<? echo ARC_SECTION; ?> nav
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<CISECTION_NAV>INSERT<br/></CISECTION_NAV><br/>
+					<ARCSECTION_NAV>INSERT<br/></ARCSECTION_NAV><br/>
 				</div></div>
 			</div>
 
@@ -110,8 +110,8 @@
 					render stats
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<CI_PROFILE/>
-					<br/><?php echo makeLink('rss', CI_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
+					<ARC_PROFILE/>
+					<br/><?php echo makeLink('rss', ARC_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
 				</div></div>
 			</div>
 

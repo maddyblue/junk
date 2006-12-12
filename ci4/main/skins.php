@@ -47,7 +47,7 @@ for($i = 0; $i < count($res); $i++)
 {
 	$link = ($res[$i]['skin_www'] == '' ? '' : '<a href="' . $res[$i]['skin_www'] . '">' . $res[$i]['skin_www'] . '</a>');
 
-	$name = ($res[$i]['skin_name'] == CI_TEMPLATE ? $res[$i]['skin_name'] : makeLink($res[$i]['skin_name'], 'a=skins&template=' . $res[$i]['skin_name']));
+	$name = ($res[$i]['skin_name'] == ARC_TEMPLATE ? $res[$i]['skin_name'] : makeLink($res[$i]['skin_name'], 'a=skins&template=' . $res[$i]['skin_name']));
 
 	array_push($array, array(
 		$name,

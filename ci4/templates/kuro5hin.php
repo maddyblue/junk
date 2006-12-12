@@ -5,7 +5,7 @@
 <head>
 <!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<link rel="alternate" type="application/xml" title="rss" href="<?php echo CI_WWW_ADDRESS; ?>rss.php"/>
+<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_ADDRESS; ?>rss.php"/>
 <title>crescentisland.com || online tactics gaming</title>
 <style type="text/css">
 <!--
@@ -139,7 +139,7 @@ table.maintable {
 
 -->
 </style>
-<CI_HEAD/>
+<ARC_HEAD/>
 </head>
 
 <body>
@@ -150,7 +150,7 @@ table.maintable {
 <table class="ciNavTable">
 	<tr>
 		<td style="border: 1px solid #000000;">
-			<CINAV><td class="ciNavTableTd">INSERT</td></CINAV>
+			<ARCNAV><td class="ciNavTableTd">INSERT</td></ARCNAV>
 		</td>
 	</tr>
 </table>
@@ -210,7 +210,7 @@ table.maintable {
 					<table class="boxinner">
 						<tr>
 						<td class="box">
-							<?php echo substr(CI_SECTION, 0, 1) . strtolower(substr(CI_SECTION, 1)); ?> Navigation
+							<?php echo substr(ARC_SECTION, 0, 1) . strtolower(substr(ARC_SECTION, 1)); ?> Navigation
 						</td>
 					</tr>
 					</table>
@@ -221,7 +221,7 @@ table.maintable {
 		<table class="boxcontents">
 			<tr>
 				<td>
-					<CISECTION_NAV>INSERT<br/></CISECTION_NAV>
+					<ARCSECTION_NAV>INSERT<br/></ARCSECTION_NAV>
 				</td>
 			</tr>
 		</table>
@@ -291,8 +291,8 @@ table.maintable {
 		<table class="boxcontents">
 			<tr>
 				<td>
-						<CI_PROFILE/>
-						<br/><?php echo makeLink('rss', CI_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
+						<ARC_PROFILE/>
+						<br/><?php echo makeLink('rss', ARC_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
 				</td>
 			</tr>
 		</table>
@@ -307,7 +307,7 @@ table.maintable {
 						<table class="boxinner">
 							<tr>
 								<td valign="middle" class="box">
-									<b><?php echo strtolower(CI_SECTION);?></b>
+									<b><?php echo strtolower(ARC_SECTION);?></b>
 								</td>
 							</tr>
 						</table>
@@ -318,7 +318,7 @@ table.maintable {
 			<table class="content">
 				<tr>
 					<td valign="top" width="100%" align="left">
-						<CICONTENT/>
+						<ARCCONTENT/>
 					</td>
 				</tr>
 			</table>

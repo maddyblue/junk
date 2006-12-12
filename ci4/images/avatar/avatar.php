@@ -32,11 +32,11 @@
  *
  */
 
-define('CI_HOME_MOD', '../../');
+define('ARC_HOME_MOD', '../../');
 
-require_once CI_HOME_MOD . 'config/Globals.inc.php';
-require_once CI_FS_PATH . 'config/Database.inc.php';
-require_once CI_FS_PATH . 'utility/Database.inc.php';
+require_once ARC_HOME_MOD . 'config/Globals.inc.php';
+require_once ARC_FS_PATH . 'config/Database.inc.php';
+require_once ARC_FS_PATH . 'utility/Database.inc.php';
 
 // Setup database connections
 

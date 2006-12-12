@@ -68,8 +68,8 @@ if(isset($_POST['submit']))
 	{
 		$last = isset($_POST['r']) ? decode($_POST['r']) : '';
 
-		setCIcookie('id', $ret[0]['user_id']);
-		setCIcookie('pass', $ret[0]['user_pass']);
+		setARCcookie('id', $ret[0]['user_id']);
+		setARCcookie('pass', $ret[0]['user_pass']);
 		$id = $ret[0]['user_id'];
 		$pass = $ret[0]['user_pass'];
 
@@ -82,11 +82,11 @@ if(isset($_POST['submit']))
 			if($last && strpos($last, 'logout') === false)
 			{
 				echo '<p/>Redirecting to <a href="' . $last . '">last location</a>...';
-				$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
+				$GLOBALS['ARC_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
 			}
 			else
 			{
-				$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=index.php?a=login">';
+				$GLOBALS['ARC_HEAD'] = '<meta http-equiv="refresh" content="0; url=index.php?a=login">';
 			}
 		}
 	}

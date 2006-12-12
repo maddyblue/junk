@@ -32,8 +32,8 @@
  *
  */
 
-define('CI_SECTION', 'FORUM');
-define('CI_HOME_MOD', '../');
+define('ARC_SECTION', 'FORUM');
+define('ARC_HOME_MOD', '../');
 
 if(!isset($_GET['a']) && !isset($_POST['a']))
 	$_GET['a'] = 'viewforum';

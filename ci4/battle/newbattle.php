@@ -136,7 +136,7 @@ function newBattle($area)
 
 	echo '<p/>Starting battle...';
 	echo '<p/>' . makeLink('Begin.', 'a=battle');
-	$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=?a=battle">';
+	$GLOBALS['ARC_HEAD'] = '<meta http-equiv="refresh" content="0; url=?a=battle">';
 }
 
 if(LOGGED)

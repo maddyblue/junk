@@ -32,8 +32,8 @@
  *
  */
 
-$id = getCIcookie('id');
-$pass = getCIcookie('pass');
+$id = getARCcookie('id');
+$pass = getARCcookie('pass');
 
 if($id && $pass)
 {
@@ -50,13 +50,13 @@ if($id && $pass)
 		$db->query('delete from session where session_id=\'' . SESSION . '\'');
 	}
 
-	deleteCIcookie('id');
-	deleteCIcookie('pass');
+	deleteARCcookie('id');
+	deleteARCcookie('pass');
 
 	$id = '';
 	$pass = '';
 
-	$GLOBALS['CI_HEAD'] = '<meta http-equiv="refresh" content="0; url=index.php?a=logout">';
+	$GLOBALS['ARC_HEAD'] = '<meta http-equiv="refresh" content="0; url=index.php?a=logout">';
 }
 
 update_session_action(303, '', 'Logout');

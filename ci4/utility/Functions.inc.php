@@ -57,11 +57,11 @@ Data control:
 	validateChars
 
 Cookies:
-	setCIcookie
-	setCIcookieReal
-	deleteCIcookie
-	deleteCIcookieReal
-	getCIcookie
+	setARCcookie
+	setARCcookieReal
+	deleteARCcookie
+	deleteARCcookieReal
+	getARCcookie
 
 Small data:
 	getTime
@@ -81,8 +81,10 @@ Pages:
 
 function parseTags(&$template)
 {
+	$ARC_TAG = 'ARC';
+
 	// Find all of the tags and parse them out
-	while(preg_match('/<CI([^>]+)>/', $template, $matches)) // find a <CIXXX> tag
+	while(preg_match('/<' . $ARC_TAG . '([^>]+)>/', $template, $matches)) // find a <ARCXXX> tag
 	{
 		$tag = $matches[1];
 
@@ -95,9 +97,9 @@ function parseTags(&$template)
 		else
 		{
 			$insert = '';
-			$pos = strpos($template, '<CI');
+			$pos = strpos($template, '<' . $ARC_TAG);
 			$pos1 = strpos($template, '>', $pos + 3);
-			$pos2 = strpos($template, '</CI' . $tag . '>', $pos1);
+			$pos2 = strpos($template, '</' . $ARC_TAG . $tag . '>', $pos1);
 
 			/* Shouldn't have to do this, but it'll prevent infinite loops.
 			 * This if block will remove the tag spanning $pos to $pos1,
@@ -109,7 +111,7 @@ function parseTags(&$template)
 				continue;
 			}
 
-			$pos3 = $pos2 + 5 + strlen($tag); // 5 to account for these chars: </CI>
+			$pos3 = $pos2 + strlen('</' . $ARC_TAG . $tag . '>');
 			$insert = substr($template, $pos1 + 1, $pos2 - $pos1 - 1);
 			$pos4 = strpos($insert, 'INSERT');
 			$inslen = strlen($insert);
@@ -140,7 +142,7 @@ function parseTags(&$template)
 /* Returns the associative array from the site[_replace] table corresponding to
  *  the given tag.
  * $tag - the name of the tag.  Something like 'GAMESEC' or 'AFFILIATES'.
- * Note: omit the CI part of the tag, as it's only used in the parser.
+ * Note: omit the ARC part of the tag, as it's only used in the parser.
  * $single - boolean.  True if from the site_replace table, false for site
  *  table.
  */
@@ -152,7 +154,7 @@ function getSiteArray($tag)
 	{
 		case 'SECTION_MENU':
 		case 'SECTION_NAV':
-			$tag = CI_SECTION . '_' . $tag;
+			$tag = ARC_SECTION . '_' . $tag;
 			break;
 		default:
 			break;
@@ -235,7 +237,7 @@ function getSiteStringArray($tag, $useSecondary = false, $ignoreLink = false)
 // Returns the template filename of $t.
 function getTemplateFilename($t)
 {
-	return CI_TEMPLATE_FS . $t . '.php';
+	return ARC_TEMPLATE_FS . $t . '.php';
 }
 
 // --- Tables and forms ---
@@ -440,9 +442,9 @@ function makeLink($text, $link, $section = '', $title = '')
 	if($section != 'EXTERIOR')
 	{
 		if($section == '/')
-			$ret .= CI_WWW_PATH;
+			$ret .= ARC_WWW_PATH;
 		else if($section)
-			$ret .= CI_WWW_PATH . $section . '/';
+			$ret .= ARC_WWW_PATH . $section . '/';
 
 		$ret .= '?';
 	}
@@ -460,11 +462,11 @@ function makeLink($text, $link, $section = '', $title = '')
 /* Make an image of $img. Add $prefix before the image location.
  * $relative - if the image location is with respect to the current directory,
  *  set this to true. Otherwise, it is assumed the image is linked to
- *  CI_WWW_PATH.
+ *  ARC_WWW_PATH.
  */
 function makeImg($img, $prefix = '', $relative = false)
 {
-	return ($img ? '<img alt="" src="' . ($relative ? '' : CI_WWW_PATH) . $prefix . $img . '" />' : '');
+	return ($img ? '<img alt="" src="' . ($relative ? '' : ARC_WWW_PATH) . $prefix . $img . '" />' : '');
 }
 
 // --- Data control ---
@@ -497,41 +499,41 @@ function validateCharsDie(&$text)
 // --- Cookies ---
 
 // Set a cookie. This handles duration.
-function setCIcookie($name, $value)
+function setARCcookie($name, $value)
 {
 	if(defined('IS_SECURE'))
-		setCIcookieReal($name, $value, '1');
+		setARCcookieReal($name, $value, '1');
 	else
-		setCIcookieReal($name, $value, '0');
+		setARCcookieReal($name, $value, '0');
 }
 
-function setCIcookieReal($name, $value, $secure)
+function setARCcookieReal($name, $value, $secure)
 {
 	// 60*60*24*7 = 604800 = 7 days
-	setCookie('CI_' . $name, $value, TIME + 604800, CI_WWW_PATH);
+	setCookie('ARC_' . $name, $value, TIME + 604800, ARC_WWW_PATH);
 }
 
 // Clear a cookie made with setCICookie.
-function deleteCIcookie($name)
+function deleteARCcookie($name)
 {
 	if(defined('IS_SECURE'))
-		deleteCIcookieReal($name, '0');
+		deleteARCcookieReal($name, '0');
 	else
-		deleteCIcookieReal($name, '1');
+		deleteARCcookieReal($name, '1');
 }
 
-function deleteCIcookieReal($name, $secure)
+function deleteARCcookieReal($name, $secure)
 {
-	setCookie('CI_' . $name, '', 0, CI_WWW_PATH);
+	setCookie('ARC_' . $name, '', 0, ARC_WWW_PATH);
 }
 
 // Retrieve a cookie set with setCICookie.
-function getCIcookie($name)
+function getARCcookie($name)
 {
 	$ret = '';
 
-	if(isset($_COOKIE['CI_' . $name]))
-		$ret = encode($_COOKIE['CI_' . $name]);
+	if(isset($_COOKIE['ARC_' . $name]))
+		$ret = encode($_COOKIE['ARC_' . $name]);
 
 	return $ret;
 }
@@ -553,7 +555,7 @@ function getTime($ts = -1)
 function getDomainName($domain = 0)
 {
 	if($domain == 0)
-		$domain = CI_DOMAIN;
+		$domain = ARC_DOMAIN;
 
 	$name = getDBData('domain_name', $domain, 'domain_id', 'domain');
 

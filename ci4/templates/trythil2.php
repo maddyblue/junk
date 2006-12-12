@@ -165,15 +165,15 @@
 		<table border=0 cellspacing=0 cellpadding=0>
 			<tr>
 				<td valign="top" align="left" height=458 width=157>
-					<img src="<?php echo CI_WWW_TEMPLATE_DIR; ?>/left.jpg">
+					<img src="<?php echo ARC_WWW_TEMPLATE_DIR; ?>/left.jpg">
 				</td>
 
 				<td valign="top" align="left" height=288 width=135>
-					<img src="<?php echo CI_WWW_TEMPLATE_DIR; ?>/top-s.jpg">
+					<img src="<?php echo ARC_WWW_TEMPLATE_DIR; ?>/top-s.jpg">
 				</td>
 
 				<td valign="top" align="left" height=178 width=153>
-					<img src="<?php echo CI_WWW_TEMPLATE_DIR; ?>/top.jpg">
+					<img src="<?php echo ARC_WWW_TEMPLATE_DIR; ?>/top.jpg">
 				</td>
 
 				<td valign="top" align="left" width="80%">
@@ -251,7 +251,7 @@
 										<tr>
 											<td>
 												<br/>
-												<CICONTENT/>
+												<ARCCONTENT/>
 											</td>
 										</tr>
 									</table>
@@ -294,7 +294,7 @@
 				$t = floor($radius * sin(-$angle) + $shiftt);
 
 				$str .= 'left: ' . $l . 'px; top: ' . $t . 'px';
-				echo '<div style="' . $str . '"><img src="' .  CI_WWW_TEMPLATE_DIR . '/ball.gif" align=absmiddle>' . $items[$i] . '</div>';
+				echo '<div style="' . $str . '"><img src="' .  ARC_WWW_TEMPLATE_DIR . '/ball.gif" align=absmiddle>' . $items[$i] . '</div>';
 
 				$a -= $change;
 			}

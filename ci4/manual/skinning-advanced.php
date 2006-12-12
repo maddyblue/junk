@@ -80,7 +80,7 @@ update_session_action(602, '', 'Advanced Skinning');
 26   $t = floor($radius * sin(-$angle) + $shiftt);
 27
 28   $str .= 'left: ' . $l . 'px; top: ' . $t . 'px';
-29   echo '&lt;div style=&quot;' . $str . '&quot;&gt;&lt;img src=&quot;' .  CI_WWW_TEMPLATE_DIR .
+29   echo '&lt;div style=&quot;' . $str . '&quot;&gt;&lt;img src=&quot;' .  ARC_WWW_TEMPLATE_DIR .
 30    '/ball.gif&quot; align=absmiddle&gt;' . $items[$i] . '&lt;/div&gt;';
 31
 32   $a -= $change;
@@ -131,9 +131,9 @@ update_session_action(602, '', 'Advanced Skinning');
 
 <p/><b>Images in Skins</b>
 
-<p/>Since users are able to traverse directories, and hardcoding in image locations is not portable, the define <tt>CI_WWW_TEMPLATE_DIR</tt> is used for template specific images. For example:
+<p/>Since users are able to traverse directories, and hardcoding in image locations is not portable, the define <tt>ARC_WWW_TEMPLATE_DIR</tt> is used for template specific images. For example:
 
-<p/><tt>&lt;img src=&quot;&lt;?php echo CI_WWW_TEMPLATE_DIR; ?&gt;/left.jpg&quot;&gt;</tt>
+<p/><tt>&lt;img src=&quot;&lt;?php echo ARC_WWW_TEMPLATE_DIR; ?&gt;/left.jpg&quot;&gt;</tt>
 
 <p/>would be used for the image (if we are using the trythil2 skin):
 

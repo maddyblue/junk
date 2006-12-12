@@ -36,7 +36,7 @@ function dirList($dir, $files = true, $dirs = true, $omitdotfiles = true)
 {
 	$ret = array();
 
-	$path = CI_FS_PATH . $dir;
+	$path = ARC_FS_PATH . $dir;
 	if(substr($path, -1) != '/')
 		$path .= '/';
 
@@ -108,7 +108,7 @@ function disp($base, $dir)
 
 if(ID != 0 && LOGGED == true)
 {
-	$base = CI_AVATAR_PATH;
+	$base = ARC_AVATAR_PATH;
 
 	$dir = isset($_POST['dir']) ? $_POST['dir'] : '';
 	$dir = isset($_GET['dir']) ? $_GET['dir'] : $dir;
@@ -140,7 +140,7 @@ if(ID != 0 && LOGGED == true)
 			$fail = true;
 			echo '<p/>Image is not in the gallery.';
 		}
-		else if(!is_file(CI_FS_PATH . $base . $full))
+		else if(!is_file(ARC_FS_PATH . $base . $full))
 		{
 			$fail = true;
 			echo '<p/>Invalid image.';

@@ -150,7 +150,7 @@
 	?>
 		<p/>
 		<center>
-		<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <CINAV><font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> INSERT <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/></CINAV> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font>
+		<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <ARCNAV><font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> INSERT <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/></ARCNAV> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font>
 		</center>
 	</div>
 
@@ -163,9 +163,9 @@
 	?>
 		<p/>
 		<center>
-		<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <CISECTION_MENU><font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> INSERT <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/></CISECTION_MENU> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/>
+		<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <ARCSECTION_MENU><font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> INSERT <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/></ARCSECTION_MENU> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font><br/>
 
-		<br/><CISECTION_NAV>INSERT<br/></CISECTION_NAV>
+		<br/><ARCSECTION_NAV>INSERT<br/></ARCSECTION_NAV>
 		</center>
 	</div>
 
@@ -198,7 +198,7 @@
 												<tr>
 													<td valign="top" align="left">
 														<div class="normal">
-															<CICONTENT/>
+															<ARCCONTENT/>
 														</div>
 
 													</td>

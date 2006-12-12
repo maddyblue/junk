@@ -32,7 +32,7 @@
  *
  */
 
-require_once(CI_FS_PATH . 'utility/ActionList.inc.php');
+require_once(ARC_FS_PATH . 'utility/ActionList.inc.php');
 
 function getAction($a, $d)
 {

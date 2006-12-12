@@ -32,16 +32,16 @@
  *
  */
 
-require_once CI_HOME_MOD . 'config/Globals.inc.php';
+require_once ARC_HOME_MOD . 'config/Globals.inc.php';
 
 // Requires
-require_once CI_FS_PATH . 'config/Database.inc.php';
+require_once ARC_FS_PATH . 'config/Database.inc.php';
 
-require_once CI_FS_PATH . 'utility/Database.inc.php';
-require_once CI_FS_PATH . 'utility/Functions.inc.php';
-require_once CI_FS_PATH . 'utility/User.inc.php';
-require_once CI_FS_PATH . 'utility/Forum.inc.php';
-require_once CI_FS_PATH . 'utility/Session.inc.php';
+require_once ARC_FS_PATH . 'utility/Database.inc.php';
+require_once ARC_FS_PATH . 'utility/Functions.inc.php';
+require_once ARC_FS_PATH . 'utility/User.inc.php';
+require_once ARC_FS_PATH . 'utility/Forum.inc.php';
+require_once ARC_FS_PATH . 'utility/Session.inc.php';
 
 // Setup database connections
 $db = new Database();

@@ -37,13 +37,13 @@ $time_start = gettimeofday();
 // turn on all errors
 error_reporting(E_ALL);
 
-if(!defined('CI_SECTION')) define('CI_SECTION', 'MAIN');
-if(!defined('CI_HOME_MOD')) define('CI_HOME_MOD', '');
+if(!defined('ARC_SECTION')) define('ARC_SECTION', 'MAIN');
+if(!defined('ARC_HOME_MOD')) define('ARC_HOME_MOD', '');
 
-require_once CI_HOME_MOD . 'Include.inc.php';
+require_once ARC_HOME_MOD . 'Include.inc.php';
 
-eval('$secDir = SECTION_' . strtoupper(CI_SECTION) . ';');
-define('CI_SECTION_DIR', $secDir . '/');
+eval('$secDir = SECTION_' . strtoupper(ARC_SECTION) . ';');
+define('ARC_SECTION_DIR', $secDir . '/');
 
 $message = '';
 $content = '';
@@ -53,7 +53,7 @@ handle_login();
 if(isset($_GET['domain']))
 	$content .= '<div><b>Domain changed.</b></div>';
 
-setCIcookie('domain', CI_DOMAIN);
+setARCcookie('domain', ARC_DOMAIN);
 
 $aval = '';
 
@@ -64,22 +64,22 @@ else if(isset($_GET['a']))
 
 validateCharsDie($aval);
 
-if(!$aval && CI_SECTION == 'MAIN')
+if(!$aval && ARC_SECTION == 'MAIN')
 	$aval = 'news';
 
 define('ACTION', $aval);
 
-if(!isset($CI_HEAD))
-	$CI_HEAD = '';
+if(!isset($ARC_HEAD))
+	$ARC_HEAD = '';
 
 // Template
 if(isset($_GET['template']))
 	$t = $_GET['template'];
 else
-	$t = getCIcookie('template');
+	$t = getARCcookie('template');
 
 if(!$t)
-	$t = CI_DEF_TEMPLATE;
+	$t = ARC_DEF_TEMPLATE;
 
 validateCharsDie($t);
 
@@ -87,26 +87,26 @@ $tfile = getTemplateFilename($t);
 if(!file_exists($tfile))
 {
 	$message .= '<p/>The ' . $t . ' template does not exist. Reverting to default.';
-	$t = CI_DEF_TEMPLATE;
+	$t = ARC_DEF_TEMPLATE;
 	$tfile = getTemplateFilename($t);
 }
 
 $fd = fopen($tfile, 'r');
 
-setCIcookie('template', $t);
+setARCcookie('template', $t);
 
-define('CI_TEMPLATE', $t);
-define('CI_WWW_TEMPLATE_DIR', CI_TEMPLATE_WWW . CI_TEMPLATE);
+define('ARC_TEMPLATE', $t);
+define('ARC_WWW_TEMPLATE_DIR', ARC_TEMPLATE_WWW . ARC_TEMPLATE);
 $template = fread($fd, filesize($tfile));
 fclose($fd);
 
-if(CI_SECTION == 'ADMIN' && !ADMIN)
+if(ARC_SECTION == 'ADMIN' && !ADMIN)
 	$content .= '<p/>You do not have permission to view this page.';
 else
 {
 	if($aval)
 	{
-		$a = CI_FS_PATH . CI_SECTION_DIR . $aval . '.php';
+		$a = ARC_FS_PATH . ARC_SECTION_DIR . $aval . '.php';
 
 		if(file_exists($a))
 		{
@@ -122,7 +122,7 @@ else
 	}
 }
 
-$db->query('insert into stats values (' . TIME . ', ' . ID . ', ' . $SESSION_ACTION . ', \'' . CI_TEMPLATE . '\', ' . REMOTE_ADDR . ')');
+$db->query('insert into stats values (' . TIME . ', ' . ID . ', ' . $SESSION_ACTION . ', \'' . ARC_TEMPLATE . '\', ' . REMOTE_ADDR . ')');
 $db->query('update data set data_val_int=data_val_int+1 where data_name=\'hits\'');
 
 ob_start();
@@ -130,15 +130,17 @@ eval('?>' . $template);
 $template = ob_get_contents();
 ob_end_clean();
 
+$stopstr = '<ARCCONTENT/>';
+
 // Split the template into two halves, so we can do timed or incremental output in the content section
-$pos = strpos($template, '<CICONTENT/>');
+$pos = strpos($template, $stopstr);
 
 if($pos !== false)
 {
 	$top = substr($template, 0, $pos - 1);
-	$bottom = substr($template, $pos + 12); // 12 = length of <CICONTENT/>
+	$bottom = substr($template, $pos + strlen($stopstr));
 }
-else // handle templates that don't have <CICONTENT/> (for template development/debugging)
+else // handle templates that don't have <ARCCONTENT/> (for template development/debugging)
 {
 	$top = $template;
 	$content = '';

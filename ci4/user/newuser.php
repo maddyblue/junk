@@ -110,8 +110,8 @@ if(isset($_POST['submit']))
 		$md5pass = md5($pass1);
 		$uid = $db->insert('insert into users (user_name, user_email, user_pass, user_register) values (\'' . $name . '\', \'' . $email . '\', \'' . $md5pass . '\', ' . TIME . ')', 'user');
 
-		setCIcookie('id', $uid);
-		setCIcookie('pass', $md5pass);
+		setARCcookie('id', $uid);
+		setARCcookie('pass', $md5pass);
 
 		echo '<p/>User &quot;' . decode($name) . '&quot; successfully registered. You have been automatically logged in.';
 		echo '<p/>Complete your profile in the ' . makeLink('User Control Panel', 'a=usercp') . '.';

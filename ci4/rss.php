@@ -32,9 +32,9 @@
  *
  */
 
-define('CI_HOME_MOD', '');
+define('ARC_HOME_MOD', '');
 
-require_once CI_HOME_MOD . 'Include.inc.php';
+require_once ARC_HOME_MOD . 'Include.inc.php';
 
 handle_login();
 
@@ -49,7 +49,7 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>
   <channel>
 
     <title>Crescent Island</title>
-    <link>' . CI_WWW_ADDRESS . '</link>
+    <link>' . ARC_WWW_ADDRESS . '</link>
     <description>Online Tactics Gaming.</description>
     <language>en-us</language>
     <managingEditor>dolmant@gmail.com</managingEditor>';
@@ -61,7 +61,7 @@ for($i = 0; $i < count($res); $i++)
 {
 	echo "\n<item>" .
 		'<title>' . decode($res[$i]['forum_thread_title']) . '</title>' .
-		'<link>' . CI_WWW_ADDRESS . 'forum/?a=viewthread&amp;t=' . $res[$i]['forum_thread_id'] . '</link>' .
+		'<link>' . ARC_WWW_ADDRESS . 'forum/?a=viewthread&amp;t=' . $res[$i]['forum_thread_id'] . '</link>' .
 		'<category>' . decode($res[$i]['forum_forum_name']) . '</category>' .
 		'<pubDate>' . gmdate('D, j M Y H:i:s') . ' GMT</pubDate>' .
 		'<description><![CDATA[' . parsePostText($res[$i]['forum_post_text']) . ']]></description>' .
