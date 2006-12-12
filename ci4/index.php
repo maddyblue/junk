@@ -106,7 +106,7 @@ else
 {
 	if($aval)
 	{
-		$a = ARC_FS_PATH . ARC_SECTION_DIR . $aval . '.php';
+		$a = ARC_HOME_MOD . ARC_SECTION_DIR . $aval . '.php';
 
 		if(file_exists($a))
 		{

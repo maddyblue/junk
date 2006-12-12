@@ -36,7 +36,7 @@ function dirList($dir, $files = true, $dirs = true, $omitdotfiles = true)
 {
 	$ret = array();
 
-	$path = ARC_FS_PATH . $dir;
+	$path = ARC_HOME_MOD . $dir;
 	if(substr($path, -1) != '/')
 		$path .= '/';
 
@@ -140,7 +140,7 @@ if(ID != 0 && LOGGED == true)
 			$fail = true;
 			echo '<p/>Image is not in the gallery.';
 		}
-		else if(!is_file(ARC_FS_PATH . $base . $full))
+		else if(!is_file(ARC_HOME_MOD . $base . $full))
 		{
 			$fail = true;
 			echo '<p/>Invalid image.';

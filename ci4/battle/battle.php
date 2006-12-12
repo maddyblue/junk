@@ -32,11 +32,11 @@
  *
  */
 
-require_once ARC_FS_PATH . 'objects/Entity.inc.php';
-require_once ARC_FS_PATH . 'objects/Player.inc.php';
-require_once ARC_FS_PATH . 'objects/Monster.inc.php';
-require_once ARC_FS_PATH . 'utility/GameMath.inc.php';
-require_once ARC_FS_PATH . 'utility/Battle.inc.php';
+require_once ARC_HOME_MOD . 'objects/Entity.inc.php';
+require_once ARC_HOME_MOD . 'objects/Player.inc.php';
+require_once ARC_HOME_MOD . 'objects/Monster.inc.php';
+require_once ARC_HOME_MOD . 'utility/GameMath.inc.php';
+require_once ARC_HOME_MOD . 'utility/Battle.inc.php';
 
 /* NOTE: DO NOTE USE foreach here. I haven't done extensive testing, but I
  * think that it uses a copy constructor, so modified values aren't saved.

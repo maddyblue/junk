@@ -35,7 +35,7 @@
 if(ADMIN)
 	echo '<p/>' . makeLink('Update Events', 'a=event&update');
 
-require_once ARC_FS_PATH . 'utility/Event.inc.php';
+require_once ARC_HOME_MOD . 'utility/Event.inc.php';
 
 $query = 'select distinct on (event_id) * from event left join eventlog on event_id=eventlog_event order by event_id, eventlog_time desc';
 
