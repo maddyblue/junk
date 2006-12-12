@@ -43,6 +43,8 @@ $next = $start + $per;
 
 echo '<p/>Reparsing forum posts ' . $start . ' to ' . $next . ':<br/>';
 
+echo '<p/>(It is safe to at any time stop execution of this page and leave - posts are updated atomically.)';
+
 $posts = $db->query('select forum_post_id, forum_post_text from forum_post limit ' . $per . ' offset ' . $start);
 foreach($posts as $post)
 {
