@@ -1,0 +1,12 @@
+<?php
+
+/* $Id$ */
+
+/*	PostgreSQL database connection configuration.	*/
+
+$DBConf['user']     = '';
+$DBConf['pass']     = '';
+$DBConf['host']     = '';
+$DBConf['database'] = '';
+
+?>

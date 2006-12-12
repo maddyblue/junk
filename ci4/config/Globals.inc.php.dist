@@ -2,12 +2,12 @@
 
 /* $Id$ */
 
-/*	ARC globals.	*/
+/* ARC globals. */
 
 /* All addresses (filesystem or www) must end in '/'. */
 
-define('ARC_WWW_DOMAIN', '192.168.1.101');
-define('ARC_WWW_PATH', '/ci4/'); // '/' if root. must begin with '/'
+define('ARC_WWW_DOMAIN', 'your.domain.com');
+define('ARC_WWW_PATH', '/path/to/arc/on/www/'); // '/' if root. must begin with '/'
 define('ARC_AVATAR_PATH', 'images/avatar/');
 define('ARC_SMILIE_PATH', 'images/smilies/');
 

@@ -9,7 +9,7 @@
 		</title>
 		<ARC_HEAD/>
 		<link rel="stylesheet" type="text/css" href="<ARC_TEMPLATE_DIR/>/main.css" />
-		<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_ADDRESS; ?>rss.php"/>
+		<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php"/>
 	</head>
 	<body>
 		<div id="globalWrapper">
@@ -44,7 +44,7 @@
 				</div>
 				<div class="portlet" id="p-logo">
 					<a style="background-image: url(<ARC_TEMPLATE_DIR/>/wikiisland.gif);"
-						href="<?php echo ARC_WWW_ADDRESS; ?>"
+						href="<?php echo ARC_WWW_PATH; ?>"
 						title=""></a>
 				</div>
 				<div class="portlet">

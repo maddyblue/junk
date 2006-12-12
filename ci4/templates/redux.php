@@ -14,7 +14,7 @@
 
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
 	<link rel="stylesheet" type="text/css" href="<ARC_TEMPLATE_DIR/>/redux.css" />
-	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_ADDRESS; ?>rss.php"/>
+	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php"/>
 </head>
 
 <body>
