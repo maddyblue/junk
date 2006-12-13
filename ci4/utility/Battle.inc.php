@@ -242,7 +242,7 @@ function drand($a, $b)
 
 function spawnTimer(&$src, $turns, $when, $eachcode, $endcode)
 {
-	$GLOBALS['db']->query('insert into battle_timer (battle_timer_uid, battle_timer_turns, battle_timer_when, battle_timer_each_code, battle_timer_end_code) values (' . $src->uid . ', ' . $turns . ', ' . $when . ', \'' . pg_escape_string($eachcode) . '\', \'' . pg_escape_string($endcode) . '\')');
+	$GLOBALS['db']->query('insert into battle_timer (battle_timer_uid, battle_timer_turns, battle_timer_when, battle_timer_each_code, battle_timer_end_code) values (' . $src->uid . ', ' . $turns . ', ' . $when . ', \'' . $GLOBALS['db']->escape_string($eachcode) . '\', \'' . $GLOBALS['db']->escape_string($endcode) . '\')');
 }
 
 // return an Entity with the specified uid. callers should use &getEntity(uid).

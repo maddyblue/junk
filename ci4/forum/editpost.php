@@ -102,7 +102,7 @@ else
 		{
 			$db->query('update forum_post set ' .
 				'forum_post_text=\'' . $text . '\',' .
-				'forum_post_text_parsed=\'' . pg_escape_string(parsePostText($text)) . '\',' .
+				'forum_post_text_parsed=\'' . $GLOBALS['db']->escape_string(parsePostText($text)) . '\',' .
 				'forum_post_edit_date=' . TIME . ',' .
 				'forum_post_edit_user=' . ID .
 				' where forum_post_id=' . $post);

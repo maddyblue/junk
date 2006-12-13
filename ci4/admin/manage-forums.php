@@ -118,7 +118,10 @@ if(count($orphaned) > 1)
 }
 
 echo '<p/>';
-echo getFormField(array('type'=>'submit', 'name'=>'submit', 'val'=>'Save Changes'));
+
+if(count($array) > 1 && count($orphaned) > 1)
+	echo getFormField(array('type'=>'submit', 'name'=>'submit', 'val'=>'Save Changes'));
+
 echo getFormField(array('type'=>'hidden', 'name'=>'a', 'val'=>'manage-forums'));
 
 echo '</form>';

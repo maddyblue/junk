@@ -462,6 +462,7 @@ function makePostLink($text, $post)
 }
 
 $searchRegex = '/[\'a-zA-Z0-9_-]+/';
+
 function parsePostWords($id, $text, $del = false)
 {
 	global $db, $searchRegex;
@@ -478,22 +479,40 @@ function parsePostWords($id, $text, $del = false)
 
 	$u = array_unique($res[0]);
 
-	$i = 0;
-	$query = '';
-
-	foreach($u as $p)
+	if($db->type == 'postgre')
 	{
-		$query .= 'insert into forum_word values (' . $id . ', \'' . pg_escape_string($p) . "');\n";
+		$i = 0;
+		$query = '';
 
-		if($i++ == 100)
+		foreach($u as $p)
 		{
-			$GLOBALS['db']->update($query);
-			$query = '';
-			$i = 0;
-		}
-	}
+			$query .= 'insert into forum_word values (' . $id . ', \'' . $db->escape_string($p) . "');\n";
 
-	$GLOBALS['db']->update($query);
+			if($i++ == 100)
+			{
+				$db->update($query);
+				$query = '';
+				$i = 0;
+			}
+		}
+
+		$db->update($query);
+	}
+	else if($db->type == 'mysql')
+	{
+		$query = 'insert into forum_word values ';
+		$i = 0;
+
+		foreach($u as $p)
+		{
+			if($i++ > 0)
+				$query .= ', ';
+
+			$query .= '(' . $id . ', \'' . $db->escape_string($p) . '\')';
+		}
+
+		$db->update($query);
+	}
 }
 
 ?>

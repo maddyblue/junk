@@ -48,7 +48,7 @@ if($search || $user)
 	$query = 'from forum_post, forum_thread, forum_forum, users where ';
 
 	if($user)
-		$query .= 'user_name=\'' . pg_escape_string($user) . '\' ';
+		$query .= 'user_name=\'' . $GLOBALS['db']->escape_string($user) . '\' ';
 
 	if($user && $search)
 		$query .= 'and ';
@@ -60,7 +60,7 @@ if($search || $user)
 		for($i = 0; $i < count($u); $i++)
 		{
 			if($i) $query .= 'and ';
-			$query .= 'forum_post_id in (select forum_word_post from forum_word where forum_word_word = \'' . pg_escape_string($u[$i]) . '\') ';
+			$query .= 'forum_post_id in (select forum_word_post from forum_word where forum_word_word = \'' . $GLOBALS['db']->escape_string($u[$i]) . '\') ';
 		}
 	}
 

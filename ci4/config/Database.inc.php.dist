@@ -8,5 +8,6 @@ $DBConf['user']     = '';
 $DBConf['pass']     = '';
 $DBConf['host']     = '';
 $DBConf['database'] = '';
+$DBConf['type']     = ''; // 'postgre' or 'mysql'
 
 ?>

@@ -36,6 +36,7 @@ class Database
 {
 	var $handle = null;
 	var $resource;
+	var $type;
 
 	var $queries = array();
 	var $time = 0;
@@ -45,12 +46,27 @@ class Database
 
 	function connect($params)
 	{
-		$this->handle = pg_connect('
-			host=' . $params['host'] . '
-			user=' . $params['user'] . '
-			password=' . $params['pass'] . '
-			dbname=' . $params['database']
-		);
+		$this->type = $params['type'];
+
+		if($this->type == 'postgre')
+		{
+			$this->handle = pg_connect('
+				host=' . $params['host'] . '
+				user=' . $params['user'] . '
+				password=' . $params['pass'] . '
+				dbname=' . $params['database']
+			);
+		}
+		else if($this->type == 'mysql')
+		{
+			$this->handle = mysql_connect(
+				$params['host'],
+				$params['user'],
+				$params['pass']
+			);
+
+			mysql_select_db($params['database'], $this->handle);
+		}
 
 		return $this->handle;
 	}
@@ -60,7 +76,11 @@ class Database
 
 	function disconnect()
 	{
-		pg_close($this->handle);
+		if($this->type == 'postgre')
+			pg_close($this->handle);
+		else if($this->type == 'mysql')
+			mysql_close($this->handle);
+
 		$this->handle = null;
 	}
 
@@ -78,28 +98,52 @@ class Database
 
 	function query($query, $expect_return = true)
 	{
-		$start = gettimeofday();
-
-		pg_send_query($this->handle, $query);
-
 		$ret = array();
 
-		while($this->resource = pg_get_result($this->handle))
+		$start = gettimeofday();
+
+		if($this->type == 'postgre')
 		{
-			if(pg_result_error($this->resource))
+			pg_send_query($this->handle, $query);
+
+			while($this->resource = pg_get_result($this->handle))
+			{
+				if(pg_result_error($this->resource))
+				{
+					global $message;
+					$message .= '<div class="error">Error: ' . pg_result_error($this->resource) . '.
+						<br/>Query: <pre>' . $query . '</pre></div>';
+					$ret = false;
+				}
+				else if($expect_return)
+				{
+					while($row = pg_fetch_assoc($this->resource))
+						array_push($ret, $row);
+				}
+
+				pg_free_result($this->resource);
+			}
+		}
+		else if($this->type == 'mysql')
+		{
+			$res = mysql_query($query, $this->handle);
+
+			$s = mysql_error($this->handle);
+
+			if($s)
 			{
 				global $message;
-				$message .= '<div class="error">Error: ' . pg_result_error($this->resource) . '.
+				$message .= '<div class="error">Error: ' . $s . '.
 					<br/>Query: <pre>' . $query . '</pre></div>';
 				$ret = false;
 			}
-			else if($expect_return)
+			else if($expect_return && $res !== TRUE && mysql_num_rows($res) > 0)
 			{
-				while($row = pg_fetch_assoc($this->resource))
+				while($row = mysql_fetch_assoc($res))
 					array_push($ret, $row);
-			}
 
-			pg_free_result($this->resource);
+				mysql_free_result($res);
+			}
 		}
 
 		$end = gettimeofday();
@@ -123,11 +167,26 @@ class Database
 
 		if($ret !== false)
 		{
-			$result = $this->query("select currval('${seq}${s}_${seq}_id_seq') as lastid");
-			$ret = $result[0]['lastid'];
+			if($this->type == 'postgre')
+			{
+				$result = $this->query("select currval('${seq}${s}_${seq}_id_seq') as lastid");
+				$ret = $result[0]['lastid'];
+			}
+			else if($this->type == 'mysql')
+			{
+				$ret = mysql_insert_id();
+			}
 		}
 
 		return $ret;
+	}
+
+	function escape_string($s)
+	{
+		if($this->type == 'postgre')
+			return pg_escape_string($s);
+		else if($this->type == 'mysql')
+			return mysql_real_escape_string($s, $this->handle);
 	}
 }
 
