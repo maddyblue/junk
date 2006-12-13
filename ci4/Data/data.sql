@@ -285,6 +285,7 @@ MANUAL_SECTION_NAV	12	link	IRC		'a=irc'	SECTION_MANUAL	0	0
 MANUAL_SECTION_NAV	13	link	Contributing to CI		'a=help'	SECTION_MANUAL	0	0	
 MANUAL_SECTION_NAV	14	link	About CI		'a=about'	SECTION_MANUAL	0	0	
 MANUAL_SECTION_NAV	15	link	Staff		'a=staff'	SECTION_MANUAL	0	0	
+NAV	0	link	Podcast			SECTION_PODCAST	0	0	
 NAV	10	link	Main			SECTION_HOME	0	0	
 NAV	11	link	Forum		'a=viewforum'	SECTION_FORUM	0	0	
 NAV	12	link	Game		'a=viewplayers'	SECTION_GAME	0	0	
