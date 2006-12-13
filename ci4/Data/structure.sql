@@ -377,8 +377,7 @@ CREATE TABLE group_def (
     group_def_name character varying(100),
     group_def_admin integer DEFAULT 0,
     group_def_news integer DEFAULT 0,
-    group_def_mod integer DEFAULT 0,
-    group_def_banned integer DEFAULT 0
+    group_def_mod integer DEFAULT 0
 );
 
 

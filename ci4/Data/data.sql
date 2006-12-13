@@ -155,12 +155,9 @@ SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('group_def', 'group_def_id'), 4, true);
-COPY group_def (group_def_id, group_def_name, group_def_admin, group_def_news, group_def_mod, group_def_banned) FROM stdin;
-1	Administrators	1	1	1	0
-2	Super Moderators	0	1	1	0
-3	Banned	0	0	0	0
-4	Moderators	0	0	0	0
+SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('group_def', 'group_def_id'), 1, true);
+COPY group_def (group_def_id, group_def_name, group_def_admin, group_def_news, group_def_mod) FROM stdin;
+1	Administrators	1	1	1
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;
@@ -251,19 +248,19 @@ SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 COPY site (site_tag, site_orderid, site_type, site_main, site_secondary, site_link, site_section, site_logged, site_admin, site_comment) FROM stdin;
 ADMIN_SECTION_NAV	1	link	Forum Permissions		'a=forum-permissions'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	2	link	Manage forums		'a=manage-forums'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	3	link	Manage groups		'a=manage-groups'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	4	link	Reparse posts		'a=reparse-posts'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	5	link	Reparse words		'a=reparse-words'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	2	link	Manage Forums		'a=manage-forums'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	3	link	Manage Groups		'a=manage-groups'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	4	link	Reparse Posts		'a=reparse-posts'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	5	link	Reparse Words		'a=reparse-words'	SECTION_ADMIN	1	1	
 ADMIN_SECTION_NAV	6	link	Reset		'a=reset'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	7	link	Sync data		'a=sync-data'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	8	link	Sync forums		'a=sync-forums'	SECTION_ADMIN	1	1	
-ADMIN_SECTION_NAV	9	link	Sync sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	7	link	Sync Data		'a=sync-data'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	8	link	Sync Forums		'a=sync-forums'	SECTION_ADMIN	1	1	
+ADMIN_SECTION_NAV	9	link	Sync Sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
 BATTLE_SECTION_NAV	10	link	Battle		'a=battle'	SECTION_BATTLE	1	0	
 BATTLE_SECTION_NAV	11	link	New Battle		'a=newbattle'	SECTION_BATTLE	1	0	
 FORUM_SECTION_NAV	10	link	Search		'a=search'	SECTION_FORUM	1	0	
 FORUM_SECTION_NAV	11	link	Smilies		'a=smilies'	SECTION_FORUM	0	0	
-FORUM_SECTION_NAV	12	link	Tag list		'a=taglist'	SECTION_FORUM	0	0	
+FORUM_SECTION_NAV	12	link	Tag List		'a=taglist'	SECTION_FORUM	0	0	
 FORUM_SECTION_NAV	13	link	View New Threads		'a=viewnew'	SECTION_FORUM	1	0	
 GAME_SECTION_NAV	0	link	Register new player		'a=newplayer'	SECTION_GAME	1	0	
 GAME_SECTION_NAV	10	link	Manage Abilities		'a=abilities'	SECTION_GAME	1	0	
@@ -300,7 +297,7 @@ NAV	18	link	[Register User]		'a=newuser'	SECTION_USER	-1	0
 NAV	19	link	[Login]		'a=login&r=' . encode($_SERVER['REQUEST_URI'])	SECTION_USER	-1	0	
 NAV	19	link	[Logout]		'a=logout'	SECTION_USER	1	0	
 USER_SECTION_NAV	10	link	My Info		'a=viewuserdetails&user=' . ID	SECTION_USER	1	0	
-USER_SECTION_NAV	11	link	Register new user		'a=newuser'	SECTION_USER	-1	0	
+USER_SECTION_NAV	11	link	Register New User		'a=newuser'	SECTION_USER	-1	0	
 USER_SECTION_NAV	12	link	Remote Information		'a=info'	SECTION_USER	0	0	
 USER_SECTION_NAV	13	link	Send PM		'a=sendpm'	SECTION_USER	1	0	
 USER_SECTION_NAV	14	link	User CP		'a=usercp'	SECTION_USER	1	0	
