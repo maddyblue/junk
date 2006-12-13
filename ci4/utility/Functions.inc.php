@@ -247,37 +247,19 @@ function getTemplateFilename($t)
  */
 function getTableForm($title, $arr, $upload = false, $method = 'post')
 {
-	$ret = '';
 	$end = '';
 
-	$ret .= '<p/><form method="' . $method . '" action="index.php" ' . ($upload ? ' enctype="multipart/form-data"' : '') . '>
-		<table>
-			<tr>
-				<td colspan="' . count($arr[0]) . '">
-					' . $title . '
-				</td>
-			</tr>';
+	$ret = '<p/><form method="' . $method . '" action="index.php" ' . ($upload ? ' enctype="multipart/form-data"' : '') . '><table><tr><td colspan="' . count($arr[0]) . '">' . $title . '</td></tr>';
 
 	while(list(,$array) = each($arr))
 	{
 		if($array[1]['type'] != 'hidden')
-		{
-			$ret .= '<tr>
-					<td>
-						' . $array[0] . '
-					</td>
-					<td>
-						' . getFormField($array[1]) . '
-					</td>
-				</tr>';
-		}
+			$ret .= '<tr><td>' . $array[0] . '</td><td>' . getFormField($array[1]) . '</td></tr>';
 		else
 			$end .= getFormField($array[1]);
 	}
 
-	$ret .= '</table>';
-	$ret .= $end;
-	$ret .= '</form>';
+	$ret .= '</table>' . $end . '</form>';
 
 	return $ret;
 }
@@ -287,15 +269,10 @@ function getTableForm($title, $arr, $upload = false, $method = 'post')
  */
 function getForm($title, $arr)
 {
-	$ret = '';
-
-	$ret .= '<form method="post" action="index.php">
-		' . $title;
+	$ret = '<form method="post" action="index.php">' . $title;
 
 	while(list(,$array) = each($arr))
-	{
 		$ret .= $array[0] . getFormField($array[1]);
-	}
 
 	$ret .= '</form>';
 
@@ -448,6 +425,9 @@ function makeLink($text, $link, $section = '', $title = '')
 
 		$ret .= '?';
 	}
+
+	if(isset($_GET['sqlprofile']) || isset($_POST['sqlprofile']))
+		$link .= '&sqlprofile';
 
 	$ret .= str_replace('&', '&amp;', $link) . '"';
 
@@ -611,7 +591,7 @@ function getProfile()
 	$script = $total - $dbtime;
 	$scriptper = $script / $total;
 
-	$ret = '<small>'  .round($total, 3) . 's, ' . round(100 * $scriptper, 1) . '% PHP, ' . round(100* (1 - $scriptper), 1) . '% SQL with ' . $dbcalls . ' ' . makeLink('queries', $_SERVER['REQUEST_URI'] . '&sqlprofile') . '</small>';
+	$ret = '<small>'  .round($total, 3) . 's, ' . round(100 * $scriptper, 1) . '% PHP, ' . round(100* (1 - $scriptper), 1) . '% SQL with ' . $dbcalls . ' ' . makeLink('queries', $_SERVER['QUERY_STRING'] . '&sqlprofile', '/') . '</small>';
 
 	return $ret;
 }
