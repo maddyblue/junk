@@ -57,6 +57,7 @@ $groupid = isset($_GET['g']) ? intval($_GET['g']) : (isset($_POST['g']) ? intval
 $name = isset($_POST['name']) ? encode($_POST['name']) : '';
 $admin = isset($_POST['admin']) ? (($_POST['admin'] == 'on') ? '1' : '0' ) : '0';
 $mod = isset($_POST['mod']) ? (($_POST['mod'] == 'on') ? '1' : '0') : '0';
+$news = isset($_POST['news']) ? (($_POST['news'] == 'on') ? '1' : '0') : '0';
 $sure = isset($_POST['sure']) ? (($_POST['sure'] == 'on') ? '1' : '0') : '0';
 $userid = isset($_POST['userid']) ? intval($_POST['userid']) : 0;
 $username = isset($_POST['username']) ? encode($_POST['username']) : '';
@@ -85,7 +86,7 @@ if(count($res))
 	{
 		$submit = true;
 
-		$db->update('update group_def set group_def_admin=' . $admin . ', group_def_mod=' . $mod . ' where group_def_id=' . $groupid);
+		$db->update('update group_def set group_def_admin=' . $admin . ', group_def_mod=' . $mod . ', group_def_news=' . $news . ' where group_def_id=' . $groupid);
 		echo '<p/>Permissions updated.';
 	}
 	else if(isset($_POST['submit-remove-user']))
@@ -161,6 +162,7 @@ if(count($res))
 		echo getTableForm('Group permissions:', array(
 				array('Admin', array('name'=>'admin', 'type'=>'checkbox', 'val'=>($res[0]['group_def_admin']) ? 'checked' : 'unchecked')),
 				array('Forum Moderation', array('name'=>'mod', 'type'=>'checkbox', 'val'=>($res[0]['group_def_mod']) ? 'checked' : 'unchecked')),
+				array('News Posting', array('name'=>'news', 'type'=>'checkbox', 'val'=>($res[0]['group_def_news']) ? 'checked' : 'unchecked')),
 
 				array('', array('type'=>'submit','name'=>'submit-permissions', 'val'=>'Save Permissions')),
 				array('', array('type'=>'hidden', 'name'=>'g', 'val'=>$groupid)),

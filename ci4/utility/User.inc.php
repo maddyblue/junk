@@ -262,8 +262,7 @@ function handle_login()
 	$PERMISSIONS = array(
 		'admin' => false,
 		'mod' => false,
-		'news' => false,
-		'banned' => false
+		'news' => false
 	);
 
 	if(count($ret))
