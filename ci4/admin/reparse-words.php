@@ -33,40 +33,48 @@
  */
 
 set_time_limit(0);
-$index_name = 'word_index';
+$index_name = 'forum_word_index';
 
-$start = isset($_GET['start']) ? intval($_GET['start']) : 0;
+$start = isset($_GET['start']) ? intval($_GET['start']) : -1;
+
 if($start < 0)
-	$start = 0;
-
-$per = 500;
-$next = $start + $per;
-
-if($start == 0)
 {
-	echo '<p/>Dropping the index.';
-	$db->update('drop index ' . $index_name);
-
-	echo '<p/>Clearing table.';
-	$db->update('truncate table forum_word');
-}
-
-echo '<p/>Reparsing forum_word posts ' . $start . ' to ' . ($next - 1) . '.';
-
-$posts = $db->query('select forum_post_id, forum_post_text from forum_post limit ' . $per . ' offset ' . $start);
-
-foreach($posts as $post)
-	parsePostWords($post['forum_post_id'], $post['forum_post_text'], true);
-
-if(count($posts) < $per)
-{
-	echo '<p/>Creating the index.';
-	$db->update('create index ' . $index_name . ' on forum_word (forum_word_word)');
-
-	echo '<p/>Done.';
+	echo '<p/>This script will empty and repopulate the forum post words for the search engine. It is not possible to execute this script partially - it should be done all at once. If you stop in the middle, restart it from scratch. Each successive set of 500 posts will take longer to run.';
+	echo '<p/>' . makeLink('Begin parsing forum post words.', 'a=reparse-words&start=0');
 }
 else
-	echo '<meta http-equiv="refresh" content="0; url=?a=reparse-words&start=' . $next . '">';
+{
+	$per = 500;
+	$next = $start + $per;
+
+	if($start == 0)
+	{
+		echo '<p/>Dropping the index.';
+		$db->update('drop index ' . $index_name);
+
+		echo '<p/>Clearing table.';
+		$db->update('truncate table forum_word');
+	}
+
+	echo '<p/>Reparsing forum_word posts ' . $start . ' to ' . ($next - 1) . '.';
+
+	echo '<p/><b>Do not stop the execution of this script!</b></p>';
+
+	$posts = $db->query('select forum_post_id, forum_post_text from forum_post limit ' . $per . ' offset ' . $start);
+
+	foreach($posts as $post)
+		parsePostWords($post['forum_post_id'], $post['forum_post_text'], true);
+
+	if(count($posts) < $per)
+	{
+		echo '<p/>Creating the index.';
+		$db->update('create index ' . $index_name . ' on forum_word (forum_word_word)');
+
+		echo '<p/>Done.';
+	}
+	else
+		echo '<meta http-equiv="refresh" content="0; url=?a=reparse-words&start=' . $next . '">';
+}
 
 update_session_action(200, '', 'Reparse Words');
 
