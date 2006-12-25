@@ -258,7 +258,7 @@ function handle_login()
 
 	// groups
 	$ret = $db->query('select * from group_user, group_def where group_user_user=' . ID . ' and group_user_group=group_def_id');
-	$GROUPS = array();
+	$GROUPS = array('0');
 	$PERMISSIONS = array(
 		'admin' => false,
 		'mod' => false,
