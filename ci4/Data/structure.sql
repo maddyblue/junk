@@ -621,7 +621,11 @@ CREATE TABLE podcast (
     podcast_title character varying(200),
     podcast_description text,
     podcast_location character varying(255),
-    podcast_creator bigint
+    podcast_creator bigint,
+    podcast_subtitle character varying(200),
+    podcast_type character varying(20),
+    podcast_filesize bigint,
+    podcast_keywords character varying(200)
 );
 
 

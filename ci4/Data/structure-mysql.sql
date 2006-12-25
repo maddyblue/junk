@@ -20,7 +20,7 @@
 -- SET default_with_oids = true;
 
 --
--- Name: ability; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: ability; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE ability (
@@ -38,7 +38,7 @@ CREATE TABLE ability (
 
 
 --
--- Name: abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE abilitytype (
@@ -49,7 +49,7 @@ CREATE TABLE abilitytype (
 
 
 --
--- Name: area; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: area; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE area (
@@ -61,7 +61,7 @@ CREATE TABLE area (
 
 
 --
--- Name: battle; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: battle; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE battle (
@@ -73,7 +73,7 @@ CREATE TABLE battle (
 
 
 --
--- Name: battle_entity; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: battle_entity; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE battle_entity (
@@ -100,7 +100,7 @@ CREATE TABLE battle_entity (
 
 
 --
--- Name: battle_timer; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: battle_timer; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE battle_timer (
@@ -114,7 +114,7 @@ CREATE TABLE battle_timer (
 
 
 --
--- Name: cor_area_monster; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: cor_area_monster; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE cor_area_monster (
@@ -124,7 +124,7 @@ CREATE TABLE cor_area_monster (
 
 
 --
--- Name: cor_area_town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: cor_area_town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE cor_area_town (
@@ -134,7 +134,7 @@ CREATE TABLE cor_area_town (
 
 
 --
--- Name: cor_job_abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: cor_job_abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE cor_job_abilitytype (
@@ -144,7 +144,7 @@ CREATE TABLE cor_job_abilitytype (
 
 
 --
--- Name: cor_job_equipmenttype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: cor_job_equipmenttype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE cor_job_equipmenttype (
@@ -154,7 +154,7 @@ CREATE TABLE cor_job_equipmenttype (
 
 
 --
--- Name: cor_job_joblv; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: cor_job_joblv; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE cor_job_joblv (
@@ -165,7 +165,7 @@ CREATE TABLE cor_job_joblv (
 
 
 --
--- Name: cor_monster_drop; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: cor_monster_drop; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE cor_monster_drop (
@@ -176,7 +176,7 @@ CREATE TABLE cor_monster_drop (
 
 
 --
--- Name: data; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: data; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE data (
@@ -187,7 +187,7 @@ CREATE TABLE data (
 
 
 --
--- Name: domain; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: domain; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE domain (
@@ -200,7 +200,7 @@ CREATE TABLE domain (
 
 
 --
--- Name: equipment; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: equipment; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE equipment (
@@ -229,7 +229,7 @@ CREATE TABLE equipment (
 
 
 --
--- Name: equipmentclass; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: equipmentclass; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE equipmentclass (
@@ -239,7 +239,7 @@ CREATE TABLE equipmentclass (
 
 
 --
--- Name: equipmenttype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: equipmenttype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE equipmenttype (
@@ -249,7 +249,7 @@ CREATE TABLE equipmenttype (
 
 
 --
--- Name: event; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: event; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE event (
@@ -261,7 +261,7 @@ CREATE TABLE event (
 
 
 --
--- Name: eventlog; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: eventlog; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE eventlog (
@@ -271,7 +271,7 @@ CREATE TABLE eventlog (
 
 
 --
--- Name: forum_forum; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_forum; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE forum_forum (
@@ -288,7 +288,7 @@ CREATE TABLE forum_forum (
 
 
 --
--- Name: forum_mod; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_mod; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE forum_mod (
@@ -298,7 +298,7 @@ CREATE TABLE forum_mod (
 
 
 --
--- Name: forum_perm; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_perm; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE forum_perm (
@@ -313,7 +313,7 @@ CREATE TABLE forum_perm (
 
 
 --
--- Name: forum_post; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_post; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE forum_post (
@@ -330,7 +330,7 @@ CREATE TABLE forum_post (
 
 
 --
--- Name: forum_thread; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_thread; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE forum_thread (
@@ -348,7 +348,7 @@ CREATE TABLE forum_thread (
 
 
 --
--- Name: forum_view; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_view; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE forum_view (
@@ -359,7 +359,7 @@ CREATE TABLE forum_view (
 
 
 --
--- Name: forum_word; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_word; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE forum_word (
@@ -369,7 +369,7 @@ CREATE TABLE forum_word (
 
 
 --
--- Name: group_def; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: group_def; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE group_def (
@@ -382,7 +382,7 @@ CREATE TABLE group_def (
 
 
 --
--- Name: group_user; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: group_user; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE group_user (
@@ -392,7 +392,7 @@ CREATE TABLE group_user (
 
 
 --
--- Name: house; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: house; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE house (
@@ -413,7 +413,7 @@ CREATE TABLE house (
 
 
 --
--- Name: item; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: item; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE item (
@@ -430,7 +430,7 @@ CREATE TABLE item (
 
 
 --
--- Name: job; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: job; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE job (
@@ -459,7 +459,7 @@ CREATE TABLE job (
 
 
 --
--- Name: monster; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: monster; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE monster (
@@ -483,7 +483,7 @@ CREATE TABLE monster (
 
 
 --
--- Name: monstertype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: monstertype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE monstertype (
@@ -493,7 +493,7 @@ CREATE TABLE monstertype (
 
 
 --
--- Name: player; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE player (
@@ -532,7 +532,7 @@ CREATE TABLE player (
 
 
 --
--- Name: player_ability; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player_ability; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE player_ability (
@@ -546,7 +546,7 @@ CREATE TABLE player_ability (
 
 
 --
--- Name: player_abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player_abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE player_abilitytype (
@@ -558,7 +558,7 @@ CREATE TABLE player_abilitytype (
 
 
 --
--- Name: player_equipment; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player_equipment; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE player_equipment (
@@ -570,7 +570,7 @@ CREATE TABLE player_equipment (
 
 
 --
--- Name: player_item; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player_item; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE player_item (
@@ -581,7 +581,7 @@ CREATE TABLE player_item (
 
 
 --
--- Name: player_job; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player_job; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE player_job (
@@ -593,7 +593,7 @@ CREATE TABLE player_job (
 
 
 --
--- Name: pm; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: pm; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE pm (
@@ -610,7 +610,7 @@ CREATE TABLE pm (
 -- SET default_with_oids = false;
 
 --
--- Name: podcast; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: podcast; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE podcast (
@@ -621,14 +621,18 @@ CREATE TABLE podcast (
     podcast_title character varying(200),
     podcast_description text,
     podcast_location character varying(255),
-    podcast_creator bigint
+    podcast_creator bigint,
+    podcast_subtitle character varying(200),
+    podcast_type character varying(20),
+    podcast_filesize bigint,
+    podcast_keywords character varying(200)
 );
 
 
 -- SET default_with_oids = true;
 
 --
--- Name: session; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: session; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE session (
@@ -644,7 +648,7 @@ CREATE TABLE session (
 
 
 --
--- Name: site; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: site; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE site (
@@ -662,7 +666,7 @@ CREATE TABLE site (
 
 
 --
--- Name: skin; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: skin; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE skin (
@@ -673,7 +677,7 @@ CREATE TABLE skin (
 
 
 --
--- Name: stats; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: stats; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE stats (
@@ -686,7 +690,7 @@ CREATE TABLE stats (
 
 
 --
--- Name: town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE town (
@@ -702,7 +706,7 @@ CREATE TABLE town (
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: dolmant; Tablespace:
+-- Name: users; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 CREATE TABLE users (
@@ -728,7 +732,7 @@ CREATE TABLE users (
 
 
 --
--- Name: ability_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: ability_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY ability
@@ -736,7 +740,7 @@ CREATE TABLE users (
 
 
 --
--- Name: abilitytype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: abilitytype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY abilitytype
@@ -744,7 +748,7 @@ CREATE TABLE users (
 
 
 --
--- Name: area_area_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: area_area_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY area
@@ -752,7 +756,7 @@ CREATE TABLE users (
 
 
 --
--- Name: area_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: area_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY area
@@ -760,7 +764,7 @@ CREATE TABLE users (
 
 
 --
--- Name: battle_entity_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: battle_entity_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY battle_entity
@@ -768,7 +772,7 @@ CREATE TABLE users (
 
 
 --
--- Name: battle_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: battle_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY battle
@@ -776,7 +780,7 @@ CREATE TABLE users (
 
 
 --
--- Name: battle_timer_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: battle_timer_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY battle_timer
@@ -784,7 +788,7 @@ CREATE TABLE users (
 
 
 --
--- Name: domain_domain_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: domain_domain_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY "domain"
@@ -792,7 +796,7 @@ CREATE TABLE users (
 
 
 --
--- Name: domain_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: domain_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY "domain"
@@ -800,7 +804,7 @@ CREATE TABLE users (
 
 
 --
--- Name: equipment_equipment_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: equipment_equipment_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY equipment
@@ -808,7 +812,7 @@ CREATE TABLE users (
 
 
 --
--- Name: equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY equipment
@@ -816,7 +820,7 @@ CREATE TABLE users (
 
 
 --
--- Name: equipmentclass_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: equipmentclass_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY equipmentclass
@@ -824,7 +828,7 @@ CREATE TABLE users (
 
 
 --
--- Name: equipmenttype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: equipmenttype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY equipmenttype
@@ -832,7 +836,7 @@ CREATE TABLE users (
 
 
 --
--- Name: event_event_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: event_event_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY event
@@ -840,7 +844,7 @@ CREATE TABLE users (
 
 
 --
--- Name: event_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: event_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY event
@@ -848,7 +852,7 @@ CREATE TABLE users (
 
 
 --
--- Name: forum_forum_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_forum_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY forum_forum
@@ -856,7 +860,7 @@ CREATE TABLE users (
 
 
 --
--- Name: forum_post_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_post_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY forum_post
@@ -864,7 +868,7 @@ CREATE TABLE users (
 
 
 --
--- Name: forum_thread_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_thread_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY forum_thread
@@ -872,7 +876,7 @@ CREATE TABLE users (
 
 
 --
--- Name: group_def_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: group_def_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY group_def
@@ -880,7 +884,7 @@ CREATE TABLE users (
 
 
 --
--- Name: house_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: house_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY house
@@ -888,7 +892,7 @@ CREATE TABLE users (
 
 
 --
--- Name: item_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: item_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY item
@@ -896,7 +900,7 @@ CREATE TABLE users (
 
 
 --
--- Name: job_job_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: job_job_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY job
@@ -904,7 +908,7 @@ CREATE TABLE users (
 
 
 --
--- Name: job_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: job_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY job
@@ -912,7 +916,7 @@ CREATE TABLE users (
 
 
 --
--- Name: monster_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: monster_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY monster
@@ -920,7 +924,7 @@ CREATE TABLE users (
 
 
 --
--- Name: monstertype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: monstertype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY monstertype
@@ -928,7 +932,7 @@ CREATE TABLE users (
 
 
 --
--- Name: player_ability_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player_ability_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY player_ability
@@ -936,7 +940,7 @@ CREATE TABLE users (
 
 
 --
--- Name: player_equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player_equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY player_equipment
@@ -944,7 +948,7 @@ CREATE TABLE users (
 
 
 --
--- Name: player_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: player_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY player
@@ -952,7 +956,7 @@ CREATE TABLE users (
 
 
 --
--- Name: pm_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: pm_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY pm
@@ -960,7 +964,7 @@ CREATE TABLE users (
 
 
 --
--- Name: session_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: session_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY "session"
@@ -968,7 +972,7 @@ CREATE TABLE users (
 
 
 --
--- Name: skin_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: skin_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY skin
@@ -976,7 +980,7 @@ CREATE TABLE users (
 
 
 --
--- Name: town_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: town_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY town
@@ -984,7 +988,7 @@ CREATE TABLE users (
 
 
 --
--- Name: town_town_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: town_town_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY town
@@ -992,7 +996,7 @@ CREATE TABLE users (
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY users
@@ -1000,7 +1004,7 @@ CREATE TABLE users (
 
 
 --
--- Name: users_user_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace:
+-- Name: users_user_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 -- ALTER TABLE ONLY users
@@ -1008,14 +1012,14 @@ CREATE TABLE users (
 
 
 --
--- Name: forum_word_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace:
+-- Name: forum_word_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 ALTER TABLE forum_word add index (forum_word_word (50));
 
 
 --
--- Name: stats_timestamp_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace:
+-- Name: stats_timestamp_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
 --
 
 ALTER TABLE stats add index (stats_timestamp);
