@@ -32,14 +32,19 @@
  *
  */
 
-function disp($title, $desc, $length, $size, $location)
+function disp($title, $desc, $length, $size, $location, $type, $fsize, $keywords, $subtitle)
 {
 	echo getTableForm('New Podcast:', array(
 		array('Title', array('type'=>'text', 'name'=>'title', 'val'=>decode($title))),
+		array('Subtitle', array('type'=>'text', 'name'=>'subtitle', 'val'=>decode($subtitle))),
 		array('Description', array('type'=>'textarea', 'name'=>'desc', 'val'=>decode($desc))),
+		array('', array('type'=>'disptext', 'val'=>'Keywords are optional and should be in a comma-separated list.')),
+		array('Keywords', array('type'=>'text', 'name'=>'keywords', 'val'=>decode($keywords))),
 		array('Length (H:MM:SS)', array('type'=>'text', 'name'=>'length', 'val'=>decode($length))),
-		array('Size', array('type'=>'text', 'name'=>'size', 'val'=>decode($size))),
+		array('Size (MB)', array('type'=>'text', 'name'=>'size', 'val'=>decode($size))),
+		array('Filesize (in bytes)', array('type'=>'text', 'name'=>'fsize', 'val'=>decode($fsize))),
 		array('Location', array('type'=>'text', 'name'=>'location', 'val'=>decode($location))),
+		array('Type', array('type'=>'text', 'name'=>'type', 'val'=>decode($type))),
 
 		array('', array('type'=>'submit','name'=>'submit', 'val'=>'Add Podcast')),
 		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'new-podcast'))
@@ -59,6 +64,10 @@ else
 		$length = isset($_POST['length']) ? encode($_POST['length']) : '';
 		$size = isset($_POST['size']) ? encode($_POST['size']) : '';
 		$location = isset($_POST['location']) ? encode($_POST['location']) : '';
+		$fsize = isset($_POST['fsize']) ? encode($_POST['fsize']) : '';
+		$type = isset($_POST['type']) ? encode($_POST['type']) : '';
+		$keywords = isset($_POST['keywords']) ? encode($_POST['keywords']) : '';
+		$subtitle = isset($_POST['subtitle']) ? encode($_POST['subtitle']) : '';
 
 		$fname = PODCAST_DATA . $location;
 		$fname_dec = decode($fname);
@@ -72,25 +81,29 @@ else
 		if(!is_readable($fname_dec) || !is_file($fname_dec))
 		{
 			$submitted = false;
-			echo '<p/>Error: cannot read or access file: ' . $fname;
+			echo '<p/>Error: cannot read or access file: ' . decode($fname);
 		}
 
 		if($submitted)
 		{
-			$db->query('insert into podcast (podcast_date, podcast_length, podcast_size, podcast_title, podcast_description, podcast_location, podcast_creator) values (' .
+			$db->query('insert into podcast (podcast_date, podcast_length, podcast_size, podcast_title, podcast_description, podcast_location, podcast_creator, podcast_type, podcast_filesize, podcast_subtitle, podcast_keywords) values (' .
 				TIME . ', \'' .
 				$length . '\', \'' .
 				$size . '\', \'' .
 				$title . '\', \'' .
 				$desc . '\', \'' .
 				$location . '\', ' .
-				$USER['user_id'] .
+				$USER['user_id'] . ', \'' .
+				$type . '\', ' .
+				$fsize . ', \'' .
+				$subtitle . '\', \'' .
+				$keywords . '\'' .
 			')');
 
 			echo '<p/>Podcast created successfully.';
 		}
 		else
-			disp($title, $desc, $length, $size, $location);
+			disp($title, $desc, $length, $size, $location, $type, $fsize, $keywords, $subtitle);
 	}
 
 	if($submitted)
@@ -118,16 +131,17 @@ else
 
 			// podcast not in database yet
 
-				echo getTableForm('New Podcast:', array(
-			array('Title', array('type'=>'text', 'name'=>'title', 'val'=>decode($f_enc))),
-			array('Description', array('type'=>'textarea', 'name'=>'desc')),
-			array('Length (H:MM:SS)', array('type'=>'text', 'name'=>'length')),
-			array('Size', array('type'=>'text', 'name'=>'size', 'val'=>(round(filesize(PODCAST_DATA . $f) / 1024 / 1024, 1) . 'MB'))),
-			array('Location', array('type'=>'text', 'name'=>'location', 'val'=>decode($f_enc))),
+			switch(substr($f_enc, -4))
+			{
+				case '.mp3': $type = 'audio/mpeg'; break;
+				case '.m4a': $type = 'audio/x-m4a'; break;
+				case '.mp4': $type = 'video/mp4'; break;
+				case '.m4v': $type = 'video/x-m4v'; break;
+				case '.mov': $type = 'video/quicktime'; break;
+				default: $type = ''; break;
+			}
 
-			array('', array('type'=>'submit','name'=>'submit', 'val'=>'Add Podcast')),
-			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'new-podcast'))
-		));
+			disp($f_enc, '', '', round(filesize(PODCAST_DATA . $f) / 1024 / 1024, 1) . ' (MB)', $f_enc, $type, filesize(PODCAST_DATA . $f), '', '');
 		}
 
 		if($casts == 0)

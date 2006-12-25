@@ -40,34 +40,87 @@ handle_login();
 
 $f = isset($_GET['f']) ? ($_GET['f'] == 'podcast' ? 'podcast' : intval($_GET['f'])) : NEWSFORUM;
 
-if(is_int($f) && !canView($f))
+$p = $f == 'podcast';
+
+if(!$p && !canView($f))
 	exit;
 
-echo '<?xml version="1.0" encoding="ISO-8859-1"?>
+ob_start();
 
-<rss version="0.92">
-  <channel>
+echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 
-    <title>' . ARC_TITLE . '</title>
-    <link>' . ARC_WWW_PATH . '</link>
-    <description>' . ARC_DESCRIPTION . '</description>
-    <language>en-us</language>
-    <managingEditor>dolmant@gmail.com</managingEditor>';
+echo ($p ?
+	'<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">' :
+	'<rss version="0.92">');
 
-$query = 'select user_name, user_id, forum_thread.*, forum_post.*, forum_forum_name from forum_thread, users, forum_post, forum_forum where forum_thread_forum=' . $f . ' and forum_thread_first_post=forum_post_id and forum_post_user=user_id and forum_forum_id=forum_thread_forum order by forum_post_date desc limit 5';
-$res = $db->query($query);
+echo
+	'<channel>' .
+	'<title>' . ARC_TITLE . '</title>' .
+	'<link>' . ARC_WWW_ADDR . '</link>' .
+	'<description>' . ARC_DESCRIPTION . '</description>' .
+	'<language>en-us</language>';
 
-for($i = 0; $i < count($res); $i++)
+if($p)
 {
-	echo "\n<item>" .
-		'<title>' . decode($res[$i]['forum_thread_title']) . '</title>' .
-		'<link>' . ARC_WWW_PATH . 'forum/?a=viewthread&amp;t=' . $res[$i]['forum_thread_id'] . '</link>' .
-		'<category>' . decode($res[$i]['forum_forum_name']) . '</category>' .
-		'<pubDate>' . gmdate('D, j M Y H:i:s') . ' GMT</pubDate>' .
-		'<description><![CDATA[' . parsePostText($res[$i]['forum_post_text']) . ']]></description>' .
-		'</item>';
+	echo
+		'<itunes:subtitle>A show about LDS religion and culture</itunes:subtitle>' .
+		'<itunes:author>Kara Huelin</itunes:author>' .
+		'<itunes:summary>Various LDS stuffs. Yo.</itunes:summary>' .
+		'<itunes:owner>' .
+			'<itunes:name>Kara Huelin</itunes:name>' .
+			'<itunes:email>kara@popcorncast.com</itunes:email>' .
+		'</itunes:owner>' .
+		'<itunes:image href="' . ARC_WWW_ADDR . 'images/logo.jpg"/>' .
+		'<itunes:category text="Religion"/>';
+
+	$res = $db->query('select podcast.*, user_name, user_email from podcast join users on podcast_creator=user_id order by podcast_date desc');
+
+	for($i = 0; $i < count($res); $i++)
+	{
+		echo
+			'<item>' .
+				'<title>' . decode($res[$i]['podcast_title']) . '</title>' .
+				'<itunes:author>' . decode($res[$i]['user_name']) . '</itunes:author>' .
+				'<itunes:subtitle>' . decode($res[$i]['podcast_subtitle']) . '</itunes:subtitle>' .
+				'<itunes:summary>' . decode($res[$i]['podcast_description']) . '</itunes:summary>' .
+				'<enclosure ' .
+					'url="' . ARC_WWW_ADDR . PODCAST_DATA . decode($res[$i]['podcast_location']) . '" ' .
+					'type="' . decode($res[$i]['podcast_type']) . '" ' .
+					'length="' . decode($res[$i]['podcast_filesize']) . '"/>' .
+				'<guid>' . $res[$i]['podcast_id'] . '</guid>' .
+				'<pubDate>' . date('D, j M Y H:i:s', $res[$i]['podcast_date']) . ' GMT</pubDate>' .
+				'<itunes:duration>' . decode($res[$i]['podcast_length']) . '</itunes:duration>' .
+				'<itunes:keywords>' . decode($res[$i]['podcast_keywords']) . '</itunes:keywords>' .
+			'</item>';
+	}
+}
+else
+{
+	$res = $db->query('select user_name, user_id, forum_thread.*, forum_post.*, forum_forum_name from forum_thread, users, forum_post, forum_forum where forum_thread_forum=' . $f . ' and forum_thread_first_post=forum_post_id and forum_post_user=user_id and forum_forum_id=forum_thread_forum order by forum_post_date desc limit 7');
+
+	for($i = 0; $i < count($res); $i++)
+	{
+		echo
+			'<item>' .
+				'<title>' . decode($res[$i]['forum_thread_title']) . '</title>' .
+				'<link>' . ARC_WWW_ADDR . 'forum/?a=viewthread&amp;t=' . $res[$i]['forum_thread_id'] . '</link>' .
+				'<category>' . decode($res[$i]['forum_forum_name']) . '</category>' .
+				'<pubDate>' . gmdate('D, j M Y H:i:s') . ' GMT</pubDate>' .
+				'<description><![CDATA[' . parsePostText($res[$i]['forum_post_text']) . ']]></description>' .
+			'</item>';
+	}
 }
 
-echo "\n</channel></rss>";
+echo '</channel></rss>';
+
+$s = ob_get_contents();
+ob_end_clean();
+
+echo '<pre>';
+var_dump($res);
+echo "\n\n";
+echo htmlspecialchars(str_replace('><', ">\n<", $s));
+echo '</pre>';
+echo decode($res[1]['podcast_description']);
 
 ?>
