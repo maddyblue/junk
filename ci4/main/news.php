@@ -52,7 +52,7 @@ for($i = 0; $i < count($res); $i++)
 	echo '<p/>' . makeLink($res[$i]['forum_thread_replies'] . ' replies', 'a=viewthread&t=' . $res[$i]['forum_thread_id'], SECTION_FORUM);
 }
 
-echo '<p/>' . makeLink('Older news', 'a=viewforum&f=' . NEWSFORUM, SECTION_FORUM);
+echo '<p/><hr/><p/>' . makeLink('Older news', 'a=viewforum&f=' . NEWSFORUM, SECTION_FORUM);
 
 update_session_action(101, '', 'News');
 
