@@ -52,6 +52,7 @@ define('PODCAST_DATA', ARC_HOME_MOD . SECTION_PODCAST . '/data/');
 
 /* Don't mess with these */
 
+define('ARC_WWW_ADDR', 'http://' . ARC_WWW_DOMAIN . ARC_WWW_PATH);
 define('ARC_TEMPLATE_FS', ARC_HOME_MOD . 'templates/');
 define('ARC_TEMPLATE_WWW', ARC_WWW_PATH . 'templates/');
 
