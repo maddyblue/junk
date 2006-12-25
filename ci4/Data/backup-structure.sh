@@ -17,5 +17,6 @@ sed 's/ADD CONSTRAINT .* UNIQUE .*/ -- UNIQUE/' | \
 sed 's/CREATE INDEX .* ON/ALTER TABLE/' | \
 sed 's/USING btree/add index/' | \
 sed 's/add index (forum_word_word)/add index (forum_word_word (50))/' | \
-sed 's/ADD CONSTRAINT .* FOREIGN KEY/-- FOREIGN KEY/' \
+sed 's/ADD CONSTRAINT .* FOREIGN KEY/-- FOREIGN KEY/' | \
+sed 's/boolean/tinyint/' \
  > structure-mysql.sql
