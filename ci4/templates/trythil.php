@@ -187,7 +187,7 @@
 													<td>
 														<center>
 														<div class="newsheading">
-															<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> Crescent Island <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font>
+															<font color=#6C7196><b>:</b></font><font color=#828BDC><b>.</b></font> <?php echo ARC_TITLE; ?> <font color=#828BDC><b>.</b></font><font color=#6C7196><b>:</b></font>
 														</div>
 														</center>
 													</td>

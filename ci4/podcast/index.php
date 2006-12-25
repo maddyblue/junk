@@ -3,7 +3,7 @@
 /* $Id$ */
 
 /*
- * Copyright (c) 2002 Matthew Jibson
+ * Copyright (c) 2006 Matthew Jibson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,28 +32,9 @@
  *
  */
 
-if(!LOGGED)
-	echo '<div><b>' . makeLink('First time to ' . ARC_TITLE . '?', 'a=about', SECTION_MANUAL) . '</b><hr/></div>';
+define('ARC_SECTION', 'PODCAST');
+define('ARC_HOME_MOD', '../');
 
-$ppp = 10; // posts per page
-$offset = 0;
-
-$query = 'select user_name, user_id, forum_thread.*, forum_post.* from forum_thread, users, forum_post where forum_thread_forum=' . NEWSFORUM . ' and forum_thread_first_post=forum_post_id and forum_post_user=user_id order by forum_post_date desc limit ' . $ppp . ' offset ' . $offset;
-$res = $db->query($query);
-
-for($i = 0; $i < count($res); $i++)
-{
-	if($i)
-		echo '<p/>-----';
-
-	echo '<p/><b>' . decode($res[$i]['forum_thread_title']) . '</b>';
-	echo '<br/>By ' . getUserlink($res[$i]['user_id'], decode($res[$i]['user_name'])) . ' on ' . getTime($res[$i]['forum_thread_date']) . ':';
-	echo '<p/>' . parsePostText($res[$i]['forum_post_text']);
-	echo '<p/>' . makeLink($res[$i]['forum_thread_replies'] . ' replies', 'a=viewthread&t=' . $res[$i]['forum_thread_id'], SECTION_FORUM);
-}
-
-echo '<p/>' . makeLink('Older news', 'a=viewforum&f=' . NEWSFORUM, SECTION_FORUM);
-
-update_session_action(101, '', 'News');
+require '../index.php';
 
 ?>

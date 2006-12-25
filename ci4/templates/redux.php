@@ -6,7 +6,7 @@
 <head>
 	<!-- $Id$ -->
 	<title>
-		crescent island ::
+		<?php echo strtolower(ARC_TITLE); ?> ::
 		<?php echo strtolower(ARC_SECTION); ?>
 		<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
 	</title>

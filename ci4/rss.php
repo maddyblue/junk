@@ -38,9 +38,9 @@ require_once ARC_HOME_MOD . 'Include.inc.php';
 
 handle_login();
 
-$f = isset($_GET['f']) ? intval($_GET['f']) : NEWSFORUM;
+$f = isset($_GET['f']) ? ($_GET['f'] == 'podcast' ? 'podcast' : intval($_GET['f'])) : NEWSFORUM;
 
-if(!canView($f))
+if(is_int($f) && !canView($f))
 	exit;
 
 echo '<?xml version="1.0" encoding="ISO-8859-1"?>
@@ -48,9 +48,9 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>
 <rss version="0.92">
   <channel>
 
-    <title>Crescent Island</title>
+    <title>' . ARC_TITLE . '</title>
     <link>' . ARC_WWW_PATH . '</link>
-    <description>Online Tactics Gaming.</description>
+    <description>' . ARC_DESCRIPTION . '</description>
     <language>en-us</language>
     <managingEditor>dolmant@gmail.com</managingEditor>';
 

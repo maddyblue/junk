@@ -6,7 +6,7 @@
 <!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php"/>
-<title>crescentisland.com || online tactics gaming</title>
+<title><?php echo strtolower(ARC_TITLE); ?> || <?php echo strtolower(ARC_DESCRIPTION); ?></title>
 <style type="text/css">
 <!--
 
@@ -145,7 +145,7 @@ table.maintable {
 <body>
 
 <br/>
-<a href="http://crescentisland.com"><b>Crescent Island</b></a>
+<a href="http://crescentisland.com"><b><?php echo ARC_TITLE; ?></b></a>
 
 <table class="ciNavTable">
 	<tr>

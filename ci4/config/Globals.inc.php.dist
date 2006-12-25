@@ -20,6 +20,8 @@
 
 /* All addresses (filesystem or www) must end in '/'. */
 
+define('ARC_TITLE', 'Your Site Title');
+define('ARC_DESCRIPTION', 'Your Site Description');
 define('ARC_WWW_DOMAIN', 'your.domain.com');
 define('ARC_WWW_PATH', '/path/to/arc/on/www/'); // '/' if root. must begin with '/'
 define('ARC_AVATAR_PATH', 'images/avatar/');

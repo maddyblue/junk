@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
 		<title>
-			crescent island -
+			<?php echo strtolower(ARC_TITLE); ?> -
 			<?php echo strtolower(ARC_SECTION); ?>
 			<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
 		</title>

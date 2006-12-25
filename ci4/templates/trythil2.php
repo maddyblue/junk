@@ -5,7 +5,7 @@
 <head>
 <!-- $Id$ -->
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">	<head>
-		<title>Crescent Island .:
+		<title><?php echo ARC_TITLE; ?> .:
 			<?php
 				if(LOGGED)
 					echo decode($USER['user_name']) . '@';

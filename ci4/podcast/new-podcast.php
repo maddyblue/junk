@@ -1,0 +1,138 @@
+<?php
+
+/* $Id$ */
+
+/*
+ * Copyright (c) 2006 Matthew Jibson
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    - Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    - Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+function disp($title, $desc, $length, $size, $location)
+{
+	echo getTableForm('New Podcast:', array(
+		array('Title', array('type'=>'text', 'name'=>'title', 'val'=>decode($title))),
+		array('Description', array('type'=>'textarea', 'name'=>'desc', 'val'=>decode($desc))),
+		array('Length (H:MM:SS)', array('type'=>'text', 'name'=>'length', 'val'=>decode($length))),
+		array('Size', array('type'=>'text', 'name'=>'size', 'val'=>decode($size))),
+		array('Location', array('type'=>'text', 'name'=>'location', 'val'=>decode($location))),
+
+		array('', array('type'=>'submit','name'=>'submit', 'val'=>'Add Podcast')),
+		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'new-podcast'))
+	));
+}
+
+if(!ADMIN || !$USER)
+	echo '<p/>You do not have permissions to do podcast stuff.';
+else
+{
+	$submitted = true;
+
+	if(isset($_POST['submit']))
+	{
+		$title = isset($_POST['title']) ? encode($_POST['title']) : '';
+		$desc = isset($_POST['desc']) ? encode($_POST['desc']) : '';
+		$length = isset($_POST['length']) ? encode($_POST['length']) : '';
+		$size = isset($_POST['size']) ? encode($_POST['size']) : '';
+		$location = isset($_POST['location']) ? encode($_POST['location']) : '';
+
+		$fname = PODCAST_DATA . $location;
+		$fname_dec = decode($fname);
+
+		if(!$title)
+		{
+			$submitted = false;
+			echo '<p/>Error: no title';
+		}
+
+		if(!is_readable($fname_dec) || !is_file($fname_dec))
+		{
+			$submitted = false;
+			echo '<p/>Error: cannot read or access file: ' . $fname;
+		}
+
+		if($submitted)
+		{
+			$db->query('insert into podcast (podcast_date, podcast_length, podcast_size, podcast_title, podcast_description, podcast_location, podcast_creator) values (' .
+				TIME . ', \'' .
+				$length . '\', \'' .
+				$size . '\', \'' .
+				$title . '\', \'' .
+				$desc . '\', \'' .
+				$location . '\', ' .
+				$USER['user_id'] .
+			')');
+
+			echo '<p/>Podcast created successfully.';
+		}
+		else
+			disp($title, $desc, $length, $size, $location);
+	}
+
+	if($submitted)
+	{
+		$files = scandir(PODCAST_DATA);
+
+		$casts = 0;
+
+		foreach($files as $f)
+		{
+			if(substr($f, 0, 1) == '.' || !is_file(PODCAST_DATA . $f))
+				continue;
+
+			$f_enc = encode($f);
+
+			$res = $db->query('select count(*) as count from podcast where podcast_location=\'' . $f_enc . '\'');
+
+			if($res[0]['count'] > 0)
+				continue;
+
+			if($casts > 0)
+				echo '<p/><hr/>';
+
+			$casts++;
+
+			// podcast not in database yet
+
+				echo getTableForm('New Podcast:', array(
+			array('Title', array('type'=>'text', 'name'=>'title', 'val'=>decode($f_enc))),
+			array('Description', array('type'=>'textarea', 'name'=>'desc')),
+			array('Length (H:MM:SS)', array('type'=>'text', 'name'=>'length')),
+			array('Size', array('type'=>'text', 'name'=>'size', 'val'=>(round(filesize(PODCAST_DATA . $f) / 1024 / 1024, 1) . 'MB'))),
+			array('Location', array('type'=>'text', 'name'=>'location', 'val'=>decode($f_enc))),
+
+			array('', array('type'=>'submit','name'=>'submit', 'val'=>'Add Podcast')),
+			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'new-podcast'))
+		));
+		}
+
+		if($casts == 0)
+			echo '<p/>No unassociated files in ' . PODCAST_DATA . '.';
+	}
+}
+
+?>
