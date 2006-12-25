@@ -539,6 +539,8 @@ INSERT INTO site VALUES ('USER_SECTION_NAV', 11, 'link', 'Register New User', ''
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 8, 'link', 'Sync Forums', '', '''a=sync-forums''', 'SECTION_ADMIN', 1, 1, '');
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 9, 'link', 'Sync Sequences', '', '''a=sync-seqs''', 'SECTION_ADMIN', 1, 1, '');
 INSERT INTO site VALUES ('NAV', 0, 'link', 'Podcast', '', '', 'SECTION_PODCAST', 0, 0, '');
+INSERT INTO site VALUES ('PODCAST_SECTION_NAV', 1, 'link', 'New Podcast', '', '''a=new-podcast''', 'SECTION_PODCAST', 1, 1, '');
+INSERT INTO site VALUES ('PODCAST_SECTION_NAV', 1, 'link', 'View Podcasts', '', '''a=view-podcasts''', 'SECTION_PODCAST', 0, 0, '');
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 1, 'link', 'Forum Permissions', '', '''a=forum-permissions''', 'SECTION_ADMIN', 1, 1, '');
 
 

@@ -62,11 +62,11 @@ if($p)
 {
 	echo
 		'<itunes:subtitle>A show about LDS religion and culture</itunes:subtitle>' .
-		'<itunes:author>Kara Huelin</itunes:author>' .
+		'<itunes:author>Popcorn Popping Staff</itunes:author>' .
 		'<itunes:summary>Various LDS stuffs. Yo.</itunes:summary>' .
 		'<itunes:owner>' .
-			'<itunes:name>Kara Huelin</itunes:name>' .
-			'<itunes:email>kara@popcorncast.com</itunes:email>' .
+			'<itunes:name>Popcorn Popping Staff</itunes:name>' .
+			'<itunes:email>staff@popcorncast.com</itunes:email>' .
 		'</itunes:owner>' .
 		'<itunes:image href="' . ARC_WWW_ADDR . 'images/logo.jpg"/>' .
 		'<itunes:category text="Religion"/>';
@@ -89,6 +89,7 @@ if($p)
 				'<pubDate>' . date('D, j M Y H:i:s', $res[$i]['podcast_date']) . ' GMT</pubDate>' .
 				'<itunes:duration>' . decode($res[$i]['podcast_length']) . '</itunes:duration>' .
 				'<itunes:keywords>' . decode($res[$i]['podcast_keywords']) . '</itunes:keywords>' .
+				'<itunes:explicit>clean</itunes:explicit>' .
 			'</item>';
 	}
 }

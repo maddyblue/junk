@@ -51,6 +51,8 @@ function disp($title, $desc, $length, $size, $location, $type, $fsize, $keywords
 	));
 }
 
+$podcast_dir = ARC_HOME_MOD . PODCAST_DATA;
+
 if(!ADMIN || !$USER)
 	echo '<p/>You do not have permissions to do podcast stuff.';
 else
@@ -69,7 +71,7 @@ else
 		$keywords = isset($_POST['keywords']) ? encode($_POST['keywords']) : '';
 		$subtitle = isset($_POST['subtitle']) ? encode($_POST['subtitle']) : '';
 
-		$fname = PODCAST_DATA . $location;
+		$fname = $podcast_dir . $location;
 		$fname_dec = decode($fname);
 
 		if(!$title)
@@ -108,13 +110,13 @@ else
 
 	if($submitted)
 	{
-		$files = scandir(PODCAST_DATA);
+		$files = scandir($podcast_dir);
 
 		$casts = 0;
 
 		foreach($files as $f)
 		{
-			if(substr($f, 0, 1) == '.' || !is_file(PODCAST_DATA . $f))
+			if(substr($f, 0, 1) == '.' || !is_file($podcast_dir . $f))
 				continue;
 
 			$f_enc = encode($f);
@@ -141,11 +143,11 @@ else
 				default: $type = ''; break;
 			}
 
-			disp($f_enc, '', '', round(filesize(PODCAST_DATA . $f) / 1024 / 1024, 1) . ' (MB)', $f_enc, $type, filesize(PODCAST_DATA . $f), '', '');
+			disp($f_enc, '', '', round(filesize($podcast_dir . $f) / 1024 / 1024, 1) . ' (MB)', $f_enc, $type, filesize($podcast_dir . $f), '', '');
 		}
 
 		if($casts == 0)
-			echo '<p/>No unassociated files in ' . PODCAST_DATA . '.';
+			echo '<p/>No unassociated files in ' . $podcast_dir . '.';
 	}
 }
 

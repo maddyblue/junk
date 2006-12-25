@@ -297,6 +297,8 @@ NAV	17	link	Admin			SECTION_ADMIN	1	1
 NAV	18	link	[Register User]		'a=newuser'	SECTION_USER	-1	0	
 NAV	19	link	[Login]		'a=login&r=' . encode($_SERVER['REQUEST_URI'])	SECTION_USER	-1	0	
 NAV	19	link	[Logout]		'a=logout'	SECTION_USER	1	0	
+PODCAST_SECTION_NAV	1	link	New Podcast		'a=new-podcast'	SECTION_PODCAST	1	1	
+PODCAST_SECTION_NAV	1	link	View Podcasts		'a=view-podcasts'	SECTION_PODCAST	0	0	
 USER_SECTION_NAV	10	link	My Info		'a=viewuserdetails&user=' . ID	SECTION_USER	1	0	
 USER_SECTION_NAV	11	link	Register New User		'a=newuser'	SECTION_USER	-1	0	
 USER_SECTION_NAV	12	link	Remote Information		'a=info'	SECTION_USER	0	0	

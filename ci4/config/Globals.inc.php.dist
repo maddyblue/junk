@@ -48,7 +48,7 @@ define('FORUM_POSTS_PP', 20);
 define('FORUM_THREAD_PAGES', 10);
 define('NEWSFORUM', 0);
 define('SESSION_TIMEOUT', 600); // in seconds
-define('PODCAST_DATA', ARC_HOME_MOD . SECTION_PODCAST . '/data/');
+define('PODCAST_DATA', SECTION_PODCAST . '/data/');
 
 /* Don't mess with these */
 
