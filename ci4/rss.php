@@ -45,8 +45,6 @@ $p = $f == 'podcast';
 if(!$p && !canView($f))
 	exit;
 
-ob_start();
-
 echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 
 echo ($p ?
@@ -112,15 +110,5 @@ else
 }
 
 echo '</channel></rss>';
-
-$s = ob_get_contents();
-ob_end_clean();
-
-echo '<pre>';
-var_dump($res);
-echo "\n\n";
-echo htmlspecialchars(str_replace('><', ">\n<", $s));
-echo '</pre>';
-echo decode($res[1]['podcast_description']);
 
 ?>
