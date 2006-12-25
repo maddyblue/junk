@@ -591,7 +591,7 @@ function getProfile()
 	$script = $total - $dbtime;
 	$scriptper = $script / $total;
 
-	$ret = '<small>'  .round($total, 3) . 's, ' . round(100 * $scriptper, 1) . '% PHP, ' . round(100* (1 - $scriptper), 1) . '% SQL with ' . $dbcalls . ' ' . makeLink('queries', $_SERVER['QUERY_STRING'] . '&sqlprofile', '/') . '</small>';
+	$ret = '<small>'  .round($total, 3) . 's, ' . round(100 * $scriptper, 1) . '% PHP, ' . round(100* (1 - $scriptper), 1) . '% SQL with ' . $dbcalls . ' ' . makeLink('queries', $_SERVER['QUERY_STRING'] . '&sqlprofile') . '</small>';
 
 	return $ret;
 }
