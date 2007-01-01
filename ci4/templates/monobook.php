@@ -104,7 +104,7 @@
 					<h5>render stats</h5>
 					<div class="pBody">
 						<ARC_PROFILE/>
-						<br/><?php echo makeLink('rss', ARC_HOME_MOD . 'rss.php', 'EXTERIOR'); ?>
+						<br/><ARC_RSS/>
 					</div>
 				</div>
 			</div>
