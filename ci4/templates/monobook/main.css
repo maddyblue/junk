@@ -146,7 +146,7 @@ select {
 	vertical-align: top;
 }
 q {
-    font-family: Times, "Times New Roman", serif;
+    font-family: serif, Times, "Times New Roman";
     font-style: italic;
 }
 code { background-color: #f9f9f9; }
