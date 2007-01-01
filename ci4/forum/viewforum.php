@@ -198,7 +198,7 @@ function threadList($forumid, $page, $threadsPP, $uls)
 		$totpages = ceil(($row['forum_thread_replies'] + 1) / FORUM_POSTS_PP);
 		$pageList = pageList($totpages, FORUM_THREAD_PAGES, FORUM_POSTS_PP, 'a=viewthread&t=' . $row['forum_thread_id']);
 		if($pageList)
-			$pageList = '<font class=small>' . $pageList . '</font>';
+			$pageList = '<font class="small">' . $pageList . '</font>';
 
 		array_push($array, array(
 			(newThread($row, $uls) ? '* ' : '') .
