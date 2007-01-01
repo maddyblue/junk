@@ -35,9 +35,9 @@
 $array = array('[i]italics[/i]',
 '[b]bold[/b]',
 '[u]underline[/u]',
-'[img]http://crescentisland.com/images/monster/ChaosDragon.gif[/img]',
-'[url]http://crescentisland.com[/url]',
-'[url=http://crescentisland.com]Crescent Island[/url]',
+'[img]' . ARC_WWW_ADDR . 'images/avatar/other/18.jpg[/img]',
+'[url]' . ARC_WWW_ADDR . '[/url]',
+'[url=' . ARC_WWW_ADDR . ']' . ARC_TITLE . '[/url]',
 '[quote]Hi, I said something![/quote]',
 '[pre]test
 1
