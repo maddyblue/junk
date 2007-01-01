@@ -1,0 +1,167 @@
+body {
+	background: #fff url(bg2.gif); /* Optional */
+	font-family: sans-serif, Verdana, Arial, Helvetica;
+	font-size: 75%;
+	text-align: center; /* IE Fix */
+	margin: 0;
+	color: #666;
+	}
+a { text-decoration: none; color: #369; border-bottom: 1px dashed #369; }
+a:hover { border-bottom: 1px dashed #49515C; color: #49515C; }
+
+#container {
+	margin: 0 auto;
+	width: 740px;
+	background: #fff url(dot_line.gif) repeat-y 25%;
+	border: 1px solid #ddd;
+	padding: 0 5px;
+	text-align: left; /* Cancel IE Fix */
+	}
+
+#header {
+	background: #49515C url(header_right.gif) no-repeat 100% 0;
+	border-bottom: 4px solid #fff;
+	border-top: 5px solid #fff;
+	padding: 28px 30px;
+	}
+#header h1 {
+	margin: 0;
+	color: #C6C4C5;
+	font-size: 1.8em;
+	font-weight: normal;
+	cursor: default;
+	}
+#header h2 {
+	margin: 0;
+	color: #8D8E90;
+	font-size: 1.2em;
+	padding-left: 1px;
+	cursor: default;
+	}
+
+#nav {
+	background: #858F9E;
+	border-bottom: 4px solid #fff;
+	margin: 0;
+	padding: 0;
+	height: 2.2em;
+	}
+#nav li {
+	list-style-type: none;
+	display: inline;
+	line-height: 20px;
+	}
+#nav li a {
+	text-decoration: none;
+	color: #ddd;
+	background-color: #858F9E;
+	border-right: 4px solid #fff;
+	border-bottom: 0;
+	padding: 3px 8px;
+	font-size: 1em;
+	float: left;
+	font-weight: bold;
+	}
+#nav li a:hover { background-color: #6B7687; }
+#nav li a.on { background-color: #49515C; color: #C6C4C5; }
+
+#sidebar {
+	float: left;
+	width: 175px;
+	position: relative;
+	line-height: 20px;
+	word-spacing: 2px;
+	}
+#sidebar div { background: #fff url(para_bg.jpg) repeat-x; }
+
+#sidebar h3, #content h3 {
+	font-size: 1.1em;
+	color: #49515C;
+	margin: 0 10px 0 0;
+	cursor: default;
+	}
+#content div, #sidebar div {
+	padding: 1px 0 10px 0;
+	border-top: 1px solid #ddd;
+  padding: 10px;
+	}
+
+#content {
+	float: left;
+	width: 550px;
+	position: relative;
+	margin-left: 15px;
+	line-height: 20px;
+	text-align: justify;
+	word-spacing: 2px;
+	}
+#content div { background: #fff url(para_bg.jpg) repeat-x; }
+
+#footer {
+	background: #49515C url(header_right.gif) no-repeat 100% 0;
+	border-bottom: 5px solid #fff;
+	border-top: 10px solid #fff;
+	text-align: center;
+	color: #fff;
+	font-size: 0.8em;
+	padding: 10px;
+	line-height: 16px;
+	clear: both;
+	}
+
+#footer a { text-decoration: none; color: #A2AFBF; border-bottom: 1px dashed #A2AFBF; }
+#footer a:hover { border-bottom: 1px dashed #fff; color: #fff; }
+
+/* ARC stuff */
+
+.tableMain {
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+.tableHeaderCellL, .tableHeaderCell {
+	padding: 2px;
+	background-color: #eee;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+}
+
+.tableHeaderCellR {
+	padding: 2px;
+	background-color: #eee;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+.tableCell, .tableCellL, .tableCellTL, .tableCellT {
+	padding: 2px;
+	border-left: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+}
+
+.tableCellTR, .tableCellR {
+	padding: 2px;
+	border-left: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+.tableCellB, .tableCellBL {
+	padding: 2px;
+	border-left: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+
+.tableCellBR {
+	padding: 2px;
+	border: 1px solid #ddd;
+}
+
+.small, .small * { font-size: 0.9em; }
+table.small { font-size: 0.9em }
