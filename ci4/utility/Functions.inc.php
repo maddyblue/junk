@@ -160,7 +160,35 @@ function getSiteArray($tag)
 			break;
 	}
 
-	return $db->query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag=\'' . $tag . '\' and site_admin <= ' . ADMIN . ' order by site_orderid');
+	$ret = $db->query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag=\'' . $tag . '\' and site_admin <= ' . ADMIN . ' order by site_orderid');
+
+	$arr = array();
+
+	for($i = 0; $i < count($ret); $i++)
+	{
+		$c = false;
+
+		switch($ret[$i]['site_section'])
+		{
+			case 'SECTION_PODCAST':
+				if(!MODULE_PODCAST)
+					$c = true;
+				break;
+			case 'SECTION_GAME':
+			case 'SECTION_BATTLE':
+			case 'SECTION_MANUAL':
+				if(!MODULE_GAME)
+					$c = true;
+				break;
+		}
+
+		if($c)
+			continue;
+
+		array_push($arr, $ret[$i]);
+	}
+
+	return $arr;
 }
 
 /* Returns a string made from the given parameters array dependant on the type.
