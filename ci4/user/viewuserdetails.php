@@ -59,7 +59,8 @@ $user = isset($_GET['user']) ? intval($_GET['user']) :
 	(LOGGED ? $USER['user_id'] : '0');
 
 $res = $db->query('select * from users where user_id=' . $user);
-$players = $db->query('select player_name, player_id, domain_id, domain_name from player, domain where player_user=' . $user . ' and domain_id=player_domain order by domain_expw_time, domain_expw_max');
+if(MODULE_GAME)
+	$players = $db->query('select player_name, player_id, domain_id, domain_name from player, domain where player_user=' . $user . ' and domain_id=player_domain order by domain_expw_time, domain_expw_max');
 
 update_session_action(309, $user, count($res) ? 'User details of ' . decode($res[0]['user_name']) : '');
 
@@ -91,27 +92,6 @@ if(count($res) == 1)
 		array('Signature', parseSig($res[0]['user_sig']))
 	);
 
-	$player = array(array('Player', 'Domain'));
-
-	if(ID == $user)
-		array_push($player[0], 'Destroy?');
-
-	foreach($players as $p)
-	{
-		$a = array(makeLink(decode($p['player_name']), 'a=viewplayerdetails&player=' . $p['player_id'], SECTION_GAME), makeLink($p['domain_name'], 'a=domains', SECTION_HOME));
-
-		if(ID == $user)
-			array_push($a, getForm('', array(
-				array('', array('type'=>'submit', 'name'=>'delete', 'val'=>'Delete')),
-				array(' Confirm', array('type'=>'checkbox', 'name'=>'confirm')),
-				array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewuserdetails')),
-				array('', array('type'=>'hidden', 'name'=>'player', 'val'=>$p['player_id']))
-				))
-			);
-
-		array_push($player, $a);
-	}
-
 	if(LOGGED)
 	{
 		echo '<p/>' . makeLink('Send this user a PM.', 'a=sendpm&userid=' . $res[0]['user_id']);
@@ -121,7 +101,31 @@ if(count($res) == 1)
 
 	echo getTable($array, false);
 
-	echo '<p/>Players owned by this user:' . getTable($player);
+	if(MODULE_GAME)
+	{
+		$player = array(array('Player', 'Domain'));
+
+		if(ID == $user)
+			array_push($player[0], 'Destroy?');
+
+		foreach($players as $p)
+		{
+			$a = array(makeLink(decode($p['player_name']), 'a=viewplayerdetails&player=' . $p['player_id'], SECTION_GAME), makeLink($p['domain_name'], 'a=domains', SECTION_HOME));
+
+			if(ID == $user)
+				array_push($a, getForm('', array(
+					array('', array('type'=>'submit', 'name'=>'delete', 'val'=>'Delete')),
+					array(' Confirm', array('type'=>'checkbox', 'name'=>'confirm')),
+					array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'viewuserdetails')),
+					array('', array('type'=>'hidden', 'name'=>'player', 'val'=>$p['player_id']))
+					))
+				);
+
+			array_push($player, $a);
+		}
+
+		echo '<p/>Players owned by this user:' . getTable($player);
+	}
 }
 else if(!LOGGED)
 {
