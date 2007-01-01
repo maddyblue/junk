@@ -2,7 +2,7 @@
 <html>
 	<head>
 	<!-- $Id$ -->
-	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php"/>
 	<title>
 		<?php echo strtolower(ARC_TITLE); ?> ||

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<!-- $Id$ -->
-		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 		<title>
 			<?php echo strtolower(ARC_TITLE); ?> -
 			<?php echo strtolower(ARC_SECTION); ?>

@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<!-- $Id$ -->
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 	<title>
-		<?php echo ucfirst(strtolower(ARC_TITLE)); ?> -
+		<?php echo ARC_TITLE; ?> -
 		<?php echo ucfirst(strtolower(ARC_SECTION)); ?>
 		<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
 	</title>
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
 	<link href="<ARC_TEMPLATE_DIR/>/bl-stylesheet.css" rel="stylesheet" type="text/css" />
 	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php"/>
 	<ARC_HEAD/>

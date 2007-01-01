@@ -5,14 +5,13 @@
 
 <head>
 	<!-- $Id$ -->
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 	<title>
 		<?php echo strtolower(ARC_TITLE); ?> ::
 		<?php echo strtolower(ARC_SECTION); ?>
 		<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
 	</title>
 	<ARC_HEAD/>
-
-	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
 	<link rel="stylesheet" type="text/css" href="<ARC_TEMPLATE_DIR/>/redux.css" />
 	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php"/>
 </head>
