@@ -152,7 +152,8 @@ echo $top;
 
 echo $content;
 
-echo '<p/>' . $message;
+if($message)
+	echo '<p/>' . $message;
 
 if(isset($_GET['sqlprofile']))
 {
