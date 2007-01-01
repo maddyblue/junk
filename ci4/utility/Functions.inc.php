@@ -461,7 +461,12 @@ function encode($input)
  */
 function decode($output)
 {
-	return urldecode($output);
+	$o = urldecode($output);
+
+	if(STRIPSLASHES)
+		$o = stripslashes($o);
+
+	return $o;
 }
 
 /* Makes sure only alphanumeric characters are in $text. If something else is
@@ -591,7 +596,7 @@ function getProfile()
 	$script = $total - $dbtime;
 	$scriptper = $script / $total;
 
-	$ret = '<small>'  .round($total, 3) . 's, ' . round(100 * $scriptper, 1) . '% PHP, ' . round(100* (1 - $scriptper), 1) . '% SQL with ' . $dbcalls . ' ' . makeLink('queries', $_SERVER['QUERY_STRING'] . '&sqlprofile') . '</small>';
+	$ret = round($total, 3) . 's, ' . round(100 * $scriptper, 1) . '% PHP, ' . round(100* (1 - $scriptper), 1) . '% SQL with ' . $dbcalls . ' ' . makeLink('queries', $_SERVER['QUERY_STRING'] . '&sqlprofile');
 
 	return $ret;
 }

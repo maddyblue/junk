@@ -507,7 +507,6 @@ INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 12, 'link', 'IRC', '', '''a=irc''
 INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 13, 'link', 'Contributing to CI', '', '''a=help''', 'SECTION_MANUAL', 0, 0, '');
 INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 14, 'link', 'About CI', '', '''a=about''', 'SECTION_MANUAL', 0, 0, '');
 INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 15, 'link', 'Staff', '', '''a=staff''', 'SECTION_MANUAL', 0, 0, '');
-INSERT INTO site VALUES ('NAV', 10, 'link', 'Main', '', '', 'SECTION_HOME', 0, 0, '');
 INSERT INTO site VALUES ('NAV', 11, 'link', 'Forum', '', '''a=viewforum''', 'SECTION_FORUM', 0, 0, '');
 INSERT INTO site VALUES ('NAV', 12, 'link', 'Game', '', '''a=viewplayers''', 'SECTION_GAME', 0, 0, '');
 INSERT INTO site VALUES ('NAV', 13, 'link', 'Battle', '', '', 'SECTION_BATTLE', 1, 0, '');
@@ -538,9 +537,10 @@ INSERT INTO site VALUES ('FORUM_SECTION_NAV', 12, 'link', 'Tag List', '', '''a=t
 INSERT INTO site VALUES ('USER_SECTION_NAV', 11, 'link', 'Register New User', '', '''a=newuser''', 'SECTION_USER', -1, 0, '');
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 8, 'link', 'Sync Forums', '', '''a=sync-forums''', 'SECTION_ADMIN', 1, 1, '');
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 9, 'link', 'Sync Sequences', '', '''a=sync-seqs''', 'SECTION_ADMIN', 1, 1, '');
-INSERT INTO site VALUES ('NAV', 0, 'link', 'Podcast', '', '', 'SECTION_PODCAST', 0, 0, '');
 INSERT INTO site VALUES ('PODCAST_SECTION_NAV', 1, 'link', 'New Podcast', '', '''a=new-podcast''', 'SECTION_PODCAST', 1, 1, '');
 INSERT INTO site VALUES ('PODCAST_SECTION_NAV', 1, 'link', 'View Podcasts', '', '''a=view-podcasts''', 'SECTION_PODCAST', 0, 0, '');
+INSERT INTO site VALUES ('NAV', 1, 'link', 'Main', '', '', 'SECTION_HOME', 0, 0, '');
+INSERT INTO site VALUES ('NAV', 10, 'link', 'Podcast', '', '', 'SECTION_PODCAST', 0, 0, '');
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 1, 'link', 'Forum Permissions', '', '''a=forum-permissions''', 'SECTION_ADMIN', 1, 1, '');
 
 
@@ -565,6 +565,7 @@ INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 1, 'link', 'Forum Permissions', ''
 INSERT INTO skin VALUES ('redux', 'ubik', 'http://werdizen.com/');
 INSERT INTO skin VALUES ('kuro5hin', 'rusty', 'http://www.kuro5hin.org/');
 INSERT INTO skin VALUES ('monobook', 'MediaWiki', 'http://wikipedia.sourceforge.net/');
+INSERT INTO skin VALUES ('blueleaves', 'growldesign', 'http://www.growldesign.co.uk/');
 
 
 --

@@ -285,8 +285,8 @@ MANUAL_SECTION_NAV	12	link	IRC		'a=irc'	SECTION_MANUAL	0	0
 MANUAL_SECTION_NAV	13	link	Contributing to CI		'a=help'	SECTION_MANUAL	0	0	
 MANUAL_SECTION_NAV	14	link	About CI		'a=about'	SECTION_MANUAL	0	0	
 MANUAL_SECTION_NAV	15	link	Staff		'a=staff'	SECTION_MANUAL	0	0	
-NAV	0	link	Podcast			SECTION_PODCAST	0	0	
-NAV	10	link	Main			SECTION_HOME	0	0	
+NAV	1	link	Main			SECTION_HOME	0	0	
+NAV	10	link	Podcast			SECTION_PODCAST	0	0	
 NAV	11	link	Forum		'a=viewforum'	SECTION_FORUM	0	0	
 NAV	12	link	Game		'a=viewplayers'	SECTION_GAME	0	0	
 NAV	13	link	Battle			SECTION_BATTLE	1	0	
@@ -316,6 +316,7 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 COPY skin (skin_name, skin_creator, skin_www) FROM stdin;
+blueleaves	growldesign	http://www.growldesign.co.uk/
 kuro5hin	rusty	http://www.kuro5hin.org/
 monobook	MediaWiki	http://wikipedia.sourceforge.net/
 redux	ubik	http://werdizen.com/

@@ -26,8 +26,16 @@ define('ARC_WWW_DOMAIN', 'your.domain.com');
 define('ARC_WWW_PATH', '/path/to/arc/on/www/'); // '/' if root. must begin with '/'
 define('ARC_AVATAR_PATH', 'images/avatar/');
 define('ARC_SMILIE_PATH', 'images/smilies/');
-
 define('ARC_DEF_TEMPLATE', 'monobook');
+
+define('STRIPSLASHES', true);
+
+/* Modules
+ * These should all have values of true or false.
+ */
+
+define('MODULE_GAME', true);
+define('MODULE_PODCAST', true);
 
 /* Section alises */
 
