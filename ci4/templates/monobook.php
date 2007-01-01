@@ -91,7 +91,7 @@
 				<div class="portlet">
 					<h5>server time</h5>
 					<div class="pBody">
-						<?php echo gmdate('d M y g:i a', TIME + TZOFFSET); ?>
+						<ARC_SERVERTIME/>
 					</div>
 				</div>
 				<div class="portlet">

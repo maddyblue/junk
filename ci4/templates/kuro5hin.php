@@ -249,7 +249,7 @@
 		<table class="boxcontents">
 			<tr>
 				<td>
-					<?php echo gmdate('d M y g:i a', TIME + TZOFFSET); ?>
+					<ARC_SERVERTIME/>
 				</td>
 			</tr>
 		</table>

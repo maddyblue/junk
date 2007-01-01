@@ -57,9 +57,7 @@
 			<?php } ?>
 			<div>
 				<h3>Server Time</h3>
-				<p>
-					<?php echo gmdate('d M y g:i a', TIME + TZOFFSET); ?>
-				</p>
+				<p><ARC_SERVERTIME/></p>
 			</div>
 			<div>
 				<h3><?php echo makeLink('Who\'s Online', 'a=whosonline', SECTION_USER); ?></h3>

@@ -94,7 +94,7 @@
 					server time
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<?php echo gmdate('d M y g:i a', TIME + TZOFFSET); ?>
+					<ARC_SERVERTIME/>
 				</div></div>
 			</div>
 
