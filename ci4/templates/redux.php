@@ -66,13 +66,16 @@
 								echo '0 new PMs';
 							echo '<br/>';
 
-							$res = $db->query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
-							for($i = 0; $i < count($res); $i++)
+							if(MODULE_GAME)
 							{
-								if($res[$i]['player_battle'])
-									echo '* ';
+								$res = $db->query('select player_name, player_id, player_battle, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
+								for($i = 0; $i < count($res); $i++)
+								{
+									if($res[$i]['player_battle'])
+										echo '* ';
 
-								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_GAME) . ' [' . makeLink($res[$i]['domain_abrev'], $_SERVER['QUERY_STRING'] . '&domain=' . $res[$i]['domain_id']) . ']<br/>';
+									echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_GAME) . ' [' . makeLink($res[$i]['domain_abrev'], $_SERVER['QUERY_STRING'] . '&domain=' . $res[$i]['domain_id']) . ']<br/>';
+								}
 							}
 						?>
 					</div></div>

@@ -545,7 +545,7 @@ INSERT INTO site VALUES ('_SERVERTIME', 0, 'eval', 'gmdate(''d M y g:i a'', TIME
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 1, 'link', 'Forum Permissions', '', '''a=forum-permissions''', 'SECTION_ADMIN', 1, 1, '');
 INSERT INTO site VALUES ('_WHOSONLINE', 0, 'eval', 'getNumActiveUsers() . '' users, '' . getNumActiveGuests() . '' guests'';', '', '', '', 0, 0, '');
 INSERT INTO site VALUES ('_RSS', 0, 'eval', 'makeLink(''rss'', ARC_HOME_MOD . ''rss.php'', ''EXTERIOR'');', '', '', '', 0, 0, '');
-INSERT INTO site VALUES ('_USER', 0, 'eval', 'makeLink(decode($USER[''user_name'']), ''a=viewuserdetails'', SECTION_USER) . '' - '' . ($USER[''domain_abrev''] ? $USER[''domain_abrev''] : ''no domain'');', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_USER', 0, 'eval', 'makeLink(decode($USER[''user_name'']), ''a=viewuserdetails'', SECTION_USER) . (MODULE_GAME ? '' - '' . ($USER[''domain_abrev''] ? $USER[''domain_abrev''] : ''no domain'') : '''');', '', '', '', 0, 0, '');
 
 
 --

@@ -312,7 +312,7 @@ _PROFILE	0	eval	getProfile()				0	0
 _RSS	0	eval	makeLink('rss', ARC_HOME_MOD . 'rss.php', 'EXTERIOR');				0	0	
 _SERVERTIME	0	eval	gmdate('d M y g:i a', TIME + TZOFFSET);				0	0	
 _TEMPLATE_DIR	0	eval	ARC_TEMPLATE_WWW . ARC_TEMPLATE				0	0	directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)
-_USER	0	eval	makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . ' - ' . ($USER['domain_abrev'] ? $USER['domain_abrev'] : 'no domain');				0	0	
+_USER	0	eval	makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . (MODULE_GAME ? ' - ' . ($USER['domain_abrev'] ? $USER['domain_abrev'] : 'no domain') : '');				0	0	
 _WHOSONLINE	0	eval	getNumActiveUsers() . ' users, ' . getNumActiveGuests() . ' guests';				0	0	
 \.
 SET client_encoding = 'SQL_ASCII';
