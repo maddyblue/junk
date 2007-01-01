@@ -58,6 +58,10 @@ for($i = 0; $i < count($res); $i++)
 
 echo getTable($array);
 
+echo '<p/>On the left side of the menu is the list of available skins. The one you are currently using is not hyperlinked. To change skins, click on one that is hyperlinked.';
+
+echo '<p/>These skins have been adopted, by permission, from the authors. They have, in general, all been slightly tweaked to fit the purposes of this website. Ergo, some of the artists\' original intentions may not be represented here.';
+
 update_session_action(102, '', 'Skins');
 
 ?>
