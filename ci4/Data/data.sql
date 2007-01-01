@@ -311,6 +311,7 @@ _HEAD	0	eval	$GLOBALS['ARC_HEAD']				0	0
 _PROFILE	0	eval	getProfile()				0	0	
 _SERVERTIME	0	eval	gmdate('d M y g:i a', TIME + TZOFFSET);				0	0	
 _TEMPLATE_DIR	0	eval	ARC_TEMPLATE_WWW . ARC_TEMPLATE				0	0	directory the template files live in.  example:\n/ci4/templates/ci4 (no trailing slash)
+_WHOSONLINE	0	eval	getNumActiveUsers() . ' users, ' . getNumActiveGuests() . ' guests';				0	0	
 \.
 SET client_encoding = 'SQL_ASCII';
 SET check_function_bodies = false;

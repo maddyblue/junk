@@ -272,8 +272,7 @@
 		<table class="boxcontents">
 			<tr>
 				<td>
-					<?php echo getNumActiveUsers(); ?> users,
-					<?php echo getNumActiveGuests(); ?> guests
+					<ARC_WHOSONLINE/>
 				</td>
 			</tr>
 		</table>

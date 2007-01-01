@@ -62,8 +62,7 @@
 			<div>
 				<h3><?php echo makeLink('Who\'s Online', 'a=whosonline', SECTION_USER); ?></h3>
 				<p>
-					<?php echo getNumActiveUsers(); ?> users,
-					<?php echo getNumActiveGuests(); ?> guests
+					<ARC_WHOSONLINE/>
 				</p>
 			</div>
 			<div>

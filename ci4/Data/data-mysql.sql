@@ -543,6 +543,7 @@ INSERT INTO site VALUES ('NAV', 1, 'link', 'Main', '', '', 'SECTION_HOME', 0, 0,
 INSERT INTO site VALUES ('NAV', 10, 'link', 'Podcast', '', '', 'SECTION_PODCAST', 0, 0, '');
 INSERT INTO site VALUES ('_SERVERTIME', 0, 'eval', 'gmdate(''d M y g:i a'', TIME + TZOFFSET);', '', '', '', 0, 0, '');
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 1, 'link', 'Forum Permissions', '', '''a=forum-permissions''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('_WHOSONLINE', 0, 'eval', 'getNumActiveUsers() . '' users, '' . getNumActiveGuests() . '' guests'';', '', '', '', 0, 0, '');
 
 
 --

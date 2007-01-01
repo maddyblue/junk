@@ -97,8 +97,7 @@
 				<div class="portlet">
 					<h5><?php echo makeLink('who\'s online', 'a=whosonline', SECTION_USER); ?></h5>
 					<div class="pBody">
-						<?php echo getNumActiveUsers(); ?> users,
-						<?php echo getNumActiveGuests(); ?> guests
+						<ARC_WHOSONLINE/>
 					</div>
 				</div>
 				<div class="portlet">

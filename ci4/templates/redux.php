@@ -103,8 +103,7 @@
 					<?php echo makeLink('who\'s online', 'a=whosonline', SECTION_USER); ?>
 				</div></div>
 				<div class="block-light"><div class="sidepad">
-					<?php echo getNumActiveUsers(); ?> users,
-					<?php echo getNumActiveGuests(); ?> guests
+					<ARC_WHOSONLINE/>
 				</div></div>
 			</div>
 
