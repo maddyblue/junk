@@ -27,7 +27,7 @@
 				<table style="width: 100%;"><tr><td>
 					<?php echo ARC_SECTION; ?>
 				</td><td style="text-align: right;">
-					crescent island
+					<?php echo strtolower(ARC_TITLE); ?>
 				</td></tr></table>
 			</div></div>
 
