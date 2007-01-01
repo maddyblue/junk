@@ -197,9 +197,7 @@ function parsePostText($post)
 
 	$repl = array(
 		array('[url]', '[/url]', '<a href="$1">$1</a>'),
-		array('[URL]', '[/URL]', '<a href="$1">$1</a>'),
 		array('[img]', '[/img]', '<img src="$1">'),
-		array('[IMG]', '[/IMG]', '<img src="$1">'),
 		array('[b]', '[/b]', '<b>$1</b>'),
 		array('[u]', '[/u]', '<u>$1</u>'),
 		array('[i]', '[/i]', '<i>$1</i>'),
@@ -213,8 +211,8 @@ function parsePostText($post)
 	{
 		$cur = 0;
 		while(
-			!(($cur = strpos($return, $row[0], $cur)) === false) &&
-			!(($next = strpos($return, $row[1], $cur + 1)) === false))
+			!(($cur = stripos($return, $row[0], $cur)) === false) &&
+			!(($next = stripos($return, $row[1], $cur + 1)) === false))
 		{
 			$len = $next - $cur;
 			$len_0 = strlen($row[0]);
@@ -245,15 +243,14 @@ function parsePostText($post)
 	$url = "\[url=([-a-zA-Z0-9:/\.%~_\?\=\+&;# ,]+)\](.+)\[/url\]";
 	$endurl = '[/url]';
 	$regs = array();
-	// don't use eregi because PHP4 apparently doesn't have stripos
-	while(ereg($url, $return, $regs) == true)
+	while(eregi($url, $return, $regs) == true)
 	{
-		$pos_0 = strpos($return, $regs[0]);
-		$pos_1 = strpos($return, $regs[1]);
+		$pos_0 = stripos($return, $regs[0]);
+		$pos_1 = stripos($return, $regs[1]);
 		$len_1 = strlen($regs[1]);
 		$pos_2 = strpos($return, $regs[2], $pos_1 + $len_1);
 		// location of the ending [/url], since ereg will get the _last_ [/url], we find our own
-		$pos_3 = strpos($return, $endurl, $pos_2);
+		$pos_3 = stripos($return, $endurl, $pos_2);
 
 		// do the end first so we don't mess up string positions in the front
 		$return = substr_replace($return, '</a>', $pos_3, strlen($endurl));
@@ -269,7 +266,7 @@ function parsePostText($post)
 	foreach($repl as $row)
 	{
 		$cur = 0;
-		while(!(($cur = strpos($return, $row[0], $cur)) === false))
+		while(!(($cur = stripos($return, $row[0], $cur)) === false))
 		{
 			$len_0 = strlen($row[0]);
 			$len_1 = strlen($row[1]);
@@ -279,8 +276,8 @@ function parsePostText($post)
 
 			while(true)
 			{
-				$next_0 = strpos($return, $row[0], $temp);
-				$next_1 = strpos($return, $row[1], $temp);
+				$next_0 = stripos($return, $row[0], $temp);
+				$next_1 = stripos($return, $row[1], $temp);
 
 				if($next_1 === false)
 				{
