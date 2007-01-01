@@ -61,7 +61,10 @@
 						<?php
 							$pms = makePMLink();
 							if($pms)
-								echo $pms . '<br/>';
+								echo $pms;
+							else
+								echo '0 new PMs';
+							echo '<br/>';
 
 							$res = $db->query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
 							for($i = 0; $i < count($res); $i++)
