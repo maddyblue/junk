@@ -69,6 +69,8 @@ foreach($array as $tag)
 
 echo getTable($disp);
 
+echo '<p/>These tags can be used when doing forum posts. Use the templates on the left side to produced output on the right. All tags are case insensitive (e.g., [url] is the same as [URL] and [UrL]).';
+
 update_session_action(404, '', 'Tag List');
 
 ?>
