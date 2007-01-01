@@ -31,7 +31,7 @@
 			</div>
 			<?php if(LOGGED) { ?>
 			<div>
-				<h3><?php echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . ' - ' . ($USER['domain_abrev'] ? $USER['domain_abrev'] : 'no domain'); ?></h3>
+				<h3><ARC_USER/></h3>
 				<p>
 					<?php
 						$pms = makePMLink();

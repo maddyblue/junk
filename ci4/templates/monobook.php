@@ -58,7 +58,7 @@
 				</div>
 				<?php if(LOGGED) { ?>
 				<div class="portlet">
-					<h5><?php echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . ' - ' . ($USER['domain_abrev'] ? $USER['domain_abrev'] : 'no domain'); ?></h5>
+					<h5><ARC_USER/></h5>
 					<div class="pBody">
 						<ul>
 							<?php

@@ -173,7 +173,7 @@
 						<table class="boxinner">
 							<tr>
 							<td class="box">
-								<?php echo makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_USER) . ' - ' . ($USER['domain_abrev'] ? $USER['domain_abrev'] : 'no domain'); ?>
+								<ARC_USER/>
 							</td>
 						</tr>
 						</table>
@@ -195,7 +195,7 @@
 							$res = $db->query('select player_name, player_id, domain_id, domain_abrev from player, domain where player_user=' . ID . ' and player_domain=domain_id');
 							for($i = 0; $i < count($res); $i++)
 							{
-								if($res[$i]['player_id'] == $PLAYER['player_id'])
+								if($res[$i]['player_battle'])
 									echo '* ';
 
 								echo makeLink(decode($res[$i]['player_name']), 'a=viewplayerdetails&player=' . $res[$i]['player_id'], SECTION_GAME) . ' [' . makeLink($res[$i]['domain_abrev'], $_SERVER['QUERY_STRING'] . '&domain=' . $res[$i]['domain_id']) . ']<br/>';
