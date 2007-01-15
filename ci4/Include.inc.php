@@ -41,6 +41,8 @@ require_once ARC_HOME_MOD . 'utility/User.inc.php';
 require_once ARC_HOME_MOD . 'utility/Forum.inc.php';
 require_once ARC_HOME_MOD . 'utility/Session.inc.php';
 
+set_magic_quotes_runtime(0);
+
 // Setup database connections
 $db = new Database();
 
