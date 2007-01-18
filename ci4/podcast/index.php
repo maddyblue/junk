@@ -35,6 +35,9 @@
 define('ARC_SECTION', 'PODCAST');
 define('ARC_HOME_MOD', '../');
 
+if(!isset($_GET['a']) && !isset($_POST['a']))
+	$_GET['a'] = 'view-podcasts';
+
 require '../index.php';
 
 ?>
