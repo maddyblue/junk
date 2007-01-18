@@ -501,3 +501,59 @@ blockquote[cite]:after {
 	text-align: left;
 	padding-right: 1em;
 }
+
+/* ARC stuff */
+
+.tableMain {
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+.tableHeaderCellL, .tableHeaderCell {
+	padding: 2px;
+	color: #B05128;
+	background-color: #d2d2d2;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #D96B11;
+	border-top: 1px solid #D96B11;
+}
+
+.tableHeaderCellR {
+	padding: 2px;
+	color: #B05128;
+	background-color: #d2d2d2;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #D96B11;
+	border-top: 1px solid #D96B11;
+	border-right: 1px solid #D96B11;
+}
+
+.tableCell, .tableCellL, .tableCellTL, .tableCellT {
+	padding: 2px;
+	border-left: 1px solid #D96B11;
+	border-top: 1px solid #D96B11;
+}
+
+.tableCellTR, .tableCellR {
+	padding: 2px;
+	border-left: 1px solid #D96B11;
+	border-top: 1px solid #D96B11;
+	border-right: 1px solid #D96B11;
+}
+
+.tableCellB, .tableCellBL {
+	padding: 2px;
+	border-left: 1px solid #D96B11;
+	border-top: 1px solid #D96B11;
+	border-bottom: 1px solid #D96B11;
+}
+
+.tableCellBR {
+	padding: 2px;
+	border: 1px solid #D96B11;
+}
+
+.small, .small * { font-size: 10px; }
+table.small { font-size: 10px }
