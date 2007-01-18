@@ -16,7 +16,6 @@ body
 	margin: 0 auto;
 }
 
-
 #head #title
 {
 	/*float: left;*/
@@ -34,7 +33,6 @@ body
 	width: 747px;
 	display: block;
 }
-
 
 #body
 {
@@ -244,7 +242,6 @@ body
 	padding-top: 4px;
 }
 
-
 #menu ul li.active a:hover, #menu ul li.active a:active,#menu ul li.active a:link, #menu ul li.active a:visited
 {
 	background-image: url(menu_tabs.gif);
@@ -256,7 +253,6 @@ body
 	padding-top: 4px;
 	color: #B05128;
 }
-
 
 /*  Headers  */
 h1
@@ -329,8 +325,8 @@ h6
 	font-weight: normal;
 	line-height: 150%;
 }
-/* HTML Tags */
 
+/* HTML Tags */
 .code, code
 {
   display: block;
@@ -408,7 +404,6 @@ blockquote {
 	padding-left: 37px;
 }
 
-
 del
 {
   color: #800;
@@ -431,7 +426,6 @@ dd
 a[target]:after{
 	content: " " url(externalpage.gif);
 }
-
 
 blockquote[cite]:after {
 	content: "Quote from: " attr(cite);
