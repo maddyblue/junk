@@ -42,6 +42,7 @@
  * 6: manual
  * 7: player
  * 8: battle
+ * 9: podcast
  */
 
 $actionlist = array(
@@ -107,7 +108,11 @@ array(704, 'makeLink(\'Managing their abilities\', \'a=abilities\', SECTION_GAME
 array(705, 'makeLink(\'Managing their equipment\', \'a=equipment\', SECTION_GAME)'),
 
 // battle
-array(801, '\'Battling\'')
+array(801, '\'Battling\''),
+
+// podcast
+array(901, 'makeLink(\'Viewing the podcasts\', \'a=view-podcasts\', SECTION_PODCAST)'),
+array(902, '\'Adding a podcast\'')
 
 );
 

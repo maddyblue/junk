@@ -48,4 +48,6 @@ for($i = 0; $i < count($res); $i++)
 		'<p/>' . makeLink('Download', ARC_WWW_PATH . PODCAST_DATA . decode($res[$i]['podcast_location']), 'EXTERIOR') . ' (' . decode($res[$i]['podcast_length']) . ', ' . decode($res[$i]['podcast_size']) . ')';
 }
 
+update_session_action(901, '', 'View Podcasts');
+
 ?>

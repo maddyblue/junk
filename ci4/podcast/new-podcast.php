@@ -151,4 +151,6 @@ else
 	}
 }
 
+update_session_action(902, '', 'New Podcast');
+
 ?>
