@@ -53,23 +53,23 @@ echo ($p ?
 
 echo
 	'<channel>' .
-	'<title>' . ARC_TITLE . '</title>' .
-	'<link>' . ARC_WWW_ADDR . '</link>' .
-	'<description>' . ARC_DESCRIPTION . '</description>' .
+	'<title>' . PODCAST_TITLE . '</title>' .
+	'<link>' . PODCAST_LINK . '</link>' .
+	'<description>' . PODCAST_DESCRIPTION . '</description>' .
 	'<language>en-us</language>';
 
 if($p)
 {
 	echo
-		'<itunes:subtitle>A show about LDS religion and culture</itunes:subtitle>' .
-		'<itunes:author>Popcorn Popping Staff</itunes:author>' .
-		'<itunes:summary>Various LDS stuffs. Yo.</itunes:summary>' .
+		'<itunes:subtitle>' . PODCAST_SUBTITLE . '</itunes:subtitle>' .
+		'<itunes:author>' . PODCAST_AUTHOR . '</itunes:author>' .
+		'<itunes:summary>' . PODCAST_SUMMARY . '</itunes:summary>' .
 		'<itunes:owner>' .
-			'<itunes:name>Popcorn Popping Staff</itunes:name>' .
-			'<itunes:email>staff@popcorncast.com</itunes:email>' .
+			'<itunes:name>' . PODCAST_OWNER . '</itunes:name>' .
+			'<itunes:email>' . PODCAST_EMAIL . '</itunes:email>' .
 		'</itunes:owner>' .
-		'<itunes:image href="' . ARC_WWW_ADDR . 'images/logo.jpg"/>' .
-		'<itunes:category text="Religion"/>';
+		'<itunes:image href="' . ARC_WWW_ADDR . PODCAST_IMAGE . '"/>' .
+		'<itunes:category text="' . PODCAST_CATEGORY . '"/>';
 
 	$res = $db->query('select podcast.*, user_name, user_email from podcast join users on podcast_creator=user_id order by podcast_date desc');
 

@@ -28,7 +28,19 @@ define('ARC_AVATAR_PATH', 'images/avatar/');
 define('ARC_SMILIE_PATH', 'images/smilies/');
 define('ARC_DEF_TEMPLATE', 'monobook');
 
-define('STRIPSLASHES', true);
+define('PODCAST_TITLE', ARC_TITLE);
+define('PODCAST_LINK', ARC_WWW_ADDR);
+define('PODCAST_DESCRIPTION', ARC_DESCRIPTION);
+define('PODCAST_SUBTITLE', '');
+define('PODCAST_AUTHOR', '');
+define('PODCAST_OWNER', PODCAST_AUTHOR);
+define('PODCAST_EMAIL', '');
+define('PODCAST_SUMMARY', '');
+define('PODCAST_IMAGE', 'images/logo.jpg'); // relative to ARC_WWW_ADDR
+define('PODCAST_CATEGORY', '');
+define('PODCAST_EXPLICIT', ''); // 'clean', 'explicit', or ''
+
+define('STRIPSLASHES', !get_magic_quotes_gpc());
 
 /* Modules
  * These should all have values of true or false.
