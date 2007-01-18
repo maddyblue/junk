@@ -48,7 +48,6 @@
 					</div>
 					<div id="right">
 						<div class="content">
-
 							<h4>Section Navigation</h4>
 							<ul>
 								<li><ARCSECTION_NAV><li>INSERT</li></ARCSECTION_NAV></li>
@@ -91,12 +90,10 @@
 							<h4>Render Stats</h4>
 								<p/><ARC_PROFILE/>
 								<br/><ARC_RSS/>
-
 						</div>
 					</div>
 					<div class="clearer"></div>
 					<div class="bottom"></div>
-
 				</div>
 				<div class="clearer"></div>
 			</div>
