@@ -112,7 +112,8 @@ array(801, '\'Battling\''),
 
 // podcast
 array(901, 'makeLink(\'Viewing the podcasts\', \'a=view-podcasts\', SECTION_PODCAST)'),
-array(902, '\'Adding a podcast\'')
+array(902, '\'Adding a podcast\''),
+array(903, 'makeLink(\'Viewing the details of \' . decode(getDBData(\'podcast_title\', $d, \'podcast_id\', \'podcast\')), \'a=view-podcast-details&p=\' . $d, SECTION_PODCAST)')
 
 );
 

@@ -3,7 +3,7 @@
 /* $Id$ */
 
 /*
- * Copyright (c) 2006 Matthew Jibson
+ * Copyright (c) 2007 Matthew Jibson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,22 +32,21 @@
  *
  */
 
-$res = $db->query('select podcast.*, user_name, user_id from podcast join users on podcast_creator=user_id order by podcast_date desc');
+$id = isset($_GET['p']) ? intval($_GET['p']) : '0';
 
-echo '<p/><b>' . makeLink('RSS Feed', ARC_WWW_PATH . 'rss.php?f=podcast', 'EXTERIOR') . '</b>';
+$res = $db->query('select podcast.*, user_name, user_id from podcast join users on podcast_creator=user_id where podcast_id=' . $id);
 
-for($i = 0; $i < count($res); $i++)
+if(count($res) > 0)
 {
-	if($i > 0)
-		echo '<p/><hr/>';
-
 	echo
-		'<p/><b>' . makeLink(decode($res[$i]['podcast_title']), 'a=view-podcast-details&p=' . $res[$i]['podcast_id']) . '</b> - ' . decode($res[$i]['podcast_subtitle']) .
-		'<br/>Posted on ' . getTime($res[$i]['podcast_date']) . ' by ' . makeLink(decode($res[$i]['user_name']), 'a=viewuserdetails&user=' . $res[$i]['user_id'], SECTION_USER) . ':' .
-		'<p/>' . decode($res[$i]['podcast_description']) .
-		'<p/>' . makeLink('Download', ARC_WWW_PATH . PODCAST_DATA . decode($res[$i]['podcast_location']), 'EXTERIOR') . ' (' . decode($res[$i]['podcast_length']) . ', ' . decode($res[$i]['podcast_size']) . ')';
+		'<p/><b>' . decode($res[0]['podcast_title']) . '</b> - ' . decode($res[0]['podcast_subtitle']) .
+		'<br/>Posted on ' . getTime($res[0]['podcast_date']) . ' by ' . makeLink(decode($res[0]['user_name']), 'a=viewuserdetails&user=' . $res[0]['user_id'], SECTION_USER) . ':' .
+		'<p/>' . decode($res[0]['podcast_description']) .
+		'<p/>' . makeLink('Download', ARC_WWW_PATH . PODCAST_DATA . decode($res[0]['podcast_location']), 'EXTERIOR') . ' (' . decode($res[0]['podcast_length']) . ', ' . decode($res[0]['podcast_size']) . ')';
 }
+else
+	echo '<p/>Invalid podcast.';
 
-update_session_action(901, '', 'View Podcasts');
+update_session_action(903, $id, 'Podcast Details');
 
 ?>
