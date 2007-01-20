@@ -137,7 +137,7 @@ $pos = strpos($template, $stopstr);
 
 if($pos !== false)
 {
-	$top = substr($template, 0, $pos - 1);
+	$top = substr($template, 0, $pos);
 	$bottom = substr($template, $pos + strlen($stopstr));
 }
 else // handle templates that don't have <ARCCONTENT/> (for template development/debugging)
