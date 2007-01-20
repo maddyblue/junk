@@ -321,6 +321,7 @@ SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 COPY skin (skin_name, skin_creator, skin_www) FROM stdin;
 blueleaves	growldesign	http://www.growldesign.co.uk/
+flange	Technology Directory	http://www.alltechnologydirectory.com
 kuro5hin	rusty	http://www.kuro5hin.org/
 monobook	MediaWiki	http://wikipedia.sourceforge.net/
 redux	ubik	http://werdizen.com/

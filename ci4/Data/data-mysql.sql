@@ -570,6 +570,7 @@ INSERT INTO skin VALUES ('redux', 'ubik', 'http://werdizen.com/');
 INSERT INTO skin VALUES ('kuro5hin', 'rusty', 'http://www.kuro5hin.org/');
 INSERT INTO skin VALUES ('monobook', 'MediaWiki', 'http://wikipedia.sourceforge.net/');
 INSERT INTO skin VALUES ('blueleaves', 'growldesign', 'http://www.growldesign.co.uk/');
+INSERT INTO skin VALUES ('flange', 'Technology Directory', 'http://www.alltechnologydirectory.com');
 
 
 --
