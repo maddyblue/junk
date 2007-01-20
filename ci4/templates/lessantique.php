@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-	<!-- $Id$ -->
-    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-    <title>
-      <?php echo ARC_TITLE; ?> -
+		<!-- $Id$ -->
+		<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+		<title>
+			<?php echo ARC_TITLE; ?> -
 			<?php echo ucfirst(strtolower(ARC_SECTION)); ?>
 			<?php echo $GLOBALS['PAGE_TITLE'] ? '- ' . $GLOBALS['PAGE_TITLE'] : ''; ?>
-    </title>
-    <link href="<ARC_TEMPLATE_DIR/>/style.css" rel="stylesheet" type="text/css" />
+		</title>
+		<link href="<ARC_TEMPLATE_DIR/>/style.css" rel="stylesheet" type="text/css" />
 		<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php"/>
 		<ARC_HEAD/>
 	</head>
