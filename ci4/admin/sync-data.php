@@ -18,12 +18,20 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-$db->query('delete from data where data_name=\'hits\'');
-$db->query('insert into data values (\'hits\', null, 0)');
+$db->query('delete from data');
 
 $ret = $db->query('select count(*) as count from stats');
+$hits = $ret[0]['count'];
 
-$db->update('update data set data_val_int=' . $ret[0]['count'] . ' where data_name=\'hits\'');
+$ret = $db->query('select count(*) as count from stats_podcast');
+$podcast = $ret[0]['count'];
+
+$ret = $db->query('select count(*) as count from stats_rss');
+$rss = $ret[0]['count'];
+
+$db->query('insert into data values (\'hits\', null, ' . $hits . ')');
+$db->query('insert into data values (\'podcast_downloads\', null, ' . $podcast . ')');
+$db->query('insert into data values (\'rss_hits\', null, ' . $rss . ')');
 
 echo '<p/>Done.';
 

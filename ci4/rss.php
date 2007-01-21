@@ -99,5 +99,6 @@ else
 echo '</channel></rss>';
 
 $db->query('insert into stats_rss (stats_rss_timestamp, stats_rss_rss, stats_rss_ip) values (' . 	time() . ', \'' . $f . '\', ' . ip2long($_SERVER['REMOTE_ADDR']) . ')');
+$db->query('update data set data_val_int=data_val_int+1 where data_name=\'rss_hits\'');
 
 ?>

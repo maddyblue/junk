@@ -39,6 +39,7 @@ if(!$f)
 	die('Bad file open.');
 
 $db->query('insert into stats_podcast (stats_podcast_timestamp, stats_podcast_podcast, stats_podcast_ip) values (' . 	time() . ', ' . $id . ', ' . ip2long($_SERVER['REMOTE_ADDR']) . ')');
+$db->query('update data set data_val_int=data_val_int+1 where data_name=\'podcast_downloads\'');
 
 header('Content-Type: ' . decode($res[0]['podcast_type']));
 header('Content-Length: ' . filesize($fname));
