@@ -702,6 +702,17 @@ CREATE TABLE stats_podcast (
 );
 
 
+--
+-- Name: stats_rss; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE TABLE stats_rss (
+    stats_rss_timestamp bigint,
+    stats_rss_rss character varying(7),
+    stats_rss_ip character varying(11)
+);
+
+
 SET default_with_oids = true;
 
 --
@@ -1034,6 +1045,20 @@ CREATE INDEX forum_word_index ON forum_word USING btree (forum_word_word);
 
 
 --
+-- Name: player_user_domain; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE INDEX player_user_domain ON player USING btree (player_user, player_domain);
+
+
+--
+-- Name: pm_to; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE INDEX pm_to ON pm USING btree (pm_to);
+
+
+--
 -- Name: podcast_date; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
 --
 
@@ -1045,6 +1070,20 @@ CREATE INDEX podcast_date ON podcast USING btree (podcast_date);
 --
 
 CREATE UNIQUE INDEX podcast_id ON podcast USING btree (podcast_id);
+
+
+--
+-- Name: session_uid_current; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE INDEX session_uid_current ON "session" USING btree (session_uid, session_current);
+
+
+--
+-- Name: site_tag; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE INDEX site_tag ON site USING hash (site_tag);
 
 
 --

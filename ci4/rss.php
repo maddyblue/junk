@@ -98,4 +98,6 @@ else
 
 echo '</channel></rss>';
 
+$db->query('insert into rss_podcast (stats_rss_timestamp, stats_rss_rss, stats_rss_ip) values (' . 	time() . ', \'' . $f . '\', ' . ip2long($_SERVER['REMOTE_ADDR']) . ')');
+
 ?>
