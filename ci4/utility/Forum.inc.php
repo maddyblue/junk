@@ -175,15 +175,14 @@ function parsePost($post)
 
 function parsePostText($post)
 {
-	$return = htmlentities(decode($post));
+	$URL_PATTERN = '[-a-zA-Z0-9:\/\\.%~_\?\=\+&;# ,]+';
+	$return = htmlentities(urldecode($post));
 
 	$return = nl2br($return);
 
 	// non-nested replaces
 
 	$repl = array(
-		array('[url]', '[/url]', '<a href="$1">$1</a>'),
-		array('[img]', '[/img]', '<img src="$1">'),
 		array('[b]', '[/b]', '<b>$1</b>'),
 		array('[u]', '[/u]', '<u>$1</u>'),
 		array('[i]', '[/i]', '<i>$1</i>'),
@@ -214,9 +213,9 @@ function parsePostText($post)
 
 	$ereg = array(
 		// remove the <br /> tags that nl2br adds from <pre> blocks
-		array("<pre>(.*)<br />(.*)</pre>", "<pre>\\1\\2</pre>"),
+		array('<pre>(.*)<br />(.*)</pre>', '<pre>\\1\\2</pre>'),
 		// list items
-		array("<([ou]l.*)>(.*)\[li\](.+)</([ou]l)>", "<\\1>\\2<li>\\3</\\4>")
+		array('<([ou]l.*)>(.*)\[li\](.+)</([ou]l)>', '<\\1>\\2<li>\\3</\\4>'),
 	);
 
 	foreach($ereg as $row)
@@ -225,74 +224,25 @@ function parsePostText($post)
 			$return = eregi_replace($row[0], $row[1], $return);
 	}
 
-	// extended urls: [url=http://blah.com]text[/url]
-	$url = "\[url=([-a-zA-Z0-9:/\.%~_\?\=\+&;# ,]+)\](.+)\[/url\]";
-	$endurl = '[/url]';
-	$regs = array();
-	while(eregi($url, $return, $regs) == true)
-	{
-		$pos_0 = stripos($return, $regs[0]);
-		$pos_1 = stripos($return, $regs[1]);
-		$len_1 = strlen($regs[1]);
-		$pos_2 = strpos($return, $regs[2], $pos_1 + $len_1);
-		// location of the ending [/url], since ereg will get the _last_ [/url], we find our own
-		$pos_3 = stripos($return, $endurl, $pos_2);
-
-		// do the end first so we don't mess up string positions in the front
-		$return = substr_replace($return, '</a>', $pos_3, strlen($endurl));
-		$return = substr_replace($return, '<a href="' . $regs[1] . '">', $pos_0, $pos_2 - $pos_0);
-	}
-
-	// nested replaces
-
-	$repl = array(
-		array('[quote]', '[/quote]', '<table class="tableMain"><tr class="tableRow"><td class="tableCellBR">$1</td></tr></table>')
+	$preg_search = array(
+		'/\\[url\\](' . $URL_PATTERN . ')\\[\/url\\]/i',
+		'/\\[url=(' . $URL_PATTERN . ')\\](.*?)\\[\/url\\]/i',
+		'/\\[img\\](' . $URL_PATTERN . ')\\[\/img\\]/i',
+		'/\\[img=(' . $URL_PATTERN . ')\\](' . $URL_PATTERN . ')\\[\/img\\]/i',
+		'/(.*)\\[quote\\](.*?)\\[\/quote\\]/is',
+		'/(.*)\\[quote cite=([^]]*?)\\](.*?)\\[\/quote\\]/is'
 	);
 
-	foreach($repl as $row)
-	{
-		$cur = 0;
-		while(!(($cur = stripos($return, $row[0], $cur)) === false))
-		{
-			$len_0 = strlen($row[0]);
-			$len_1 = strlen($row[1]);
-			$temp = $cur + $len_0;
+	$preg_replace = array(
+		'<a href="\\1">\\1</a>',
+		'<a href="\\1">\\2</a>',
+		'<img src="\\1"/>',
+		'<a href="\\1"><img src="\\2"/></a>',
+		'\\1<blockquote>\\2</blockquote>',
+		'\\1<blockquote cite="\\2">\\3</blockquote>'
+	);
 
-			$noexist = false;
-
-			while(true)
-			{
-				$next_0 = stripos($return, $row[0], $temp);
-				$next_1 = stripos($return, $row[1], $temp);
-
-				if($next_1 === false)
-				{
-					$noexist = true;
-					break;
-				}
-
-				if($next_0 === false || $next_0 > $next_1)
-				{
-					$next = $next_1;
-					break;
-				}
-
-				$temp = $next_1 + $len_1;
-			}
-
-			if($noexist)
-			{
-				$cur += $len_0;
-				break;
-			}
-
-			$len = $next - $cur;
-			$one = substr($return, $cur + $len_0, $len - $len_0);
-			$new = str_replace('$1', $one, $row[2]);
-			$return = substr_replace($return, $new, $cur, $len + $len_1);
-			$cur += $len_0;
-		}
-	}
+	$return = preg_replace($preg_search, $preg_replace, $return);
 
 	$return = forumReplace($return);
 
@@ -471,7 +421,7 @@ function parsePostWords($id, $text, $del = false)
 		{
 			$query .= 'insert into forum_word values (' . $id . ', \'' . $db->escape_string($p) . "');\n";
 
-			if($i++ == 100)
+			if($i++ == 0)
 			{
 				$db->update($query);
 				$query = '';

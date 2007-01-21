@@ -22,9 +22,13 @@ $array = array('[i]italics[/i]',
 '[b]bold[/b]',
 '[u]underline[/u]',
 '[img]' . ARC_WWW_ADDR . 'images/avatar/other/18.jpg[/img]',
+'[img=' . ARC_WWW_ADDR . ']' . ARC_WWW_ADDR . 'images/avatar/other/18.jpg[/img]',
 '[url]' . ARC_WWW_ADDR . '[/url]',
 '[url=' . ARC_WWW_ADDR . ']' . ARC_TITLE . '[/url]',
 '[quote]Hi, I said something![/quote]',
+'[quote cite=citation]
+Someone named citation said something!
+[/quote]',
 '[pre]test
 1
  2
