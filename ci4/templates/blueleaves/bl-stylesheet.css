@@ -165,3 +165,21 @@ a:hover { border-bottom: 1px dashed #49515C; color: #49515C; }
 
 .small, .small * { font-size: 0.9em; }
 table.small { font-size: 0.9em }
+
+blockquote {
+	border-left: 4px #858F9E solid;
+	padding:  0 0 0 10px;
+	margin: 10px 20px 10px 20px;
+	letter-spacing: 0px;
+	white-space:inherit;
+}
+
+blockquote[cite]:after {
+	content: "Quote from: " attr(cite);
+	display: block;
+	border-top: 1px solid #999;
+	margin: 1em 0 0;
+	padding: .5em 0 0;
+	font-size: .8em;
+	font-weight: bold;
+}

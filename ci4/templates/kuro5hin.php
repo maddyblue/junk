@@ -139,6 +139,24 @@
 			width: 100%;
 		}
 
+		blockquote {
+			border-left: 4px #c7d2ea solid;
+			padding:  0 0 0 10px;
+			margin: 10px 20px 10px 20px;
+			letter-spacing: 0px;
+			white-space:inherit;
+		}
+
+		blockquote[cite]:after {
+			content: "Quote from: " attr(cite);
+			display: block;
+			border-top: 1px solid #999;
+			margin: 1em 0 0;
+			padding: .5em 0 0;
+			font-size: .8em;
+			font-weight: bold;
+		}
+
 		-->
 	</style>
 	<ARC_HEAD/>
