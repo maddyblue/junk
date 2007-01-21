@@ -689,6 +689,21 @@ CREATE TABLE stats (
 );
 
 
+SET default_with_oids = false;
+
+--
+-- Name: stats_podcast; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE TABLE stats_podcast (
+    stats_podcast_timestamp bigint,
+    stats_podcast_podcast bigint,
+    stats_podcast_ip character varying(11)
+);
+
+
+SET default_with_oids = true;
+
 --
 -- Name: town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
@@ -1016,6 +1031,20 @@ ALTER TABLE ONLY users
 --
 
 CREATE INDEX forum_word_index ON forum_word USING btree (forum_word_word);
+
+
+--
+-- Name: podcast_date; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE INDEX podcast_date ON podcast USING btree (podcast_date);
+
+
+--
+-- Name: podcast_id; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE UNIQUE INDEX podcast_id ON podcast USING btree (podcast_id);
 
 
 --

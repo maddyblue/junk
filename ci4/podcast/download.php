@@ -18,22 +18,33 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+define('ARC_HOME_MOD', '../');
+require_once(ARC_HOME_MOD . 'Include.inc.php');
+
 $id = isset($_GET['p']) ? intval($_GET['p']) : '0';
 
-$res = $db->query('select podcast.*, user_name, user_id from podcast join users on podcast_creator=user_id where podcast_id=' . $id);
+$res = $db->query('select * from podcast where podcast_id=' . $id);
 
-if(count($res) > 0)
-{
-	echo
-		'<p/><b>' . decode($res[0]['podcast_title']) . '</b>' .
-		($res[0]['podcast_subtitle'] ? ' - ' . decode($res[0]['podcast_subtitle']) : '') .
-		'<br/>Posted on ' . getTime($res[0]['podcast_date']) . ' by ' . makeLink(decode($res[0]['user_name']), 'a=viewuserdetails&user=' . $res[0]['user_id'], SECTION_USER) . ':' .
-		'<p/>' . decode($res[0]['podcast_description']) .
-		'<p/>' . makeLink('Download', 'download.php?p=' . $res[0]['podcast_id'], 'EXTERIOR') . ' (' . decode($res[0]['podcast_length']) . ', ' . decode($res[0]['podcast_size']) . ')';
-}
-else
-	echo '<p/>Invalid podcast.';
+if(count($res) == 0)
+	die('Invalid podcast.');
 
-update_session_action(903, $id, 'Podcast Details');
+$fname = ARC_HOME_MOD . PODCAST_DATA . decode($res[0]['podcast_location']);
+
+if(!is_file($fname) || !is_readable($fname))
+	die('Cannot read file.');
+
+$f = fopen($fname, 'rb');
+
+if(!$f)
+	die('Bad file open.');
+
+$db->query('insert into stats_podcast (stats_podcast_timestamp, stats_podcast_podcast, stats_podcast_ip) values (' . 	time() . ', ' . $id . ', ' . ip2long($_SERVER['REMOTE_ADDR']) . ')');
+
+header('Content-Type: ' . decode($res[0]['podcast_type']));
+header('Content-Length: ' . filesize($fname));
+
+fpassthru($f);
+fclose($f);
+exit;
 
 ?>

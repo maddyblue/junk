@@ -28,10 +28,11 @@ for($i = 0; $i < count($res); $i++)
 		echo '<p/><hr/>';
 
 	echo
-		'<p/><b>' . makeLink(decode($res[$i]['podcast_title']), 'a=view-podcast-details&p=' . $res[$i]['podcast_id']) . '</b> - ' . decode($res[$i]['podcast_subtitle']) .
+		'<p/><b>' . makeLink(decode($res[$i]['podcast_title']), 'a=view-podcast-details&p=' . $res[$i]['podcast_id']) . '</b>' .
+		($res[$i]['podcast_subtitle'] ? ' - ' . decode($res[$i]['podcast_subtitle']) : '') .
 		'<br/>Posted on ' . getTime($res[$i]['podcast_date']) . ' by ' . makeLink(decode($res[$i]['user_name']), 'a=viewuserdetails&user=' . $res[$i]['user_id'], SECTION_USER) . ':' .
 		'<p/>' . decode($res[$i]['podcast_description']) .
-		'<p/>' . makeLink('Download', ARC_WWW_PATH . PODCAST_DATA . decode($res[$i]['podcast_location']), 'EXTERIOR') . ' (' . decode($res[$i]['podcast_length']) . ', ' . decode($res[$i]['podcast_size']) . ')';
+		'<p/>' . makeLink('Download', 'download.php?p=' . $res[0]['podcast_id'], 'EXTERIOR') . ' (' . decode($res[$i]['podcast_length']) . ', ' . decode($res[$i]['podcast_size']) . ')';
 }
 
 update_session_action(901, '', 'View Podcasts');

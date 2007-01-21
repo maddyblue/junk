@@ -689,6 +689,21 @@ CREATE TABLE stats (
 );
 
 
+-- SET default_with_oids = false;
+
+--
+-- Name: stats_podcast; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE TABLE stats_podcast (
+    stats_podcast_timestamp bigint,
+    stats_podcast_podcast bigint,
+    stats_podcast_ip character varying(11)
+);
+
+
+-- SET default_with_oids = true;
+
 --
 -- Name: town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
 --
@@ -1016,6 +1031,20 @@ CREATE TABLE users (
 --
 
 ALTER TABLE forum_word add index (forum_word_word (50));
+
+
+--
+-- Name: podcast_date; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+ALTER TABLE podcast add index (podcast_date);
+
+
+--
+-- Name: podcast_id; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+--
+
+CREATE UNIQUE INDEX podcast_id ON podcast add index (podcast_id);
 
 
 --

@@ -68,7 +68,7 @@ if($p)
 				'<itunes:subtitle>' . decode($res[$i]['podcast_subtitle']) . '</itunes:subtitle>' .
 				'<itunes:summary>' . decode($res[$i]['podcast_description']) . '</itunes:summary>' .
 				'<enclosure ' .
-					'url="' . ARC_WWW_ADDR . PODCAST_DATA . decode($res[$i]['podcast_location']) . '" ' .
+					'url="' . ARC_WWW_ADDR . SECTION_PODCAST . '/download.php?p=' . $res[$i]['podcast_id'] . '" ' .
 					'type="' . decode($res[$i]['podcast_type']) . '" ' .
 					'length="' . decode($res[$i]['podcast_filesize']) . '"/>' .
 				'<guid>' . $res[$i]['podcast_id'] . '</guid>' .
