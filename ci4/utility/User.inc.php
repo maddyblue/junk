@@ -197,7 +197,12 @@ function handle_login()
 	// check to see if we have a valid user
 
 	if($id && $pass)
-		$res = $db->query('select users.*, domain_abrev from users left join domain on domain_id=' . ARC_DOMAIN . ' where user_id=' . $id . ' and user_pass=\'' . $pass . '\'');
+		$res = $db->query(
+			'select users.*' .
+			(MODULE_GAME ? ', domain_abrev' : '') .
+			' from users' .
+			(MODULE_GAME ? ' left join domain on domain_id=' . ARC_DOMAIN : '') .
+			' where user_id=' . $id . ' and user_pass=\'' . $pass . '\'');
 	else
 		$res = array();
 
