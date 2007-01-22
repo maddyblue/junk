@@ -469,6 +469,9 @@ function makeImg($img, $prefix = '', $relative = false)
 // Make inupt data safe. Must always be used for all $_GET and $_POST string data.
 function encode($input)
 {
+	if(STRIPSLASHES)
+		$input = stripslashes($input);
+
 	return urlencode(htmlspecialchars($input));
 }
 
@@ -477,12 +480,7 @@ function encode($input)
  */
 function decode($output)
 {
-	$o = urldecode($output);
-
-	if(STRIPSLASHES)
-		$o = stripslashes($o);
-
-	return $o;
+	return urldecode($output);
 }
 
 /* Makes sure only alphanumeric characters are in $text. If something else is
