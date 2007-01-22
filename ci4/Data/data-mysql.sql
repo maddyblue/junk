@@ -541,12 +541,12 @@ INSERT INTO site VALUES ('PODCAST_SECTION_NAV', 1, 'link', 'New Podcast', '', ''
 INSERT INTO site VALUES ('PODCAST_SECTION_NAV', 1, 'link', 'View Podcasts', '', '''a=view-podcasts''', 'SECTION_PODCAST', 0, 0, '');
 INSERT INTO site VALUES ('NAV', 1, 'link', 'Main', '', '', 'SECTION_HOME', 0, 0, '');
 INSERT INTO site VALUES ('NAV', 10, 'link', 'Podcast', '', '', 'SECTION_PODCAST', 0, 0, '');
-INSERT INTO site VALUES ('_SERVERTIME', 0, 'eval', 'gmdate(''d M y g:i a'', TIME + TZOFFSET);', '', '', '', 0, 0, '');
 INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 1, 'link', 'Forum Permissions', '', '''a=forum-permissions''', 'SECTION_ADMIN', 1, 1, '');
 INSERT INTO site VALUES ('_WHOSONLINE', 0, 'eval', 'getNumActiveUsers() . '' users, '' . getNumActiveGuests() . '' guests'';', '', '', '', 0, 0, '');
 INSERT INTO site VALUES ('_USER', 0, 'eval', 'makeLink(decode($USER[''user_name'']), ''a=viewuserdetails'', SECTION_USER) . (MODULE_GAME ? '' - '' . ($USER[''domain_abrev''] ? $USER[''domain_abrev''] : ''no domain'') : '''');', '', '', '', 0, 0, '');
 INSERT INTO site VALUES ('_RSS', 0, 'eval', 'makeLink(''rss'', ARC_HOME_MOD . ''rss.php?'', ''EXTERIOR'');', '', '', '', 0, 0, '');
 INSERT INTO site VALUES ('_PREENDBODY', 0, 'eval', '(defined(''URCHIN'') ? ''<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script type="text/javascript">_uacct = "'' . URCHIN . ''"; urchinTracker();</script>'' : '''')', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_SERVERTIME', 0, 'eval', 'gmdate(TIMEFORMAT, TIME + TZOFFSET);', '', '', '', 0, 0, '');
 
 
 --

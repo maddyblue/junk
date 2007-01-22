@@ -18,7 +18,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle)
+function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle, $timeformat)
 {
 	$tzarr = array(
 		array(-12, '(GMT -12:00) Eniwetok, Kwajalein'),
@@ -70,6 +70,8 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle)
 		array('', array('type'=>'disptext', 'val'=>'Signature must be less than or equal to five lines long, may contain only non-formatted text and hyperlinks. Your sig will be edited by an admin or moderator if it is in any way obscene or unacceptable.')),
 		array('', array('type'=>'disptext', 'val'=>'<p/>')),
 
+		array('Time format', array('type'=>'text', 'name'=>'timeformat', 'val'=>decode($timeformat))),
+		array('', array('type'=>'disptext', 'val'=>'Refer to <a href="http://php.net/date">PHP\'s date() function</a> for more information about time formatting. Leave blank for default.')),
 		array('Timezone', array('type'=>'select', 'name'=>'tz', 'val'=>$timezone)),
 		array('', array('type'=>'disptext', 'val'=>'<p/>')),
 
@@ -106,6 +108,7 @@ if(LOGGED)
 		$www = isset($_POST['www']) ? encode($_POST['www']) : '';
 		// $tz won't be checked later on, so force it to be a number
 		$tz = isset($_POST['tz']) ? floatval($_POST['tz']) : 0;
+		$timeformat = isset($_POST['timeformat']) ? encode($_POST['timeformat']) : '';
 		$battle = (isset($_POST['battle']) && $_POST['battle'] == 'on') ? 1 : 0;
 		$pass1 = isset($_POST['pass1']) ? encode($_POST['pass1']) : '';
 		$pass2 = isset($_POST['pass2']) ? encode($_POST['pass2']) : '';
@@ -123,6 +126,7 @@ if(LOGGED)
 		$www = $ret[0]['user_www'];
 		$tz = $ret[0]['user_timezone'];
 		$battle = $ret[0]['user_battle_verbose'];
+		$timeformat = $ret[0]['user_timeformat'];
 	}
 
 	if(isset($_POST['submit']))
@@ -163,7 +167,7 @@ if(LOGGED)
 			disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
 		else
 		{
-			$db->query('update users set user_email=\'' . $email . '\', user_sig=\'' . $sig . '\', user_aim=\'' . $aim . '\', user_yahoo=\'' . $yahoo . '\', user_icq=\'' . $icq . '\', user_msn=\'' . $msn . '\', user_www=\'' . $www . '\', user_timezone=\'' . $tz . '\', user_battle_verbose=' . $battle . ' where user_id=' . ID);
+			$db->query('update users set user_email=\'' . $email . '\', user_sig=\'' . $sig . '\', user_aim=\'' . $aim . '\', user_yahoo=\'' . $yahoo . '\', user_icq=\'' . $icq . '\', user_msn=\'' . $msn . '\', user_www=\'' . $www . '\', user_timezone=\'' . $tz . '\', user_battle_verbose=' . $battle . ', user_timeformat=\'' . $timeformat . '\' where user_id=' . ID);
 			echo '<p/>Userdata updated successfully.';
 
 			if($pass1)
@@ -173,11 +177,11 @@ if(LOGGED)
 			}
 			// don't show this if password changed, since they won't have a valid login
 			else
-				disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle);
+				disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle, $timeformat);
 		}
 	}
 	else
-		disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle);
+		disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle, $timeformat);
 }
 else
 {

@@ -753,7 +753,8 @@ CREATE TABLE users (
     user_icq character varying(100),
     user_www character varying(200),
     user_timezone character varying(4),
-    user_battle_verbose integer DEFAULT 0
+    user_battle_verbose integer DEFAULT 0,
+    user_timeformat character varying(20)
 );
 
 

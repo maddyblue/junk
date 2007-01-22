@@ -546,7 +546,7 @@ function getTime($ts = -1)
 	else if($ts == -1)
 		$ts = TIME;
 
-	return str_replace(' ', '&nbsp;', gmdate('d M y g:i a', $ts + TZOFFSET));
+	return str_replace(' ', '&nbsp;', gmdate(TIMEFORMAT, $ts + TZOFFSET));
 }
 
 // Returns the name of the specified domain.

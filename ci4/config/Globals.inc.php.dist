@@ -40,6 +40,7 @@ define('PODCAST_IMAGE', 'images/logo.jpg'); // relative to ARC_WWW_ADDR
 define('PODCAST_CATEGORY', '');
 define('PODCAST_EXPLICIT', ''); // 'clean', 'explicit', or ''
 
+define('DEFAULT_TIME_FORMAT', 'd M y g:i a'); // default time format, refer to http://php.net/date for more.
 define('STRIPSLASHES', get_magic_quotes_gpc());
 //define('URCHIN', 'UA-12345-6'); // Optional. Uncomment and set to your Google Analytics account number.
 

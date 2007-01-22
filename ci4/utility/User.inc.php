@@ -235,6 +235,7 @@ function handle_login()
 		$USER = $res[0];
 
 		define('TZOFFSET', $res[0]['user_timezone'] * 3600);
+		define('TIMEFORMAT', $res[0]['user_timeformat'] ? decode($res[0]['user_timeformat']) : DEFAULT_TIME_FORMAT);
 	}
 	else
 	{
@@ -242,6 +243,7 @@ function handle_login()
 		define('LOGGED_DIR', '<');
 		define('ID', 0);
 		define('TZOFFSET', 0);
+		define('TIMEFORMAT', DEFAULT_TIME_FORMAT);
 
 		$PLAYER = false;
 		$USER = false;
