@@ -66,23 +66,26 @@ for($i = 0; $i < count($res); $i++)
 
 if(ADMIN)
 {
-	echo '<p/><hr/><p/>Podcast stats:';
-
-	$res = $db->query('select stats_podcast_podcast as p, stats_podcast_timestamp/' . $SecPerDay . ' as s, count(*) as count, podcast_title as t from stats_podcast left join podcast on stats_podcast_podcast=podcast_id group by p, s, t order by s desc, p desc limit 30');
-	$table = array(array('Date', 'Podcast', 'Downloads'));
-
-	for($i = 0; $i < count($res); $i++)
+	if(MODULE_PODCAST)
 	{
-		array_push($table, array(
-			date('D, d M y', $res[$i]['s'] * $SecPerDay), decode($res[$i]['t']), $res[$i]['count']
-		));
+		echo '<p/><hr/><p/>Podcast stats:';
+
+		$res = $db->query('select stats_podcast_podcast as p, stats_podcast_timestamp/' . $SecPerDay . ' as s, count(*) as count, podcast_title as t from stats_podcast left join podcast on stats_podcast_podcast=podcast_id group by p, s, t order by s desc, p desc limit 30');
+		$table = array(array('Date', 'Podcast', 'Downloads'));
+
+		for($i = 0; $i < count($res); $i++)
+		{
+			array_push($table, array(
+				date('D, d M y', $res[$i]['s'] * $SecPerDay), decode($res[$i]['t']), $res[$i]['count']
+			));
+		}
+
+		echo getTable($table);
+
+		$res = $db->query('select data_val_int from data where data_name=\'podcast_downloads\'');
+
+		echo '<p/>Total podcast downloads: ' . $res[0]['data_val_int'];
 	}
-
-	echo getTable($table);
-
-	$res = $db->query('select data_val_int from data where data_name=\'podcast_downloads\'');
-
-	echo '<p/>Total podcast downloads: ' . $res[0]['data_val_int'];
 
 	echo '<p/><hr/><p/>RSS stats:';
 
