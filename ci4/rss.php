@@ -28,8 +28,8 @@ $f = isset($_GET['f']) ? ($_GET['f'] == 'podcast' ? 'podcast' : intval($_GET['f'
 
 $p = $f == 'podcast';
 
-if(!$p && !canView($f))
-	exit;
+if((!$p && !canView($f)) || ($p && !MODULE_PODCAST))
+	die('invalid access');
 
 echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
 
