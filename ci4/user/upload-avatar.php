@@ -59,9 +59,9 @@ function checkFile($file, $image = true)
 		return false;
 	}
 
-	if($fsize > 50000)
+	if($fsize > 51200)
 	{
-		echo '<p/>Filesize must be less than 50kB. Your image is ' . round($fsize / 1000) . 'kB.';
+		echo '<p/>Filesize must be less than 50kB. Your image is ' . round($fsize / 1024) . 'kB.';
 		return false;
 	}
 
@@ -91,7 +91,7 @@ function display()
 {
 	echo
 		getTableForm('Upload avatar:', array(
-			array('', array('type'=>'hidden', 'name'=>'MAX_FILE_SIZE', 'val'=>'50000')),
+			array('', array('type'=>'hidden', 'name'=>'MAX_FILE_SIZE', 'val'=>'51200')),
 			array('File', array('type'=>'file', 'name'=>'avatar')),
 			array('', array('type'=>'disptext', 'val'=>'Image can be up to 50kB in size and 100x100 pixels large.')),
 
