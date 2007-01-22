@@ -58,7 +58,7 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle, $timef
 	for($i = 0; $i < count($tzarr); $i++)
 		$timezone .= '<option value="' . $tzarr[$i][0] . '"' . ($tzarr[$i][0] == $tz ? ' selected' : '') . '>' . $tzarr[$i][1] . '</option>';
 
-	echo getTableForm('User Control Panel:', array(
+	$arr = array(
 		array('Password', array('type'=>'password', 'name'=>'pass1')),
 		array('Password (verify)', array('type'=>'password', 'name'=>'pass2')),
 		array('', array('type'=>'disptext', 'val'=>'(Leave blank for no change.)')),
@@ -80,11 +80,16 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle, $timef
 		array('ICQ', array('type'=>'text', 'name'=>'icq', 'val'=>decode($icq))),
 		array('MSN', array('type'=>'text', 'name'=>'msn', 'val'=>decode($msn))),
 		array('WWW', array('type'=>'text', 'name'=>'www', 'val'=>decode($www))),
-		array('', array('type'=>'disptext', 'val'=>'<p/>')),
+		array('', array('type'=>'disptext', 'val'=>'<p/>'))
+	);
 
-		array('Verbose Battles', array('type'=>'checkbox', 'name'=>'battle', 'val'=>($battle ? 'checked' : ''))),
-		array('', array('type'=>'disptext', 'val'=>'<p/>')),
+	if(MODULE_GAME)
+		array_push($arr,
+			array('Verbose Battles', array('type'=>'checkbox', 'name'=>'battle', 'val'=>($battle ? 'checked' : ''))),
+			array('', array('type'=>'disptext', 'val'=>'<p/>'))
+		);
 
+	array_push($arr,
 		array('Avatar', array('type'=>'disptext', 'val'=>getAvatar())),
 		array('', array('type'=>'disptext', 'val'=>(makeLink('Change avatar', 'a=change-avatar') . ' (WITHOUT saving current profile changes!)'))),
 		array('', array('type'=>'disptext', 'val'=>(makeLink('Upload custom avatar', 'a=upload-avatar') . ' (WITHOUT saving current profile changes!)'))),
@@ -92,7 +97,9 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle, $timef
 
 		array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Save')),
 		array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'usercp'))
-	));
+	);
+
+	echo getTableForm('User Control Panel:', $arr);
 }
 
 if(LOGGED)
