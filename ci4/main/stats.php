@@ -33,10 +33,14 @@ $stats = array(
 	array('Forum posts', 'select count(*) as count from forum_post'),
 	array('Forum posts for the past week', 'select count(*) as count from forum_post where forum_post_date > ' . $PastWeek),
 	array('Forum posts for the past day', 'select count(*) as count from forum_post where forum_post_date > ' . $PastDay),
-	array('Forum threads', 'select count(*) as count from forum_thread'),
-	array('Registered players', 'select count(*) as count from player'),
-	array('Battles', 'select count(*) as count from battle')
+	array('Forum threads', 'select count(*) as count from forum_thread')
 );
+
+if(MODULE_GAME)
+	array_push($stats,
+		array('Registered players', 'select count(*) as count from player'),
+		array('Battles', 'select count(*) as count from battle')
+	);
 
 $table = array();
 
@@ -64,7 +68,7 @@ if(ADMIN)
 {
 	echo '<p/><hr/><p/>Podcast stats:';
 
-	$res = $db->query('select stats_podcast_podcast as p, stats_podcast_timestamp/' . $SecPerDay . ' as s, count(*), podcast_title as t from stats_podcast left join podcast on stats_podcast_podcast=podcast_id group by p, s, t order by s desc, p desc limit 30');
+	$res = $db->query('select stats_podcast_podcast as p, stats_podcast_timestamp/' . $SecPerDay . ' as s, count(*) as count, podcast_title as t from stats_podcast left join podcast on stats_podcast_podcast=podcast_id group by p, s, t order by s desc, p desc limit 30');
 	$table = array(array('Date', 'Podcast', 'Downloads'));
 
 	for($i = 0; $i < count($res); $i++)
@@ -82,7 +86,7 @@ if(ADMIN)
 
 	echo '<p/><hr/><p/>RSS stats:';
 
-	$res = $db->query('select forum_forum_name as t, stats_rss_rss as p, stats_rss_timestamp/' . $SecPerDay . ' as s, count(*) from stats_rss left join forum_forum on forum_forum_id=stats_rss_rss group by p, s, t order by s desc, p desc limit 30');
+	$res = $db->query('select forum_forum_name as t, stats_rss_rss as p, stats_rss_timestamp/' . $SecPerDay . ' as s, count(*) as count from stats_rss left join forum_forum on forum_forum_id=stats_rss_rss group by p, s, t order by s desc, p desc limit 30');
 	$table = array(array('Date', 'RSS Feed', 'Hits'));
 
 	for($i = 0; $i < count($res); $i++)
