@@ -41,6 +41,7 @@ define('PODCAST_CATEGORY', '');
 define('PODCAST_EXPLICIT', ''); // 'clean', 'explicit', or ''
 
 define('STRIPSLASHES', get_magic_quotes_gpc());
+//define('URCHIN', 'UA-12345-6'); // Optional. Uncomment and set to your Google Analytics account number.
 
 /* Modules
  * These should all have values of true or false.

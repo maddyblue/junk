@@ -546,6 +546,7 @@ INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 1, 'link', 'Forum Permissions', ''
 INSERT INTO site VALUES ('_WHOSONLINE', 0, 'eval', 'getNumActiveUsers() . '' users, '' . getNumActiveGuests() . '' guests'';', '', '', '', 0, 0, '');
 INSERT INTO site VALUES ('_USER', 0, 'eval', 'makeLink(decode($USER[''user_name'']), ''a=viewuserdetails'', SECTION_USER) . (MODULE_GAME ? '' - '' . ($USER[''domain_abrev''] ? $USER[''domain_abrev''] : ''no domain'') : '''');', '', '', '', 0, 0, '');
 INSERT INTO site VALUES ('_RSS', 0, 'eval', 'makeLink(''rss'', ARC_HOME_MOD . ''rss.php?'', ''EXTERIOR'');', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_PREENDBODY', 0, 'eval', '(defined(''URCHIN'') ? ''<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script type="text/javascript">_uacct = "'' . URCHIN . ''"; urchinTracker();</script>'' : '''')', '', '', '', 0, 0, '');
 
 
 --

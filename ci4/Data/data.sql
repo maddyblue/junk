@@ -308,6 +308,7 @@ USER_SECTION_NAV	15	link	View Active Users		'a=whosonline'	SECTION_USER	0	0
 USER_SECTION_NAV	16	link	View PMs		'a=viewpms'	SECTION_USER	1	0	
 USER_SECTION_NAV	17	link	View Users		'a=viewusers'	SECTION_USER	0	0	
 _HEAD	0	eval	$GLOBALS['ARC_HEAD']				0	0	
+_PREENDBODY	0	eval	(defined('URCHIN') ? '<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script type="text/javascript">_uacct = "' . URCHIN . '"; urchinTracker();</script>' : '')				0	0	
 _PROFILE	0	eval	getProfile()				0	0	
 _RSS	0	eval	makeLink('rss', ARC_HOME_MOD . 'rss.php?', 'EXTERIOR');				0	0	
 _SERVERTIME	0	eval	gmdate('d M y g:i a', TIME + TZOFFSET);				0	0	
