@@ -19,18 +19,46 @@
  */
 
 $array = array(
-	':smile:',
-	':happy:',
-	':wink:',
-	':sad:',
-	':slant:',
-	':mad:',
-	':p',
-	':P',
 	':trout:',
-	':x',
-	':X',
-	':ci:'
+	':ci:',
+
+	':angry:',
+	':biggrin:',
+	':blink:',
+	':blush:',
+	':blushing:',
+	':bored:',
+	':closedeyes:',
+	':confused:',
+	':cool:',
+	':crying:',
+	':cursing:',
+	':drool:',
+	':glare:',
+	':huh:',
+	':laugh:',
+	':lol:',
+	':mad:',
+	':mellow:',
+	':ohmy:',
+	':rolleyes:',
+	':sad:',
+	':scared:',
+	':sleep:',
+	':smile:',
+	':sneaky:',
+	':thumbdown:',
+	':thumbup:',
+	':thumbup1:',
+	':tongue:',
+	':tonguesmile:',
+	':tt1:',
+	':tt2:',
+	':unsure:',
+	':w00t:',
+	':woot:',
+	':wink:',
+	':wub:'
 );
 
 $disp = array();
@@ -46,6 +74,8 @@ foreach($array as $tag)
 }
 
 echo getTable($disp);
+
+echo '<p/>In your forum posts, use the text on the left side to display the image on the right. All tags are case insensitive.';
 
 update_session_action(407, '', 'Smilies');
 
