@@ -56,7 +56,6 @@ $array = array(
 	':tt2:',
 	':unsure:',
 	':w00t:',
-	':woot:',
 	':wink:',
 	':wub:'
 );
