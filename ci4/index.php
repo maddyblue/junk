@@ -92,7 +92,7 @@ else
 {
 	if($aval)
 	{
-		$a = ARC_HOME_MOD . ARC_SECTION_DIR . $aval . '.php';
+		$a = ARC_HOME_MOD . ARC_SECTION_DIR . ACTION . '.php';
 
 		if(file_exists($a))
 		{
