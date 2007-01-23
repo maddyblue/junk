@@ -66,17 +66,19 @@ for($i = 0; $i < count($res); $i++)
 
 if(ADMIN)
 {
+	echo '<p/><hr/><p/><b>Stats viewable by Administrators:</b>';
+
+	if($db->type == 'mysql')
+	{
+		$trunc1 = 'truncate(';
+		$trunc2 = ', 0)';
+	}
+	else
+		$trunc1 = $trunc2 = '';
+
 	if(MODULE_PODCAST)
 	{
-		echo '<p/><hr/><p/>Podcast stats:';
-
-		if($db->type == 'mysql' || true)
-		{
-			$trunc1 = 'truncate(';
-			$trunc2 = ', 0)';
-		}
-		else
-			$trunc1 = $trunc2 = '';
+		echo '<p/>Podcast stats:';
 
 		$res = $db->query('select stats_podcast_podcast as p, ' . $trunc1 . 'stats_podcast_timestamp/' . $SecPerDay . $trunc2 . ' as s, count(*) as count, podcast_title as t from stats_podcast left join podcast on stats_podcast_podcast=podcast_id group by p, s, t order by s desc, p desc limit 30');
 		$table = array(array('Date', 'Podcast', 'Downloads'));
@@ -95,7 +97,7 @@ if(ADMIN)
 		echo '<p/>Total podcast downloads: ' . $res[0]['data_val_int'];
 	}
 
-	echo '<p/><hr/><p/>RSS stats:';
+	echo '<p/>RSS stats:';
 
 	$res = $db->query('select forum_forum_name as t, stats_rss_rss as p, ' . $trunc1 . 'stats_rss_timestamp/' . $SecPerDay . $trunc2 . ' as s, count(*) as count from stats_rss left join forum_forum on forum_forum_id=stats_rss_rss group by p, s, t order by s desc, p desc limit 30');
 	$table = array(array('Date', 'RSS Feed', 'Hits'));
