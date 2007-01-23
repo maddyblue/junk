@@ -70,7 +70,15 @@ if(ADMIN)
 	{
 		echo '<p/><hr/><p/>Podcast stats:';
 
-		$res = $db->query('select stats_podcast_podcast as p, stats_podcast_timestamp/' . $SecPerDay . ' as s, count(*) as count, podcast_title as t from stats_podcast left join podcast on stats_podcast_podcast=podcast_id group by p, s, t order by s desc, p desc limit 30');
+		if($db->type == 'mysql' || true)
+		{
+			$trunc1 = 'truncate(';
+			$trunc2 = ', 0)';
+		}
+		else
+			$trunc1 = $trunc2 = '';
+
+		$res = $db->query('select stats_podcast_podcast as p, ' . $trunc1 . 'stats_podcast_timestamp/' . $SecPerDay . $trunc2 . ' as s, count(*) as count, podcast_title as t from stats_podcast left join podcast on stats_podcast_podcast=podcast_id group by p, s, t order by s desc, p desc limit 30');
 		$table = array(array('Date', 'Podcast', 'Downloads'));
 
 		for($i = 0; $i < count($res); $i++)
@@ -89,7 +97,7 @@ if(ADMIN)
 
 	echo '<p/><hr/><p/>RSS stats:';
 
-	$res = $db->query('select forum_forum_name as t, stats_rss_rss as p, stats_rss_timestamp/' . $SecPerDay . ' as s, count(*) as count from stats_rss left join forum_forum on forum_forum_id=stats_rss_rss group by p, s, t order by s desc, p desc limit 30');
+	$res = $db->query('select forum_forum_name as t, stats_rss_rss as p, ' . $trunc1 . 'stats_rss_timestamp/' . $SecPerDay . $trunc2 . ' as s, count(*) as count from stats_rss left join forum_forum on forum_forum_id=stats_rss_rss group by p, s, t order by s desc, p desc limit 30');
 	$table = array(array('Date', 'RSS Feed', 'Hits'));
 
 	for($i = 0; $i < count($res); $i++)
