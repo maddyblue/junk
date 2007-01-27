@@ -68,14 +68,15 @@ if($p)
 				'<itunes:subtitle>' . decode($res[$i]['podcast_subtitle']) . '</itunes:subtitle>' .
 				'<itunes:summary>' . decode($res[$i]['podcast_description']) . '</itunes:summary>' .
 				'<enclosure ' .
-					'url="' . ARC_WWW_ADDR . SECTION_PODCAST . '/download.php?p=' . $res[$i]['podcast_id'] . '" ' .
+					//'url="' . ARC_WWW_ADDR . SECTION_PODCAST . '/download.php?p=' . $res[$i]['podcast_id'] . '" ' .
+					'url="' . ARC_WWW_ADDR . SECTION_PODCAST . '/data/' . decode($res[$i]['podcast_location']) . '" ' .
 					'type="' . decode($res[$i]['podcast_type']) . '" ' .
 					'length="' . decode($res[$i]['podcast_filesize']) . '"/>' .
 				'<guid>' . $res[$i]['podcast_id'] . '</guid>' .
 				'<pubDate>' . date('D, j M Y H:i:s', $res[$i]['podcast_date']) . ' GMT</pubDate>' .
 				'<itunes:duration>' . decode($res[$i]['podcast_length']) . '</itunes:duration>' .
 				'<itunes:keywords>' . decode($res[$i]['podcast_keywords']) . '</itunes:keywords>' .
-				'<itunes:explicit>clean</itunes:explicit>' .
+				'<itunes:explicit>' . PODCAST_EXPLICIT . '</itunes:explicit>' .
 			'</item>';
 	}
 }
