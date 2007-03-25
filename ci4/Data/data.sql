@@ -22,11 +22,13 @@ delete from site;
 delete from skin;
 delete from town;
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('abilitytype', 'abilitytype_id'), 30, true);
+SET escape_string_warning = off;
 COPY abilitytype (abilitytype_id, abilitytype_name, abilitytype_desc) FROM stdin;
+SELECT pg_catalog.setval('abilitytype_abilitytype_id_seq', 30, true);
+SET search_path = public, pg_catalog;
 1	Black Magic	Damaging magic.
 2	White Magic	Healing magic.
 8	Tactic	Other battles abilities excluding healing and attacking.
@@ -54,11 +56,13 @@ COPY abilitytype (abilitytype_id, abilitytype_name, abilitytype_desc) FROM stdin
 30	Necromancy	
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('area', 'area_id'), 26, true);
+SET escape_string_warning = off;
 COPY area (area_id, area_name, area_desc, area_order) FROM stdin;
+SELECT pg_catalog.setval('area_area_id_seq', 26, true);
+SET search_path = public, pg_catalog;
 1	Swamps	Step on ants and kill small rodents.	1
 2	Middle Ocean	Sail across the ocean and fight the monsters that climb on board.	3
 3	Long Plains	Step on big ants and big rodents.	2
@@ -87,11 +91,13 @@ COPY area (area_id, area_name, area_desc, area_order) FROM stdin;
 26	Nether Plane	You cannot win.	150
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('"domain"', 'domain_id'), 6, true);
+SET escape_string_warning = off;
 COPY "domain" (domain_id, domain_name, domain_abrev, domain_expw_time, domain_expw_max) FROM stdin;
+SELECT pg_catalog.setval('domain_domain_id_seq', 6, true);
+SET search_path = public, pg_catalog;
 1	Defenestration	def	2	5
 2	Electrocution	elec	1	10
 3	Starvation	star	4	5
@@ -100,11 +106,13 @@ COPY "domain" (domain_id, domain_name, domain_abrev, domain_expw_time, domain_ex
 6	Suffocation	suf	2	10
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipmentclass', 'equipmentclass_id'), 11, true);
+SET escape_string_warning = off;
 COPY equipmentclass (equipmentclass_id, equipmentclass_name) FROM stdin;
+SELECT pg_catalog.setval('equipmentclass_equipmentclass_id_seq', 11, true);
+SET search_path = public, pg_catalog;
 1	Ring
 2	Hand&nbsp;(Main)
 3	Hand&nbsp;(Offhand)
@@ -118,11 +126,13 @@ COPY equipmentclass (equipmentclass_id, equipmentclass_name) FROM stdin;
 11	Neck
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipmenttype', 'equipmenttype_id'), 18, true);
+SET escape_string_warning = off;
 COPY equipmenttype (equipmenttype_id, equipmenttype_name) FROM stdin;
+SELECT pg_catalog.setval('equipmenttype_equipmenttype_id_seq', 18, true);
+SET search_path = public, pg_catalog;
 1	ring
 2	sword
 3	dagger
@@ -143,28 +153,34 @@ COPY equipmenttype (equipmenttype_id, equipmenttype_name) FROM stdin;
 18	katana
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('event', 'event_id'), 2, true);
+SET escape_string_warning = off;
 COPY event (event_id, event_name, event_code, event_desc) FROM stdin;
+SELECT pg_catalog.setval('event_event_id_seq', 2, true);
+SET search_path = public, pg_catalog;
 1	Job&nbsp;Wages	jobWages($id, $last);	Once every day (24 hours), players recieve a job wage, depending on their job. The domain the player is in does not matter. Wages are every 24 hours, regardless of domain speed.
 2	EXPW&nbsp;Decrease	expwDecrease($id, $last);	Decrease expw by all players by one in each domain that needs it.
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('group_def', 'group_def_id'), 1, true);
+SET escape_string_warning = off;
 COPY group_def (group_def_id, group_def_name, group_def_admin, group_def_news, group_def_mod) FROM stdin;
+SELECT pg_catalog.setval('group_def_group_def_id_seq', 1, true);
+SET search_path = public, pg_catalog;
 1	Administrators	1	1	1
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('house', 'house_id'), 17, true);
+SET escape_string_warning = off;
 COPY house (house_id, house_name, house_cost, house_lv, house_hp, house_mp, house_str, house_mag, house_def, house_mgd, house_agl, house_acc, house_money) FROM stdin;
+SELECT pg_catalog.setval('house_house_id_seq', 17, true);
+SET search_path = public, pg_catalog;
 1	Shack	0	0	0	0	0	0	0	0	0	0	0
 2	Cottage	4000	10	0	0	20	0	10	0	0	0	-5
 3	Townhouse	5000	10	0	0	0	20	0	10	0	0	-5
@@ -184,20 +200,24 @@ COPY house (house_id, house_name, house_cost, house_lv, house_hp, house_mp, hous
 17	Manor House	60000	62	15	15	65	65	50	50	0	0	-38
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('item', 'item_id'), 2, true);
+SET escape_string_warning = off;
 COPY item (item_id, item_name, item_desc, item_usebattle, item_useworld, item_codebattle, item_codeworld, item_cost, item_sellable) FROM stdin;
+SELECT pg_catalog.setval('item_item_id_seq', 2, true);
+SET search_path = public, pg_catalog;
 1	Potion	Restore 100 HP to target.	t	f	echo '<p/>' . $src->name . ' uses a potion on ' . $dest->name . '.';\nbattleHeal($dest, 100);		100	t
 2	High Potion	Restores 250 HP to target.	t	f	echo '<p/>' . $src->name . ' uses a potion on ' . $dest->name . '.';\nbattleHeal($dest, 100);		500	t
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('job', 'job_id'), 29, true);
+SET escape_string_warning = off;
 COPY job (job_id, job_name, job_gender, job_stat_hp, job_stat_mp, job_stat_str, job_stat_mag, job_stat_def, job_stat_mgd, job_stat_agl, job_stat_acc, job_level_hp, job_level_mp, job_level_str, job_level_mag, job_level_def, job_level_mgd, job_level_agl, job_level_acc, job_wage, job_desc) FROM stdin;
+SELECT pg_catalog.setval('job_job_id_seq', 29, true);
+SET search_path = public, pg_catalog;
 1	Citizen	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	The humble beginning of every adventurer as a common citizen or Crescent Island.
 2	Squire	0	5	0	0	0	5	0	0	0	10	5	1	0	1	0	0	0	10	A knights apprentice, eagerly awaiting the advent of his own knighthood.
 3	Knight	0	5	0	5	0	0	5	0	0	10	5	2	2	2	1	0	1	20	A knight of the realm, protector of the innocent and slayer of large scaly beasts.
@@ -226,11 +246,13 @@ COPY job (job_id, job_name, job_gender, job_stat_hp, job_stat_mp, job_stat_str, 
 29	Summoner	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('monstertype', 'monstertype_id'), 10, true);
+SET escape_string_warning = off;
 COPY monstertype (monstertype_id, monstertype_name) FROM stdin;
+SELECT pg_catalog.setval('monstertype_monstertype_id_seq', 10, true);
+SET search_path = public, pg_catalog;
 1	Abberation
 2	Bug
 3	Beast
@@ -243,10 +265,10 @@ COPY monstertype (monstertype_id, monstertype_name) FROM stdin;
 10	Mechanical
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-COPY site (site_tag, site_orderid, site_type, site_main, site_secondary, site_link, site_section, site_logged, site_admin, site_comment) FROM stdin;
+SET escape_string_warning = off;
 ADMIN_SECTION_NAV	1	link	Forum Permissions		'a=forum-permissions'	SECTION_ADMIN	1	1	
 ADMIN_SECTION_NAV	2	link	Manage Forums		'a=manage-forums'	SECTION_ADMIN	1	1	
 ADMIN_SECTION_NAV	3	link	Manage Groups		'a=manage-groups'	SECTION_ADMIN	1	1	
@@ -258,6 +280,7 @@ ADMIN_SECTION_NAV	8	link	Sync Forums		'a=sync-forums'	SECTION_ADMIN	1	1
 ADMIN_SECTION_NAV	9	link	Sync Sequences		'a=sync-seqs'	SECTION_ADMIN	1	1	
 BATTLE_SECTION_NAV	10	link	Battle		'a=battle'	SECTION_BATTLE	1	0	
 BATTLE_SECTION_NAV	11	link	New Battle		'a=newbattle'	SECTION_BATTLE	1	0	
+COPY site (site_tag, site_orderid, site_type, site_main, site_secondary, site_link, site_section, site_logged, site_admin, site_comment) FROM stdin;
 FORUM_SECTION_NAV	10	link	Search		'a=search'	SECTION_FORUM	1	0	
 FORUM_SECTION_NAV	11	link	Smilies		'a=smilies'	SECTION_FORUM	0	0	
 FORUM_SECTION_NAV	12	link	Tag List		'a=taglist'	SECTION_FORUM	0	0	
@@ -299,6 +322,7 @@ NAV	19	link	[Login]		'a=login&r=' . encode($_SERVER['REQUEST_URI'])	SECTION_USER
 NAV	19	link	[Logout]		'a=logout'	SECTION_USER	1	0	
 PODCAST_SECTION_NAV	1	link	New Podcast		'a=new-podcast'	SECTION_PODCAST	1	1	
 PODCAST_SECTION_NAV	1	link	View Podcasts		'a=view-podcasts'	SECTION_PODCAST	0	0	
+SET search_path = public, pg_catalog;
 USER_SECTION_NAV	10	link	My Info		'a=viewuserdetails&user=' . ID	SECTION_USER	1	0	
 USER_SECTION_NAV	11	link	Register New User		'a=newuser'	SECTION_USER	-1	0	
 USER_SECTION_NAV	12	link	Remote Information		'a=info'	SECTION_USER	0	0	
@@ -317,10 +341,12 @@ _USER	0	eval	makeLink(decode($USER['user_name']), 'a=viewuserdetails', SECTION_U
 _WHOSONLINE	0	eval	getNumActiveUsers() . ' users, ' . getNumActiveGuests() . ' guests';				0	0	
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
+SET escape_string_warning = off;
 COPY skin (skin_name, skin_creator, skin_www) FROM stdin;
+SET search_path = public, pg_catalog;
 blueleaves	growldesign	http://www.growldesign.co.uk/
 flange	Technology Directory	http://www.alltechnologydirectory.com
 kuro5hin	rusty	http://www.kuro5hin.org/
@@ -328,11 +354,13 @@ monobook	MediaWiki	http://wikipedia.sourceforge.net/
 redux	ubik	http://werdizen.com/
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('town', 'town_id'), 17, true);
+SET escape_string_warning = off;
 COPY town (town_id, town_name, town_lv, town_desc, town_item_min_lv, town_item_max_lv, town_reqs, town_reqs_desc) FROM stdin;
+SELECT pg_catalog.setval('town_town_id_seq', 17, true);
+SET search_path = public, pg_catalog;
 1	Midgar	0	A run-down, old slum.	0	0		
 2	Narshe	0	A forgotten mining town.	0	0		
 3	Cosmo Canyon	5	Cosmo Canyon is the training place of young warriors. Trained monks are very strong.	0	0		
@@ -352,11 +380,13 @@ COPY town (town_id, town_name, town_lv, town_desc, town_item_min_lv, town_item_m
 17	Kakariko Village	175	Watch out for those chickens... o.O	0	0		
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('ability', 'ability_id'), 24, true);
+SET escape_string_warning = off;
 COPY ability (ability_id, ability_name, ability_image, ability_type, ability_mp, ability_ap_cost_init, ability_ap_cost_level, ability_effect, ability_desc, ability_code) FROM stdin;
+SELECT pg_catalog.setval('ability_ability_id_seq', 24, true);
+SET search_path = public, pg_catalog;
 1	Retreat		8	0	10	5	You will leave the battle if your agility * rand(.5, lv) &gt; other's agility.	Discretion is the better part of valour and sometimes it is to your advantage to exercise this fact. Retreat allows you to withdraw from battle, if you can outrun your enemy, that is.	$r = $src->agl * drand(.5, $lv);\r\nif($r > $dest->agl)\r\n{\r\n $src->dead = 1;\r\n $db->query('delete from battle_entity where battle_entity_uid=' . $src->uid);\r\n if($src->type == ENTITY_PLAYER)\r\n  $db->query('update player set player_battle=0 where player_id=' . $src->id);\r\n echo '<p>' . $src->name . ' has retreated from battle.';\r\n $src->name = $src->name . ' [retreated]';\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' tried to retreat, but was not able to.';
 2	Errantry		8	0	10	10	If (the natural logarithm of your strength) < lv + rand(1, 3), your strength will be multiplied by 1.5 and you will attack. Otherwise nothing will happen.	Young Knights are often spirited on to greater feats of strength by their youthful exuberance, leading to a rush of adrenaline. While useful early on later it becomes useless as the knight relies more on finess than mindless attacking.	$ln = log($src->str);\r\n$r = drand(1, 3);\r\nif($ln < $r + $lv)\r\n{\r\n $src->str = (int)($src->str * 1.5);\r\n echo '<p>' . $src->name . ' has been errant, increasing their strength to ' . $src->str . '.';\r\n battleAttack($src, $dest);\r\n}\r\nelse\r\n echo '<p>' . $src->name . ' is not very errant...';
 3	Power Break		11	0	10	0	This decreased the enemy's str by at most 25%. The monster's level is subtracted from your level, and the difference multiplied by a random number is how much it decreased. If the amount is negative, nothing happens.	To thwart the enemies attack is to leave them unable to oppose your victory over them, Power Break reduces your opponants strength leaving them less capable of inflicting damage.	
@@ -377,11 +407,13 @@ COPY ability (ability_id, ability_name, ability_image, ability_type, ability_mp,
 24	Poison		1	0	10	0	Inflicts poison status on the enemy		
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('equipment', 'equipment_id'), 139, true);
+SET escape_string_warning = off;
 COPY equipment (equipment_id, equipment_name, equipment_image, equipment_stat_hp, equipment_stat_mp, equipment_stat_str, equipment_stat_mag, equipment_stat_def, equipment_stat_mgd, equipment_stat_agl, equipment_stat_acc, equipment_req_lv, equipment_req_str, equipment_req_mag, equipment_req_agl, equipment_req_gender, equipment_cost, equipment_desc, equipment_type, equipment_class, equipment_twohand) FROM stdin;
+SELECT pg_catalog.setval('equipment_equipment_id_seq', 139, true);
+SET search_path = public, pg_catalog;
 1	Small Knife	knife.gif	0	0	10	0	0	0	0	0	0	0	0	0	0	500	A small knife, not much to say about it. Can be used as a basic weapon, or to cut bread, whatever.	3	2	0
 2	Stronger Knife	knife.gif	0	0	15	0	0	0	0	0	0	0	0	0	0	750	The blade has been tempured to decrease flexability of the metal.	3	2	0
 3	Mythril Knife	knife.gif	0	0	20	0	0	0	0	0	0	0	0	0	0	1250	Made from the once thought to be rare Mythril ore, this knife is cheaper than the longer Mythril Dagger and sword.	3	2	0
@@ -522,11 +554,13 @@ COPY equipment (equipment_id, equipment_name, equipment_image, equipment_stat_hp
 139	Danger Dagger	knife.gif	0	0	65	0	-25	0	0	0	0	0	0	0	0	12500	Due to the lack of hand guard, this dagger lowers defence, you dont want to attempt stabbing with this, you might slice your fingers off.	3	2	0
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-SELECT pg_catalog.setval(pg_catalog.pg_get_serial_sequence('monster', 'monster_id'), 112, true);
+SET escape_string_warning = off;
 COPY monster (monster_id, monster_name, monster_image, monster_hp, monster_mp, monster_str, monster_mag, monster_def, monster_mgd, monster_agl, monster_acc, monster_lv, monster_exp, monster_gil, monster_type, monster_desc) FROM stdin;
+SELECT pg_catalog.setval('monster_monster_id_seq', 112, true);
+SET search_path = public, pg_catalog;
 1	Small Rodent	SmallRodent.gif	55	5	15	5	10	5	10	10	1	20	25	3	
 2	Snake	Snake.gif	75	5	25	5	5	0	10	10	1	20	25	3	
 3	Sea Wasp	SeaWasp.gif	195	11	65	20	60	25	12	12	5	12	50	2	
@@ -641,10 +675,12 @@ COPY monster (monster_id, monster_name, monster_image, monster_hp, monster_mp, m
 112	Ultimate Being		65535	65535	65535	65535	65535	65535	85	85	150	50	1	1	
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
+SET escape_string_warning = off;
 COPY cor_area_monster (cor_area, cor_monster) FROM stdin;
+SET search_path = public, pg_catalog;
 1	1
 1	2
 2	3
@@ -761,10 +797,12 @@ COPY cor_area_monster (cor_area, cor_monster) FROM stdin;
 26	112
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
+SET escape_string_warning = off;
 COPY cor_area_town (cor_area, cor_town) FROM stdin;
+SET search_path = public, pg_catalog;
 1	1
 1	2
 1	7
@@ -815,10 +853,12 @@ COPY cor_area_town (cor_area, cor_town) FROM stdin;
 26	17
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
+SET escape_string_warning = off;
 COPY cor_job_abilitytype (cor_job, cor_abilitytype) FROM stdin;
+SET search_path = public, pg_catalog;
 2	8
 3	11
 4	10
@@ -846,10 +886,12 @@ COPY cor_job_abilitytype (cor_job, cor_abilitytype) FROM stdin;
 29	16
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
+SET escape_string_warning = off;
 COPY cor_job_equipmenttype (cor_job, cor_equipmenttype) FROM stdin;
+SET search_path = public, pg_catalog;
 1	11
 1	3
 2	10
@@ -1018,10 +1060,12 @@ COPY cor_job_equipmenttype (cor_job, cor_equipmenttype) FROM stdin;
 29	4
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
+SET escape_string_warning = off;
 COPY cor_job_joblv (cor_job, cor_job_req, cor_joblv) FROM stdin;
+SET search_path = public, pg_catalog;
 2	1	5
 3	2	10
 4	5	15
@@ -1052,8 +1096,10 @@ COPY cor_job_joblv (cor_job, cor_job_req, cor_joblv) FROM stdin;
 29	12	15
 \.
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
+SET escape_string_warning = off;
 COPY cor_monster_drop (cor_monster, cor_drop, cor_type) FROM stdin;
+SET search_path = public, pg_catalog;
 \.

@@ -3,11 +3,13 @@
 --
 
 SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET escape_string_warning = off;
 
 --
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: _postgresql
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON SCHEMA public IS 'Standard public schema';
@@ -20,11 +22,11 @@ SET default_tablespace = '';
 SET default_with_oids = true;
 
 --
--- Name: ability; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: ability; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE ability (
-    ability_id bigserial NOT NULL,
+    ability_id bigint NOT NULL,
     ability_name character varying(100),
     ability_image character varying(50),
     ability_type bigint DEFAULT (0)::bigint,
@@ -38,22 +40,58 @@ CREATE TABLE ability (
 
 
 --
--- Name: abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: ability_ability_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE ability_ability_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: ability_ability_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE ability_ability_id_seq OWNED BY ability.ability_id;
+
+
+--
+-- Name: abilitytype; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE abilitytype (
-    abilitytype_id bigserial NOT NULL,
+    abilitytype_id bigint NOT NULL,
     abilitytype_name character varying(100),
     abilitytype_desc text
 );
 
 
 --
--- Name: area; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: abilitytype_abilitytype_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE abilitytype_abilitytype_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: abilitytype_abilitytype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE abilitytype_abilitytype_id_seq OWNED BY abilitytype.abilitytype_id;
+
+
+--
+-- Name: area; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE area (
-    area_id bigserial NOT NULL,
+    area_id bigint NOT NULL,
     area_name character varying(100),
     area_desc text,
     area_order integer DEFAULT 0
@@ -61,11 +99,29 @@ CREATE TABLE area (
 
 
 --
--- Name: battle; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: area_area_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE area_area_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: area_area_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE area_area_id_seq OWNED BY area.area_id;
+
+
+--
+-- Name: battle; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE battle (
-    battle_id bigserial NOT NULL,
+    battle_id bigint NOT NULL,
     battle_start bigint DEFAULT (0)::bigint,
     battle_end bigint DEFAULT (0)::bigint,
     battle_area bigint DEFAULT (0)::bigint
@@ -73,11 +129,30 @@ CREATE TABLE battle (
 
 
 --
--- Name: battle_entity; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: battle_battle_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE battle_battle_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: battle_battle_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE battle_battle_id_seq OWNED BY battle.battle_id;
+
+
+--
+-- Name: battle_entity; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE battle_entity (
-    battle_entity_uid bigserial NOT NULL,
+    battle_entity_uid bigint NOT NULL,
     battle_entity_battle bigint DEFAULT (0)::bigint,
     battle_entity_id bigint DEFAULT (0)::bigint,
     battle_entity_type integer DEFAULT 0,
@@ -100,11 +175,30 @@ CREATE TABLE battle_entity (
 
 
 --
--- Name: battle_timer; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: battle_entity_battle_entity_uid_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE battle_entity_battle_entity_uid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: battle_entity_battle_entity_uid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE battle_entity_battle_entity_uid_seq OWNED BY battle_entity.battle_entity_uid;
+
+
+--
+-- Name: battle_timer; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE battle_timer (
-    battle_timer_id bigserial NOT NULL,
+    battle_timer_id bigint NOT NULL,
     battle_timer_uid bigint DEFAULT (0)::bigint,
     battle_timer_turns integer DEFAULT 0,
     battle_timer_when integer DEFAULT 0,
@@ -114,7 +208,26 @@ CREATE TABLE battle_timer (
 
 
 --
--- Name: cor_area_monster; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: battle_timer_battle_timer_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE battle_timer_battle_timer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: battle_timer_battle_timer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE battle_timer_battle_timer_id_seq OWNED BY battle_timer.battle_timer_id;
+
+
+--
+-- Name: cor_area_monster; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE cor_area_monster (
@@ -124,7 +237,7 @@ CREATE TABLE cor_area_monster (
 
 
 --
--- Name: cor_area_town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: cor_area_town; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE cor_area_town (
@@ -134,7 +247,7 @@ CREATE TABLE cor_area_town (
 
 
 --
--- Name: cor_job_abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: cor_job_abilitytype; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE cor_job_abilitytype (
@@ -144,7 +257,7 @@ CREATE TABLE cor_job_abilitytype (
 
 
 --
--- Name: cor_job_equipmenttype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: cor_job_equipmenttype; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE cor_job_equipmenttype (
@@ -154,7 +267,7 @@ CREATE TABLE cor_job_equipmenttype (
 
 
 --
--- Name: cor_job_joblv; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: cor_job_joblv; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE cor_job_joblv (
@@ -165,7 +278,7 @@ CREATE TABLE cor_job_joblv (
 
 
 --
--- Name: cor_monster_drop; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: cor_monster_drop; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE cor_monster_drop (
@@ -176,7 +289,7 @@ CREATE TABLE cor_monster_drop (
 
 
 --
--- Name: data; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: data; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE data (
@@ -187,11 +300,11 @@ CREATE TABLE data (
 
 
 --
--- Name: domain; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: domain; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE "domain" (
-    domain_id bigserial NOT NULL,
+    domain_id bigint NOT NULL,
     domain_name character varying(100),
     domain_abrev character varying(5),
     domain_expw_time integer DEFAULT 0,
@@ -200,11 +313,29 @@ CREATE TABLE "domain" (
 
 
 --
--- Name: equipment; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: domain_domain_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE domain_domain_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: domain_domain_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE domain_domain_id_seq OWNED BY "domain".domain_id;
+
+
+--
+-- Name: equipment; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE equipment (
-    equipment_id bigserial NOT NULL,
+    equipment_id bigint NOT NULL,
     equipment_name character varying(100),
     equipment_image character varying(100),
     equipment_stat_hp integer DEFAULT 0,
@@ -229,31 +360,85 @@ CREATE TABLE equipment (
 
 
 --
--- Name: equipmentclass; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: equipment_equipment_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE equipment_equipment_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: equipment_equipment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE equipment_equipment_id_seq OWNED BY equipment.equipment_id;
+
+
+--
+-- Name: equipmentclass; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE equipmentclass (
-    equipmentclass_id bigserial NOT NULL,
+    equipmentclass_id bigint NOT NULL,
     equipmentclass_name character varying(25)
 );
 
 
 --
--- Name: equipmenttype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: equipmentclass_equipmentclass_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE equipmentclass_equipmentclass_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: equipmentclass_equipmentclass_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE equipmentclass_equipmentclass_id_seq OWNED BY equipmentclass.equipmentclass_id;
+
+
+--
+-- Name: equipmenttype; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE equipmenttype (
-    equipmenttype_id bigserial NOT NULL,
+    equipmenttype_id bigint NOT NULL,
     equipmenttype_name character varying(100)
 );
 
 
 --
--- Name: event; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: equipmenttype_equipmenttype_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE equipmenttype_equipmenttype_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: equipmenttype_equipmenttype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE equipmenttype_equipmenttype_id_seq OWNED BY equipmenttype.equipmenttype_id;
+
+
+--
+-- Name: event; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE event (
-    event_id bigserial NOT NULL,
+    event_id bigint NOT NULL,
     event_name character varying(100),
     event_code text,
     event_desc text
@@ -261,7 +446,25 @@ CREATE TABLE event (
 
 
 --
--- Name: eventlog; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: event_event_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE event_event_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: event_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE event_event_id_seq OWNED BY event.event_id;
+
+
+--
+-- Name: eventlog; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE eventlog (
@@ -271,11 +474,11 @@ CREATE TABLE eventlog (
 
 
 --
--- Name: forum_forum; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_forum; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE forum_forum (
-    forum_forum_id bigserial NOT NULL,
+    forum_forum_id bigint NOT NULL,
     forum_forum_name character varying(100),
     forum_forum_desc character varying(100),
     forum_forum_type integer DEFAULT 0,
@@ -288,7 +491,26 @@ CREATE TABLE forum_forum (
 
 
 --
--- Name: forum_mod; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_forum_forum_forum_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE forum_forum_forum_forum_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: forum_forum_forum_forum_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE forum_forum_forum_forum_id_seq OWNED BY forum_forum.forum_forum_id;
+
+
+--
+-- Name: forum_mod; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE forum_mod (
@@ -298,7 +520,7 @@ CREATE TABLE forum_mod (
 
 
 --
--- Name: forum_perm; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_perm; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE forum_perm (
@@ -308,16 +530,35 @@ CREATE TABLE forum_perm (
     forum_perm_thread integer DEFAULT 0,
     forum_perm_post integer DEFAULT 0,
     forum_perm_mod integer DEFAULT 0,
-    forum_perm_id bigserial NOT NULL
+    forum_perm_id bigint NOT NULL
 );
 
 
 --
--- Name: forum_post; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_perm_forum_perm_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE forum_perm_forum_perm_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: forum_perm_forum_perm_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE forum_perm_forum_perm_id_seq OWNED BY forum_perm.forum_perm_id;
+
+
+--
+-- Name: forum_post; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE forum_post (
-    forum_post_id bigserial NOT NULL,
+    forum_post_id bigint NOT NULL,
     forum_post_thread bigint DEFAULT (0)::bigint,
     forum_post_text text,
     forum_post_text_parsed text,
@@ -330,11 +571,30 @@ CREATE TABLE forum_post (
 
 
 --
--- Name: forum_thread; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_post_forum_post_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE forum_post_forum_post_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: forum_post_forum_post_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE forum_post_forum_post_id_seq OWNED BY forum_post.forum_post_id;
+
+
+--
+-- Name: forum_thread; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE forum_thread (
-    forum_thread_id bigserial NOT NULL,
+    forum_thread_id bigint NOT NULL,
     forum_thread_forum bigint DEFAULT (0)::bigint,
     forum_thread_title character varying(100),
     forum_thread_user bigint DEFAULT (0)::bigint,
@@ -348,7 +608,26 @@ CREATE TABLE forum_thread (
 
 
 --
--- Name: forum_view; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_thread_forum_thread_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE forum_thread_forum_thread_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: forum_thread_forum_thread_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE forum_thread_forum_thread_id_seq OWNED BY forum_thread.forum_thread_id;
+
+
+--
+-- Name: forum_view; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE forum_view (
@@ -359,7 +638,7 @@ CREATE TABLE forum_view (
 
 
 --
--- Name: forum_word; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_word; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE forum_word (
@@ -369,11 +648,11 @@ CREATE TABLE forum_word (
 
 
 --
--- Name: group_def; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: group_def; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE group_def (
-    group_def_id bigserial NOT NULL,
+    group_def_id bigint NOT NULL,
     group_def_name character varying(100),
     group_def_admin integer DEFAULT 0,
     group_def_news integer DEFAULT 0,
@@ -382,7 +661,25 @@ CREATE TABLE group_def (
 
 
 --
--- Name: group_user; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: group_def_group_def_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE group_def_group_def_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: group_def_group_def_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE group_def_group_def_id_seq OWNED BY group_def.group_def_id;
+
+
+--
+-- Name: group_user; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE group_user (
@@ -392,11 +689,11 @@ CREATE TABLE group_user (
 
 
 --
--- Name: house; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: house; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE house (
-    house_id bigserial NOT NULL,
+    house_id bigint NOT NULL,
     house_name character varying(100),
     house_cost bigint DEFAULT (0)::bigint,
     house_lv integer DEFAULT 0,
@@ -413,11 +710,29 @@ CREATE TABLE house (
 
 
 --
--- Name: item; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: house_house_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE house_house_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: house_house_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE house_house_id_seq OWNED BY house.house_id;
+
+
+--
+-- Name: item; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE item (
-    item_id bigserial NOT NULL,
+    item_id bigint NOT NULL,
     item_name character varying(25),
     item_desc text,
     item_usebattle boolean,
@@ -430,11 +745,29 @@ CREATE TABLE item (
 
 
 --
--- Name: job; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: item_item_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE item_item_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: item_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE item_item_id_seq OWNED BY item.item_id;
+
+
+--
+-- Name: job; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE job (
-    job_id bigserial NOT NULL,
+    job_id bigint NOT NULL,
     job_name character varying(100),
     job_gender integer DEFAULT 0,
     job_stat_hp integer DEFAULT 0,
@@ -459,11 +792,29 @@ CREATE TABLE job (
 
 
 --
--- Name: monster; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: job_job_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE job_job_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: job_job_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE job_job_id_seq OWNED BY job.job_id;
+
+
+--
+-- Name: monster; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE monster (
-    monster_id bigserial NOT NULL,
+    monster_id bigint NOT NULL,
     monster_name character varying(100),
     monster_image character varying(100),
     monster_hp integer DEFAULT 0,
@@ -483,21 +834,57 @@ CREATE TABLE monster (
 
 
 --
--- Name: monstertype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: monster_monster_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE monster_monster_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: monster_monster_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE monster_monster_id_seq OWNED BY monster.monster_id;
+
+
+--
+-- Name: monstertype; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE monstertype (
-    monstertype_id bigserial NOT NULL,
+    monstertype_id bigint NOT NULL,
     monstertype_name character varying(100)
 );
 
 
 --
--- Name: player; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: monstertype_monstertype_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE monstertype_monstertype_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: monstertype_monstertype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE monstertype_monstertype_id_seq OWNED BY monstertype.monstertype_id;
+
+
+--
+-- Name: player; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE player (
-    player_id bigserial NOT NULL,
+    player_id bigint NOT NULL,
     player_name character varying(100),
     player_user bigint DEFAULT (0)::bigint,
     player_register bigint DEFAULT (0)::bigint,
@@ -532,11 +919,11 @@ CREATE TABLE player (
 
 
 --
--- Name: player_ability; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_ability; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE player_ability (
-    player_ability_id bigserial NOT NULL,
+    player_ability_id bigint NOT NULL,
     player_ability_player bigint DEFAULT (0)::bigint,
     player_ability_ability bigint DEFAULT (0)::bigint,
     player_ability_level integer DEFAULT 0,
@@ -546,7 +933,26 @@ CREATE TABLE player_ability (
 
 
 --
--- Name: player_abilitytype; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_ability_player_ability_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE player_ability_player_ability_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: player_ability_player_ability_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE player_ability_player_ability_id_seq OWNED BY player_ability.player_ability_id;
+
+
+--
+-- Name: player_abilitytype; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE player_abilitytype (
@@ -558,11 +964,11 @@ CREATE TABLE player_abilitytype (
 
 
 --
--- Name: player_equipment; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_equipment; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE player_equipment (
-    player_equipment_id bigserial NOT NULL,
+    player_equipment_id bigint NOT NULL,
     player_equipment_equipment bigint DEFAULT (0)::bigint,
     player_equipment_player bigint DEFAULT (0)::bigint,
     player_equipment_equipped integer DEFAULT 0
@@ -570,18 +976,56 @@ CREATE TABLE player_equipment (
 
 
 --
--- Name: player_item; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_equipment_player_equipment_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE player_equipment_player_equipment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: player_equipment_player_equipment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE player_equipment_player_equipment_id_seq OWNED BY player_equipment.player_equipment_id;
+
+
+--
+-- Name: player_item; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE player_item (
     player_item_player bigint,
-    player_item_id bigserial NOT NULL,
+    player_item_id bigint NOT NULL,
     player_item_item bigint DEFAULT (0)::bigint
 );
 
 
 --
--- Name: player_job; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_item_player_item_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE player_item_player_item_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: player_item_player_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE player_item_player_item_id_seq OWNED BY player_item.player_item_id;
+
+
+--
+-- Name: player_job; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE player_job (
@@ -593,11 +1037,30 @@ CREATE TABLE player_job (
 
 
 --
--- Name: pm; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_player_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE player_player_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: player_player_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE player_player_id_seq OWNED BY player.player_id;
+
+
+--
+-- Name: pm; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE pm (
-    pm_id bigserial NOT NULL,
+    pm_id bigint NOT NULL,
     pm_from bigint DEFAULT (0)::bigint,
     pm_to bigint DEFAULT (0)::bigint,
     pm_date bigint DEFAULT (0)::bigint,
@@ -607,14 +1070,33 @@ CREATE TABLE pm (
 );
 
 
+--
+-- Name: pm_pm_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pm_pm_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: pm_pm_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pm_pm_id_seq OWNED BY pm.pm_id;
+
+
 SET default_with_oids = false;
 
 --
--- Name: podcast; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: podcast; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE podcast (
-    podcast_id bigserial NOT NULL,
+    podcast_id bigint NOT NULL,
     podcast_date bigint,
     podcast_length character varying(25),
     podcast_size character varying(25),
@@ -629,10 +1111,29 @@ CREATE TABLE podcast (
 );
 
 
+--
+-- Name: podcast_podcast_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE podcast_podcast_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: podcast_podcast_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE podcast_podcast_id_seq OWNED BY podcast.podcast_id;
+
+
 SET default_with_oids = true;
 
 --
--- Name: session; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: session; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE "session" (
@@ -648,7 +1149,7 @@ CREATE TABLE "session" (
 
 
 --
--- Name: site; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: site; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE site (
@@ -666,7 +1167,7 @@ CREATE TABLE site (
 
 
 --
--- Name: skin; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: skin; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE skin (
@@ -677,7 +1178,7 @@ CREATE TABLE skin (
 
 
 --
--- Name: stats; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: stats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE stats (
@@ -692,7 +1193,7 @@ CREATE TABLE stats (
 SET default_with_oids = false;
 
 --
--- Name: stats_podcast; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: stats_podcast; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE stats_podcast (
@@ -703,7 +1204,7 @@ CREATE TABLE stats_podcast (
 
 
 --
--- Name: stats_rss; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: stats_rss; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE stats_rss (
@@ -716,11 +1217,11 @@ CREATE TABLE stats_rss (
 SET default_with_oids = true;
 
 --
--- Name: town; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: town; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE town (
-    town_id bigserial NOT NULL,
+    town_id bigint NOT NULL,
     town_name character varying(100),
     town_lv integer DEFAULT 0,
     town_desc text,
@@ -732,11 +1233,29 @@ CREATE TABLE town (
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: town_town_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE town_town_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: town_town_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE town_town_id_seq OWNED BY town.town_id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE users (
-    user_id bigserial NOT NULL,
+    user_id bigint NOT NULL,
     user_name character varying(100),
     user_pass character varying(100),
     user_email character varying(100),
@@ -759,7 +1278,229 @@ CREATE TABLE users (
 
 
 --
--- Name: ability_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE users_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE users_user_id_seq OWNED BY users.user_id;
+
+
+--
+-- Name: ability_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ability ALTER COLUMN ability_id SET DEFAULT nextval('ability_ability_id_seq'::regclass);
+
+
+--
+-- Name: abilitytype_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE abilitytype ALTER COLUMN abilitytype_id SET DEFAULT nextval('abilitytype_abilitytype_id_seq'::regclass);
+
+
+--
+-- Name: area_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE area ALTER COLUMN area_id SET DEFAULT nextval('area_area_id_seq'::regclass);
+
+
+--
+-- Name: battle_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE battle ALTER COLUMN battle_id SET DEFAULT nextval('battle_battle_id_seq'::regclass);
+
+
+--
+-- Name: battle_entity_uid; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE battle_entity ALTER COLUMN battle_entity_uid SET DEFAULT nextval('battle_entity_battle_entity_uid_seq'::regclass);
+
+
+--
+-- Name: battle_timer_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE battle_timer ALTER COLUMN battle_timer_id SET DEFAULT nextval('battle_timer_battle_timer_id_seq'::regclass);
+
+
+--
+-- Name: domain_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE "domain" ALTER COLUMN domain_id SET DEFAULT nextval('domain_domain_id_seq'::regclass);
+
+
+--
+-- Name: equipment_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE equipment ALTER COLUMN equipment_id SET DEFAULT nextval('equipment_equipment_id_seq'::regclass);
+
+
+--
+-- Name: equipmentclass_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE equipmentclass ALTER COLUMN equipmentclass_id SET DEFAULT nextval('equipmentclass_equipmentclass_id_seq'::regclass);
+
+
+--
+-- Name: equipmenttype_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE equipmenttype ALTER COLUMN equipmenttype_id SET DEFAULT nextval('equipmenttype_equipmenttype_id_seq'::regclass);
+
+
+--
+-- Name: event_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE event ALTER COLUMN event_id SET DEFAULT nextval('event_event_id_seq'::regclass);
+
+
+--
+-- Name: forum_forum_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE forum_forum ALTER COLUMN forum_forum_id SET DEFAULT nextval('forum_forum_forum_forum_id_seq'::regclass);
+
+
+--
+-- Name: forum_perm_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE forum_perm ALTER COLUMN forum_perm_id SET DEFAULT nextval('forum_perm_forum_perm_id_seq'::regclass);
+
+
+--
+-- Name: forum_post_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE forum_post ALTER COLUMN forum_post_id SET DEFAULT nextval('forum_post_forum_post_id_seq'::regclass);
+
+
+--
+-- Name: forum_thread_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE forum_thread ALTER COLUMN forum_thread_id SET DEFAULT nextval('forum_thread_forum_thread_id_seq'::regclass);
+
+
+--
+-- Name: group_def_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE group_def ALTER COLUMN group_def_id SET DEFAULT nextval('group_def_group_def_id_seq'::regclass);
+
+
+--
+-- Name: house_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE house ALTER COLUMN house_id SET DEFAULT nextval('house_house_id_seq'::regclass);
+
+
+--
+-- Name: item_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE item ALTER COLUMN item_id SET DEFAULT nextval('item_item_id_seq'::regclass);
+
+
+--
+-- Name: job_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE job ALTER COLUMN job_id SET DEFAULT nextval('job_job_id_seq'::regclass);
+
+
+--
+-- Name: monster_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE monster ALTER COLUMN monster_id SET DEFAULT nextval('monster_monster_id_seq'::regclass);
+
+
+--
+-- Name: monstertype_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE monstertype ALTER COLUMN monstertype_id SET DEFAULT nextval('monstertype_monstertype_id_seq'::regclass);
+
+
+--
+-- Name: player_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE player ALTER COLUMN player_id SET DEFAULT nextval('player_player_id_seq'::regclass);
+
+
+--
+-- Name: player_ability_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE player_ability ALTER COLUMN player_ability_id SET DEFAULT nextval('player_ability_player_ability_id_seq'::regclass);
+
+
+--
+-- Name: player_equipment_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE player_equipment ALTER COLUMN player_equipment_id SET DEFAULT nextval('player_equipment_player_equipment_id_seq'::regclass);
+
+
+--
+-- Name: player_item_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE player_item ALTER COLUMN player_item_id SET DEFAULT nextval('player_item_player_item_id_seq'::regclass);
+
+
+--
+-- Name: pm_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE pm ALTER COLUMN pm_id SET DEFAULT nextval('pm_pm_id_seq'::regclass);
+
+
+--
+-- Name: podcast_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE podcast ALTER COLUMN podcast_id SET DEFAULT nextval('podcast_podcast_id_seq'::regclass);
+
+
+--
+-- Name: town_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE town ALTER COLUMN town_id SET DEFAULT nextval('town_town_id_seq'::regclass);
+
+
+--
+-- Name: user_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_seq'::regclass);
+
+
+--
+-- Name: ability_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY ability
@@ -767,7 +1508,7 @@ ALTER TABLE ONLY ability
 
 
 --
--- Name: abilitytype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: abilitytype_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY abilitytype
@@ -775,7 +1516,7 @@ ALTER TABLE ONLY abilitytype
 
 
 --
--- Name: area_area_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: area_area_name_key; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY area
@@ -783,7 +1524,7 @@ ALTER TABLE ONLY area
 
 
 --
--- Name: area_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: area_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY area
@@ -791,7 +1532,7 @@ ALTER TABLE ONLY area
 
 
 --
--- Name: battle_entity_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: battle_entity_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY battle_entity
@@ -799,7 +1540,7 @@ ALTER TABLE ONLY battle_entity
 
 
 --
--- Name: battle_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: battle_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY battle
@@ -807,7 +1548,7 @@ ALTER TABLE ONLY battle
 
 
 --
--- Name: battle_timer_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: battle_timer_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY battle_timer
@@ -815,7 +1556,7 @@ ALTER TABLE ONLY battle_timer
 
 
 --
--- Name: domain_domain_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: domain_domain_name_key; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY "domain"
@@ -823,7 +1564,7 @@ ALTER TABLE ONLY "domain"
 
 
 --
--- Name: domain_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: domain_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY "domain"
@@ -831,7 +1572,7 @@ ALTER TABLE ONLY "domain"
 
 
 --
--- Name: equipment_equipment_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: equipment_equipment_name_key; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY equipment
@@ -839,7 +1580,7 @@ ALTER TABLE ONLY equipment
 
 
 --
--- Name: equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY equipment
@@ -847,7 +1588,7 @@ ALTER TABLE ONLY equipment
 
 
 --
--- Name: equipmentclass_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: equipmentclass_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY equipmentclass
@@ -855,7 +1596,7 @@ ALTER TABLE ONLY equipmentclass
 
 
 --
--- Name: equipmenttype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: equipmenttype_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY equipmenttype
@@ -863,7 +1604,7 @@ ALTER TABLE ONLY equipmenttype
 
 
 --
--- Name: event_event_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: event_event_name_key; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY event
@@ -871,7 +1612,7 @@ ALTER TABLE ONLY event
 
 
 --
--- Name: event_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: event_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY event
@@ -879,7 +1620,7 @@ ALTER TABLE ONLY event
 
 
 --
--- Name: forum_forum_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_forum_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY forum_forum
@@ -887,7 +1628,7 @@ ALTER TABLE ONLY forum_forum
 
 
 --
--- Name: forum_post_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_post_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY forum_post
@@ -895,7 +1636,7 @@ ALTER TABLE ONLY forum_post
 
 
 --
--- Name: forum_thread_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_thread_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY forum_thread
@@ -903,7 +1644,7 @@ ALTER TABLE ONLY forum_thread
 
 
 --
--- Name: group_def_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: group_def_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY group_def
@@ -911,7 +1652,7 @@ ALTER TABLE ONLY group_def
 
 
 --
--- Name: house_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: house_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY house
@@ -919,7 +1660,7 @@ ALTER TABLE ONLY house
 
 
 --
--- Name: item_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: item_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY item
@@ -927,7 +1668,7 @@ ALTER TABLE ONLY item
 
 
 --
--- Name: job_job_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: job_job_name_key; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY job
@@ -935,7 +1676,7 @@ ALTER TABLE ONLY job
 
 
 --
--- Name: job_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: job_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY job
@@ -943,7 +1684,7 @@ ALTER TABLE ONLY job
 
 
 --
--- Name: monster_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: monster_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY monster
@@ -951,7 +1692,7 @@ ALTER TABLE ONLY monster
 
 
 --
--- Name: monstertype_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: monstertype_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY monstertype
@@ -959,7 +1700,7 @@ ALTER TABLE ONLY monstertype
 
 
 --
--- Name: player_ability_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_ability_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY player_ability
@@ -967,7 +1708,7 @@ ALTER TABLE ONLY player_ability
 
 
 --
--- Name: player_equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_equipment_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY player_equipment
@@ -975,7 +1716,7 @@ ALTER TABLE ONLY player_equipment
 
 
 --
--- Name: player_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY player
@@ -983,7 +1724,7 @@ ALTER TABLE ONLY player
 
 
 --
--- Name: pm_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: pm_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY pm
@@ -991,7 +1732,7 @@ ALTER TABLE ONLY pm
 
 
 --
--- Name: session_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: session_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY "session"
@@ -999,7 +1740,7 @@ ALTER TABLE ONLY "session"
 
 
 --
--- Name: skin_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: skin_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY skin
@@ -1007,7 +1748,7 @@ ALTER TABLE ONLY skin
 
 
 --
--- Name: town_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: town_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY town
@@ -1015,7 +1756,7 @@ ALTER TABLE ONLY town
 
 
 --
--- Name: town_town_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: town_town_name_key; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY town
@@ -1023,7 +1764,7 @@ ALTER TABLE ONLY town
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
@@ -1031,7 +1772,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: users_user_name_key; Type: CONSTRAINT; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: users_user_name_key; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
@@ -1039,63 +1780,63 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: forum_word_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: forum_word_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX forum_word_index ON forum_word USING btree (forum_word_word);
 
 
 --
--- Name: player_user_domain; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: player_user_domain; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX player_user_domain ON player USING btree (player_user, player_domain);
 
 
 --
--- Name: pm_to; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: pm_to; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX pm_to ON pm USING btree (pm_to);
 
 
 --
--- Name: podcast_date; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: podcast_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX podcast_date ON podcast USING btree (podcast_date);
 
 
 --
--- Name: podcast_id; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: podcast_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX podcast_id ON podcast USING btree (podcast_id);
 
 
 --
--- Name: session_uid_current; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: session_uid_current; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX session_uid_current ON "session" USING btree (session_uid, session_current);
 
 
 --
--- Name: site_tag; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: site_tag; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX site_tag ON site USING hash (site_tag);
 
 
 --
--- Name: stats_timestamp_index; Type: INDEX; Schema: public; Owner: dolmant; Tablespace: 
+-- Name: stats_timestamp_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX stats_timestamp_index ON stats USING btree (stats_timestamp);
 
 
 --
--- Name: player_item_player_item_item_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+-- Name: player_item_player_item_item_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY player_item
@@ -1103,7 +1844,7 @@ ALTER TABLE ONLY player_item
 
 
 --
--- Name: player_item_player_item_player_fkey; Type: FK CONSTRAINT; Schema: public; Owner: dolmant
+-- Name: player_item_player_item_player_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY player_item
