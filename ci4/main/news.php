@@ -30,7 +30,7 @@ $res = $db->query($query);
 for($i = 0; $i < count($res); $i++)
 {
 	if($i)
-		echo '<p/>-----';
+		echo '<p/><hr/>';
 
 	echo '<p/><b>' . decode($res[$i]['forum_thread_title']) . '</b>';
 	echo '<br/>By ' . getUserlink($res[$i]['user_id'], decode($res[$i]['user_name'])) . ' on ' . getTime($res[$i]['forum_thread_date']) . ':';
