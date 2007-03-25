@@ -158,7 +158,7 @@ if(LOGGED)
 			$fail = true;
 		}
 
-		if(substr_count($sig, "\n") > 4)
+		if(substr_count(decode($sig), "\n") > 4)
 		{
 			echo '<p/>Signature has more than 5 lines.';
 			$fail = true;
@@ -171,7 +171,7 @@ if(LOGGED)
 		}
 
 		if($fail)
-			disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz);
+			disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle, $timeformat);
 		else
 		{
 			$db->query('update users set user_email=\'' . $email . '\', user_sig=\'' . $sig . '\', user_aim=\'' . $aim . '\', user_yahoo=\'' . $yahoo . '\', user_icq=\'' . $icq . '\', user_msn=\'' . $msn . '\', user_www=\'' . $www . '\', user_timezone=\'' . $tz . '\', user_battle_verbose=' . $battle . ', user_timeformat=\'' . $timeformat . '\' where user_id=' . ID);
