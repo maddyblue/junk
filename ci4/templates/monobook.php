@@ -10,7 +10,7 @@
 	</title>
 	<ARC_HEAD/>
 	<link rel="stylesheet" type="text/css" href="<ARC_TEMPLATE_DIR/>/main.css" />
-	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php"/>
+	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php" />
 </head>
 
 <body>
