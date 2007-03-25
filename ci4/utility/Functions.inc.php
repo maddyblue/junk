@@ -199,9 +199,6 @@ function createSiteString($parameters, $incr = 0, $useSecondary = false, $ignore
 {
 	global $USER;
 
-	/* Due to this use of extract, useSecondary and ignoreLink could just as
-	 * easily be specified in $parameters.
-	 */
 	$type      = $parameters[$incr]['site_type'];
 	$main      = $parameters[$incr]['site_main'];
 	$secondary = $parameters[$incr]['site_secondary'];
