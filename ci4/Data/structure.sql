@@ -495,7 +495,6 @@ CREATE TABLE forum_forum (
 --
 
 CREATE SEQUENCE forum_forum_forum_forum_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -575,7 +574,6 @@ CREATE TABLE forum_post (
 --
 
 CREATE SEQUENCE forum_post_forum_post_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -612,7 +610,6 @@ CREATE TABLE forum_thread (
 --
 
 CREATE SEQUENCE forum_thread_forum_thread_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -1282,7 +1279,6 @@ CREATE TABLE users (
 --
 
 CREATE SEQUENCE users_user_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
