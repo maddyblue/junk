@@ -53,34 +53,38 @@ class Database
 
 			mysql_select_db($params['database'], $this->handle);
 		}
-
-		return $this->handle;
+		else if($this->type == 'sqlite')
+		{
+			$this->handle = sqlite_open($params['database']);
+		}
 	}
 
-	/*	Disconnect: Closes a database connection
-	*/
+	/* Disconnect: Closes a database connection
+	 */
 
 	function disconnect()
 	{
-		if($this->type == 'postgre')
-			pg_close($this->handle);
-		else if($this->type == 'mysql')
-			mysql_close($this->handle);
+		switch($this->type)
+		{
+			case 'postgre': pg_close($this->handle); break;
+			case 'mysql': mysql_close($this->handle); break;
+			case 'sqlite': sqlite_close($this->handle); break;
+		}
 
 		$this->handle = null;
 	}
 
-	/*	ReadTable: Given a query, execute that query, and retrieve
-		all data in row/column format.
-
-		$query[0]['key1'] = 'value01';
-		$query[0]['key2'] = 'value02';
-		$query[1]['key1'] = 'value11';
-		etc.
-
-		Expected parameters:
-			Query - query to execute.
-	*/
+	/* ReadTable: Given a query, execute that query, and retrieve
+	 * all data in row/column format.
+	 *
+	 * $query[0]['key1'] = 'value01';
+	 * $query[0]['key2'] = 'value02';
+	 * $query[1]['key1'] = 'value11';
+	 * etc.
+	 *
+	 * Expected parameters:
+	 * Query - query to execute.
+	 */
 
 	function query($query, $expect_return = true)
 	{
@@ -131,6 +135,24 @@ class Database
 				mysql_free_result($res);
 			}
 		}
+		else if($this->type == 'sqlite')
+		{
+			$res = sqlite_query($this->handle, $query);
+
+			$s = sqlite_last_error($this->handle);
+
+			if($s > 0)
+			{
+				global $message;
+				$message .= '<div class="error">Error: ' . sqlite_error_string($s) . '
+					<br/>Query: <pre>' . $query . '</pre></div>';
+				$ret = false;
+			}
+			else if($expect_return && $res !== FALSE && sqlite_num_rows($res) > 0)
+			{
+				$ret = sqlite_fetch_all($res);
+			}
+		}
 
 		$end = gettimeofday();
 		$time = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
@@ -160,7 +182,11 @@ class Database
 			}
 			else if($this->type == 'mysql')
 			{
-				$ret = mysql_insert_id();
+				$ret = mysql_insert_id($this->type);
+			}
+			else if($this->type == 'sqlite')
+			{
+				$ret = sqlite_last_insert_rowid($this->type);
 			}
 		}
 
@@ -169,10 +195,12 @@ class Database
 
 	function escape_string($s)
 	{
-		if($this->type == 'postgre')
-			return pg_escape_string($s);
-		else if($this->type == 'mysql')
-			return mysql_real_escape_string($s, $this->handle);
+		switch($this->type)
+		{
+			case 'postgre': return pg_escape_string($s);
+			case 'mysql': return mysql_real_escape_string($s, $this->handle);
+			case 'sqlite': return sqlite_escape_string($s);
+		}
 	}
 }
 
