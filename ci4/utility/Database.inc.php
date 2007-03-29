@@ -21,7 +21,6 @@
 class Database
 {
 	var $handle = null;
-	var $resource;
 	var $type;
 
 	var $queries = array();
