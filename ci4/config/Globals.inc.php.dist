@@ -62,6 +62,7 @@ define('SECTION_GAME', 'game');
 define('SECTION_BATTLE', 'battle');
 define('SECTION_MANUAL', 'manual');
 define('SECTION_PODCAST', 'podcast');
+define('SECTION_CDDB', 'cddb');
 
 /* Preferences */
 
