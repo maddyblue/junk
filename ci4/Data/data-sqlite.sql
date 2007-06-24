@@ -1,0 +1,1496 @@
+delete from cor_area_monster;
+delete from cor_area_town;
+delete from cor_job_abilitytype;
+delete from cor_job_equipmenttype;
+delete from cor_job_joblv;
+delete from cor_monster_drop;
+delete from ability;
+delete from equipment;
+delete from monster;
+delete from abilitytype;
+delete from area;
+delete from domain;
+delete from equipmentclass;
+delete from equipmenttype;
+delete from event;
+delete from group_def;
+delete from house;
+delete from item;
+delete from job;
+delete from monstertype;
+delete from site;
+delete from skin;
+delete from town;
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: abilitytype_abilitytype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =30;
+
+
+--
+-- Data for Name: abilitytype; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO abilitytype VALUES (1, 'Black Magic', 'Damaging magic.');
+INSERT INTO abilitytype VALUES (2, 'White Magic', 'Healing magic.');
+INSERT INTO abilitytype VALUES (8, 'Tactic', 'Other battles abilities excluding healing and attacking.');
+INSERT INTO abilitytype VALUES (9, 'Archery', 'Anything dealing with bows and arrows or accuracy.');
+INSERT INTO abilitytype VALUES (10, 'Aura', 'Light that envelopes a Paladin which gives status and other bonuses.');
+INSERT INTO abilitytype VALUES (11, 'Sword Tech', 'Attacks with status lowering affects.');
+INSERT INTO abilitytype VALUES (12, 'Understudy', 'Studying under a greater mage, you can start to learn this powerful art, although sometimes it can be aggravating.');
+INSERT INTO abilitytype VALUES (13, 'Tracking', 'Use terrain to out maneuver your opponent.');
+INSERT INTO abilitytype VALUES (14, 'Protection', 'Training has shown you the different means of defending against a foe. But never forget that this does not always imply defense.');
+INSERT INTO abilitytype VALUES (15, 'Calling', '');
+INSERT INTO abilitytype VALUES (16, 'Summoning', '');
+INSERT INTO abilitytype VALUES (17, 'Raising', '');
+INSERT INTO abilitytype VALUES (18, 'Dark Sword Tech', '');
+INSERT INTO abilitytype VALUES (19, 'Dark Aura', '');
+INSERT INTO abilitytype VALUES (20, 'Thievery', '');
+INSERT INTO abilitytype VALUES (21, 'Smuggling', '');
+INSERT INTO abilitytype VALUES (22, 'Pirating', '');
+INSERT INTO abilitytype VALUES (23, 'Gambling', '');
+INSERT INTO abilitytype VALUES (24, 'Sleight of Hand', '');
+INSERT INTO abilitytype VALUES (25, 'Privateering', '');
+INSERT INTO abilitytype VALUES (26, 'Ninjitsu', '');
+INSERT INTO abilitytype VALUES (27, 'Bushido', '');
+INSERT INTO abilitytype VALUES (28, 'Assassination', '');
+INSERT INTO abilitytype VALUES (29, 'Lancing', '');
+INSERT INTO abilitytype VALUES (30, 'Necromancy', '');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: area_area_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =26;
+
+
+--
+-- Data for Name: area; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO area VALUES (1, 'Swamps', 'Step on ants and kill small rodents.', 1);
+INSERT INTO area VALUES (2, 'Middle Ocean', 'Sail across the ocean and fight the monsters that climb on board.', 3);
+INSERT INTO area VALUES (3, 'Long Plains', 'Step on big ants and big rodents.', 2);
+INSERT INTO area VALUES (4, 'Western Mountains', 'Hike through the mountains of the beautiful continent of Utai!', 4);
+INSERT INTO area VALUES (5, 'Beach Town Outskirts', 'Walk down the long beaches.', 5);
+INSERT INTO area VALUES (6, 'Ice Caverns', 'Bring your jacket and portable heaters cause this is gonna be a cold one.', 6);
+INSERT INTO area VALUES (7, 'Local Mountains', 'Bridges, treasure chests that have no apparent paths leading to them, huge ugly spiders waiting to kill you, rabid squirrels, and annoying bombs!  Ok, maybe I threw those squirrels in there...', 7);
+INSERT INTO area VALUES (8, 'Abandoned Garden', 'Watch out, those flowers just jump right out at you... no, not those, the ones you just walked into...', 8);
+INSERT INTO area VALUES (9, 'Underground', 'Go underground.', 9);
+INSERT INTO area VALUES (10, 'Haunted Cavern', 'The abandoned mine shafts of Crescent Island are filled with ghosts.', 11);
+INSERT INTO area VALUES (11, 'The Red Forest', 'Named after the strange color of the tree bark, sunsets here seem to bleed into the forest.', 15);
+INSERT INTO area VALUES (12, 'Underworld', 'Really far Underground.', 10);
+INSERT INTO area VALUES (13, 'The Void', 'Creatures can survive in nothing.', 20);
+INSERT INTO area VALUES (14, 'Middle of the Swamp', 'Watch your step or you''ll get your foot stuck in a monster!', 40);
+INSERT INTO area VALUES (15, 'The Dark', '...Bring your flashlight?', 50);
+INSERT INTO area VALUES (16, 'Elemental Factory', '*bzzt* looks like the alarm was turned off and the monsters are loose...', 60);
+INSERT INTO area VALUES (17, 'Thamasa', '', 70);
+INSERT INTO area VALUES (18, 'Valrash Marsh', 'Venture into a dangerous land... and meet creatures who want to kill you.', 80);
+INSERT INTO area VALUES (19, 'Pureland', 'Visit this divine land to gain enlightenment... just don''t expect it to come without a fight.', 90);
+INSERT INTO area VALUES (20, 'The Deep', 'Travel down into the deepest depths of the ocean to find a challenge. But be warned, few have lived to tell the tale of what dwells there.', 90);
+INSERT INTO area VALUES (21, 'Forbidden Peaks', 'Journey across the mountains of Crescent Island and discover some of the most dangerous creatures to ever cross this continent.', 95);
+INSERT INTO area VALUES (22, 'Mystic Caverns', 'The gathering place of all the elemental magics of order, the existance of this place is simply a legend.', 100);
+INSERT INTO area VALUES (23, 'Xenthar''s Dungeon', 'Explore a dungeon in search of treasure and experience. Be wary however, for as with any good dungeon this one is filled with monsters.', 101);
+INSERT INTO area VALUES (24, 'Boadicea''s Battlefield', 'Here lie the bodies of 80,000 soldiers who died fighting for independence. Watch your back, there''s always a vengeful ghost aflutter...', 120);
+INSERT INTO area VALUES (25, 'Schania', 'The beauty of this land is well guarded.', 105);
+INSERT INTO area VALUES (26, 'Nether Plane', 'You cannot win.', 150);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: domain_domain_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =6;
+
+
+--
+-- Data for Name: domain; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO domain VALUES (1, 'Defenestration', 'def', 2, 5);
+INSERT INTO domain VALUES (2, 'Electrocution', 'elec', 1, 10);
+INSERT INTO domain VALUES (3, 'Starvation', 'star', 4, 5);
+INSERT INTO domain VALUES (4, 'Combustion', 'comb', 1, 5);
+INSERT INTO domain VALUES (5, 'Torture', 'tort', 4, 10);
+INSERT INTO domain VALUES (6, 'Suffocation', 'suf', 2, 10);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: equipmentclass_equipmentclass_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =11;
+
+
+--
+-- Data for Name: equipmentclass; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO equipmentclass VALUES (1, 'Ring');
+INSERT INTO equipmentclass VALUES (2, 'Hand&nbsp;(Main)');
+INSERT INTO equipmentclass VALUES (3, 'Hand&nbsp;(Offhand)');
+INSERT INTO equipmentclass VALUES (4, 'Head');
+INSERT INTO equipmentclass VALUES (5, 'Legs');
+INSERT INTO equipmentclass VALUES (6, 'Feet');
+INSERT INTO equipmentclass VALUES (7, 'Arms');
+INSERT INTO equipmentclass VALUES (8, 'Gloves');
+INSERT INTO equipmentclass VALUES (9, 'Chest');
+INSERT INTO equipmentclass VALUES (10, 'Back');
+INSERT INTO equipmentclass VALUES (11, 'Neck');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: equipmenttype_equipmenttype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =18;
+
+
+--
+-- Data for Name: equipmenttype; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO equipmenttype VALUES (1, 'ring');
+INSERT INTO equipmenttype VALUES (2, 'sword');
+INSERT INTO equipmenttype VALUES (3, 'dagger');
+INSERT INTO equipmenttype VALUES (4, 'staff');
+INSERT INTO equipmenttype VALUES (5, 'bow');
+INSERT INTO equipmenttype VALUES (6, 'polearm');
+INSERT INTO equipmenttype VALUES (7, 'leather');
+INSERT INTO equipmenttype VALUES (8, 'mail');
+INSERT INTO equipmenttype VALUES (9, 'gun');
+INSERT INTO equipmenttype VALUES (10, 'shield');
+INSERT INTO equipmenttype VALUES (11, 'cloth');
+INSERT INTO equipmenttype VALUES (12, 'instrument');
+INSERT INTO equipmenttype VALUES (13, 'whip');
+INSERT INTO equipmenttype VALUES (14, 'knuckles');
+INSERT INTO equipmenttype VALUES (15, 'amulet');
+INSERT INTO equipmenttype VALUES (16, 'tool');
+INSERT INTO equipmenttype VALUES (17, 'cards');
+INSERT INTO equipmenttype VALUES (18, 'katana');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: event_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =2;
+
+
+--
+-- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO event VALUES (1, 'Job&nbsp;Wages', 'jobWages($id, $last);', 'Once every day (24 hours), players recieve a job wage, depending on their job. The domain the player is in does not matter. Wages are every 24 hours, regardless of domain speed.');
+INSERT INTO event VALUES (2, 'EXPW&nbsp;Decrease', 'expwDecrease($id, $last);', 'Decrease expw by all players by one in each domain that needs it.');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: group_def_group_def_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =1;
+
+
+--
+-- Data for Name: group_def; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO group_def VALUES (1, 'Administrators', 1, 1, 1);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: house_house_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =17;
+
+
+--
+-- Data for Name: house; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO house VALUES (1, 'Shack', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO house VALUES (2, 'Cottage', 4000, 10, 0, 0, 20, 0, 10, 0, 0, 0, -5);
+INSERT INTO house VALUES (3, 'Townhouse', 5000, 10, 0, 0, 0, 20, 0, 10, 0, 0, -5);
+INSERT INTO house VALUES (4, 'Villa', 65000, 75, 0, 20, 0, 75, 0, 75, 0, 0, -45);
+INSERT INTO house VALUES (5, 'Tower', 10000, 20, 0, 0, 0, 30, 0, 20, 0, 0, -10);
+INSERT INTO house VALUES (6, 'Stone Fort', 8500, 20, 0, 0, 30, 0, 20, 0, 0, 0, -10);
+INSERT INTO house VALUES (7, 'Castle', 95000, 100, 40, 0, 100, 0, 75, 0, 0, 0, -60);
+INSERT INTO house VALUES (8, 'Palace', 110000, 100, 0, 40, 0, 100, 0, 75, 0, 0, -60);
+INSERT INTO house VALUES (9, 'House', 250, 5, 0, 0, 5, 5, 5, 5, 0, 0, -2);
+INSERT INTO house VALUES (10, 'Capital', 175000, 150, 50, 50, 75, 75, 75, 75, 0, 0, -75);
+INSERT INTO house VALUES (11, 'Hideout', 26000, 35, 0, 0, 45, 0, 35, 0, 0, 0, -20);
+INSERT INTO house VALUES (12, 'Mansion', 22500, 35, 0, 0, 0, 45, 0, 30, 0, 0, -20);
+INSERT INTO house VALUES (13, 'Keep', 55000, 50, 10, 0, 55, 0, 45, 0, 0, 0, -30);
+INSERT INTO house VALUES (14, 'Dungeon', 45000, 50, 0, 10, 0, 55, 0, 45, 0, 0, -30);
+INSERT INTO house VALUES (15, 'Fortress', 73000, 75, 20, 0, 75, 0, 60, 0, 0, 0, -45);
+INSERT INTO house VALUES (16, 'Leader''s Abode', 18000, 28, 0, 0, 40, 40, 30, 30, 0, 0, -15);
+INSERT INTO house VALUES (17, 'Manor House', 60000, 62, 15, 15, 65, 65, 50, 50, 0, 0, -38);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: item_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =2;
+
+
+--
+-- Data for Name: item; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: job_job_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =29;
+
+
+--
+-- Data for Name: job; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO job VALUES (1, 'Citizen', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The humble beginning of every adventurer as a common citizen or Crescent Island.');
+INSERT INTO job VALUES (2, 'Squire', 0, 5, 0, 0, 0, 5, 0, 0, 0, 10, 5, 1, 0, 1, 0, 0, 0, 10, 'A knights apprentice, eagerly awaiting the advent of his own knighthood.');
+INSERT INTO job VALUES (3, 'Knight', 0, 5, 0, 5, 0, 0, 5, 0, 0, 10, 5, 2, 2, 2, 1, 0, 1, 20, 'A knight of the realm, protector of the innocent and slayer of large scaly beasts.');
+INSERT INTO job VALUES (4, 'Paladin', 0, 5, 5, 5, 5, 5, 5, 0, 0, 10, 5, 2, 2, 2, 1, 0, 1, 30, 'A knight of the holy orders, sworn to uphold truth and justice.');
+INSERT INTO job VALUES (5, 'Guardian', 0, 10, 0, 10, 0, 5, 5, 0, 0, 10, 5, 2, 2, 3, 2, 0, 1, 40, 'A knight protector, sworn to defend his ward with courage and honour.');
+INSERT INTO job VALUES (7, 'Archer', 0, 0, 0, 2, 0, 3, 0, 0, 5, 10, 5, 1, 0, 0, 0, 0, 1, 10, 'Bow in hand the archer rains death on his quarry from afar.');
+INSERT INTO job VALUES (8, 'Ranger', 0, 5, 0, 5, 0, 5, 0, 0, 5, 10, 5, 1, 0, 2, 0, 0, 1, 20, 'The protector of nature with bow in hand, the ranger travels the world in harmony with nature and in defiance of his enemies.');
+INSERT INTO job VALUES (9, 'Apprentice', 0, 0, 0, 0, 5, 0, 5, 0, 0, 7, 10, 0, 1, 1, 0, 0, 0, 10, 'The young apprentice of a greater mage, seeking knowledge of arcana in dusty tomes and upon the field of battle.');
+INSERT INTO job VALUES (10, 'White Mage', 0, 5, 0, 0, 5, 0, 10, 0, 0, 7, 10, 0, 2, 1, 1, 0, 0, 20, 'Majestic healers and arcane protectors, White Mages seek to help the less fortunate wherever they go.');
+INSERT INTO job VALUES (11, 'Black Mage', 0, 5, 0, 0, 10, 0, 5, 0, 0, 7, 10, 0, 2, 1, 1, 0, 0, 20, ' For good or evil the Black Mage walks the path of destruction, shattering earth and incinerating their enemies is their trade, but what is the price for such power?');
+INSERT INTO job VALUES (12, 'Caller', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (13, 'Pillar', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (14, 'Thief', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (15, 'Ninja', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (16, 'Assassin', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (17, 'Gambler', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (18, 'Card Shark', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (19, 'Pirate', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (20, 'Smuggler', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (21, 'Privateer', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (24, 'Dark Knight', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (25, 'Necromancer', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (26, 'Dragoon', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (27, 'Samurai', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (28, 'Fallen Paladin', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO job VALUES (29, 'Summoner', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: monstertype_monstertype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =10;
+
+
+--
+-- Data for Name: monstertype; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO monstertype VALUES (1, 'Abberation');
+INSERT INTO monstertype VALUES (2, 'Bug');
+INSERT INTO monstertype VALUES (3, 'Beast');
+INSERT INTO monstertype VALUES (4, 'Dragon');
+INSERT INTO monstertype VALUES (5, 'Humanoid');
+INSERT INTO monstertype VALUES (6, 'Magical Beast');
+INSERT INTO monstertype VALUES (7, 'Plant');
+INSERT INTO monstertype VALUES (8, 'Phantom');
+INSERT INTO monstertype VALUES (9, 'Undead');
+INSERT INTO monstertype VALUES (10, 'Mechanical');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: site; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 1, 'link', 'Forum Permissions', '', '''a=forum-permissions''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 2, 'link', 'Manage Forums', '', '''a=manage-forums''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 3, 'link', 'Manage Groups', '', '''a=manage-groups''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 4, 'link', 'Reparse Posts', '', '''a=reparse-posts''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 5, 'link', 'Reparse Words', '', '''a=reparse-words''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 6, 'link', 'Reset', '', '''a=reset''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 7, 'link', 'Sync Data', '', '''a=sync-data''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 8, 'link', 'Sync Forums', '', '''a=sync-forums''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('ADMIN_SECTION_NAV', 9, 'link', 'Sync Sequences', '', '''a=sync-seqs''', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('BATTLE_SECTION_NAV', 10, 'link', 'Battle', '', '''a=battle''', 'SECTION_BATTLE', 1, 0, '');
+INSERT INTO site VALUES ('BATTLE_SECTION_NAV', 11, 'link', 'New Battle', '', '''a=newbattle''', 'SECTION_BATTLE', 1, 0, '');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV', 10, 'link', 'Search', '', '''a=search''', 'SECTION_FORUM', 1, 0, '');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV', 11, 'link', 'Smilies', '', '''a=smilies''', 'SECTION_FORUM', 0, 0, '');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV', 12, 'link', 'Tag List', '', '''a=taglist''', 'SECTION_FORUM', 0, 0, '');
+INSERT INTO site VALUES ('FORUM_SECTION_NAV', 13, 'link', 'View New Threads', '', '''a=viewnew''', 'SECTION_FORUM', 1, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 0, 'link', 'Register new player', '', '''a=newplayer''', 'SECTION_GAME', 1, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 10, 'link', 'Manage Abilities', '', '''a=abilities''', 'SECTION_GAME', 1, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 11, 'link', 'Manage Equipment', '', '''a=equip''', 'SECTION_GAME', 1, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 12, 'link', 'View Abilities', '', '''a=viewabilities''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 13, 'link', 'View Ability Types', '', '''a=viewabilitytypes''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 14, 'link', 'View Areas', '', '''a=viewareas''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 15, 'link', 'View Equipment', '', '''a=viewequipment''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 16, 'link', 'View Houses', '', '''a=viewhouses''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 17, 'link', 'View Items', '', '''a=viewitems''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 18, 'link', 'View Jobs', '', '''a=viewjobs''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 19, 'link', 'View Monsters', '', '''a=viewmonsters''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 20, 'link', 'View Players', '', '''a=viewplayers''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('GAME_SECTION_NAV', 21, 'link', 'View Towns', '', '''a=viewtowns''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('MAIN_SECTION_NAV', 10, 'link', 'Domains', '', '''a=domains''', 'SECTION_HOME', 0, 0, '');
+INSERT INTO site VALUES ('MAIN_SECTION_NAV', 11, 'link', 'Events', '', '''a=event''', 'SECTION_HOME', 0, 0, '');
+INSERT INTO site VALUES ('MAIN_SECTION_NAV', 12, 'link', 'Skins', '', '''a=skins''', 'SECTION_HOME', 0, 0, '');
+INSERT INTO site VALUES ('MAIN_SECTION_NAV', 13, 'link', 'Stats', '', '''a=stats''', 'SECTION_HOME', 0, 0, '');
+INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 10, 'link', 'Skinning', '', '''a=skinning''', 'SECTION_MANUAL', 0, 0, '');
+INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 11, 'link', 'Advanced Skinning', '', '''a=skinning-advanced''', 'SECTION_MANUAL', 0, 0, '');
+INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 12, 'link', 'IRC', '', '''a=irc''', 'SECTION_MANUAL', 0, 0, '');
+INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 13, 'link', 'Contributing to CI', '', '''a=help''', 'SECTION_MANUAL', 0, 0, '');
+INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 14, 'link', 'About CI', '', '''a=about''', 'SECTION_MANUAL', 0, 0, '');
+INSERT INTO site VALUES ('MANUAL_SECTION_NAV', 15, 'link', 'Staff', '', '''a=staff''', 'SECTION_MANUAL', 0, 0, '');
+INSERT INTO site VALUES ('NAV', 1, 'link', 'Main', '', '', 'SECTION_HOME', 0, 0, '');
+INSERT INTO site VALUES ('NAV', 10, 'link', 'Podcast', '', '', 'SECTION_PODCAST', 0, 0, '');
+INSERT INTO site VALUES ('NAV', 11, 'link', 'Forum', '', '''a=viewforum''', 'SECTION_FORUM', 0, 0, '');
+INSERT INTO site VALUES ('NAV', 12, 'link', 'Game', '', '''a=viewplayers''', 'SECTION_GAME', 0, 0, '');
+INSERT INTO site VALUES ('NAV', 13, 'link', 'Battle', '', '', 'SECTION_BATTLE', 1, 0, '');
+INSERT INTO site VALUES ('NAV', 14, 'link', 'User', '', '', 'SECTION_USER', -1, 0, '');
+INSERT INTO site VALUES ('NAV', 15, 'link', 'User', '', '''a=viewuserdetails&user='' . ID', 'SECTION_USER', 1, 0, '');
+INSERT INTO site VALUES ('NAV', 16, 'link', 'Manual', '', '', 'SECTION_MANUAL', 0, 0, '');
+INSERT INTO site VALUES ('NAV', 17, 'link', 'Admin', '', '', 'SECTION_ADMIN', 1, 1, '');
+INSERT INTO site VALUES ('NAV', 18, 'link', '[Register User]', '', '''a=newuser''', 'SECTION_USER', -1, 0, '');
+INSERT INTO site VALUES ('NAV', 19, 'link', '[Login]', '', '''a=login&r='' . encode($_SERVER[''REQUEST_URI''])', 'SECTION_USER', -1, 0, '');
+INSERT INTO site VALUES ('NAV', 19, 'link', '[Logout]', '', '''a=logout''', 'SECTION_USER', 1, 0, '');
+INSERT INTO site VALUES ('PODCAST_SECTION_NAV', 1, 'link', 'New Podcast', '', '''a=new-podcast''', 'SECTION_PODCAST', 1, 1, '');
+INSERT INTO site VALUES ('PODCAST_SECTION_NAV', 1, 'link', 'View Podcasts', '', '''a=view-podcasts''', 'SECTION_PODCAST', 0, 0, '');
+INSERT INTO site VALUES ('USER_SECTION_NAV', 10, 'link', 'My Info', '', '''a=viewuserdetails&user='' . ID', 'SECTION_USER', 1, 0, '');
+INSERT INTO site VALUES ('USER_SECTION_NAV', 11, 'link', 'Register New User', '', '''a=newuser''', 'SECTION_USER', -1, 0, '');
+INSERT INTO site VALUES ('USER_SECTION_NAV', 12, 'link', 'Remote Information', '', '''a=info''', 'SECTION_USER', 0, 0, '');
+INSERT INTO site VALUES ('USER_SECTION_NAV', 13, 'link', 'Send PM', '', '''a=sendpm''', 'SECTION_USER', 1, 0, '');
+INSERT INTO site VALUES ('USER_SECTION_NAV', 14, 'link', 'User CP', '', '''a=usercp''', 'SECTION_USER', 1, 0, '');
+INSERT INTO site VALUES ('USER_SECTION_NAV', 15, 'link', 'View Active Users', '', '''a=whosonline''', 'SECTION_USER', 0, 0, '');
+INSERT INTO site VALUES ('USER_SECTION_NAV', 16, 'link', 'View PMs', '', '''a=viewpms''', 'SECTION_USER', 1, 0, '');
+INSERT INTO site VALUES ('USER_SECTION_NAV', 17, 'link', 'View Users', '', '''a=viewusers''', 'SECTION_USER', 0, 0, '');
+INSERT INTO site VALUES ('_HEAD', 0, 'eval', '$GLOBALS[''ARC_HEAD'']', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_PREENDBODY', 0, 'eval', '(defined(''URCHIN'') ? ''<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script type="text/javascript">_uacct = "'' . URCHIN . ''"; urchinTracker();</script>'' : '''')', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_PROFILE', 0, 'eval', 'getProfile()', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_RSS', 0, 'eval', 'makeLink(''rss'', ARC_HOME_MOD . ''rss.php?'', ''EXTERIOR'');', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_SERVERTIME', 0, 'eval', 'gmdate(TIMEFORMAT, TIME + TZOFFSET);', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_TEMPLATE_DIR', 0, 'eval', 'ARC_TEMPLATE_WWW . ARC_TEMPLATE', '', '', '', 0, 0, 'directory the template files live in.  example:
+/ci4/templates/ci4 (no trailing slash)');
+INSERT INTO site VALUES ('_USER', 0, 'eval', 'makeLink(decode($USER[''user_name'']), ''a=viewuserdetails'', SECTION_USER) . (MODULE_GAME ? '' - '' . ($USER[''domain_abrev''] ? $USER[''domain_abrev''] : ''no domain'') : '''');', '', '', '', 0, 0, '');
+INSERT INTO site VALUES ('_WHOSONLINE', 0, 'eval', 'getNumActiveUsers() . '' users, '' . getNumActiveGuests() . '' guests'';', '', '', '', 0, 0, '');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: skin; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO skin VALUES ('blueleaves', 'growldesign', 'http://www.growldesign.co.uk/');
+INSERT INTO skin VALUES ('flange', 'Technology Directory', 'http://www.alltechnologydirectory.com');
+INSERT INTO skin VALUES ('kuro5hin', 'rusty', 'http://www.kuro5hin.org/');
+INSERT INTO skin VALUES ('monobook', 'MediaWiki', 'http://wikipedia.sourceforge.net/');
+INSERT INTO skin VALUES ('redux', 'ubik', 'http://werdizen.com/');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: town_town_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =17;
+
+
+--
+-- Data for Name: town; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO town VALUES (1, 'Midgar', 0, 'A run-down, old slum.', 0, 0, '', '');
+INSERT INTO town VALUES (2, 'Narshe', 0, 'A forgotten mining town.', 0, 0, '', '');
+INSERT INTO town VALUES (3, 'Cosmo Canyon', 5, 'Cosmo Canyon is the training place of young warriors. Trained monks are very strong.', 0, 0, '', '');
+INSERT INTO town VALUES (4, 'Treno', 10, 'Treno is another city of darkness, but a central gambling point. Dancers and Bards are very populous around Treno and they make a lot of money.', 0, 0, '', '');
+INSERT INTO town VALUES (5, 'Alexandria', 15, 'Alexandria is a well rounded town that revolves mostly around fighting. Build up your strength if you move to Alexandria.', 0, 0, '', '');
+INSERT INTO town VALUES (6, 'Madain Sari', 15, 'Madain Sari, the home of all Summoners, will find a nice comfy place for you. If you''re a summoner living in Madain Sari, you might want to think about opening a bank account.', 0, 0, '', '');
+INSERT INTO town VALUES (7, 'Potos Village', 0, 'Just another town, Potos Village is quiet, peaceful, and boring.', 0, 0, '', '');
+INSERT INTO town VALUES (8, 'Tzen', 35, 'As you walk into Tzen you notice old houses and stone paths.  Old chimneys are puffing out smoke.', 0, 0, '', '');
+INSERT INTO town VALUES (9, 'Lindblum', 55, 'As you enter Lindblum you see taxis flying alongside you and people rebuilding their homes.', 0, 0, '', '');
+INSERT INTO town VALUES (10, 'Wutai', 70, '...Watch your wallet...', 0, 0, '', '');
+INSERT INTO town VALUES (11, 'Mideel', 80, 'You can build your house right next to the shore of the lifestream.', 0, 0, '', '');
+INSERT INTO town VALUES (12, 'Round Island', 90, 'The cost includes your airfare and the chocobo ride.  Train with the Knight of the Round themselves!', 0, 0, '', '');
+INSERT INTO town VALUES (13, 'South Figaro', 45, 'Enjoy a peaceful town and train with the most experienced fighters in the region! Mobile battle armor has been developed here.', 0, 0, '', '');
+INSERT INTO town VALUES (14, 'Lumina', 25, 'Take root in a most wonderful town full of magic and mystery. Lamps seem to be quite popular in this town...', 0, 0, '', '');
+INSERT INTO town VALUES (15, 'Kokiri Village', 110, 'Bring your fairy and run around weeding people''s gardens collecting money!', 0, 0, '', '');
+INSERT INTO town VALUES (16, 'Burmecia', 140, 'Bring your bell and watch out for the fallen statues.', 0, 0, '', '');
+INSERT INTO town VALUES (17, 'Kakariko Village', 175, 'Watch out for those chickens... o.O', 0, 0, '', '');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: ability_ability_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =24;
+
+
+--
+-- Data for Name: ability; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: equipment_equipment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =139;
+
+
+--
+-- Data for Name: equipment; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO equipment VALUES (1, 'Small Knife', 'knife.gif', 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 500, 'A small knife, not much to say about it. Can be used as a basic weapon, or to cut bread, whatever.', 3, 2, 0);
+INSERT INTO equipment VALUES (2, 'Stronger Knife', 'knife.gif', 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 750, 'The blade has been tempured to decrease flexability of the metal.', 3, 2, 0);
+INSERT INTO equipment VALUES (3, 'Mythril Knife', 'knife.gif', 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1250, 'Made from the once thought to be rare Mythril ore, this knife is cheaper than the longer Mythril Dagger and sword.', 3, 2, 0);
+INSERT INTO equipment VALUES (4, 'Broad Sword', 'gen4.gif', 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 'Usually seen to be a difficult weapon to master, most discard it early on, in exchange for the lighter ''long-sword''. This weapon gives poor attack to an inexperienced user, but a master...', 2, 2, 0);
+INSERT INTO equipment VALUES (5, 'Long Sword', 'gen4.gif', 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 'A straight, pointed, two edged sword with a grip long enough for use with two hands.', 2, 2, 0);
+INSERT INTO equipment VALUES (6, 'Mythril Sword', 'gen4.gif', 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3000, 'Forged of smelted Mythril ore, this sword takes the blade style of a long-sword, and the simple hilt of the broadsword.', 2, 2, 0);
+INSERT INTO equipment VALUES (7, 'Diamond Sword', 'gen4.gif', 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6000, 'When making the blade for this weapon, the blacksmith pore diamond powder into the molten steal before forging. The result is a serrated blade or diamond teeth.', 2, 2, 0);
+INSERT INTO equipment VALUES (8, 'Ragnarok', 'gen4.gif', 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10000, 'Said to have been forged from both the frozen night of Niflheim, and the burning rivers of Muspell. This weapon was created in the final moments of Ragnarok before both the Giants, and the Gods fell. "Doom of the Powers" is engraved along its blade.', 2, 2, 0);
+INSERT INTO equipment VALUES (9, 'Wooden Lance', 'voulge.gif', 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1500, 'This is little more than a shapened tree branch. Usually used when a real spear has become lost or broken.', 6, 2, 1);
+INSERT INTO equipment VALUES (10, 'Spear', 'voulge.gif', 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2250, 'Made of ash-wood with a iron head, this spear is mainly used for hunting.', 6, 2, 1);
+INSERT INTO equipment VALUES (11, 'Diamond Spear', 'voulge.gif', 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3500, 'With it''s diamond tipped head, these spears cost more, but are able to pierce thicker hides.', 6, 2, 1);
+INSERT INTO equipment VALUES (12, 'Platinum Lance', 'voulge.gif', 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5000, 'Lighter than even the most primitive spear, Platinum lances consist of a platinum head and a platinum compound shaft. Unlike spears a lance''s head is not designed to break off on impact.', 6, 2, 1);
+INSERT INTO equipment VALUES (13, 'Wooden Bow', 'wooden.gif', 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 'Your basic Bow comprised of a good piece of Bamboo, horn and sinew glued together.', 5, 2, 1);
+INSERT INTO equipment VALUES (14, 'Strong Bow', 'wooden.gif', 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1500, 'Like it''s older brother, Strong Bows are made up of horn and sinew. The difference is that the main part of the bow is made from sapwood, making it more elastic and durable.', 5, 2, 1);
+INSERT INTO equipment VALUES (15, 'Diamond Bow', 'wooden.gif', 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3000, 'Despite it''s name, the bow it''s self is not made of Diamond. But instead it is the arrowheads which are.', 5, 2, 1);
+INSERT INTO equipment VALUES (16, 'Longbow', 'wooden.gif', 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5000, '', 5, 2, 1);
+INSERT INTO equipment VALUES (17, 'Simple Rod', 'reedstaff.gif', 0, 0, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 500, 'Commonly mistaken as walking sticks these rods hold no great power.', 4, 2, 1);
+INSERT INTO equipment VALUES (18, 'Intricate Rod', 'reedstaff.gif', 0, 0, 0, 10, 0, 5, 0, 0, 0, 0, 0, 0, 0, 1500, 'A twisted branch of an old oak with a magical jewel inset at the end.', 4, 2, 1);
+INSERT INTO equipment VALUES (19, 'Magic Rod', 'reedstaff.gif', 0, 0, 5, 20, 0, 10, 0, 0, 0, 0, 0, 0, 0, 3000, 'A standard Apprentice''s rod, usually made from broken Mage''s Rods.', 4, 2, 1);
+INSERT INTO equipment VALUES (20, 'Cheap Rod', 'reedstaff.gif', 0, 0, -10, -5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 'A cheap but effective rod used by many starting mages.', 4, 2, 1);
+INSERT INTO equipment VALUES (21, 'Mage''s Rod', 'reedstaff.gif', 0, 0, -10, 50, 0, 20, 0, 0, 0, 0, 0, 0, 0, 5000, 'In days gone by many wizards and mages used they''re magic openly, the resulting excess mana sometimes seeps into the ground and the air. Eventually this is absorbed into trees and other living things. These rods are made from the branches of said trees.', 4, 2, 1);
+INSERT INTO equipment VALUES (22, 'Emerald Rod', 'reedstaff.gif', 0, 0, 0, 80, -15, 50, 0, 0, 0, 0, 0, 0, 0, 10000, '', 4, 2, 1);
+INSERT INTO equipment VALUES (23, 'Ultimate Rod', 'reedstaff.gif', 0, 0, -50, 150, -20, 100, 0, 0, 0, 0, 0, 0, 0, 15000, '', 4, 2, 1);
+INSERT INTO equipment VALUES (24, 'Katana', 'katana1.gif', 0, 0, 25, -50, 10, -15, 0, 0, 0, 0, 0, 0, 0, 5000, 'Traditional weapon of Samurai.', 18, 2, 1);
+INSERT INTO equipment VALUES (25, 'Sharp Katana', 'katana1.gif', 0, 0, 75, -50, 25, -20, 0, 0, 0, 0, 0, 0, 0, 8000, 'This Katana has been lovingly sharpened with silk fibers.', 18, 2, 1);
+INSERT INTO equipment VALUES (26, 'Masamune', 'katana1.gif', 25, 0, 150, 0, 50, -30, 0, 0, 0, 0, 0, 0, 0, 12000, 'Sister sword to the Murasame, this tempered blade made of steal folded 200 times, has an area of Nie, bright crystalline structures in the temper-line. Proof that this blade was forged by the fabiled master swordsmith.', 18, 2, 1);
+INSERT INTO equipment VALUES (27, 'Wooden Shield', 'buckler.gif', 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 500, 'Little more than a shaply piece of oak with a strap.', 10, 3, 0);
+INSERT INTO equipment VALUES (28, 'Metal Shield', 'buckler.gif', 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 'Made of Steal, this offers more defence than the wooden shield.', 10, 3, 0);
+INSERT INTO equipment VALUES (29, 'Magic Shield', 'buckler.gif', 0, 0, 0, 0, 10, 20, 0, 0, 0, 0, 0, 0, 0, 2500, 'Enchanted with mystic runes, to protect against magic, perfect for mage hunters.', 10, 3, 0);
+INSERT INTO equipment VALUES (30, 'Diamond Shield', 'buckler.gif', 0, 0, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0, 0, 3500, 'Coated in liquid diamond, making it almost inpenitrable.', 10, 3, 0);
+INSERT INTO equipment VALUES (31, 'Simple Robe', 'robe.gif', 0, 0, 0, 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 750, '', 11, 9, 0);
+INSERT INTO equipment VALUES (32, 'Cloth Robe', 'robe.gif', 0, 0, 20, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 1250, '', 11, 9, 0);
+INSERT INTO equipment VALUES (33, 'Thick Robe', 'robe.gif', 0, 0, 0, 0, 25, 20, 0, 0, 0, 0, 0, 0, 0, 2250, '', 11, 9, 0);
+INSERT INTO equipment VALUES (34, 'Expensive Robe', 'robe.gif', -20, 20, 0, 20, 40, 50, 0, 0, 0, 0, 0, 0, 0, 7500, '', 11, 9, 0);
+INSERT INTO equipment VALUES (35, 'Boots', 'boots.gif', 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 250, '', 7, 6, 0);
+INSERT INTO equipment VALUES (36, 'Thicksoled Boots', 'boots.gif', 5, 5, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 750, '', 7, 6, 0);
+INSERT INTO equipment VALUES (37, 'Tough Boots', 'boots.gif', 10, 5, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 1000, '', 7, 6, 0);
+INSERT INTO equipment VALUES (38, 'Enchanted Shoes', 'boots.gif', 10, 10, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 2000, '', 7, 6, 0);
+INSERT INTO equipment VALUES (39, 'Wooden Helmet', 'head.gif', 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 500, '', 8, 4, 0);
+INSERT INTO equipment VALUES (40, 'Metal Helmet', 'head.gif', 5, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 1000, '', 8, 4, 0);
+INSERT INTO equipment VALUES (41, 'Spiked Helmet', 'head.gif', 5, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1500, '', 8, 4, 0);
+INSERT INTO equipment VALUES (42, 'Fluffy Feathered Helmet', 'head.gif', 15, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 2000, '', 8, 4, 0);
+INSERT INTO equipment VALUES (43, 'Guitar', '', 0, 0, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, '', 12, 2, 1);
+INSERT INTO equipment VALUES (44, 'Trumpet', '', 0, 0, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, '', 12, 2, 1);
+INSERT INTO equipment VALUES (45, 'Magic Flute', '', 0, 0, 0, 35, 0, 20, 0, 0, 0, 0, 0, 0, 0, 3000, '', 12, 2, 1);
+INSERT INTO equipment VALUES (46, 'Strong Drum', '', 0, 0, 35, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 3000, '', 12, 2, 1);
+INSERT INTO equipment VALUES (47, 'Torn Armor', 'chest.gif', 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 500, '', 7, 9, 0);
+INSERT INTO equipment VALUES (48, 'Leather Vest', 'chest.gif', 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 1000, '', 7, 9, 0);
+INSERT INTO equipment VALUES (49, 'Hard Leather Vest', 'chest.gif', 0, 0, 0, 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 2000, '', 7, 9, 0);
+INSERT INTO equipment VALUES (50, 'Bone Armor', 'chest.gif', -10, -10, 0, 0, 20, 15, 0, 0, 0, 0, 0, 0, 0, 3000, '', 7, 9, 0);
+INSERT INTO equipment VALUES (51, 'Hidden Dagger', 'knife.gif', 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 'Based on the standard Tanto used by many samurai, this small dagger can easily be disguised as a wooden cylinder.', 3, 2, 0);
+INSERT INTO equipment VALUES (52, 'Mythril Dagger', 'knife.gif', 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2500, 'As with the Mythril Knife, it is made from smelted Mythril ore. The main difference is the increased number of sharp edges, allowing for greater damage.', 3, 2, 0);
+INSERT INTO equipment VALUES (53, 'Orhicalon', 'knife.gif', 0, 0, 35, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 4000, 'Made from a unknown metal, supposidly found in meteorites, this daggers blade is almost unbreakable.', 3, 2, 0);
+INSERT INTO equipment VALUES (55, 'Long Katana', 'katana1.gif', 0, 0, 75, -50, 25, -20, 0, 0, 0, 0, 0, 0, 0, 8500, 'The extended blade creates an even greater curve, usually used in seppuku (Samurai Suicide).', 18, 2, 1);
+INSERT INTO equipment VALUES (56, 'Murasame', 'katana1.gif', 25, 0, 150, 0, 50, -30, 0, 0, 0, 0, 0, 0, 0, 12500, 'Sister sword to the Masamune, legend states thats the two blades are much alike, despite different forgers. Legend tells of the Murasames lust for blood.', 18, 2, 1);
+INSERT INTO equipment VALUES (57, 'Leather Whip', '', 0, 0, 30, 0, 5, -10, 0, 0, 0, 0, 0, 0, 0, 7000, '', 13, 2, 0);
+INSERT INTO equipment VALUES (58, 'Crackling Whip', '', 0, 0, 50, 0, 20, -5, 0, 0, 0, 0, 0, 0, 0, 10000, '', 13, 2, 0);
+INSERT INTO equipment VALUES (59, 'Super Whip', '', 0, 0, 80, 0, 20, 10, 0, 0, 0, 0, 0, 0, 0, 12500, '', 13, 2, 0);
+INSERT INTO equipment VALUES (60, 'Thin Whip', '', 0, 0, 100, 0, 50, 10, 0, 0, 0, 0, 0, 0, 0, 13500, '', 13, 2, 0);
+INSERT INTO equipment VALUES (61, 'Bullet Proof Vest', 'chest.gif', 0, 0, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0, 0, 5000, '', 7, 9, 0);
+INSERT INTO equipment VALUES (62, 'Thick Vest', 'chest.gif', 0, 0, 0, -15, 30, 15, 0, 0, 0, 0, 0, 0, 0, 4500, '', 7, 9, 0);
+INSERT INTO equipment VALUES (63, 'Subzero Vest', 'chest.gif', 0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 18250, '', 7, 9, 0);
+INSERT INTO equipment VALUES (64, 'Brass Knuckles', '', 0, 0, 60, -20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 10000, '', 14, 2, 0);
+INSERT INTO equipment VALUES (65, 'Gold Knuckles', '', 25, 25, 125, -20, 75, 50, 0, 0, 0, 0, 0, 0, 0, 15000, '', 14, 2, 0);
+INSERT INTO equipment VALUES (66, 'Bebe Gun', 'snapshot.gif', 0, 0, 25, 0, -10, 0, 0, 0, 0, 0, 0, 0, 0, 6000, '', 9, 2, 0);
+INSERT INTO equipment VALUES (67, 'Pistol', 'snapshot.gif', 0, 0, 55, 0, -20, 0, 0, 0, 0, 0, 0, 0, 0, 8700, '', 9, 2, 0);
+INSERT INTO equipment VALUES (68, 'Small Machine Gun', 'snapshot.gif', 0, 0, 75, 0, -20, 0, 0, 0, 0, 0, 0, 0, 0, 13200, '', 9, 2, 0);
+INSERT INTO equipment VALUES (69, 'Shiny Knuckles', '', 50, 50, 175, 0, 100, 50, 0, 0, 0, 0, 0, 0, 0, 24550, '', 14, 2, 0);
+INSERT INTO equipment VALUES (70, 'Fake Ring', '', 0, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 500, '', 1, 1, 0);
+INSERT INTO equipment VALUES (71, 'Princess Ring', '', 0, 0, 0, 0, 20, 15, 0, 0, 0, 0, 0, 0, 0, 2500, '', 1, 1, 0);
+INSERT INTO equipment VALUES (72, 'Cubic Ring', '', 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7500, '', 1, 1, 0);
+INSERT INTO equipment VALUES (73, 'Diamond Ring', '', 25, 0, 0, 40, 25, 25, 0, 0, 0, 0, 0, 0, 0, 25000, '', 1, 1, 0);
+INSERT INTO equipment VALUES (74, 'Wooden Amulet', 'AmuletA.gif', 0, 0, 15, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 500, 'Carved of wood this item doesn''t offer much defence, if you paid much for this, you might have been conned.', 15, 11, 0);
+INSERT INTO equipment VALUES (75, 'Stone Amulet', 'AmuletB.gif', 10, 0, 15, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 3200, 'The stone in the centre may look important, but in truth it isn''t really worth much.', 15, 11, 0);
+INSERT INTO equipment VALUES (76, 'Ruby Amulet', 'AmuletA.gif', 35, 0, 25, -20, 25, 25, 0, 0, 0, 0, 0, 0, 0, 15300, 'An amulet cantered around a stone of Ruby. When the light catches it defensive runes can be seen engraved.', 15, 11, 0);
+INSERT INTO equipment VALUES (77, 'Wrench', '', 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, '', 16, 2, 1);
+INSERT INTO equipment VALUES (78, 'Adjustable Wrench', '', 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5500, '', 16, 2, 1);
+INSERT INTO equipment VALUES (79, 'Drill', '', 0, 0, 50, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 9000, '', 16, 2, 1);
+INSERT INTO equipment VALUES (80, 'Automatic Sledgehammer', '', 0, 0, 90, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 25000, '', 16, 2, 1);
+INSERT INTO equipment VALUES (81, 'Monkey Wrench', '', 0, 0, 45, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 12000, '', 16, 2, 1);
+INSERT INTO equipment VALUES (82, 'Pearl Necklace', 'AmuletA.gif', 20, 0, 20, -10, 20, 20, 0, 0, 0, 0, 0, 0, 0, 11000, 'A necklace of small pearls. Due to their defensive properties, the pearls increase the wearer''s magic and physical defence, as well as their HP.', 15, 11, 0);
+INSERT INTO equipment VALUES (83, 'Crystal Pendant', 'PendantA.gif', 10, 0, 10, 10, 15, 15, 0, 0, 0, 0, 0, 0, 0, 7000, 'A small crystal sword on a lace change.', 15, 11, 0);
+INSERT INTO equipment VALUES (84, 'Prince Ring', '', 0, 0, 0, 0, 30, 25, 0, 0, 0, 0, 0, 0, 0, 5000, '', 1, 1, 0);
+INSERT INTO equipment VALUES (85, 'Evil Band', '', 33, 33, 0, 33, -33, -33, 0, 0, 0, 0, 0, 0, 0, 6666, '', 1, 1, 0);
+INSERT INTO equipment VALUES (86, 'Zeron Armor', 'chest.gif', 25, -75, 0, 0, 40, 40, 0, 0, 0, 0, 0, 0, 0, 25000, '', 7, 9, 0);
+INSERT INTO equipment VALUES (87, 'Chain Plate', 'chest.gif', 10, 0, 0, 0, 30, 20, 0, 0, 0, 0, 0, 0, 0, 7500, '', 7, 9, 0);
+INSERT INTO equipment VALUES (88, 'Meteorite Medallion', 'AmuletA.gif', 50, 0, 25, 25, 50, 50, 0, 0, 0, 0, 0, 0, 0, 30000, 'The centre stone of this piece was a chip off the meteor that hit the island, making it crescent shaped. In memory of this event, the medallion itself has crescents on it.', 15, 11, 0);
+INSERT INTO equipment VALUES (89, 'Ring of Infinite Magic', '', -25, 0, -25, 125, 25, 75, 0, 0, 0, 0, 0, 0, 0, 35000, '', 1, 1, 0);
+INSERT INTO equipment VALUES (90, 'Robe of the Sky', 'robe.gif', 0, 30, 0, 30, 50, 60, 0, 0, 0, 0, 0, 0, 0, 12500, '', 11, 9, 0);
+INSERT INTO equipment VALUES (91, 'Boots of Vigor', 'boots.gif', 25, 15, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 5000, '', 7, 6, 0);
+INSERT INTO equipment VALUES (92, 'Platinum Helm', 'head.gif', 15, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0, 6000, '', 8, 4, 0);
+INSERT INTO equipment VALUES (93, 'Platinum Shield', 'buckler.gif', 0, 0, 0, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, 8500, 'Lightweight, durable. Good magic defence too.', 10, 3, 0);
+INSERT INTO equipment VALUES (94, 'Excalibur', 'gen4.gif', 15, 15, 150, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20000, 'Many believe this to be the sword of so many fabled legends, although even experts have had problems providing a date to its creation. The magic radiating from this sword has decreased over time, but that still is no proof that ''he'' once wielded this blade...', 2, 2, 0);
+INSERT INTO equipment VALUES (95, 'Amulet of Ultimos', 'AmuletA.gif', 75, 75, 55, 55, 55, 50, 0, 0, 0, 0, 0, 0, 0, 50000, 'A purple amulet said to posses the soul of one time explorer of the island, Ultimos.', 15, 11, 0);
+INSERT INTO equipment VALUES (96, 'Dragonscaled Boots', 'boots.gif', 30, 30, 30, 30, 55, -20, 0, 0, 0, 0, 0, 0, 0, 30000, '', 7, 6, 0);
+INSERT INTO equipment VALUES (97, 'Orichalcum Helm', 'head.gif', 30, -15, -15, -25, 55, 55, 0, 0, 0, 0, 0, 0, 0, 15000, '', 8, 4, 0);
+INSERT INTO equipment VALUES (98, 'Enchanted Cloak', 'robe.gif', 40, 0, 20, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 20000, '', 11, 9, 0);
+INSERT INTO equipment VALUES (99, 'Expensive Deck', '', 0, 0, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10000, '', 17, 2, 1);
+INSERT INTO equipment VALUES (100, 'Trick Deck', '', 25, -25, 35, 25, -25, -25, 0, 0, 0, 0, 0, 0, 0, 15000, '', 17, 2, 1);
+INSERT INTO equipment VALUES (101, 'Knight Shoes', '', 20, -20, 40, -20, 25, 25, 0, 0, 0, 0, 0, 0, 0, 20000, '', 8, 6, 0);
+INSERT INTO equipment VALUES (102, 'Leather Jacket', 'chest.gif', 25, 25, 0, 0, 35, 35, 0, 0, 0, 0, 0, 0, 0, 22500, '', 8, 9, 0);
+INSERT INTO equipment VALUES (103, 'Kill The Queen', 'gen4.gif', 0, 0, 75, 0, -20, -20, 0, 0, 0, 0, 0, 0, 0, 28000, 'During the 200 year civil war of the western continent [replace with fictional place, other than CI], the high-councle, in one last hope to take control before the Queen turned of age, commanded the Mage, Blacksmith, and Timester to produce a second sword. This sword would, in time fall into the hands of the real source behind the war. As with its counterpart, the current location of the master is unknown.', 2, 2, 0);
+INSERT INTO equipment VALUES (104, 'Save The Queen', 'gen4.gif', 0, 0, 60, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 27000, 'Before the 200 year civil war of the western continent, a Queen was born. In standing with tradition, the soul of the strongest guard was bind to the blade marked with the sign of the Queen. The soul is not bind to the sword it''s self, but to the birth stone, which takes up the lower half of the hilt. This guard would stand over the Queen, never leaving her side, even through death. The sword remains intact, but during the final confrontation, the wielder and his opponent disappeared, leaving both swords idle on the floor.', 2, 2, 0);
+INSERT INTO equipment VALUES (105, 'Divine Embrace', 'robe.gif', 25, 25, 0, 80, 0, 75, 0, 0, 0, 0, 0, 0, 0, 30000, '', 11, 9, 0);
+INSERT INTO equipment VALUES (106, 'Steel Armor', 'chest.gif', 35, 30, 0, 0, 45, 40, 0, 0, 0, 0, 0, 0, 0, 30000, '', 8, 9, 0);
+INSERT INTO equipment VALUES (107, 'Goron Sword', 'gen4.gif', 10, 0, 85, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 40000, 'Long after the almost suicide of the Goron medusa, her fellow kin finally had a chance to repopulate their species. They produced many a brave warrior in search of the ''hero'', killer of their great mother. Being carved from the very stone of the late medusa, this sword is said to posses'' unheard of qualities. ', 2, 2, 0);
+INSERT INTO equipment VALUES (108, 'Odin''s Shoes', '', 25, 0, 55, 0, 35, 35, 0, 0, 0, 0, 0, 0, 0, 35000, '', 8, 6, 0);
+INSERT INTO equipment VALUES (109, 'Stiff Helmet', 'head.gif', 25, 0, 0, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, 25000, '', 8, 4, 0);
+INSERT INTO equipment VALUES (110, 'Mithril-Woven Robe', 'robe.gif', 100, 0, 0, 125, 125, 100, 0, 0, 0, 0, 0, 0, 0, 31500, '', 11, 9, 0);
+INSERT INTO equipment VALUES (111, 'Glass Rod', 'reedstaff.gif', -20, 50, 5, 75, 0, 45, 0, 0, 0, 0, 0, 0, 0, 4500, 'Thinking magic spells while blowing glass is the easyist way to produce one of these. The mysticial power of the maker becomes trapped inside, allowing others to draw upon it.', 4, 2, 1);
+INSERT INTO equipment VALUES (112, 'Bishamon Sword', 'gen4.gif', 20, 0, 90, -10, 35, 0, 0, 0, 0, 0, 0, 0, 0, 55000, 'Although usually portrayed with a spear, followers of the great god Bishamon do not limit themselves to one form of weapon. The hilt of the Bishamon sword is forged into the form of the god himself, with each arm and spear making up the hand guard. The blade is not straight as expected, but not curved either; it weaves almost like a Kris, creating several serrated edges.', 2, 2, 1);
+INSERT INTO equipment VALUES (113, 'Zephyr Shot', 'wooden.gif', 0, 25, 125, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 20000, '', 5, 2, 1);
+INSERT INTO equipment VALUES (114, 'Wonderbow', 'wooden.gif', 25, -50, 150, 50, -25, -25, 0, 0, 0, 0, 0, 0, 0, 45000, 'This bow is partly comprised of the same material as most white mage wands, increasing Magic and HP.', 5, 2, 1);
+INSERT INTO equipment VALUES (115, 'Chaos Bow', 'wooden.gif', 0, -60, 111, 16, -73, 6, 0, 0, 0, 0, 0, 0, 0, 13500, '', 5, 2, 1);
+INSERT INTO equipment VALUES (116, 'Magical Vest', 'chest.gif', 5, 15, -10, 0, 37, 50, 0, 0, 0, 0, 0, 0, 0, 12000, '', 7, 9, 0);
+INSERT INTO equipment VALUES (117, 'Scaled Plate', 'chest.gif', 10, -20, 20, 0, 33, -30, 0, 0, 0, 0, 0, 0, 0, 21000, '', 7, 9, 0);
+INSERT INTO equipment VALUES (118, 'The Lost Medallion', 'AmuletA.gif', 125, 125, 25, 75, 25, 35, 0, 0, 0, 0, 0, 0, 0, 999999, 'What are you doing with this? It was declared lost to the meteor years ago!', 15, 11, 0);
+INSERT INTO equipment VALUES (119, 'Hero Medal', 'AmuletA.gif', 25, 15, 20, 15, 25, 25, 0, 0, 0, 0, 0, 0, 0, 13000, 'Standard equipment for any daring adventurer.', 15, 11, 0);
+INSERT INTO equipment VALUES (120, 'Lucky Necklace', 'AmuletA.gif', 44, 33, -11, 33, -22, 55, 0, 0, 0, 0, 0, 0, 0, 27777, 'An unusual item, although said to be lucky at -11 strength I don''t agree. This must have some hidden power...', 15, 11, 0);
+INSERT INTO equipment VALUES (121, 'Shiny Talisman', 'AmuletA.gif', 40, 40, 15, 0, 15, 25, 0, 0, 0, 0, 0, 0, 0, 20000, 'This talisman is said to have been polished every day by a master swordsman, in hope that one day it would be shiny enough to reflect magic back at a user.', 15, 11, 0);
+INSERT INTO equipment VALUES (122, 'Bracelet of Hope', '', 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 15000, '', 1, 1, 0);
+INSERT INTO equipment VALUES (123, 'Ring of Infinite Strength', '', 25, -25, 75, -50, 25, -50, 0, 0, 0, 0, 0, 0, 0, 35000, '', 1, 1, 0);
+INSERT INTO equipment VALUES (124, 'Prototype A3', 'snapshot.gif', 0, 0, 99, 0, -10, 0, 0, 0, 0, 0, 0, 0, 0, 18550, '', 9, 2, 0);
+INSERT INTO equipment VALUES (125, 'Combat Visor', 'head.gif', 50, 0, 0, 0, 75, 75, 0, 0, 0, 0, 0, 0, 0, 50000, '', 8, 4, 0);
+INSERT INTO equipment VALUES (126, 'Skull Keeper', 'head.gif', -25, 50, 5, -10, 40, 60, 0, 0, 0, 0, 0, 0, 0, 20000, '', 8, 4, 0);
+INSERT INTO equipment VALUES (127, 'Karaoke Box', '', 0, 25, 55, 0, 25, 50, 0, 0, 0, 0, 0, 0, 0, 11999, '', 12, 2, 1);
+INSERT INTO equipment VALUES (128, 'Battle Kazoo', '', 10, 15, 40, 0, 25, 10, 0, 0, 0, 0, 0, 0, 0, 7000, '', 12, 2, 1);
+INSERT INTO equipment VALUES (129, 'Posioned Knife', 'knife.gif', 0, 0, 35, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 5000, 'A small vile in the handle allows a poisonus liquid to be secreated along the blade.', 3, 2, 0);
+INSERT INTO equipment VALUES (130, 'Normal Deck', '', 0, 15, 15, 15, 0, 15, 0, 0, 0, 0, 0, 0, 0, 5000, '', 17, 2, 1);
+INSERT INTO equipment VALUES (131, 'Fallen Mage''s Requiem', 'robe.gif', -80, 75, -95, 100, -50, 100, 0, 0, 0, 0, 0, 0, 0, 75000, '', 11, 9, 0);
+INSERT INTO equipment VALUES (132, 'Crystal Branch', 'reedstaff.gif', 15, 50, 5, 70, -10, 25, 0, 0, 0, 0, 0, 0, 0, 7500, 'Sometimes crystals form in the earths crust. Under pressure they can join together, then it is only a matter of carving it to the required shape.', 4, 2, 1);
+INSERT INTO equipment VALUES (133, 'Custom Shield', 'buckler.gif', 15, 0, 0, 0, 75, 75, 0, 0, 0, 0, 0, 0, 0, 20000, 'Whatever you make it.', 10, 3, 0);
+INSERT INTO equipment VALUES (134, 'Raiding Bow', 'wooden.gif', 0, 0, 100, 0, 50, 25, 0, 0, 0, 0, 0, 0, 0, 100000, '', 5, 2, 1);
+INSERT INTO equipment VALUES (135, 'Street Mage''s Deck', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7777, '', 17, 2, 1);
+INSERT INTO equipment VALUES (136, 'Karaoke Box DX', '', 0, 50, 75, 0, 50, 75, 0, 0, 0, 0, 0, 0, 0, 29999, '', 12, 2, 1);
+INSERT INTO equipment VALUES (137, 'Chainsaw', '', 0, 0, 75, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 19000, '', 16, 2, 1);
+INSERT INTO equipment VALUES (138, 'Concealed Knife', 'knife.gif', 5, 0, 50, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 10000, 'This knife is actually a device which connects to the users forearm, allowing at the flick of the wrist an instant weapon.', 3, 2, 0);
+INSERT INTO equipment VALUES (139, 'Danger Dagger', 'knife.gif', 0, 0, 65, 0, -25, 0, 0, 0, 0, 0, 0, 0, 0, 12500, 'Due to the lack of hand guard, this dagger lowers defence, you dont want to attempt stabbing with this, you might slice your fingers off.', 3, 2, 0);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Name: monster_monster_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+-- =112;
+
+
+--
+-- Data for Name: monster; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO monster VALUES (1, 'Small Rodent', 'SmallRodent.gif', 55, 5, 15, 5, 10, 5, 10, 10, 1, 20, 25, 3, '');
+INSERT INTO monster VALUES (2, 'Snake', 'Snake.gif', 75, 5, 25, 5, 5, 0, 10, 10, 1, 20, 25, 3, '');
+INSERT INTO monster VALUES (3, 'Sea Wasp', 'SeaWasp.gif', 195, 11, 65, 20, 60, 25, 12, 12, 5, 12, 50, 2, '');
+INSERT INTO monster VALUES (4, 'Sea Cucumber', 'SeaCucumber.gif', 225, 13, 30, 25, 70, 30, 13, 13, 6, 15, 65, 3, '');
+INSERT INTO monster VALUES (5, 'Zemzelet', '', 245, 15, 80, 25, 70, 35, 14, 14, 7, 18, 75, 3, '');
+INSERT INTO monster VALUES (6, 'Large Rodent', 'LargeRodent.gif', 125, 5, 35, 10, 35, 12, 11, 11, 2, 15, 30, 3, '');
+INSERT INTO monster VALUES (7, 'Blue Beast', 'BlueBeast.gif', 150, 7, 45, 15, 40, 18, 12, 12, 3, 15, 50, 3, '');
+INSERT INTO monster VALUES (8, 'Red Beast', 'RedBeast.gif', 170, 9, 50, 5, 50, 20, 12, 12, 4, 18, 50, 3, '');
+INSERT INTO monster VALUES (9, 'Flying Bug', 'FlyingBug.gif', 290, 17, 80, 30, 81, 35, 14, 14, 8, 12, 80, 2, '');
+INSERT INTO monster VALUES (10, 'Kimara Bug', 'KimaraBug.gif', 290, 19, 87, 38, 90, 40, 14, 14, 9, 15, 90, 2, '');
+INSERT INTO monster VALUES (11, 'Small Scythe', '', 320, 21, 95, 40, 98, 42, 15, 15, 10, 18, 100, 3, '');
+INSERT INTO monster VALUES (12, 'Lefty', '', 350, 23, 100, 45, 105, 40, 16, 16, 11, 10, 0, 3, '');
+INSERT INTO monster VALUES (13, 'Ochu', '', 380, 25, 109, 50, 113, 50, 16, 16, 12, 12, 110, 3, '');
+INSERT INTO monster VALUES (14, 'Pupu', '', 400, 27, 125, 53, 120, 55, 16, 16, 13, 15, 130, 3, '');
+INSERT INTO monster VALUES (15, 'Abomination', 'Abomination.gif', 425, 29, 130, 55, 132, 57, 17, 17, 14, 10, 150, 3, '');
+INSERT INTO monster VALUES (16, 'BoogaBooga', 'BoogaBooga.gif', 435, 25, 120, 50, 110, 55, 18, 18, 15, 12, 175, 3, '');
+INSERT INTO monster VALUES (17, 'Icicle', 'Icicle.gif', 400, 30, 130, 55, 130, 57, 18, 18, 16, 18, 200, 3, '');
+INSERT INTO monster VALUES (18, 'Bomb', 'Bomb.gif', 475, 41, 150, 70, 140, 65, 19, 19, 18, 15, 300, 3, '');
+INSERT INTO monster VALUES (19, 'Materia Killer', 'MateriaKiller.gif', 475, 39, 158, 70, 148, 65, 20, 20, 19, 18, 350, 6, '');
+INSERT INTO monster VALUES (20, 'Rabid Squirrel', '', 500, 41, 165, 73, 155, 68, 20, 20, 20, 10, 400, 3, '');
+INSERT INTO monster VALUES (21, 'Diseased Flower', 'DiseasedFlower.gif', 525, 43, 172, 77, 162, 72, 20, 20, 21, 12, 450, 7, '');
+INSERT INTO monster VALUES (22, 'Garden Fly', 'GardenFly.gif', 550, 45, 180, 80, 170, 75, 21, 21, 22, 15, 600, 2, '');
+INSERT INTO monster VALUES (23, 'Lizard', '', 575, 47, 187, 84, 177, 79, 22, 22, 23, 18, 650, 3, '');
+INSERT INTO monster VALUES (24, 'Tree Roots', 'TreeRoots.gif', 600, 49, 195, 87, 195, 87, 22, 22, 24, 18, 700, 7, '');
+INSERT INTO monster VALUES (25, 'Gold Arachnia', '', 610, 50, 200, 89, 200, 90, 22, 22, 24, 18, 720, 3, '');
+INSERT INTO monster VALUES (26, 'Huge Rodent', 'HugeRodent.gif', 625, 51, 202, 90, 192, 90, 22, 22, 25, 12, 750, 3, '');
+INSERT INTO monster VALUES (27, 'Termite', 'Termite.gif', 650, 53, 210, 94, 200, 89, 23, 23, 26, 15, 850, 2, '');
+INSERT INTO monster VALUES (28, 'Cockroach', 'CockRoach.gif', 675, 55, 217, 98, 207, 93, 24, 24, 27, 12, 950, 2, '');
+INSERT INTO monster VALUES (29, 'Killer Ant', 'KillerAnt.gif', 700, 57, 225, 101, 215, 96, 24, 24, 28, 12, 1050, 2, '');
+INSERT INTO monster VALUES (30, 'Ghost', '', 800, 63, 248, 112, 238, 107, 26, 26, 31, 10, 1550, 8, '');
+INSERT INTO monster VALUES (31, 'Spectre', '', 825, 65, 255, 115, 245, 110, 26, 26, 32, 12, 1600, 8, '');
+INSERT INTO monster VALUES (32, 'Zombie', 'Zombie.gif', 850, 67, 262, 119, 252, 114, 26, 26, 33, 15, 1700, 8, '');
+INSERT INTO monster VALUES (33, 'Wisp', 'Wisp.gif', 875, 69, 270, 122, 260, 117, 27, 27, 34, 18, 1750, 8, '');
+INSERT INTO monster VALUES (34, 'Whisper', 'Whisper.gif', 900, 71, 277, 125, 267, 120, 27, 27, 34, 12, 1775, 8, '');
+INSERT INTO monster VALUES (35, 'Haunt', 'Haunt.gif', 930, 15, 290, 140, 275, 130, 27, 27, 34, 13, 1800, 8, '');
+INSERT INTO monster VALUES (36, 'Mothra', 'Mothra.gif', 950, 73, 300, 130, 290, 130, 28, 28, 35, 15, 2000, 1, '');
+INSERT INTO monster VALUES (37, 'Slasher', 'Slasher.gif', 975, 73, 280, 150, 270, 140, 28, 28, 35, 15, 1500, 3, '');
+INSERT INTO monster VALUES (38, 'Dark Force', 'DarkForce.gif', 990, 75, 285, 155, 280, 150, 28, 28, 35, 15, 1500, 1, '');
+INSERT INTO monster VALUES (39, 'Flyscreamer', 'FlyScreamer.gif', 960, 70, 295, 135, 280, 135, 28, 28, 35, 15, 1400, 3, '');
+INSERT INTO monster VALUES (40, 'Young Demon', 'YoungDemon.gif', 725, 59, 233, 105, 223, 100, 24, 24, 29, 10, 1200, 5, '');
+INSERT INTO monster VALUES (41, 'Gargoyle', 'Gargoyle.gif', 750, 61, 240, 108, 230, 103, 25, 25, 30, 15, 1400, 3, '');
+INSERT INTO monster VALUES (42, 'Magma Black', 'MagmaBlack.gif', 760, 65, 245, 110, 234, 105, 25, 25, 30, 15, 1500, 1, '');
+INSERT INTO monster VALUES (43, 'Skeleton', 'Skeleton.gif', 775, 65, 250, 115, 240, 110, 25, 25, 30, 16, 1600, 9, '');
+INSERT INTO monster VALUES (44, 'Lich', 'Lich.gif', 1500, 300, 500, 300, 400, 600, 28, 28, 35, 20, 2000, 9, '');
+INSERT INTO monster VALUES (45, 'C3P0', '', 2000, 1000, 850, 450, 600, 800, 28, 28, 37, 20, 2000, 10, '');
+INSERT INTO monster VALUES (46, 'Wyrm', 'Wyrm.gif', 1575, 350, 560, 450, 450, 640, 28, 28, 35, 20, 2000, 6, '');
+INSERT INTO monster VALUES (47, 'NecroTech', 'NecroTech.gif', 1600, 350, 575, 470, 480, 650, 28, 28, 35, 20, 2000, 10, '');
+INSERT INTO monster VALUES (48, 'Winged Deadeye', 'WingedDeadeye.gif', 1610, 355, 590, 475, 495, 650, 28, 28, 35, 20, 2000, 3, '');
+INSERT INTO monster VALUES (49, 'Stick Monster', '', 2500, 800, 1000, 450, 800, 900, 30, 30, 40, 20, 2000, 3, '');
+INSERT INTO monster VALUES (50, 'Clay Monster', '', 2750, 50, 1500, 300, 1500, 300, 31, 31, 42, 20, 2000, 3, '');
+INSERT INTO monster VALUES (51, 'Crawler', '', 3200, 400, 1400, 500, 1200, 1000, 32, 32, 45, 18, 2000, 3, '');
+INSERT INTO monster VALUES (52, 'Kavory', '', 2650, 500, 1250, 470, 900, 860, 30, 30, 40, 20, 2000, 3, '');
+INSERT INTO monster VALUES (53, 'Carapa', '', 2700, 700, 1200, 500, 950, 900, 30, 30, 41, 20, 2000, 3, '');
+INSERT INTO monster VALUES (54, 'Parallex', '', 2740, 275, 1250, 400, 1025, 500, 30, 30, 41, 20, 2000, 3, '');
+INSERT INTO monster VALUES (55, 'Kryle', '', 2800, 300, 1400, 350, 1100, 360, 31, 31, 42, 19, 2000, 3, '');
+INSERT INTO monster VALUES (56, 'Stalking', '', 3500, 200, 1600, 300, 1100, 1000, 35, 35, 50, 19, 1500, 3, '');
+INSERT INTO monster VALUES (57, 'Stalked', '', 2000, 400, 2500, 350, 1100, 900, 36, 36, 52, 18, 1400, 3, '');
+INSERT INTO monster VALUES (58, 'Shadow', '', 5200, 520, 1700, 300, 1300, 800, 37, 37, 54, 20, 1600, 8, '');
+INSERT INTO monster VALUES (59, 'Falconite', '', 6000, 300, 2200, 350, 1400, 1000, 39, 39, 58, 20, 1200, 3, '');
+INSERT INTO monster VALUES (60, 'Blue Raven', '', 6300, 400, 2300, 400, 1500, 1600, 40, 40, 61, 20, 2000, 3, '');
+INSERT INTO monster VALUES (61, 'Bitz', '', 6500, 500, 3000, 300, 1300, 1300, 42, 42, 64, 20, 2000, 3, '');
+INSERT INTO monster VALUES (62, 'Reactor', '', 7000, 700, 3000, 500, 1900, 1700, 44, 44, 67, 20, 2000, 10, '');
+INSERT INTO monster VALUES (63, 'Twisted Steel', '', 7500, 550, 2800, 300, 200, 1300, 44, 44, 69, 20, 2000, 10, '');
+INSERT INTO monster VALUES (64, 'Bytez', '', 7750, 580, 3700, 350, 2200, 1500, 45, 45, 70, 20, 2000, 3, '');
+INSERT INTO monster VALUES (65, 'Red Giant', '', 8000, 500, 2700, 450, 2150, 1500, 46, 46, 71, 20, 2000, 3, '');
+INSERT INTO monster VALUES (66, 'Frost', '', 8000, 500, 2700, 475, 2000, 1600, 46, 46, 72, 20, 2000, 3, '');
+INSERT INTO monster VALUES (67, 'Kilizard', '', 7750, 500, 2700, 600, 2100, 1700, 46, 46, 73, 20, 2000, 3, '');
+INSERT INTO monster VALUES (68, 'Liord', '', 7500, 550, 2600, 600, 2000, 1800, 47, 47, 74, 20, 2000, 3, '');
+INSERT INTO monster VALUES (69, 'Flame Talon', '', 7550, 600, 2600, 600, 2300, 1700, 48, 48, 75, 20, 2000, 3, '');
+INSERT INTO monster VALUES (70, 'Czar', '', 7850, 600, 2650, 625, 2400, 1800, 48, 48, 76, 20, 2000, 3, '');
+INSERT INTO monster VALUES (71, 'Xo', '', 7950, 630, 2750, 640, 2450, 1875, 48, 48, 77, 20, 2000, 3, '');
+INSERT INTO monster VALUES (72, 'Gigan Toad', '', 8000, 700, 2850, 650, 2550, 1800, 49, 49, 78, 20, 2000, 3, '');
+INSERT INTO monster VALUES (73, 'Fiend Head', '', 8100, 750, 2900, 675, 2600, 1900, 50, 50, 79, 20, 1400, 3, '');
+INSERT INTO monster VALUES (74, 'Mushdoom', '', 8150, 760, 2950, 700, 2650, 1950, 50, 50, 80, 20, 1400, 3, '');
+INSERT INTO monster VALUES (75, 'Griffin Hand', '', 8200, 770, 3000, 725, 2700, 2000, 50, 50, 81, 20, 1400, 3, '');
+INSERT INTO monster VALUES (76, 'Dark Stalker', '', 8250, 785, 3050, 750, 2750, 2050, 51, 51, 82, 20, 1400, 3, '');
+INSERT INTO monster VALUES (77, 'Terminator', '', 8300, 800, 3100, 775, 2800, 2100, 52, 52, 83, 20, 1400, 3, '');
+INSERT INTO monster VALUES (78, 'Kraken', '', 8375, 820, 3150, 800, 2900, 2150, 52, 52, 84, 20, 2000, 3, '');
+INSERT INTO monster VALUES (79, 'Great White', '', 8450, 830, 3200, 810, 3000, 2250, 52, 52, 85, 20, 2000, 3, '');
+INSERT INTO monster VALUES (80, 'Cheep-Cheep', '', 8530, 845, 3325, 835, 3150, 2375, 52, 52, 83, 20, 2000, 3, '');
+INSERT INTO monster VALUES (81, 'Liquid Golem', '', 8600, 850, 3400, 840, 3275, 2450, 52, 52, 84, 20, 2000, 3, '');
+INSERT INTO monster VALUES (82, 'Mion', '', 8725, 875, 3475, 875, 3350, 2500, 52, 52, 85, 20, 2000, 3, '');
+INSERT INTO monster VALUES (83, 'Heery', '', 8800, 890, 3550, 900, 3450, 2575, 53, 53, 86, 20, 2000, 3, '');
+INSERT INTO monster VALUES (84, 'Jsuno', '', 8925, 900, 3625, 925, 3500, 2650, 54, 54, 87, 20, 2000, 3, '');
+INSERT INTO monster VALUES (85, 'Lesser Aura', '', 9150, 1000, 3000, 1200, 3600, 2800, 54, 54, 88, 20, 2000, 1, '');
+INSERT INTO monster VALUES (86, 'Aura', '', 9300, 1200, 3150, 1350, 3750, 3000, 55, 55, 90, 20, 2000, 1, '');
+INSERT INTO monster VALUES (87, 'Lesser Gnome', '', 9150, 1000, 3000, 1200, 3600, 2800, 54, 54, 88, 20, 2000, 5, '');
+INSERT INTO monster VALUES (88, 'Gnome', '', 9300, 1200, 3150, 1350, 3750, 3000, 55, 55, 90, 20, 2000, 5, '');
+INSERT INTO monster VALUES (89, 'Lesser Undine', '', 9150, 1000, 3000, 1200, 3600, 2800, 54, 54, 88, 20, 2000, 3, '');
+INSERT INTO monster VALUES (90, 'Undine', '', 9300, 1200, 3150, 1350, 3750, 3000, 55, 55, 90, 20, 2000, 3, '');
+INSERT INTO monster VALUES (91, 'Force of Order', '', 9500, 1350, 3500, 1450, 3800, 3200, 56, 56, 92, 20, 1400, 1, '');
+INSERT INTO monster VALUES (92, 'Skeleton Knight', 'SkeletonKnight.gif', 9500, 1000, 3650, 1000, 3800, 2850, 56, 56, 93, 20, 1400, 9, '');
+INSERT INTO monster VALUES (93, 'Greater Wyrm', '', 9650, 1200, 3725, 1100, 3900, 2925, 57, 57, 94, 20, 1400, 3, '');
+INSERT INTO monster VALUES (94, 'Night Crawler', '', 9675, 1100, 3775, 1200, 3950, 2975, 58, 58, 95, 20, 1400, 3, '');
+INSERT INTO monster VALUES (95, 'Xenthar', '', 9750, 1200, 3875, 1300, 4050, 3050, 58, 58, 96, 20, 2000, 3, '');
+INSERT INTO monster VALUES (96, 'Flesh Golem', '', 10000, 1400, 3500, 1500, 4000, 4000, 56, 56, 93, 24, 1400, 3, '');
+INSERT INTO monster VALUES (97, 'Briton Rebel', '', 12000, 1800, 3200, 2200, 2900, 4500, 62, 62, 105, 20, 1900, 3, '');
+INSERT INTO monster VALUES (98, 'Phalanx', '', 20000, 2250, 5700, 1500, 5600, 4500, 70, 70, 120, 20, 1800, 3, '');
+INSERT INTO monster VALUES (99, 'Lesser Phalanx', '', 18000, 3000, 1800, 3100, 5200, 5500, 65, 65, 110, 25, 1800, 3, '');
+INSERT INTO monster VALUES (100, 'Emperor''s Guardsman', '', 24000, 6000, 8000, 8900, 8500, 7500, 72, 72, 125, 25, 1500, 5, '');
+INSERT INTO monster VALUES (101, 'Iceni Soldier', '', 19500, 2000, 5000, 2750, 5600, 3500, 65, 65, 110, 25, 1400, 5, '');
+INSERT INTO monster VALUES (102, 'Iceni Soldieress', '', 18500, 4000, 5700, 4000, 5600, 5000, 65, 65, 110, 25, 1600, 5, '');
+INSERT INTO monster VALUES (103, 'Lesser Sylph', '', 13500, 1300, 3200, 1400, 3750, 3200, 58, 58, 97, 20, 1400, 6, '');
+INSERT INTO monster VALUES (104, 'Sylph', '', 16650, 1400, 3300, 1500, 3850, 3300, 59, 59, 98, 20, 1400, 6, '');
+INSERT INTO monster VALUES (105, 'Lesser Salamander', '', 13500, 1300, 3200, 1400, 3750, 3200, 58, 58, 97, 20, 1400, 3, '');
+INSERT INTO monster VALUES (106, 'Salamander', '', 16650, 1400, 3300, 1500, 3850, 3300, 59, 59, 98, 20, 1400, 3, '');
+INSERT INTO monster VALUES (107, 'Lesser Shade', '', 13500, 1300, 3200, 1400, 3750, 3200, 58, 58, 97, 20, 1400, 8, '');
+INSERT INTO monster VALUES (108, 'Shade', '', 19650, 1400, 3300, 1500, 3850, 3300, 59, 59, 98, 20, 1400, 8, '');
+INSERT INTO monster VALUES (109, 'Force of Chaos', '', 17800, 1500, 3500, 1600, 3950, 3400, 60, 60, 99, 25, 1500, 1, '');
+INSERT INTO monster VALUES (110, 'Chaos Dragon', 'ChaosDragon.gif', 50000, 10000, 10000, 10000, 10000, 10000, 72, 72, 125, 20, 1, 4, '');
+INSERT INTO monster VALUES (111, 'Nether Essence', 'NetherEssense.gif', 65535, 50000, 35000, 35000, 35000, 35000, 72, 72, 125, 20, 1, 1, '');
+INSERT INTO monster VALUES (112, 'Ultimate Being', '', 65535, 65535, 65535, 65535, 65535, 65535, 85, 85, 150, 50, 1, 1, '');
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: cor_area_monster; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO cor_area_monster VALUES (1, 1);
+INSERT INTO cor_area_monster VALUES (1, 2);
+INSERT INTO cor_area_monster VALUES (2, 3);
+INSERT INTO cor_area_monster VALUES (2, 4);
+INSERT INTO cor_area_monster VALUES (2, 5);
+INSERT INTO cor_area_monster VALUES (3, 6);
+INSERT INTO cor_area_monster VALUES (3, 7);
+INSERT INTO cor_area_monster VALUES (3, 8);
+INSERT INTO cor_area_monster VALUES (4, 10);
+INSERT INTO cor_area_monster VALUES (4, 11);
+INSERT INTO cor_area_monster VALUES (4, 9);
+INSERT INTO cor_area_monster VALUES (5, 12);
+INSERT INTO cor_area_monster VALUES (5, 13);
+INSERT INTO cor_area_monster VALUES (5, 14);
+INSERT INTO cor_area_monster VALUES (6, 15);
+INSERT INTO cor_area_monster VALUES (6, 16);
+INSERT INTO cor_area_monster VALUES (6, 17);
+INSERT INTO cor_area_monster VALUES (7, 18);
+INSERT INTO cor_area_monster VALUES (7, 19);
+INSERT INTO cor_area_monster VALUES (7, 20);
+INSERT INTO cor_area_monster VALUES (8, 21);
+INSERT INTO cor_area_monster VALUES (8, 22);
+INSERT INTO cor_area_monster VALUES (8, 23);
+INSERT INTO cor_area_monster VALUES (8, 24);
+INSERT INTO cor_area_monster VALUES (8, 25);
+INSERT INTO cor_area_monster VALUES (9, 1);
+INSERT INTO cor_area_monster VALUES (9, 26);
+INSERT INTO cor_area_monster VALUES (9, 27);
+INSERT INTO cor_area_monster VALUES (9, 28);
+INSERT INTO cor_area_monster VALUES (9, 29);
+INSERT INTO cor_area_monster VALUES (9, 6);
+INSERT INTO cor_area_monster VALUES (10, 30);
+INSERT INTO cor_area_monster VALUES (10, 31);
+INSERT INTO cor_area_monster VALUES (10, 32);
+INSERT INTO cor_area_monster VALUES (10, 33);
+INSERT INTO cor_area_monster VALUES (10, 34);
+INSERT INTO cor_area_monster VALUES (10, 35);
+INSERT INTO cor_area_monster VALUES (11, 36);
+INSERT INTO cor_area_monster VALUES (11, 37);
+INSERT INTO cor_area_monster VALUES (11, 38);
+INSERT INTO cor_area_monster VALUES (11, 39);
+INSERT INTO cor_area_monster VALUES (12, 40);
+INSERT INTO cor_area_monster VALUES (12, 41);
+INSERT INTO cor_area_monster VALUES (12, 42);
+INSERT INTO cor_area_monster VALUES (12, 43);
+INSERT INTO cor_area_monster VALUES (13, 44);
+INSERT INTO cor_area_monster VALUES (13, 45);
+INSERT INTO cor_area_monster VALUES (13, 46);
+INSERT INTO cor_area_monster VALUES (13, 47);
+INSERT INTO cor_area_monster VALUES (13, 48);
+INSERT INTO cor_area_monster VALUES (14, 49);
+INSERT INTO cor_area_monster VALUES (14, 50);
+INSERT INTO cor_area_monster VALUES (14, 51);
+INSERT INTO cor_area_monster VALUES (14, 52);
+INSERT INTO cor_area_monster VALUES (14, 53);
+INSERT INTO cor_area_monster VALUES (14, 54);
+INSERT INTO cor_area_monster VALUES (14, 55);
+INSERT INTO cor_area_monster VALUES (15, 56);
+INSERT INTO cor_area_monster VALUES (15, 57);
+INSERT INTO cor_area_monster VALUES (15, 58);
+INSERT INTO cor_area_monster VALUES (16, 59);
+INSERT INTO cor_area_monster VALUES (16, 60);
+INSERT INTO cor_area_monster VALUES (16, 61);
+INSERT INTO cor_area_monster VALUES (16, 62);
+INSERT INTO cor_area_monster VALUES (16, 63);
+INSERT INTO cor_area_monster VALUES (16, 64);
+INSERT INTO cor_area_monster VALUES (17, 65);
+INSERT INTO cor_area_monster VALUES (17, 66);
+INSERT INTO cor_area_monster VALUES (17, 67);
+INSERT INTO cor_area_monster VALUES (17, 68);
+INSERT INTO cor_area_monster VALUES (17, 69);
+INSERT INTO cor_area_monster VALUES (18, 70);
+INSERT INTO cor_area_monster VALUES (18, 71);
+INSERT INTO cor_area_monster VALUES (18, 72);
+INSERT INTO cor_area_monster VALUES (19, 73);
+INSERT INTO cor_area_monster VALUES (19, 74);
+INSERT INTO cor_area_monster VALUES (19, 75);
+INSERT INTO cor_area_monster VALUES (19, 76);
+INSERT INTO cor_area_monster VALUES (19, 77);
+INSERT INTO cor_area_monster VALUES (20, 78);
+INSERT INTO cor_area_monster VALUES (20, 79);
+INSERT INTO cor_area_monster VALUES (20, 80);
+INSERT INTO cor_area_monster VALUES (20, 81);
+INSERT INTO cor_area_monster VALUES (21, 82);
+INSERT INTO cor_area_monster VALUES (21, 83);
+INSERT INTO cor_area_monster VALUES (21, 84);
+INSERT INTO cor_area_monster VALUES (22, 85);
+INSERT INTO cor_area_monster VALUES (22, 86);
+INSERT INTO cor_area_monster VALUES (22, 87);
+INSERT INTO cor_area_monster VALUES (22, 88);
+INSERT INTO cor_area_monster VALUES (22, 89);
+INSERT INTO cor_area_monster VALUES (22, 90);
+INSERT INTO cor_area_monster VALUES (22, 91);
+INSERT INTO cor_area_monster VALUES (23, 92);
+INSERT INTO cor_area_monster VALUES (23, 93);
+INSERT INTO cor_area_monster VALUES (23, 94);
+INSERT INTO cor_area_monster VALUES (23, 95);
+INSERT INTO cor_area_monster VALUES (23, 96);
+INSERT INTO cor_area_monster VALUES (24, 100);
+INSERT INTO cor_area_monster VALUES (24, 101);
+INSERT INTO cor_area_monster VALUES (24, 102);
+INSERT INTO cor_area_monster VALUES (24, 97);
+INSERT INTO cor_area_monster VALUES (24, 98);
+INSERT INTO cor_area_monster VALUES (24, 99);
+INSERT INTO cor_area_monster VALUES (25, 103);
+INSERT INTO cor_area_monster VALUES (25, 104);
+INSERT INTO cor_area_monster VALUES (25, 105);
+INSERT INTO cor_area_monster VALUES (25, 106);
+INSERT INTO cor_area_monster VALUES (25, 107);
+INSERT INTO cor_area_monster VALUES (25, 108);
+INSERT INTO cor_area_monster VALUES (25, 109);
+INSERT INTO cor_area_monster VALUES (26, 110);
+INSERT INTO cor_area_monster VALUES (26, 111);
+INSERT INTO cor_area_monster VALUES (26, 112);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: cor_area_town; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO cor_area_town VALUES (1, 1);
+INSERT INTO cor_area_town VALUES (1, 2);
+INSERT INTO cor_area_town VALUES (1, 7);
+INSERT INTO cor_area_town VALUES (2, 1);
+INSERT INTO cor_area_town VALUES (3, 2);
+INSERT INTO cor_area_town VALUES (3, 3);
+INSERT INTO cor_area_town VALUES (3, 7);
+INSERT INTO cor_area_town VALUES (4, 2);
+INSERT INTO cor_area_town VALUES (4, 3);
+INSERT INTO cor_area_town VALUES (5, 7);
+INSERT INTO cor_area_town VALUES (6, 2);
+INSERT INTO cor_area_town VALUES (7, 3);
+INSERT INTO cor_area_town VALUES (7, 4);
+INSERT INTO cor_area_town VALUES (8, 4);
+INSERT INTO cor_area_town VALUES (9, 4);
+INSERT INTO cor_area_town VALUES (9, 5);
+INSERT INTO cor_area_town VALUES (10, 14);
+INSERT INTO cor_area_town VALUES (10, 5);
+INSERT INTO cor_area_town VALUES (11, 5);
+INSERT INTO cor_area_town VALUES (11, 6);
+INSERT INTO cor_area_town VALUES (13, 14);
+INSERT INTO cor_area_town VALUES (13, 6);
+INSERT INTO cor_area_town VALUES (13, 8);
+INSERT INTO cor_area_town VALUES (14, 13);
+INSERT INTO cor_area_town VALUES (14, 8);
+INSERT INTO cor_area_town VALUES (15, 13);
+INSERT INTO cor_area_town VALUES (15, 14);
+INSERT INTO cor_area_town VALUES (15, 8);
+INSERT INTO cor_area_town VALUES (15, 9);
+INSERT INTO cor_area_town VALUES (16, 10);
+INSERT INTO cor_area_town VALUES (16, 13);
+INSERT INTO cor_area_town VALUES (16, 9);
+INSERT INTO cor_area_town VALUES (17, 10);
+INSERT INTO cor_area_town VALUES (17, 11);
+INSERT INTO cor_area_town VALUES (17, 9);
+INSERT INTO cor_area_town VALUES (18, 10);
+INSERT INTO cor_area_town VALUES (18, 11);
+INSERT INTO cor_area_town VALUES (19, 11);
+INSERT INTO cor_area_town VALUES (19, 12);
+INSERT INTO cor_area_town VALUES (20, 12);
+INSERT INTO cor_area_town VALUES (22, 12);
+INSERT INTO cor_area_town VALUES (22, 15);
+INSERT INTO cor_area_town VALUES (23, 15);
+INSERT INTO cor_area_town VALUES (24, 16);
+INSERT INTO cor_area_town VALUES (24, 17);
+INSERT INTO cor_area_town VALUES (25, 16);
+INSERT INTO cor_area_town VALUES (25, 17);
+INSERT INTO cor_area_town VALUES (26, 17);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: cor_job_abilitytype; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO cor_job_abilitytype VALUES (2, 8);
+INSERT INTO cor_job_abilitytype VALUES (3, 11);
+INSERT INTO cor_job_abilitytype VALUES (4, 10);
+INSERT INTO cor_job_abilitytype VALUES (5, 14);
+INSERT INTO cor_job_abilitytype VALUES (7, 9);
+INSERT INTO cor_job_abilitytype VALUES (8, 13);
+INSERT INTO cor_job_abilitytype VALUES (9, 12);
+INSERT INTO cor_job_abilitytype VALUES (10, 2);
+INSERT INTO cor_job_abilitytype VALUES (11, 1);
+INSERT INTO cor_job_abilitytype VALUES (12, 15);
+INSERT INTO cor_job_abilitytype VALUES (13, 17);
+INSERT INTO cor_job_abilitytype VALUES (14, 20);
+INSERT INTO cor_job_abilitytype VALUES (15, 26);
+INSERT INTO cor_job_abilitytype VALUES (16, 28);
+INSERT INTO cor_job_abilitytype VALUES (17, 23);
+INSERT INTO cor_job_abilitytype VALUES (18, 24);
+INSERT INTO cor_job_abilitytype VALUES (19, 22);
+INSERT INTO cor_job_abilitytype VALUES (20, 21);
+INSERT INTO cor_job_abilitytype VALUES (21, 25);
+INSERT INTO cor_job_abilitytype VALUES (24, 18);
+INSERT INTO cor_job_abilitytype VALUES (25, 30);
+INSERT INTO cor_job_abilitytype VALUES (26, 29);
+INSERT INTO cor_job_abilitytype VALUES (27, 27);
+INSERT INTO cor_job_abilitytype VALUES (28, 19);
+INSERT INTO cor_job_abilitytype VALUES (29, 16);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: cor_job_equipmenttype; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO cor_job_equipmenttype VALUES (1, 11);
+INSERT INTO cor_job_equipmenttype VALUES (1, 3);
+INSERT INTO cor_job_equipmenttype VALUES (2, 10);
+INSERT INTO cor_job_equipmenttype VALUES (2, 11);
+INSERT INTO cor_job_equipmenttype VALUES (2, 15);
+INSERT INTO cor_job_equipmenttype VALUES (2, 3);
+INSERT INTO cor_job_equipmenttype VALUES (2, 7);
+INSERT INTO cor_job_equipmenttype VALUES (3, 10);
+INSERT INTO cor_job_equipmenttype VALUES (3, 11);
+INSERT INTO cor_job_equipmenttype VALUES (3, 2);
+INSERT INTO cor_job_equipmenttype VALUES (3, 3);
+INSERT INTO cor_job_equipmenttype VALUES (3, 7);
+INSERT INTO cor_job_equipmenttype VALUES (3, 8);
+INSERT INTO cor_job_equipmenttype VALUES (4, 1);
+INSERT INTO cor_job_equipmenttype VALUES (4, 10);
+INSERT INTO cor_job_equipmenttype VALUES (4, 11);
+INSERT INTO cor_job_equipmenttype VALUES (4, 14);
+INSERT INTO cor_job_equipmenttype VALUES (4, 15);
+INSERT INTO cor_job_equipmenttype VALUES (4, 16);
+INSERT INTO cor_job_equipmenttype VALUES (4, 2);
+INSERT INTO cor_job_equipmenttype VALUES (4, 3);
+INSERT INTO cor_job_equipmenttype VALUES (4, 6);
+INSERT INTO cor_job_equipmenttype VALUES (4, 7);
+INSERT INTO cor_job_equipmenttype VALUES (4, 8);
+INSERT INTO cor_job_equipmenttype VALUES (5, 1);
+INSERT INTO cor_job_equipmenttype VALUES (5, 10);
+INSERT INTO cor_job_equipmenttype VALUES (5, 11);
+INSERT INTO cor_job_equipmenttype VALUES (5, 15);
+INSERT INTO cor_job_equipmenttype VALUES (5, 2);
+INSERT INTO cor_job_equipmenttype VALUES (5, 3);
+INSERT INTO cor_job_equipmenttype VALUES (5, 7);
+INSERT INTO cor_job_equipmenttype VALUES (5, 8);
+INSERT INTO cor_job_equipmenttype VALUES (7, 11);
+INSERT INTO cor_job_equipmenttype VALUES (7, 3);
+INSERT INTO cor_job_equipmenttype VALUES (7, 5);
+INSERT INTO cor_job_equipmenttype VALUES (7, 7);
+INSERT INTO cor_job_equipmenttype VALUES (8, 11);
+INSERT INTO cor_job_equipmenttype VALUES (8, 13);
+INSERT INTO cor_job_equipmenttype VALUES (8, 15);
+INSERT INTO cor_job_equipmenttype VALUES (8, 3);
+INSERT INTO cor_job_equipmenttype VALUES (8, 5);
+INSERT INTO cor_job_equipmenttype VALUES (8, 7);
+INSERT INTO cor_job_equipmenttype VALUES (9, 1);
+INSERT INTO cor_job_equipmenttype VALUES (9, 11);
+INSERT INTO cor_job_equipmenttype VALUES (9, 15);
+INSERT INTO cor_job_equipmenttype VALUES (9, 3);
+INSERT INTO cor_job_equipmenttype VALUES (10, 1);
+INSERT INTO cor_job_equipmenttype VALUES (10, 11);
+INSERT INTO cor_job_equipmenttype VALUES (10, 15);
+INSERT INTO cor_job_equipmenttype VALUES (10, 4);
+INSERT INTO cor_job_equipmenttype VALUES (11, 1);
+INSERT INTO cor_job_equipmenttype VALUES (11, 11);
+INSERT INTO cor_job_equipmenttype VALUES (11, 15);
+INSERT INTO cor_job_equipmenttype VALUES (11, 3);
+INSERT INTO cor_job_equipmenttype VALUES (11, 4);
+INSERT INTO cor_job_equipmenttype VALUES (12, 1);
+INSERT INTO cor_job_equipmenttype VALUES (12, 11);
+INSERT INTO cor_job_equipmenttype VALUES (12, 15);
+INSERT INTO cor_job_equipmenttype VALUES (12, 3);
+INSERT INTO cor_job_equipmenttype VALUES (12, 4);
+INSERT INTO cor_job_equipmenttype VALUES (13, 1);
+INSERT INTO cor_job_equipmenttype VALUES (13, 11);
+INSERT INTO cor_job_equipmenttype VALUES (13, 15);
+INSERT INTO cor_job_equipmenttype VALUES (13, 3);
+INSERT INTO cor_job_equipmenttype VALUES (13, 4);
+INSERT INTO cor_job_equipmenttype VALUES (14, 11);
+INSERT INTO cor_job_equipmenttype VALUES (14, 14);
+INSERT INTO cor_job_equipmenttype VALUES (14, 3);
+INSERT INTO cor_job_equipmenttype VALUES (15, 11);
+INSERT INTO cor_job_equipmenttype VALUES (15, 13);
+INSERT INTO cor_job_equipmenttype VALUES (15, 14);
+INSERT INTO cor_job_equipmenttype VALUES (15, 2);
+INSERT INTO cor_job_equipmenttype VALUES (15, 3);
+INSERT INTO cor_job_equipmenttype VALUES (15, 5);
+INSERT INTO cor_job_equipmenttype VALUES (16, 11);
+INSERT INTO cor_job_equipmenttype VALUES (16, 13);
+INSERT INTO cor_job_equipmenttype VALUES (16, 14);
+INSERT INTO cor_job_equipmenttype VALUES (16, 18);
+INSERT INTO cor_job_equipmenttype VALUES (16, 2);
+INSERT INTO cor_job_equipmenttype VALUES (16, 3);
+INSERT INTO cor_job_equipmenttype VALUES (16, 5);
+INSERT INTO cor_job_equipmenttype VALUES (16, 7);
+INSERT INTO cor_job_equipmenttype VALUES (17, 1);
+INSERT INTO cor_job_equipmenttype VALUES (17, 11);
+INSERT INTO cor_job_equipmenttype VALUES (17, 13);
+INSERT INTO cor_job_equipmenttype VALUES (17, 15);
+INSERT INTO cor_job_equipmenttype VALUES (17, 17);
+INSERT INTO cor_job_equipmenttype VALUES (17, 3);
+INSERT INTO cor_job_equipmenttype VALUES (17, 9);
+INSERT INTO cor_job_equipmenttype VALUES (18, 1);
+INSERT INTO cor_job_equipmenttype VALUES (18, 13);
+INSERT INTO cor_job_equipmenttype VALUES (18, 14);
+INSERT INTO cor_job_equipmenttype VALUES (18, 15);
+INSERT INTO cor_job_equipmenttype VALUES (18, 17);
+INSERT INTO cor_job_equipmenttype VALUES (18, 3);
+INSERT INTO cor_job_equipmenttype VALUES (18, 7);
+INSERT INTO cor_job_equipmenttype VALUES (18, 9);
+INSERT INTO cor_job_equipmenttype VALUES (19, 1);
+INSERT INTO cor_job_equipmenttype VALUES (19, 11);
+INSERT INTO cor_job_equipmenttype VALUES (19, 14);
+INSERT INTO cor_job_equipmenttype VALUES (19, 15);
+INSERT INTO cor_job_equipmenttype VALUES (19, 2);
+INSERT INTO cor_job_equipmenttype VALUES (19, 3);
+INSERT INTO cor_job_equipmenttype VALUES (19, 7);
+INSERT INTO cor_job_equipmenttype VALUES (19, 9);
+INSERT INTO cor_job_equipmenttype VALUES (20, 1);
+INSERT INTO cor_job_equipmenttype VALUES (20, 11);
+INSERT INTO cor_job_equipmenttype VALUES (20, 16);
+INSERT INTO cor_job_equipmenttype VALUES (20, 3);
+INSERT INTO cor_job_equipmenttype VALUES (20, 7);
+INSERT INTO cor_job_equipmenttype VALUES (20, 9);
+INSERT INTO cor_job_equipmenttype VALUES (21, 1);
+INSERT INTO cor_job_equipmenttype VALUES (21, 11);
+INSERT INTO cor_job_equipmenttype VALUES (21, 15);
+INSERT INTO cor_job_equipmenttype VALUES (21, 16);
+INSERT INTO cor_job_equipmenttype VALUES (21, 17);
+INSERT INTO cor_job_equipmenttype VALUES (21, 3);
+INSERT INTO cor_job_equipmenttype VALUES (21, 7);
+INSERT INTO cor_job_equipmenttype VALUES (21, 9);
+INSERT INTO cor_job_equipmenttype VALUES (24, 1);
+INSERT INTO cor_job_equipmenttype VALUES (24, 10);
+INSERT INTO cor_job_equipmenttype VALUES (24, 11);
+INSERT INTO cor_job_equipmenttype VALUES (24, 14);
+INSERT INTO cor_job_equipmenttype VALUES (24, 15);
+INSERT INTO cor_job_equipmenttype VALUES (24, 2);
+INSERT INTO cor_job_equipmenttype VALUES (24, 3);
+INSERT INTO cor_job_equipmenttype VALUES (24, 7);
+INSERT INTO cor_job_equipmenttype VALUES (24, 8);
+INSERT INTO cor_job_equipmenttype VALUES (25, 1);
+INSERT INTO cor_job_equipmenttype VALUES (25, 11);
+INSERT INTO cor_job_equipmenttype VALUES (25, 15);
+INSERT INTO cor_job_equipmenttype VALUES (25, 3);
+INSERT INTO cor_job_equipmenttype VALUES (25, 4);
+INSERT INTO cor_job_equipmenttype VALUES (26, 1);
+INSERT INTO cor_job_equipmenttype VALUES (26, 10);
+INSERT INTO cor_job_equipmenttype VALUES (26, 11);
+INSERT INTO cor_job_equipmenttype VALUES (26, 15);
+INSERT INTO cor_job_equipmenttype VALUES (26, 2);
+INSERT INTO cor_job_equipmenttype VALUES (26, 3);
+INSERT INTO cor_job_equipmenttype VALUES (26, 6);
+INSERT INTO cor_job_equipmenttype VALUES (26, 7);
+INSERT INTO cor_job_equipmenttype VALUES (26, 8);
+INSERT INTO cor_job_equipmenttype VALUES (27, 11);
+INSERT INTO cor_job_equipmenttype VALUES (27, 13);
+INSERT INTO cor_job_equipmenttype VALUES (27, 15);
+INSERT INTO cor_job_equipmenttype VALUES (27, 18);
+INSERT INTO cor_job_equipmenttype VALUES (27, 2);
+INSERT INTO cor_job_equipmenttype VALUES (27, 3);
+INSERT INTO cor_job_equipmenttype VALUES (27, 6);
+INSERT INTO cor_job_equipmenttype VALUES (27, 7);
+INSERT INTO cor_job_equipmenttype VALUES (27, 8);
+INSERT INTO cor_job_equipmenttype VALUES (28, 1);
+INSERT INTO cor_job_equipmenttype VALUES (28, 10);
+INSERT INTO cor_job_equipmenttype VALUES (28, 11);
+INSERT INTO cor_job_equipmenttype VALUES (28, 15);
+INSERT INTO cor_job_equipmenttype VALUES (28, 16);
+INSERT INTO cor_job_equipmenttype VALUES (28, 2);
+INSERT INTO cor_job_equipmenttype VALUES (28, 3);
+INSERT INTO cor_job_equipmenttype VALUES (28, 7);
+INSERT INTO cor_job_equipmenttype VALUES (28, 8);
+INSERT INTO cor_job_equipmenttype VALUES (28, 9);
+INSERT INTO cor_job_equipmenttype VALUES (29, 1);
+INSERT INTO cor_job_equipmenttype VALUES (29, 11);
+INSERT INTO cor_job_equipmenttype VALUES (29, 15);
+INSERT INTO cor_job_equipmenttype VALUES (29, 3);
+INSERT INTO cor_job_equipmenttype VALUES (29, 4);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: cor_job_joblv; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO cor_job_joblv VALUES (2, 1, 5);
+INSERT INTO cor_job_joblv VALUES (3, 2, 10);
+INSERT INTO cor_job_joblv VALUES (4, 5, 15);
+INSERT INTO cor_job_joblv VALUES (5, 3, 15);
+INSERT INTO cor_job_joblv VALUES (7, 1, 5);
+INSERT INTO cor_job_joblv VALUES (8, 7, 10);
+INSERT INTO cor_job_joblv VALUES (9, 1, 5);
+INSERT INTO cor_job_joblv VALUES (10, 9, 10);
+INSERT INTO cor_job_joblv VALUES (11, 9, 10);
+INSERT INTO cor_job_joblv VALUES (12, 9, 15);
+INSERT INTO cor_job_joblv VALUES (13, 29, 15);
+INSERT INTO cor_job_joblv VALUES (14, 1, 5);
+INSERT INTO cor_job_joblv VALUES (15, 14, 10);
+INSERT INTO cor_job_joblv VALUES (15, 8, 10);
+INSERT INTO cor_job_joblv VALUES (16, 15, 10);
+INSERT INTO cor_job_joblv VALUES (17, 14, 5);
+INSERT INTO cor_job_joblv VALUES (18, 17, 20);
+INSERT INTO cor_job_joblv VALUES (19, 20, 15);
+INSERT INTO cor_job_joblv VALUES (20, 14, 10);
+INSERT INTO cor_job_joblv VALUES (21, 18, 20);
+INSERT INTO cor_job_joblv VALUES (24, 3, 10);
+INSERT INTO cor_job_joblv VALUES (25, 11, 10);
+INSERT INTO cor_job_joblv VALUES (26, 4, 10);
+INSERT INTO cor_job_joblv VALUES (26, 8, 10);
+INSERT INTO cor_job_joblv VALUES (27, 5, 10);
+INSERT INTO cor_job_joblv VALUES (27, 9, 5);
+INSERT INTO cor_job_joblv VALUES (28, 24, 10);
+INSERT INTO cor_job_joblv VALUES (29, 12, 15);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- PostgreSQL database dump
+--
+
+--SET client_encoding = 'SQL_ASCII';
+--SET standard_conforming_strings = off;
+--SET check_function_bodies = false;
+--SET client_min_messages = warning;
+--SET escape_string_warning = off;
+
+--SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: cor_monster_drop; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- PostgreSQL database dump complete
+--
+
