@@ -2,7 +2,7 @@
 
 /* $Id$ */
 
-/*	PostgreSQL database connection configuration.	*/
+/* SQL database connection configuration. */
 
 $DBConf['user']     = '';
 $DBConf['pass']     = '';
