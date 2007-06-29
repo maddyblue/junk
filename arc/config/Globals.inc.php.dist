@@ -24,6 +24,7 @@ define('ARC_TITLE', 'Your Site Title');
 define('ARC_DESCRIPTION', 'Your Site Description');
 define('ARC_WWW_DOMAIN', 'your.domain.com');
 define('ARC_WWW_PATH', '/path/to/arc/on/www/'); // '/' if root. must begin with '/'
+define('ARC_WWW_ADDR', 'http://' . ARC_WWW_DOMAIN . ARC_WWW_PATH); // you shouldn't need to change this
 define('ARC_AVATAR_PATH', 'images/avatar/');
 define('ARC_SMILIE_PATH', 'images/smilies/');
 define('ARC_DEF_TEMPLATE', 'monobook');
@@ -63,6 +64,7 @@ define('SECTION_BATTLE', 'battle');
 define('SECTION_MANUAL', 'manual');
 define('SECTION_PODCAST', 'podcast');
 define('SECTION_CDDB', 'cddb');
+define('SECTION_BLOG', 'blog');
 
 /* Preferences */
 
@@ -75,7 +77,6 @@ define('PODCAST_DATA', SECTION_PODCAST . '/data/');
 
 /* Don't mess with these */
 
-define('ARC_WWW_ADDR', 'http://' . ARC_WWW_DOMAIN . ARC_WWW_PATH);
 define('ARC_TEMPLATE_FS', ARC_HOME_MOD . 'templates/');
 define('ARC_TEMPLATE_WWW', ARC_WWW_PATH . 'templates/');
 
