@@ -1,0 +1,54 @@
+<?php
+
+/* $Id$ */
+
+/*
+ * Copyright (c) 2007 Matthew Jibson <dolmant@gmail.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+$l = isset($_GET['l']) ? intval($_GET['l']) : '0';
+
+if(isset($_POST['l']))
+	$l = intval($_POST['l']);
+
+$res = $db->query('select * from iads_location where iads_location_id=' . $l);
+
+if(count($res))
+{
+	$array = array(
+		array('Location', $res[0]['iads_location_name']),
+		array('Address', makeMaplink($res[0]['iads_location_address'], $res[0]['iads_location_zip'])),
+		array('Zipcode', $res[0]['iads_location_zip'])
+	);
+
+	echo getTable($array);
+
+	echo '<p/>Availability in the next 30 days:';
+
+	for($i = 0; $i < 30; $i++)
+	{
+		$slot = $db->query('select * from iads_reservation where iads_reservation_location=' . $l . ' and iads_reservation_date = current_date + ' . $i . ' order by iads_reservation_date');
+
+		$open = count($slot) == 0;
+
+		echo '<br/>' . date('D, F j', strtotime('+' . $i . ' days')) . ' is ' . ($open ? '' : '<b>not</b> ') . 'open.';
+	}
+}
+else
+	echo '<p/>Invalid location ID.';
+
+update_session_action(1001, '', 'Location Details');
+
+?>
