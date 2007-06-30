@@ -18,7 +18,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-define('ARC_SECTION', 'BLOG');
+define('ARC_SECTION', 'IADS');
 define('ARC_HOME_MOD', '../');
 
 require '../index.php';
