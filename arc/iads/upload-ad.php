@@ -142,4 +142,6 @@ else
 	echo '<p/>You must be logged in to upload an ad.';
 }
 
+update_session_action(1001, '', 'Upload Ad');
+
 ?>
