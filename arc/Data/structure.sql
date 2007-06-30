@@ -566,7 +566,6 @@ CREATE TABLE forum_forum (
 --
 
 CREATE SEQUENCE forum_forum_forum_forum_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -799,6 +798,37 @@ ALTER SEQUENCE house_house_id_seq OWNED BY house.house_id;
 
 
 SET default_with_oids = false;
+
+--
+-- Name: iads_ad; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE iads_ad (
+    iads_ad_id bigint NOT NULL,
+    iads_ad_user bigint,
+    iads_ad_name character varying(200),
+    iads_ad_data bytea,
+    iads_ad_type character varying(20)
+);
+
+
+--
+-- Name: iads_ad_iads_ad_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE iads_ad_iads_ad_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: iads_ad_iads_ad_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE iads_ad_iads_ad_id_seq OWNED BY iads_ad.iads_ad_id;
+
 
 --
 -- Name: iads_location; Type: TABLE; Schema: public; Owner: -; Tablespace: 
@@ -1564,6 +1594,13 @@ ALTER TABLE group_def ALTER COLUMN group_def_id SET DEFAULT nextval('group_def_g
 --
 
 ALTER TABLE house ALTER COLUMN house_id SET DEFAULT nextval('house_house_id_seq'::regclass);
+
+
+--
+-- Name: iads_ad_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE iads_ad ALTER COLUMN iads_ad_id SET DEFAULT nextval('iads_ad_iads_ad_id_seq'::regclass);
 
 
 --

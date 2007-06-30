@@ -116,6 +116,11 @@ function getAvatarImg($img)
 	return $ret;
 }
 
+function getAdImg($id)
+{
+	return makeImg('ad.php?a=' . $id, 'images/');
+}
+
 // Update player's modified stats according to equipment, job. etc.
 function updatePlayerStats($pid = 0)
 {
