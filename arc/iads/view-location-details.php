@@ -27,13 +27,20 @@ $res = $db->query('select * from iads_location where iads_location_id=' . $l);
 
 if(count($res))
 {
+	$a = $res[0]['iads_location_address'];
+	$n = $res[0]['iads_location_name'];
+	$z = $res[0]['iads_location_zip'];
+	$addr = $a . ', ' . $z;
+
 	$array = array(
-		array('Location', $res[0]['iads_location_name']),
-		array('Address', makeMaplink($res[0]['iads_location_address'], $res[0]['iads_location_zip'])),
-		array('Zipcode', $res[0]['iads_location_zip'])
+		array('Location', $n),
+		array('Address', makeMaplink($a, $z)),
+		array('Zipcode', $z)
 	);
 
 	echo getTable($array);
+
+	echo '<p/><div id="map" style="width: 300px; height: 300px"></div>';
 
 	echo '<p/>Availability in the next 30 days:';
 
@@ -45,6 +52,40 @@ if(count($res))
 
 		echo '<br/>' . date('D, F j', strtotime('+' . $i . ' days')) . ' is ' . ($open ? '' : '<b>not</b> ') . 'open.';
 	}
+
+	$ARC_BODYTAG = 'onload="load()" onunload="GUnload()"';
+
+	$ARC_HEAD = '
+    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=' . GOOGLE_MAPS_KEY . '" type="text/javascript"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+
+    var map = null;
+    var geocoder = null;
+
+    function load() {
+      if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map"));
+        address = "' . $addr . '";
+        geocoder = new GClientGeocoder();
+        geocoder.getLatLng(
+          address,
+          function(point) {
+            if (!point) {
+              alert(address + " not found");
+            } else {
+              map.setCenter(point, 14);
+              var marker = new GMarker(point);
+              map.addOverlay(marker);
+              marker.openInfoWindowHtml("' . $n . '<br/>" + address);
+            }
+          }
+        );
+      }
+    }
+    //]]>
+    </script>
+	';
 }
 else
 	echo '<p/>Invalid location ID.';
