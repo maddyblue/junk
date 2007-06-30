@@ -226,6 +226,77 @@ CREATE SEQUENCE battle_timer_battle_timer_id_seq
 ALTER SEQUENCE battle_timer_battle_timer_id_seq OWNED BY battle_timer.battle_timer_id;
 
 
+SET default_with_oids = false;
+
+--
+-- Name: blog_comment; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE blog_comment (
+    blog_comment_id bigint NOT NULL,
+    blog_comment_user bigint,
+    blog_comment_date bigint,
+    blog_comment_edit_date bigint,
+    blog_comment_edit_user bigint,
+    blog_comment_text text,
+    blog_comment_entry bigint
+);
+
+
+--
+-- Name: blog_comment_blog_comment_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE blog_comment_blog_comment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: blog_comment_blog_comment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE blog_comment_blog_comment_id_seq OWNED BY blog_comment.blog_comment_id;
+
+
+--
+-- Name: blog_entry; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE blog_entry (
+    blog_entry_id bigint NOT NULL,
+    blog_entry_user bigint,
+    blog_entry_text text,
+    blog_entry_date bigint,
+    blog_entry_edit_date bigint,
+    blog_entry_edit_user bigint
+);
+
+
+--
+-- Name: blog_entry_blog_entry_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE blog_entry_blog_entry_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: blog_entry_blog_entry_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE blog_entry_blog_entry_id_seq OWNED BY blog_entry.blog_entry_id;
+
+
+SET default_with_oids = true;
+
 --
 -- Name: cor_area_monster; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
@@ -495,6 +566,7 @@ CREATE TABLE forum_forum (
 --
 
 CREATE SEQUENCE forum_forum_forum_forum_id_seq
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -574,6 +646,7 @@ CREATE TABLE forum_post (
 --
 
 CREATE SEQUENCE forum_post_forum_post_id_seq
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -610,6 +683,7 @@ CREATE TABLE forum_thread (
 --
 
 CREATE SEQUENCE forum_thread_forum_thread_id_seq
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -723,6 +797,72 @@ CREATE SEQUENCE house_house_id_seq
 
 ALTER SEQUENCE house_house_id_seq OWNED BY house.house_id;
 
+
+SET default_with_oids = false;
+
+--
+-- Name: iads_location; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE iads_location (
+    iads_location_id bigint NOT NULL,
+    iads_location_name character varying(200),
+    iads_location_address character varying(200),
+    iads_location_zip character varying(20),
+    iads_location_city character varying(200),
+    iads_location_state character varying(5)
+);
+
+
+--
+-- Name: iads_locations_iads_location_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE iads_locations_iads_location_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: iads_locations_iads_location_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE iads_locations_iads_location_id_seq OWNED BY iads_location.iads_location_id;
+
+
+--
+-- Name: iads_reservation; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE iads_reservation (
+    iads_reservation_id bigint NOT NULL,
+    iads_reservation_user bigint,
+    iads_reservation_location bigint,
+    iads_reservation_date date
+);
+
+
+--
+-- Name: iads_reservation_iads_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE iads_reservation_iads_reservation_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: iads_reservation_iads_reservation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE iads_reservation_iads_reservation_id_seq OWNED BY iads_reservation.iads_reservation_id;
+
+
+SET default_with_oids = true;
 
 --
 -- Name: item; Type: TABLE; Schema: public; Owner: -; Tablespace: 
@@ -1270,7 +1410,8 @@ CREATE TABLE users (
     user_www character varying(200),
     user_timezone character varying(4),
     user_battle_verbose integer DEFAULT 0,
-    user_timeformat character varying(20)
+    user_timeformat character varying(20),
+    user_iads_slots integer
 );
 
 
@@ -1332,6 +1473,20 @@ ALTER TABLE battle_entity ALTER COLUMN battle_entity_uid SET DEFAULT nextval('ba
 --
 
 ALTER TABLE battle_timer ALTER COLUMN battle_timer_id SET DEFAULT nextval('battle_timer_battle_timer_id_seq'::regclass);
+
+
+--
+-- Name: blog_comment_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE blog_comment ALTER COLUMN blog_comment_id SET DEFAULT nextval('blog_comment_blog_comment_id_seq'::regclass);
+
+
+--
+-- Name: blog_entry_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE blog_entry ALTER COLUMN blog_entry_id SET DEFAULT nextval('blog_entry_blog_entry_id_seq'::regclass);
 
 
 --
@@ -1409,6 +1564,20 @@ ALTER TABLE group_def ALTER COLUMN group_def_id SET DEFAULT nextval('group_def_g
 --
 
 ALTER TABLE house ALTER COLUMN house_id SET DEFAULT nextval('house_house_id_seq'::regclass);
+
+
+--
+-- Name: iads_location_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE iads_location ALTER COLUMN iads_location_id SET DEFAULT nextval('iads_locations_iads_location_id_seq'::regclass);
+
+
+--
+-- Name: iads_reservation_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE iads_reservation ALTER COLUMN iads_reservation_id SET DEFAULT nextval('iads_reservation_iads_reservation_id_seq'::regclass);
 
 
 --
