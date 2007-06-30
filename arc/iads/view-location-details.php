@@ -39,7 +39,7 @@ if(count($res))
 
 	for($i = 0; $i < 30; $i++)
 	{
-		$slot = $db->query('select * from iads_reservation where iads_reservation_location=' . $l . ' and iads_reservation_date = current_date + ' . $i . ' order by iads_reservation_date');
+		$slot = $db->query('select * from iads_reservation where iads_reservation_location=' . $l . ' and iads_reservation_date = date(to_timestamp(' . TIME . ') + \'' . $i . ' days\') order by iads_reservation_date');
 
 		$open = count($slot) == 0;
 
