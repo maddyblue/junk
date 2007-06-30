@@ -65,6 +65,7 @@ define('SECTION_MANUAL', 'manual');
 define('SECTION_PODCAST', 'podcast');
 define('SECTION_CDDB', 'cddb');
 define('SECTION_BLOG', 'blog');
+define('SECTION_IADS', 'iads');
 
 /* Preferences */
 
