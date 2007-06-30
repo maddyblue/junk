@@ -16,7 +16,7 @@ rm -f $o $om
 for i in $rev
 do
 	echo "delete from ${i};" >> $o
-	echo "truncate ${i};" >> $om
+	#echo "truncate ${i};" >> $om
 done
 
 for i in $all
