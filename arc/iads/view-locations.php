@@ -31,7 +31,7 @@ array_push($array, array(
 for($i = 0; $i < count($res); $i++)
 {
 	array_push($array, array(
-		makeLink($res[$i]['iads_location_name'], 'a=view-location-details.php&l=' . $res[$i]['iads_location_id']),
+		makeLink($res[$i]['iads_location_name'], 'a=view-location-details&l=' . $res[$i]['iads_location_id']),
 		makeMaplink($res[$i]['iads_location_address'], $res[$i]['iads_location_zip'])
 	));
 }
