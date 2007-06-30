@@ -58,6 +58,7 @@ array(307, 'makeLink(\'Veiwing their User CP\', \'a=usercp\', SECTION_USER)'),
 array(308, 'makeLink(\'Viewing their PMs\', \'a=viewpms\', SECTION_USER)'),
 array(309, 'makeLink(\'Viewing details of \' . decode(getDBData(\'user_name\', $d)), \'a=viewuserdetails&user=\' . $d, SECTION_USER)'),
 array(310, 'makeLink(\'Viewing the user list\', \'a=viewusers\', SECTION_USER)'),
+array(311, 'makeLink(\'Uploading an avatar\', \'a=upload-avatar\', SECTION_USER)'),
 
 // forum
 array(401, 'makeLink(\'Editing a post\', \'a=viewpost&p=\' . $d, SECTION_FORUM)'),

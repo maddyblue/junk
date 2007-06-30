@@ -142,4 +142,6 @@ else
 	echo '<p/>You must be logged in to upload an avatar.';
 }
 
+update_session_action(311, '', 'Upload Avatar');
+
 ?>
