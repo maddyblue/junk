@@ -16,7 +16,7 @@
 	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php" />
 </head>
 
-<body>
+<body <ARC_BODYTAG/> >
 
 	<table><tr class="top"><td style="width: 100%;">
 

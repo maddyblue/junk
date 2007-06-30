@@ -13,7 +13,7 @@
 	<ARC_HEAD/>
 </head>
 
-<body>
+<body <ARC_BODYTAG/> >
 	<div id="container">
 		<div id="header">
 			<h1><?php echo ARC_TITLE; ?></h1>

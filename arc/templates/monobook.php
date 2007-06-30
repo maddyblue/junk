@@ -13,7 +13,7 @@
 	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php" />
 </head>
 
-<body>
+<body <ARC_BODYTAG/> >
 	<div id="globalWrapper">
 		<div id="column-content">
 			<div id="content">

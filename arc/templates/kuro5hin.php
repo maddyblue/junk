@@ -162,7 +162,7 @@
 	<ARC_HEAD/>
 	</head>
 
-<body>
+<body <ARC_BODYTAG/> >
 
 <br/>
 <a href="http://crescentisland.com"><b><?php echo ARC_TITLE; ?></b></a>

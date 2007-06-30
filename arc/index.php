@@ -58,6 +58,9 @@ define('ACTION', $aval);
 if(!isset($ARC_HEAD))
 	$ARC_HEAD = '';
 
+if(!isset($ARC_BODYTAG))
+	$ARC_BODYTAG = '';
+
 // Template
 if(isset($_GET['template']))
 	$t = $_GET['template'];
