@@ -3,7 +3,7 @@
 /* $Id$ */
 
 /*
- * Copyright (c) 2007 Matthew Jibson <dolmant@gmail.com>
+ * Copyright (c) 2007 Matt Jibson <dolmant@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -18,12 +18,14 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-define('ARC_SECTION', 'IADS');
-define('ARC_HOME_MOD', '../');
-
-if(!isset($_GET['a']) && !isset($_POST['a']))
-	$_GET['a'] = 'welcome';
-
-require '../index.php';
+update_session_action(1001, '', 'Welcome');
 
 ?>
+
+<p/>Welcome to iAds.
+<p/><ol>
+	<li>Sign up.</li>
+	<li>Upload ads.</li>
+	<li>Buy slots.</li>
+	<li>Your ads show up on our screens.</li>
+</ol>
