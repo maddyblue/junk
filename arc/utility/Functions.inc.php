@@ -307,11 +307,12 @@ function getFormField($arr)
 		switch($type)
 		{
 			case 'textarea':
-				$parms = 'rows="15" cols="35" wrap="virtual" style="width:450px"';
+				$parms = 'rows="15" cols="35" wrap="virtual"';
 				break;
+			case 'file':
 			case 'text':
 			case 'password':
-				$parms = 'size="45" maxlength="100" style="width:450px"';
+				$parms = 'size="35"';
 				break;
 		}
 	}
