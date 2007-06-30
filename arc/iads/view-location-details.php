@@ -56,35 +56,42 @@ if(count($res))
 	$ARC_BODYTAG = 'onload="load()" onunload="GUnload()"';
 
 	$ARC_HEAD = '
-    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=' . GOOGLE_MAPS_KEY . '" type="text/javascript"></script>
-    <script type="text/javascript">
-    //<![CDATA[
+		<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=' . GOOGLE_MAPS_KEY . '" type="text/javascript"></script>
+		<script type="text/javascript">
+		//<![CDATA[
 
-    var map = null;
-    var geocoder = null;
+		var map = null;
+		var geocoder = null;
 
-    function load() {
-      if (GBrowserIsCompatible()) {
-        map = new GMap2(document.getElementById("map"));
-        address = "' . $addr . '";
-        geocoder = new GClientGeocoder();
-        geocoder.getLatLng(
-          address,
-          function(point) {
-            if (!point) {
-              alert(address + " not found");
-            } else {
-              map.setCenter(point, 14);
-              var marker = new GMarker(point);
-              map.addOverlay(marker);
-              marker.openInfoWindowHtml("' . $n . '<br/>" + address);
-            }
-          }
-        );
-      }
-    }
-    //]]>
-    </script>
+		function load()
+		{
+			if(GBrowserIsCompatible())
+			{
+				map = new GMap2(document.getElementById("map"));
+				map.addControl(new GSmallMapControl());
+				address = "' . $addr . '";
+				geocoder = new GClientGeocoder();
+				geocoder.getLatLng(
+					address,
+					function(point)
+					{
+						if(!point)
+						{
+							alert(address + " not found");
+						}
+						else
+						{
+							map.setCenter(point, 14);
+							var marker = new GMarker(point);
+							map.addOverlay(marker);
+							marker.openInfoWindowHtml("' . $n . '<br/>" + address);
+						}
+					}
+				);
+			}
+		}
+		//]]>
+		</script>
 	';
 }
 else
