@@ -31,7 +31,7 @@ Tables and forms:
 	getTableForm
 	getForm
 	getFormField
-	getTable
+	GetTable
 
 Links and images:
 	makeLink
@@ -669,6 +669,14 @@ function pageDisp($curpage, $totpages, $perpage, $link, $section = '')
 	}
 
 	return $pageDisp;
+}
+
+function makeMaplink($address, $zip, $name = '')
+{
+	if(!$name)
+		$name = $address;
+
+	return makeLink($name, 'http://maps.google.com/maps?q=' . str_replace(' ', '+', $address) . ',+' . $zip, 'EXTERIOR');
 }
 
 ?>
