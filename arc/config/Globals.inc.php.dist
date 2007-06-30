@@ -49,8 +49,9 @@ define('STRIPSLASHES', get_magic_quotes_gpc());
  * These should all have values of true or false.
  */
 
-define('MODULE_GAME', true);
-define('MODULE_PODCAST', true);
+define('MODULE_GAME', false);
+define('MODULE_PODCAST', false);
+define('MODULE_IADS', false);
 
 /* Section alises */
 
