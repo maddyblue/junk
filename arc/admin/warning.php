@@ -3,7 +3,7 @@
 /* $Id$ */
 
 /*
- * Copyright (c) 2002 Matthew Jibson <dolmant@gmail.com>
+ * Copyright (c) 2007 Matthew Jibson <dolmant@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -18,12 +18,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-define('ARC_SECTION', 'ADMIN');
-define('ARC_HOME_MOD', '../');
-
-if(!isset($_GET['a']) && !isset($_POST['a']))
-	$_GET['a'] = 'warning';
-
-require '../index.php';
-
 ?>
+
+<p/><b>Warning!</b>
+<p/>The scripts in this section are potentially dangerous. Do not even click on the links unless you know what you are doing.
