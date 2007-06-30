@@ -29,14 +29,14 @@ do
 	cat $t.top $t.mid $t.bot >> $o
 	rm $t $t.top $t.mid $t.bot
 
-	pg_dump -a -O -x -d -U $1 -h $2 -t $i $3 | \
-	sed 's/^SET/--SET/' | \
-	sed "s/SELECT pg_catalog.setval('\(.*\)', \(.*\), true);/ALTER TABLE \1 AUTO_INCREMENT =\2;/" | \
-	sed 's/"domain"/domain/' | \
-	sed "s/', E'/', '/" \
-		>> $om
+	#pg_dump -a -O -x -d -U $1 -h $2 -t $i $3 | \
+	#sed 's/^SET/--SET/' | \
+	#sed "s/SELECT pg_catalog.setval('\(.*\)', \(.*\), true);/ALTER TABLE \1 AUTO_INCREMENT =\2;/" | \
+	#sed 's/"domain"/domain/' | \
+	#sed "s/', E'/', '/" \
+	#	>> $om
 done
 
-sed 's/^.*AUTO_INCREMENT/--/' $om |\
-sed 's/^truncate/delete from/' \
- > $os
+#sed 's/^.*AUTO_INCREMENT/--/' $om |\
+#sed 's/^truncate/delete from/' \
+# > $os

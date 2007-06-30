@@ -298,6 +298,8 @@ GAME_SECTION_NAV	18	link	View Jobs		'a=viewjobs'	SECTION_GAME	0	0
 GAME_SECTION_NAV	19	link	View Monsters		'a=viewmonsters'	SECTION_GAME	0	0	
 GAME_SECTION_NAV	20	link	View Players		'a=viewplayers'	SECTION_GAME	0	0	
 GAME_SECTION_NAV	21	link	View Towns		'a=viewtowns'	SECTION_GAME	0	0	
+IADS_SECTION_NAV	0	link	View Locations		'a=view-locations'		0	0	
+IADS_SECTION_NAV	2	link	Buy Slots		'a=buy-slots'		1	0	
 MAIN_SECTION_NAV	10	link	Domains		'a=domains'	SECTION_HOME	0	0	
 MAIN_SECTION_NAV	11	link	Events		'a=event'	SECTION_HOME	0	0	
 MAIN_SECTION_NAV	12	link	Skins		'a=skins'	SECTION_HOME	0	0	
@@ -320,6 +322,7 @@ NAV	17	link	Admin			SECTION_ADMIN	1	1
 NAV	18	link	[Register User]		'a=newuser'	SECTION_USER	-1	0	
 NAV	19	link	[Login]		'a=login&r=' . encode($_SERVER['REQUEST_URI'])	SECTION_USER	-1	0	
 NAV	19	link	[Logout]		'a=logout'	SECTION_USER	1	0	
+NAV	2	link	iAds			SECTION_IADS	0	0	
 PODCAST_SECTION_NAV	1	link	New Podcast		'a=new-podcast'	SECTION_PODCAST	1	1	
 PODCAST_SECTION_NAV	1	link	View Podcasts		'a=view-podcasts'	SECTION_PODCAST	0	0	
 SET search_path = public, pg_catalog;
@@ -331,6 +334,7 @@ USER_SECTION_NAV	14	link	User CP		'a=usercp'	SECTION_USER	1	0
 USER_SECTION_NAV	15	link	View Active Users		'a=whosonline'	SECTION_USER	0	0	
 USER_SECTION_NAV	16	link	View PMs		'a=viewpms'	SECTION_USER	1	0	
 USER_SECTION_NAV	17	link	View Users		'a=viewusers'	SECTION_USER	0	0	
+_BODYTAG	0	eval	$GLOBALS['ARC_BODYTAG']				0	0	
 _HEAD	0	eval	$GLOBALS['ARC_HEAD']				0	0	
 _PREENDBODY	0	eval	(defined('URCHIN') ? '<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script type="text/javascript">_uacct = "' . URCHIN . '"; urchinTracker();</script>' : '')				0	0	
 _PROFILE	0	eval	getProfile()				0	0	
