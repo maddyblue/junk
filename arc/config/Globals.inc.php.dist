@@ -43,7 +43,8 @@ define('PODCAST_EXPLICIT', ''); // 'clean', 'explicit', or ''
 
 define('DEFAULT_TIME_FORMAT', 'd M y g:i a'); // default time format, refer to http://php.net/date for more.
 define('STRIPSLASHES', get_magic_quotes_gpc());
-//define('URCHIN', 'UA-12345-6'); // Optional. Uncomment and set to your Google Analytics account number.
+//define('URCHIN', 'UA-12345-6'); // Optional. If set (uncommented), will enable Google Analytics with the specified key on all pages.
+define('IADS_GOOGLE_MAPS', ''); // Optional. Set to your Google Maps API key for the /iads directory.
 
 /* Modules
  * These should all have values of true or false.
