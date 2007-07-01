@@ -22,6 +22,8 @@ require_once(ARC_HOME_MOD . 'utility/Iads.inc.php');
 
 if(LOGGED)
 {
+	updateCart();
+
 	$query = 'select iads_cart.*, iads_ad_name, iads_location_name from iads_cart, iads_location, iads_ad where iads_cart_ad = iads_ad_id and iads_location_id = iads_cart_location and iads_ad_user = ' . ID;
 	$res = $db->query($query);
 
@@ -40,11 +42,16 @@ if(LOGGED)
 		$numslots = count($slots);
 		$totalslots += $numslots;
 
-		array_push($array, array(
+		$array[] = array(
 			makeLink(decode($res[$i]['iads_ad_name']), ARC_WWW_PATH . 'images/ad.php?a=' . $res[$i]['iads_cart_ad'], 'EXTERIOR') . ' at ' . makeLink($res[$i]['iads_location_name'], 'a=view-location-details&l=' . $res[$i]['iads_cart_location']) . '<br/>from ' . date('D, F j', strtotime($res[$i]['iads_cart_d1'])) . ' to ' . date('D, F j', strtotime($res[$i]['iads_cart_d2'])),
 			$numslots
-		));
+		);
 	}
+
+	$array[] = array(
+		'Total cost',
+		'$' . number_format($USER['user_cart_cost'], 2)
+	);
 
 	echo getTable($array);
 }
