@@ -440,7 +440,7 @@ function makeLink($text, $link, $section = '', $title = '')
 		$ret .= '?';
 	}
 
-	if(isset($_GET['sqlprofile']) || isset($_POST['sqlprofile']))
+	if($section != 'EXTERIOR' && isset($_GET['sqlprofile']) || isset($_POST['sqlprofile']))
 		$link .= '&sqlprofile';
 
 	$ret .= str_replace('&', '&amp;', $link) . '"';
