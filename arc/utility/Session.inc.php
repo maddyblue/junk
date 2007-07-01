@@ -104,8 +104,9 @@ function close_sessions()
 
 	foreach($ret as $row)
 	{
-		$db->query('update users set user_last_session = ' . $row['session_current'] . ' where user_id = ' . $row['session_uid']);
+		$db->query('update users set user_last_session = ' . $row['session_current'] . ', user_cart_cost=0, user_cart_items=0 where user_id = ' . $row['session_uid']);
 		$db->query('delete from forum_view where forum_view_user=' . $row['session_uid']);
+		$db->query('delete from iads_cart using iads_ad where iads_cart_ad = iads_ad_id and iads_ad_user = ' . $row['session_uid']);
 	}
 
 	// remove all sessions that are over the timeout
