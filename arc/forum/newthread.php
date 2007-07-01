@@ -117,6 +117,7 @@ else
 
 				$db->update('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $lastthread);
 				$db->update('insert into forum_view (forum_view_user, forum_view_thread, forum_view_date) values (' . ID . ', ' . $lastthread . ', ' . TIME . ')');
+
 				parsePostWords($lastpost, $_POST['post']);
 
 				echo '<p/>Thread created successfully.';
