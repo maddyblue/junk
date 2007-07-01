@@ -18,26 +18,131 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+function display($locid, $adid, $d1id, $d2id)
+{
+	global $db;
+
+	$res = $db->query('select * from iads_location order by iads_location_name');
+	$locarr = array();
+
+	for($i = 0; $i < count($res); $i++)
+	{
+		$locarr[] = array(
+			$res[$i]['iads_location_id'],
+			$res[$i]['iads_location_name'] . ' - ' . $res[$i]['iads_location_address'] . ', ' . $res[$i]['iads_location_zip']
+		);
+	}
+
+	$loc = makeSelect($locarr, $locid);
+
+	$res = $db->query('select iads_ad_id, iads_ad_name, iads_ad_type, octet_length(iads_ad_data) as length from iads_ad where iads_ad_user = ' . ID . ' order by iads_ad_name');
+	$adarr = array();
+
+	if(count($res) == 0)
+	{
+		echo '<p/>There are no advertisements in your account. Please upload one and wait for approval.';
+		return;
+	}
+
+	for($i = 0; $i < count($res); $i++)
+	{
+		$adarr[] = array(
+			$res[$i]['iads_ad_id'],
+			$res[$i]['iads_ad_name'] . ' - ' . $res[$i]['iads_ad_type'] . ', ' . round($res[$i]['length'] / 1024, 1) . 'KB'
+		);
+	}
+
+	$ad = makeSelect($adarr, $adid);
+
+	$darr = array();
+
+	for($i = 1; $i <= 30; $i++)
+	{
+		$date = strtotime('+' . $i . ' day');
+		$darr[] = array(
+			date('Ymd', $date),
+			date('D, M j', $date)
+		);
+	}
+
+	$d1 = makeSelect($darr, $d1id);
+	$d2 = makeSelect($darr, $d2id);
+
+	echo
+		getTableForm('Buy slots:', array(
+			array('Location', array('type'=>'select', 'name'=>'loc', 'val'=>$loc)),
+			array('Ad', array('type'=>'select', 'name'=>'ad', 'val'=>$ad)),
+			array('', array('type'=>'disptext', 'val'=>'Add all free slots between:')),
+			array('', array('type'=>'disptext', 'val'=>
+				getFormField(array('type'=>'select', 'name'=>'d1', 'val'=>$d1)) .
+				' and ' .
+				getFormField(array('type'=>'select', 'name'=>'d2', 'val'=>$d2))
+			)),
+
+			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Add to cart')),
+			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'buy-slots'))
+	), true);
+}
+
+if(LOGGED)
+{
+	$loc = isset($_POST['loc']) ? intval($_POST['loc']) : 0;
+	$ad = isset($_POST['ad']) ? intval($_POST['ad']) : 0;
+	$d1 = isset($_POST['d1']) ? intval($_POST['d1']) : 0;
+	$d2 = isset($_POST['d2']) ? intval($_POST['d2']) : 0;
+
+	if($d2 < $d1)
+	{
+		$tmp = $d2;
+		$d2 = $d1;
+		$d1 = $tmp;
+	}
+
+	$firstday = date('Ymd', strtotime('today +1 day'));
+	$lastday = date('Ymd', strtotime('today +30 days'));
+
+	if($d1 < $firstday)
+		$d1 = $firstday;
+
+	if($d2 > $lastday)
+		$d2 = $lastday;
+
+	if(isset($_POST['submit']))
+	{
+		$fail = false;
+
+		$res = $db->query('select count(*) as count from iads_location where iads_location_id = ' . $loc);
+		if($res[0]['count'] == 0)
+		{
+			$fail = true;
+			echo '<p/>Invalid location ID.';
+		}
+
+		$res = $db->query('select count(*) as count from iads_ad where iads_ad_id = ' . $ad . ' and iads_ad_user = ' . ID);
+		if($res[0]['count'] == 0)
+		{
+			$fail = true;
+			echo '<p/>Invalid advertisement ID.';
+		}
+
+		if(!$fail)
+		{
+			$db->update('insert into iads_cart (iads_cart_ad, iads_cart_d1, iads_cart_d2) values (' . $ad . ', date(' . $d1 . '), date(' . $d2 . '))');
+
+			echo '<p/>Selection added to cart.';
+
+			display('', '', '', '');
+		}
+		else
+			display($loc, $ad, $d1, $d2);
+	}
+	else
+		display($loc, $ad, $d1, $d2);
+}
+else
+	echo '<p/>You must be logged in to buy slots.';
+
 update_session_action(1001, '', 'Buy Slots');
 
 ?>
-
-<form action="https://sandbox.google.com/checkout/cws/v2/Merchant/262335603214380/checkout" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm">
-	<table cellpadding="5" cellspacing="0" width="1%">
-		<tr>
-			<td align="right" width="1%">
-				<select name="buyButtonCart">
-					<option value="PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxjaGVja291dC1zaG9wcGluZy1jYXJ0IHhtbG5zPSJodHRwOi8vY2hlY2tvdXQuZ29vZ2xlLmNvbS9zY2hlbWEvMiI+DQogIDxzaG9wcGluZy1jYXJ0Pg0KICAgIDxpdGVtcz4NCiAgICAgIDxpdGVtPg0KICAgICAgICA8aXRlbS1uYW1lPjEgU2xvdDwvaXRlbS1uYW1lPg0KICAgICAgICA8cXVhbnRpdHk+MTwvcXVhbnRpdHk+DQogICAgICAgIDx1bml0LXByaWNlIGN1cnJlbmN5PSJVU0QiPjUuMDwvdW5pdC1wcmljZT4NCiAgICAgICAgPGl0ZW0tZGVzY3JpcHRpb24gLz4NCiAgICAgIDwvaXRlbT4NCiAgICA8L2l0ZW1zPg0KICA8L3Nob3BwaW5nLWNhcnQ+DQogIDxjaGVja291dC1mbG93LXN1cHBvcnQ+DQogICAgPG1lcmNoYW50LWNoZWNrb3V0LWZsb3ctc3VwcG9ydCAvPg0KICA8L2NoZWNrb3V0LWZsb3ctc3VwcG9ydD4NCjwvY2hlY2tvdXQtc2hvcHBpbmctY2FydD4NCg0K//separator//P41QgJbM036e7Ez2Hcq7Kx08ka8=">&#x24;5.00 - 1 Slot</option>
-					<option value="PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxjaGVja291dC1zaG9wcGluZy1jYXJ0IHhtbG5zPSJodHRwOi8vY2hlY2tvdXQuZ29vZ2xlLmNvbS9zY2hlbWEvMiI+DQogIDxzaG9wcGluZy1jYXJ0Pg0KICAgIDxpdGVtcz4NCiAgICAgIDxpdGVtPg0KICAgICAgICA8aXRlbS1uYW1lPjIgU2xvdHM8L2l0ZW0tbmFtZT4NCiAgICAgICAgPHF1YW50aXR5PjE8L3F1YW50aXR5Pg0KICAgICAgICA8dW5pdC1wcmljZSBjdXJyZW5jeT0iVVNEIj4xMC4wPC91bml0LXByaWNlPg0KICAgICAgICA8aXRlbS1kZXNjcmlwdGlvbiAvPg0KICAgICAgPC9pdGVtPg0KICAgIDwvaXRlbXM+DQogIDwvc2hvcHBpbmctY2FydD4NCiAgPGNoZWNrb3V0LWZsb3ctc3VwcG9ydD4NCiAgICA8bWVyY2hhbnQtY2hlY2tvdXQtZmxvdy1zdXBwb3J0IC8+DQogIDwvY2hlY2tvdXQtZmxvdy1zdXBwb3J0Pg0KPC9jaGVja291dC1zaG9wcGluZy1jYXJ0Pg0KDQo=//separator//KRqNjeiMxm0Q5rnVjYF/k5ulfr0=">&#x24;10.00 - 2 Slots</option>
-					<option value="PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxjaGVja291dC1zaG9wcGluZy1jYXJ0IHhtbG5zPSJodHRwOi8vY2hlY2tvdXQuZ29vZ2xlLmNvbS9zY2hlbWEvMiI+DQogIDxzaG9wcGluZy1jYXJ0Pg0KICAgIDxpdGVtcz4NCiAgICAgIDxpdGVtPg0KICAgICAgICA8aXRlbS1uYW1lPjUgU2xvdHM8L2l0ZW0tbmFtZT4NCiAgICAgICAgPHF1YW50aXR5PjE8L3F1YW50aXR5Pg0KICAgICAgICA8dW5pdC1wcmljZSBjdXJyZW5jeT0iVVNEIj4yNC41PC91bml0LXByaWNlPg0KICAgICAgICA8aXRlbS1kZXNjcmlwdGlvbj4kNC45MCBwZXIgc2xvdDwvaXRlbS1kZXNjcmlwdGlvbj4NCiAgICAgIDwvaXRlbT4NCiAgICA8L2l0ZW1zPg0KICA8L3Nob3BwaW5nLWNhcnQ+DQogIDxjaGVja291dC1mbG93LXN1cHBvcnQ+DQogICAgPG1lcmNoYW50LWNoZWNrb3V0LWZsb3ctc3VwcG9ydCAvPg0KICA8L2NoZWNrb3V0LWZsb3ctc3VwcG9ydD4NCjwvY2hlY2tvdXQtc2hvcHBpbmctY2FydD4NCg0K//separator//smPcj7a/n5NaUbiZKn6P8/5IhX0=">&#x24;24.50 - 5 Slots</option>
-					<option value="PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxjaGVja291dC1zaG9wcGluZy1jYXJ0IHhtbG5zPSJodHRwOi8vY2hlY2tvdXQuZ29vZ2xlLmNvbS9zY2hlbWEvMiI+DQogIDxzaG9wcGluZy1jYXJ0Pg0KICAgIDxpdGVtcz4NCiAgICAgIDxpdGVtPg0KICAgICAgICA8aXRlbS1uYW1lPjEwIFNsb3RzPC9pdGVtLW5hbWU+DQogICAgICAgIDxxdWFudGl0eT4xPC9xdWFudGl0eT4NCiAgICAgICAgPHVuaXQtcHJpY2UgY3VycmVuY3k9IlVTRCI+NDguMDwvdW5pdC1wcmljZT4NCiAgICAgICAgPGl0ZW0tZGVzY3JpcHRpb24+JDQuODAgcGVyIHNsb3Q8L2l0ZW0tZGVzY3JpcHRpb24+DQogICAgICA8L2l0ZW0+DQogICAgPC9pdGVtcz4NCiAgPC9zaG9wcGluZy1jYXJ0Pg0KICA8Y2hlY2tvdXQtZmxvdy1zdXBwb3J0Pg0KICAgIDxtZXJjaGFudC1jaGVja291dC1mbG93LXN1cHBvcnQgLz4NCiAgPC9jaGVja291dC1mbG93LXN1cHBvcnQ+DQo8L2NoZWNrb3V0LXNob3BwaW5nLWNhcnQ+DQoNCg==//separator//jCWc5Hp9JWbOlQg3QyJi4ikhrAs=">&#x24;48.00 - 10 Slots</option>
-					<option value="PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxjaGVja291dC1zaG9wcGluZy1jYXJ0IHhtbG5zPSJodHRwOi8vY2hlY2tvdXQuZ29vZ2xlLmNvbS9zY2hlbWEvMiI+DQogIDxzaG9wcGluZy1jYXJ0Pg0KICAgIDxpdGVtcz4NCiAgICAgIDxpdGVtPg0KICAgICAgICA8aXRlbS1uYW1lPjUwIFNsb3RzPC9pdGVtLW5hbWU+DQogICAgICAgIDxxdWFudGl0eT4xPC9xdWFudGl0eT4NCiAgICAgICAgPHVuaXQtcHJpY2UgY3VycmVuY3k9IlVTRCI+MjI1LjA8L3VuaXQtcHJpY2U+DQogICAgICAgIDxpdGVtLWRlc2NyaXB0aW9uPiQ0LjUwIHBlciBzbG90PC9pdGVtLWRlc2NyaXB0aW9uPg0KICAgICAgPC9pdGVtPg0KICAgIDwvaXRlbXM+DQogIDwvc2hvcHBpbmctY2FydD4NCiAgPGNoZWNrb3V0LWZsb3ctc3VwcG9ydD4NCiAgICA8bWVyY2hhbnQtY2hlY2tvdXQtZmxvdy1zdXBwb3J0IC8+DQogIDwvY2hlY2tvdXQtZmxvdy1zdXBwb3J0Pg0KPC9jaGVja291dC1zaG9wcGluZy1jYXJ0Pg0KDQo=//separator//U+WVzPm1r7KelAA9yOK4sLyscSA=">&#x24;225.00 - 50 Slots</option>
-					<option value="PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxjaGVja291dC1zaG9wcGluZy1jYXJ0IHhtbG5zPSJodHRwOi8vY2hlY2tvdXQuZ29vZ2xlLmNvbS9zY2hlbWEvMiI+DQogIDxzaG9wcGluZy1jYXJ0Pg0KICAgIDxpdGVtcz4NCiAgICAgIDxpdGVtPg0KICAgICAgICA8aXRlbS1uYW1lPjEwMCBTbG90czwvaXRlbS1uYW1lPg0KICAgICAgICA8cXVhbnRpdHk+MTwvcXVhbnRpdHk+DQogICAgICAgIDx1bml0LXByaWNlIGN1cnJlbmN5PSJVU0QiPjQwMC4wPC91bml0LXByaWNlPg0KICAgICAgICA8aXRlbS1kZXNjcmlwdGlvbj4kNC4wMCBwZXIgc2xvdDwvaXRlbS1kZXNjcmlwdGlvbj4NCiAgICAgIDwvaXRlbT4NCiAgICA8L2l0ZW1zPg0KICA8L3Nob3BwaW5nLWNhcnQ+DQogIDxjaGVja291dC1mbG93LXN1cHBvcnQ+DQogICAgPG1lcmNoYW50LWNoZWNrb3V0LWZsb3ctc3VwcG9ydCAvPg0KICA8L2NoZWNrb3V0LWZsb3ctc3VwcG9ydD4NCjwvY2hlY2tvdXQtc2hvcHBpbmctY2FydD4NCg0K//separator//0/+14A0Teh0B+mblHx2frId+mN4=">&#x24;400.00 - 100 Slots</option>
-				</select>
-			</td>
-			<td align="left" width="1%">
-				<input alt="" src="https://sandbox.google.com/checkout/buttons/buy.gif?merchant_id=262335603214380&amp;w=117&amp;h=48&amp;style=trans&amp;variant=text&amp;loc=en_US" type="image"/>
-			</td>
-		</tr>
-	</table>
-</form>

@@ -645,7 +645,6 @@ CREATE TABLE forum_post (
 --
 
 CREATE SEQUENCE forum_post_forum_post_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -682,7 +681,6 @@ CREATE TABLE forum_thread (
 --
 
 CREATE SEQUENCE forum_thread_forum_thread_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -828,6 +826,36 @@ CREATE SEQUENCE iads_ad_iads_ad_id_seq
 --
 
 ALTER SEQUENCE iads_ad_iads_ad_id_seq OWNED BY iads_ad.iads_ad_id;
+
+
+--
+-- Name: iads_cart; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE iads_cart (
+    iads_cart_id bigint NOT NULL,
+    iads_cart_ad bigint,
+    iads_cart_d1 date,
+    iads_cart_d2 date
+);
+
+
+--
+-- Name: iads_cart_iads_cart_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE iads_cart_iads_cart_id_seq
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- Name: iads_cart_iads_cart_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE iads_cart_iads_cart_id_seq OWNED BY iads_cart.iads_cart_id;
 
 
 --
@@ -1441,7 +1469,7 @@ CREATE TABLE users (
     user_timezone character varying(4),
     user_battle_verbose integer DEFAULT 0,
     user_timeformat character varying(20),
-    user_iads_slots integer
+    user_cart_cost real
 );
 
 
@@ -1601,6 +1629,13 @@ ALTER TABLE house ALTER COLUMN house_id SET DEFAULT nextval('house_house_id_seq'
 --
 
 ALTER TABLE iads_ad ALTER COLUMN iads_ad_id SET DEFAULT nextval('iads_ad_iads_ad_id_seq'::regclass);
+
+
+--
+-- Name: iads_cart_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE iads_cart ALTER COLUMN iads_cart_id SET DEFAULT nextval('iads_cart_iads_cart_id_seq'::regclass);
 
 
 --
