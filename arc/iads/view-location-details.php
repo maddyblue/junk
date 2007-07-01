@@ -18,6 +18,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+require_once(ARC_HOME_MOD . 'utility/Iads.inc.php');
+
 $l = isset($_GET['l']) ? intval($_GET['l']) : '0';
 
 if(isset($_POST['l']))
@@ -42,15 +44,16 @@ if(count($res))
 
 	echo '<p/><div id="map" style="width: 300px; height: 300px"></div>';
 
-	echo '<p/>Availability in the next 30 days:';
+	$d1 = date('Ymd', strtotime('today +1 day'));
+	$d2 = date('Ymd', strtotime('today +30 days'));
 
-	for($i = 0; $i < 30; $i++)
+	$free = freeSlots($d1, $d2, $l);
+
+	echo '<p/>Availability in the next 30 days (' . count($free) . ' days free):';
+
+	for($i = 0; $i < count($free); $i++)
 	{
-		$slot = $db->query('select * from iads_reservation where iads_reservation_location=' . $l . ' and iads_reservation_date = date(to_timestamp(' . TIME . ') + \'' . $i . ' days\') order by iads_reservation_date');
-
-		$open = count($slot) == 0;
-
-		echo '<br/>' . date('D, F j', strtotime('+' . $i . ' days')) . ' is ' . ($open ? '' : '<b>not</b> ') . 'open.';
+		echo '<br/>' . date('D, F j', strtotime($free[$i]));
 	}
 
 	$ARC_BODYTAG = 'onload="load()" onunload="GUnload()"';
