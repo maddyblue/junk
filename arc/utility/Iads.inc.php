@@ -60,10 +60,10 @@ function freeSlots($d1, $d2, $loc)
 // updates the current cart total for the current user
 function updateCart()
 {
-	global $db;
-
 	if(!LOGGED)
 		return;
+
+	global $db, $USER;
 
 	$res = $db->query('select iads_cart.* from iads_cart, iads_ad where iads_cart_ad = iads_ad_id and iads_ad_user = ' . ID);
 
@@ -77,6 +77,9 @@ function updateCart()
 	$cost = $slots * 5;
 
 	$db->update('update users set user_cart_cost = ' . $cost . ', user_cart_items = ' . count($res) . ' where user_id = ' . ID);
+
+	$USER['user_cart_cost'] = $cost;
+	$USER['user_cart_items'] = count($res);
 }
 
 function dateConvert($d)
