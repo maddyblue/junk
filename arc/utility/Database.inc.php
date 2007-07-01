@@ -113,7 +113,7 @@ class Database
 
 	function escape_string($s)
 	{
-		pg_escape_string($s);
+		return pg_escape_string($s);
 	}
 }
 
