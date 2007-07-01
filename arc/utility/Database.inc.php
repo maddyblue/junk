@@ -21,7 +21,6 @@
 class Database
 {
 	var $handle = null;
-	var $type;
 
 	var $queries = array();
 	var $time = 0;
@@ -31,31 +30,12 @@ class Database
 
 	function connect($params)
 	{
-		$this->type = $params['type'];
-
-		if($this->type == 'postgre')
-		{
-			$this->handle = pg_connect('
-				host=' . $params['host'] . '
-				user=' . $params['user'] . '
-				password=' . $params['pass'] . '
-				dbname=' . $params['database']
-			);
-		}
-		else if($this->type == 'mysql')
-		{
-			$this->handle = mysql_connect(
-				$params['host'],
-				$params['user'],
-				$params['pass']
-			);
-
-			mysql_select_db($params['database'], $this->handle);
-		}
-		else if($this->type == 'sqlite')
-		{
-			$this->handle = sqlite_open($params['database']);
-		}
+		$this->handle = pg_connect('
+			host=' . $params['host'] . '
+			user=' . $params['user'] . '
+			password=' . $params['pass'] . '
+			dbname=' . $params['database']
+		);
 	}
 
 	/* Disconnect: Closes a database connection
@@ -63,12 +43,7 @@ class Database
 
 	function disconnect()
 	{
-		switch($this->type)
-		{
-			case 'postgre': pg_close($this->handle); break;
-			case 'mysql': mysql_close($this->handle); break;
-			case 'sqlite': sqlite_close($this->handle); break;
-		}
+		 pg_close($this->handle);
 
 		$this->handle = null;
 	}
@@ -91,67 +66,22 @@ class Database
 
 		$start = gettimeofday();
 
-		if($this->type == 'postgre')
+		$this->resource = pg_query($this->handle, $query);
+
+		if(pg_result_error($this->resource))
 		{
-			pg_send_query($this->handle, $query);
-
-			while($this->resource = pg_get_result($this->handle))
-			{
-				if(pg_result_error($this->resource))
-				{
-					global $message;
-					$message .= '<div class="error">Error: ' . pg_result_error($this->resource) . '.
-						<br/>Query: <pre>' . $query . '</pre></div>';
-					$ret = false;
-				}
-				else if($expect_return)
-				{
-					while($row = pg_fetch_assoc($this->resource))
-						array_push($ret, $row);
-				}
-
-				pg_free_result($this->resource);
-			}
+			global $message;
+			$message .= '<div class="error">Error: ' . pg_result_error($this->resource) . '.
+				<br/>Query: <pre>' . $query . '</pre></div>';
+			$ret = false;
 		}
-		else if($this->type == 'mysql')
+		else if($expect_return)
 		{
-			$res = mysql_query($query, $this->handle);
-
-			$s = mysql_error($this->handle);
-
-			if($s)
-			{
-				global $message;
-				$message .= '<div class="error">Error: ' . $s . '.
-					<br/>Query: <pre>' . $query . '</pre></div>';
-				$ret = false;
-			}
-			else if($expect_return && $res !== TRUE && mysql_num_rows($res) > 0)
-			{
-				while($row = mysql_fetch_assoc($res))
-					array_push($ret, $row);
-
-				mysql_free_result($res);
-			}
+			while($row = pg_fetch_assoc($this->resource))
+				array_push($ret, $row);
 		}
-		else if($this->type == 'sqlite')
-		{
-			$res = sqlite_query($this->handle, $query);
 
-			$s = sqlite_last_error($this->handle);
-
-			if($s > 0)
-			{
-				global $message;
-				$message .= '<div class="error">Error: ' . sqlite_error_string($s) . '
-					<br/>Query: <pre>' . $query . '</pre></div>';
-				$ret = false;
-			}
-			else if($expect_return && $res !== FALSE && sqlite_num_rows($res) > 0)
-			{
-				$ret = sqlite_fetch_all($res);
-			}
-		}
+		pg_free_result($this->resource);
 
 		$end = gettimeofday();
 		$time = (float)($end['sec'] - $start['sec']) + ((float)($end['usec'] - $start['usec'])/1000000);
@@ -174,19 +104,8 @@ class Database
 
 		if($ret !== false)
 		{
-			if($this->type == 'postgre')
-			{
-				$result = $this->query("select currval('${seq}${s}_${seq}_id_seq') as lastid");
-				$ret = $result[0]['lastid'];
-			}
-			else if($this->type == 'mysql')
-			{
-				$ret = mysql_insert_id($this->type);
-			}
-			else if($this->type == 'sqlite')
-			{
-				$ret = sqlite_last_insert_rowid($this->type);
-			}
+			$result = $this->query("select currval('${seq}${s}_${seq}_id_seq') as lastid");
+			$ret = $result[0]['lastid'];
 		}
 
 		return $ret;
@@ -194,12 +113,7 @@ class Database
 
 	function escape_string($s)
 	{
-		switch($this->type)
-		{
-			case 'postgre': return pg_escape_string($s);
-			case 'mysql': return mysql_real_escape_string($s, $this->handle);
-			case 'sqlite': return sqlite_escape_string($s);
-		}
+		pg_escape_string($s);
 	}
 }
 

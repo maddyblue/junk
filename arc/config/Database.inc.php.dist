@@ -8,8 +8,5 @@ $DBConf['user']     = '';
 $DBConf['pass']     = '';
 $DBConf['host']     = '';
 $DBConf['database'] = '';
-$DBConf['type']     = ''; // 'postgre', 'mysql', 'sqlite'
-
-// If type is sqlite, only specify the database parameter as the database file.
 
 ?>

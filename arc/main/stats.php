@@ -68,13 +68,7 @@ if(ADMIN)
 {
 	echo '<p/><hr/><p/><b>Stats viewable by Administrators:</b>';
 
-	if($db->type == 'mysql')
-	{
-		$trunc1 = 'truncate(';
-		$trunc2 = ', 0)';
-	}
-	else
-		$trunc1 = $trunc2 = '';
+	$trunc1 = $trunc2 = '';
 
 	if(MODULE_PODCAST)
 	{

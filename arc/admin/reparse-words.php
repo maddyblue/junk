@@ -36,10 +36,7 @@ else
 	if($start == 0)
 	{
 		echo '<p/>Dropping the index.';
-		if($db->type == 'postgre')
-			$db->update('drop index ' . $index_name);
-		else if($db->type == 'mysql')
-			$db->update('ALTER TABLE forum_word DROP INDEX forum_word_word');
+		$db->update('drop index ' . $index_name);
 
 		echo '<p/>Clearing table.';
 		$db->update('truncate table forum_word');
@@ -57,10 +54,7 @@ else
 	if(count($posts) < $per)
 	{
 		echo '<p/>Creating the index.';
-		if($db->type == 'postgre')
-			$db->update('create index ' . $index_name . ' on forum_word (forum_word_word)');
-		else if($db->type == 'mysql')
-			$db->update('ALTER TABLE forum_word add index (forum_word_word (50))');
+		$db->update('create index ' . $index_name . ' on forum_word (forum_word_word)');
 
 		echo '<p/>Done.';
 	}

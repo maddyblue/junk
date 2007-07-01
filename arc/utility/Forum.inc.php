@@ -472,40 +472,22 @@ function parsePostWords($id, $text, $del = false)
 
 	$u = array_unique($res[0]);
 
-	if($db->type == 'postgre')
+	$i = 0;
+	$query = '';
+
+	foreach($u as $p)
 	{
-		$i = 0;
-		$query = '';
+		$query .= 'insert into forum_word values (' . $id . ', \'' . $db->escape_string($p) . "');\n";
 
-		foreach($u as $p)
+		if($i++ == 0)
 		{
-			$query .= 'insert into forum_word values (' . $id . ', \'' . $db->escape_string($p) . "');\n";
-
-			if($i++ == 0)
-			{
-				$db->update($query);
-				$query = '';
-				$i = 0;
-			}
+			$db->update($query);
+			$query = '';
+			$i = 0;
 		}
-
-		$db->update($query);
 	}
-	else if($db->type == 'mysql')
-	{
-		$query = 'insert into forum_word values ';
-		$i = 0;
 
-		foreach($u as $p)
-		{
-			if($i++ > 0)
-				$query .= ', ';
-
-			$query .= '(' . $id . ', \'' . $db->escape_string($p) . '\')';
-		}
-
-		$db->update($query);
-	}
+	$db->update($query);
 }
 
 ?>
