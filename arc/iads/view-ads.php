@@ -32,6 +32,6 @@ else
 	echo '<p/>You must be logged in to view your ads.';
 }
 
-update_session_action(1001, '', 'My Ads');
+update_session_action(1001, '', 'Ads');
 
 ?>

@@ -38,6 +38,6 @@ for($i = 0; $i < count($res); $i++)
 
 echo getTable($array);
 
-update_session_action(1001, '', 'View Locations');
+update_session_action(1001, '', 'Locations');
 
 ?>
