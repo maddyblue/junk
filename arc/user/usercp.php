@@ -53,10 +53,7 @@ function disp($email, $sig, $aim, $yahoo, $icq, $msn, $www, $tz, $battle, $timef
 		array(12, '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka')
 	);
 
-	$timezone = '';
-
-	for($i = 0; $i < count($tzarr); $i++)
-		$timezone .= '<option value="' . $tzarr[$i][0] . '"' . ($tzarr[$i][0] == $tz ? ' selected' : '') . '>' . $tzarr[$i][1] . '</option>';
+	$timezone = makeSelect($tzarr, $tz);
 
 	$arr = array(
 		array('Password', array('type'=>'password', 'name'=>'pass1')),

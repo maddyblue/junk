@@ -680,4 +680,14 @@ function makeMaplink($address, $zip, $name = '')
 	return makeLink($name, 'http://maps.google.com/maps?q=' . str_replace(' ', '+', $address) . ',+' . $zip, 'EXTERIOR');
 }
 
+function makeSelect($arr, $selected = null)
+{
+	$ret = '';
+
+	for($i = 0; $i < count($arr); $i++)
+		$ret .= '<option value="' . $arr[$i][0] . '"' . ($arr[$i][0] == $selected ? ' selected' : '') . '>' . $arr[$i][1] . '</option>';
+
+	return $ret;
+}
+
 ?>
