@@ -40,7 +40,7 @@ function checkFile($file, $image = true)
 			return false;
 			break;
 		case UPLOAD_ERR_NO_FILE:
-			echo '<p/>' . $dispname . ': No file was uploaded.';
+			echo '<p/>' . ($dispname ? $dispname . ': ' : '') . 'No file was uploaded.';
 			return false;
 			break;
 		default:
@@ -108,7 +108,7 @@ if(LOGGED)
 		}
 		else if(!checkFile($_FILES['ad']))
 		{
-			display();
+			display($name);
 		}
 		else
 		{
