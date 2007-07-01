@@ -63,11 +63,14 @@
 				<div class="pBody">
 					<ul>
 						<?php
+						if(MODULE_IADS && $USER['user_cart_cost'] > 0)
+						{
+							echo '<li>' . $USER['user_cart_items'] . ' items ($' . $USER['user_cart_cost'] . ')</li>';
+						}
+
 						$pms = makePMLink();
-						if($pms)
-							echo '<li class="usermessage">' . $pms . '</li>';
-						else
-							echo '<li>0 new PMs</li>';
+
+						echo ($pms ? '<li class="usermessage">' . $pms . '</li>' : '<li>0 new PMs</li>');
 
 						if(MODULE_GAME)
 						{

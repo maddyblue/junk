@@ -203,12 +203,14 @@
 				<tr>
 					<td>
 						<?php
+							if(MODULE_IADS && $USER['user_cart_cost'] > 0)
+							{
+								echo $USER['user_cart_items'] . ' items ($' . $USER['user_cart_cost'] . ')<br/>';
+							}
+
 							$pms = makePMLink();
-							if($pms)
-								echo $pms;
-							else
-								echo '0 new PMs';
-							echo '<br/>';
+
+							echo ($pms ? $pms : '0 new PMs') . '<br/>';
 
 							if(MODULE_GAME)
 							{
