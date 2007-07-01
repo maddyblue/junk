@@ -63,17 +63,14 @@ if(isset($_POST['submit']))
 
 		echo '<p/>Logged in successfully as ' . decode($user) . '.';
 
-		if(strpos($last, 'ajax') === false)
+		if($last && strpos($last, 'logout') === false)
 		{
-			if($last && strpos($last, 'logout') === false)
-			{
-				echo '<p/>Redirecting to <a href="' . $last . '">last location</a>...';
-				$GLOBALS['ARC_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
-			}
-			else
-			{
-				$GLOBALS['ARC_HEAD'] = '<meta http-equiv="refresh" content="0; url=index.php?a=login">';
-			}
+			echo '<p/>Redirecting to <a href="' . $last . '">last location</a>...';
+			$GLOBALS['ARC_HEAD'] = '<meta http-equiv="refresh" content="0; url=' . $last . '">';
+		}
+		else
+		{
+			$GLOBALS['ARC_HEAD'] = '<meta http-equiv="refresh" content="0; url=index.php?a=login">';
 		}
 	}
 	else if($user && $pass)
