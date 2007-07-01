@@ -18,6 +18,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+require_once(ARC_HOME_MOD . 'utility/Iads.inc.php');
 
 function display($locid, $adid, $d1id, $d2id)
 {
@@ -128,7 +129,8 @@ if(LOGGED)
 
 		if(!$fail)
 		{
-			$db->update('insert into iads_cart (iads_cart_ad, iads_cart_d1, iads_cart_d2) values (' . $ad . ', date(' . $d1 . '), date(' . $d2 . '))');
+			$db->update('insert into iads_cart (iads_cart_ad, iads_cart_d1, iads_cart_d2, iads_cart_location) values (' . $ad . ', date(' . $d1 . '), date(' . $d2 . '), ' . $loc . ')');
+			updateCart();
 
 			echo '<p/>Selection added to cart.';
 

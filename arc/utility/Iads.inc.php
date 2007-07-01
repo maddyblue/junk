@@ -23,6 +23,9 @@ function freeSlots($d1, $d2, $loc)
 {
 	global $db;
 
+	$d1 = dateConvert($d1);
+	$d2 = dateConvert($d2);
+
 	if($d2 < $d1)
 	{
 		$tmp = $d2;
@@ -52,6 +55,33 @@ function freeSlots($d1, $d2, $loc)
 	}
 
 	return $ret;
+}
+
+// updates the current cart total for the current user
+function updateCart()
+{
+	global $db;
+
+	if(!LOGGED)
+		return;
+
+	$res = $db->query('select iads_cart.* from iads_cart, iads_ad where iads_cart_ad = iads_ad_id and iads_ad_user = ' . ID);
+
+	$slots = 0;
+
+	for($i = 0; $i < count($res); $i++)
+	{
+		$slots += count(freeSlots($res[$i]['iads_cart_d1'], $res[$i]['iads_cart_d2'], $res[$i]['iads_cart_location']));
+	}
+
+	$cost = $slots * 5;
+
+	$db->update('update users set user_cart_cost = ' . $cost . ', user_cart_items = ' . count($res) . ' where user_id = ' . ID);
+}
+
+function dateConvert($d)
+{
+	return date('Ymd', strtotime($d));
 }
 
 ?>

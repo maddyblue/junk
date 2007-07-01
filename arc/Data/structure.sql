@@ -133,7 +133,6 @@ CREATE TABLE battle (
 --
 
 CREATE SEQUENCE battle_battle_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -179,7 +178,6 @@ CREATE TABLE battle_entity (
 --
 
 CREATE SEQUENCE battle_entity_battle_entity_uid_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -836,7 +834,8 @@ CREATE TABLE iads_cart (
     iads_cart_id bigint NOT NULL,
     iads_cart_ad bigint,
     iads_cart_d1 date,
-    iads_cart_d2 date
+    iads_cart_d2 date,
+    iads_cart_location bigint
 );
 
 
@@ -1205,7 +1204,6 @@ CREATE TABLE player_item (
 --
 
 CREATE SEQUENCE player_item_player_item_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -1236,7 +1234,6 @@ CREATE TABLE player_job (
 --
 
 CREATE SEQUENCE player_player_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -1469,7 +1466,8 @@ CREATE TABLE users (
     user_timezone character varying(4),
     user_battle_verbose integer DEFAULT 0,
     user_timeformat character varying(20),
-    user_cart_cost real
+    user_cart_cost real,
+    user_cart_items integer
 );
 
 
