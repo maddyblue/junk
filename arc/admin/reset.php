@@ -33,9 +33,13 @@ function reset_forum()
 {
 	global $db;
 
+	$db->query('truncate table forum_forum');
+	$db->query('truncate table forum_mod');
+	$db->query('truncate table forum_perm');
 	$db->query('truncate table forum_post');
 	$db->query('truncate table forum_thread');
-	$db->query('truncate table forum_forum');
+	$db->query('truncate table forum_view');
+	$db->query('truncate table forum_word');
 	$db->query('update users set user_posts=0');
 
 	echo '<p/>Forum reset.';
