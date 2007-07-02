@@ -288,7 +288,7 @@ function makeCartLink()
 	global $USER;
 
 	if(LOGGED && MODULE_IADS && $USER['user_cart_cost'] > 0)
-		return makeLink($USER['user_cart_items'] . ' items', 'a=view-cart', SECTION_IADS) . ' ($' . $USER['user_cart_cost'] . ')';
+		return makeLink($USER['user_cart_items'] . ' item' . ($USER['user_cart_items'] != 1 ? 's' : ''), 'a=view-cart', SECTION_IADS) . ' ($' . $USER['user_cart_cost'] . ')';
 
 	return '';
 }
