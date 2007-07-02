@@ -129,7 +129,7 @@ if(LOGGED)
 
 		if(!$fail)
 		{
-			$db->update('insert into iads_cart (iads_cart_ad, iads_cart_d1, iads_cart_d2, iads_cart_location) values (' . $ad . ', date(' . $d1 . '), date(' . $d2 . '), ' . $loc . ')');
+			$db->update('insert into iads_cart (iads_cart_ad, iads_cart_d1, iads_cart_d2, iads_cart_location, iads_cart_user) values (' . $ad . ', date(' . $d1 . '), date(' . $d2 . '), ' . $loc . ', ' . ID . ')');
 			updateCart();
 
 			echo '<p/>Selection added to cart.';

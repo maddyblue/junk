@@ -835,7 +835,8 @@ CREATE TABLE iads_cart (
     iads_cart_ad bigint,
     iads_cart_d1 date,
     iads_cart_d2 date,
-    iads_cart_location bigint
+    iads_cart_location bigint,
+    iads_cart_user bigint
 );
 
 

@@ -65,7 +65,7 @@ function updateCart()
 
 	global $db, $USER;
 
-	$res = $db->query('select iads_cart.* from iads_cart, iads_ad where iads_cart_ad = iads_ad_id and iads_ad_user = ' . ID);
+	$res = $db->query('select * from iads_cart where iads_cart_user = ' . ID);
 
 	$slots = 0;
 
