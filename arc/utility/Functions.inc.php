@@ -166,6 +166,10 @@ function getSiteArray($tag)
 				if(!MODULE_GAME)
 					$c = true;
 				break;
+			case 'SECTION_IADS':
+				if(!MODULE_IADS)
+					$c = true;
+				break;
 		}
 
 		if($c)
