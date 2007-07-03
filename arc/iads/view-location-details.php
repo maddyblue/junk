@@ -49,16 +49,21 @@ if(count($res))
 
 	$free = freeSlots($d1, $d2, $l);
 
-	echo '<p/>Availability in the next 30 days (' . count($free) . ' days free):';
+	echo '<p/>Availability in the next 30 days:';
+
+	$array = array(array('Date', 'Open slots'));
 
 	for($i = 0; $i < count($free); $i++)
 	{
-		echo '<br/>' . date('D, F j', strtotime($free[$i]));
+		$array[] = array(date('D, M j', strtotime($free[$i][0])), $free[$i][1]);
 	}
+
+	echo getTable($array);
 
 	$ARC_BODYTAG = 'onload="load()" onunload="GUnload()"';
 
 	$ARC_HEAD = '
+		<link href="styles2.css" rel="stylesheet" type="text/css" />
 		<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=' . GOOGLE_MAPS_KEY . '" type="text/javascript"></script>
 		<script type="text/javascript">
 		//<![CDATA[
