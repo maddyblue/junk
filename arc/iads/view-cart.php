@@ -54,6 +54,8 @@ if(LOGGED)
 	);
 
 	echo getTable($array);
+
+	echo '<p/><b>Note:</b> we do not reserve the slots listed here until the time of purchase. This means that if someone else purchases time slots that you have in your cart, you will not be able to buy them. The cart will automatically update when this happens. Your slots will be determined at checkout time, where the slots you successfully reserved will be displayed.';
 }
 else
 	echo '<p/>You must be logged in to view your cart.';
