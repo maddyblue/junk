@@ -58,7 +58,7 @@ function display($locid, $adid, $d1id, $d2id)
 
 	$darr = array();
 
-	for($i = 1; $i <= 30; $i++)
+	for($i = 1; $i <= $GLOBALS['DAYS_LOOKAHEAD']; $i++)
 	{
 		$date = strtotime('+' . $i . ' day');
 		$darr[] = array(
@@ -74,7 +74,7 @@ function display($locid, $adid, $d1id, $d2id)
 		getTableForm('Buy slots:', array(
 			array('Location', array('type'=>'select', 'name'=>'loc', 'val'=>$loc)),
 			array('Ad', array('type'=>'select', 'name'=>'ad', 'val'=>$ad)),
-			array('', array('type'=>'disptext', 'val'=>'Add all free slots between:')),
+			array('', array('type'=>'disptext', 'val'=>'Add one slot every day between and including:')),
 			array('', array('type'=>'disptext', 'val'=>
 				getFormField(array('type'=>'select', 'name'=>'d1', 'val'=>$d1)) .
 				' and ' .
@@ -101,7 +101,7 @@ if(LOGGED)
 	}
 
 	$firstday = date('Ymd', strtotime('today +1 day'));
-	$lastday = date('Ymd', strtotime('today +30 days'));
+	$lastday = date('Ymd', strtotime('today +' . $GLOBALS['DAYS_LOOKAHEAD'] . ' days'));
 
 	if($d1 < $firstday)
 		$d1 = $firstday;
@@ -127,6 +127,7 @@ if(LOGGED)
 			echo '<p/>Invalid advertisement ID.';
 		}
 
+		/*
 		$res = $db->query('select (iads_cart_d1, iads_cart_d2) overlaps (date \'' . $d1 . '\', date \'' . $d2 . '\') from iads_cart where iads_cart_location = ' . $loc . ' and iads_cart_user = ' . ID);
 		for($i = 0; $i < count($res); $i++)
 		{
@@ -138,6 +139,7 @@ if(LOGGED)
 
 			break;
 		}
+		*/
 
 		if(!$fail)
 		{

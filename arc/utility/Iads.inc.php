@@ -18,6 +18,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+$DAYS_LOOKAHEAD = 30;
+
 // returns an array of the number of free slots at location $loc between dates $d1 and $d2
 function freeSlots($d1, $d2, $loc)
 {
@@ -34,8 +36,6 @@ function freeSlots($d1, $d2, $loc)
 	}
 
 	$res = $db->query('select count(*), iads_reservation_date from iads_reservation where iads_reservation_location = ' . $loc . ' and iads_reservation_date >= date(' . $d1 . ') and iads_reservation_date <= date(' . $d2 . ') group by iads_reservation_date');
-
-	$SLOTS_PER_DAY = 30;
 
 	$ret = array();
 	$last = strtotime($d2);
@@ -59,7 +59,7 @@ function freeSlots($d1, $d2, $loc)
 			}
 		}
 
-		$ret[] = array($d, $SLOTS_PER_DAY - $c);
+		$ret[] = array($d, IADS_SLOTS_PER_DAY - $c);
 	}
 
 	return $ret;
