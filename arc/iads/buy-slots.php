@@ -127,20 +127,6 @@ if(LOGGED)
 			echo '<p/>Invalid advertisement ID.';
 		}
 
-		/*
-		$res = $db->query('select (iads_cart_d1, iads_cart_d2) overlaps (date \'' . $d1 . '\', date \'' . $d2 . '\') from iads_cart where iads_cart_location = ' . $loc . ' and iads_cart_user = ' . ID);
-		for($i = 0; $i < count($res); $i++)
-		{
-			if($res[$i]['overlaps'] == 'f')
-				continue;
-
-			$fail = true;
-			echo '<p/>This selection inteferes with something already in your cart.';
-
-			break;
-		}
-		*/
-
 		if(!$fail)
 		{
 			$db->update('insert into iads_cart (iads_cart_ad, iads_cart_d1, iads_cart_d2, iads_cart_location, iads_cart_user) values (' . $ad . ', date(' . $d1 . '), date(' . $d2 . '), ' . $loc . ', ' . ID . ')');
