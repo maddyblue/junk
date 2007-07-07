@@ -48,12 +48,24 @@ if(LOGGED)
 		);
 	}
 
+	$cost = number_format($USER['user_cart_cost'], 2);
+
 	$array[] = array(
 		'Total cost',
-		'$' . number_format($USER['user_cart_cost'], 2)
+		'$' . $cost
 	);
 
 	echo getTable($array);
+
+	echo '<p/>
+		<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+			<input type="hidden" name="cmd" value="_xclick">
+			<input type="hidden" name="business" value="' . PAYPAL_BUSINESS_ADDRESS . '">
+			<input type="hidden" name="item_name" value="' . $numslots . ' iAds slots">
+			<input type="hidden" name="currency_code" value="USD">
+			<input type="hidden" name="amount" value="' . $cost . '">
+			<input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it\'s fast, free and secure!">
+		</form>';
 
 	echo '<p/><b>Note:</b> we do not reserve the slots listed here until the time of purchase. This means that if someone else purchases time slots that you have in your cart, you will not be able to buy them. The cart will automatically update when this happens. Your slots will be determined at checkout time, where the slots you successfully reserved will be displayed.';
 }

@@ -44,7 +44,8 @@ define('PODCAST_EXPLICIT', ''); // 'clean', 'explicit', or ''
 define('DEFAULT_TIME_FORMAT', 'd M y g:i a'); // default time format, refer to http://php.net/date for more.
 define('STRIPSLASHES', get_magic_quotes_gpc());
 //define('URCHIN', 'UA-12345-6'); // Optional. If set (uncommented), will enable Google Analytics with the specified key on all pages.
-define('GOOGLE_MAPS_KEY', ''); // Optional. Set to your Google Maps API key for use with the iAds module.
+//define('GOOGLE_MAPS_KEY', ''); // Optional. Set to your Google Maps API key for use with the iAds module.
+//define('PAYPAL_BUSINESS_ADDRESS', 'user@domain.com'); // Optional. Set to your PayPal business address for use with the iAds module.
 
 /* Modules
  * These should all have values of true or false.
