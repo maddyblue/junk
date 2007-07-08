@@ -37,7 +37,7 @@ function display($locid, $adid, $d1id, $d2id)
 
 	$loc = makeSelect($locarr, $locid);
 
-	$res = $db->query('select iads_ad_id, iads_ad_name, iads_ad_type, octet_length(iads_ad_data) as length from iads_ad where iads_ad_user = ' . ID . ' order by iads_ad_name');
+	$res = $db->query('select * from iads_ad where iads_ad_user = ' . ID . ' order by iads_ad_name');
 	$adarr = array();
 
 	if(count($res) == 0)
@@ -50,7 +50,7 @@ function display($locid, $adid, $d1id, $d2id)
 	{
 		$adarr[] = array(
 			$res[$i]['iads_ad_id'],
-			$res[$i]['iads_ad_name'] . ' - ' . $res[$i]['iads_ad_type'] . ', ' . round($res[$i]['length'] / 1024, 1) . 'KB'
+			$res[$i]['iads_ad_name'] . ' - ' . $res[$i]['iads_ad_type'] . ', ' . round($res[$i]['iads_ad_size'] / 1024 / 1024, 1) . ' MB'
 		);
 	}
 
