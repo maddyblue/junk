@@ -803,8 +803,9 @@ CREATE TABLE iads_ad (
     iads_ad_id bigint NOT NULL,
     iads_ad_user bigint,
     iads_ad_name character varying(200),
-    iads_ad_data bytea,
-    iads_ad_type character varying(20)
+    iads_ad_type character varying(50),
+    iads_ad_status integer,
+    iads_ad_size bigint
 );
 
 
@@ -1175,7 +1176,6 @@ CREATE TABLE player_equipment (
 --
 
 CREATE SEQUENCE player_equipment_player_equipment_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE

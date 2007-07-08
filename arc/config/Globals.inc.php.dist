@@ -46,6 +46,8 @@ define('STRIPSLASHES', get_magic_quotes_gpc());
 //define('URCHIN', 'UA-12345-6'); // Optional. If set (uncommented), will enable Google Analytics with the specified key on all pages.
 //define('GOOGLE_MAPS_KEY', ''); // Optional. Set to your Google Maps API key for use with the iAds module.
 //define('PAYPAL_BUSINESS_ADDRESS', 'user@domain.com'); // Optional. Set to your PayPal business address for use with the iAds module.
+//define('AWS_KEY', ''); // Optional. Set to your AWS key for S3 uploading.
+//define('AWS_SECRET_KEY', ''); // Optional. Set to your AWS secret key for S3 uploading.
 
 /* Modules
  * These should all have values of true or false.

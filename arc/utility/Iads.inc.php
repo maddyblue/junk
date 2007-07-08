@@ -18,7 +18,21 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+define('AD_PENDING',   1);
+define('AD_UPLOADING', 2);
+define('AD_UPLOADED',  3);
+
 $DAYS_LOOKAHEAD = 30;
+
+function getAdStatus($s)
+{
+	switch($s)
+	{
+		case AD_PENDING: return 'Pending upload'; break;
+		case AD_UPLOADING: return 'Uploading now'; break;
+		case AD_UPLOADED: return 'Uploaded'; break;
+	}
+}
 
 // returns an array of the number of free slots at location $loc between dates $d1 and $d2
 function freeSlots($d1, $d2, $loc)

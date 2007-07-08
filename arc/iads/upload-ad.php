@@ -18,10 +18,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+require_once(ARC_HOME_MOD . 'utility/Iads.inc.php');
+
 /* Checks for any error conditions.
  * Returns false on error, true otherwise.
  */
-function checkFile($file, $image = true)
+function checkFile($file)
 {
 	$dispname = $file['name'];
 	$name = $file['tmp_name'];
@@ -47,9 +49,11 @@ function checkFile($file, $image = true)
 			break;
 	}
 
-	if($image && substr($type, 0, 5) != 'image')
+	$typefirst = substr($type, 0, 5);
+
+	if($typefirst != 'image' && $typefirst != 'video')
 	{
-		echo '<p/>' . $dispname . ': Uploaded file is not an image.';
+		echo '<p/>' . $dispname . ': Uploaded file is not an image or video file: ' . $type;
 		return false;
 	}
 
@@ -59,16 +63,9 @@ function checkFile($file, $image = true)
 		return false;
 	}
 
-	if($fsize > 5242880)
+	if($fsize > 52428800)
 	{
-		echo '<p/>Filesize must be less than 5MB. Your image is ' . round($fsize / (1024 * 1024)) . 'MB.';
-		return false;
-	}
-
-	$size = getimagesize($name);
-	if($size == FALSE)
-	{
-		echo '<p/>File is not an image.';
+		echo '<p/>Filesize must be less than 50MB. Your image is ' . round($fsize / (1024 * 1024)) . 'MB.';
 		return false;
 	}
 
@@ -81,14 +78,13 @@ function checkFile($file, $image = true)
 	return true;
 }
 
-function display($name)
+function display()
 {
 	echo
-		getTableForm('Upload advertisement:', array(
-			array('', array('type'=>'hidden', 'name'=>'MAX_FILE_SIZE', 'val'=>'5242880')),
-			array('Name (optional)', array('type'=>'text', 'name'=>'name', 'val'=>$name)),
-			array('File', array('type'=>'file', 'name'=>'ad')),
-			array('', array('type'=>'disptext', 'val'=>'Image can be up to 5MB in size.')),
+		getTableForm('Upload image or video:', array(
+			array('', array('type'=>'hidden', 'name'=>'MAX_FILE_SIZE', 'val'=>'52428800')),
+			array('Name (optional)', array('type'=>'text', 'name'=>'name')),
+			array('File (up to 50MB)', array('type'=>'file', 'name'=>'ad')),
 
 			array('', array('type'=>'submit', 'name'=>'submit', 'val'=>'Upload')),
 			array('', array('type'=>'hidden', 'name'=>'a', 'val'=>'upload-ad'))
@@ -101,41 +97,49 @@ if(LOGGED)
 {
 	if(isset($_POST['submit']))
 	{
+		$fail = false;
+
+		if(!$name)
+			$name = encode($_FILES['ad']['name']);
+
+		$fname = $_FILES['ad']['tmp_name'];
+		$type = $_FILES['ad']['type'];
+
 		if(!isset($_FILES['ad']['name']))
 		{
 			$fail = true;
 			echo '<p/>No file specified.';
 		}
-		else if(!checkFile($_FILES['ad']))
+
+		if(!checkFile($_FILES['ad']))
 		{
-			display($name);
+			$fail = true;
 		}
-		else
+
+		if(!$fail)
 		{
-			if(!$name)
-				$name = encode($_FILES['ad']['name']);
+			$id = $db->insert('insert into iads_ad (iads_ad_user, iads_ad_name, iads_ad_type, iads_ad_status, iads_ad_size) values (' . ID . ', \'' . $name . '\', \'' . $type . '\', ' . AD_PENDING . ', ' . filesize($fname) . ')', 'iads_ad');
 
-			$fname = $_FILES['ad']['tmp_name'];
-			$type = $_FILES['ad']['type'];
+			$dest = '/iads/' . $id;
 
-			$fd = fopen($fname, 'r');
-			if($fd)
+			if(!move_uploaded_file($fname, $dest))
 			{
-				$data = pg_escape_bytea(fread($fd, filesize($fname)));
-				fclose($fd);
-
-				$db->insert('insert into iads_ad (iads_ad_user, iads_ad_name, iads_ad_data, iads_ad_type) values (' . ID . ', \'' . $name . '\', \'' . $data . '\', \'' . $type . '\')', 'iads_ad');
-
-				echo '<p/>Advertisement upload complete.';
+				$fail = true;
+				$db->query('delete from iads_ad where iads_ad_id = ' . $id);
+				echo '<p/>It looks like there is something wrong on our end, but try uploading again. If it doesn\'t work, please contact our technical support.';
 			}
 			else
 			{
-				echo '<p/>Error: could not open uploaded file.';
+				chmod($dest, 0644);
+				echo '<p/>Advertisement upload complete. It will take another few minutes for the ad to upload to our other servers that provide redundancy and other features.';
 			}
 		}
+
+		if($fail)
+			display();
 	}
 	else
-		display($name);
+		display();
 }
 else
 {

@@ -18,14 +18,30 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+require_once ARC_HOME_MOD . 'utility/Iads.inc.php';
+
 if(LOGGED)
 {
-	$res = $db->query('select iads_ad_id, iads_ad_name from iads_ad where iads_ad_user=' . ID);
+	$res = $db->query('select * from iads_ad where iads_ad_user=' . ID);
+
+	$array = array(array(
+		'Name',
+		'Type',
+		'Size',
+		'Status'
+	));
 
 	for($i = 0; $i < count($res); $i++)
 	{
-		echo '<p/>' . makeLink(decode($res[$i]['iads_ad_name']), ARC_WWW_PATH . 'images/ad.php?a=' . $res[$i]['iads_ad_id'], 'EXTERIOR');
+		$array[] = array(
+			makeLink(decode($res[$i]['iads_ad_name']), 'http://s3.amazonaws.com/iads-ads/' . $res[$i]['iads_ad_id'], 'EXTERIOR'),
+			$res[$i]['iads_ad_type'],
+			round($res[$i]['iads_ad_size'] / 1024 / 1024, 2) . ' MB',
+			getAdStatus($res[$i]['iads_ad_status'])
+		);
 	}
+
+	echo getTable($array);
 }
 else
 {
