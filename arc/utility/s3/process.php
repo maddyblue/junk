@@ -32,6 +32,8 @@ require_once 'PEAR.php';
 require_once 'Crypt/HMAC.php';
 require_once 'HTTP/Request.php';
 
+$DATE = gmdate(DATE_RFC1123);
+
 function hex2b64($str)
 {
 	$raw = '';
@@ -50,6 +52,10 @@ $verb = 'PUT';
 $bucket = 'iads-ads';
 $dname = '/var/www/iads/';
 
+$fp = fopen('lock', 'w');
+
+flock($fp, LOCK_EX);
+
 $dir = scandir($dname);
 
 for($i = 0; $i < count($dir); $i++)
@@ -65,12 +71,12 @@ for($i = 0; $i < count($dir); $i++)
 		continue;
 	else if($res[0]['iads_ad_status'] == AD_UPLOADED)
 	{
-		echo "$f already uploaded. Moving on\n";
+		echo "$DATE: $f already uploaded. Moving on\n";
 		unlink($f);
 		continue;
 	}
 
-	echo "Processing $f...\n";
+	echo "$DATE: Processing $f...\n";
 
 	$contentType = $res[0]['iads_ad_type'];
 	$resource = $bucket . '/' . $dir[$i];
@@ -89,7 +95,7 @@ for($i = 0; $i < count($dir); $i++)
 	$req->addHeader('Authorization', 'AWS ' . $keyId . ':' . $signature);
 	$req->setBody(file_get_contents($f));
 
-	echo "Sending request.\n";
+	echo "$DATE: Sending request.\n";
 	flush();
 
 	$db->query('update iads_ad set iads_ad_status = ' . AD_UPLOADING . ' where iads_ad_id = ' . $dir[$i]);
@@ -97,7 +103,7 @@ for($i = 0; $i < count($dir); $i++)
 
 	if($req->getResponseBody())
 	{
-		echo 'Response: ' . $req->getResponseBody() . "\n";
+		echo "$DATE: Response: " . $req->getResponseBody() . "\n";
 	}
 	else
 	{
