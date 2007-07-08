@@ -130,7 +130,6 @@ if(LOGGED)
 			}
 			else
 			{
-				chmod($dest, 0644);
 				echo '<p/>Advertisement upload complete. It will take another few minutes for the ad to upload to our other servers that provide redundancy and other features.';
 			}
 		}
