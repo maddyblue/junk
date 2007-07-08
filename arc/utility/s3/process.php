@@ -66,6 +66,7 @@ for($i = 0; $i < count($dir); $i++)
 	else if($res[0]['iads_ad_status'] == AD_UPLOADED)
 	{
 		echo "$f already uploaded. Moving on\n";
+		unlink($f);
 		continue;
 	}
 
