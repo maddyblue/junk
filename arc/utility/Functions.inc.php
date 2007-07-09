@@ -136,15 +136,8 @@ function getSiteArray($tag)
 {
 	global $db;
 
-	switch($tag)
-	{
-		case 'SECTION_MENU':
-		case 'SECTION_NAV':
-			$tag = ARC_SECTION . '_' . $tag;
-			break;
-		default:
-			break;
-	}
+	if($tag == 'SECTION_NAV')
+		$tag = ARC_SECTION . '_' . $tag;
 
 	$ret = $db->query('select * from site where site_logged ' . LOGGED_DIR . '= 0 and site_tag=\'' . $tag . '\' and site_admin <= ' . ADMIN . ' order by site_orderid');
 
@@ -157,18 +150,18 @@ function getSiteArray($tag)
 		switch($ret[$i]['site_section'])
 		{
 			case 'SECTION_PODCAST':
-				if(!MODULE_PODCAST)
-					$c = true;
+				$c = !MODULE_PODCAST;
 				break;
 			case 'SECTION_GAME':
 			case 'SECTION_BATTLE':
 			case 'SECTION_MANUAL':
-				if(!MODULE_GAME)
-					$c = true;
+				$c = !MODULE_GAME;
 				break;
 			case 'SECTION_IADS':
-				if(!MODULE_IADS)
-					$c = true;
+				$c = !MODULE_IADS;
+				break;
+			case 'SECTION_HOME':
+				$c = !MODULE_GAME && ($ret[$i]['site_main'] == 'Domains' || $ret[$i]['site_main'] == 'Events');
 				break;
 		}
 
