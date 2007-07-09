@@ -3,7 +3,7 @@
 	<head>
 	<!-- $Id$ -->
 	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php" />
+	<link rel="alternate" type="application/rss+xml" title="<?php echo ARC_TITLE; ?> RSS" href="<?php echo ARC_WWW_PATH; ?>rss.php" />
 	<title>
 		<?php echo strtolower(ARC_TITLE); ?> ||
 		<?php echo strtolower(ARC_SECTION); ?>

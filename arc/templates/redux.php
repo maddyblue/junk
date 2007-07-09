@@ -13,7 +13,7 @@
 	</title>
 	<ARC_HEAD/>
 	<link rel="stylesheet" type="text/css" href="<ARC_TEMPLATE_DIR/>/redux.css" />
-	<link rel="alternate" type="application/xml" title="rss" href="<?php echo ARC_WWW_PATH; ?>rss.php" />
+	<link rel="alternate" type="application/rss+xml" title="<?php echo ARC_TITLE; ?> RSS" href="<?php echo ARC_WWW_PATH; ?>rss.php" />
 </head>
 
 <body <ARC_BODYTAG/> >
