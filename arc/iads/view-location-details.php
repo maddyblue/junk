@@ -63,7 +63,6 @@ if(count($res))
 	$ARC_BODYTAG = 'onload="load()" onunload="GUnload()"';
 
 	$ARC_HEAD = '
-		<link href="styles2.css" rel="stylesheet" type="text/css" />
 		<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=' . GOOGLE_MAPS_KEY . '" type="text/javascript"></script>
 		<script type="text/javascript">
 		//<![CDATA[
