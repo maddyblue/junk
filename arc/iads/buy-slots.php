@@ -50,7 +50,7 @@ function display($locid, $adid, $d1id, $d2id)
 	{
 		$adarr[] = array(
 			$res[$i]['iads_ad_id'],
-			$res[$i]['iads_ad_name'] . ' - ' . $res[$i]['iads_ad_type'] . ', ' . round($res[$i]['iads_ad_size'] / 1024 / 1024, 1) . ' MB'
+			decode($res[$i]['iads_ad_name']) . ' - ' . $res[$i]['iads_ad_type'] . ', ' . round($res[$i]['iads_ad_size'] / 1024 / 1024, 1) . ' MB'
 		);
 	}
 
