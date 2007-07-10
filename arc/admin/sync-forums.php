@@ -18,6 +18,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+echo '<p/>Deleting posts with no thread.';
+$db->query('delete from forum_post where forum_post_id IN (select forum_post_id from forum_post left join forum_thread on forum_post_thread = forum_thread_id where forum_thread_id is null)');
+
 echo '<p/>Updating thread replies, first post, and last post:<br/>';
 $count = 0;
 
