@@ -126,7 +126,7 @@ else
 		{
 			$ret = $db->query('select * from forum_post where forum_post_id=' . intval($_GET['q']));
 			if(count($ret) == 1)
-				$post = '[quote]Originally posted by ' . getUsername($ret[0]['forum_post_user']) . ':' . "\n" . $ret[0]['forum_post_text'] . '[/quote]';
+				$post = '[quote cite=' . getUsername($ret[0]['forum_post_user']) . ']' . $ret[0]['forum_post_text'] . '[/quote]';
 		}
 		disp($post, $thread);
 	}
