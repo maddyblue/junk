@@ -31,7 +31,7 @@ function disp($post, $thread)
 	$reply = getFormField(array('type'=>'submit', 'name'=>'submit', 'val'=>'Post New Reply')) . ' ' . getFormField(array('type'=>'submit', 'name'=>'preview', 'val'=>'Preview Post'));
 
 	echo getTableForm('New Reply' . $name, array(
-			array('Post', array('type'=>'textarea', 'name'=>'post', 'val'=>decode($post))),
+			array('Post', array('type'=>'textarea', 'name'=>'post', 'parms'=>'rows="10" cols="35" wrap="virtual" style="width:450px"', 'val'=>decode($post))),
 
 			array('', array('type'=>'disptext', 'val'=>$reply)),
 			array('', array('type'=>'hidden', 'name'=>'t', 'val'=>$thread)),
