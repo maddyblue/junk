@@ -28,7 +28,7 @@ update_session_action(1001, '', 'Welcome');
 	echo (LOGGED ? '<strike>Sign up.</strike>' : makeLink('Sign up', 'a=newuser', SECTION_USER) . ' (or ' . makeLink('login', 'a=login&r=' . encode($_SERVER['REQUEST_URI']), SECTION_USER) . ').');
 	?></li>
 	<li><?php echo (LOGGED ? makeLink('Upload ads.', 'a=upload-ad') : 'Upload ads.'); ?></li>
-	<li><?php echo makeLink('Find some locations.', 'a=view-locations'); ?></li>
+	<li><?php echo makeLink('Find locations.', 'a=view-locations'); ?></li>
 	<li><?php echo (LOGGED ? makeLink('Buy slots.', 'a=buy-slots') : 'Buy slots.'); ?></li>
 	<li>Your ads show up on our screens.</li>
 </ol>
