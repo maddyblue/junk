@@ -49,6 +49,42 @@ if(count($res))
 
 	$free = freeSlots($d1, $d2, $l);
 
+	echo '<p/>Calendar:';
+
+	$array = array(array('S', 'M', 'T', 'W', 'T', 'F', 'S'));
+
+	$week = array();
+
+	$d = getdate(strtotime($free[0][0]));
+
+	for($i = 0; $i < $d['wday']; $i++)
+		$week[] = '';
+
+	$LAST_WDAY = 6;
+
+	for($i = 0; $i < count($free); $i++)
+	{
+		$d = getdate(strtotime($free[$i][0]));
+
+		$week[] = $d['mday'];
+
+		if($d['wday'] == $LAST_WDAY)
+		{
+			$array[] = $week;
+			$week = array();
+		}
+	}
+
+	if(count($week))
+	{
+		for($i = $d['wday']; $i < $LAST_WDAY; $i++)
+			$week[] = '';
+
+		$array[] = $week;
+	}
+
+	echo getTable($array);
+
 	echo '<p/>Availability in the next 30 days:';
 
 	$array = array(array('Date', 'Open slots'));
