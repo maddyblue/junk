@@ -419,7 +419,7 @@ function getTable($array, $firstLineHeader = true, $lastLineFooter = true, $with
  * SECTION_USER) to link to a different section. Use EXTERIOR as $section if
  * you want to link off site.
  */
-function makeLink($text, $link, $section = '', $title = '')
+function makeLink($text, $link, $section = '', $title = '', $target = '')
 {
 	// if there's nothing to link, don't link anything
 	if(!$text)
@@ -444,6 +444,9 @@ function makeLink($text, $link, $section = '', $title = '')
 
 	if($title)
 		$ret .= ' title="' . $title . '"';
+
+	if($target)
+		$ret .= ' target="' . $target . '"';
 
 	$ret .= '>' . $text . '</a>';
 

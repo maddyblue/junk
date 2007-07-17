@@ -33,8 +33,9 @@ if(LOGGED)
 
 	for($i = 0; $i < count($res); $i++)
 	{
+		$img = substr($res[$i]['iads_ad_type'], 0, 5) == 'image';
 		$array[] = array(
-			makeLink(decode($res[$i]['iads_ad_name']), 'http://s3.amazonaws.com/iads-ads/' . $res[$i]['iads_ad_id'], 'EXTERIOR'),
+			makeLink(decode($res[$i]['iads_ad_name']), 'http://s3.amazonaws.com/iads-ads/' . $res[$i]['iads_ad_id'], 'EXTERIOR', '', $img ? '_blank' : ''),
 			$res[$i]['iads_ad_type'],
 			round($res[$i]['iads_ad_size'] / 1024 / 1024, 2) . ' MB',
 			getAdStatus($res[$i]['iads_ad_status'])
