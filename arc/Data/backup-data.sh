@@ -1,28 +1,11 @@
 #!/bin/sh
 
-group1='abilitytype area domain equipmentclass equipmenttype event group_def house item job monstertype site skin town'
-group2='ability equipment monster'
-group3='cor_area_monster cor_area_town cor_job_abilitytype cor_job_equipmenttype cor_job_joblv cor_monster_drop'
+tables='ability abilitytype area cor_area_monster cor_area_town cor_job_abilitytype cor_job_equipmenttype cor_job_joblv cor_monster_drop domain equipment equipmentclass equipmenttype event group_def house item job monster monstertype site skin town'
 
-all="${group1} ${group2} ${group3}"
-rev="${group3} ${group2} ${group1}"
-
-o=data.sql
-t=temp.sql
-rm -f $o
-
-for i in $rev
+for i in $tables
 do
-	echo "delete from ${i};" >> $o
+	t=$t" -t "$i
 done
 
-for i in $all
-do
-	pg_dump -a -O -x -U $1 -h $2 -t $i $3 | \
-		grep -v "^-" | grep -v "^$" > $t
-	head -n 5 $t > $t.top
-	sed 1,5d $t | sed '$d' | sort -n > $t.mid
-	tail -n 1 $t > $t.bot
-	cat $t.top $t.mid $t.bot >> $o
-	rm $t $t.top $t.mid $t.bot
-done
+pg_dump -a -Fc -O -U $1 -h $2$t $3 > data.dump
+

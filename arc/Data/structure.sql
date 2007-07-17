@@ -607,7 +607,6 @@ CREATE TABLE forum_perm (
 --
 
 CREATE SEQUENCE forum_perm_forum_perm_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
