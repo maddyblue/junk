@@ -8,4 +8,5 @@ do
 done
 
 pg_dump -a -Fc -O -U $1 -h $2$t $3 > data.dump
+pg_dump -a -Fp -O -U $1 -h $2$t $3 > data.sql
 
