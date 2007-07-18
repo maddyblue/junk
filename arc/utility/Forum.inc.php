@@ -302,7 +302,10 @@ function parsePostText($post)
 		'\\1<blockquote cite="\\2">\\3</blockquote>'
 	);
 
-	$return = preg_replace($preg_search, $preg_replace, $return);
+	$count = 1;
+
+	while($count > 0)
+		$return = preg_replace($preg_search, $preg_replace, $return, -1, $count);
 
 	$return = forumReplace($return);
 
