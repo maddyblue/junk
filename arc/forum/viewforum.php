@@ -228,7 +228,7 @@ if($read)
 {
 	$where = $forumid == 0 ? '' : ' and forum_thread_forum=' . $forumid;
 
-	$db->query('delete from forum_view where forum_view_user=' . ID);
+	$db->query('delete from forum_view where forum_view_user=' . ID . ' and forum_view_thread=' . $forumid);
 
 	// insert all threads with a last post date after the last ending session
 	$res = $db->query('select forum_thread_id from forum_thread, forum_post where forum_thread_last_post=forum_post_id and forum_post_date > ' . $USER['user_last_session'] . $where);
