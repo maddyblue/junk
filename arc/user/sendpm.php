@@ -87,7 +87,7 @@ else
 			{
 				$userid = $res[0]['pm_from'];
 				$sub = 'Re: ' . $res[0]['pm_subject'];
-				$text = '[quote]Originally sent by ' . getUsername($res[0]['pm_from']) . ':' . "\n" . $res[0]['pm_text'] . '[/quote]';
+				$text = '[quote cite=' . getUsername($res[0]['pm_from']) . ']' . "\n" . $res[0]['pm_text'] . '[/quote]';
 			}
 		}
 
