@@ -898,7 +898,8 @@ CREATE TABLE iads_reservation (
     iads_reservation_id bigint NOT NULL,
     iads_reservation_user bigint,
     iads_reservation_location bigint,
-    iads_reservation_date date
+    iads_reservation_date date,
+    iads_reservation_ad bigint
 );
 
 
