@@ -76,10 +76,13 @@ function updateCart()
 			}
 			else
 			{
+				$db->update('update iads_cart set iads_cart_slots = ' . $$var . ' where iads_cart_id = ' . $res[$i]['iads_cart_id']);
 				$slots += $$var;
 				$$var = 0;
 			}
 		}
+		else
+			$db->update('delete from iads_cart where iads_cart_id = ' . $res[$i]['iads_cart_id']);
 	}
 
 	$cost = getCost($slots);
