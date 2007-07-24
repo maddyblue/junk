@@ -149,7 +149,7 @@ if(isset($_GET['sqlprofile']))
 	echo '<hr/>';
 	foreach($db->queries as $q)
 	{
-		echo '<br/>' . $q[1] . ': ' . $q[0];
+		echo '<br/><b>' . $q[1] . '</b>: ' . htmlspecialchars($q[0]);
 	}
 }
 
