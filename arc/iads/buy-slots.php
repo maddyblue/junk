@@ -20,7 +20,9 @@
 
 require_once(ARC_HOME_MOD . 'utility/Iads.inc.php');
 
-function display($locid, $adid, $d1id, $d2id)
+$MAX_SLOTS = 5;
+
+function display($locid, $adid, $d1id, $d2id, $slid)
 {
 	global $db;
 
@@ -58,7 +60,7 @@ function display($locid, $adid, $d1id, $d2id)
 
 	$darr = array();
 
-	for($i = 1; $i <= $GLOBALS['DAYS_LOOKAHEAD']; $i++)
+	for($i = 1; $i <= IADS_DAYS_LOOKAHEAD; $i++)
 	{
 		$date = strtotime('+' . $i . ' day');
 		$darr[] = array(
@@ -70,11 +72,18 @@ function display($locid, $adid, $d1id, $d2id)
 	$d1 = makeSelect($darr, $d1id);
 	$d2 = makeSelect($darr, $d2id);
 
+	$slarr = array();
+
+	for($i = 1; $i <= $GLOBALS['MAX_SLOTS']; $i++)
+		$slarr[] = array($i, $i);
+
+	$sl = makeSelect($slarr, $slid);
+
 	echo
 		getTableForm('Buy slots:', array(
 			array('Location', array('type'=>'select', 'name'=>'loc', 'val'=>$loc)),
 			array('Ad', array('type'=>'select', 'name'=>'ad', 'val'=>$ad)),
-			array('', array('type'=>'disptext', 'val'=>'Add one slot every day between and including:')),
+			array('', array('type'=>'disptext', 'val'=>'Add ' . getFormField(array('type'=>'select', 'name'=>'slots', 'val'=>$sl)) . ' slot(s) every day between and including:')),
 			array('', array('type'=>'disptext', 'val'=>
 				getFormField(array('type'=>'select', 'name'=>'d1', 'val'=>$d1)) .
 				' and ' .
@@ -92,6 +101,7 @@ if(LOGGED)
 	$ad = isset($_POST['ad']) ? intval($_POST['ad']) : 0;
 	$d1 = isset($_POST['d1']) ? intval($_POST['d1']) : 0;
 	$d2 = isset($_POST['d2']) ? intval($_POST['d2']) : 0;
+	$sl = isset($_POST['slots']) ? intval($_POST['slots']) : 1;
 
 	if($d2 < $d1)
 	{
@@ -100,8 +110,13 @@ if(LOGGED)
 		$d1 = $tmp;
 	}
 
-	$firstday = date('Ymd', strtotime('today +1 day'));
-	$lastday = date('Ymd', strtotime('today +' . $GLOBALS['DAYS_LOOKAHEAD'] . ' days'));
+	if($sl < 1)
+		$sl = 1;
+	else if($sl > $MAX_SLOTS)
+		$sl = $MAX_SLOTS;
+
+	$firstday = dateConvert('today +1 day');
+	$lastday = dateConvert('today +' . IADS_DAYS_LOOKAHEAD . ' days');
 
 	if($d1 < $firstday)
 		$d1 = $firstday;
@@ -129,14 +144,24 @@ if(LOGGED)
 
 		if(!$fail)
 		{
-			$db->update('insert into iads_cart (iads_cart_ad, iads_cart_d1, iads_cart_d2, iads_cart_location, iads_cart_user) values (' . $ad . ', date(' . $d1 . '), date(' . $d2 . '), ' . $loc . ', ' . ID . ')');
+			$d = 0;
+
+			for($i = 0; $d < $d2; $i++)
+			{
+				$d = dateConvert($d1 . ' +' . $i . ' days');
+				$added = addToCart($ad, $loc, $d, $sl);
+
+				if($added < $sl)
+					echo '<br/>Cannot reserve all requested slots on ' . date('D, M j', strtotime($d)) . ' because that date is full.';
+			}
+
 			updateCart();
 
 			echo '<p/>Selection added to cart.';
 		}
 	}
 
-	display($loc, $ad, $d1, $d2);
+	display($loc, $ad, $d1, $d2, $sl);
 }
 else
 	echo '<p/>You must be logged in to buy slots.';

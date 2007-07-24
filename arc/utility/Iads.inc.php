@@ -22,8 +22,6 @@ define('AD_PENDING',   1);
 define('AD_UPLOADING', 2);
 define('AD_UPLOADED',  3);
 
-$DAYS_LOOKAHEAD = 30;
-
 function getAdStatus($s)
 {
 	switch($s)
@@ -34,49 +32,16 @@ function getAdStatus($s)
 	}
 }
 
-// returns an array of the number of free slots at location $loc between dates $d1 and $d2
-function freeSlots($d1, $d2, $loc)
+// returns the number of free slots on day $d at location $loc
+function freeSlots($d, $loc)
 {
 	global $db;
 
-	$d1 = dateConvert($d1);
-	$d2 = dateConvert($d2);
+	$d = dateConvert($d);
 
-	if($d2 < $d1)
-	{
-		$tmp = $d2;
-		$d2 = $d1;
-		$d1 = $tmp;
-	}
+	$res = $db->query('select count(*) as count from iads_reservation where iads_reservation_location = ' . $loc . ' and iads_reservation_date = date(' . $d . ')');
 
-	$res = $db->query('select count(*), iads_reservation_date from iads_reservation where iads_reservation_location = ' . $loc . ' and iads_reservation_date >= date(' . $d1 . ') and iads_reservation_date <= date(' . $d2 . ') group by iads_reservation_date');
-
-	$ret = array();
-	$last = strtotime($d2);
-
-	for($i = 0; true; $i++)
-	{
-		$cur = strtotime($d1 . ' +' . $i . ' days');
-
-		if($cur > $last)
-			break;
-
-		$d = date('Ymd', $cur);
-		$c = 0;
-
-		for($j = 0; $j < count($res); $j++)
-		{
-			if(strtotime($res[$j]['iads_reservation_date']) == $cur)
-			{
-				$c = $res[$j]['count'];
-				break;
-			}
-		}
-
-		$ret[] = array($d, IADS_SLOTS_PER_DAY - $c);
-	}
-
-	return $ret;
+	return IADS_SLOTS_PER_DAY - $res[0]['count'];
 }
 
 // updates the current cart total for the current user
@@ -90,23 +55,82 @@ function updateCart()
 	$res = $db->query('select * from iads_cart where iads_cart_user = ' . ID);
 
 	$slots = 0;
+	$used = array();
 
 	for($i = 0; $i < count($res); $i++)
 	{
-		$slots += count(freeSlots($res[$i]['iads_cart_d1'], $res[$i]['iads_cart_d2'], $res[$i]['iads_cart_location']));
+		$var = $res[$i]['iads_cart_location'] . '-' . $res[$i]['iads_cart_date'];
+
+		if(!isset($$var))
+			$$var = freeSlots($res[$i]['iads_cart_date'], $res[$i]['iads_cart_location']);
+
+		if($$var > 0)
+		{
+			$desired = $res[$i]['iads_cart_slots'];
+			$left = $$var - $desired;
+
+			if($left >= 0)
+			{
+				$$var = $left;
+				$slots += $desired;
+			}
+			else
+			{
+				$slots += $$var;
+				$$var = 0;
+			}
+		}
 	}
 
-	$cost = $slots * 5;
+	$cost = getCost($slots);
 
-	$db->update('update users set user_cart_cost = ' . $cost . ', user_cart_items = ' . count($res) . ' where user_id = ' . ID);
+	$db->update('update users set user_cart_cost = ' . $cost . ', user_cart_items = ' . count($res) . ', user_cart_slots = ' . $slots . ' where user_id = ' . ID);
 
 	$USER['user_cart_cost'] = $cost;
 	$USER['user_cart_items'] = count($res);
+	$USER['user_cart_slots'] = $slots;
+}
+
+function getCost($slots)
+{
+	return $slots * 10;
 }
 
 function dateConvert($d)
 {
 	return date('Ymd', strtotime($d));
+}
+
+function addToCart($ad, $loc, $d, $slots)
+{
+	global $db;
+
+	$f = freeSlots($d, $loc);
+
+	$d = dateConvert($d);
+
+	if(!LOGGED)
+		return;
+
+	$res = $db->query('select sum(iads_cart_slots) as sum from iads_cart where iads_cart_location = ' . $loc . ' and iads_cart_date = date(' . $d . ')');
+
+	$sum = $res[0]['sum'];
+	$left = $f - $sum;
+
+	if($left < $slots)
+		$slots = $left;
+
+	if($slots < 1)
+		return 0;
+
+	$res = $db->query('select count(*) as count from iads_cart where iads_cart_location = ' . $loc . ' and iads_cart_date = date(' . $d . ') and iads_cart_ad = ' . $ad);
+
+	if($res[0]['count'] > 0)
+		$db->update('update iads_cart set iads_cart_slots = iads_cart_slots + ' . $slots . ' where iads_cart_ad = ' . $ad . ' and iads_cart_location = ' . $loc . ' and iads_cart_date = date(' . $d . ')');
+	else
+		$db->update('insert into iads_cart (iads_cart_ad, iads_cart_date, iads_cart_location, iads_cart_user, iads_cart_slots) values (' . $ad . ', date(' . $d . '), ' . $loc . ', ' . ID . ', ' . $slots . ')');
+
+	return $slots;
 }
 
 ?>

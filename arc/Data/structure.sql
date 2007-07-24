@@ -210,6 +210,7 @@ CREATE TABLE battle_timer (
 --
 
 CREATE SEQUENCE battle_timer_battle_timer_id_seq
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -812,7 +813,6 @@ CREATE TABLE iads_ad (
 --
 
 CREATE SEQUENCE iads_ad_iads_ad_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -833,10 +833,10 @@ ALTER SEQUENCE iads_ad_iads_ad_id_seq OWNED BY iads_ad.iads_ad_id;
 CREATE TABLE iads_cart (
     iads_cart_id bigint NOT NULL,
     iads_cart_ad bigint,
-    iads_cart_d1 date,
-    iads_cart_d2 date,
+    iads_cart_date date,
     iads_cart_location bigint,
-    iads_cart_user bigint
+    iads_cart_user bigint,
+    iads_cart_slots smallint
 );
 
 
@@ -845,7 +845,6 @@ CREATE TABLE iads_cart (
 --
 
 CREATE SEQUENCE iads_cart_iads_cart_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -878,7 +877,6 @@ CREATE TABLE iads_location (
 --
 
 CREATE SEQUENCE iads_locations_iads_location_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -909,7 +907,6 @@ CREATE TABLE iads_reservation (
 --
 
 CREATE SEQUENCE iads_reservation_iads_reservation_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -1135,6 +1132,7 @@ CREATE TABLE player_ability (
 --
 
 CREATE SEQUENCE player_ability_player_ability_id_seq
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -1269,6 +1267,7 @@ CREATE TABLE pm (
 --
 
 CREATE SEQUENCE pm_pm_id_seq
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -1468,7 +1467,8 @@ CREATE TABLE users (
     user_battle_verbose integer DEFAULT 0,
     user_timeformat character varying(20),
     user_cart_cost real,
-    user_cart_items integer
+    user_cart_items integer,
+    user_cart_slots integer
 );
 
 

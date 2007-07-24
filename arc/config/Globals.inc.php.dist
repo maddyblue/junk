@@ -81,6 +81,7 @@ define('NEWSFORUM', 0);
 define('SESSION_TIMEOUT', 600); // in seconds
 define('PODCAST_DATA', SECTION_PODCAST . '/data/');
 define('IADS_SLOTS_PER_DAY', 30);
+define('IADS_DAYS_LOOKAHEAD', 30);
 
 /* Don't mess with these */
 

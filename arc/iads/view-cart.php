@@ -24,7 +24,7 @@ if(LOGGED)
 {
 	updateCart();
 
-	$query = 'select iads_cart.*, iads_ad_name, iads_location_name from iads_cart, iads_location, iads_ad where iads_cart_ad = iads_ad_id and iads_location_id = iads_cart_location and iads_ad_user = ' . ID;
+	$query = 'select iads_cart.*, iads_ad_name, iads_location_name from iads_cart, iads_location, iads_ad where iads_cart_ad = iads_ad_id and iads_location_id = iads_cart_location and iads_ad_user = ' . ID . ' order by iads_cart_date, iads_location_name, iads_ad_name desc';
 	$res = $db->query($query);
 
 	$array = array();
@@ -38,17 +38,26 @@ if(LOGGED)
 
 	for($i = 0; $i < count($res); $i++)
 	{
-		$slots = freeSlots($res[$i]['iads_cart_d1'], $res[$i]['iads_cart_d2'], $res[$i]['iads_cart_location']);
-		$numslots = count($slots);
+		$numslots = $res[$i]['iads_cart_slots'];
 		$totalslots += $numslots;
 
 		$array[] = array(
-			makeLink(decode($res[$i]['iads_ad_name']), ARC_WWW_PATH . 'images/ad.php?a=' . $res[$i]['iads_cart_ad'], 'EXTERIOR') . ' at ' . makeLink($res[$i]['iads_location_name'], 'a=view-location-details&l=' . $res[$i]['iads_cart_location']) . '<br/>from ' . date('D, F j', strtotime($res[$i]['iads_cart_d1'])) . ' to ' . date('D, F j', strtotime($res[$i]['iads_cart_d2'])),
+			makeLink(decode($res[$i]['iads_ad_name']), ARC_WWW_PATH . 'images/ad.php?a=' . $res[$i]['iads_cart_ad'], 'EXTERIOR') . ' at ' . makeLink($res[$i]['iads_location_name'], 'a=view-location-details&l=' . $res[$i]['iads_cart_location']) . '<br/>on ' . date('D, F j', strtotime($res[$i]['iads_cart_date'])),
 			$numslots
 		);
 	}
 
+	$array[] = array(
+		'Total slots',
+		$totalslots
+	);
+
 	$cost = number_format($USER['user_cart_cost'], 2);
+
+	$array[] = array(
+		'Cost per slot',
+		'$' . ($USER['user_cart_slots'] > 0 ? number_format(round($USER['user_cart_cost'] / $USER['user_cart_slots'], 2), 2) : '0.00')
+	);
 
 	$array[] = array(
 		'Total cost',
@@ -59,12 +68,12 @@ if(LOGGED)
 
 	echo '<p/>
 		<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-			<input type="hidden" name="cmd" value="_xclick">
-			<input type="hidden" name="business" value="' . PAYPAL_BUSINESS_ADDRESS . '">
-			<input type="hidden" name="item_name" value="' . $numslots . ' iAds slots">
-			<input type="hidden" name="currency_code" value="USD">
-			<input type="hidden" name="amount" value="' . $cost . '">
-			<input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it\'s fast, free and secure!">
+			<input type="hidden" name="cmd" value="_xclick"/>
+			<input type="hidden" name="business" value="' . PAYPAL_BUSINESS_ADDRESS . '"/>
+			<input type="hidden" name="item_name" value="' . $totalslots . ' iAds slots"/>
+			<input type="hidden" name="currency_code" value="USD"/>
+			<input type="hidden" name="amount" value="' . $cost . '"/>
+			<input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it\'s fast, free and secure!"/>
 		</form>';
 
 	echo '<p/><b>Note:</b> we do not reserve the slots listed here until the time of purchase. This means that if someone else purchases time slots that you have in your cart, you will not be able to buy them. The cart will automatically update when this happens. Your slots will be determined at checkout time, where the slots you successfully reserved will be displayed.';
