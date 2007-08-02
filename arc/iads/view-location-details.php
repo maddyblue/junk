@@ -31,10 +31,10 @@ $days = array();
 
 foreach($_POST as $k => $p)
 {
-	if(substr($k, 0, strlen($DAY_STR)) == $DAY_STR && $p == 'on')
-	{
-		$days[$k] = substr($k, strlen($DAY_STR));
-	}
+	$p = intval($p);
+
+	if(substr($k, 0, strlen($DAY_STR)) == $DAY_STR && $p > 0)
+		$days[substr($k, strlen($DAY_STR))] = $p;
 }
 
 if(isset($_POST['submit']) && LOGGED)
@@ -59,13 +59,17 @@ if(isset($_POST['submit']) && LOGGED)
 
 	if(!$fail)
 	{
-		foreach($days as $d)
+		foreach($days as $d => $v)
 		{
-			addToCart($ad, $l, $d, 1);
+			$added = addToCart($ad, $l, $d, $v);
+
+			echo '<p/>' . date('D, j F', strtotime($d)) . ': ' . $added . ' slots added to cart';
+			echo ($added == $v) ? '.' : ' (you requested ' . $v . ' slots, but only ' . $added . ' are available).';
 		}
 
+		echo '<hr/>';
+
 		updateCart();
-		echo '<p/>Selection added to cart.';
 	}
 }
 
@@ -111,12 +115,21 @@ if(count($res))
 		$date = getdate(strtotime($str));
 		$d = dateConvert($str);
 
-		$w = $date['mday'];
-
 		$free = freeSlots($d, $l);
 
-		if($free > 0 && LOGGED)
-			$w .= '<br/>' . getFormField(array('name'=>$DAY_STR . $d, 'type'=>'checkbox'));
+		$freearr = array();
+
+		for($j = 0; $j <= $free; $j++)
+			$freearr[] = array($j, $j);
+
+		$w = '<div class="Tips1" title="' . date('l, F j', strtotime($str)) . ' :: ' . $free . ' open slots">' . $date['mday'];
+
+		$freeselect = makeSelect($freearr, '0');
+
+		if(LOGGED)
+			$w .= '<br/>' . getFormField(array('name'=>$DAY_STR . $d, 'type'=>'select', 'val'=>$freeselect));
+
+		$w .= '</div>';
 
 		$week[] = $w;
 
@@ -135,9 +148,9 @@ if(count($res))
 		$array[] = $week;
 	}
 
-	$res = $db->query('select * from iads_ad where iads_ad_user = ' . ID . ' order by iads_ad_name');
+	$res = LOGGED ? $db->query('select * from iads_ad where iads_ad_user = ' . ID . ' order by iads_ad_name') : false;
 
-	if(count($res) > 0)
+	if($res && count($res) > 0)
 	{
 		$adarr = array();
 
@@ -165,6 +178,82 @@ if(count($res))
 	$ARC_BODYTAG = 'onload="load()" onunload="GUnload()"';
 
 	$ARC_HEAD = '
+		<style type="text/css">
+			.tool-tip {
+				color: #fff;
+				z-index: 13000;
+			}
+
+			.tool-title {
+				font-weight: bold;
+				font-size: 11px;
+				margin: 0;
+				color: #9FD4FF;
+				padding: 8px 8px 4px;
+				background: #000;
+			}
+
+			.tool-text {
+				font-size: 11px;
+				padding: 4px 8px 8px;
+				background: #000;
+			}
+
+			#area {
+				background: #ccc;
+				height: 20px;
+				width: 500px;
+			}
+
+			#knob {
+				height: 20px;
+				width: 20px;
+				background: #000;
+			}
+
+			#area2 {
+				position: relative;
+				height: 15px;
+				width: 280px;
+				background: #000;
+			}
+
+			#knob2 {
+				position: absolute;
+				height: 15px;
+				width: 20px;
+				background: #ff3300;
+				cursor: pointer;
+			}
+
+			#area3 {
+				background: #ccc;
+				height: 300px;
+				width: 20px;
+			}
+
+				#knob3 {
+				height: 20px;
+				width: 20px;
+				background: #000;
+			}
+		</style>
+
+		<script type="text/javascript" src="' . ARC_WWW_ADDR . 'iads/mootools.js"></script>
+		<script type="text/javascript">
+			window.addEvent(\'domready\', function(){
+				var Tips1 = new Tips($$(\'.Tips1\'));
+
+				var mySlide = new Slider($(\'area\'), $(\'knob\'), {
+					steps: 30,
+					onChange: function(step){
+						$(\'upd\').setHTML(step);
+					}
+				}).set(0);
+
+			});
+		</script>
+
 		<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=' . GOOGLE_MAPS_KEY . '" type="text/javascript"></script>
 		<script type="text/javascript">
 		//<![CDATA[
