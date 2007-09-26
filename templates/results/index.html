@@ -1,0 +1,13 @@
+{% if result_list %}
+	<ul>
+	{% for result in result_list %}
+		<li><a href="{{ result.id }}">{{ result.id }}</a></li>
+	{% endfor %}
+	</ul>
+
+	<form action="/results/upload/" method="post">
+		<input
+	</form>
+{% else %}
+	<p>No results available.</p>
+{% endif %}
