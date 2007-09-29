@@ -1,7 +1,7 @@
-{% if result_list %}
+{% if object_list %}
 	<ul>
-	{% for result in result_list %}
-		<li><a href="{{ result.id }}">{{ result.id }}</a></li>
+	{% for object in object_list %}
+		<li><a href="{{ object.id }}">{{ object }}</a></li>
 	{% endfor %}
 	</ul>
 {% else %}
