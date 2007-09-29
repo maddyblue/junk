@@ -1,6 +1,8 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from biosensor.results.models import *
 import datetime
+import re
+from time import strptime
 
 def index(request):
 	result_list = Result.objects.all().order_by('-run_date')
@@ -17,11 +19,14 @@ def upload(request):
 			f = request.FILES['upload_file']
 			r = Result(sensor=0, electrode=0, run_date=datetime.datetime.now())
 			r.save()
-			print r.id
-			r.save_upload_file_file(r.id, f['content'])
+			r.save_upload_file_file(str(r.id), f['content'])
 			r.upload_file=r.get_upload_file_filename()
+			s = f['content'].splitlines()
+			d = re.split('[ :]+', s[0])
+			#r.run_date=datetime(d[2], d[0], d[1], d[3], d[4], d[5])
+			print datetime(*strptime(s[0], "%
+			
 			r.save()
-			print r.upload_file
 			return render_to_response('results/upload-done.html')
 	else:
 		form = UploadForm()
