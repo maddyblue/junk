@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from biosensor.results.models import *
 import datetime
 import re
+import commands
 
 def upload(request):
 	months = {
@@ -38,6 +39,9 @@ def upload(request):
 			r.upload_file=r.get_upload_file_filename()
 
 			r.save()
+
+			commands.getstatusoutput('/usr/bin/awk -f results/plot.awk ' + r.get_upload_file_filename())
+			commands.getstatusoutput('/usr/local/bin/gnuplot ' + r.get_upload_file_filename() + '.plt')
 
 			return render_to_response('results/upload.html', {'form': UploadForm(), 'upload': r})
 	else:

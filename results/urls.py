@@ -2,8 +2,7 @@ from django.conf.urls.defaults import *
 from biosensor.results.models import Result
 
 info_dict = {
-	'queryset': Result.objects.all(),
-	'allow_empty': True
+	'queryset': Result.objects.all()
 }
 
 urlpatterns = patterns('',
