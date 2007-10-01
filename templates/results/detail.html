@@ -1,0 +1,34 @@
+{% extends "results/base.html" %}
+
+{% block title %}
+
+- {{ result }}
+
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ result }}</h1>
+<ul>
+	<li>sensor: {{ result.sensor }}</li>
+	<li>electrode: {{ result.electrode }}</li>
+	<li>run date: {{ result.run_date }}</li>
+	<li>analysis: {{ result.analysis }}</li>
+	<li>init e: {{ result.init_e }}</li>
+	<li>high e: {{ result.high_e }}</li>
+	<li>low e: {{ result.low_e }}</li>
+	<li>init pn: {{ result.init_pn }}</li>
+	<li>scan rate: {{ result.scan_rate }}</li>
+	<li>sample interval: {{ result.sample_interval }}</li>
+	<li>sensitivity: {{ result.sensitivity }}</li>
+	<li>solution: {{ result.solution }}</li>
+	<li>notes: {{ result.notes }}</li>
+</ul>
+<p><img src="/{{ result.get_upload_file_url }}.png"/></p>
+<p><img src="/{{ result.get_upload_file_url }}.dat1.png"/></p>
+<p><img src="/{{ result.get_upload_file_url }}.dat2.png"/></p>
+<p><img src="/{{ result.get_upload_file_url }}.dat3.png"/></p>
+<p><img src="/{{ result.get_upload_file_url }}.dat4.png"/></p>
+<p><img src="/{{ result.get_upload_file_url }}.dat5.png"/></p>
+
+{% endblock %}

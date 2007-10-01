@@ -4,6 +4,27 @@ import datetime
 import re
 import commands
 
+def result_list():
+	result_list = {}
+	d = ''
+
+	for res in Result.objects.all().order_by('-run_date'):
+		nd = res.run_date.strftime("%d %b %y")
+		if nd != d:
+			d = nd
+			result_list[d] = []
+
+		result_list[d].append(res)
+
+	return result_list
+
+def index(request):
+	return render_to_response('results/base.html', {'result_list': result_list()})
+
+def detail(request, result_id):
+	r = get_object_or_404(Result, pk=result_id)
+	return render_to_response('results/detail.html', {'result': r, 'result_list': result_list()})
+
 def upload(request):
 	months = {
 		'Sept': 9
@@ -33,6 +54,13 @@ def upload(request):
 				sample_interval = s[14].split(' = ')[1],
 				sensitivity = s[16].split(' = ')[1]
 			)
+
+			if request.POST['sensor'] == '' and r.filename[0] == 's':
+				r.sensor = r.filename[1:3]
+
+			if request.POST['electrode'] == '' and r.filename[3] == 'w':
+				r.electrode = r.filename[4:6]
+
 			r.save()
 
 			r.save_upload_file_file(str(r.id), f['content'])

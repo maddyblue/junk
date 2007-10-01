@@ -1,0 +1,60 @@
+<html>
+
+<head>
+	<title>Biosensor Results Viewer{% block title %}{% endblock %}</title>
+
+	<style type="text/css">
+	<!--
+
+	body {
+		font-family: sans-serif;
+		font-size: 13px;
+		margin: 2;
+		padding: 0;
+	}
+
+	#list {
+		position: absolute;
+		width: 150px;
+		border-right: 1px solid #000000;
+	}
+
+	#content {
+		position: absolute;
+		left: 150px;
+		padding-left: 5px;
+	}
+	-->
+	</style>
+</head>
+
+<body>
+
+<div id="list">
+	<p><a href="{% url biosensor.results.views.index %}">main</a> - <a href="{% url biosensor.results.views.upload %}">upload</a></p>
+	<hr />
+	{% for date, days in result_list.items reversed %}
+		<p><b>{{ date }}:</b>
+		{% for result in days %}
+			<br />{{ result.run_date|date:"H:i:s" }} <a href="{% url biosensor.results.views.detail result.id %}">{{ result.filename }}</a>
+		{% endfor %}
+		</p>
+	{% endfor %}
+</div>
+
+<div id="content">
+	{% block content %}
+		{% for date, days in result_list.items reversed %}
+			<p><b>{{ date }}:</b>
+			{% for result in days %}
+				<p>
+					<a href="{% url biosensor.results.views.detail result.id %}"><img src="/{{ result.get_upload_file_url }}.tn.png" border="0" /></a>
+					<a href="{% url biosensor.results.views.detail result.id %}">{{ result }}</a>
+					</p>
+			{% endfor %}
+		{% endfor %}
+	{% endblock %}
+</div>
+
+</body>
+</html>

@@ -7,8 +7,8 @@ class Result(models.Model):
 	run_date = models.DateTimeField()
 	upload_date = models.DateTimeField()
 	upload_file = models.FileField(upload_to="uploads")
-	solution = models.CharField(max_length=100)
-	notes = models.TextField(max_length=500)
+	solution = models.CharField(max_length=100, blank=True)
+	notes = models.TextField(max_length=500, blank=True)
 	filename = models.CharField(max_length=100)
 	analysis = models.CharField(max_length=100)
 	init_e = models.DecimalField(max_digits=4, decimal_places=2)
@@ -19,7 +19,7 @@ class Result(models.Model):
 	sample_interval = models.DecimalField(max_digits=6, decimal_places=5)
 	sensitivity = models.DecimalField(max_digits=8, decimal_places=7)
 	def __unicode__(self):
-		return self.filename + ': ' + str(self.run_date)
+		return self.filename + ': ' + self.run_date.strftime('%d %b %y %H:%M:%S')
 
 	class Admin:
 		pass
