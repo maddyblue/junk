@@ -33,9 +33,11 @@
 <div id="list">
 	<p><a href="{% url biosensor.results.views.index %}">main</a> - <a href="{% url biosensor.results.views.upload %}">upload</a></p>
 	<hr />
-	{% for date, days in result_list.items reversed %}
-		<p><b>{{ date }}:</b>
-		{% for result in days %}
+	{% for dates in result_list %}
+		{% for result in dates %}
+			{% ifequal forloop.counter 1 %}
+				<p><b>{{ result.run_date|date:"j M y" }}:</b>
+			{% endifequal %}
 			<br />{{ result.run_date|date:"H:i:s" }} <a href="{% url biosensor.results.views.detail result.id %}">{{ result.filename }}</a>
 		{% endfor %}
 		</p>
@@ -44,9 +46,11 @@
 
 <div id="content">
 	{% block content %}
-		{% for date, days in result_list.items reversed %}
-			<p><b>{{ date }}:</b>
-			{% for result in days %}
+		{% for dates in result_list %}
+			{% for result in dates %}
+				{% ifequal forloop.counter 1 %}
+					<p><b>{{ result.run_date|date:"j M y" }}:</b>
+				{% endifequal %}
 				<p>
 					<a href="{% url biosensor.results.views.detail result.id %}"><img src="/{{ result.get_upload_file_url }}.tn.png" border="0" /></a>
 					<a href="{% url biosensor.results.views.detail result.id %}">{{ result }}</a>

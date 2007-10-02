@@ -5,16 +5,16 @@ import re
 import commands
 
 def result_list():
-	result_list = {}
+	result_list = []
 	d = ''
 
 	for res in Result.objects.all().order_by('-run_date'):
 		nd = res.run_date.strftime("%d %b %y")
 		if nd != d:
 			d = nd
-			result_list[d] = []
+			result_list.append([])
 
-		result_list[d].append(res)
+		result_list[-1].append(res)
 
 	return result_list
 
