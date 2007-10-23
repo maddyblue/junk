@@ -1,6 +1,10 @@
-import pygtk
-pygtk.require('2.0')
+from __future__ import with_statement
+
 import gtk
+import os
+import pygtk
+import threading
+import urllib2
 
 def scale(pixbuf, width, height):
 	w = float(width)
@@ -13,7 +17,8 @@ def scale(pixbuf, width, height):
 
 	if wscale < hscale:
 		h = wscale * h
-	else:
+
+	if hscale < wscale:
 		w = hscale * w
 
 	w = int(w)
@@ -21,21 +26,26 @@ def scale(pixbuf, width, height):
 
 	return pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 
-class Iads:
+class Iads(threading.Thread):
 	def destroy(self, widget, data=None):
 		gtk.main_quit()
+		exit()
 
 	def __init__(self):
+		threading.Thread.__init__(self)
+
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.connect("destroy", self.destroy)
 		self.window.fullscreen()
 
 		self.screen = self.window.get_screen()
-		width = self.screen.get_width()
-		height = self.screen.get_height()
+		self.width = self.screen.get_width()
+		self.height = self.screen.get_height()
+
+		self.logo = scale(gtk.gdk.pixbuf_new_from_file("logo.png"), self.width, self.height)
 
 		self.image = gtk.Image()
-		self.image.set_from_pixbuf(scale(gtk.gdk.pixbuf_new_from_file("logo.png"), width, height))
+		self.image.set_from_pixbuf(self.logo)
 		self.image.show()
 
 		self.eventbox = gtk.EventBox()
@@ -51,8 +61,67 @@ class Iads:
 		cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
 		self.eventbox.window.set_cursor(cursor)
 
+		self.lock = threading.Lock()
+		self.adloc = 0
+		self.adlist = []
+
 	def main(self):
 		gtk.main()
 
+	def update_adlist(self):
+		print "downloading list"
+		u = urllib2.urlopen("http://i-ads.com/images/list")
+		ads = u.read().split()
+		print ads
+
+		adlist = [self.logo]
+
+		for a in ads:
+			print "checking: " + a
+
+			fname = "ads/" + a
+
+			try:
+				f = open(fname, 'r')
+			except IOError:
+				print "downloading: " + a
+				u = urllib2.urlopen("http://s3.amazonaws.com/iads-ads/" + a)
+				f = open(fname, 'w')
+				f.write(u.read())
+				f.close()
+
+			p = scale(gtk.gdk.pixbuf_new_from_file(fname), self.width, self.height)
+			adlist[len(adlist):-1] = [p]
+
+		with self.lock:
+			self.adlist = adlist
+
+	def next_ad(self):
+		if len(self.adlist) == 0:
+			return
+
+		with self.lock:
+			self.adloc = self.adloc + 1
+			if self.adloc >= len(self.adlist):
+				self.adloc = 0
+
+			self.image.set_from_pixbuf(self.adlist[self.adloc])
+
+	def run(self):
+		self.update_adlist()
+
+		while True:
+			t = threading.Timer(5, self.next_ad)
+			t.start()
+			t.join()
+
+try:
+	os.mkdir('ads')
+except:
+	pass
+
+gtk.gdk.threads_init()
+
 iads = Iads()
+iads.start()
 iads.main()
