@@ -19,14 +19,7 @@ def scale(pixbuf, width, height):
 	w = int(w)
 	h = int(h)
 
-	pixbuf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
-
-	result = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, width, height)
-	result.fill(0x000000ff)
-
-	pixbuf.copy_area(0, 0, w, h, result, 0, height / 2 - h / 2)
-
-	return result
+	return pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 
 class Iads:
 	def destroy(self, widget, data=None):
@@ -34,20 +27,29 @@ class Iads:
 
 	def __init__(self):
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-		self.screen = self.window.get_screen()
-
 		self.window.connect("destroy", self.destroy)
 		self.window.fullscreen()
+
+		self.screen = self.window.get_screen()
 		width = self.screen.get_width()
 		height = self.screen.get_height()
 
 		self.image = gtk.Image()
-		p = gtk.gdk.pixbuf_new_from_file("logo.png")
-		self.image.set_from_pixbuf(scale(p, width, height))
+		self.image.set_from_pixbuf(scale(gtk.gdk.pixbuf_new_from_file("logo.png"), width, height))
 		self.image.show()
 
-		self.window.add(self.image)
+		self.eventbox = gtk.EventBox()
+		self.eventbox.add(self.image)
+		self.eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color())
+		self.eventbox.show()
+
+		self.window.add(self.eventbox)
 		self.window.show()
+
+		pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
+		color = gtk.gdk.Color()
+		cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
+		self.eventbox.window.set_cursor(cursor)
 
 	def main(self):
 		gtk.main()
