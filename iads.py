@@ -16,10 +16,12 @@ def scale(pixbuf, width, height):
 	hscale = h / ph
 
 	if wscale < hscale:
-		h = wscale * h
+		scale = wscale
+	else:
+		scale = hscale
 
-	if hscale < wscale:
-		w = hscale * w
+	h = scale * ph
+	w = scale * pw
 
 	w = int(w)
 	h = int(h)
