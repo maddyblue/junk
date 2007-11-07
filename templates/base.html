@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+
+<title>iAds{% block title %}{% endblock %}</title>
+
+<link rel="stylesheet" href="/templates/iads.css" type="text/css" />
+
+{% block head %}{% endblock %}
+
+</head>
+
+<body {% block body %}{% endblock %} >
+	<div id="container">
+		<div id="container-inner">
+			<!-- Headerbox  -->
+			<div id="headerbox">
+				<div id="logo">
+					<a href="/"><img src="/templates/images/logo.jpg" alt="Innovative Advertising" /></a>
+				</div>
+				<div id="watermark"><img src="/templates/images/watermarktop.jpg" alt="" /></div>
+			</div>
+			<!-- Navbox -->
+			<div id="navbox">
+				<div id="leftstripe"><img src="/templates/images/stripebox.jpg" alt="" /></div>
+				<div id="nav-home{% block p-home %}{% endblock %}"><a href="/">Home</a></div>
+				<div id="navdivider1"></div><div id="nav-ads"><a href="/ads/">Ads</a></div><div id="navdivider2"></div>
+				<div id="nav-coupons{% block p-coupons %}{% endblock %}"><a href="/coupons/">Coupons</a></div>
+				<div id="navdivider3"></div>
+				<div id="nav-blog{% block p-blog %}{% endblock %}"><a href="/blog/">Blog</a></div>
+				<div id="navdivider4"></div>
+				<div id="nav-support{% block p-support %}{% endblock %}"><a href="/support/">Support</a></div>
+				<div id="navdivider5"></div>
+				<div id="nav-login"><a href="/user/?a=login" class="noborder"><img src="/templates/images/loginbutton.jpg" alt="Log In" class="noborder" /></a></div>
+			</div>
+			<!-- Sneakybox  -->
+			<div id="sneakybox">
+				<div id="watermarkcontinued"><img src="/templates/images/watermarkbottom.jpg" alt="" /></div>
+			</div>
+
+			{% block middlebox %}{% endblock %}
+
+			<!-- Bottombox  -->
+			<div id="bottombox">
+				<div id="bottombox-inner">
+					{% block content %}{% endblock %}
+				</div>
+			</div>
+			<!-- Footerbox  -->
+			<div id="footerbox">
+				<div id="leftstripe2"><img src="/templates/images/stripebox.jpg" alt="" /></div>
+				<div id="footer-left"></div>
+				<div id="footer-fusionfox"> Design by <a href="http://fusionfox.com" target="_blank">Fusionfox</a></div>
+				<div id="rightstripe2"><img src="/templates/images/stripebox.jpg" alt="" /></div>
+			</div>
+			<div id="verybottom">Copyright &copy; 2007 Innovative Advertising, LLC</div>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,1080 @@
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++
+Innovative Advertising CSS
+By Clifton Labrum
+fusionfox.com
+++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+/* Cullahs
+Olive: #9BBB34 (Light Olive: #B4CC68)
+Blue: #00CCFF
+Orange: #FF9900
+*/
+html
+{
+	margin: 0;
+	/* setting border: 0 hoses ie6 win window inner well border */
+	padding: 0;
+	height:100%;
+}
+
+body
+{
+	margin: 0;
+	/* setting border: 0 hoses ie5 win window inner well border */
+	padding: 0;
+	background-color:#333333;
+	background-image:url(images/bodybg.jpg);
+	background-repeat:repeat-x;
+	min-width: 750px;
+	text-align: center; /* center on ie */
+	height:100%;
+	line-height:180%;
+
+	font-family: "Lucida Sans",sans-serif;
+	color:#CCC;
+	font-size: 13px;
+}
+
+/* +++++++++ HEADERS +++++++++ */
+h1{
+	margin:0 0 5px 0;
+	font-size:18px;
+	color:#FFF;
+	font-weight: normal;
+	text-transform: uppercase;
+}
+h2{
+	margin:0px 0px 5px 0px;
+	font-size:17px;
+	color:#FF6;
+	font-weight:lighter;
+}
+h3{
+	margin:0 0 5px 0;
+	font-size:13px;
+	color:#FFF;
+	font-weight: normal;
+	text-transform: uppercase;
+}
+h4{
+	margin:0 0 5px 0;
+	font-size:14px;
+	color:#FF6;
+	font-weight: normal;
+	text-transform: uppercase;
+}
+h5{
+
+}
+h6{
+
+}
+
+/* +++++++++ ANCHORS +++++++++ */
+a,a:active,a:visited {
+	color:#FFF;
+	text-decoration: none;
+}
+a:hover{
+	color: #0C0;
+	text-decoration: none;
+}
+a img{
+	border: none;
+	text-decoration: none;
+}
+/* Make it so image links don't have underlines */
+.noborder,
+.noborder:hover,
+.noborder:visited
+{
+	border:none;
+}
+
+/* +++++++++ LISTS +++++++++ */
+ul{
+	margin:0;
+	padding:0;
+	list-style-type:none;
+}
+li{
+	padding: 0px 0px 3px 20px;
+}
+
+/* +++++++++ FORMS +++++++++ */
+input, textarea{
+	margin: 0;
+	padding: 3px;
+	color:#FF6;
+	border: #444 solid 1px;
+	background-color:#333;
+}
+	input:focus, textarea:focus{
+		padding: 3px;
+		border: #090 solid 1px;
+	}
+select {
+	margin: 0;
+	padding: 2px;
+	color:#EEE;
+	border: #444 solid 1px;
+	background-color:#333;
+}
+	select:focus{
+		padding: 2px;
+		border: #444 solid 1px;
+	}
+#button-upload{
+	background:url(images/button-upload.jpg) no-repeat;
+	background-color: transparent;
+	width:85px;
+	height:24px;
+}
+label{
+	margin: 3px 0px 2px 0px;
+	color:#999;
+	font-size:12px;
+}
+#button-submit{
+	border:none;
+	background:none;
+}
+
+/*
+input:focus, textarea:focus, select:focus{
+	padding: 3px;
+	border: #F90 solid 1px;
+}
+textarea {
+	margin: 0;
+	padding: 2px 2px 2px 2px;
+	font-family:Tahoma, sans-serif;
+	font-size: 12px;
+	color:#555555;
+	border: #CCCCCC solid 1px;
+	background: url(images/textareabg.jpg) repeat-x;
+	background-color:#FFFFFF;
+}
+
+*/
+
+/* +++++++++ VARIOUS CLASSES AND ICONS +++++++++ */
+
+/* Lil' Icons*/
+
+.icon-upload{
+	background:url(images/icon-upload.jpg) no-repeat 0 3px;
+	padding: 3px 0px 3px 19px;
+	display:inline;
+	margin:0;
+}
+.icon-user{
+	background:url(images/icon-user.jpg) no-repeat 0 6px;
+	padding: 3px 0px 3px 21px;
+	display:inline;
+	margin:0;
+	font-size:17px;
+	color:#FF6;
+	font-weight:lighter;
+}
+.icon-lock{
+	background:url(images/icon-lock.jpg) no-repeat 0 5px;
+	padding: 3px 0px 3px 21px;
+	display:inline;
+	margin:0;
+	font-size:17px;
+	color:#FF6;
+	font-weight:lighter;
+}
+/* Classes n' Divs for Various Things */
+#uploadnew{
+	margin:0;
+	text-align: center;
+}
+
+.darkgray{
+	color:#333;
+}
+.mediumgray{
+	color:#666;
+}
+.lightgray{
+	color:#BBB;
+}
+
+.invisible{
+	display:none;
+}
+#clearit{
+	clear:both;
+	display:block;
+}
+.currentimage{
+	border:2px #FF6 solid;
+	padding:3px;
+}
+.notcurrentimage{
+	padding:3px;
+	border:2px #1D1D1D solid;
+}
+
+/* +++++++++ LIST BOX LINKS +++++++++ */
+
+#listbox {
+	width:100%;
+	padding:0px 0px 0px 0px;
+	margin-bottom: 0px;
+	color: #999;
+}
+
+#listbox ul {
+	list-style-type:none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background-color:#333;
+}
+
+#listbox li {
+	margin: 0px 0px 0px 0px;
+	width:100%;
+	padding:0;
+	text-indent:0px;
+	border-bottom: 4px solid #222;
+}
+
+#listbox li a {
+	width:180px;
+	background:url(images/stripeboxfat.jpg) no-repeat 0px 0px;
+	padding-left: 17px;
+	display: block;
+	background-color: #333;
+	color: #999;
+	text-decoration: none;
+	border:none;
+	height:22px;
+
+}
+
+#listbox li a:hover {
+	width:180px;
+	background:url(images/stripeboxfat.jpg) no-repeat 0px 0px;
+	padding-left: 17px;
+	display: block;
+	background-color: #333;
+	color: #FF6;
+	border:none;
+	height:22px;
+}
+
+html>body #listbox li a {
+	width: auto;
+}
+
+
+/* (((((((((((((((((((((((((((((((((( Page Structure )))))))))))))))))))))))))))))))))))) */
+
+#container
+{
+	position: relative;
+	margin: 0 auto; /* center on everything else */
+	width: 750px;
+	text-align: left;
+	height:100%;
+}
+	#container-inner { position: static; width: auto; }
+
+/* ---------------------------------------- */
+/*
+#pagebody {
+	position: relative;
+	width: 100%;
+}
+	#pagebody-inner {
+		position: static;
+	}
+*/
+
+
+/* ############## Header Box ################*/
+#headerbox {
+	position: relative;
+	height:80px;
+}
+
+/* The Logo --- */
+#logo{
+	margin-left:10px;
+	margin-top:17px;
+	width:160px;
+	height:50px;
+	position:absolute;
+}
+#logo a, #logo a:hover, #logo a img{
+	border: none;
+	text-decoration: none;
+}
+
+#watermark{
+	margin-top:0;
+	margin-left:525px;
+	position:absolute;
+}
+
+/* ############## Navigation Box ################*/
+#navbox{
+	width:750px;
+	height:30px;
+	background:url(images/navbg.jpg) repeat-x;
+}
+	#navbox a{
+		color:#CCC;
+		text-decoration: none;
+	}
+	#navbox a:hover{
+		color:#0C0;
+		text-decoration: none;
+	}
+#leftstripe{
+	width:5px;
+	position: absolute;
+	margin-left: 0;
+}
+/* Home ===== */
+#nav-home{
+	margin-left:5px;
+	position:absolute;
+	width:88px;
+	padding-top:3px;
+	padding-left:24px;
+}
+	#nav-home-pressed a{
+		margin-left:5px;
+		position:absolute;
+		width:88px;
+		height:30px;
+		background: url(images/navpressed.jpg) no-repeat;
+		color:#F90;
+		padding-top:3px;
+		padding-left:24px;
+	}
+#navdivider1{
+	width:2px;
+	height:30px;
+	position:absolute;
+	margin-left:93px;
+	background:url(images/navdivider.jpg) no-repeat;
+}
+/* Ads ===== */
+#nav-ads{
+	margin-left:95px;
+	position:absolute;
+	width:88px;
+	padding-top:3px;
+	padding-left:31px;
+}
+	#nav-ads-pressed a{
+		margin-left:95px;
+		position:absolute;
+		width:88px;
+		height:30px;
+		background: url(images/navpressed.jpg) no-repeat;
+		color:#F90;
+		padding-top:3px;
+		padding-left:31px;
+	}
+#navdivider2{
+	width:2px;
+	height:30px;
+	position:absolute;
+	margin-left:181px;
+	background:url(images/navdivider.jpg) no-repeat;
+}
+/* Coupons ===== */
+#nav-coupons{
+	margin-left:183px;
+	position:absolute;
+	width:88px;
+	padding-top:3px;
+	padding-left:16px;
+}
+	#nav-coupons-pressed a{
+		margin-left:183px;
+		position:absolute;
+		width:88px;
+		height:30px;
+		background: url(images/navpressed.jpg) no-repeat;
+		color:#F90;
+		padding-top:3px;
+		padding-left:16px;
+	}
+#navdivider3{
+	width:2px;
+	height:30px;
+	position:absolute;
+	margin-left:269px;
+	background:url(images/navdivider.jpg) no-repeat;
+}
+/* Blog ===== */
+#nav-blog{
+	margin-left:271px;
+	position:absolute;
+	width:88px;
+	padding-top:3px;
+	padding-left:29px;
+}
+	#nav-blog-pressed a{
+		margin-left:271px;
+		position:absolute;
+		width:88px;
+		height:30px;
+		background: url(images/navpressed.jpg) no-repeat;
+		color:#F90;
+		padding-top:3px;
+		padding-left:29px;
+	}
+#navdivider4{
+	width:2px;
+	height:30px;
+	position:absolute;
+	margin-left:357px;
+	background:url(images/navdivider.jpg) no-repeat;
+}
+/* Support ===== */
+#nav-support{
+	margin-left:359px;
+	position:absolute;
+	width:88px;
+	padding-top:3px;
+	padding-left:20px;
+}
+	#nav-support-pressed a{
+		margin-left:359px;
+		position:absolute;
+		width:88px;
+		height:30px;
+		background: url(images/navpressed.jpg) no-repeat;
+		color:#F90;
+		padding-top:3px;
+		padding-left:20px;
+	}
+#navdivider5{
+	width:2px;
+	height:30px;
+	position:absolute;
+	margin-left:445px;
+	background:url(images/navdivider.jpg) no-repeat;
+}
+/* Login ===== */
+#nav-login{
+	margin-left:668px;
+	height:30px;
+	position: absolute;
+}
+/* Checkout ===== */
+#nav-checkout{
+	margin-left:643px;
+	height:30px;
+	position: absolute;
+}
+/* Next ===== */
+#nav-next{
+	margin-left:643px;
+	height:30px;
+	position: absolute;
+}
+/* Right Stripe ===== */
+#rightstripe{
+	width:5px;
+	position: absolute;
+	margin-left: 745px;
+}
+/* ############## Sneaky Box ################*/
+#sneakybox {
+	position: relative;
+	height:9px;
+}
+
+#watermarkcontinued{
+	margin-top:0;
+	margin-left:525px;
+	position:absolute;
+}
+/* #######################################################################*/
+/* ############## Middle Box ################*/
+/* #######################################################################*/
+
+#middlebox{
+	position: relative;
+	width:750px;
+	height:200px;
+	margin:0 0 9px 0;
+}
+	#leftbox{
+		float:left;
+		display:inline;
+		width:500px;
+		background:url(images/greenbg.jpg) repeat-x;
+		height:200px;
+	}
+		#promo{
+			position: absolute;
+			margin-left:3px;
+			margin-top: 23px;
+		}
+		#promotext{
+			position:absolute;
+			margin-left: 240px;
+			margin-top: 30px;
+			color:#FFF;
+			font-size:20px;
+			line-height: 160%;
+		}
+		#promowatermark{
+			position:absolute;
+			background:url(images/greenwatermark.jpg) no-repeat;
+			margin-left: 323px;
+			margin-top:37px;
+		}
+		#promobutton{
+			position:absolute;
+			margin-left:301px;
+			margin-top:150px;
+		}
+	#rightbox{
+		float:right;
+		display:inline;
+		width:240px;
+		margin-left: 10px;
+		background:url(images/orangebg.jpg) repeat-x;
+		height:200px;
+	}
+		#couponwatermark{
+			position:absolute;
+			background:url(images/couponswatermark.jpg) no-repeat;
+			margin-left: 78px;
+			margin-top:41px;
+		}
+		#coupontext{
+			position:absolute;
+			margin:30px 20px 0px 20px;
+			color:#FFD6AD;
+			font-size:13px;
+			line-height: 160%;
+			width:200px;
+		}
+
+/* ############## Bottom Box ################*/
+#bottombox{
+	position: relative;
+	width:750px;
+	height:auto;
+	background:url(images/graybg.jpg) repeat-x;
+	background-color: #222;
+	margin:0px 0 9px 0;
+	padding:0;
+}
+	#bottombox-inner{
+		padding:20px;
+		display:block;
+	}
+	#blogquote{
+		background:url(images/quotemarks.jpg) no-repeat;
+		padding-left:50px;
+		line-height: 135%;
+		width:400px;
+		float:left;
+	}
+	.blogentry{
+		background:url(images/quotemarks.jpg) no-repeat;
+		padding-left:50px;
+		line-height: 135%;
+		width:650px;
+		float:left;
+	}
+	.blogentry2{
+		background:url(images/quotemarks2.jpg) no-repeat;
+		padding-left:50px;
+		line-height: 135%;
+		width:650px;
+		float:left;
+	}
+	#recentarticles{
+		float:right;
+		width:200px;
+		margin:0 0 0 30px;
+		padding:0;
+
+	}
+/* ############## Footer Box ################*/
+#footerbox{
+	width:750px;
+	height:30px;
+	background:url(images/navbg.jpg) repeat-x;
+	font-size: 12px;
+}
+	#footerbox a{
+		color:#999;
+		text-decoration: none;
+	}
+	#footerbox a:hover{
+		color:#0C0;
+		text-decoration: none;
+	}
+#leftstripe2{
+	width:5px;
+	position: absolute;
+	margin-left: 0px;
+}
+/* Search ===== */
+#footer-left{
+	margin-left:5px;
+	position:absolute;
+	width:278px;
+	padding-top:4px;
+	padding-left:19px;
+	color:#F90;
+}
+
+/* Designed By ===== */
+#footer-fusionfox{
+	float: right;
+	padding-right:20px;
+	padding-top:4px;
+	color:#666;
+}
+
+#rightstripe2{
+	width:5px;
+	position: absolute;
+	margin-left: 745px;
+}
+#verybottom{
+	width:750px;
+	text-align: center;
+	color:#666;
+	font-size:11px;
+}
+/* ############## Right Side ################*/
+#rightside{
+	float: right;
+	width:180px;
+	margin:0 0 10px 13px;
+}
+
+/* ############## Progress Box ################*/
+#progressbox{
+	margin-bottom:10px;
+	width:180px;
+}
+.progressimage{
+	margin-left:5px;
+}
+/* ############## Shopping Cart Box ################*/
+#yourcartbox{
+	width:180px;
+	height:auto;
+	background:url(images/darkfader.jpg) repeat-x;
+	background-color: #1D1D1D;
+}
+	#yourcartbox a{
+		color:#FF8689;
+	}
+	#yourcartbox a:hover{
+		color:#E43A3B;
+	}
+.yourcarttitle{
+	margin:9px 0px 5px 7px;
+	float:left;
+}
+#numberofitems{
+	width:60px;
+	background:url(images/carticon.jpg) no-repeat right 4px;
+	padding:1px 22px 1px 0;
+	color:#FFF;
+	font-size: 22px;
+	float:right;
+	margin:8px 5px 5px 5px;
+	text-align: right;
+}
+.lines{
+	height:2px;
+	/*border-top:1px #333 solid;*/
+	/*border-bottom: 1px #000 solid;*/
+	margin:1px 0px;
+	padding:0;
+	background:url(images/linesbg.jpg) repeat-x;
+}
+/* "cartitem" Applies to all boxes */
+.cartitem{
+	padding:7px;
+	line-height: 125%;
+	margin:0;
+}
+.locationname{
+	color:#FC0;
+	font-size: 12px;
+	float:left;
+	width:115px;
+}
+.locationnamelong{
+	color:#FC0;
+	font-size: 12px;
+	float:left;
+	width:155px;
+}
+.locationlist{
+	color:#FFF;
+	font-size: 11px;
+	clear:both;
+	width:155px;
+	text-transform: uppercase;
+}
+.cost{
+	color:#0F0;
+	float:right;
+	width:40px;
+	background-color: #1D1D1D;
+}
+.dates{
+	font-size:11px;
+	color:#CCC;
+	clear:both;
+	width:180px;
+}
+.datesword{
+	color:#999;
+}
+.remove{
+	color:#FF8689;
+	background:url(images/redx.jpg) no-repeat 0 2px;
+	padding-left:15px;
+	font-size: 12px;
+}
+.lessbutton{
+	float:right;
+	margin:7px 4px 7px 7px;
+}
+.morebutton{
+	float:right;
+	margin:7px 7px 7px 4px;
+}
+#button-add{
+	background:url(images/button-add.jpg) no-repeat;
+	width:60px;
+	height: 24px;
+	border:none;
+	margin-top: 5px;
+}
+/* ############## Location Box (Photo, Map, Calendar) ################*/
+#locationinfobox{
+	width:320px;
+	height:265px;
+	/*position:relative;*/
+	float:left;
+	margin:0px 0 0 0;
+	/*margin:5px 0 0 195px;*/
+	background:url(images/darkfader.jpg) repeat-x;
+	background-color: #1D1D1D;
+}
+#locationimage{
+	padding-top:6px;
+	margin:0;
+}
+
+#locationnav{
+	width:320px;
+	height:20px;
+	background:url(images/littlenavbg.jpg) repeat-x;
+	font-size:11px;
+	line-height: 100%;
+}
+	#locationnav a{
+		color:#CCC;
+		text-decoration: none;
+	}
+	#locationnav a:hover{
+		color:#0C0;
+		text-decoration: none;
+	}
+	#location-photo{
+		position:absolute;
+		width:105px;
+		height:20px;
+		margin-left:1px;
+		padding-left:38px;
+		padding-top: 4px;
+	}
+		#location-photo-pressed a{
+			position:absolute;
+			width:105px;
+			height:20px;
+			margin-left:1px;
+			background:url(images/littlenavpressed.jpg) no-repeat;
+			padding-left:38px;
+			padding-top: 4px;
+			color:#F90;
+		}
+	#location-map{
+		position:absolute;
+		width:105px;
+		margin-left:108px;
+		padding-left:41px;
+		padding-top: 4px;
+	}
+		#location-map-pressed a{
+			position:absolute;
+			width:105px;
+			height:20px;
+			margin-left:108px;
+			background:url(images/littlenavpressed.jpg) no-repeat;
+			padding-left:41px;
+			padding-top: 4px;
+			color:#F90;
+		}
+	#location-calendar{
+		position:absolute;
+		width:104px;
+		margin-left: 215px;
+		padding-left:28px;
+		padding-top: 4px;
+	}
+		#location-calendar-pressed a{
+			position:absolute;
+			width:104px;
+			height:20px;
+			margin-left: 215px;
+			background:url(images/littlenavpressed2.jpg) no-repeat;
+			padding-left:28px;
+			padding-top: 4px;
+			color:#F90;
+		}
+	#location-centered{
+		position:absolute;
+		width:320px;
+		text-align: center;
+		padding-top: 4px;
+	}
+#littlenavdivider1{
+	width:2px;
+	height:20px;
+	position:absolute;
+	margin-left:106px;
+	background:url(images/littlenavdivider.jpg) no-repeat;
+}
+#littlenavdivider2{
+	width:2px;
+	height:20px;
+	position:absolute;
+	margin-left:213px;
+	background:url(images/littlenavdivider.jpg) no-repeat;
+}
+/* Location Text Box */
+#locationtext{
+	width:180px;
+	float:left;
+	margin:5px 0 0 15px;
+	line-height: 135%;
+}
+#locationtextleft{
+	width:380px;
+	float:left;
+	margin:5px 0 0 0px;
+	line-height: 135%;
+}
+.price{
+	color:#0F0;
+}
+.p-location{
+	margin:7px 0px;
+}
+/* ############## Location Box (Photo, Map, Calendar) ################*/
+#locationflipper{
+	width:710px;
+	height:125px;
+	background:url(images/darkfader2.jpg) repeat-x;
+	/*text-align: center;*/
+}
+#locationflipperbox{
+	/*position: absolute;*/
+	float:left;
+	width:535px;
+	margin:22px 0 0 45px;
+}
+	#locationflipperbox img{
+		margin:0px 10px;
+	}
+#button-left{
+	/*position: absolute;*/
+	float:left;
+	margin: 47px 0px 0px 13px;
+}
+#button-right{
+	/*position: absolute;*/
+	float:right;
+	margin: 47px 13px 0px 0px;
+}
+/* ############## Check Out Box ################*/
+#checkoutbox{
+	width:310px;
+	height:80px;
+	background:url(images/darkfader.jpg) repeat-x;
+	background-color: #1D1D1D;
+	margin-top:10px;
+}
+#checkout-number{
+	float:left;
+	margin:12px 0px 0px 10px;
+	text-align: center;
+	width:120px;
+	text-transform: uppercase;
+	color:#FFF;
+	line-height: 200%;
+}
+.bignumber{
+	color:#0F0;
+	font-size:24px;
+}
+#checkout-buttonbox{
+	text-align: center;
+	float:right;
+	width:120px;
+	margin:30px 10px 0px 0px;
+}
+/* ############## Create Account Box ################*/
+#createaccountbox{
+	width:370px;
+	height:80px;
+	background:url(images/darkfader.jpg) repeat-x;
+	background-color: #1D1D1D;
+	margin-top:10px;
+	padding:15px;
+	height:auto;
+}
+
+/* ############## Login Box ################*/
+#yourloginbox{
+	width:180px;
+	height:auto;
+	background:url(images/darkfader.jpg) repeat-x;
+	background-color: #1D1D1D;
+}
+	#yourloginbox a{
+		color:#CCC;
+	}
+	#yourloginbox a:hover{
+		color:#0C0;
+	}
+#login-username{
+	width:157px;
+}
+#login-password{
+	width:157px;
+}
+#button-login{
+	border:none;
+	background:none;
+	float:right;
+	margin-right: 0px;
+}
+/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& basic page elements &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
+
+/*+++++++++++++++++++ STUFF I NEED ++++++++++++++++++++++++++++*/
+
+/* standard helper classes (whatever that is...) */
+
+.clr
+{
+	clear: both;
+	overflow: hidden;
+	width: 1px;
+	height: 1px;
+	margin: 0 -1px -1px 0;
+	border: 0;
+	padding: 0;
+	font-size: 0;
+	line-height:0px;
+}
+
+/* ARC stuff */
+
+.tableMain {
+	border-spacing: 0px;
+	border-collapse: collapse;
+	line-height: 20px;
+}
+
+.tableHeaderCellL, .tableHeaderCell {
+	padding-left: 8px;
+	padding-right: 8px;
+	background-color: #171717;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+}
+
+.tableHeaderCellR {
+	padding-left: 8px;
+	padding-right: 8px;
+	background-color: #171717;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+	border-right: 1px solid #000;
+}
+
+.tableCell, .tableCellL, .tableCellTL, .tableCellT {
+	padding-left: 8px;
+	padding-right: 8px;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+}
+
+.tableCellTR, .tableCellR {
+	padding-left: 8px;
+	padding-right: 8px;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+	border-right: 1px solid #000;
+}
+
+.tableCellB, .tableCellBL {
+	padding-left: 8px;
+	padding-right: 8px;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
+}
+
+.tableCellBR {
+	padding-left: 8px;
+	padding-right: 8px;
+	border: 1px solid #000;
+}
+
+/* .pkg class wraps enclosing block element around inner floated elements (whatever that means...) */
+
+.pkg:after
+{
+	content: " ";
+	display: block;
+	visibility: hidden;
+	clear: both;
+	height: 0.1px;
+	font-size: 0.1em;
+	line-height:0px;
+}
+* html .pkg {
+	display: inline-block;
+}
+/* no ie mac \*/
+
+* html .pkg {
+	height:100%;
+}
+.pkg {
+	display: block;
+	height:100%;
+}

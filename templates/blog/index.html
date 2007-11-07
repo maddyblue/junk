@@ -1,0 +1,24 @@
+{% extends "blog/default.html" %}
+
+{% block title %}
+
+ - Blog
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Our Blog</h1>
+
+{% for entry in entries %}
+	<div class="blogentry">
+		<h2>{{ entry.title }} </h2>
+		<h3 style="text-transform: none;">By {{ entry.user.username }} on {{ entry.date|date:"j F y H:i A" }}</h3>
+		{{ entry.short }}
+		<br /><br /><a href="{{ entry.id }}"><img src="/templates/images/button-readmore.jpg" alt="Read More" /></a><br /><br />
+	</div>
+{% endfor %}
+
+<div id="clearit"></div>
+
+{% endblock %}

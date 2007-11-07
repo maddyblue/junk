@@ -1,0 +1,20 @@
+{% extends "blog/default.html" %}
+
+{% block title %}
+
+ - {{ entry.title }}
+
+{% endblock %}
+
+{% block content %}
+
+<h2>{{ entry.title }}</h2>
+<h3 style="text-transform: none;">By {{ entry.user.username }} on {{ entry.date|date:"j F y H:i A" }}</h3>
+
+{{ entry.short|linebreaks }}
+{% if entry.long %} <p /> {% endif %}
+{{ entry.long|linebreaks }}
+
+<div id="clearit"></div>
+
+{% endblock %}
