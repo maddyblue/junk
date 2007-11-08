@@ -1,0 +1,27 @@
+{% extends "main/default.html" %}
+
+{% block content %}
+
+<h1>Login</h1>
+
+{{ message }}
+
+<form method="post" action="">
+	<table>{{ form }}</table>
+	<input type="submit" value="Login" />
+</form>
+
+{% if register %}
+
+<h1>New User</h1>
+
+Need an account? Registering is quick.
+
+<form method="post" action="/register/">
+	<table>{{ register }}</table>
+	<input type="submit" value="Register" />
+</form>
+
+{% endif %}
+
+{% endblock %}
