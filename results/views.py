@@ -27,7 +27,8 @@ def detail(request, result_id):
 
 def upload(request):
 	months = {
-		'Sept': 9
+		'Sept': 9,
+		'Oct': 10
 	}
 
 	if request.method == 'POST':
