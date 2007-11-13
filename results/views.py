@@ -40,10 +40,10 @@ def upload(request):
 			d = re.split('[\., :]+', s[0])
 
 			r = Result(
-				sensor = request.POST['sensor'],
-				electrode = request.POST['electrode'],
-				solution = request.POST['solution'],
-				notes = request.POST['notes'],
+				sensor = form.cleaned_data['sensor'],
+				electrode = form.cleaned_data['electrode'],
+				solution = form.cleaned_data['solution'],
+				notes = form.cleaned_data['notes'],
 				upload_date = datetime.datetime.now(),
 				run_date = datetime.datetime(int(d[2]), months[d[0]], int(d[1]), int(d[3]), int(d[4]), int(d[5])),
 				filename = request.FILES['upload_file']['filename'],
@@ -57,12 +57,10 @@ def upload(request):
 				sensitivity = s[16].split(' = ')[1]
 			)
 
-			print form.cleaned_data
-
-			if form.cleaned_data is None and r.filename[0] == 's':
+			if form.cleaned_data['sensor'] is None and len(r.filename) >= 3 and r.filename[0] == 's':
 				r.sensor = r.filename[1:3]
 
-			if form.cleaned_data is None and r.filename[3] == 'w':
+			if form.cleaned_data['electrode'] is None and len(r.filename) >= 6 and r.filename[3] == 'w':
 				r.electrode = r.filename[4:6]
 
 			r.save()

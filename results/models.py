@@ -2,8 +2,8 @@ from django.db import models
 from django import newforms as forms
 
 class Result(models.Model):
-	sensor = models.IntegerField()
-	electrode = models.IntegerField()
+	sensor = models.IntegerField(null=True)
+	electrode = models.IntegerField(null=True)
 	run_date = models.DateTimeField()
 	upload_date = models.DateTimeField()
 	upload_file = models.FileField(upload_to="uploads")

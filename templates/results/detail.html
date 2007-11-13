@@ -11,8 +11,8 @@
 <h1>{{ result }}</h1>
 <a href="/{{ result.get_upload_file_url }}">[ download .txt data ]</a>
 <ul>
-	<li>sensor: {{ result.sensor }}</li>
-	<li>electrode: {{ result.electrode }}</li>
+	<li>sensor: {{ result.sensor|default_if_none:"unknown" }}</li>
+	<li>electrode: {{ result.electrode|default_if_none:"unknown" }}</li>
 	<li>run date: {{ result.run_date }}</li>
 	<li>analysis: {{ result.analysis }}</li>
 	<li>init e: {{ result.init_e }}</li>
