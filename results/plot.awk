@@ -24,6 +24,9 @@ FNR == 1 {
 	print "set output \"" FILENAME ".dat5.png\"" > fplt;
 	print "plot \"" FILENAME ".dat5\" with lines" > fplt;
 
+	print "set output \"" FILENAME ".avg.png\"" > fplt;
+	print "plot \"" FILENAME ".avg\" with lines" > fplt;
+
 	print "set output \"" FILENAME ".png\"" > fplt;
 	print "plot \\" > fplt;
 	print "\"" FILENAME ".dat1\" with lines , \\" > fplt;
@@ -42,15 +45,20 @@ FNR == 1 {
 	print "unset ylabel" > fplt;
 	print "unset tics" > fplt;
 	print "plot \\" > fplt;
-	print "\"" FILENAME ".dat1\" notitle with lines , \\" > fplt;
-	print "\"" FILENAME ".dat2\" notitle with lines, \\" > fplt;
-	print "\"" FILENAME ".dat3\" notitle with lines, \\" > fplt;
-	print "\"" FILENAME ".dat4\" notitle with lines, \\" > fplt;
-	print "\"" FILENAME ".dat5\" notitle with lines" > fplt;
+	print "\"" FILENAME ".avg\" notitle with lines" > fplt;
 }
 
 /^[-0-9]/ {
 	line += 1;
-	fname = FILENAME ".dat" line % 5 + 1;
+	idx = line % 5;
+	data[idx] = $2;
+	time[idx] = $1;
+	fname = FILENAME ".dat" idx + 1;
 	print $1 " " $2 > fname;
+
+	if(idx == 4)
+	{
+		avgname = FILENAME ".avg";
+		print ((time[0] + time[1] + time[2] + time[3] + time[4]) / 5) " " ((data[0] + data[1] + data[2] + data[3] + data[4]) / 5) > avgname;
+	}
 }

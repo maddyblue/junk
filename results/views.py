@@ -8,7 +8,7 @@ def result_list():
 	result_list = []
 	d = ''
 
-	for res in Result.objects.all().order_by('-run_date'):
+	for res in Result.objects.all().order_by('-run_date', '-upload_date'):
 		nd = res.run_date.strftime("%d %b %y")
 		if nd != d:
 			d = nd
@@ -57,10 +57,12 @@ def upload(request):
 				sensitivity = s[16].split(' = ')[1]
 			)
 
-			if request.POST['sensor'] == '' and r.filename[0] == 's':
+			print form.cleaned_data
+
+			if form.cleaned_data is None and r.filename[0] == 's':
 				r.sensor = r.filename[1:3]
 
-			if request.POST['electrode'] == '' and r.filename[3] == 'w':
+			if form.cleaned_data is None and r.filename[3] == 'w':
 				r.electrode = r.filename[4:6]
 
 			r.save()
