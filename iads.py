@@ -72,7 +72,7 @@ class Iads(threading.Thread):
 
 	def update_adlist(self):
 		print "downloading list"
-		u = urllib2.urlopen("http://i-ads.com/images/list")
+		u = urllib2.urlopen("http://i-ads.com/list/1/")
 		ads = u.read().split()
 		print ads
 
@@ -110,10 +110,14 @@ class Iads(threading.Thread):
 			self.image.set_from_pixbuf(self.adlist[self.adloc])
 
 	def run(self):
-		self.update_adlist()
-
 		while True:
 			t = threading.Timer(5, self.next_ad)
+			t.start()
+			t.join()
+
+	def update(self):
+		while True:
+			t = threading.Timer(300, self.update_adlist)
 			t.start()
 			t.join()
 
@@ -126,4 +130,8 @@ gtk.gdk.threads_init()
 
 iads = Iads()
 iads.start()
+
+t = threading.Timer(0, iads.update)
+t.start()
+
 iads.main()
