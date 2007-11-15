@@ -116,6 +116,8 @@ class Iads(threading.Thread):
 			t.join()
 
 	def update(self):
+		self.update_adlist()
+
 		while True:
 			t = threading.Timer(300, self.update_adlist)
 			t.start()
