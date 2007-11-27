@@ -1,0 +1,129 @@
+%deffont "standard"   tfont "Vera.ttf"
+%deffont "thick"      tfont "VeraBd.ttf"
+%deffont "typewriter" tfont "VeraMono.ttf"
+%%
+%default 1 area 95 95, leftfill, size 2, fore "white", back "black", font "thick"
+%default 2 size 7, vgap 10, prefix " "
+%default 3 size 2, bar "gray70", vgap 10
+%default 4 size 5, vgap 30, prefix " ", font "standard"
+%%
+%tab 1 size 5, vgap 40, prefix "  ", icon box "green" 50
+%tab 2 size 4, vgap 40, prefix "      ", icon arc "yellow" 50
+%tab 3 size 3, vgap 40, prefix "            ", icon delta3 "white" 40
+%page
+
+%center
+Development of an integrated CMOS DNA detection biochip
+
+	Yi-Ting Cheng, Chien-Ying Tsai and Ping-Hei Chen
+
+
+Matt Jibson
+
+BIOM 680
+
+27 Nov 2007
+
+%page
+
+Introduction
+
+	detect specific DNA sequences to identify diseases or specific species
+	this has been done before, but methods are improving
+	can concentrate on accurate, portable, inexpensive
+	use complementary metal oxide semiconductor (CMOS)
+	mature industry, small (< 1um)
+
+%page
+
+Their chip has three main parts
+
+	self-assembly gold nanoparticle (AuNP) multilayer without silver enhancement
+	temperature system for single base-pair (bp) mismatch detection
+	cascode current mirrors for amplification
+
+%page
+
+All-powerful nanogap (monolayer version)
+
+%newimage "nanogap.png"
+
+	construct two electrodes with a gap inbetween
+	capture oligonucleotide strand in the gap
+	immerse in probe and target oligonucleotides
+	AuNPs fill the gap => conductivity
+	they have a multilayer version of this
+
+%page
+
+Temperatures for bp mismatch
+
+	need to detect single base-pair mismatch tDNA:
+		5'-GGATTATTGTT...
+		5'-GGATTATCGTT...
+	difference in pairing energies between complementary and mutated strands
+	use temperature as a measuring tool
+	heat target DNA to denature, then...
+
+%page
+
+Temperatures for bp mismatch
+
+%newimage "heating.png"
+
+	must calibrate the temperature sensor
+	correlate resistance <-> temperature relationship
+
+%page
+
+Current mirrors for amplification
+
+%newimage "amp.jpg"
+
+	cascode five amplifiers that each amplify 10x
+	hence total amplification is 10^5 = 10,000x
+	trying to detect in the pice-ampere level
+	this is a cheap, low-noise circuit
+
+%page
+
+Results
+
+%newimage "fig10.jpg"
+
+%size 3
+(Current signals vs. melting temperature for both single bp mismatch and complementary hybridization between single strand DNAs. The concentration of target DNA in the test sample is 10 nM)
+
+	2 °C difference between single bp mismatch and complementary (perfect match)
+
+%page
+
+Results
+
+%newimage "fig8.jpg"
+
+%size 3
+(Electric currents of multilayer AuNPs without current amplification at different target DNA concentrations with an applied voltage of 1.0 V)
+
+	current signal of the target DNA concentration of 0.01 nM is as low as that of the monolayer AuNP structure
+	lowest detectable target DNA concentration is 0.1 nM
+
+%page
+
+Results
+
+%newimage "fig11.jpg"
+
+%size 3
+(Current signals of monolayer and multilayer self-assembly gold nanoparticles over a 350 nm nanogap with and without a current amplifier circuit at a target DNA concentration of 10 nM)
+
+	amplifiers are clearly effective
+		able to measure with common hardware
+
+%page
+
+Conclusion
+
+	possible to use common CMOS designs to build a DNA sensor
+	good performance: measurable by commercial ammeter
+	cheap, easy to design
