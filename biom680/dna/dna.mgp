@@ -32,15 +32,16 @@ Introduction
 	this has been done before, but methods are improving
 	can concentrate on accurate, portable, inexpensive
 	use complementary metal oxide semiconductor (CMOS)
-	mature industry, small (< 1um)
+		mature industry
+		small feature size (< 1um)
 
 %page
 
-Their chip has three main parts
+Sensor has three main parts
 
-	self-assembly gold nanoparticle (AuNP) multilayer without silver enhancement
+	self-assembled gold nanoparticle (AuNP) multilayer
 	temperature system for single base-pair (bp) mismatch detection
-	cascode current mirrors for amplification
+	cascode current mirrors for signal amplification
 
 %page
 
@@ -49,7 +50,9 @@ All-powerful nanogap (monolayer version)
 %newimage "nanogap.png"
 
 	construct two electrodes with a gap inbetween
+		350nm - a nanogap!
 	capture oligonucleotide strand in the gap
+		short sequences of nucleotides (RNA or DNA)
 	immerse in probe and target oligonucleotides
 	AuNPs fill the gap => conductivity
 	they have a multilayer version of this
@@ -82,7 +85,7 @@ Current mirrors for amplification
 
 	cascode five amplifiers that each amplify 10x
 	hence total amplification is 10^5 = 10,000x
-	trying to detect in the pice-ampere level
+	trying to detect in the pico-ampere level
 	this is a cheap, low-noise circuit
 
 %page
@@ -126,4 +129,4 @@ Conclusion
 
 	possible to use common CMOS designs to build a DNA sensor
 	good performance: measurable by commercial ammeter
-	cheap, easy to design
+	cheap, easy to produce
