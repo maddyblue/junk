@@ -1,0 +1,121 @@
+%deffont "standard"   tfont "Vera.ttf"
+%deffont "thick"      tfont "VeraBd.ttf"
+%deffont "typewriter" tfont "VeraMono.ttf"
+%%
+%default 1 area 90 90, leftfill, size 2, fore "white", back "black", font "thick"
+%default 2 size 7, vgap 10, prefix " "
+%default 3 size 2, bar "gray70", vgap 10
+%default 4 size 5, vgap 30, prefix " ", font "standard"
+%%
+%tab 1 size 5, vgap 40, prefix "  ", icon box "green" 50
+%tab 2 size 4, vgap 40, prefix "      ", icon arc "yellow" 50
+%tab 3 size 3, vgap 40, prefix "            ", icon delta3 "white" 40
+%%
+%page
+
+Memory Cell
+
+	Analysis and Robustness
+		Find nominal setup time
+		Find most likely breakages and probabilities
+			Sensitivity Analysis
+			SPICE sweeps
+		Recommend improvements
+
+%%
+%page
+
+Circuit
+
+	Buffered clock, transmission gate, strong and weak inverter, four loads
+		14 transistors
+
+%newimage "circuit.png"
+
+%%
+%page
+
+Setup Time
+
+	Sweeping bit line wrt select line over time
+	Topmost line that drops down to zero
+		3.37ps for this circuit
+
+%image "setup.png"
+
+%%
+%page
+
+Sensitivity Analysis
+
+Sweep length of all transistors 10% both directions.
+Measure new setup time.
+
+	Largest effect (~1.5ps)
+		forward inverter
+	Medium effect (~1ps)
+		clock buffer
+		transmission gate
+		weak inverter
+	Little effect (~0.5ps)
+		forward inverter
+		transmission gate
+
+%%
+%page
+
+SPICE Sweeps
+
+	Constrain problem size: run sweeps between nominal and "bad" size
+	Find the smallest delta for the bad size to maximize probability
+	Good results for 88.8nm and 91.2nm (90nm nominal)
+
+%%
+%page
+
+Probabilities
+
+	Gaussian distribution
+	10% size variation = 3 sigma
+	Computed using normcdf() in MATLAB
+
+%image "normal.png"
+
+%%
+%page
+
+Results
+
+After running the sweep, randomly chose 10 failures
+
+Most probable
+	0.017%
+	3 transistors from clock buffer (88.8nm)
+	nfet on reverse inverter (88.8nm)
+	pfet on forward inverter and transmission gate (91.2nm)
+
+%%
+%page
+
+Others
+
+		0.058%
+			29, 27, 25, 11, 13, 5 ,3
+		0.020%
+			29, 25, 23, 9, 11, 13, 5 ,3
+		0.0068%
+			29, 27, 25, 23, 9, 11, 13, 5, 3
+		0.0068%
+			29, 27, 25, 23, 7, 11, 13, 5, 3
+		0.058%
+			29, 23, 7, 11, 13, 5, 3
+		0.058%
+			29, 27, 25, 23, 7, 11, 3
+		0.020%
+			29, 27, 25, 7, 9, 11, 5, 3
+		0.020%
+			29, 27, 23, 7, 11, 13, 5, 3
+		0.020%
+			29, 27, 25, 23, 11, 13, 5, 3
+		0.0068%
+			29, 27, 25, 23, 7, 9, 11, 5, 3
