@@ -76,7 +76,7 @@ def index(request):
 		location_margin = 22
 	elif num_location_pages == 4:
 		location_margin = 15
-	else
+	else:
 		location_margin = 12
 
 	return render_to_response('ads/index.html', {'ads': ads, 'adpages': adpages, 'ads_paged': ads_paged, 'locations': locations, 'locationpages': locationpages, 'locations_paged': locations_paged, 'ad_margin': ad_margin, 'location_margin': location_margin})
