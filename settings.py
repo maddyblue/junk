@@ -80,6 +80,7 @@ INSTALLED_APPS = (
 	'django.contrib.contenttypes',
 	'django.contrib.databrowse',
 	'django.contrib.flatpages',
+	'django.contrib.humanize',
 	'django.contrib.sessions',
 	'django.contrib.sites'
 )
