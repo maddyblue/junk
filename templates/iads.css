@@ -467,7 +467,7 @@ html>body #listbox li a {
 }
 /* Login ===== */
 #nav-login{
-	margin-left:668px;
+	margin-left:678px;
 	height:30px;
 	position: absolute;
 }
@@ -996,64 +996,6 @@ html>body #listbox li a {
 	line-height:0px;
 }
 
-/* ARC stuff */
-
-.tableMain {
-	border-spacing: 0px;
-	border-collapse: collapse;
-	line-height: 20px;
-}
-
-.tableHeaderCellL, .tableHeaderCell {
-	padding-left: 8px;
-	padding-right: 8px;
-	background-color: #171717;
-	font-weight: bold;
-	text-align: center;
-	border-left: 1px solid #000;
-	border-top: 1px solid #000;
-}
-
-.tableHeaderCellR {
-	padding-left: 8px;
-	padding-right: 8px;
-	background-color: #171717;
-	font-weight: bold;
-	text-align: center;
-	border-left: 1px solid #000;
-	border-top: 1px solid #000;
-	border-right: 1px solid #000;
-}
-
-.tableCell, .tableCellL, .tableCellTL, .tableCellT {
-	padding-left: 8px;
-	padding-right: 8px;
-	border-left: 1px solid #000;
-	border-top: 1px solid #000;
-}
-
-.tableCellTR, .tableCellR {
-	padding-left: 8px;
-	padding-right: 8px;
-	border-left: 1px solid #000;
-	border-top: 1px solid #000;
-	border-right: 1px solid #000;
-}
-
-.tableCellB, .tableCellBL {
-	padding-left: 8px;
-	padding-right: 8px;
-	border-left: 1px solid #000;
-	border-top: 1px solid #000;
-	border-bottom: 1px solid #000;
-}
-
-.tableCellBR {
-	padding-left: 8px;
-	padding-right: 8px;
-	border: 1px solid #000;
-}
-
 /* .pkg class wraps enclosing block element around inner floated elements (whatever that means...) */
 
 .pkg:after
@@ -1067,7 +1009,7 @@ html>body #listbox li a {
 	line-height:0px;
 }
 * html .pkg {
-	display: inline-block;
+	/*display: inline-block;*/
 }
 /* no ie mac \*/
 

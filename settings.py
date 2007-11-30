@@ -72,11 +72,13 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+	'darc.ads',
 	'darc.blog',
 	'darc.main',
 	'django.contrib.admin',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
+	'django.contrib.databrowse',
 	'django.contrib.flatpages',
 	'django.contrib.sessions',
 	'django.contrib.sites'
