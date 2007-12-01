@@ -35,6 +35,12 @@ FNR == 1 {
 	print "\"" FILENAME ".dat4\" with lines, \\" > fplt;
 	print "\"" FILENAME ".dat5\" with lines" > fplt;
 
+	print "set output \"" FILENAME ".-1_1.png\"" > fplt;
+	print "plot \"" FILENAME ".-1_1\" with lines" > fplt;
+
+	print "set output \"" FILENAME ".-2_2.png\"" > fplt;
+	print "plot \"" FILENAME ".-2_2\" with lines" > fplt;
+
 	print "set terminal png size 200, 100" > fplt;
 	print "set output \"" FILENAME ".tn.png\"" > fplt;
 	print "set lmargin .2" > fplt;
@@ -59,6 +65,17 @@ FNR == 1 {
 	if(idx == 4)
 	{
 		avgname = FILENAME ".avg";
-		print ((time[0] + time[1] + time[2] + time[3] + time[4]) / 5) " " ((data[0] + data[1] + data[2] + data[3] + data[4]) / 5) > avgname;
+		range1 = FILENAME ".-1_1";
+		range2 = FILENAME ".-2_2";
+
+		avgtime = (time[0] + time[1] + time[2] + time[3] + time[4]) / 5;
+		avgdata = (data[0] + data[1] + data[2] + data[3] + data[4]) / 5;
+		print avgtime " " avgdata > avgname;
+
+		if(avgtime >= -.2 && avgtime <= .2)
+			print avgtime " " avgdata > range2;
+
+		if(avgtime >= -.1 && avgtime <= .1)
+			print avgtime " " avgdata > range1;
 	}
 }

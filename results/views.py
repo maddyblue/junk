@@ -66,7 +66,7 @@ def upload(request):
 			r.save()
 
 			r.save_upload_file_file(str(r.id), f['content'])
-			r.upload_file=r.get_upload_file_filename()
+			r.upload_file = r.get_upload_file_filename()
 
 			r.save()
 
