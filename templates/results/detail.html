@@ -11,7 +11,7 @@
 <h1>{{ result }}</h1>
 <a href="/{{ result.get_upload_file_url }}">[ download .txt data ]</a>
 <ul>
-	<li>sensor: {{ result.sensor|default_if_none:"unknown" }}</li>
+	<li><a href="/uploads/sensors/s{{ result.sensor|stringformat:"02d" }}.png">sensor: {{ result.sensor|default_if_none:"unknown" }}</a></li>
 	<li>electrode: {{ result.electrode|default_if_none:"unknown" }}</li>
 	<li>run date: {{ result.run_date }}</li>
 	<li>analysis: {{ result.analysis }}</li>
