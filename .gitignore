@@ -1,3 +1,4 @@
 *.pyc
 uploads
 biosensor.db
+settings.py
