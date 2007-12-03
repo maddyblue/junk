@@ -108,7 +108,7 @@ Results
 %size 3
 (Electric currents of multilayer AuNPs without current amplification at different target DNA concentrations with an applied voltage of 1.0 V)
 
-	current signal of the target DNA concentration of 0.01 nM is as low as that of the monolayer AuNP structure
+	signal of the target DNA concentration of 0.01 nM is as low as that of the monolayer AuNP structure
 	lowest detectable target DNA concentration is 0.1 nM
 
 %page
@@ -130,3 +130,11 @@ Conclusion
 	possible to use common CMOS designs to build a DNA sensor
 	good performance: measurable by commercial ammeter
 	cheap, easy to produce
+
+%page
+
+Concerns with the paper
+
+	spotty English
+	no discussion of selectivity
+		assumed same from earlier work, the reader can figure it out on their own?
