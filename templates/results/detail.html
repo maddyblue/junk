@@ -25,10 +25,16 @@
 	<li>sensitivity: {{ result.sensitivity }}</li>
 	<li>solution: {{ result.solution }}</li>
 	<li>notes: {{ result.notes }}</li>
+	<li>average diff over full range: {{ result.range_all }}</li>
+	<li>average diff over -0.2 to 0.2 range: {{ result.range_p2 }}</li>
+	<li>average diff over -0.1 to 0.1 range: {{ result.range_p1 }}</li>
 </ul>
 <p><img src="/{{ result.get_upload_file_url }}.avg.png"/></p>
+<p>Average diff over full range: {{ result.range_all }}</p>
 <p><img src="/{{ result.get_upload_file_url }}.-1_1.png"/></p>
+<p>Average diff over -0.1 to 0.1 range: {{ result.range_p1 }}</p>
 <p><img src="/{{ result.get_upload_file_url }}.-2_2.png"/></p>
+<p>Average diff over -0.2 to 0.2 range: {{ result.range_p2 }}</p>
 <p><img src="/{{ result.get_upload_file_url }}.png"/></p>
 <p><img src="/{{ result.get_upload_file_url }}.dat1.png"/></p>
 <p><img src="/{{ result.get_upload_file_url }}.dat2.png"/></p>

@@ -18,6 +18,11 @@ class Result(models.Model):
 	scan_rate = models.DecimalField(max_digits=4, decimal_places=2)
 	sample_interval = models.DecimalField(max_digits=6, decimal_places=5)
 	sensitivity = models.DecimalField(max_digits=8, decimal_places=7)
+
+	range_all = models.DecimalField(null=True, max_digits=11, decimal_places=10)
+	range_p2  = models.DecimalField(null=True, max_digits=11, decimal_places=10)
+	range_p1  = models.DecimalField(null=True, max_digits=11, decimal_places=10)
+
 	def __unicode__(self):
 		return self.filename + ': ' + self.run_date.strftime('%d %b %y %H:%M:%S')
 
