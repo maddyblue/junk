@@ -24,19 +24,25 @@ def index(request):
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
 
-	if r.range_all is None:
-		r.range_all = calc_range(r.get_upload_file_filename() + '.avg')
-	if r.range_p2 is None:
-		r.range_p2 = calc_range(r.get_upload_file_filename() + '.-2_2')
-	if r.range_p1 is None:
-		r.range_p1 = calc_range(r.get_upload_file_filename() + '.-1_1')
+	save = False
 
-	r.save()
+	if r.range_all is None or True:
+		r.range_all = calc_range(r.get_upload_file_filename() + '.avg')
+		save = True
+	if r.range_p2 is None or True:
+		r.range_p2 = calc_range(r.get_upload_file_filename() + '.-2_2')
+		save = True
+	if r.range_p1 is None or True:
+		r.range_p1 = calc_range(r.get_upload_file_filename() + '.-1_1')
+		save = True
+
+	if save:
+		r.save()
 
 	return render_to_response('results/detail.html', {'result': r, 'result_list': result_list()})
 
 def calc_range(fname):
-	f = open(fname)
+	f = open('/usr/home/mjibson/biosensor/' + fname)
 
 	time = []
 	value = []
