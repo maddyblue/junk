@@ -30,7 +30,7 @@ body
 	height:100%;
 	line-height:180%;
 
-	font-family: "Lucida Sans",sans-serif;
+	font-family: sans-serif, "Lucida Sans";
 	color:#CCC;
 	font-size: 13px;
 }
