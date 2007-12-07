@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="/templates/megapage/megapage.css" type="text/css" />
 <!--[if IE]>
-	<link rel="stylesheet" type="text/css" href="/templates/megapage/ie6hacks.css" />
+	<link rel="stylesheet" type="text/css" href="/templates/megapage/iehacks.css" />
 <![endif]-->
 <!-- Checkout -->
 <script type="text/javascript" src="/templates/megapage/scripts/checkout.js"></script>
@@ -619,7 +619,7 @@ function resetPagination(currentCombo){
 		<div class="box-middle-right-date">
 		<br /><br />
 			End Date:<br />
-			<input type="text" id="enddate" onchange="cartButton();" />
+			<span><input type="text" id="enddate" onchange="cartButton();" /></span>
 		</div>
 		<div class="box-middle-right"><img src="/templates/megapage/images/box-middle-right.jpg" alt="" /></div>
 	</div>
@@ -646,7 +646,7 @@ function resetPagination(currentCombo){
 				</div>
 			</div>
 			<!-- ...This handles the pagination for the Cart... -->
-					<div id="cartPagination" style="float:left; margin-top:20px; margin-left: 78px;">
+					<div id="cartPagination">
 						<div id="bottomPage1" class="pageon" style="display:none;"></div>
 					</div>
 			<!-- ............................... -->

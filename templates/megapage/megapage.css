@@ -357,6 +357,12 @@
 	margin-left:-15px;
 	line-height: 120%;
 }
+#cartPagination{
+	float:left;
+	margin-top:20px;
+	display:inline;
+	margin-left: 78px;
+}
 /* +++ Tooltip Customization +++ */
 div#tipDiv {
   position:absolute;

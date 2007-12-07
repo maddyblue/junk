@@ -1,8 +1,6 @@
-/* IE6-Specific Hacks ============================ */
+/* IE-Specific Hacks ============================ */
 
 /* +++ Ad Selector Box +++ */
-
-
 	.leftbutton{
 		margin:24px 0px 0px 0px;
 		padding-left:80px;
@@ -240,11 +238,17 @@
 	line-height: 120%;
 }
 .widebox{
-	height:37px;
+	min-height:37px;
 }
 .clearfix{	/*IE6 Bug Fix... Makes the clear div 0 pixels tall */
 	clear:both;
 	height:0px;
 	overflow:hidden;
 	margin-top:-1px;
+}
+#cartPagination{
+	float:left; 
+	margin-top:20px; 
+	display:inline;
+	margin-left: 78px;
 }
