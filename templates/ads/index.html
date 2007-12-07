@@ -77,8 +77,11 @@ $(function() {
 	Tooltip.init();
 
 	//Date picker
-	$('#startdate').datepicker();
-	$('#enddate').datepicker();
+	today = new Date();
+	tomorrow = new Date();
+	tomorrow.setDate(today.getDate()+1);
+	$('#startdate').datepicker({ defaultDate: tomorrow, minDate: today });
+	$('#enddate').datepicker({ defaultDate: tomorrow, minDate: today });
 
 });
 //Slider...
@@ -225,6 +228,14 @@ function cartButton(setter){
 		readyB = "b";
 	}
 		if(readyA == "a" && readyB == "b" && checkStartDate.length > 0 && checkEndDate.length > 0){
+			if(checkStartDate > checkEndDate){
+				temp = checkEndDate;
+				start = document.getElementById('startdate');
+				end = document.getElementById('enddate');
+				end.value = start.value;
+				start.value = temp;
+			}
+
 			$("#addtocartbuttonoff").hide();
 			$("#addtocartbutton").show();
 		}
