@@ -135,10 +135,14 @@ def upload(request):
 			r.save_upload_file_file(str(r.id), f['content'])
 			r.upload_file = r.get_upload_file_filename()
 
-			r.save()
-
 			commands.getstatusoutput('/usr/bin/awk -f results/plot.awk ' + r.get_upload_file_filename())
 			commands.getstatusoutput('/usr/local/bin/gnuplot ' + r.get_upload_file_filename() + '.plt')
+
+			r.range_all = calc_range(r.get_upload_file_filename() + '.avg')
+			r.range_p2 = calc_range(r.get_upload_file_filename() + '.-2_2')
+			r.range_p1 = calc_range(r.get_upload_file_filename() + '.-1_1')
+
+			r.save()
 
 			return render_to_response('results/upload.html', {'form': UploadForm(), 'upload': r})
 	else:
