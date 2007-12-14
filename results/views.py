@@ -21,6 +21,23 @@ def result_list():
 def index(request):
 	return render_to_response('results/base.html', {'result_list': result_list()})
 
+def sensor(request):
+	return sensors(request, '')
+
+def sensors(request, rangetype):
+	if rangetype == '1':
+		r = 'p1'
+		t = '0.1 to -0.1'
+	elif rangetype == '0':
+		r = 'all'
+		t = 'all'
+	else:
+		r = 'p2'
+		t = '0.2 to -0.2'
+
+	sensors = Result.objects.all().order_by('-range_' + r)
+	return render_to_response('results/sensors.html', {'sensors': sensors, 'type': t})
+
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
 

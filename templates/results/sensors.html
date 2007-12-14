@@ -1,0 +1,33 @@
+{% extends "results/base.html" %}
+
+{% block title %}
+
+- Sensor Results
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Sensor Results</h1>
+
+<p>Ordered by descending {{ type }} range.</p>
+
+<table border="1">
+<tr>
+	<td>Sensor</td>
+	<td>File</td>
+	<td><a href="{% url biosensor.results.views.sensor %}0">Range All</a></td>
+	<td><a href="{% url biosensor.results.views.sensor %}2">Range 0.2 to -0.2</a></td>
+	<td><a href="{% url biosensor.results.views.sensor %}1">Range 0.1 to -0.1</a></td>
+</tr>
+{% for sensor in sensors %}
+	<tr>
+		<td><a href="/uploads/sensors/s{{ sensor.sensor|stringformat:"02d" }}.png">{{ sensor.sensor}}</a></td>
+		<td><a href="/results/{{ sensor.id }}">{{ sensor.filename }}</a></td>
+		<td>{{ sensor.range_all }}</td>
+		<td>{{ sensor.range_p2 }}</td>
+		<td>{{ sensor.range_p1 }}</td>
+	</tr>
+{% endfor %}
+
+{% endblock %}
