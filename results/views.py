@@ -36,7 +36,7 @@ def sensors(request, rangetype):
 		t = '0.2 to -0.2'
 
 	sensors = Result.objects.all().order_by('-range_' + r)
-	return render_to_response('results/sensors.html', {'sensors': sensors, 'type': t})
+	return render_to_response('results/sensors.html', {'sensors': sensors, 'type': t, 'result_list': result_list()})
 
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
@@ -59,7 +59,7 @@ def detail(request, result_id):
 	return render_to_response('results/detail.html', {'result': r, 'result_list': result_list()})
 
 def calc_range(fname):
-	f = open('/usr/home/mjibson/biosensor/' + fname)
+	f = open('/home/mjibson/biosensor/' + fname)
 
 	time = []
 	value = []
@@ -136,7 +136,7 @@ def upload(request):
 			r.upload_file = r.get_upload_file_filename()
 
 			commands.getstatusoutput('/usr/bin/awk -f results/plot.awk ' + r.get_upload_file_filename())
-			commands.getstatusoutput('/usr/local/bin/gnuplot ' + r.get_upload_file_filename() + '.plt')
+			commands.getstatusoutput('/usr/bin/gnuplot ' + r.get_upload_file_filename() + '.plt')
 
 			r.range_all = calc_range(r.get_upload_file_filename() + '.avg')
 			r.range_p2 = calc_range(r.get_upload_file_filename() + '.-2_2')
