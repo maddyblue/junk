@@ -6,16 +6,68 @@
 
 {% endblock %}
 
+{% block css %}
+
+.graph {
+	font-family: sans-serif;
+	font-size: 13px;
+	background-color: #C8C8C8;
+	border: solid 1px black;
+}
+
+.graph thead th {
+	border-bottom: solid 1px black;
+}
+
+.bar {
+	background-color: white;
+	text-align: right;
+	border-left: solid 1px black;
+	width: 300px;
+	height: 1em;
+}
+
+.bar div {
+	border-top: solid 1px #004080;
+	background-color: #004080;
+	text-align: right;
+	color: white;
+	float: left;
+	padding-top: 0;
+	height: 1em;
+}
+
+{% endblock %}
+
 {% block content %}
 
 <h1>Sensor Results</h1>
 
+<table class="graph" cellspacing="5" cellpadding="0">
+	<thead>
+		<tr><th colspan="4">Average by {{ type }} range</th></tr>
+	</thead>
+	<tbody>
+	{% for p in perc %}
+		<tr>
+			<td><a href="/uploads/sensors/s{{ forloop.counter0|stringformat:"02d" }}.png">Sensor {{ forloop.counter0 }}</a></td>
+			<td class="bar">
+				<div style="width: {{ p.1 }}%"></div>
+			</td>
+			<td>{{ p.1|floatformat:1 }}%</td>
+			<td>{{ p.0|floatformat:13 }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
 <p>Ordered by descending {{ type }} range.</p>
 
-<table border="1">
+<table border="1" cellspacing="0" cellpadding="1">
 <tr>
 	<td>Sensor</td>
 	<td>File</td>
+	<td>Date</td>
 	<td><a href="{% url biosensor.results.views.sensor %}0">Range All</a></td>
 	<td><a href="{% url biosensor.results.views.sensor %}2">Range 0.2 to -0.2</a></td>
 	<td><a href="{% url biosensor.results.views.sensor %}1">Range 0.1 to -0.1</a></td>
@@ -24,6 +76,7 @@
 	<tr>
 		<td><a href="/uploads/sensors/s{{ sensor.sensor|stringformat:"02d" }}.png">{{ sensor.sensor}}</a></td>
 		<td><a href="/results/{{ sensor.id }}">{{ sensor.filename }}</a></td>
+		<td>{{ sensor.run_date|date:"j M y H:i:s" }}</td>
 		<td>{{ sensor.range_all }}</td>
 		<td>{{ sensor.range_p2 }}</td>
 		<td>{{ sensor.range_p1 }}</td>

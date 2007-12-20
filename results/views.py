@@ -35,8 +35,26 @@ def sensors(request, rangetype):
 		r = 'p2'
 		t = '0.2 to -0.2'
 
-	sensors = Result.objects.all().order_by('-range_' + r)
-	return render_to_response('results/sensors.html', {'sensors': sensors, 'type': t, 'result_list': result_list()})
+	sensors = Result.objects.exclude(run_date__lt=datetime.date(2007, 11, 11)).order_by('-range_' + r)
+
+	avg = []
+
+	for i in range(21):
+		d = sensors.filter(sensor=i).values()
+
+		a = 0
+
+		for s in d:
+			a = a + s['range_' + r]
+
+		avg.append(a / len(d))
+
+	perc = []
+
+	for i in avg:
+		perc.append([i, i / max(avg) * 100])
+
+	return render_to_response('results/sensors.html', {'sensors': sensors, 'type': t, 'result_list': result_list(), 'perc': perc})
 
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
