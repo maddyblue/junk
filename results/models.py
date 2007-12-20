@@ -15,7 +15,7 @@ class Result(models.Model):
 	high_e = models.DecimalField(max_digits=4, decimal_places=2)
 	low_e = models.DecimalField(max_digits=4, decimal_places=2)
 	init_pn = models.CharField(max_length=1)
-	scan_rate = models.DecimalField(max_digits=4, decimal_places=2)
+	scan_rate = models.DecimalField(max_digits=4, decimal_places=3)
 	sample_interval = models.DecimalField(max_digits=6, decimal_places=5)
 	sensitivity = models.DecimalField(max_digits=12, decimal_places=11)
 	range_all = models.DecimalField(null=True, max_digits=20, decimal_places=18)
