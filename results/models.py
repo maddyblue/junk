@@ -21,6 +21,7 @@ class Result(models.Model):
 	range_all = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	range_p2  = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	range_p1  = models.DecimalField(null=True, max_digits=20, decimal_places=18)
+	use = models.BooleanField(null=True, default=True)
 
 	def __unicode__(self):
 		return self.filename + ': ' + self.run_date.strftime('%d %b %y %H:%M:%S')

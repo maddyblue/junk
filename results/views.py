@@ -3,6 +3,7 @@ from biosensor.results.models import *
 import datetime
 import re
 import commands
+import math
 
 def result_list():
 	result_list = []
@@ -35,24 +36,32 @@ def sensors(request, rangetype):
 		r = 'p2'
 		t = '0.2 to -0.2'
 
-	sensors = Result.objects.exclude(run_date__lt=datetime.date(2007, 11, 11)).order_by('-range_' + r)
+	sensors = Result.objects.exclude(use=False).order_by('-range_' + r)
 
 	avg = []
+	stdev = []
+	sterror = []
 
 	for i in range(21):
-		d = sensors.filter(sensor=i).values()
+		a = []
+		for s in sensors.filter(sensor=i).values():
+			a.append(s['range_' + r])
 
-		a = 0
+		curavg = sum(a) / len(a)
+		curstdev = math.sqrt(sum(list((i - curavg) ** 2 for i in a)) / len(a))
+		cursterror = curstdev / math.sqrt(len(a))
 
-		for s in d:
-			a = a + s['range_' + r]
-
-		avg.append(a / len(d))
+		avg.append(curavg)
+		stdev.append(curstdev)
+		sterror.append(cursterror)
 
 	perc = []
+	m = float(max(avg) / 100)
 
 	for i in avg:
-		perc.append([i, i / max(avg) * 100])
+		se = sterror.pop(0)
+		i = float(i)
+		perc.append([i, i / m, se / m, se])
 
 	return render_to_response('results/sensors.html', {'sensors': sensors, 'type': t, 'result_list': result_list(), 'perc': perc})
 

@@ -17,13 +17,14 @@
 
 .graph thead th {
 	border-bottom: solid 1px black;
+	padding-bottom: 2px;
 }
 
 .bar {
 	background-color: white;
 	text-align: right;
 	border-left: solid 1px black;
-	width: 300px;
+	width: 200px;
 	height: 1em;
 }
 
@@ -49,14 +50,20 @@
 		<tr><th colspan="4">Average by {{ type }} range</th></tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td></td>
+			<td></td>
+			<td>% of max</td>
+			<td>avg value</td>
+		</tr>
 	{% for p in perc %}
 		<tr>
 			<td><a href="/uploads/sensors/s{{ forloop.counter0|stringformat:"02d" }}.png">Sensor {{ forloop.counter0 }}</a></td>
 			<td class="bar">
 				<div style="width: {{ p.1 }}%"></div>
 			</td>
-			<td>{{ p.1|floatformat:1 }}%</td>
-			<td><tt>{{ p.0|floatformat:13 }}</tt></td>
+			<td>{{ p.1|floatformat:1 }}% +/- {{ p.2|floatformat:1 }}%</td>
+			<td>{{ p.0|stringformat:".2e" }} +/- {{ p.3|stringformat:".2e" }}</td>
 		</tr>
 	{% endfor %}
 	</tbody>
@@ -78,9 +85,9 @@
 		<td><a href="/uploads/sensors/s{{ sensor.sensor|stringformat:"02d" }}.png">{{ sensor.sensor}}</a></td>
 		<td><a href="/results/{{ sensor.id }}">{{ sensor.filename }}</a></td>
 		<td>{{ sensor.run_date|date:"j M y H:i:s" }}</td>
-		<td>{{ sensor.range_all }}</td>
-		<td>{{ sensor.range_p2 }}</td>
-		<td>{{ sensor.range_p1 }}</td>
+		<td>{{ sensor.range_all|stringformat:".3e" }}</td>
+		<td>{{ sensor.range_p2|stringformat:".3e" }}</td>
+		<td>{{ sensor.range_p1|stringformat:".3e" }}</td>
 	</tr>
 {% endfor %}
 
