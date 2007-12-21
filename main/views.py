@@ -3,37 +3,17 @@ from django import newforms as forms
 from django.contrib.auth import authenticate, login as LogIn
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
+from django.template.context import RequestContext
+
+def render(request, template, dictionary):
+	return render_to_response(
+		template,
+		dictionary,
+		context_instance=RequestContext(request)
+	)
 
 def index(request):
-	return render_to_response('main/index.html', {'entry': Blog.objects.all().select_related().order_by('-date')[0:1], 'entries': Blog.objects.all().order_by('-date')[1:9]})
-
-class LoginForm(forms.Form):
-	username = forms.CharField()
-	password = forms.CharField(widget=forms.PasswordInput)
-
-class RegisterForm(forms.Form):
-	username = forms.CharField()
-	password = forms.CharField(widget=forms.PasswordInput)
-	email = forms.EmailField()
-
-def login(request):
-	if request.method == 'POST':
-		form = LoginForm(request.POST)
-		if form.is_valid():
-			username = form.cleaned_data['username']
-			password = form.cleaned_data['password']
-			user = authenticate(username=username, password=password)
-
-			if user is not None:
-				LogIn(request, user)
-				return render_to_response('main/login-success.html')
-			else:
-				return render_to_response('main/login.html', {'form': form, 'message': 'Invalid username/password combination.'})
-	else:
-		form = LoginForm()
-		register = RegisterForm()
-
-	return render_to_response('main/login.html', {'form': form, 'register': register})
+	return render(request, 'main/index.html', {'entry': Blog.objects.all().select_related().order_by('-date')[0:1], 'entries': Blog.objects.all().order_by('-date')[1:9]})
 
 def register(request):
 	if request.method == 'POST':

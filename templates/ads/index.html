@@ -504,6 +504,9 @@ function resetPagination(currentCombo){
 <div class="box-top-ads">
 	<div class="box-top-left"><img src="/templates/megapage/images/box-top-left.jpg" alt="" /></div>
 	<div class="box-top-middle">
+		<div style="position: absolute; top: 3px;">
+			<a href="upload"><img src="/templates/megapage/images/button-upload.jpg" alt="Upload Ads" /></a>
+		</div>
 		<div class="title">Ads</div>
 		<div class="thumbs">
 
@@ -538,7 +541,7 @@ function resetPagination(currentCombo){
 				{% endfor %}
 			</div>
 		{% else %}
-			<div class='badnews'>You must upload an ad before you can add anything to your cart. Click the button below to go to the ad management page.<br /><a href="#"><img src="/templates/megapage/images/button-upload.jpg" alt="Upload Ads" /></div>
+			<div class='badnews'>You must upload an ad before you can add anything to your cart. Click the button below to go to the ad management page.<br /><a href="upload"><img src="/templates/megapage/images/button-upload.jpg" alt="Upload Ads" /></div>
 		{% endif %}
 
 		</div>

@@ -467,7 +467,8 @@ html>body #listbox li a {
 }
 /* Login ===== */
 #nav-login{
-	margin-left:678px;
+	/* margin-left:678px; */
+	right: 0px;
 	height:30px;
 	position: absolute;
 }

@@ -1,0 +1,20 @@
+{% load humanize %}
+
+{% extends "ads/default.html" %}
+
+{% block title %}
+
+ - Upload Ad
+
+{% endblock %}
+
+{% block content %}
+
+<h1>UPLOAD AN AD</h1>
+
+<form enctype="multipart/form-data" method="post" action="">
+<table>{{ form }}</table>
+<input type="submit" value="Upload" />
+</form>
+
+{% endblock %}

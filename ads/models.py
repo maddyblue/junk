@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django import newforms as forms
 
 class Location(models.Model):
 	name = models.CharField(max_length=100)
@@ -30,7 +31,8 @@ class Terminal(models.Model):
 class Ad(models.Model):
 	user = models.ForeignKey(User)
 	name = models.CharField(max_length=100)
-	title = models.CharField(max_length=100)
+	mimetype = models.CharField(max_length=50)
+	filesize = models.IntegerField()
 	date = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
@@ -38,3 +40,7 @@ class Ad(models.Model):
 
 	class Admin:
 		pass
+
+class UploadForm(forms.Form):
+	image = forms.FileField()
+	name = forms.CharField(max_length=100, required=False)

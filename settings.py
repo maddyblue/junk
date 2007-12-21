@@ -84,3 +84,6 @@ INSTALLED_APPS = (
 	'django.contrib.sessions',
 	'django.contrib.sites'
 )
+
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'

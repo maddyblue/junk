@@ -2,11 +2,37 @@ import math
 from darc.ads.models import *
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
+from django import newforms as forms
+from django.contrib.auth.decorators import login_required
+from darc.main.views import render
 
 def list(request, loc_id):
 	t = Terminal(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
 	t.save()
 	return HttpResponse("47\n49\n61")
+
+@login_required
+def upload(request):
+	if request.method == 'POST':
+		form = UploadForm(request.POST, request.FILES)
+		if form.is_valid():
+			f = request.FILES['image']
+			a = Ad(
+				user = request.user,
+				name = form.cleaned_data['name'],
+				mimetype = f['content-type'],
+				filesize = len(f['content'])
+			)
+
+		if form.cleaned_data['name'] is None:
+			a.name = form.cleaned_data['image']
+
+		a.save()
+
+	else:
+		form = UploadForm()
+
+	return render(request, 'ads/upload.html', {'form': form})
 
 def index(request):
 	page_size = 3
@@ -15,8 +41,8 @@ def index(request):
 	ads = Ad.objects.all()
 	locations = Location.objects.all()
 
-	num_ad_pages = round(math.ceil(len(ads) / 3.))
-	num_location_pages = round(math.ceil(len(locations) / 3.))
+	num_ad_pages = int(round(math.ceil(len(ads) / 3.)))
+	num_location_pages = int(round(math.ceil(len(locations) / 3.)))
 
 	adpages = []
 	for i in range(num_ad_pages):
@@ -79,4 +105,4 @@ def index(request):
 	else:
 		location_margin = 12
 
-	return render_to_response('ads/index.html', {'ads': ads, 'adpages': adpages, 'ads_paged': ads_paged, 'locations': locations, 'locationpages': locationpages, 'locations_paged': locations_paged, 'ad_margin': ad_margin, 'location_margin': location_margin})
+	return render(request, 'ads/index.html', {'ads': ads, 'adpages': adpages, 'ads_paged': ads_paged, 'locations': locations, 'locationpages': locationpages, 'locations_paged': locations_paged, 'ad_margin': ad_margin, 'location_margin': location_margin})
