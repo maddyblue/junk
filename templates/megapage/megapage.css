@@ -179,10 +179,10 @@
 	margin:15px 0px 0px 12px;
 }
 .combined-addtocart{
-	margin-top:12px;
 	width:100%;
 }
 	.combined-addtocart img, .combined-addtocart a img{
+		margin-top:12px;
 		border:none;
 	}
 		.box-middle-right-date{
