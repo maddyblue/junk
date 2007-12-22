@@ -5,6 +5,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django import newforms as forms
 from django.contrib.auth.decorators import login_required
 from darc.main.views import render
+import commands
+from django.conf import settings
 
 def list(request, loc_id):
 	t = Terminal(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
@@ -24,11 +26,24 @@ def upload(request):
 				filesize = len(f['content'])
 			)
 
-		if form.cleaned_data['name'] is None:
-			a.name = form.cleaned_data['image']
+			if len(form.cleaned_data['name']) == 0:
+				a.name = f['filename']
 
-		a.save()
+			a.save()
 
+			a.save_image_file(str(a.id), f['content'])
+			a.image = a.get_image_filename()
+
+			a.save()
+
+			result = commands.getstatusoutput('/usr/local/bin/convert ' + a.get_image_filename() + ' -resize 80x80 -background black -gravity Center -extent 80x80 ' + a.get_image_filename() + '_tn.jpg')
+
+			if result[0] != 0:
+				a.delete()
+				return render(request, 'ads/upload.html', {'form': form, 'fail': 'There was a problem while processing your image. It probably wasn\'t an image.'})
+			else:
+				a.save()
+				return render(request, 'ads/upload.html', {'form': UploadForm(), 'upload': a.name})
 	else:
 		form = UploadForm()
 
@@ -37,8 +52,7 @@ def upload(request):
 def index(request):
 	page_size = 3
 
-	#ads = Ad.objects.filter(user=request.user.id)
-	ads = Ad.objects.all()
+	ads = Ad.objects.filter(user=request.user.id)
 	locations = Location.objects.all()
 
 	num_ad_pages = int(round(math.ceil(len(ads) / 3.)))

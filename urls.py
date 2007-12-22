@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 	(r'^ads/upload/$', 'darc.ads.views.upload'),
 
 	(r'^templates/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'templates'}),
+	(r'^uploads/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'uploads'}),
 	(r'^admin/', include('django.contrib.admin.urls')),
 	(r'^$', 'darc.main.views.index'),
 )

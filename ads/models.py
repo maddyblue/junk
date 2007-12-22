@@ -34,6 +34,7 @@ class Ad(models.Model):
 	mimetype = models.CharField(max_length=50)
 	filesize = models.IntegerField()
 	date = models.DateTimeField(auto_now_add=True)
+	image = models.FileField(upload_to="uploads")
 
 	def __unicode__(self):
 		return str(self.name)

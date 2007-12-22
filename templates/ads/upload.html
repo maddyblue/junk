@@ -10,11 +10,23 @@
 
 {% block content %}
 
+{% if fail %}
+	<p>{{ fail }}</p>
+{% else %}
+	{% if upload %}
+		<p>Upload of {{ upload }} successful.</p>
+	{% endif %}
+{% endif %}
+
 <h1>UPLOAD AN AD</h1>
 
 <form enctype="multipart/form-data" method="post" action="">
 <table>{{ form }}</table>
 <input type="submit" value="Upload" />
 </form>
+
+<p>We support pretty much any image format of which you have ever heard, and certainly the standards: bmp, gif, jpg, png, tiff.</p>
+
+<p>No videos, for now. Sorry.</p>
 
 {% endblock %}

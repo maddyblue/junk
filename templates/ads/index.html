@@ -203,7 +203,7 @@ jQuery(window).bind("load", function(){
 //Combo image swap
 function combineAd(thumb){
 	adImage = document.getElementById("comboAd");
-	adImage.src = "/templates/megapage/images/"+thumb+".jpg";
+	adImage.src = "/uploads/"+thumb+"_tn.jpg";
 	cartButton('a'); //Go to the function to enable the Add to Cart button
 	theAd = thumb; //Get which ad is clicked for the addComboToCart function
 }
@@ -534,7 +534,7 @@ function resetPagination(currentCombo){
 							<div class='wrapper'>
 
 							{% for ad in page %}
-								<a href='#current' onmouseover="doTooltip(event,ad{{ ad.id }})" onmouseout="hideTip()" onclick="combineAd('ad{{ ad.id }}');"><img src="/templates/megapage/images/ad{{ ad.id }}.jpg" alt="ad{{ ad.id }}" class="thumbsnormal" /></a>
+								<a href='#current' onmouseover="doTooltip(event,ad{{ ad.id }})" onmouseout="hideTip()" onclick="combineAd('{{ ad.id }}');"><img src="/uploads/{{ ad.id }}_tn.jpg" alt="{{ ad.name }}" class="thumbsnormal" /></a>
 							{% endfor %}
 
 							</div>
