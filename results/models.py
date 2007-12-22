@@ -29,6 +29,42 @@ class Result(models.Model):
 	class Admin:
 		pass
 
+ELECTRODE_CHOICES = (
+	(1, 'Common'),
+	(2, 'One'),
+	(3, 'Two')
+)
+
+ELECTRODE_SYSTEM_CHOICES = (
+	(1, 'Four'),
+	(2, 'Three')
+)
+
+class Sensor(models.Model):
+	sensor = models.PositiveSmallIntegerField()
+	electrode_system = models.PositiveSmallIntegerField(choices=ELECTRODE_SYSTEM_CHOICES)
+	ref = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
+	aux = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
+	we  = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
+
+	def __unicode__(self):
+		return 'Sensor ' + str(self.sensor)
+
+	class Admin:
+		pass
+
+class Electrode(models.Model):
+	sensor = models.ForeignKey(Sensor)
+	we = models.PositiveSmallIntegerField()
+	size = models.DecimalField(blank=True, null=True, max_digits=2, decimal_places=1)
+	spacing = models.DecimalField(blank=True, null=True, max_digits=2, decimal_places=1)
+
+	def __unicode__(self):
+		return self.sensor.__unicode__() + ' Electrode ' + str(self.we)
+
+	class Admin:
+		pass
+
 class UploadForm(forms.Form):
 	upload_file = forms.FileField()
 	sensor = forms.IntegerField(required=False)

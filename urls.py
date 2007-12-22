@@ -1,8 +1,10 @@
 from django.conf.urls.defaults import *
 from django.contrib import databrowse
-from biosensor.results.models import Result
+from biosensor.results.models import *
 
 databrowse.site.register(Result)
+databrowse.site.register(Sensor)
+databrowse.site.register(Electrode)
 
 urlpatterns = patterns('',
 	(r'^results/', include('biosensor.results.urls')),
