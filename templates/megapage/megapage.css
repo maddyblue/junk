@@ -142,7 +142,7 @@
 		.box-middle-left-date input{
 			width:82px;
 			border:1px solid #333;
-			background:url(/templates/megapage/images/inputbg.jpg) repeat-x;
+			background: #000 url(/templates/megapage/images/inputbg.jpg) repeat-x;
 			float:left;
 			margin-left:0px;
 		}
@@ -196,7 +196,7 @@
 		.box-middle-right-date input{
 			width:82px;
 			border:1px solid #333;
-			background:url(/templates/megapage/images/inputbg.jpg) repeat-x;
+			background: #000 url(/templates/megapage/images/inputbg.jpg) repeat-x;
 			float:left;
 			margin-left:0px;
 		}
