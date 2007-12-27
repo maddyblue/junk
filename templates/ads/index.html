@@ -227,22 +227,30 @@ function cartButton(setter){
 	else if(setter == 'b'){
 		readyB = "b";
 	}
-		if(readyA == "a" && readyB == "b" && checkStartDate.length > 0 && checkEndDate.length > 0){
-			if(checkStartDate > checkEndDate){
-				temp = checkEndDate;
-				start = document.getElementById('startdate');
-				end = document.getElementById('enddate');
-				end.value = start.value;
-				start.value = temp;
-			}
 
-			$("#addtocartbuttonoff").hide();
-			$("#addtocartbutton").show();
+	if(
+		readyA == "a" &&
+		readyB == "b" &&
+		checkStartDate.length > 0 &&
+		checkEndDate.length > 0)
+	{
+		if(checkStartDate > checkEndDate)
+		{
+			tempDate = checkEndDate;
+			startDate = document.getElementById('startdate');
+			endDate = document.getElementById('enddate');
+			endDate.value = startDate.value;
+			startDate.value = tempDate;
 		}
-		else{ //Turn off the add to cart button
-			$("#addtocartbuttonoff").show();
-			$("#addtocartbutton").hide();
-		}
+
+		$("#addtocartbuttonoff").hide();
+		$("#addtocartbutton").show();
+	}
+	else
+	{ //Turn off the add to cart button
+		$("#addtocartbuttonoff").show();
+		$("#addtocartbutton").hide();
+	}
 }
 //=============================================
 
@@ -304,7 +312,7 @@ function addComboToCart(){
 	theMargin -= 5;
 
 	//Build the Cartbox
-	newCartBox = '<!-- Cart Combo '+combos+' Begin --><div class="panel"><div class="wrapper"><div class="cartbox" id="cartbox'+combos+'"><div class="cartbox-left"><img src="/templates/megapage/images/cartbox-left.jpg" alt="" /></div><div class="cartbox-middle"><div class="minititle"><div class="minicombo" id="totalCombo'+combos+'">Combo '+combos+'</div><div class="minicost">$<span id="totalCost'+combos+'">'+locationPrice[locNum]+'</span></div><div class="clearfix"></div></div><div class="minithumbs"><div class="leftminithumb"><img src="/templates/megapage/images/'+theAd+'.jpg" alt="'+theAd+'" id="totalAd'+combos+'" /></div><div class="rightminithumb"><img src="/templates/megapage/images/'+theLocation+'.jpg" alt="'+theLocation+'" id="totalLocation'+combos+'" /></div><div class="clearfix"></div></div><div class="minidate"><span id="totalStart'+combos+'">'+checkStartDate+'</span> - <span id="totalEnd'+combos+'">'+checkEndDate+'</span></div><div class="miniremove"><a href="#current" class="miniremoveicon" onclick="removeComboFromCart('+combos+');">Remove</a></div></div><!-- end cartbox-middle --><div class="cartbox-right"><img src="/templates/megapage/images/cartbox-right.jpg" alt="" /></div></div><!-- end cartbox --></div></div><!-- Cart Combo End -->';
+	newCartBox = '<!-- Cart Combo '+combos+' Begin --><div class="panel"><div class="wrapper"><div class="cartbox" id="cartbox'+combos+'"><div class="cartbox-left"><img src="/templates/megapage/images/cartbox-left.jpg" alt="" /></div><div class="cartbox-middle"><div class="minititle"><div class="minicombo" id="totalCombo'+combos+'">Combo '+combos+'</div><div class="minicost">$<span id="totalCost'+combos+'">'+locationPrice[locNum]+'</span></div><div class="clearfix"></div></div><div class="minithumbs"><div class="leftminithumb"><img src="/uploads/'+theAd+'_tn.jpg" alt="'+theAd+'" id="totalAd'+combos+'" /></div><div class="rightminithumb"><img src="/templates/megapage/images/'+theLocation+'.jpg" alt="'+theLocation+'" id="totalLocation'+combos+'" /></div><div class="clearfix"></div></div><div class="minidate"><span id="totalStart'+combos+'">'+checkStartDate+'</span> - <span id="totalEnd'+combos+'">'+checkEndDate+'</span></div><div class="miniremove"><a href="#current" class="miniremoveicon" onclick="removeComboFromCart('+combos+');">Remove</a></div></div><!-- end cartbox-middle --><div class="cartbox-right"><img src="/templates/megapage/images/cartbox-right.jpg" alt="" /></div></div><!-- end cartbox --></div></div><!-- Cart Combo End -->';
 
 	//Add the new cartbox
 	$("#addHere").append(newCartBox);
@@ -670,7 +678,7 @@ function resetPagination(currentCombo){
 		<div class="box-bottom-checkout">
 		<br /><br /><br /><br />
 		Total: <span class="lightorange">$</span><span id="totalCostText">0</span><br />
-		<!--a href="#current" onclick="loadCheckout();"--><img src="/templates/megapage/images/button-checkout.jpg" class="nobackground" alt="Click Here to Check Out" /><!--/a-->
+		<a href="#current" onclick="loadCheckout();"><img src="/templates/megapage/images/button-checkout.jpg" class="nobackground" alt="Click Here to Check Out" />
 		</form>
 	</div>
 	</div>
