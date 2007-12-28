@@ -34,15 +34,15 @@
 				<div id="navdivider4"></div>
 				<div id="nav-support{% block p-support %}{% endblock %}"><a href="/support/">Support</a></div>
 				<div id="navdivider5"></div>
-				<div id="nav-login">
-					{% if user.is_authenticated %}
+				{% if user.is_authenticated %}
 					<div style="float: right; padding-right: 20px; padding-top: 4px; color: #666;">
 						Welcome, {{ user.username }}. <a href="{% url django.contrib.auth.views.logout %}">[Logout]</a>
 					</div>
-					{% else %}
+				{% else %}
+					<div id="nav-login">
 						<a href="{% url django.contrib.auth.views.login %}" class="noborder"><img src="/templates/images/loginbutton.jpg" alt="Log In" class="noborder" /></a>
-					{% endif %}
-				</div>
+					</div>
+				{% endif %}
 			</div>
 			<!-- Sneakybox  -->
 			<div id="sneakybox">
