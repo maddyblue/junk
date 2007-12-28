@@ -14,6 +14,7 @@
 <!--[if IE]>
 	<link rel="stylesheet" type="text/css" href="/templates/megapage/iehacks.css" />
 <![endif]-->
+
 <!-- Checkout -->
 <script type="text/javascript" src="/templates/megapage/scripts/checkout.js"></script>
 <script type="text/javascript" src="/templates/megapage/scripts/ajax.js"></script>
@@ -45,13 +46,19 @@
   This notice must be retained in the code as is!
 *************************************************************************/
 
-function doTooltip(e, msg) {
-  if ( typeof Tooltip == "undefined" || !Tooltip.ready ) return;
+function doTooltip(e, msg)
+{
+  if(typeof Tooltip == "undefined" || !Tooltip.ready)
+		return;
+
   Tooltip.show(e, msg);
 }
 
-function hideTip() {
-  if ( typeof Tooltip == "undefined" || !Tooltip.ready ) return;
+function hideTip()
+{
+  if(typeof Tooltip == "undefined" || !Tooltip.ready)
+		return;
+
   Tooltip.hide();
 }
 
@@ -64,14 +71,10 @@ var location{{ location.id}} = '<strong>{{ location.name }}</strong><span class=
 {% endfor %}
 
 //jQuery Calls
-$(function() {
-
-	$(".thumbsnormal").mouseover(function() {
-		$(this).toggleClass('thumbshover');
-	});
-	$(".thumbsnormal").mouseout(function() {
-		$(this).toggleClass('thumbshover');
-	});
+$(function()
+{
+	$(".thumbsnormal").mouseover(function(){$(this).toggleClass('thumbshover');});
+	$(".thumbsnormal").mouseout(function(){$(this).toggleClass('thumbshover');});
 
 	//Initialize Tooltip
 	Tooltip.init();
@@ -79,15 +82,16 @@ $(function() {
 	//Date picker
 	today = new Date();
 	tomorrow = new Date();
-	tomorrow.setDate(today.getDate()+1);
+	tomorrow.setDate(today.getDate() + 1);
 	end = new Date();
-	end.setDate(today.getDate()+90);
-	$('#startdate').datepicker({ defaultDate: tomorrow, minDate: today, maxDate: end});
-	$('#enddate').datepicker({ defaultDate: tomorrow, minDate: today, maxDate: end});
+	end.setDate(today.getDate() + 90);
+	$('#startdate').datepicker({defaultDate: tomorrow, minDate: today, maxDate: end});
+	$('#enddate').datepicker({defaultDate: tomorrow, minDate: today, maxDate: end});
 
 });
 //Slider...
-jQuery(window).bind("load", function(){
+jQuery(window).bind("load", function()
+{
 	jQuery("div#slider1").codaSlider()
 	jQuery("div#slider2").codaSlider()
 	jQuery("div#slider3").codaSlider()
@@ -110,9 +114,8 @@ jQuery(window).bind("load", function(){
 		{% endfor %}
 
 		// arbitrary untrue 'if' statement so that the remaining automated conditions can be 'else if' statements
-		if(1 == 2)
-		{
-		}
+		if(false)
+		{}
 
 		{% for left, right in adpages %}
 		else if(theLeftPanel == {{ forloop.counter }})
@@ -134,10 +137,8 @@ jQuery(window).bind("load", function(){
 		varLeftPage{{ forloop.counter }}.className = 'pageoff';
 		{% endfor %}
 
-		// arbitrary untrue 'if' statement so that the remaining automated conditions can be 'else if' statements
-		if(1 == 2)
-		{
-		}
+		if(false)
+		{}
 
 		{% for left, right in adpages %}
 		else if(theLeftPanel == {{ forloop.counter }})
@@ -161,10 +162,8 @@ jQuery(window).bind("load", function(){
 		varRightPage{{ forloop.counter }}.className = 'pageoff';
 		{% endfor %}
 
-		// arbitrary untrue 'if' statement so that the remaining automated conditions can be 'else if' statements
-		if(1 == 2)
-		{
-		}
+		if(false)
+		{}
 
 		{% for Right, right in locationpages %}
 		else if(theRightPanel == {{ forloop.counter }})
@@ -186,10 +185,8 @@ jQuery(window).bind("load", function(){
 		varRightPage{{ forloop.counter }}.className = 'pageoff';
 		{% endfor %}
 
-		// arbitrary untrue 'if' statement so that the remaining automated conditions can be 'else if' statements
-		if(1 == 2)
-		{
-		}
+		if(false)
+		{}
 
 		{% for left, right in locationpages %}
 		else if(theRightPanel == {{ forloop.counter }})
@@ -201,34 +198,36 @@ jQuery(window).bind("load", function(){
 	});
 });
 
-//=============================================
-//Combo image swap
-function combineAd(thumb){
+// combo image swap
+function combineAd(thumb)
+{
 	adImage = document.getElementById("comboAd");
-	adImage.src = "/uploads/"+thumb+"_tn.jpg";
-	cartButton('a'); //Go to the function to enable the Add to Cart button
-	theAd = thumb; //Get which ad is clicked for the addComboToCart function
+	adImage.src = "/uploads/" + thumb + "_tn.jpg";
+	cartButton('a'); // go to the function to enable the Add to Cart button
+	theAd = thumb; // get which ad is clicked for the addComboToCart function
 }
-function combineLocation(thumb,locationNumber){
+
+function combineLocation(thumb,locationNumber)
+{
 	locationImage = document.getElementById("comboLocation");
-	locationImage.src = "/templates/megapage/images/location"+thumb+".jpg";
+	locationImage.src = "/templates/megapage/images/location" + thumb + ".jpg";
 	cartButton('b'); //Go to the function to enable the Add to Cart button
 	theLocation = thumb;  //Get which location is clicked for the addComboToCart function
 	locNum = locationNumber //Make this passed parameter global
 }
-var readyA, readyB; //Initialize the variables outside the function to avoid a script error
-function cartButton(setter){
 
+var readyA, readyB; // initialize the variables outside the function to avoid a script error
+
+function cartButton(setter)
+{
 	//Make sure they've selected a date
 	checkStartDate = document.getElementById('startdate').value;
 	checkEndDate = document.getElementById('enddate').value;
 
-	if(setter == 'a'){
+	if(setter == 'a')
 		readyA = "a";
-	}
-	else if(setter == 'b'){
+	else if(setter == 'b')
 		readyB = "b";
-	}
 
 	if(
 		readyA == "a" &&
@@ -250,32 +249,31 @@ function cartButton(setter){
 		$("#addtocartbuttonoff").hide();
 		$("#addtocartbutton").show();
 	}
+	// turn off the add to cart button
 	else
-	{ //Turn off the add to cart button
+	{
 		$("#addtocartbuttonoff").show();
 		$("#addtocartbutton").hide();
 	}
 }
-//=============================================
 
-	combos = 0; //Initially there are zero combos
-	theMargin = 78; //Initially set dynamic margin
-	currentCombo = 1; //Cart starts on page 1
-	trackCombos = combos + 2; //The combo arrows for the shopping cart start 2 higher than the combo count
+combos = 0; // Initially there are zero combos
+theMargin = 78; // Initially set dynamic margin
+currentCombo = 1; // Cart starts on page 1
+trackCombos = combos + 2; // The combo arrows for the shopping cart start 2 higher than the combo count
 
-	//Cart Checkout Data Arrays (build these up to pass on with the Check Out button)
-	var theTotalCost = new Array()
-	var theTotalCostNumber = new Array()
-	var theTotalCombo = new Array()
-	var theTotalAd = new Array()
-	var theTotalLocation = new Array()
-	var theTotalStart = new Array()
-	var theTotalEnd = new Array()
-	var bigCost = Number(0);
+// Cart Checkout Data Arrays (build these up to pass on with the Check Out button)
+var theTotalCost = new Array()
+var theTotalCostNumber = new Array()
+var theTotalCombo = new Array()
+var theTotalAd = new Array()
+var theTotalLocation = new Array()
+var theTotalStart = new Array()
+var theTotalEnd = new Array()
+var bigCost = Number(0);
 
-//=============================================
-function addComboToCart(){
-
+function addComboToCart()
+{
 	var locationPrice = new Array({{ locations|length }})
 
 	{% for location in locations %}
@@ -295,13 +293,15 @@ function addComboToCart(){
 
 	//Begin the Combo Addition
 	combos++;
-	if(combos == 1){
+	if(combos == 1)
+	{
 		$('#cartIntro').remove(); //Get rid of the intro text during the first pass
 		$("#bottomPage1").show();
 	}
 
 	//Add another gray dot for the new combo
-	if(combos > 1){
+	if(combos > 1)
+	{
 		middlePart = '<div id="bottomPage'+combos+'" class="pageoff"></div>';
 
 		//Change the Left Margin
@@ -309,7 +309,6 @@ function addComboToCart(){
 
 		//Show the new pagination
 		$("#cartPagination").append(middlePart);
-
 	}
 	//Build the pagination
 	resetPagination(combos);
@@ -321,8 +320,11 @@ function addComboToCart(){
 	//Add the new cartbox
 	$("#addHere").append(newCartBox);
 
-	//Get rid of the prior pagination arrows to make room for the new
-	if(combos == 1){ trackCombos = combos + 1;} //If this is the first cartbox, the tracking number is specified,otherwise follow the global variable
+	// Get rid of the prior pagination arrows to make room for the new
+	// If this is the first cartbox, the tracking number is specified,otherwise follow the global variable
+	if(combos == 1)
+		trackCombos = combos + 1;
+
 	$("#stripNavR"+trackCombos+"").remove();
 	$("#stripNavL"+trackCombos+"").remove();
 
@@ -330,22 +332,24 @@ function addComboToCart(){
 	jQuery("div#slider3").codaSlider();
 
 	//Put the slider back on page 1
-	$("#slider3").children("div.panelContainer").css({ left: 0 });
+	$("#slider3").children("div.panelContainer").css({left: 0});
 
 	//Keep the cart arrow div number in sync
 	trackCombos++;
 
 	cartPaginate(trackCombos,currentCombo);
 
-
 	//Get the location cost amounts
 	bigCost = Number(0);
 
-	for(c=1;c<=combos;c++){
-		if(deadCartBoxes[c] == "dead"){
+	for(c = 1; c <= combos; c++)
+	{
+		if(deadCartBoxes[c] == "dead")
+		{
 			//alert(c+" is dead");
 		}
-		else{
+		else
+		{
 			theTotalCost[c] = document.getElementById("totalCost"+c+"").innerHTML;
 			theTotalCombo[c] = document.getElementById("totalCombo"+c+"").innerHTML;
 			theTotalAd[c] = document.getElementById("totalAd"+c+"").alt;
@@ -356,9 +360,7 @@ function addComboToCart(){
 
 		{% for location in locations %}
 		if(theTotalCost[c] == "2")
-		{
 			theTotalCostNumber[c] = Number(2);
-		}
 		{% endfor %}
 
 		//Sum the costs
@@ -371,8 +373,8 @@ function addComboToCart(){
 
 var deadCartBoxes = new Array //Keep track of the cartboxes that get removed
 
-//=============================================
-function removeComboFromCart(currentCom){
+function removeComboFromCart(currentCom)
+{
 	//Get rid of the cartbox (combo)
 	$("#cartbox"+currentCom+"").parent().parent().remove();
 
@@ -384,15 +386,16 @@ function removeComboFromCart(currentCom){
 	jQuery("div#slider3").codaSlider();
 
 	//Set the cart starting position back to the beginning
-	$("#slider3").children("div.panelContainer").css({ left: 0 });
+	$("#slider3").children("div.panelContainer").css({left: 0});
 
 	//Make note of which cartbox was removed
 	deadCartBoxes[currentCom] = "dead";
 
-    //Light up the first one since we reset to the first page
-    for(u=1;u<=combos;u++){
-		if(1 == 2){}
-		else if(deadCartBoxes[u] != "dead"){
+	//Light up the first one since we reset to the first page
+	for(u = 1; u <= combos; u++)
+	{
+		if(deadCartBoxes[u] != "dead")
+		{
 			//resetDot = document.getElementById("bottomPage"+u+"");
 			//resetDot.className = "pageon";
 			//u = combos; //If we set the page dot, call it good
@@ -419,11 +422,12 @@ function removeComboFromCart(currentCom){
 	//Get the costs
 	//bigCost = Number(0);
 
-	for(d=1;d<=combos;d++){
-		if(d == currentCom){
+	for(d = 1; d <= combos; d++)
+	{
+		if(d == currentCom)
 			theTotalCost[d] = 0;
-		}
-		else{
+		else
+		{
 			theTotalCost[d] = document.getElementById("totalCost"+d+"").innerHTML;
 			theTotalCombo[d] = document.getElementById("totalCombo"+d+"").innerHTML;
 			theTotalAd[d] = document.getElementById("totalAd"+d+"").alt;
@@ -433,10 +437,8 @@ function removeComboFromCart(currentCom){
 		}
 
 		{% for location in locations %}
-		if(theTotalCost[d] == "100")
-		{
-			theTotalCostNumber[d] = Number(100);
-		}
+		if(theTotalCost[d] == "2")
+			theTotalCostNumber[d] = Number(2);
 		{% endfor %}
 	}
 
@@ -447,76 +449,79 @@ function removeComboFromCart(currentCom){
 	tempSubCost = document.getElementById("totalCostText");
 	tempSubCost.innerHTML = bigCost;
 }
-//=============================================
-function cartPaginate(trackCombos,currentCombo){
 
-/*+++++++++++++++++++++++
-CART - Left Pagination
-++++++++++++++++++++++++*/
+function cartPaginate(trackCombos,currentCombo)
+{
+	/*+++++++++++++++++++++++
+	CART - Left Pagination
+	++++++++++++++++++++++++*/
 
-	$("#leftlink"+trackCombos+"").click(function(){
-		if(currentCombo == 1){
+	$("#leftlink"+trackCombos+"").click(function()
+	{
+		if(currentCombo == 1)
 			currentCombo = combos;
-		}
-		else{
+		else
 			currentCombo = currentCombo - 1;
-		}
+
 		//Setup the DOM controls to turn the dots on and off
-		for(g=1;g<=combos;g++){ //Cycle through all the combos
-			if(g == currentCombo){
+		for(g = 1; g <= combos; g++)
+		{
+			if(g == currentCombo)
 				cartClass = "pageon";
-			}else{
+			else
 				cartClass = "pageoff";
-			}
-			theVarName = "tempy"+currentCombo;
-			theVarName = document.getElementById("bottomPage"+g+"");
+
+			theVarName = "tempy" + currentCombo;
+			theVarName = document.getElementById("bottomPage" + g);
 			theVarName.className = cartClass;
 		}
 	});
-/*+++++++++++++++++++++++
-CART - Right Pagination
-++++++++++++++++++++++++*/
 
-	$("#rightlink"+trackCombos+"").click(function(){
-		if(currentCombo == combos){
+	/*+++++++++++++++++++++++
+	CART - Right Pagination
+	++++++++++++++++++++++++*/
+
+	$("#rightlink"+trackCombos+"").click(function()
+	{
+		if(currentCombo == combos)
 			currentCombo = 1;
-		}
-		else{
+		else
 			currentCombo = currentCombo + 1;
-		}
+
 		//Setup the DOM controls to turn the dots on and off
-		for(g=1;g<=combos;g++){ //Cycle through all the combos
-			if(g == currentCombo){
+		for(g = 1; g <= combos; g++)
+		{
+			if(g == currentCombo)
 				cartClass = "pageon";
-			}else{
+			else
 				cartClass = "pageoff";
-			}
-			anotherVarName = "tempytoo"+currentCombo;
-			anotherVarName = document.getElementById("bottomPage"+g+"");
+
+			anotherVarName = "tempytoo" + currentCombo;
+			anotherVarName = document.getElementById("bottomPage" + g);
 			anotherVarName.className = cartClass;
 		}
 	});
 }
-//================================================
-function resetPagination(currentCombo){
 
+function resetPagination(currentCombo)
+{
 	//Reset the yellow dot pagination if they add or remove a new combo
-		//Setup the DOM controls to turn the dots on and off
-		for(p=1;p<=combos;p++){ //Cycle through all the combos
-			if(p == 1){
-				cartClass = "pageon";
-			}else{
-				cartClass = "pageoff";
-			}
-			yetAnotherVarName = "temp"+currentCombo;
-			yetAnotherVarName = document.getElementById("bottomPage"+p+"");
-			yetAnotherVarName.className = cartClass;
-		}
+	//Setup the DOM controls to turn the dots on and off
+	for(p = 1; p <= combos; p++)
+	{
+		if(p == 1)
+			cartClass = "pageon";
+		else
+			cartClass = "pageoff";
 
-		//Set the Current Combo back to 1
-		currentCombo = 1;
+		yetAnotherVarName = "temp" + currentCombo;
+		yetAnotherVarName = document.getElementById("bottomPage" + p);
+		yetAnotherVarName.className = cartClass;
+	}
+
+	//Set the Current Combo back to 1
+	currentCombo = 1;
 }
-//================================================
 
 </script>
 
@@ -526,7 +531,6 @@ function resetPagination(currentCombo){
 
 <h1>BOOK YOUR ADS</h1>
 
-<!-- +++ Ad Selector Box Begin +++ -->
 <div class="box-top-ads">
 	<div class="box-top-left"><img src="/templates/megapage/images/box-top-left.jpg" alt="" /></div>
 	<div class="box-top-middle">
@@ -557,26 +561,24 @@ function resetPagination(currentCombo){
 				</div>
 			</div>
 
-			<div id='leftindicator' style='float:left; margin:23px 0px 0px {{ ad_margin }}px;'>
+			<div id="leftindicator" style="float: left; margin: 23px 0px 0px {{ ad_margin }}px;">
 				{% for page in adpages %}
 					{% if forloop.first %}
-						<div id='leftPage{{ forloop.counter }}' class='pageon'></div>
+						<div id="leftPage{{ forloop.counter }}" class="pageon"></div>
 					{% else %}
-						<div id='leftPage{{ forloop.counter }}' class='pageoff'></div>
+						<div id="leftPage{{ forloop.counter }}" class="pageoff"></div>
 					{% endif %}
 				{% endfor %}
 			</div>
 		{% else %}
-			<div class='badnews'>You must upload an ad before you can add anything to your cart. Click the button below to go to the ad management page.<br /><a href="upload"><img src="/templates/megapage/images/button-upload.jpg" alt="Upload Ads" /></div>
+			<div class="badnews">You must upload an ad before you can add anything to your cart. Click the button below to go to the ad management page.<br /><a href="upload"><img src="/templates/megapage/images/button-upload.jpg" alt="Upload Ads" /></div>
 		{% endif %}
 
 		</div>
 	</div>
 	<div class="box-top-right"><img src="/templates/megapage/images/box-top-right.jpg" alt="" /></div>
 </div>
-<!-- +++ Ad Selector Box End +++ -->
 
-<!-- +++ Location Selector Begin +++ -->
 <div class="box-top-locations">
 	<div class="box-top-left"><img src="/templates/megapage/images/box-top-left.jpg" alt="" /></div>
 	<div class="box-top-middle">
@@ -592,7 +594,7 @@ function resetPagination(currentCombo){
 							<div class='wrapper'>
 
 							{% for location in page %}
-								<a href='#current' onmouseover="doTooltip(event,location{{ location.id }})" onmouseout="hideTip()" onclick="combineLocation('{{ location.id }}','{{ forloop.counter0 }}');"><img src="/templates/megapage/images/location{{ location.id }}.jpg" alt="location{{ location.id }}" class="thumbsnormal" /></a>
+								<a href="#current" onmouseover="doTooltip(event, location{{ location.id }})" onmouseout="hideTip()" onclick="combineLocation('{{ location.id }}', '{{ forloop.counter0 }}');"><img src="/templates/megapage/images/location{{ location.id }}.jpg" alt="location{{ location.id }}" class="thumbsnormal" /></a>
 							{% endfor %}
 
 							</div>
@@ -603,12 +605,12 @@ function resetPagination(currentCombo){
 				</div>
 			</div>
 
-			<div id='leftindicator' style='float:left; margin:23px 0px 0px {{ location_margin }}px;'>
+			<div id="leftindicator" style="float:left; margin:23px 0px 0px {{ location_margin }}px;">
 				{% for page in locationpages %}
 					{% if forloop.first %}
-						<div id='rightPage{{ forloop.counter }}' class='pageon'></div>
+						<div id="rightPage{{ forloop.counter }}" class="pageon"></div>
 					{% else %}
-						<div id='rightPage{{ forloop.counter }}' class='pageoff'></div>
+						<div id="rightPage{{ forloop.counter }}" class="pageoff"></div>
 					{% endif %}
 				{% endfor %}
 			</div>
@@ -616,11 +618,9 @@ function resetPagination(currentCombo){
 	</div>
 	<div class="box-top-right"><img src="/templates/megapage/images/box-top-right.jpg" alt="" /></div>
 </div>
-<!-- +++ Location Selector End +++ -->
 
 <div class="widebox"><img src="/templates/megapage/images/doubledownarrows.jpg" alt="" /></div>
 
-<!-- +++ Combined Box Begin +++ -->
 <div class="widebox">
 	<div class="box-middle">
 		<div class="box-middle-left"><img src="/templates/megapage/images/box-middle-left.jpg" alt="" /></div>
@@ -630,7 +630,6 @@ function resetPagination(currentCombo){
 			<input type="text" id="startdate" onchange="cartButton();" />
 		</div>
 		<div class="box-middle-center">
-		<!-- /// Combo Images Begin \\\ -->
 			<div class="combined-ad">
 				<img id="comboAd" src="/templates/megapage/images/selectad.jpg" alt="Select an Ad Above" />
 			</div>
@@ -640,7 +639,6 @@ function resetPagination(currentCombo){
 			</div>
 			<div class="clearfix"></div>
 			<div class="combined-addtocart"><img id="addtocartbuttonoff" src="/templates/megapage/images/button-addtocart-off.jpg" alt="Select an Ad and Location Above" /><a href="#current" onclick="addComboToCart();"><img id="addtocartbutton" src="/templates/megapage/images/button-addtocart.jpg" alt="Add to Cart" style="display:none;" /></a></div>
-		<!-- \\\ Combo Images End /// -->
 		</div>
 		<div class="box-middle-right-date">
 		<br /><br />
@@ -650,43 +648,40 @@ function resetPagination(currentCombo){
 		<div class="box-middle-right"><img src="/templates/megapage/images/box-middle-right.jpg" alt="" /></div>
 	</div>
 </div>
-<!-- +++ Combined Box End +++ -->
 
 <div class="widebox"><img src="/templates/megapage/images/singledownarrow.jpg" alt="" /></div>
 
-<!-- +++ Cart Box Begin +++ -->
 <div class="widebox">
 	<div class="box-bottom">
-		<div class="box-bottom-left"><img src="/templates/megapage/images/box-bottom-left.jpg" alt="" /></div>
+		<div class="box-bottom-left">
+			<img src="/templates/megapage/images/box-bottom-left.jpg" alt="" />
+		</div>
 		<div class="box-bottom-middle">
 			<div class="title">Your Cart</div>
-				<div class="thumbs">
-
-			<div class="slider-wrap">
-				<div id="slider3" class="csw2">
-				<div id="cartIntro">Your cart items will appear here.</div>
-					<div class="panelContainer" id="addHere">
-
-
+			<div class="thumbs">
+				<div class="slider-wrap">
+					<div id="slider3" class="csw2">
+						<div id="cartIntro">Your cart items will appear here.</div>
+						<div class="panelContainer" id="addHere"></div>
 					</div>
 				</div>
+				<div id="cartPagination">
+					<div id="bottomPage1" class="pageon" style="display:none;"></div>
+				</div>
 			</div>
-			<!-- ...This handles the pagination for the Cart... -->
-					<div id="cartPagination">
-						<div id="bottomPage1" class="pageon" style="display:none;"></div>
-					</div>
-			<!-- ............................... -->
-		</div><!-- end thumbs -->
 		</div>
-		<div class="box-bottom-right"><img src="/templates/megapage/images/box-bottom-right.jpg" alt="" /></div>
+		<div class="box-bottom-right">
+			<img src="/templates/megapage/images/box-bottom-right.jpg" alt="" />
+		</div>
 		<div class="box-bottom-checkout">
-		<br /><br /><br /><br />
-		Total: <span class="lightorange">$</span><span id="totalCostText">0</span><br />
-		<a href="#current" onclick="loadCheckout();"><img src="/templates/megapage/images/button-checkout.jpg" class="nobackground" alt="Click Here to Check Out" />
-		</form>
-	</div>
+			<br /><br /><br /><br />
+			Total:
+			<span class="lightorange">$</span>
+			<span id="totalCostText">0</span>
+			<br />
+			<a href="#current" onclick="loadCheckout();"><img src="/templates/megapage/images/button-checkout.jpg" class="nobackground" alt="Click Here to Check Out" /></a>
+		</div>
 	</div>
 </div>
-<!-- +++ Cart Box End +++ -->
 
 {% endblock %}
