@@ -17,9 +17,6 @@ def list(request, loc_id):
 
 @login_required
 def checkoutdata(request):
-
-	print request.POST
-
 	Reservation.objects.filter(user=request.user, checkedout=False).delete()
 
 	for i in request.POST:
