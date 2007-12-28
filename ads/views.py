@@ -7,11 +7,64 @@ from django.contrib.auth.decorators import login_required
 from darc.main.views import render
 import commands
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+import datetime
 
 def list(request, loc_id):
 	t = Terminal(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
 	t.save()
 	return HttpResponse("47\n49\n61")
+
+@login_required
+def checkoutdata(request):
+
+	print request.POST
+
+	Reservation.objects.filter(user=request.user, checkedout=False).delete()
+
+	for i in request.POST:
+		data = request.POST[i].split(',')
+
+		if u'undefined' in data:
+			continue
+
+		c = data[0]
+		ad = data[1]
+		location = data[2]
+		start = data[3]
+		end = data[4]
+
+		try:
+			a = Ad.objects.get(id=ad, user=request.user)
+			l = Location.objects.get(id=location)
+
+			d = start.split('/')
+			s = datetime.date(int(d[2]), int(d[0]), int(d[1]))
+
+			d = end.split('/')
+			e = datetime.date(int(d[2]), int(d[0]), int(d[1]))
+
+			if e < s:
+				temp = s
+				s = e
+				e = temp
+
+			if s <= datetime.date.today():
+				raise Exception
+			# Use 91 to allow for computers with bad dates set (up to 1 day in the future). The javascript is set to allow for 90 days in the future.
+			if e > datetime.date.today() + datetime.timedelta(50):
+				raise Exception
+
+			Reservation.objects.create(user=request.user, ad=a, location=l, combo=c, start=s, end=e)
+		except:
+			return HttpResponseBadRequest()
+
+	return HttpResponse()
+
+@login_required
+def checkout(request):
+	r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('combo')
+	return render(request, 'ads/checkout.html', {'r': r})
 
 @login_required
 def upload(request):

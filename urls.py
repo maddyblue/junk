@@ -8,6 +8,8 @@ urlpatterns = patterns('',
 	(r'^register/', 'darc.main.views.register'),
 	(r'^ads/$', 'darc.ads.views.index'),
 	(r'^ads/upload/$', 'darc.ads.views.upload'),
+	(r'^ads/checkoutdata/$', 'darc.ads.views.checkoutdata'),
+	(r'^ads/checkout/$', 'darc.ads.views.checkout'),
 
 	(r'^templates/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'templates'}),
 	(r'^uploads/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'uploads'}),

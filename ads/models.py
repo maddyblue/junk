@@ -42,6 +42,21 @@ class Ad(models.Model):
 	class Admin:
 		pass
 
+class Reservation(models.Model):
+	user = models.ForeignKey(User)
+	ad = models.ForeignKey(Ad)
+	location = models.ForeignKey(Location)
+	combo = models.CharField(max_length=10)
+	checkedout = models.BooleanField(default=False)
+	start = models.DateField()
+	end = models.DateField()
+
+	def __unicode__(self):
+		return str(self.user) + ": " + str(self.ad) + " from " + str(self.start) + " to " + str(self.end)
+
+	class Admin:
+		pass
+
 class UploadForm(forms.Form):
 	image = forms.FileField()
 	name = forms.CharField(max_length=100, required=False)

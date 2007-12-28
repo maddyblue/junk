@@ -80,8 +80,10 @@ $(function() {
 	today = new Date();
 	tomorrow = new Date();
 	tomorrow.setDate(today.getDate()+1);
-	$('#startdate').datepicker({ defaultDate: tomorrow, minDate: today });
-	$('#enddate').datepicker({ defaultDate: tomorrow, minDate: today });
+	end = new Date();
+	end.setDate(today.getDate()+90);
+	$('#startdate').datepicker({ defaultDate: tomorrow, minDate: today, maxDate: end});
+	$('#enddate').datepicker({ defaultDate: tomorrow, minDate: today, maxDate: end});
 
 });
 //Slider...
@@ -209,7 +211,7 @@ function combineAd(thumb){
 }
 function combineLocation(thumb,locationNumber){
 	locationImage = document.getElementById("comboLocation");
-	locationImage.src = "/templates/megapage/images/"+thumb+".jpg";
+	locationImage.src = "/templates/megapage/images/location"+thumb+".jpg";
 	cartButton('b'); //Go to the function to enable the Add to Cart button
 	theLocation = thumb;  //Get which location is clicked for the addComboToCart function
 	locNum = locationNumber //Make this passed parameter global
@@ -234,6 +236,7 @@ function cartButton(setter){
 		checkStartDate.length > 0 &&
 		checkEndDate.length > 0)
 	{
+		/*
 		if(checkStartDate > checkEndDate)
 		{
 			tempDate = checkEndDate;
@@ -242,6 +245,7 @@ function cartButton(setter){
 			endDate.value = startDate.value;
 			startDate.value = tempDate;
 		}
+		*/
 
 		$("#addtocartbuttonoff").hide();
 		$("#addtocartbutton").show();
@@ -275,7 +279,7 @@ function addComboToCart(){
 	var locationPrice = new Array({{ locations|length }})
 
 	{% for location in locations %}
-	locationPrice[{{ forloop.counter0 }}] = "100";
+	locationPrice[{{ forloop.counter0 }}] = "2";
 	{% endfor %}
 
 	//Clear the combo once they click Add to Cart
@@ -312,7 +316,7 @@ function addComboToCart(){
 	theMargin -= 5;
 
 	//Build the Cartbox
-	newCartBox = '<!-- Cart Combo '+combos+' Begin --><div class="panel"><div class="wrapper"><div class="cartbox" id="cartbox'+combos+'"><div class="cartbox-left"><img src="/templates/megapage/images/cartbox-left.jpg" alt="" /></div><div class="cartbox-middle"><div class="minititle"><div class="minicombo" id="totalCombo'+combos+'">Combo '+combos+'</div><div class="minicost">$<span id="totalCost'+combos+'">'+locationPrice[locNum]+'</span></div><div class="clearfix"></div></div><div class="minithumbs"><div class="leftminithumb"><img src="/uploads/'+theAd+'_tn.jpg" alt="'+theAd+'" id="totalAd'+combos+'" /></div><div class="rightminithumb"><img src="/templates/megapage/images/'+theLocation+'.jpg" alt="'+theLocation+'" id="totalLocation'+combos+'" /></div><div class="clearfix"></div></div><div class="minidate"><span id="totalStart'+combos+'">'+checkStartDate+'</span> - <span id="totalEnd'+combos+'">'+checkEndDate+'</span></div><div class="miniremove"><a href="#current" class="miniremoveicon" onclick="removeComboFromCart('+combos+');">Remove</a></div></div><!-- end cartbox-middle --><div class="cartbox-right"><img src="/templates/megapage/images/cartbox-right.jpg" alt="" /></div></div><!-- end cartbox --></div></div><!-- Cart Combo End -->';
+	newCartBox = '<!-- Cart Combo ' + combos + ' Begin --><div class="panel"><div class="wrapper"><div class="cartbox" id="cartbox' + combos + '"><div class="cartbox-left"><img src="/templates/megapage/images/cartbox-left.jpg" alt="" /></div><div class="cartbox-middle"><div class="minititle"><div class="minicombo" id="totalCombo' + combos + '">Combo ' + combos + '</div><div class="minicost">$<span id="totalCost' + combos + '">' + locationPrice[locNum] + '</span></div><div class="clearfix"></div></div><div class="minithumbs"><div class="leftminithumb"><img src="/uploads/' + theAd + '_tn.jpg" alt="' + theAd + '" id="totalAd' + combos + '" /></div><div class="rightminithumb"><img src="/templates/megapage/images/location' + theLocation + '.jpg" alt="' + theLocation + '" id="totalLocation' + combos + '" /></div><div class="clearfix"></div></div><div class="minidate"><span id="totalStart' + combos + '">' + checkStartDate + '</span> - <span id="totalEnd' + combos + '">' + checkEndDate + '</span></div><div class="miniremove"><a href="#current" class="miniremoveicon" onclick="removeComboFromCart(' + combos + ');">Remove</a></div></div><!-- end cartbox-middle --><div class="cartbox-right"><img src="/templates/megapage/images/cartbox-right.jpg" alt="" /></div></div><!-- end cartbox --></div></div><!-- Cart Combo End -->';
 
 	//Add the new cartbox
 	$("#addHere").append(newCartBox);
@@ -351,9 +355,9 @@ function addComboToCart(){
 		}
 
 		{% for location in locations %}
-		if(theTotalCost[c] == "100")
+		if(theTotalCost[c] == "2")
 		{
-			theTotalCostNumber[c] = Number(100);
+			theTotalCostNumber[c] = Number(2);
 		}
 		{% endfor %}
 
@@ -588,7 +592,7 @@ function resetPagination(currentCombo){
 							<div class='wrapper'>
 
 							{% for location in page %}
-								<a href='#current' onmouseover="doTooltip(event,location{{ location.id }})" onmouseout="hideTip()" onclick="combineLocation('location{{ location.id }}','{{ forloop.counter0 }}');"><img src="/templates/megapage/images/location{{ location.id }}.jpg" alt="location{{ location.id }}" class="thumbsnormal" /></a>
+								<a href='#current' onmouseover="doTooltip(event,location{{ location.id }})" onmouseout="hideTip()" onclick="combineLocation('{{ location.id }}','{{ forloop.counter0 }}');"><img src="/templates/megapage/images/location{{ location.id }}.jpg" alt="location{{ location.id }}" class="thumbsnormal" /></a>
 							{% endfor %}
 
 							</div>
