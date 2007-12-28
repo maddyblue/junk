@@ -49,7 +49,7 @@ def checkoutdata(request):
 			if s <= datetime.date.today():
 				raise Exception
 			# Use 91 to allow for computers with bad dates set (up to 1 day in the future). The javascript is set to allow for 90 days in the future.
-			if e > datetime.date.today() + datetime.timedelta(50):
+			if e > datetime.date.today() + datetime.timedelta(91):
 				raise Exception
 
 			Reservation.objects.create(user=request.user, ad=a, location=l, combo=c, start=s, end=e)
@@ -105,8 +105,8 @@ def index(request):
 	ads = Ad.objects.filter(user=request.user.id)
 	locations = Location.objects.all()
 
-	num_ad_pages = int(round(math.ceil(len(ads) / 3.)))
-	num_location_pages = int(round(math.ceil(len(locations) / 3.)))
+	num_ad_pages = int(round(math.ceil(len(ads) / float(page_size))))
+	num_location_pages = int(round(math.ceil(len(locations) / float(page_size))))
 
 	adpages = []
 	for i in range(num_ad_pages):
