@@ -22,6 +22,9 @@ def result_list():
 def index(request):
 	return render_to_response('results/base.html', {'result_list': result_list()})
 
+def electrode(request):
+	return render_to_response('results/electrode.html', {'electrodes': Electrode.objects.all().order_by('sensor', 'we')})
+
 def sensor(request):
 	return sensors(request, '')
 
@@ -68,6 +71,12 @@ def sensors(request, rangetype):
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
 
+	try:
+		s = Sensor.objects.get(sensor=r.sensor)
+		e = Electrode.objects.get(sensor=s, we=r.electrode)
+	except:
+		e = None
+
 	#save = False
   #
 	#if r.range_all is None or True:
@@ -83,7 +92,7 @@ def detail(request, result_id):
 	#if save:
 	#	r.save()
 
-	return render_to_response('results/detail.html', {'result': r, 'result_list': result_list()})
+	return render_to_response('results/detail.html', {'result': r, 'e': e, 'result_list': result_list()})
 
 def calc_range(fname):
 	f = open('/home/mjibson/biosensor/' + fname)

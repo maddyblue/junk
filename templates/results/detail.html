@@ -12,7 +12,16 @@
 <a href="/{{ result.get_upload_file_url }}">[ download .txt data ]</a>
 <ul>
 	<li><a href="/uploads/sensors/s{{ result.sensor|stringformat:"02d" }}.png">sensor: {{ result.sensor|default_if_none:"unknown" }}</a></li>
+	{% if e %}
+	<li><a href="/databrowse/results/electrode/objects/{{ e.id }}/">electrode: {{ result.electrode }}</a></li>
+	<li>reference electrode: {{ e.sensor.get_ref_display }}</li>
+	<li>auxiliary electrode: {{ e.sensor.get_aux_display }}</li>
+	<li>working electrode: {{ e.sensor.get_we_display }}</li>
+	<li>electrode size (um): {{ e.size }}</li>
+	<li>electrode spacing (um): {{ e.spacing|default_if_none:"" }}</li>
+	{% else %}
 	<li>electrode: {{ result.electrode|default_if_none:"unknown" }}</li>
+	{% endif %}
 	<li>run date: {{ result.run_date|date:"j M y H:i:s" }}</li>
 	<li>upload date: {{ result.upload_date|date:"j M y H:i:s" }}</li>
 	<li>analysis: {{ result.analysis }}</li>

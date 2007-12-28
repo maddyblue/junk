@@ -48,7 +48,7 @@ class Sensor(models.Model):
 	we  = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
 
 	def __unicode__(self):
-		return 'Sensor ' + str(self.sensor)
+		return str(self.sensor)
 
 	class Admin:
 		pass
@@ -56,11 +56,11 @@ class Sensor(models.Model):
 class Electrode(models.Model):
 	sensor = models.ForeignKey(Sensor)
 	we = models.PositiveSmallIntegerField()
-	size = models.DecimalField(blank=True, null=True, max_digits=2, decimal_places=1)
-	spacing = models.DecimalField(blank=True, null=True, max_digits=2, decimal_places=1)
+	size = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
+	spacing = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
 
 	def __unicode__(self):
-		return self.sensor.__unicode__() + ' Electrode ' + str(self.we)
+		return "s" + self.sensor.__unicode__() + "w" + str(self.we) + " - size: " + str(self.size) + ", spacing: " + str(self.spacing)
 
 	class Admin:
 		pass
