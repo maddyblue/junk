@@ -1,4 +1,5 @@
 from darc.blog.models import *
+from darc.ads.models import *
 from django import newforms as forms
 from django.contrib.auth import authenticate, login as LogIn
 from django.contrib.auth.decorators import login_required
@@ -21,7 +22,6 @@ def register(request):
 		form = RegisterForm(request.POST)
 		if form.is_valid():
 			u = User.objects.filter(username=form.cleaned_data['username'])
-			print u
 
 			if len(u) == 0:
 				user = User.objects.create_user(form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password'])
@@ -37,4 +37,6 @@ def register(request):
 
 @login_required
 def account(request):
-	return render(request, 'main/account.html')
+	ads = Ad.objects.filter(user=request.user)
+	reservations = Reservation.objects.filter(user=request.user)
+	return render(request, 'main/account.html', {'ads': ads, 'reservations': reservations})

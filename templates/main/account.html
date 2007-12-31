@@ -1,9 +1,77 @@
 {% extends "main/default.html" %}
 
+{% block head %}
+
+<link rel="stylesheet" href="/templates/megapage/megapage.css" type="text/css" />
+<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="/templates/megapage/iehacks.css" />
+<![endif]-->
+
+{% endblock %}
+
 {% block content %}
 
-<h1>Account</h1>
+<h1>Your Account</h1>
 
+<h2>Uploaded Ads</h2>
 
+{% for a in ads %}
+	<p>{{ a.name }}: {{ a.mimetype }}, {{ a.filesize|filesizeformat }}, {{ a.date }}</p>
+{% endfor %}
+
+{% if not ads %}
+	<p>No uploaded ads.</p>
+{% endif %}
+
+<h2>Reservations</h2>
+
+{% for r in reservations %}
+
+<div class="panel">
+	<div class="wrapper">
+		<div class="cartbox">
+			<div class="cartbox-left">
+				<img src="/templates/megapage/images/cartbox-left.jpg" alt="" />
+			</div>
+			<div class="cartbox-middle">
+				<div class="minititle">
+					<div class="minicombo">
+						Combo {{ r.combo }}
+					</div>
+					<div class="minicost">
+						$<span>0</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="minithumbs">
+					<div class="leftminithumb">
+						<img src="/uploads/ads/{{ r.ad.id }}_tn.jpg" alt="{{ r.id }}" />
+					</div>
+					<div class="rightminithumb">
+						<img src="/uploads/locations/{{ r.location.id }}_tn.jpg" alt="{{ r.location }}" />
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="minidate" style="text-align: center;">
+					<span>start: {{ r.start|date:"D, j M Y" }}</span><br />
+					<span>end: {{ r.end|date:"D, j M Y" }}</span>
+				</div>
+			</div>
+			<div class="cartbox-right">
+				<img src="/templates/megapage/images/cartbox-right.jpg" alt="" />
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if not forloop.last %}
+<br />
+{% endif %}
+
+{% endfor %}
+
+{% if not reservations %}
+	<p>No reservations.</p>
+{% endif %}
 
 {% endblock %}
