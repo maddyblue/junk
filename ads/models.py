@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
-from django.db import models
-from django import newforms as forms
-from django.conf import settings
 import commands
 import os
 import os.path
+from django import newforms as forms
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
 
 def make_tn(image, output='', size='80x80', prog='/usr/local/bin/convert'):
 	if output == '':

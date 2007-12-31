@@ -1,6 +1,6 @@
-from django.shortcuts import render_to_response, get_object_or_404
 from darc.blog.models import *
 from darc.main.views import render
+from django.shortcuts import render_to_response, get_object_or_404
 
 def index(request):
 	return render(request, 'blog/index.html', {'entries': Blog.objects.all().select_related().order_by('-date')[:5]})

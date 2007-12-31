@@ -1,13 +1,13 @@
+import datetime
 import math
 from darc.ads.models import *
+from darc.main.views import render
+from django import newforms as forms
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
-from django import newforms as forms
-from django.contrib.auth.decorators import login_required
-from darc.main.views import render
-from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-import datetime
 
 def list(request, loc_id):
 	t = Terminal(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
