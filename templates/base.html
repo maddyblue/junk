@@ -36,7 +36,7 @@
 				<div id="navdivider5"></div>
 				{% if user.is_authenticated %}
 					<div style="float: right; padding-right: 20px; padding-top: 4px; color: #666;">
-						Welcome, {{ user.username }}. <a href="{% url django.contrib.auth.views.logout %}">[Logout]</a>
+						Welcome, <a href="{% url darc.main.views.account %}">{{ user.username }}</a>. <a href="{% url django.contrib.auth.views.logout %}">[Logout]</a>
 					</div>
 				{% else %}
 					<div id="nav-login">

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login as LogIn
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
+from django.contrib.auth.decorators import login_required
 
 def render(request, template, dictionary={}):
 	return render_to_response(
@@ -32,4 +33,8 @@ def register(request):
 	else:
 		form = RegisterForm()
 
-	return render_to_response('main/register.html', {'form': form})
+	return render(request, 'main/register.html', {'form': form})
+
+@login_required
+def account(request):
+	return render(request, 'main/account.html')
