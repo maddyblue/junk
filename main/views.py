@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 
-def render(request, template, dictionary):
+def render(request, template, dictionary={}):
 	return render_to_response(
 		template,
 		dictionary,

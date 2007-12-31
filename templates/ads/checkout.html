@@ -21,49 +21,60 @@
 
 <h1>CHECKOUT</h1>
 
-{% for i in r %}
+{% if r %}
 
-<div class="panel">
-	<div class="wrapper">
-		<div class="cartbox">
-			<div class="cartbox-left">
-				<img src="/templates/megapage/images/cartbox-left.jpg" alt="" />
-			</div>
-			<div class="cartbox-middle">
-				<div class="minititle">
-					<div class="minicombo">
-						Combo {{ i.combo }}
-					</div>
-					<div class="minicost">
-						$<span>0</span>
-					</div>
-					<div class="clearfix"></div>
+	{% for i in r %}
+
+	<div class="panel">
+		<div class="wrapper">
+			<div class="cartbox">
+				<div class="cartbox-left">
+					<img src="/templates/megapage/images/cartbox-left.jpg" alt="" />
 				</div>
-				<div class="minithumbs">
-					<div class="leftminithumb">
-						<img src="/uploads/ads/{{ i.ad.id }}_tn.jpg" alt="{{ i.id }}" />
+				<div class="cartbox-middle">
+					<div class="minititle">
+						<div class="minicombo">
+							Combo {{ i.combo }}
+						</div>
+						<div class="minicost">
+							$<span>0</span>
+						</div>
+						<div class="clearfix"></div>
 					</div>
-					<div class="rightminithumb">
-						<img src="/uploads/locations/{{ i.location.id }}_tn.jpg" alt="{{ i.location }}" />
+					<div class="minithumbs">
+						<div class="leftminithumb">
+							<img src="/uploads/ads/{{ i.ad.id }}_tn.jpg" alt="{{ i.id }}" />
+						</div>
+						<div class="rightminithumb">
+							<img src="/uploads/locations/{{ i.location.id }}_tn.jpg" alt="{{ i.location }}" />
+						</div>
+						<div class="clearfix"></div>
 					</div>
-					<div class="clearfix"></div>
+					<div class="minidate" style="text-align: center;">
+						<span>start: {{ i.start|date:"D, j M Y" }}</span><br />
+						<span>end: {{ i.end|date:"D, j M Y" }}</span>
+					</div>
 				</div>
-				<div class="minidate" style="text-align: center;">
-					<span>start: {{ i.start|date:"D, j M Y" }}</span><br />
-					<span>end: {{ i.end|date:"D, j M Y" }}</span>
+				<div class="cartbox-right">
+					<img src="/templates/megapage/images/cartbox-right.jpg" alt="" />
 				</div>
-			</div>
-			<div class="cartbox-right">
-				<img src="/templates/megapage/images/cartbox-right.jpg" alt="" />
 			</div>
 		</div>
 	</div>
-</div>
 
-{% if not forloop.last %}
-<br />
+	{% if not forloop.last %}
+	<br />
+	{% endif %}
+
+	{% endfor %}
+
+	<p>If everything looks correct, confirm below.</p>
+
+	<form action="." method="post">
+	<input type="submit" value="Confirm"/>
+	</form>
+{% else %}
+	<p>Thank you, your combos have been reserved.</p>
 {% endif %}
-
-{% endfor %}
 
 {% endblock %}

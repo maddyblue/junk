@@ -70,7 +70,15 @@ def checkoutdata(request):
 @login_required
 def checkout(request):
 	r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('combo')
-	return render(request, 'ads/checkout.html', {'r': r})
+
+	if request.method == 'POST':
+		for i in r:
+			i.checkedout = True
+			i.save()
+		return render(request, 'ads/checkout.html')
+	else:
+		r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('combo')
+		return render(request, 'ads/checkout.html', {'r': r})
 
 @login_required
 def upload(request):
