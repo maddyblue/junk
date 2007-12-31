@@ -5,7 +5,6 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django import newforms as forms
 from django.contrib.auth.decorators import login_required
 from darc.main.views import render
-import commands
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 import datetime
@@ -17,7 +16,7 @@ def list(request, loc_id):
 
 @login_required
 def checkoutdata(request):
-	Reservation.objects.filter(user=request.user, checkedout=False).delete()
+	r = []
 
 	for i in request.POST:
 		data = request.POST[i].split(',')
@@ -25,7 +24,7 @@ def checkoutdata(request):
 		if u'undefined' in data:
 			continue
 
-		c = data[0]
+		c = int(data[0]) + 1
 		ad = data[1]
 		location = data[2]
 		start = data[3]
@@ -46,15 +45,25 @@ def checkoutdata(request):
 				s = e
 				e = temp
 
-			if s <= datetime.date.today():
-				raise Exception
-			# Use 91 to allow for computers with bad dates set (up to 1 day in the future). The javascript is set to allow for 90 days in the future.
-			if e > datetime.date.today() + datetime.timedelta(91):
-				raise Exception
+			nd = datetime.date.today() + datetime.timedelta(1)
+			if s < datetime.date.today() + datetime.timedelta(1) :
+				s = nd
 
-			Reservation.objects.create(user=request.user, ad=a, location=l, combo=c, start=s, end=e)
+			nd = datetime.date.today() + datetime.timedelta(90)
+			if e > nd:
+				e = nd
+
+			r.append(Reservation(user=request.user, ad=a, location=l, combo=c, start=s, end=e))
 		except:
 			return HttpResponseBadRequest()
+
+	if len(r) == 0:
+		return HttpResponseBadRequest()
+
+	Reservation.objects.filter(user=request.user, checkedout=False).delete()
+
+	for i in r:
+		i.save()
 
 	return HttpResponse()
 
@@ -86,7 +95,7 @@ def upload(request):
 
 			a.save()
 
-			result = commands.getstatusoutput('/usr/local/bin/convert ' + a.get_image_filename() + ' -resize 80x80 -background black -gravity Center -extent 80x80 ' + a.get_image_filename() + '_tn.jpg')
+			result = make_tn(a.get_image_filename())
 
 			if result[0] != 0:
 				a.delete()

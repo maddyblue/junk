@@ -7,14 +7,14 @@ function loadCheckout()
 
 	sendStr = "";
 
-	for(i = 1; i <= 13; i++)
+	for(i = 0; i < combos.length; i++)
 	{
 		sendStr += "&ad" + i + "=" +
-			escape(theTotalCombo[i]) + "," +
-			escape(theTotalAd[i]) + "," +
-			escape(theTotalLocation[i]) + "," +
-			escape(theTotalStart[i]) + "," +
-			escape(theTotalEnd[i]);
+			escape(combos[i][IdxId]) + "," +
+			escape(combos[i][IdxAd]) + "," +
+			escape(combos[i][IdxLocation]) + "," +
+			escape(combos[i][IdxStart]) + "," +
+			escape(combos[i][IdxEnd]);
 	}
 
 	request.send(sendStr);
