@@ -33,10 +33,10 @@
 <h1>Welcome to i-Ads</h1>
 
 <div id="blogquote">
-	<h2>{{ entry.title }}</h2>
-	<h3 style="text-transform: none;">{{ entry.date|date:"j F y" }}</h3>
-	{{ entry.short|linebreaks }}
-	<a href="/blog/{{ entry.id }}"><img src="/templates/images/button-readmore.jpg" alt="Read More" /></a>
+	<h2>{{ entry.0.title }}</h2>
+	<h3 style="text-transform: none;">{{ entry.0.date|date:"j F y" }}</h3>
+	{{ entry.0.short|linebreaks }}
+	<a href="/blog/{{ entry.0.id }}"><img src="/templates/images/button-readmore.jpg" alt="Read More" /></a>
 </div>
 
 <div id="recentarticles">

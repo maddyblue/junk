@@ -15,7 +15,7 @@ def render(request, template, dictionary={}):
 	)
 
 def index(request):
-	return render(request, 'main/index.html', {'entry': Blog.objects.all().select_related().order_by('-date')[0:1], 'entries': Blog.objects.all().order_by('-date')[1:9]})
+	return render(request, 'main/index.html', {'entry': Blog.objects.all().order_by('-date')[0:1], 'entries': Blog.objects.all().order_by('-date')[1:9]})
 
 class RegisterForm(forms.Form):
 	username = forms.CharField(max_length=30)
