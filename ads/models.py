@@ -10,10 +10,7 @@ def make_tn(image, output='', size='80x80', prog='/usr/local/bin/convert'):
 	if output == '':
 		output = image + '_tn.jpg'
 
-	if os.path.exists(output) == False:
-		return commands.getstatusoutput(prog + ' ' + image + ' -resize ' + size + ' -background black -gravity Center -extent ' + size + ' ' + output)
-
-	return [0] # return list with zero as first element to indicate success
+	return commands.getstatusoutput(prog + ' ' + image + ' -resize ' + size + ' -background black -gravity Center -extent ' + size + ' ' + output)
 
 class Location(models.Model):
 	upload_dir = 'uploads/locations'
