@@ -127,7 +127,18 @@ def index(request):
 
 	adpages = []
 	for i in range(num_ad_pages):
-		page = [i if i != 0 else num_ad_pages, i + 2 if i != num_ad_pages - 1 else 1]
+		page = []
+
+		if i != 0:
+			page.append(i)
+		else:
+			page.append(num_ad_pages)
+
+		if i != num_ad_pages - 1:
+			page.append(i + 2)
+		else:
+			page.append(1)
+
 		adpages.append(page)
 
 	ads_paged = []
@@ -146,7 +157,18 @@ def index(request):
 
 	locationpages = []
 	for i in range(num_location_pages):
-		page = [i if i != 0 else num_location_pages, i + 2 if i != num_location_pages - 1 else 1]
+		page = []
+
+		if i != 0:
+			page.append(i)
+		else:
+			page.append(num_location_pages)
+
+		if i != num_location_pages - 1:
+			page.append(i + 2)
+		else:
+			page.append(1)
+
 		locationpages.append(page)
 
 	locations_paged = []
