@@ -4,8 +4,8 @@ from django.db import models
 class Blog(models.Model):
 	user = models.ForeignKey(User)
 	short = models.TextField()
-	long = models.TextField()
-	title = models.CharField(max_length=100)
+	long = models.TextField(blank=True)
+	title = models.CharField(blank=True, max_length=100)
 	date = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
