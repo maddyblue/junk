@@ -129,6 +129,7 @@ def calc_range(fname):
 
 def upload(request):
 	months = {
+		'Jan': 1,
 		'Sept': 9,
 		'Oct': 10,
 		'Nov': 11,
