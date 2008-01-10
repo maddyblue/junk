@@ -38,6 +38,7 @@
 					<div style="float: right; padding-right: 20px; padding-top: 4px; color: #666;">
 						Welcome, <a href="{% url darc.main.views.account %}">{{ user.username }}</a>. <a href="{% url django.contrib.auth.views.logout %}">[Logout]</a>
 					</div>
+					<div id="rightstripe"><img src="/templates/images/stripebox.jpg" alt="" /></div>
 				{% else %}
 					<div id="nav-login">
 						<a href="{% url django.contrib.auth.views.login %}" class="noborder"><img src="/templates/images/loginbutton.jpg" alt="Log In" class="noborder" /></a>
