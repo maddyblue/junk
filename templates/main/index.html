@@ -38,6 +38,7 @@
 	<a href="/blog/{{ entry.0.id }}"><img src="/templates/images/button-readmore.jpg" alt="Read More" /></a>
 </div>
 
+{% if entries %}
 <div id="recentarticles">
 	<h3>Recent Articles</h3>
 
@@ -51,6 +52,7 @@
 
 	<br /><a href="/blog/"><img src="/templates/images/button-morearticles.jpg" alt="Read More" /></a>
 </div>
+{% endif %}
 
 <div id="clearit"></div>
 
