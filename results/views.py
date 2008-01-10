@@ -2,7 +2,6 @@ from django.shortcuts import render_to_response, get_object_or_404
 from biosensor.results.models import *
 import datetime
 import re
-import commands
 import math
 
 def result_list():
@@ -72,60 +71,19 @@ def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
 
 	try:
+		if request.POST['reanalyze'] == 'reanalyze':
+			r.analyze()
+	except KeyError:
+		pass
+
+
+	try:
 		s = Sensor.objects.get(sensor=r.sensor)
 		e = Electrode.objects.get(sensor=s, we=r.electrode)
 	except:
 		e = None
 
-	#save = False
-  #
-	#if r.range_all is None or True:
-	#	r.range_all = calc_range(r.get_upload_file_filename() + '.avg')
-	#	save = True
-	#if r.range_p2 is None or True:
-	#	r.range_p2 = calc_range(r.get_upload_file_filename() + '.-2_2')
-	#	save = True
-	#if r.range_p1 is None or True:
-	#	r.range_p1 = calc_range(r.get_upload_file_filename() + '.-1_1')
-	#	save = True
-  #
-	#if save:
-	#	r.save()
-
 	return render_to_response('results/detail.html', {'result': r, 'e': e, 'result_list': result_list()})
-
-def calc_range(fname):
-	f = open('/home/mjibson/biosensor/' + fname)
-
-	time = []
-	value = []
-
-	for line in f:
-		l = line.split()
-		time.append(float(l[0]))
-		value.append(float(l[1]))
-
-	f.close()
-
-	idx_min = time.index(min(time)) + 1
-
-	value1 = value[:idx_min]
-	value2 = value[idx_min:]
-
-	avg1 = 0
-
-	for i in value1:
-		avg1 = avg1 + i
-
-	avg2 = 0
-
-	for i in value2:
-		avg2 = avg2 + i
-
-	avg1 = avg1 / len(value1)
-	avg2 = avg2 / len(value2)
-
-	return abs(avg1 - avg2)
 
 def upload(request):
 	months = {
@@ -172,14 +130,9 @@ def upload(request):
 			r.save_upload_file_file(str(r.id), f['content'])
 			r.upload_file = r.get_upload_file_filename()
 
-			commands.getstatusoutput('/usr/bin/awk -f results/plot.awk ' + r.get_upload_file_filename())
-			commands.getstatusoutput('/usr/bin/gnuplot ' + r.get_upload_file_filename() + '.plt')
-
-			r.range_all = calc_range(r.get_upload_file_filename() + '.avg')
-			r.range_p2 = calc_range(r.get_upload_file_filename() + '.-2_2')
-			r.range_p1 = calc_range(r.get_upload_file_filename() + '.-1_1')
-
 			r.save()
+
+			r.analyze()
 
 			return render_to_response('results/upload.html', {'form': UploadForm(), 'upload': r})
 	else:

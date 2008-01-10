@@ -9,7 +9,10 @@
 {% block content %}
 
 <h1>{{ result }}</h1>
-<a href="/{{ result.get_upload_file_url }}">[ download .txt data ]</a>
+<table border="0" cellpadding="0" cellspacing="1"><tr>
+<td><a href="/{{ result.get_upload_file_url }}">[ download .txt data ]</a></td>
+<td><form action="." method="post"><input type="submit" name="reanalyze" value="reanalyze"/></form></td>
+</tr></table>
 <ul>
 	<li><a href="/uploads/sensors/s{{ result.sensor|stringformat:"02d" }}.png">sensor: {{ result.sensor|default_if_none:"unknown" }}</a></li>
 	{% if e %}
@@ -35,21 +38,20 @@
 	<li>solution: {{ result.solution }}</li>
 	<li>notes: {{ result.notes }}</li>
 	<li>used in sensor results page: {{ result.use|yesno }}</li>
+	<li>high value: {{ result.high_val }} at {{ result.high_time }}s</li>
+	<li>low value: {{ result.low_val }} at {{ result.low_time }}s</li>
 	<li>average diff over full range: {{ result.range_all }}</li>
 	<li>average diff over -0.2 to 0.2 range: {{ result.range_p2 }}</li>
 	<li>average diff over -0.1 to 0.1 range: {{ result.range_p1 }}</li>
 </ul>
-<p><img src="/{{ result.get_upload_file_url }}.avg.png"/></p>
-<p>Average diff over full range: {{ result.range_all }}</p>
-<p><img src="/{{ result.get_upload_file_url }}.-1_1.png"/></p>
-<p>Average diff over -0.1 to 0.1 range: {{ result.range_p1 }}</p>
-<p><img src="/{{ result.get_upload_file_url }}.-2_2.png"/></p>
-<p>Average diff over -0.2 to 0.2 range: {{ result.range_p2 }}</p>
-<p><img src="/{{ result.get_upload_file_url }}.png"/></p>
-<p><img src="/{{ result.get_upload_file_url }}.dat1.png"/></p>
-<p><img src="/{{ result.get_upload_file_url }}.dat2.png"/></p>
-<p><img src="/{{ result.get_upload_file_url }}.dat3.png"/></p>
-<p><img src="/{{ result.get_upload_file_url }}.dat4.png"/></p>
-<p><img src="/{{ result.get_upload_file_url }}.dat5.png"/></p>
+<p><img src="/uploads/{{ result.id }}.avg.png"/></p>
+<p><img src="/uploads/{{ result.id }}.-1_1.png"/></p>
+<p><img src="/uploads/{{ result.id }}.-2_2.png"/></p>
+<p><img src="/uploads/{{ result.id }}.png"/></p>
+<p><img src="/uploads/{{ result.id }}.dat1.png"/></p>
+<p><img src="/uploads/{{ result.id }}.dat2.png"/></p>
+<p><img src="/uploads/{{ result.id }}.dat3.png"/></p>
+<p><img src="/uploads/{{ result.id }}.dat4.png"/></p>
+<p><img src="/uploads/{{ result.id }}.dat5.png"/></p>
 
 {% endblock %}

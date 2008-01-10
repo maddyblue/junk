@@ -1,5 +1,56 @@
+from django.conf import settings
 from django.db import models
 from django import newforms as forms
+import commands
+
+def calc_range(fname, high_low=False):
+	try:
+		f = open(fname)
+	except IOError:
+		return 0
+
+	time = []
+	value = []
+
+	for line in f:
+		l = line.split()
+		time.append(float(l[0]))
+		value.append(float(l[1]))
+
+	f.close()
+
+	if high_low:
+		minv = min(value)
+		maxv = max(value)
+		mini = value.index(minv)
+		maxi = value.index(maxv)
+		return [[minv, time[mini]], [maxv, time[maxi]]]
+
+	idx_min = time.index(min(time)) + 1
+	idx_max = time.index(max(time)) + 1
+
+	if idx_min == len(value):
+		idx = idx_max
+	else:
+		idx = idx_min
+
+	value1 = value[:idx]
+	value2 = value[idx:]
+
+	avg1 = 0
+
+	for i in value1:
+		avg1 = avg1 + i
+
+	avg2 = 0
+
+	for i in value2:
+		avg2 = avg2 + i
+
+	avg1 = avg1 / len(value1)
+	avg2 = avg2 / len(value2)
+
+	return abs(avg1 - avg2)
 
 class Result(models.Model):
 	sensor = models.IntegerField(null=True)
@@ -22,6 +73,26 @@ class Result(models.Model):
 	range_p2  = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	range_p1  = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	use = models.BooleanField(null=True, default=True)
+	high_val = models.DecimalField(max_digits=20, decimal_places=18)
+	low_val = models.DecimalField(max_digits=20, decimal_places=18)
+	high_time = models.DecimalField(max_digits=20, decimal_places=18)
+	low_time = models.DecimalField(max_digits=20, decimal_places=18)
+
+	def analyze(self):
+		commands.getstatusoutput(settings.PROG_AWK + ' -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
+		commands.getstatusoutput(settings.PROG_GNUPLOT + ' ' + self.get_upload_file_filename() + '.plt')
+
+		self.range_all = calc_range(self.get_upload_file_filename() + '.avg')
+		self.range_p2  = calc_range(self.get_upload_file_filename() + '.-2_2')
+		self.range_p1  = calc_range(self.get_upload_file_filename() + '.-1_1')
+
+		r = calc_range(self.get_upload_file_filename() + '.avg', True)
+		self.low_val = r[0][0]
+		self.low_time = r[0][1]
+		self.high_val = r[1][0]
+		self.high_time = r[1][1]
+
+		self.save()
 
 	def __unicode__(self):
 		return self.filename + ': ' + self.run_date.strftime('%d %b %y %H:%M:%S')
