@@ -22,7 +22,7 @@ def index(request):
 	return render_to_response('results/base.html', {'result_list': result_list()})
 
 def electrode(request):
-	return render_to_response('results/electrode.html', {'electrodes': Electrode.objects.all().order_by('sensor', 'we')})
+	return render_to_response('results/electrode.html', {'electrodes': Electrode.objects.all().order_by('sensor', 'we'), 'result_list': result_list()})
 
 def sensor(request):
 	return sensors(request, '')
