@@ -116,7 +116,12 @@ def upload(request):
 				init_pn = s[11].split(' = ')[1],
 				scan_rate = s[12].split(' = ')[1],
 				sample_interval = s[14].split(' = ')[1],
-				sensitivity = s[16].split(' = ')[1]
+				sensitivity = s[16].split(' = ')[1],
+				use = form.cleaned_data['use'],
+				high_val = 0,
+				high_time = 0,
+				low_val = 0,
+				low_time = 0
 			)
 
 			if form.cleaned_data['sensor'] is None and len(r.filename) >= 3 and r.filename[0] == 's':

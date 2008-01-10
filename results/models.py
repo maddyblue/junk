@@ -73,10 +73,10 @@ class Result(models.Model):
 	range_p2  = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	range_p1  = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	use = models.BooleanField(null=True, default=True)
-	high_val = models.DecimalField(max_digits=20, decimal_places=18)
-	low_val = models.DecimalField(max_digits=20, decimal_places=18)
-	high_time = models.DecimalField(max_digits=20, decimal_places=18)
-	low_time = models.DecimalField(max_digits=20, decimal_places=18)
+	high_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
+	low_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
+	high_time = models.DecimalField(null=True, max_digits=20, decimal_places=18)
+	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 
 	def analyze(self):
 		commands.getstatusoutput(settings.PROG_AWK + ' -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
@@ -142,3 +142,4 @@ class UploadForm(forms.Form):
 	electrode = forms.IntegerField(required=False)
 	solution = forms.CharField(max_length=100, required=False)
 	notes = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
+	use = forms.BooleanField(required=False)
