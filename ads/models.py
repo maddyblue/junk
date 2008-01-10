@@ -6,11 +6,11 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
-def make_tn(image, output='', size='80x80', prog='/usr/local/bin/convert'):
+def make_tn(image, output='', size='80x80'):
 	if output == '':
 		output = image + '_tn.jpg'
 
-	return commands.getstatusoutput(prog + ' ' + image + ' -resize ' + size + ' -background black -gravity Center -extent ' + size + ' ' + output)
+	return commands.getstatusoutput(settings.PROG_CONVERT + ' ' + image + ' -resize ' + size + ' -background black -gravity Center -extent ' + size + ' ' + output)
 
 class Location(models.Model):
 	upload_dir = 'uploads/locations'
