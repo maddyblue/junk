@@ -64,7 +64,7 @@
 					<p><b>{{ result.run_date|date:"j M y" }}:</b>
 				{% endifequal %}
 				<p>
-					<a href="{% url biosensor.results.views.detail result.id %}"><img src="/{{ result.get_upload_file_url }}.tn.png" border="0" /></a>
+					<a href="{% url biosensor.results.views.detail result.id %}"><img src="/uploads/{{ result.id }}.tn.png" border="0" /></a>
 					<a href="{% url biosensor.results.views.detail result.id %}">{{ result }}</a>
 					</p>
 			{% endfor %}
