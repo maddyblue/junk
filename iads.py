@@ -2,6 +2,7 @@ from __future__ import with_statement
 
 import gtk
 import logging
+import logging.handlers
 import os
 import os.path
 import pygtk
@@ -46,7 +47,7 @@ class Iads(threading.Thread):
 
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.connect('destroy', self.destroy)
-		#self.window.fullscreen()
+		self.window.fullscreen()
 
 		self.screen = self.window.get_screen()
 		global WIDTH
@@ -83,7 +84,7 @@ class Iads(threading.Thread):
 
 	def update_adlist(self):
 		try:
-			url = 'http://i-ads.com/list/1/'
+			url = globals()['LIST_HOST'] + globals()['LOCATION_ID']
 			logging.debug('downloading list: %s', url)
 			u = urllib2.urlopen(url)
 			ads = u.read().split()
@@ -104,7 +105,7 @@ class Iads(threading.Thread):
 						logging.info('downloading: %s', a)
 
 						try:
-							u = urllib2.urlopen('http://s3.amazonaws.com/iads-ads/' + a)
+							u = urllib2.urlopen(globals()['AD_HOST'] + a)
 							f = open(fname, 'w')
 							f.write(u.read())
 							f.close()
@@ -114,7 +115,7 @@ class Iads(threading.Thread):
 
 					ad = Ad(fname)
 					self.adcache[fname] = ad
-					logging.error('add to cache: %s', ad.fname)
+					logging.info('add to cache: %s', ad.fname)
 
 				if ad is not None:
 					adlist.append(ad)
@@ -141,7 +142,7 @@ class Iads(threading.Thread):
 
 	def run(self):
 		while True:
-			t = threading.Timer(0, self.next_ad)
+			t = threading.Timer(globals()['ROTATE_TIME'], self.next_ad)
 			t.start()
 			t.join()
 
@@ -149,7 +150,7 @@ class Iads(threading.Thread):
 		self.update_adlist()
 
 		while True:
-			t = threading.Timer(0, self.update_adlist)
+			t = threading.Timer(globals()['UPDATE_TIME'], self.update_adlist)
 			t.start()
 			t.join()
 
@@ -160,10 +161,32 @@ except:
 
 gtk.gdk.threads_init()
 
-logging.basicConfig(level=logging.DEBUG,
-	format='%(asctime)s %(levelname)-8s %(message)s',
-	filename='log'
-)
+rootLogger = logging.getLogger('')
+rootLogger.setLevel(logging.DEBUG)
+timedRotate = logging.handlers.TimedRotatingFileHandler('log', 'midnight')
+timedRotate.setFormatter(logging.Formatter('%(asctime)s %(levelname)-8s %(message)s'))
+rootLogger.addHandler(timedRotate)
+
+logging.info('startup')
+
+UPDATE_TIME = 300
+ROTATE_TIME = 30
+LIST_HOST = 'http://i-ads.com/list/'
+AD_HOST = 'http://s3.amazonaws.com/iads-ads/'
+LOCATION_ID = ''
+
+try:
+	f = open('conf')
+	d = f.readlines()
+	f.close()
+
+	LOCATION_ID = d.pop(0)
+	UPDATE_TIME = int(d.pop(0))
+	ROTATE_TIME = int(d.pop(0))
+	LIST_HOST = d.pop(0)
+	AD_HOST = d.pop(0)
+except:
+	pass
 
 iads = Iads()
 iads.start()
