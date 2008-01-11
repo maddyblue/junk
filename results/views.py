@@ -110,19 +110,28 @@ def upload(request):
 				run_date = datetime.datetime(int(d[2]), months[d[0]], int(d[1]), int(d[3]), int(d[4]), int(d[5])),
 				filename = request.FILES['upload_file']['filename'],
 				analysis = s[1],
-				init_e = s[8].split(' = ')[1],
-				high_e = s[9].split(' = ')[1],
-				low_e = s[10].split(' = ')[1],
-				init_pn = s[11].split(' = ')[1],
-				scan_rate = s[12].split(' = ')[1],
-				sample_interval = s[14].split(' = ')[1],
-				sensitivity = s[16].split(' = ')[1],
 				use = form.cleaned_data['use'],
+				init_e = s[8].split(' = ')[1],
+				high_e = 0,
+				low_e = 0,
+				init_pn = '',
+				scan_rate = 0,
 				high_val = 0,
 				high_time = 0,
 				low_val = 0,
 				low_time = 0
 			)
+
+			if s[1] == 'Cyclic Voltammetry':
+				r.high_e = s[9].split(' = ')[1]
+				r.low_e = s[10].split(' = ')[1]
+				r.init_pn = s[11].split(' = ')[1]
+				r.scan_rate = s[12].split(' = ')[1]
+				r.sample_interval = s[14].split(' = ')[1]
+				r.sensitivity = s[16].split(' = ')[1]
+			elif s[1] == 'i - t Curve':
+				r.sample_interval = s[9].split(' = ')[1]
+				r.sensitivity = s[12].split(' = ')[1]
 
 			if form.cleaned_data['sensor'] is None and len(r.filename) >= 3 and r.filename[0] == 's':
 				r.sensor = r.filename[1:3]

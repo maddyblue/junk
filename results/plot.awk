@@ -6,7 +6,7 @@ BEGIN {
 FNR == 1 {
 	fplt = FILENAME ".plt";
 	print "set terminal png size 640, 480" > fplt;
-	print "set xlabel \"Potential/V\"" > fplt;
+	print "set xlabel \"" xlabel "\"" > fplt;
 	print "set ylabel \"Current/A\"" > fplt;
 
 	print "set output \"" FILENAME ".dat1.png\"" > fplt;
@@ -50,8 +50,7 @@ FNR == 1 {
 	print "unset xlabel" > fplt;
 	print "unset ylabel" > fplt;
 	print "unset tics" > fplt;
-	print "plot \\" > fplt;
-	print "\"" FILENAME ".avg\" notitle with lines" > fplt;
+	print "plot \"" FILENAME ".avg\" notitle with lines" > fplt;
 }
 
 /^[-0-9]/ {

@@ -29,24 +29,30 @@
 	<li>upload date: {{ result.upload_date|date:"j M y H:i:s" }}</li>
 	<li>analysis: {{ result.analysis }}</li>
 	<li>init e: {{ result.init_e }}</li>
+	{% ifequal result.analysis "Cyclic Voltammetry" %}
 	<li>high e: {{ result.high_e }}</li>
 	<li>low e: {{ result.low_e }}</li>
 	<li>init pn: {{ result.init_pn }}</li>
 	<li>scan rate: {{ result.scan_rate }}</li>
 	<li>sample interval: {{ result.sample_interval }}</li>
+	{% endifequal %}
 	<li>sensitivity: {{ result.sensitivity }}</li>
 	<li>solution: {{ result.solution }}</li>
 	<li>notes: {{ result.notes }}</li>
 	<li>used in sensor results page: {{ result.use|yesno }}</li>
 	<li>high value: {{ result.high_val }} at {{ result.high_time }}s</li>
 	<li>low value: {{ result.low_val }} at {{ result.low_time }}s</li>
+	{% ifequal result.analysis "Cyclic Voltammetry" %}
 	<li>average diff over full range: {{ result.range_all }}</li>
 	<li>average diff over -0.2 to 0.2 range: {{ result.range_p2 }}</li>
 	<li>average diff over -0.1 to 0.1 range: {{ result.range_p1 }}</li>
+	{% endifequal %}
 </ul>
 <p><img src="/uploads/{{ result.id }}.avg.png"/></p>
+{% ifequal result.analysis "Cyclic Voltammetry" %}
 <p><img src="/uploads/{{ result.id }}.-1_1.png"/></p>
 <p><img src="/uploads/{{ result.id }}.-2_2.png"/></p>
+{% endifequal %}
 <p><img src="/uploads/{{ result.id }}.png"/></p>
 <p><img src="/uploads/{{ result.id }}.dat1.png"/></p>
 <p><img src="/uploads/{{ result.id }}.dat2.png"/></p>

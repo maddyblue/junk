@@ -63,10 +63,10 @@ class Result(models.Model):
 	filename = models.CharField(max_length=100)
 	analysis = models.CharField(max_length=100)
 	init_e = models.DecimalField(max_digits=4, decimal_places=2)
-	high_e = models.DecimalField(max_digits=4, decimal_places=2)
-	low_e = models.DecimalField(max_digits=4, decimal_places=2)
-	init_pn = models.CharField(max_length=1)
-	scan_rate = models.DecimalField(max_digits=4, decimal_places=3)
+	high_e = models.DecimalField(null=True, max_digits=4, decimal_places=2)
+	low_e = models.DecimalField(null=True, max_digits=4, decimal_places=2)
+	init_pn = models.CharField(null=True, max_length=1)
+	scan_rate = models.DecimalField(null=True, max_digits=4, decimal_places=3)
 	sample_interval = models.DecimalField(max_digits=6, decimal_places=5)
 	sensitivity = models.DecimalField(max_digits=12, decimal_places=11)
 	range_all = models.DecimalField(null=True, max_digits=20, decimal_places=18)
@@ -79,7 +79,12 @@ class Result(models.Model):
 	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 
 	def analyze(self):
-		commands.getstatusoutput(settings.PROG_AWK + ' -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
+		if self.analysis == 'Cyclic Voltammetry':
+			xlabel = 'Potential/V'
+		elif self.analysis == 'i - t Curve':
+			xlabel = 'Time/sec'
+
+		commands.getstatusoutput(settings.PROG_AWK + ' -v xlabel=' + xlabel + ' -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
 		commands.getstatusoutput(settings.PROG_GNUPLOT + ' ' + self.get_upload_file_filename() + '.plt')
 
 		self.range_all = calc_range(self.get_upload_file_filename() + '.avg')
