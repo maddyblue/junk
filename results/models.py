@@ -65,7 +65,7 @@ class Result(models.Model):
 	init_e = models.DecimalField(max_digits=4, decimal_places=2)
 	high_e = models.DecimalField(null=True, max_digits=4, decimal_places=2)
 	low_e = models.DecimalField(null=True, max_digits=4, decimal_places=2)
-	init_pn = models.CharField(null=True, max_length=1)
+	init_pn = models.CharField(null=True, blank=True, max_length=1)
 	scan_rate = models.DecimalField(null=True, max_digits=4, decimal_places=3)
 	sample_interval = models.DecimalField(max_digits=6, decimal_places=5)
 	sensitivity = models.DecimalField(max_digits=12, decimal_places=11)
@@ -75,8 +75,8 @@ class Result(models.Model):
 	use = models.BooleanField(null=True, default=True)
 	high_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	low_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	high_time = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=18)
+	high_time = models.DecimalField(null=True, max_digits=20, decimal_places=17)
+	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=17)
 
 	def analyze(self):
 		if self.analysis == 'Cyclic Voltammetry':
@@ -87,9 +87,10 @@ class Result(models.Model):
 		commands.getstatusoutput(settings.PROG_AWK + ' -v xlabel=' + xlabel + ' -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
 		commands.getstatusoutput(settings.PROG_GNUPLOT + ' ' + self.get_upload_file_filename() + '.plt')
 
-		self.range_all = calc_range(self.get_upload_file_filename() + '.avg')
-		self.range_p2  = calc_range(self.get_upload_file_filename() + '.-2_2')
-		self.range_p1  = calc_range(self.get_upload_file_filename() + '.-1_1')
+		if self.analysis == 'Cyclic Voltammetry':
+			self.range_all = calc_range(self.get_upload_file_filename() + '.avg')
+			self.range_p2  = calc_range(self.get_upload_file_filename() + '.-2_2')
+			self.range_p1  = calc_range(self.get_upload_file_filename() + '.-1_1')
 
 		r = calc_range(self.get_upload_file_filename() + '.avg', True)
 		self.low_val = r[0][0]

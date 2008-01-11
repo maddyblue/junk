@@ -38,7 +38,7 @@
 	{% endifequal %}
 	<li>sensitivity: {{ result.sensitivity }}</li>
 	<li>solution: {{ result.solution }}</li>
-	<li>notes: {{ result.notes }}</li>
+	<li>notes: {{ result.notes|linebreaksbr }}</li>
 	<li>used in sensor results page: {{ result.use|yesno }}</li>
 	<li>high value: {{ result.high_val }} at {{ result.high_time }}s</li>
 	<li>low value: {{ result.low_val }} at {{ result.low_time }}s</li>
