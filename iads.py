@@ -1,8 +1,11 @@
 from __future__ import with_statement
 
 import gtk
+import logging
 import os
+import os.path
 import pygtk
+import sys
 import threading
 import urllib2
 
@@ -28,6 +31,11 @@ def scale(pixbuf, width, height):
 
 	return pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 
+class Ad:
+	def __init__(self, fname):
+		self.fname = fname
+		self.pixbuf = scale(gtk.gdk.pixbuf_new_from_file(fname), WIDTH, HEIGHT)
+
 class Iads(threading.Thread):
 	def destroy(self, widget, data=None):
 		gtk.main_quit()
@@ -37,17 +45,19 @@ class Iads(threading.Thread):
 		threading.Thread.__init__(self)
 
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-		self.window.connect("destroy", self.destroy)
-		self.window.fullscreen()
+		self.window.connect('destroy', self.destroy)
+		#self.window.fullscreen()
 
 		self.screen = self.window.get_screen()
-		self.width = self.screen.get_width()
-		self.height = self.screen.get_height()
+		global WIDTH
+		WIDTH = self.screen.get_width()
+		global HEIGHT
+		HEIGHT = self.screen.get_height()
 
-		self.logo = scale(gtk.gdk.pixbuf_new_from_file("logo.png"), self.width, self.height)
+		self.logo = Ad('logo.png')
 
 		self.image = gtk.Image()
-		self.image.set_from_pixbuf(self.logo)
+		self.image.set_from_pixbuf(self.logo.pixbuf)
 		self.image.show()
 
 		self.eventbox = gtk.EventBox()
@@ -66,39 +76,58 @@ class Iads(threading.Thread):
 		self.lock = threading.Lock()
 		self.adloc = 0
 		self.adlist = []
+		self.adcache = {}
 
 	def main(self):
 		gtk.main()
 
 	def update_adlist(self):
-		print "downloading list"
-		u = urllib2.urlopen("http://i-ads.com/list/1/")
-		ads = u.read().split()
-		print ads
+		try:
+			url = 'http://i-ads.com/list/1/'
+			logging.debug('downloading list: %s', url)
+			u = urllib2.urlopen(url)
+			ads = u.read().split()
+			logging.debug('downloaded list: %s', ads)
 
-		adlist = [self.logo]
+			adlist = [self.logo]
 
-		for a in ads:
-			print "checking: " + a
+			for a in ads:
+				logging.debug('checking: %s', a)
 
-			fname = "ads/" + a
+				fname = 'ads/' + a
+				ad = None
 
-			try:
-				f = open(fname, 'r')
-			except IOError:
-				print "downloading: " + a
-				u = urllib2.urlopen("http://s3.amazonaws.com/iads-ads/" + a)
-				f = open(fname, 'w')
-				f.write(u.read())
-				f.close()
+				try:
+					ad = self.adcache[fname]
+				except:
+					if not os.path.isfile(fname):
+						logging.info('downloading: %s', a)
 
-			p = scale(gtk.gdk.pixbuf_new_from_file(fname), self.width, self.height)
-			adlist[len(adlist):-1] = [p]
+						try:
+							u = urllib2.urlopen('http://s3.amazonaws.com/iads-ads/' + a)
+							f = open(fname, 'w')
+							f.write(u.read())
+							f.close()
+						except:
+							logging.error('could not download ad %s', a, exc_info=True)
+							continue
 
-		with self.lock:
-			self.adlist = adlist
+					ad = Ad(fname)
+					self.adcache[fname] = ad
+					logging.error('add to cache: %s', ad.fname)
+
+				if ad is not None:
+					adlist.append(ad)
+
+			with self.lock:
+				self.adlist = adlist
+				logging.debug('updated adlist: %s', len(adlist))
+
+		except:
+			logging.error('update_adlist failed', exc_info=True)
 
 	def next_ad(self):
+		logging.debug('adlist len: %s', len(self.adlist))
 		if len(self.adlist) == 0:
 			return
 
@@ -107,11 +136,12 @@ class Iads(threading.Thread):
 			if self.adloc >= len(self.adlist):
 				self.adloc = 0
 
-			self.image.set_from_pixbuf(self.adlist[self.adloc])
+			logging.debug('show ad: %s', self.adlist[self.adloc].fname)
+			self.image.set_from_pixbuf(self.adlist[self.adloc].pixbuf)
 
 	def run(self):
 		while True:
-			t = threading.Timer(5, self.next_ad)
+			t = threading.Timer(0, self.next_ad)
 			t.start()
 			t.join()
 
@@ -119,7 +149,7 @@ class Iads(threading.Thread):
 		self.update_adlist()
 
 		while True:
-			t = threading.Timer(300, self.update_adlist)
+			t = threading.Timer(0, self.update_adlist)
 			t.start()
 			t.join()
 
@@ -129,6 +159,11 @@ except:
 	pass
 
 gtk.gdk.threads_init()
+
+logging.basicConfig(level=logging.DEBUG,
+	format='%(asctime)s %(levelname)-8s %(message)s',
+	filename='log'
+)
 
 iads = Iads()
 iads.start()
