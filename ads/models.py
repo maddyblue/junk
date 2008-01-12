@@ -63,13 +63,13 @@ class Reservation(models.Model):
 	user = models.ForeignKey(User)
 	ad = models.ForeignKey(Ad)
 	location = models.ForeignKey(Location)
-	combo = models.PositiveSmallIntegerField()
+	combo = models.PositiveSmallIntegerField(blank=True)
 	checkedout = models.BooleanField(default=False)
 	start = models.DateField()
 	end = models.DateField()
 
 	def __unicode__(self):
-		return str(self.user) + ": " + str(self.ad) + " from " + str(self.start) + " to " + str(self.end)
+		return str(self.user) + ": " + str(self.ad) + " at " + str(self.location) + " from " + str(self.start) + " to " + str(self.end)
 
 	class Admin:
 		pass
