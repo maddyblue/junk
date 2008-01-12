@@ -10,9 +10,18 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 
 def list(request, loc_id):
-	t = Terminal(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
-	t.save()
-	return HttpResponse("47\n49\n61")
+	Terminal.objects.create(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
+
+	loc = get_object_or_404(Location, pk=loc_id)
+
+	ads = Reservation.objects.filter(location=loc, checkedout=True, start__lte=datetime.date.today(), end__gte=datetime.date.today())
+
+	res = ''
+
+	for i in ads:
+		res += str(i.ad.id) + '\n'
+
+	return HttpResponse(res[:-1])
 
 @login_required
 def checkoutdata(request):
