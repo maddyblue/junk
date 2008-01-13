@@ -4,7 +4,7 @@ from darc.ads.models import *
 from darc.main.views import render
 from django import newforms as forms
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
@@ -88,6 +88,24 @@ def checkout(request):
 	else:
 		r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('combo')
 		return render(request, 'ads/checkout.html', {'r': r})
+
+@permission_required('ad.can_change')
+def mod(request):
+	done = 0
+
+	for k, v in request.POST.iteritems():
+		if v[0] == 'on':
+			try:
+				a = Ad.objects.get(id=int(k))
+				a.status = STATUS_CHECKED
+				a.save()
+				done += 1
+			except:
+				pass
+
+	ads = Ad.objects.filter(status=STATUS_NOTCHECKED)
+
+	return render(request, 'ads/mod.html', {'ads': ads, 'done': done})
 
 @login_required
 def upload(request):

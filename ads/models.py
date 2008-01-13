@@ -6,11 +6,11 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
-def make_tn(image, output='', size='80x80', prog='/usr/local/bin/convert'):
+def make_tn(image, output='', size='80x80'):
 	if output == '':
 		output = image + '_tn.jpg'
 
-	return commands.getstatusoutput(prog + ' ' + image + ' -resize ' + size + ' -background black -gravity Center -extent ' + size + ' ' + output)
+	return commands.getstatusoutput(settings.PROG_CONVERT + ' ' + image + ' -resize ' + size + ' -background black -gravity Center -extent ' + size + ' ' + output)
 
 class Location(models.Model):
 	upload_dir = 'uploads/locations'
@@ -45,6 +45,18 @@ class Terminal(models.Model):
 	class Admin:
 		pass
 
+STATUS_NOTCHECKED = 1
+STATUS_CHECKED = 2
+STATUS_UPLOADING = 3
+STATUS_DONE = 4
+
+STATUS_CHOICES = (
+	(STATUS_NOTCHECKED, 'Not yet checked by our staff.'),
+	(STATUS_CHECKED, 'Checked by our staff, but not uploaded to our ad server.'),
+	(STATUS_UPLOADING, 'Checked by our staff and currently uploading to our ad server.'),
+	(STATUS_DONE, 'Checked by our staff and uploaded to our ad server.')
+)
+
 class Ad(models.Model):
 	user = models.ForeignKey(User)
 	name = models.CharField(max_length=100)
@@ -52,6 +64,7 @@ class Ad(models.Model):
 	filesize = models.IntegerField()
 	date = models.DateTimeField(auto_now_add=True)
 	image = models.FileField(upload_to="uploads/ads")
+	status = models.PositiveSmallIntegerField(default=STATUS_NOTCHECKED, choices=STATUS_CHOICES)
 
 	def __unicode__(self):
 		return str(self.name)

@@ -86,3 +86,5 @@ INSTALLED_APPS = (
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
+
+PROG_CONVERT = '/usr/bin/convert'
