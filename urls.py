@@ -12,6 +12,7 @@ urlpatterns = patterns('',
 	(r'^ads/checkoutdata/$', 'darc.ads.views.checkoutdata'),
 	(r'^ads/checkout/$', 'darc.ads.views.checkout'),
 	(r'^mod/$', 'darc.ads.views.mod'),
+	(r'^s3/$', 'darc.ads.views.update_s3'),
 
 	(r'^templates/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'templates'}),
 	(r'^uploads/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'uploads'}),

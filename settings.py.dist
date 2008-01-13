@@ -88,3 +88,7 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 
 PROG_CONVERT = '/usr/bin/convert'
+
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+BUCKET_NAME = ''
