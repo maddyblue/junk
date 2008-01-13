@@ -99,8 +99,8 @@ def checkoutdata(request):
 				s = e
 				e = temp
 
-			nd = datetime.date.today() + datetime.timedelta(1)
-			if s < datetime.date.today() + datetime.timedelta(1) :
+			nd = datetime.date.today() - datetime.timedelta(1)
+			if s < nd:
 				s = nd
 
 			nd = datetime.date.today() + datetime.timedelta(90)
