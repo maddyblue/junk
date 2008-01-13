@@ -1,0 +1,60 @@
+{% extends "ads/default.html" %}
+
+{% block title %}
+
+ - S3 Upload
+
+{% endblock %}
+
+{% block content %}
+
+{% if error %}
+
+<p><b>Errors occured while uploading. The following ads did not upload:</b></p>
+
+{% for e in error %}
+<table border="0" cellspacing="1" cellpadding="1">
+	<tr><td colspan="2"><b>Error:</b> {{ e.0.0 }} - {{ e.0.1 }}</td></tr>
+	<tr>
+		<td>
+			<a href="/uploads/ads/{{ e.0.id }}"><img src="/uploads/ads/{{ e.0.id }}_tn.jpg" alt="" border="0" /></a>
+		</td>
+		<td>
+			user: {{ e.0.user }}<br />
+			ad name: {{ e.0.name }}<br />
+			type: {{ e.0.mimetype }}<br />
+			size: {{ e.0.filesize|filesizeformat }}<br />
+			date uploaded: {{ e.0.date|date:"D, j M y" }}
+		</td>
+	</tr>
+</table>
+{% endfor %}
+
+<form action="." method="post"><input type="submit" value="Try the above again" /></form>
+
+{% endif %}
+
+{% if done %}
+
+<p>The following ads uploaded successfully:</p>
+
+{% for ad in done %}
+<table border="0" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<a href="/uploads/ads/{{ ad.id }}"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="" border="0" /></a>
+		</td>
+		<td>
+			user: {{ ad.user }}<br />
+			ad name: {{ ad.name }}<br />
+			type: {{ ad.mimetype }}<br />
+			size: {{ ad.filesize|filesizeformat }}<br />
+			date uploaded: {{ ad.date|date:"D, j M y" }}
+		</td>
+	</tr>
+</table>
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

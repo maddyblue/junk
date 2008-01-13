@@ -2,7 +2,7 @@ from darc.blog.models import *
 from darc.ads.models import *
 from django import newforms as forms
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
@@ -13,6 +13,10 @@ def render(request, template, dictionary={}):
 		dictionary,
 		context_instance=RequestContext(request)
 	)
+
+@permission_required('ad.can_change')
+def mod(request):
+	return render(request, 'main/mod.html')
 
 def index(request):
 	return render(request, 'main/index.html', {'entry': Blog.objects.all().order_by('-date')[0:1], 'entries': Blog.objects.all().order_by('-date')[1:9]})

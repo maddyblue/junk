@@ -2,30 +2,19 @@
 
 {% block title %}
 
- - Ad Mod
+ - S3 Todo
 
 {% endblock %}
 
 {% block content %}
 
-{% if done %}
-
-<p>{{ done }} ad{{ done|pluralize }} marked good.</p>
-
-<p>Proceed to the <a href="{% url darc.ads.views.update_s3 %}">S3 Upload page</a>.
-
-{% endif %}
-
 {% if ads %}
-
-<form action="." method="post">
 
 {% for ad in ads %}
 <table border="0" cellspacing="1" cellpadding="1">
 	<tr>
 		<td>
 			<a href="/uploads/ads/{{ ad.id }}"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="" border="0" /></a>
-			<br /><input type="checkbox" name="{{ ad.id }}"/> Good?
 		</td>
 		<td>
 			user: {{ ad.user }}<br />
@@ -38,13 +27,11 @@
 </table>
 {% endfor %}
 
-<input type="submit" value="Save" />
-
-</form>
+<form action="." method="post"><input type="submit" value="Upload" /></form>
 
 {% else %}
 
-<p>No unchecked ads.</p>
+No ads to upload.
 
 {% endif %}
 
