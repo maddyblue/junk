@@ -23,6 +23,7 @@ def upload_s3(fname, mimetype, uname=''):
 	conn.put(settings.BUCKET_NAME, uname, S3.S3Object(filedata),
 		{'x-amz-acl': 'public-read', 'Content-Type': mimetype})
 
+@permission_required('ad.can_change')
 def update_s3(request):
 	ads = Ad.objects.filter(status=STATUS_CHECKED)
 
