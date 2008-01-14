@@ -10,7 +10,7 @@
 
 <h1>{{ result }}</h1>
 <table border="0" cellpadding="0" cellspacing="1"><tr>
-<td><a href="/{{ result.get_upload_file_url }}">[ download .txt data ]</a></td>
+<td><a href="/uploads/{{ result.id }}">[ download .txt data ]</a></td>
 <td><form action="." method="post"><input type="submit" name="reanalyze" value="reanalyze"/></form></td>
 </tr></table>
 <ul>
