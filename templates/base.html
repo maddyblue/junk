@@ -37,7 +37,7 @@
 				{% if user.is_authenticated %}
 					<div style="float: right; padding-right: 20px; padding-top: 4px; color: #666;">
 						Welcome, <a href="{% url darc.main.views.account %}">{{ user.username }}</a>.
-						{% if perms.ads %}
+						{% if perms.ads.change_ad %}
 						<a href="{% url darc.main.views.mod %}">[Mod]</a>
 						{% endif %}
 						<a href="{% url django.contrib.auth.views.logout %}">[Logout]</a>

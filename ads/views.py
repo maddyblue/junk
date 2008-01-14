@@ -23,7 +23,7 @@ def upload_s3(fname, mimetype, uname=''):
 	conn.put(settings.BUCKET_NAME, uname, S3.S3Object(filedata),
 		{'x-amz-acl': 'public-read', 'Content-Type': mimetype})
 
-@permission_required('ad.can_change')
+@permission_required('ads.change_ad')
 def update_s3(request):
 	ads = Ad.objects.filter(status=STATUS_CHECKED)
 
@@ -134,7 +134,7 @@ def checkout(request):
 		r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('combo')
 		return render(request, 'ads/checkout.html', {'r': r})
 
-@permission_required('ad.can_change')
+@permission_required('ads.change_ad')
 def mod(request):
 	done = 0
 

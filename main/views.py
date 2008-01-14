@@ -14,7 +14,7 @@ def render(request, template, dictionary={}):
 		context_instance=RequestContext(request)
 	)
 
-@permission_required('ad.can_change')
+@permission_required('ads.change_ad')
 def mod(request):
 	return render(request, 'main/mod.html')
 
