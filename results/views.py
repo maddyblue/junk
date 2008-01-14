@@ -119,7 +119,10 @@ def upload(request):
 				high_val = 0,
 				high_time = 0,
 				low_val = 0,
-				low_time = 0
+				low_time = 0,
+				range_all = 0,
+				range_p2 = 0,
+				range_p1 = 0
 			)
 
 			if s[1] == 'Cyclic Voltammetry':
