@@ -1,5 +1,6 @@
 from __future__ import with_statement
 
+import commands
 import gtk
 import logging
 import logging.handlers
@@ -57,6 +58,12 @@ class Iads(threading.Thread):
 			elif event.string == 'n':
 				logging.info('manually advancing ad')
 				self.next_ad()
+			elif event.string == 'h':
+				logging.info('manually halting machine')
+				commands.getoutput('/sbin/halt -p')
+			elif event.string == 'r':
+				logging.info('manually rebooting machine')
+				commands.getoutput('/sbin/reboot')
 
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -135,12 +142,13 @@ class Iads(threading.Thread):
 						logging.info('downloading: %s', a)
 
 						try:
-							u = urllib2.urlopen(globals()['AD_HOST'] + a)
+							url = globals()['AD_HOST'] + a
+							u = urllib2.urlopen(url)
 							f = open(fname, 'w')
 							f.write(u.read())
 							f.close()
 						except:
-							logging.error('could not download ad %s', a, exc_info=True)
+							logging.error('could not download ad %s', url, exc_info=True)
 							continue
 
 					ad = Ad(fname)
