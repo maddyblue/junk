@@ -161,7 +161,7 @@ def mod(request):
 
 	ads = Ad.objects.filter(status=STATUS_NOTCHECKED)
 
-	return render(request, 'ads/mod.html', {'ads': ads, 'done': done})
+	return render(request, 'ads/check.html', {'ads': ads, 'done': done})
 
 @login_required
 def upload(request):
