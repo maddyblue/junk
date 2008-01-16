@@ -74,8 +74,8 @@ def info(request, loc_id):
 	res = ''
 
 	if loc.screen is not None:
-		res += 'w' + str(loc.screen.width) + '\n'
-		res += 'h' + str(loc.screen.height) + '\n'
+		res += str(loc.screen.width) + '\n'
+		res += str(loc.screen.height) + '\n'
 
 	return HttpResponse(res[:-1])
 
