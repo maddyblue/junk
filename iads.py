@@ -10,9 +10,9 @@ import sys
 import threading
 import urllib2
 
-def scale(pixbuf, width, height):
-	w = float(width)
-	h = float(height)
+def scale(pixbuf):
+	w = float(WIDTH)
+	h = float(HEIGHT)
 	pw = float(pixbuf.get_width())
 	ph = float(pixbuf.get_height())
 
@@ -27,6 +27,9 @@ def scale(pixbuf, width, height):
 	h = scale * ph
 	w = scale * pw
 
+	#if SCREEN_WIDTH > 0:
+	#	w = w * WIDTH / SCREEN_WIDTH
+
 	w = int(w)
 	h = int(h)
 
@@ -35,25 +38,52 @@ def scale(pixbuf, width, height):
 class Ad:
 	def __init__(self, fname):
 		self.fname = fname
-		self.pixbuf = scale(gtk.gdk.pixbuf_new_from_file(fname), WIDTH, HEIGHT)
+		self.pixbuf = scale(gtk.gdk.pixbuf_new_from_file(fname))
 
 class Iads(threading.Thread):
-	def destroy(self, widget, data=None):
+	def destroy(self, widget=None, data=None):
+		logging.info('shutdown issued')
 		gtk.main_quit()
 		exit()
+
+	def press(self, widget, event):
+		if event.type == gtk.gdk.KEY_PRESS:
+			if event.string == 'q':
+				logging.info('manually shutting down')
+				self.destroy()
+			elif event.string == 'u':
+				logging.info('manually updating adlist')
+				self.update_adlist()
+			elif event.string == 'n':
+				logging.info('manually advancing ad')
+				self.next_ad()
 
 	def __init__(self):
 		threading.Thread.__init__(self)
 
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.connect('destroy', self.destroy)
+		self.window.connect('key-press-event', self.press)
 		self.window.fullscreen()
 
+		global WIDTH, HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT
 		self.screen = self.window.get_screen()
-		global WIDTH
 		WIDTH = self.screen.get_width()
-		global HEIGHT
 		HEIGHT = self.screen.get_height()
+
+		try:
+			url = globals()['LIST_HOST'] + 'info/' + globals()['LOCATION_ID']
+			logging.debug('downloading info: %s', url)
+			info = urllib2.urlopen(url).read().split()
+			SCREEN_WIDTH = int(info[0])
+			SCREEN_HEIGHT = int(info[1])
+		except:
+			logging.error('could not download screen info', exc_info=True)
+			SCREEN_WIDTH = 0
+			SCREEN_HEIGHT = 0
+
+		logging.info('display size: ' + str(WIDTH) + 'x' + str(HEIGHT))
+		logging.info('screen size: ' + str(SCREEN_WIDTH) + 'x' + str(SCREEN_HEIGHT))
 
 		self.logo = Ad('logo.png')
 
@@ -84,7 +114,7 @@ class Iads(threading.Thread):
 
 	def update_adlist(self):
 		try:
-			url = globals()['LIST_HOST'] + globals()['LOCATION_ID']
+			url = globals()['LIST_HOST'] + 'list/' + globals()['LOCATION_ID']
 			logging.debug('downloading list: %s', url)
 			u = urllib2.urlopen(url)
 			ads = u.read().split()
@@ -171,7 +201,7 @@ logging.info('startup')
 
 UPDATE_TIME = 300
 ROTATE_TIME = 30
-LIST_HOST = 'http://i-ads.com/list/'
+LIST_HOST = 'http://i-ads.com/'
 AD_HOST = 'http://s3.amazonaws.com/iads-ads/'
 LOCATION_ID = ''
 
@@ -180,11 +210,11 @@ try:
 	d = f.readlines()
 	f.close()
 
-	LOCATION_ID = d.pop(0)
+	LOCATION_ID = d.pop(0).strip()
 	UPDATE_TIME = int(d.pop(0))
 	ROTATE_TIME = int(d.pop(0))
-	LIST_HOST = d.pop(0)
-	AD_HOST = d.pop(0)
+	LIST_HOST = d.pop(0).strip()
+	AD_HOST = d.pop(0).strip()
 except:
 	pass
 
