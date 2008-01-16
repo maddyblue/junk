@@ -79,13 +79,8 @@ class Result(models.Model):
 	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=17)
 
 	def analyze(self):
-		if self.analysis == 'Cyclic Voltammetry':
-			xlabel = 'Potential/V'
-		elif self.analysis == 'i - t Curve':
-			xlabel = 'Time/sec'
-
-		commands.getstatusoutput(settings.PROG_AWK + ' -v xlabel=' + xlabel + ' -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
-		commands.getstatusoutput(settings.PROG_GNUPLOT + ' ' + self.get_upload_file_filename() + '.plt')
+		print commands.getstatusoutput(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
+		print commands.getstatusoutput(settings.PROG_GNUPLOT + ' ' + self.get_upload_file_filename() + '.plt')
 
 		if self.analysis == 'Cyclic Voltammetry':
 			self.range_all = calc_range(self.get_upload_file_filename() + '.avg')

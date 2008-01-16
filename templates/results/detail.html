@@ -53,6 +53,10 @@
 <p><img src="/uploads/{{ result.id }}.-1_1.png"/></p>
 <p><img src="/uploads/{{ result.id }}.-2_2.png"/></p>
 {% endifequal %}
+{% ifequal result.analysis "i - t Curve" %}
+<p><img src="/uploads/{{ result.id }}.+20.png"\></p>
+<p><img src="/uploads/{{ result.id }}.+15.png"\></p>
+{% endifequal %}
 <p><img src="/uploads/{{ result.id }}.png"/></p>
 <p><img src="/uploads/{{ result.id }}.dat1.png"/></p>
 <p><img src="/uploads/{{ result.id }}.dat2.png"/></p>
