@@ -69,7 +69,7 @@ var ad{{ ad.id }} = '<strong>{{ ad.name }}</strong>Uploaded {{ ad.date|naturalda
 {% endfor %}
 
 {% for location in locations %}
-var location{{ location.id}} = '<strong>{{ location.name }}</strong><span class="address">{{ location.address}}<br />{{ location.city }}, {{ location.state }} {{ location.zip }}</span><br /><br /><div class="locationcontent">{{ location.statement }}<br /><img src="/templates/megapage/images/location{{ location.id }}map.jpg" alt="{{ location.name }}" /></div>';
+var location{{ location.id}} = '<strong>{{ location.name }}</strong><span class="address">{{ location.address}}<br />{{ location.city }}, {{ location.state }} {{ location.zip }}</span><br /><br /><div class="locationcontent">{{ location.statement }}{% if location.screen %}<br />Screen size: {{ location.screen.width }}x{{ location.screen.height }}{% endif %}{% if location.map %}<br /><img src="/uploads/locations/{{ location.id }}_map.jpg" alt="{{ location.name }}" />{% endif %}</div>';
 {% endfor %}
 
 //jQuery Calls

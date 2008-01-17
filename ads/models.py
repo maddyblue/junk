@@ -36,11 +36,13 @@ class Location(models.Model):
 	state = models.CharField(blank=True, max_length=100)
 	statement = models.CharField(blank=True, max_length=200)
 	image = models.FileField(blank=True, upload_to=upload_dir)
+	map = models.FileField(blank=True, upload_to=upload_dir)
 	screen = models.ForeignKey(Screen, blank=True, null=True)
 
 	def save(self):
 		super(Location, self).save()
 		make_tn(self.get_image_filename(), os.path.join(settings.MEDIA_ROOT, self.upload_dir, str(self.id) + '_tn.jpg'))
+		make_tn(self.get_map_filename(), os.path.join(settings.MEDIA_ROOT, self.upload_dir, str(self.id) + '_map.jpg'), '183x')
 
 	def __unicode__(self):
 		return str(self.name)
