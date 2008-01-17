@@ -12,16 +12,31 @@ def make_tn(image, output='', size='80x80'):
 
 	return commands.getstatusoutput(settings.PROG_CONVERT + ' ' + image + ' -resize ' + size + ' -background black -gravity Center -extent ' + size + ' ' + output)
 
+class Screen(models.Model):
+	name = models.CharField(max_length=100)
+	width = models.PositiveSmallIntegerField()
+	height = models.PositiveSmallIntegerField()
+	vga = models.BooleanField()
+	dvi = models.BooleanField()
+	hdmi = models.BooleanField()
+
+	def __unicode__(self):
+		return self.name + ': ' + str(self.width) + 'x' + str(self.height)
+
+	class Admin:
+		pass
+
 class Location(models.Model):
 	upload_dir = 'uploads/locations'
 
 	name = models.CharField(max_length=100)
-	address = models.CharField(max_length=100)
-	zip = models.CharField(max_length=100)
-	city = models.CharField(max_length=100)
-	state = models.CharField(max_length=100)
+	address = models.CharField(blank=True, max_length=100)
+	zip = models.CharField(blank=True, max_length=100)
+	city = models.CharField(blank=True, max_length=100)
+	state = models.CharField(blank=True, max_length=100)
 	statement = models.CharField(blank=True, max_length=200)
-	image = models.FileField(upload_to=upload_dir)
+	image = models.FileField(blank=True, upload_to=upload_dir)
+	screen = models.ForeignKey(Screen, blank=True, null=True)
 
 	def save(self):
 		super(Location, self).save()
@@ -76,7 +91,7 @@ class Reservation(models.Model):
 	user = models.ForeignKey(User)
 	ad = models.ForeignKey(Ad)
 	location = models.ForeignKey(Location)
-	combo = models.PositiveSmallIntegerField(blank=True)
+	combo = models.PositiveSmallIntegerField(null=True, blank=True)
 	checkedout = models.BooleanField(default=False)
 	start = models.DateField()
 	end = models.DateField()

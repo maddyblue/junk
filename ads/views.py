@@ -68,6 +68,17 @@ def list(request, loc_id):
 
 	return HttpResponse(res[:-1])
 
+def info(request, loc_id):
+	loc = get_object_or_404(Location, pk=loc_id)
+
+	res = ''
+
+	if loc.screen is not None:
+		res += str(loc.screen.width) + '\n'
+		res += str(loc.screen.height) + '\n'
+
+	return HttpResponse(res[:-1])
+
 @login_required
 def checkoutdata(request):
 	r = []
@@ -150,7 +161,7 @@ def mod(request):
 
 	ads = Ad.objects.filter(status=STATUS_NOTCHECKED)
 
-	return render(request, 'ads/mod.html', {'ads': ads, 'done': done})
+	return render(request, 'ads/check.html', {'ads': ads, 'done': done})
 
 @login_required
 def upload(request):
