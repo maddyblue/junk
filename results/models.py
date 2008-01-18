@@ -75,8 +75,8 @@ class Result(models.Model):
 	use = models.BooleanField(null=True, default=True)
 	high_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	low_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	high_time = models.DecimalField(null=True, max_digits=20, decimal_places=17)
-	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=17)
+	high_time = models.DecimalField(null=True, max_digits=20, decimal_places=16)
+	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=16)
 
 	def analyze(self):
 		print commands.getstatusoutput(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
