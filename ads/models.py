@@ -101,7 +101,7 @@ class Reservation(models.Model):
 	end = models.DateField()
 
 	def __unicode__(self):
-		return str(self.user) + ": " + str(self.ad) + " at " + str(self.location) + " from " + str(self.start) + " to " + str(self.end)
+		return str(self.user) + ": " + str(self.ad.name) + " at " + str(self.location) + " from " + str(self.start) + " to " + str(self.end)
 
 	class Admin:
 		pass
