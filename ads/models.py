@@ -84,7 +84,7 @@ class Ad(models.Model):
 	status = models.PositiveSmallIntegerField(default=STATUS_NOTCHECKED, choices=STATUS_CHOICES)
 
 	def __unicode__(self):
-		return str(self.name)
+		return str(self.user) + ': ' + str(self.name)
 
 	class Admin:
 		pass
