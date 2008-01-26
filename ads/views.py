@@ -18,11 +18,24 @@ def list(request, loc_id):
 	loc = get_object_or_404(Location, pk=loc_id)
 
 	ads = Reservation.objects.filter(location=loc, checkedout=True, start__lte=datetime.date.today(), end__gte=datetime.date.today())
+	iads = Ad.objects.filter(category_iads=True)
+	fun = Ad.objects.filter(category_fun=True)
 
+	pos_iads = 0
+	pos_fun = 0
 	res = ''
+	i = 0
 
-	for i in ads:
-		res += str(i.ad.id) + '\n'
+	for a in ads:
+		res += str(a.ad.id) + '\n'
+		i += 1
+		print 'ad: ' + str(a.ad.id)
+		if i % 4 == 1:
+			res += str(fun[pos_fun % len(fun)].id) + '\n'
+			pos_fun += 1
+		elif i % 4 == 3:
+			res += str(iads[pos_iads % len(iads)].id) + '\n'
+			pos_iads += 1
 
 	return HttpResponse(res[:-1])
 
