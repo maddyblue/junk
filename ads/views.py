@@ -30,10 +30,10 @@ def list(request, loc_id):
 		res += str(a.ad.id) + '\n'
 		i += 1
 		print 'ad: ' + str(a.ad.id)
-		if i % 4 == 1:
+		if i % 4 == 1 and len(fun) > 0:
 			res += str(fun[pos_fun % len(fun)].id) + '\n'
 			pos_fun += 1
-		elif i % 4 == 3:
+		elif i % 4 == 3 and len(iads) > 0:
 			res += str(iads[pos_iads % len(iads)].id) + '\n'
 			pos_iads += 1
 
