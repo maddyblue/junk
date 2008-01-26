@@ -82,6 +82,8 @@ class Ad(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	image = models.FileField(upload_to="uploads/ads")
 	status = models.PositiveSmallIntegerField(default=STATUS_NOTCHECKED, choices=STATUS_CHOICES)
+	category_iads = models.BooleanField()
+	category_fun = models.BooleanField()
 
 	def __unicode__(self):
 		return str(self.user) + ': ' + str(self.name)

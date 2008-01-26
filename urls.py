@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 	(r'^ads/checkoutdata/$', 'darc.ads.views.checkoutdata'),
 	(r'^ads/checkout/$', 'darc.ads.views.checkout'),
 	(r'^mod/$', 'darc.mod.views.index'),
+	(r'^mod/categories/$', 'darc.mod.views.categories'),
 	(r'^mod/checkads/$', 'darc.mod.views.checkads'),
 	(r'^mod/s3/$', 'darc.mod.views.s3'),
 

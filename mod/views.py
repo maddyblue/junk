@@ -65,3 +65,10 @@ def checkads(request):
 	ads = Ad.objects.filter(status=STATUS_NOTCHECKED)
 
 	return render(request, 'mod/check.html', {'ads': ads, 'done': done})
+
+@permission_required('ads.change_ad')
+def categories(request):
+	iads = Ad.objects.filter(category_iads=True)
+	fun = Ad.objects.filter(category_fun=True)
+
+	return render(request, 'mod/categories.html', {'iads': iads, 'fun': fun})

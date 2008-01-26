@@ -1,0 +1,67 @@
+{% extends "mod/default.html" %}
+
+{% block title %}
+
+ - Categories
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Categories</h1>
+
+<h2>iAds</h2>
+
+{% if iads %}
+
+{% for ad in iads %}
+<table border="0" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<a href="/uploads/ads/{{ ad.id }}"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="" border="0" /></a>
+		</td>
+		<td>
+			user: {{ ad.user }}<br />
+			ad name: {{ ad.name }}<br />
+			type: {{ ad.mimetype }}<br />
+			size: {{ ad.filesize|filesizeformat }}<br />
+			date uploaded: {{ ad.date|date:"D, j M y" }}
+		</td>
+	</tr>
+</table>
+{% endfor %}
+
+{% else %}
+
+<p>Nothing in iAds.</p>
+
+{% endif %}
+
+<h2>Fun</h2>
+
+{% if fun %}
+
+{% for ad in fun %}
+<table border="0" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<a href="/uploads/ads/{{ ad.id }}"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="" border="0" /></a>
+		</td>
+		<td>
+			user: {{ ad.user }}<br />
+			ad name: {{ ad.name }}<br />
+			type: {{ ad.mimetype }}<br />
+			size: {{ ad.filesize|filesizeformat }}<br />
+			date uploaded: {{ ad.date|date:"D, j M y" }}
+		</td>
+	</tr>
+</table>
+{% endfor %}
+
+{% else %}
+
+<p>Nothing in Fun.</p>
+
+{% endif %}
+
+{% endblock %}
