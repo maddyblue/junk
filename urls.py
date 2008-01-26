@@ -16,6 +16,8 @@ urlpatterns = patterns('',
 	(r'^mod/categories/$', 'darc.mod.views.categories'),
 	(r'^mod/checkads/$', 'darc.mod.views.checkads'),
 	(r'^mod/s3/$', 'darc.mod.views.s3'),
+	(r'^mod/users/$', 'darc.mod.views.users'),
+	(r'^mod/users/(?P<user_id>\d+)/$', 'darc.mod.views.user_detail'),
 
 	(r'^templates/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'templates'}),
 	(r'^uploads/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'uploads'}),

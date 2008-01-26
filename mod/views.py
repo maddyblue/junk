@@ -2,6 +2,8 @@ import S3
 from darc.ads.models import *
 from darc.main.views import render
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 @permission_required('ads.change_ad')
 def index(request):
@@ -72,3 +74,17 @@ def categories(request):
 	fun = Ad.objects.filter(category_fun=True)
 
 	return render(request, 'mod/categories.html', {'iads': iads, 'fun': fun})
+
+@permission_required('ads.change_ad')
+def users(request):
+	users = User.objects.all()
+
+	return render(request, 'mod/users.html', {'users': users})
+
+@permission_required('ads.change_ad')
+def user_detail(request, user_id):
+	u = get_object_or_404(User, pk=user_id)
+	ads = Ad.objects.filter(user=u)
+	res = Reservation.objects.filter(user=u)
+
+	return render(request, 'mod/user_detail.html', {'u': u, 'ads': ads, 'res': res})

@@ -1,0 +1,97 @@
+{% extends "mod/default.html" %}
+
+{% block title %}
+
+ - User Details
+
+{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" href="/templates/megapage/megapage.css" type="text/css" />
+<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="/templates/megapage/iehacks.css" />
+<![endif]-->
+
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ u.username }}</h1>
+
+<h2>Details</h2>
+
+<ul>
+	<li><b>Username:</b> {{ u.username }}</li>
+	<li><b>Email:</b> {{ u.email }}</li>
+	<li><b>Last login:</b> {{ u.last_login|date:"j M, h:i A" }}</li>
+	<li><b>Date joined:</b> {{ u.date_joined|date:"j M, h:i A" }}</li>
+</ul>
+
+<h2>Ads</h2>
+
+{% for ad in ads %}
+<table border="0" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<a href="/uploads/ads/{{ ad.id }}"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="" border="0" /></a>
+		</td>
+		<td>
+			status: {{ ad.get_status_display }}<br />
+			ad name: {{ ad.name }}<br />
+			type: {{ ad.mimetype }}<br />
+			size: {{ ad.filesize|filesizeformat }}<br />
+			date uploaded: {{ ad.date|date:"D, j M y" }}
+		</td>
+	</tr>
+</table>
+{% endfor %}
+
+<h2>Reservations</h2>
+
+{% for i in res %}
+
+<div class="panel">
+	<div class="wrapper">
+		<div class="cartbox">
+			<div class="cartbox-left">
+				<img src="/templates/megapage/images/cartbox-left.jpg" alt="" />
+			</div>
+			<div class="cartbox-middle">
+				<div class="minititle">
+					<div class="minicombo">
+						Combo {{ i.combo }}
+					</div>
+					<div class="minicost">
+						$<span>0</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="minithumbs">
+					<div class="leftminithumb">
+						<img src="/uploads/ads/{{ i.ad.id }}_tn.jpg" alt="{{ i.id }}" />
+					</div>
+					<div class="rightminithumb">
+						<img src="/uploads/locations/{{ i.location.id }}_tn.jpg" alt="{{ i.location }}" />
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="minidate" style="text-align: center;">
+					<span>start: {{ i.start|date:"D, j M Y" }}</span><br />
+					<span>end: {{ i.end|date:"D, j M Y" }}</span>
+				</div>
+			</div>
+			<div class="cartbox-right">
+				<img src="/templates/megapage/images/cartbox-right.jpg" alt="" />
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if not forloop.last %}
+<br />
+{% endif %}
+
+{% endfor %}
+
+{% endblock %}
