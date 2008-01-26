@@ -74,6 +74,7 @@ INSTALLED_APPS = (
 	'darc.ads',
 	'darc.blog',
 	'darc.main',
+	'darc.mod',
 	'django.contrib.admin',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',

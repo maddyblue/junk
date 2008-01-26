@@ -1,4 +1,4 @@
-{% extends "ads/default.html" %}
+{% extends "mod/default.html" %}
 
 {% block title %}
 
@@ -12,7 +12,7 @@
 
 <p>{{ done }} ad{{ done|pluralize }} marked good.</p>
 
-<p>Proceed to the <a href="{% url darc.ads.views.update_s3 %}">S3 Upload page</a>.
+<p>Proceed to the <a href="{% url darc.mod.views.s3 %}">S3 Upload page</a>.
 
 {% endif %}
 

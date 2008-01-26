@@ -3,56 +3,14 @@ import math
 import os
 import os.path
 import sys
-import S3
 from darc.ads.models import *
 from darc.main.views import render
 from django import newforms as forms
 from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
-
-def upload_s3(fname, mimetype, uname=''):
-	if not uname:
-		uname = os.path.basename(fname)
-
-	filedata = open(fname, 'rb').read()
-
-	conn = S3.AWSAuthConnection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-	conn.put(settings.BUCKET_NAME, uname, S3.S3Object(filedata),
-		{'x-amz-acl': 'public-read', 'Content-Type': mimetype})
-
-@permission_required('ads.change_ad')
-def update_s3(request):
-	ads = Ad.objects.filter(status=STATUS_CHECKED)
-
-	if request.method == 'POST':
-		done = []
-		error = []
-
-		for a in ads:
-			filename = settings.MEDIA_ROOT + 'uploads/ads/' + str(a.id)
-
-			if not os.path.isfile(filename):
-				continue
-
-			try:
-				a.status = STATUS_UPLOADING
-				a.save()
-				upload_s3(filename, a.mimetype)
-			except:
-				a.status = STATUS_CHECKED
-				a.save()
-				error.append([a, sys.exc_info()])
-			else:
-				a.status = STATUS_DONE
-				a.save()
-				done.append(a)
-
-		return render(request, 'ads/s3-upload.html', {'done': done, 'error': error})
-	else:
-		return render(request, 'ads/s3-todo.html', {'ads': ads})
 
 def list(request, loc_id):
 	Terminal.objects.create(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
@@ -144,24 +102,6 @@ def checkout(request):
 	else:
 		r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('combo')
 		return render(request, 'ads/checkout.html', {'r': r})
-
-@permission_required('ads.change_ad')
-def mod(request):
-	done = 0
-
-	for k, v in request.POST.iteritems():
-		if v[0] == 'on':
-			try:
-				a = Ad.objects.get(id=int(k))
-				a.status = STATUS_CHECKED
-				a.save()
-				done += 1
-			except:
-				pass
-
-	ads = Ad.objects.filter(status=STATUS_NOTCHECKED)
-
-	return render(request, 'ads/check.html', {'ads': ads, 'done': done})
 
 @login_required
 def upload(request):

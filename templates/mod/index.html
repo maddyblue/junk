@@ -1,0 +1,9 @@
+{% extends "mod/default.html" %}
+
+{% block content %}
+
+<p/><a href="/admin/">Django Admin</a>
+<p/><a href="{% url darc.mod.views.checkads %}">Check new ads</a>
+<p/><a href="{% url darc.mod.views.s3 %}">Upload ads to S3</a>
+
+{% endblock %}
