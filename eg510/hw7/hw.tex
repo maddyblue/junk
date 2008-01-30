@@ -1,0 +1,190 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\begin{document}
+
+\begin{flushright}
+Matt Jibson \\
+EG 510 \\
+HW 7
+\end{flushright}
+
+1a. Problem:
+
+\begin{displaymath}
+\begin{array}{ll}
+\textrm{maximize} & z = 3x_1 + 13x_2 + 13x_3 \\
+\textrm{subject to} & x_1 + x_2 \le 7\\
+& x_1 + 3x_2 + 2x_3 \le 15 \\
+& 2x_2 + 3x_3 \le 9 \\
+& x_1, x_2, x_3 \ge 0
+\end{array}
+\end{displaymath}
+
+with optimal basis $\{x_1, x_2, x_3\}$ and
+
+\begin{displaymath}
+B^{-1} = \left( \begin{array}{rrr}
+5/2 & -3/2 & 1 \\
+-3/2 & 3/2 & -1 \\
+1 & -1 & 1
+\end{array} \right)
+\end{displaymath}
+
+First convert to standard form:
+
+\begin{displaymath}
+\begin{array}{ll}
+\textrm{minimize} & \hat{z} = -3x_1 - 13x_2 - 13x_3 \\
+\textrm{subject to} & x_1 + x_2 + x_4 = 7\\
+& x_1 + 3x_2 + 2x_3 + x_5 = 15 \\
+& 2x_2 + 3x_3 + x_6 = 9\\
+& x_1, x_2, x_3, x_4, x_5, x_6 \ge 0
+\end{array}
+\end{displaymath}
+
+Calculate solution from given optimal basis:
+
+\begin{displaymath}
+\textbf{B}^{-1}\textbf{b} = \left( \begin{array}{rrr}
+5/2 & -3/2 & 1 \\
+-3/2 & 3/2 & -1 \\
+1 & -1 & 1
+\end{array} \right)
+\left( \begin{array}{c} 7 \\ 15 \\ 9 \end{array} \right) = \left( \begin{array}{c} 4 \\ 3 \\ 1 \end{array} \right) = \textbf{x}_B
+\end{displaymath}
+
+\begin{displaymath}
+\hat{z} = -3(4) - 13(3) - 13(1) = -64
+\end{displaymath}
+
+Calculate optimum dual variables:
+
+\begin{displaymath}
+\textbf{c}_B^T \textbf{B}^{-1} =
+\left( \begin{array}{ccc} -3 & -13 & -13 \end{array} \right)
+\left( \begin{array}{rrr}
+5/2 & -3/2 & 1 \\
+-3/2 & 3/2 & -1 \\
+1 & -1 & 1
+\end{array} \right) =
+\left( \begin{array}{c} -1 \\ -2 \\ -3 \end{array} \right) =
+\textbf{y}^T
+\end{displaymath}
+
+1b. Tableau, calculated with new constraint, and row 2 multiplied by -1:
+
+\begin{displaymath}
+\begin{array}{c|rrrrrr|r}
+\textbf{basic} & x_1 & x_2 & x_3 & x_4 & x_5 & x_6 & \textbf{b} \\ 
+\hline
+-z & 0 & 0 & 0 & -40 & 37 & -29 & 0 \\
+\hline
+x_1 & 1 & 0 & 0 & 5/2 & -3/2 & 1 & 23/2 \\
+x_2 & 0 & -1 & 0 & 3/2 & -3/2 & 1 & 9/2 \\
+x_3 & 0 & 0 & 1 & 1 & -1 & 1 & 6
+\end{array}
+\end{displaymath}
+
+Pivot $x_4$ in, $x_2$ out:
+
+\begin{displaymath}
+\begin{array}{c|rrrrrr|r}
+\textbf{basic} & x_1 & x_2 & x_3 & x_4 & x_5 & x_6 & \textbf{b} \\ 
+\hline
+-z & 0 & 80/3 & 0 & 0 & 3 & 7/3 & -120 \\
+\hline
+x_1 & 1 & 5/3 & 0 & 0 & 1 & -2/3 & 4 \\
+x_4 & 0 & -2/3 & 0 & 1 & -1 & 2/3 & 3 \\
+x_3 & 0 & 2/3 & 1 & 0 & 0 & 1/3 & 3
+\end{array}
+\end{displaymath}
+
+1c. Calculate range:
+
+\begin{displaymath}
+\textbf{B}^{-1}\{\textbf{b} + \delta\} = \left( \begin{array}{rrr}
+5/2 & -3/2 & 1 \\
+-3/2 & 3/2 & -1 \\
+1 & -1 & 1
+\end{array} \right)
+\left( \begin{array}{c} 7 + x \\ 15 \\ 9 \end{array} \right) = \left( \begin{array}{c} 4 + 2.5 \delta \\ 3 - 1.5 \delta \\ 1 + \delta \end{array} \right) \Rightarrow
+\begin{array}{l} \delta \ge -1.6 \\ \delta \le 2 \\ \delta \ge -1 \end{array} \Rightarrow -1 \le \delta \le 2
+\end{displaymath}
+
+1d. Tableau:
+
+\begin{displaymath}
+\begin{array}{c|rrrrrr|r}
+\textbf{basic} & x_1 & x_2 & x_3 & x_4 & x_5 & x_6 & \textbf{b} \\ 
+\hline
+-z & 0 & 0 & 0 & -43/2 & 49/2 & -12 & 0 \\
+\hline
+x_1 & 1 & 0 & 0 & 5/2 & -3/2 & 1 & 4 \\
+x_2 & 0 & 1 & 0 & -3/2 & 3/2 & -1 & 3 \\
+x_3 & 0 & 0 & 1 & 1 & -1 & 1 & 1
+\end{array}
+\end{displaymath}
+
+$x_4$ enters, $x_3$ leaves:
+
+\begin{displaymath}
+\begin{array}{c|rrrrrr|r}
+\textbf{basic} & x_1 & x_2 & x_3 & x_4 & x_5 & x_6 & \textbf{b} \\ 
+\hline
+-z & 0 & 0 & 43/2 & 0 & 3 & 9.5 & 43/2 \\
+\hline
+x_1 & 1 & 0 & -5/2 & 0 & 1 & -3/2 & 3/2 \\
+x_2 & 0 & 1 & 3/2 & 0 & 0 & 1/2 & 9/2 \\
+x_4 & 0 & 0 & 1 & 1 & -1 & 1 & 1
+\end{array}
+\end{displaymath}
+
+1e. Calculate range:
+
+\begin{displaymath}
+\left( \begin{array}{ccc} 4 & 3 & 1 \end{array} \right) \ge
+\left( \begin{array}{ccc} \delta & 0 & 0 \end{array} \right)
+\left( \begin{array}{rrr}
+5/2 & -3/2 & 1 \\
+-3/2 & 3/2 & -1 \\
+1 & -1 & 1
+\end{array} \right) \Rightarrow
+\left( \begin{array}{ccc} 4 & 3 & 1 \end{array} \right) \ge
+\left( \begin{array}{ccc} 2.5 \delta & -1.5 \delta & \delta \end{array} \right) \Rightarrow
+\end{displaymath}
+
+\begin{displaymath}
+1.6 \ge \delta, -2 \ge \delta, 1 \ge \delta \Rightarrow
+\delta < -2
+\end{displaymath}
+
+1f. Calculate new reduced costs:
+
+\begin{displaymath}
+\textbf{B}^{-1} \textbf{c}_B =
+\left( \begin{array}{rrrr}
+5/2 & -3/2 & 1 & 2 \\
+-3/2 & 3/2 & -1 & -1 \\
+1 & -1 & 1 & 5
+\end{array} \right)
+\left( \begin{array}{c} -3 \\ -13 \\ -13 \\ -5 \end{array} \right) =
+\left( \begin{array}{c} -11 \\ 3 \\ -28 \end{array} \right)
+\end{displaymath}
+
+Since the second cost is positive, the basis is not optimal. \\
+
+1g. $4 - 3 + 2(1) = 3 \le 10$, hence constraint is inactive. Solution remains the same, with slack variable $x_7 = 7$.
+
+%\begin{displaymath}
+%\begin{array}{ll}
+%\textrm{minimize} & \hat{z} = -3x_1 - 13x_2 - 13x_3 \\
+%\textrm{subject to} & x_1 + x_2 + x_4 = 7\\
+%& x_1 + 3x_2 + 2x_3 + x_5 = 15 \\
+%& 2x_2 + 3x_3 + x_6 = 9 \\
+%& x_1 - x_2 + 2x_3 + x_7 = 10 \\
+%& x_1, x_2, x_3, x_4, x_5, x_6, x_7 \ge 0
+%\end{array}
+%\end{displaymath}
+
+\end{document}

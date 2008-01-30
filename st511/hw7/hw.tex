@@ -1,0 +1,345 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\begin{document}
+
+\begin{flushright}
+Matt Jibson \\
+ST511 S1 \\
+HW 7
+\end{flushright}
+
+1a:
+
+\begin{verbatim}
+                                        The GLM Procedure
+Dependent Variable: meas
+                                               Sum of
+       Source                      DF         Squares     Mean Square    F Value    Pr > F
+       Model                        4      75.9663257      18.9915814       8.78    <.0001
+       Error                       30      64.9145429       2.1638181
+       Corrected Total             34     140.8808686
+\end{verbatim}
+
+Since $F_{.05, 6, 28} = 2.45 < 8.78$, reject and conclude that there are differences. Residual plot:
+
+\includegraphics[width=0.4\linewidth]{1-resid}
+
+Levene's test:
+
+\begin{verbatim}
+                                        Sum of        Mean
+                  Source        DF     Squares      Square    F Value    Pr > F
+                  trt            4      9.1644      2.2911       3.42    0.0205
+                  Error         30     20.1245      0.6708
+\end{verbatim}
+
+1b. QQ plot:
+
+\includegraphics[width=0.4\linewidth]{1-qq}
+
+\begin{verbatim}
+                                      Tests for Normality
+
+                   Test                  --Statistic---    -----p Value------
+
+                   Shapiro-Wilk          W     0.972664    Pr < W      0.5205
+                   Kolmogorov-Smirnov    D     0.114139    Pr > D     >0.1500
+                   Cramer-von Mises      W-Sq  0.097056    Pr > W-Sq   0.1214
+                   Anderson-Darling      A-Sq  0.502534    Pr > A-Sq   0.2014
+\end{verbatim}
+
+Conclude that data is normally distributed. \\
+
+1c.
+
+\begin{verbatim}
+                                     t Tests (LSD) for meas
+
+                              Alpha                            0.05
+                              Error Degrees of Freedom           30
+                              Error Mean Square            2.163818
+                              Critical Value of t           2.04227
+                              Least Significant Difference   1.6058
+
+
+                   Means with the same letter are not significantly different.
+
+
+                           t Grouping          Mean      N    trt
+
+                                    A        5.4171      7    5
+                                    A
+                               B    A        4.7443      7    2
+                               B
+                               B    C        3.4329      7    4
+                                    C
+                                    C        3.0000      7    3
+
+                                    D        1.1786      7    1
+\end{verbatim}
+
+2a. Original scale:
+
+\begin{verbatim}
+                                               Sum of
+       Source                      DF         Squares     Mean Square    F Value    Pr > F
+
+       Model                        3     5793.100000     1931.033333     129.70    <.0001
+
+       Error                       36      536.000000       14.888889
+
+       Corrected Total             39     6329.100000
+\end{verbatim}
+
+\includegraphics[width=0.4\linewidth]{2-ppm-resid}
+
+YT scale:
+
+\begin{verbatim}
+                                               Sum of
+       Source                      DF         Squares     Mean Square    F Value    Pr > F
+
+       Model                        3     113.0952731      37.6984244     153.30    <.0001
+
+       Error                       36       8.8526665       0.2459074
+
+       Corrected Total             39     121.9479396
+\end{verbatim}
+
+\includegraphics[width=0.4\linewidth]{2-ppmt-resid}
+
+2bi.
+
+\begin{verbatim}
+       Contrast                    DF     Contrast SS     Mean Square    F Value    Pr > F
+
+       10 vs 1 and 5                1     50.58461199     50.58461199     205.71    <.0001
+       5 vs 1                       1      2.11106280      2.11106280       8.58    0.0059
+\end{verbatim}
+
+Conclude that these are different. \\
+
+2biii. $(-.5)(-1)[1] + (1)(-1)[5] + (-1)(0)[10] + (0)(0)[20] \ne 0$. Contrasts are not mutually orthogonal. \\
+
+2c.
+
+\begin{verbatim}
+                                        The GLM Procedure
+
+                                     t Tests (LSD) for ppmt
+
+NOTE: This test controls the Type I comparisonwise error rate, not the experimentwise error rate.
+
+
+                              Alpha                            0.05
+                              Error Degrees of Freedom           36
+                              Error Mean Square            0.245907
+                              Critical Value of t           2.02809
+                              Least Significant Difference   0.4498
+
+
+                   Means with the same letter are not significantly different.
+
+
+                        t Grouping          Mean      N    dist
+
+                                 A        5.6178     10    20KM
+
+                                 B        4.6164     10    10KM
+
+                                 C        2.1867     10    05KM
+
+                                 D        1.5369     10    01KM
+                                         The SAS System        13:02 Friday, October 26, 2007  49
+
+                                        The GLM Procedure
+                                       Least Squares Means
+
+                                                          LSMEAN
+                                dist     ppmt LSMEAN      Number
+
+                                01KM      1.53691663           1
+                                05KM      2.18669549           2
+                                10KM      4.61638258           3
+                                20KM      5.61782835           4
+
+
+                              Least Squares Means for Effect dist
+                            t for H0: LSMean(i)=LSMean(j) / Pr > |t|
+
+                                    Dependent Variable: ppmt
+
+                  i/j              1             2             3             4
+
+                     1                    -2.92998      -13.8859      -18.4016
+                                            0.0059        <.0001        <.0001
+                     2      2.929981                    -10.9559      -15.4717
+                              0.0059                      <.0001        <.0001
+                     3      13.88592      10.95594                    -4.51572
+                              <.0001        <.0001                      <.0001
+                     4      18.40163      15.47165      4.515716
+                              <.0001        <.0001        <.0001
+
+
+NOTE: To ensure overall protection level, only probabilities associated with pre-planned
+      comparisons should be used.
+                                         The SAS System        13:02 Friday, October 26, 2007  50
+
+                                        The GLM Procedure
+
+                                     t Tests (LSD) for ppmt
+
+NOTE: This test controls the Type I comparisonwise error rate, not the experimentwise error rate.
+
+
+                              Alpha                            0.05
+                              Error Degrees of Freedom           36
+                              Error Mean Square            0.245907
+                              Critical Value of t           2.02809
+                              Least Significant Difference   0.4498
+
+
+                   Means with the same letter are not significantly different.
+
+
+                        t Grouping          Mean      N    dist
+
+                                 A        5.6178     10    20KM
+
+                                 B        4.6164     10    10KM
+
+                                 C        2.1867     10    05KM
+
+                                 D        1.5369     10    01KM
+                                         The SAS System        13:02 Friday, October 26, 2007  51
+
+                                        The GLM Procedure
+
+                               Student-Newman-Keuls Test for ppmt
+
+NOTE: This test controls the Type I experimentwise error rate under the complete null hypothesis
+                             but not under partial null hypotheses.
+
+
+                                Alpha                        0.05
+                                Error Degrees of Freedom       36
+                                Error Mean Square        0.245907
+
+
+                  Number of Means              2              3              4
+                  Critical Range       0.4497724      0.5420693      0.5972744
+
+
+                   Means with the same letter are not significantly different.
+
+
+                      SNK Grouping          Mean      N    dist
+
+                                 A        5.6178     10    20KM
+
+                                 B        4.6164     10    10KM
+
+                                 C        2.1867     10    05KM
+
+                                 D        1.5369     10    01KM
+                                         The SAS System        13:02 Friday, October 26, 2007  52
+
+                                        The GLM Procedure
+
+                     Ryan-Einot-Gabriel-Welsch Multiple Range Test for ppmt
+
+                 NOTE: This test controls the Type I experimentwise error rate.
+
+
+                                Alpha                        0.05
+                                Error Degrees of Freedom       36
+                                Error Mean Square        0.245907
+
+
+                  Number of Means              2              3              4
+                  Critical Range       0.5175108      0.5420693      0.5972744
+
+
+                   Means with the same letter are not significantly different.
+
+
+                    REGWQ Grouping          Mean      N    dist
+
+                                 A        5.6178     10    20KM
+
+                                 B        4.6164     10    10KM
+
+                                 C        2.1867     10    05KM
+
+                                 D        1.5369     10    01KM
+                                         The SAS System        13:02 Friday, October 26, 2007  53
+
+                                        The GLM Procedure
+
+                          Tukey's Studentized Range (HSD) Test for ppmt
+
+  NOTE: This test controls the Type I experimentwise error rate, but it generally has a higher
+                                 Type II error rate than REGWQ.
+
+
+                          Alpha                                   0.05
+                          Error Degrees of Freedom                  36
+                          Error Mean Square                   0.245907
+                          Critical Value of Studentized Range  3.80880
+                          Minimum Significant Difference        0.5973
+
+
+                   Means with the same letter are not significantly different.
+
+
+                    Tukey Grouping          Mean      N    dist
+
+                                 A        5.6178     10    20KM
+
+                                 B        4.6164     10    10KM
+
+                                 C        2.1867     10    05KM
+
+                                 D        1.5369     10    01KM
+\end{verbatim}
+
+2e.
+
+\begin{verbatim}
+                                        The GLM Procedure
+
+                          Tukey's Studentized Range (HSD) Test for ppmt
+
+                 NOTE: This test controls the Type I experimentwise error rate.
+
+
+                          Alpha                                   0.05
+                          Error Degrees of Freedom                  36
+                          Error Mean Square                   0.245907
+                          Critical Value of Studentized Range  3.80880
+                          Minimum Significant Difference        0.5973
+
+
+                 Comparisons significant at the 0.05 level are indicated by ***.
+
+
+                                      Difference
+                          dist           Between     Simultaneous 95%
+                       Comparison          Means    Confidence Limits
+
+                       20KM - 10KM        1.0014      0.4042   1.5987  ***
+                       20KM - 05KM        3.4311      2.8339   4.0284  ***
+                       20KM - 01KM        4.0809      3.4836   4.6782  ***
+                       10KM - 20KM       -1.0014     -1.5987  -0.4042  ***
+                       10KM - 05KM        2.4297      1.8324   3.0270  ***
+                       10KM - 01KM        3.0795      2.4822   3.6767  ***
+                       05KM - 20KM       -3.4311     -4.0284  -2.8339  ***
+                       05KM - 10KM       -2.4297     -3.0270  -1.8324  ***
+                       05KM - 01KM        0.6498      0.0525   1.2471  ***
+                       01KM - 20KM       -4.0809     -4.6782  -3.4836  ***
+                       01KM - 10KM       -3.0795     -3.6767  -2.4822  ***
+                       01KM - 05KM       -0.6498     -1.2471  -0.0525  ***
+\end{verbatim}
+
+\end{document}
