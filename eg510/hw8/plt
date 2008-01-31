@@ -1,0 +1,6 @@
+set terminal png
+set output "out1.png"
+
+plot [0:6] 0.2331 * x + 1.1787 title "p=2" with points, \
+	0.2790698 * x + 1 title "p=1", \
+	0.2173913 * x + 1.286957 title "p=inf" with linespoints
