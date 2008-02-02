@@ -88,6 +88,7 @@ def detail(request, result_id):
 def upload(request):
 	months = {
 		'Jan': 1,
+		'Feb': 2,
 		'Sept': 9,
 		'Oct': 10,
 		'Nov': 11,
