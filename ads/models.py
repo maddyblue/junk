@@ -38,6 +38,8 @@ class Location(models.Model):
 	image = models.FileField(blank=True, upload_to=upload_dir)
 	map = models.FileField(blank=True, upload_to=upload_dir)
 	screen = models.ForeignKey(Screen, blank=True, null=True)
+	time_off = models.TimeField(null=True, blank=True)
+	time_on = models.TimeField(null=True, blank=True)
 
 	def save(self):
 		super(Location, self).save()

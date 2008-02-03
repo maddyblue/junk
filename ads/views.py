@@ -45,8 +45,12 @@ def info(request, loc_id):
 	res = ''
 
 	if loc.screen is not None:
-		res += str(loc.screen.width) + '\n'
-		res += str(loc.screen.height) + '\n'
+		res += 'w' + str(loc.screen.width) + '\n'
+		res += 'h' + str(loc.screen.height) + '\n'
+
+	if loc.time_on is not None and loc.time_off is not None:
+		res += 'n' + str(loc.time_on) + '\n'
+		res += 'f' + str(loc.time_off) + '\n'
 
 	return HttpResponse(res[:-1])
 
