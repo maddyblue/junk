@@ -1,6 +1,5 @@
 \documentclass{article}
 \usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
-\usepackage{graphicx}
 \usepackage{amsmath}
 \begin{document}
 
@@ -19,9 +18,17 @@ HW 1
 		\item $E(X) = \sum_{k=0}^{\infty} k \frac{1}{6} (\frac{5}{6})^{k-1} = 6$
 	\end{enumerate}
 \item %2
-	P(X=j) = $\binom{4}{j}$, P(Y=k) = $\binom{13}{k}$
+	$P(Y=0) = 0.22153, P(Y=1) = 0.41142, P(Y=2) = 0.2742, P(Y=3) = 0.0815, P(Y=4) = 0.0107, P(Y=5) = 0.000495, P(Y \ge 6) = 0$ \\
+	$P(X=0) = 0.6588, P(Y=1) = 0.2995, P(Y=2) = 0.0399, P(Y=3) = 0.00174, P(X=4) = 0.0000185, P(Y \ge 5) = 0$
+
+	%$P(X=j) = \binom{4}{j}$, P(Y=k) = \binom{13}{k}$
 \item %3
-	P(k heads in N tosses) =
+	P(k Heads $|$ N tosses) = $\binom{N}{k} p^k (1-p)^{N-k}$ \\
+	% P(j Tails $|$ N tosses) = $\binom{N}{j} (1-p)^j p^{N-j}$ \\
+	P(j Tails $|$ N tosses) = $1 - \binom{N}{N - j} p^{N - j} (1-p)^j, k = N - j \Rightarrow \binom{N}{k} p^k (1-p)^{N-k}$ \\
+	P(j Tails $\cap$ k Heads) =  \\
+	P(j Tails) P(k Heads) = $\binom{N}{k} p^k (1-p)^{N-k} * (1 - \binom{N}{k} p^k (1-p)^{N-k}) = $
+
 \item %4
 	$P(testPos | haveHep) = 0.99 = \frac{P(testPos \cap haveHep)}{P(haveHep)} = \frac{X}{0.0001} \Rightarrow P(testPos \cap haveHep) = 0.000099 \\
 	P(testPos) = (0.99 * 1 + 0.05 * 9999) / 10000 = 0.050094 $\\
@@ -32,10 +39,12 @@ HW 1
 		\item $P(all H | one H) = \frac{P(all H \cap one H)}{P(one H)} = \frac{P(\{HH\})}{P(\{HH, HT, TH\})} = \frac{1/4}{3/4} = \frac{1}{3}$
 	\end{enumerate}
 \item %6
-	cond pmf: $P_{T|N}(t|n) = \frac{P(T=t, N=n)}{P(N=n)} = \frac{e^{- \lambda} \lambda^t / t!}{1/n} \\ % e^{- \lambda} \lambda^n / n!
-	E(T|N) = \\
-	E(E(T|N)) = E(T) = N \lambda$
+	$E(T|N) = N \lambda \\
+	E(E(T|N)) = E(T) = \frac{M}{2} \lambda$ \\
 
+	Above are my answers. But, during my work I came up with the following equations. Are they right? \\
+	cond pmf: $P_{T|N}(t|n) = \frac{P(T=t, N=n)}{P(N=n)} = \frac{e^{- \lambda} \lambda^t / t!}{1/n} \\
+	E(T|N) = \Sigma_{j = 0}^\infty j P_{T|N}(j|n) = \Sigma_{j = 0}^\infty j \frac{e^{- \lambda} \lambda^j / j!}{1/n} = N \lambda$
 \end{enumerate}
 
 \end{document}
