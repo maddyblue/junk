@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\begin{document}
+
+Notes - 19 feb
+
+On homework, should be $x_m$, m is index in Markov chain.
+
+Continuing on Branching Processes.
+
+Definition 2.5.2 - Branching Process
+Let $\{Z_{nj} n \ge 1, j \ge 1\}$ be iid non-negative integer-value random variables with pmf ${p_k}$. Below, if a random sum has zero summands we give it the value zero. The branching process $X_n$ is defined (2.5.1) $X_0 = 1, X_1 = Z_{1, X_0}, X_2 = Z_{21} + Z_{22} + \dots + Z_{2X_1}, \dots, X_n = Z_{n1} + Z_{n2} + \dots + Z_{nX_{n-1}}$. $Z_{nj} = $ number of members in nth generation who are offspring of the jth member of the n-1st generation. Note: if $X_n = 0$, then $X_{n+1} = 0$, so 0 is absorbing.
+
+Theorem 2.5.2 - $X_n$ is a Markov chain. Proof: excercise.
+
+The branching process is defined in terms of random sums. We develop a few more useful facts.
+
+Definition 2.5.3 - Random Sums - Let $Y_1, Y_2, \dots$ be a sequence of iid. r.v. Let $N$ be a non-negative, integer-valued r.v. independent of $\{Y_j\}$. Let $N$ have pmf $p_N(n) = p(N = n), n = 0, 1, 2, \dots$. Set $X = 0 for N=0, Y_1 + \dots + Y_N for N > 0$. $X$ is a random sum.
+
+Theorem 2.5.3 - Assume that $\{Y_i\}$ and $N$ have finite moments. $E(Y_i) = \mu, Var(Y_i) = \sigma^2, E(N) = \nu, Var(N) = \tau^2$. Then (2.5.2) $E(X) = \mu \nu$. (2.5.3) $Var(X) = \nu \sigma^2 + \mu^2 \tau^2$. Proof: $E(X) = \Sigma_{n=0}^{\infty} E(X|N=n) p_N(n) = \Sigma_{n=0}^{\infty} E(Y_1 + \dots + Y_N|N=n)p_N(n) = \Sigma_{n=0}^{\infty}E(Y_1 + \dots + Y_n) p_N(n) = \mu \Sigma_{n=0}^{\infty}n p_N(n)$. (2.5.3) is excercise.
+
+Little notation: if $Y$ is a random variable with pmf $\{p_k\}$, we define $\mu = E(Y), \sigma^2 = Var(Y)$.
+
+Theorem 2.5.4 - Let $X_n$ be a branching process with pmf $\{P_k\}$ and assume $\mu, \sigma^2$ are finitie. Let $M_{(n)}, V_{(n)}$ be the mean and variance of $X_n$ conditioned on $X_0 = 1$. (2.5.4) $M(n) = \mu^n$. (2.5.5) $V(n) = \sigma^2 \mu^{n-1} * \{n for \mu = 1, \frac{1 - \mu^n}{1 - \mu} for \mu \ne 1$. Proof: using (2.5.2) in (2.5.1) gives (2.5.6) $\{M(n+1) = \mu M(n), V(n+1) = \sigma^2 M(n) + \mu^2 V(n). X_0 = 1, M(0) = 1, V(0) = 0$. Now iterate. $M(n+1) = \mu M(n) = \mu \mu M(n - 1) = \mu^3 M(n-2) = \dots$. This gives the result.
+
+The mean population increases geometrically if $\mu > 1$, decreases geometrically if $\mu < 1$, and is fixed if $\mu = 1$. The variance increases or decreases geometrically if $\mu > 1$ or $\mu < 1$. It increases linearly if $\mu = 1$.
+
+The probability of extinction:
+
+Definition 2.5.4 - The random time of extinction $N$ is the first time for which $X_N = 0$. This is an absorption time. We let (2.5.7) $U_n = P(N \le n | X_0 = 1) = P(X_n = 0 | X_0 = 1)$ be the probability of extinction at or prior to the nth generation, conditioned on $X_0 = 1$.
+
+Theorem 2.5.5 - We have (2.5.8) $U_0 = 0, U_1 = P_0, U_n = \Sigma_{k = 0}^{\infty} P_k (U_{n-1})^k, n \ge 2$. Proof: the single parent $X_0$ has $Z_{1, X_0} = k$ offspring. These offspring in turn have more offspring. If the original population dies out in $n$ generations, then each of these $k$ offspring lines die out in $n - 1$ generations, or less. The $k$ offspring lines are independent of each other and have the same statistics as the original generation. The probability that one of the $k$ offspring lines dies out is $U_{n-1}$. So the probability that they all die out is $(U_{n-1})^k$. The total law of probability gives (2.5.8).
+
+Example 2.5.3 - $P_0 (1/4), P_1 (1/8), P_2 (1/2), P_3 (1/8), P_4 (0), \dots$.
+
+Recall $\S 1.5$. Recall Thm 1.5.3: if $Y_1, \dots, Y_n$ are indep r.v. having prob. generating functions $P_{Y_1}, \dots, P_{Y_n}$, then the generating function for $X = Y_1 + \dots + Y_n$ is (2.5.9) $P_X(s) = P_{Y_1}(s) \cdots P_{Y_n}(s)$.
+
+Thm 1.5.1: if a r.v. $Y$ has pmf $\{P_k\}$ and prob. generating function $P_Y$, (2.5.10) $\frac{d P_Y(1)}{ds} = P_1 + 2 P_2 + 3 P_3 + \dots = E(Y)$. (2.5.11) $Var(Y) = \frac{d^2 P_Y(s)}{ds^2}|_{s=1} + \frac{d P_Y(s)}{ds}|_{s=1} - (\frac{dP_Y(s)}{ds}|_{s=1})^2$. See $\S$ 9.2 in text.
+
+Theorem 2.5.6 - If $Z_1, Z_2, \dots$ is a sequence of iid r.v. with common generating function $P_Z$ and if $N > 0$ is an integer-valued non-negative r.v. indep of $\{Z_i\}$ with prob generating function $P_N$, then $X = Z_1 + \dots + Z_N$ has prob. generating function (2.5.12) $P_X(s) = P_N(P_Z(s))$. Proof: $P_X(s) = E(s^X) = E(E(s^X|N)) = \Sigma_n E(s^X|N=n) P(N=n) = \Sigma_n E(s^{Z_1 + \dots + Z_n}) P(N=n) = \Sigma_n E(S^{Z_1}) \cdots E(s^{Z_n}) P(N=n) = \Sigma_n (P_Z(s))^n P(N = n) = P_N(P_Z(s))$.
+
+Returning to a branching process $X_n$, we assume the offspring pmf $\{P_k\}$ has generating function $\phi(s) = E(s^{X_1}) = \Sigma_k P_k s^k$. We want the prob. generating function $\phi_n$ for $X_n$.
+
+Theorem 2.5.7 - We have (2.5.13) $\phi_{m+n}(s) = \phi_m(\phi_n(s)) = \phi_n(\phi_m(s))$. (2.5.14) $\phi_n(s) = \phi(\phi(\phi(\dots \phi(s))) \dots )$ (n compositions). Proof: Every member of the $(m+n)$th generation has a unique ancestor in the mth generation. So $X_{m+n} = Z_1 + \dots + Z_{X_m}, Z_i =$ number of members of the (m+n)th generation that descend from the ith member of the mth generation. The $Z_i$ are iid r.v. with the same distribution as $X_n$, by the Markov property. By theorem 2.5.6, $\phi_{m+n}(s) = \phi_m(\phi_{Z_1}(s)), \phi_{Z_1}(s) = \phi_n(s)$.
+
+\end{document}
