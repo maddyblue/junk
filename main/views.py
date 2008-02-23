@@ -47,3 +47,35 @@ def account(request):
 	ads = Ad.objects.filter(user=request.user)
 	reservations = Reservation.objects.filter(user=request.user)
 	return render(request, 'main/account.html', {'ads': ads, 'reservations': reservations})
+
+class PasswordForm(forms.Form):
+	new_password = forms.CharField(max_length=100, widget=forms.PasswordInput)
+	confirm_password = forms.CharField(max_length=100, widget=forms.PasswordInput)
+
+	def clean(self):
+		np = ''
+		cp = ''
+
+		for k, v in self.cleaned_data.iteritems():
+			if k == 'new_password':
+				np = v
+			elif k == 'confirm_password':
+				cp = v
+
+		if np != cp:
+			raise forms.ValidationError('Passwords do not match.')
+
+		return self.cleaned_data
+
+@login_required
+def password_change(request):
+	if request.method == 'POST':
+		form = PasswordForm(request.POST)
+		if form.is_valid():
+			request.user.set_password(form.cleaned_data['new_password'])
+			request.user.save()
+			return render(request, 'main/password-change-done.html')
+	else:
+		form = PasswordForm()
+
+	return render(request, 'main/password-change.html', {'form': form})
