@@ -1,5 +1,6 @@
 import S3
 from darc.ads.models import *
+from darc.ads.views import get_list
 from darc.main.views import render
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
@@ -88,3 +89,13 @@ def user_detail(request, user_id):
 	res = Reservation.objects.filter(user=u)
 
 	return render(request, 'mod/user_detail.html', {'u': u, 'ads': ads, 'res': res})
+
+@permission_required('ads.change_ad')
+def reservations(request):
+	l = Location.objects.all()
+	a = []
+
+	for i in l:
+		a.append((i, get_list(i)))
+
+	return render(request, 'mod/reservations.html', {'a': a})

@@ -12,30 +12,38 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 
-def list(request, loc_id):
-	Terminal.objects.create(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
-
-	loc = get_object_or_404(Location, pk=loc_id)
-
+def get_list(loc):
 	ads = Reservation.objects.filter(location=loc, checkedout=True, start__lte=datetime.date.today(), end__gte=datetime.date.today())
 	iads = Ad.objects.filter(category_iads=True)
 	fun = Ad.objects.filter(category_fun=True)
 
 	pos_iads = 0
 	pos_fun = 0
-	res = ''
+	res = []
 	i = 0
 
 	for a in ads:
-		res += str(a.ad.id) + '\n'
+		res.append(a.ad)
 		i += 1
-		print 'ad: ' + str(a.ad.id)
 		if i % 4 == 1 and len(fun) > 0:
-			res += str(fun[pos_fun % len(fun)].id) + '\n'
+			res.append(fun[pos_fun % len(fun)])
 			pos_fun += 1
 		elif i % 4 == 3 and len(iads) > 0:
-			res += str(iads[pos_iads % len(iads)].id) + '\n'
+			res.append(iads[pos_iads % len(iads)])
 			pos_iads += 1
+
+	return res
+
+def list(request, loc_id):
+	Terminal.objects.create(location=loc_id, ext_ip=request.META['REMOTE_ADDR'], int_ip='0.0.0.0')
+
+	loc = get_object_or_404(Location, pk=loc_id)
+
+	r = get_list(loc)
+
+	res = ''
+	for i in r:
+		res += '%i\n' % i.id
 
 	return HttpResponse(res[:-1])
 
