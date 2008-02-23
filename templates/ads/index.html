@@ -69,7 +69,7 @@ var ad{{ ad.id }} = '<strong>{{ ad.name }}</strong>Uploaded {{ ad.date|naturalda
 {% endfor %}
 
 {% for location in locations %}
-var location{{ location.id}} = '<strong>{{ location.name }}</strong><span class="address">{{ location.address}}<br />{{ location.city }}, {{ location.state }} {{ location.zip }}</span><br /><br /><div class="locationcontent">{{ location.statement }}{% if location.screen %}<br />Screen size: {{ location.screen.width }}x{{ location.screen.height }}{% endif %}{% if location.map %}<br /><img src="/uploads/locations/{{ location.id }}_map.jpg" alt="{{ location.name }}" />{% endif %}</div>';
+var location{{ location.id}} = '<strong>{{ location.name }}</strong><span class="address">{{ location.address}}<br />{{ location.city }}, {{ location.state }} {{ location.zip }}</span><br /><br /><div class="locationcontent">${{ location.cost }}/day<br />{{ location.statement }}{% if location.screen %}<br />Screen size: {{ location.screen.width }}x{{ location.screen.height }}{% endif %}{% if location.map %}<br /><img src="/uploads/locations/{{ location.id }}_map.jpg" alt="{{ location.name }}" />{% endif %}</div>';
 {% endfor %}
 
 //jQuery Calls
@@ -202,13 +202,19 @@ function combineAd(thumb)
 	theAd = thumb; // get which ad is clicked for the addComboToCart function
 }
 
-function combineLocation(thumb,locationNumber)
+function combineLocation(thumb)
 {
+	var locationPrice = [];
+
+	{% for location in locations %}
+	locationPrice[{{ location.id }}] = {{ location.cost }};
+	{% endfor %}
+
 	locationImage = document.getElementById("comboLocation");
 	locationImage.src = "/uploads/locations/" + thumb + "_tn.jpg";
 	cartButton('b'); //Go to the function to enable the Add to Cart button
 	theLocation = thumb;  //Get which location is clicked for the addComboToCart function
-	locNum = locationNumber //Make this passed parameter global
+	theCost = locationPrice[thumb];
 }
 
 var readyA, readyB; // initialize the variables outside the function to avoid a script error
@@ -230,6 +236,7 @@ function cartButton(setter)
 		checkStartDate.length > 0 &&
 		checkEndDate.length > 0)
 	{
+		//alert(endDate - startDate);
 		/*
 		if(checkStartDate > checkEndDate)
 		{
@@ -271,12 +278,6 @@ var bigCost = Number(0);
 
 function addComboToCart()
 {
-	var locationPrice = [];
-
-	{% for location in locations %}
-	locationPrice[{{ location.id }}] = "0";
-	{% endfor %}
-
 	//Clear the combo once they click Add to Cart
 	adImage = document.getElementById("comboAd");
 	adImage.src = "/templates/megapage/images/selectad.jpg";
@@ -288,7 +289,11 @@ function addComboToCart()
 	readyA = "";
 	readyB = "";
 
-	var a = [totalCombos++, 0, theAd, theLocation, checkStartDate, checkEndDate];
+	startDate = new Date(checkStartDate);
+	endDate = new Date(checkEndDate);
+	days = Math.round((endDate - startDate)/(1000*60*60*24) + 1);
+
+	var a = [totalCombos++, theCost * days, theAd, theLocation, checkStartDate, checkEndDate];
 
 	combos.push(a);
 
@@ -308,7 +313,7 @@ function addComboToCart()
 	theMargin -= 5;
 
 	//Build the Cartbox
-	newCartBox = '<div class="panel"><div class="wrapper"><div class="cartbox" id="cartbox' + a[IdxId] + '"><div class="cartbox-left"><img src="/templates/megapage/images/cartbox-left.jpg" alt="" /></div><div class="cartbox-middle"><div class="minititle"><div class="minicombo" id="totalCombo' + a[IdxId] + '">Combo ' + (a[IdxId] + 1) + '</div><div class="minicost">$<span id="totalCost' + a[IdxId] + '">' + a[IdxCost] + '</span></div><div class="clearfix"></div></div><div class="minithumbs"><div class="leftminithumb"><img src="/uploads/ads/' + a[IdxAd] + '_tn.jpg" alt="' + a[IdxAd] + '" id="totalAd' + a[IdxId] + '" /></div><div class="rightminithumb"><img src="/uploads/locations/' + a[IdxLocation] + '_tn.jpg" alt="' + a[IdxLocation] + '" id="totalLocation' + a[IdxId] + '" /></div><div class="clearfix"></div></div><div class="minidate"><span id="totalStart' + a[IdxId] + '">' + a[IdxStart] + '</span> - <span id="totalEnd' + a[IdxId] + '">' + a[IdxEnd] + '</span></div><div class="miniremove"><a href="#current" class="miniremoveicon" onclick="removeComboFromCart(' + a[IdxId] + ');">Remove</a></div></div><div class="cartbox-right"><img src="/templates/megapage/images/cartbox-right.jpg" alt="" /></div></div></div></div>';
+	newCartBox = '<div class="panel"><div class="wrapper"><div class="cartbox" id="cartbox' + a[IdxId] + '"><div class="cartbox-left"><img src="/templates/megapage/images/cartbox-left.jpg" alt="" /></div><div class="cartbox-middle"><div class="minititle"><div class="minicombo" id="totalCombo' + a[IdxId] + '">Combo ' + (a[IdxId] + 1) + '</div><div class="minicost">$<span id="totalCost' + a[IdxId] + '">' + a[IdxCost] + '/day</span></div><div class="clearfix"></div></div><div class="minithumbs"><div class="leftminithumb"><img src="/uploads/ads/' + a[IdxAd] + '_tn.jpg" alt="' + a[IdxAd] + '" id="totalAd' + a[IdxId] + '" /></div><div class="rightminithumb"><img src="/uploads/locations/' + a[IdxLocation] + '_tn.jpg" alt="' + a[IdxLocation] + '" id="totalLocation' + a[IdxId] + '" /></div><div class="clearfix"></div></div><div class="minidate"><span id="totalStart' + a[IdxId] + '">' + a[IdxStart] + '</span> - <span id="totalEnd' + a[IdxId] + '">' + a[IdxEnd] + '</span></div><div class="miniremove"><a href="#current" class="miniremoveicon" onclick="removeComboFromCart(' + a[IdxId] + ');">Remove</a></div></div><div class="cartbox-right"><img src="/templates/megapage/images/cartbox-right.jpg" alt="" /></div></div></div></div>';
 
 	//Add the new cartbox
 	$("#addHere").append(newCartBox);
@@ -329,7 +334,7 @@ function addComboToCart()
 	cartPaginate();
 
 	//Get the location cost amounts
-	bigCost = Number(0);
+	bigCost = bigCost + a[IdxCost];
 
 	//Set the total cost text down by the checkout button
 	tempCost = document.getElementById("totalCostText");
@@ -380,6 +385,13 @@ function removeComboFromCart(currentCom)
 
 	//Reset Pagination Arrows
 	cartPaginate();
+
+	//Get the location cost amounts
+	bigCost = bigCost - c[IdxCost];
+
+	//Set the total cost text down by the checkout button
+	tempCost = document.getElementById("totalCostText");
+	tempCost.innerHTML = bigCost;
 }
 
 function paginate()
@@ -493,7 +505,7 @@ function cartPaginate()
 							<div class='wrapper'>
 
 							{% for location in page %}
-								<a href="#current" onmouseover="doTooltip(event, location{{ location.id }})" onmouseout="hideTip()" onclick="combineLocation('{{ location.id }}', '{{ forloop.counter0 }}');"><img src="/uploads/locations/{{ location.id }}_tn.jpg" alt="location{{ location.id }}" class="thumbsnormal" /></a>
+								<a href="#current" onmouseover="doTooltip(event, location{{ location.id }})" onmouseout="hideTip()" onclick="combineLocation('{{ location.id }}');"><img src="/uploads/locations/{{ location.id }}_tn.jpg" alt="location{{ location.id }}" class="thumbsnormal" /></a>
 							{% endfor %}
 
 							</div>

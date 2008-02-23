@@ -37,7 +37,7 @@
 							Combo {{ i.combo }}
 						</div>
 						<div class="minicost">
-							$<span>0</span>
+							$<span>{{ i.cost }}</span>
 						</div>
 						<div class="clearfix"></div>
 					</div>
@@ -67,6 +67,8 @@
 	{% endif %}
 
 	{% endfor %}
+
+	<p><span style="color:#F90;">Total: <span class="lightorange">${{ t }}</span></p>
 
 	<p>If everything looks correct, confirm below.</p>
 

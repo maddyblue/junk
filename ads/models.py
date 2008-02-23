@@ -40,6 +40,7 @@ class Location(models.Model):
 	screen = models.ForeignKey(Screen, blank=True, null=True)
 	time_off = models.TimeField(null=True, blank=True)
 	time_on = models.TimeField(null=True, blank=True)
+	cost = models.DecimalField(max_digits=5, decimal_places=2, default=2)
 
 	def save(self):
 		super(Location, self).save()
@@ -101,6 +102,7 @@ class Reservation(models.Model):
 	checkedout = models.BooleanField(default=False)
 	start = models.DateField()
 	end = models.DateField()
+	cost = models.DecimalField(max_digits=6, decimal_places=2)
 
 	def __unicode__(self):
 		return str(self.user) + ": " + str(self.ad.name) + " at " + str(self.location) + " from " + str(self.start) + " to " + str(self.end)

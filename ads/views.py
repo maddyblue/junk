@@ -93,7 +93,9 @@ def checkoutdata(request):
 			if e > nd:
 				e = nd
 
-			r.append(Reservation(user=request.user, ad=a, location=l, combo=c, start=s, end=e))
+			cost = ((e - s).days + 1) * l.cost
+
+			r.append(Reservation(user=request.user, ad=a, location=l, combo=c, start=s, end=e, cost=cost))
 		except:
 			return HttpResponseBadRequest()
 
@@ -117,8 +119,12 @@ def checkout(request):
 			i.save()
 		return render(request, 'ads/checkout.html')
 	else:
-		r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('combo')
-		return render(request, 'ads/checkout.html', {'r': r})
+		t = 0
+
+		for i in r:
+			t += i.cost
+
+		return render(request, 'ads/checkout.html', {'r': r, 't': t})
 
 @login_required
 def upload(request):
