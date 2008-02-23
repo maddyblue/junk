@@ -113,3 +113,23 @@ class Reservation(models.Model):
 class UploadForm(forms.Form):
 	image = forms.FileField()
 	name = forms.CharField(max_length=100, required=False)
+
+class PaymentReceived(models.Model):
+	user = models.ForeignKey(User)
+
+	class Admin:
+		pass
+
+class Payment(models.Model):
+	user = models.ForeignKey(User)
+	reservation = models.ForeignKey(Reservation)
+	date = models.DateField()
+	cost = models.DecimalField(max_digits=4, decimal_places=2)
+	paid = models.BooleanField(default=False)
+	paymentreceived = models.ForeignKey(PaymentReceived, null=True)
+
+	def __unicode__(self):
+		return '%s: %s on %s for $%s' % (self.user, self.reservation.location, self.date, self.cost)
+
+	class Admin:
+		pass

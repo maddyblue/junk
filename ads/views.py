@@ -117,6 +117,12 @@ def checkout(request):
 		for i in r:
 			i.checkedout = True
 			i.save()
+
+			t = datetime.timedelta(1)
+			c = i.start
+			while c <= i.end:
+				Payment.objects.create(user=request.user, reservation=i, date=c, cost=i.location.cost)
+				c += t
 		return render(request, 'ads/checkout.html')
 	else:
 		t = 0
