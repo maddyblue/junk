@@ -1,0 +1,28 @@
+{% extends "main/default.html" %}
+
+{% block content %}
+
+<h1>Pay Your Bill</h1>
+
+<table border="1" cellspacing="0" cellpadding="1">
+	<tr>
+		<th>Location + Ad</th>
+		<th>Cost</th>
+	</tr>
+{% for i in p %}
+	<tr>
+		<td>{{ i.1.name }} at {{ i.0 }} on days:<br />
+		{% for l in i.3 %}
+			{{ l.date|date:"n/j" }}{% if not forloop.last %},{% endif %}
+		{% endfor %}
+		</td>
+		<td>${{ i.2 }}</td>
+	</tr>
+{% endfor %}
+	<tr>
+		<td>Total</td>
+		<td>${{ t }}</td>
+	<tr>
+</table>
+
+{% endblock %}

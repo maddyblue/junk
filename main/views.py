@@ -1,3 +1,4 @@
+import datetime
 from darc.blog.models import *
 from darc.ads.models import *
 from django import newforms as forms
@@ -79,3 +80,24 @@ def password_change(request):
 		form = PasswordForm()
 
 	return render(request, 'main/password-change.html', {'form': form})
+
+@login_required
+def pay(request):
+	payments = Payment.objects.filter(user=request.user, paid=False, date__lt=datetime.date.today()).select_related().order_by('ads_location.id', 'ads_ad.id', 'date')
+
+	p = []
+	total = 0
+	l = None
+	a = None
+
+	for i in payments:
+		if l != i.reservation.location or a != i.reservation.ad:
+			l = i.reservation.location
+			a = i.reservation.ad
+			p.append([l, a, 0, []])
+
+		total += i.cost
+		p[-1][-2] += i.cost
+		p[-1][-1].append(i)
+
+	return render(request, 'main/pay.html', {'p': p, 't': total})

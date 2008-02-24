@@ -126,7 +126,7 @@ class Payment(models.Model):
 	date = models.DateField()
 	cost = models.DecimalField(max_digits=4, decimal_places=2)
 	paid = models.BooleanField(default=False)
-	paymentreceived = models.ForeignKey(PaymentReceived, null=True)
+	paymentreceived = models.ForeignKey(PaymentReceived, null=True, blank=True)
 
 	def __unicode__(self):
 		return '%s: %s on %s for $%s' % (self.user, self.reservation.location, self.date, self.cost)
