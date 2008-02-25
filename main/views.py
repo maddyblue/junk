@@ -83,20 +83,30 @@ def password_change(request):
 
 @login_required
 def pay(request):
-	payments = Payment.objects.filter(user=request.user, paid=False, date__lt=datetime.date.today()).select_related().order_by('ads_location.id', 'ads_ad.id', 'date')
+	paydues = Paydue.objects.filter(user=request.user, date__lt=datetime.date.today()).select_related().order_by('ads_location.id', 'ads_ad.id', 'date')
+	payments = Payment.objects.filter(user=request.user).values('amount')
+
+	paid = 0
+	for i in payments:
+		paid += i['amount']
 
 	p = []
 	total = 0
 	l = None
 	a = None
 
-	for i in payments:
+	for i in paydues:
+		total += i.cost
+		print paid, total, total - paid
+
+		if total <= paid:
+			continue
+
 		if l != i.reservation.location or a != i.reservation.ad:
 			l = i.reservation.location
 			a = i.reservation.ad
 			p.append([l, a, 0, []])
 
-		total += i.cost
 		p[-1][-2] += i.cost
 		p[-1][-1].append(i)
 

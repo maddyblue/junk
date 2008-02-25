@@ -129,7 +129,7 @@ def checkout(request):
 			t = datetime.timedelta(1)
 			c = i.start
 			while c <= i.end:
-				Payment.objects.create(user=request.user, reservation=i, date=c, cost=i.location.cost)
+				Paydue.objects.create(user=request.user, reservation=i, date=c, cost=i.location.cost)
 				c += t
 		return render(request, 'ads/checkout.html')
 	else:
