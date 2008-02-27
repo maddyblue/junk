@@ -26,4 +26,18 @@
 	<tr>
 </table>
 
+<p/>
+
+<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+	<input type="hidden" name="cmd" value="_xclick" />
+	<input type="hidden" name="business" value="{{ paypal }}" />
+	<input type="hidden" name="item_name" value="iAds Reservations" />
+	<input type="hidden" name="currency_code" value="USD" />
+	<input type="hidden" name="amount" value="{{ t }}" />
+	<input type="hidden" name="notify_url" value="{{ external }}process/paypal/" />
+	<input type="hidden" name="return" value="{{ external }}account/paid/" />
+	<input type="hidden" name="custom" value="{{ user.id }}" />
+	<input type="image" src="/templates/images/button-checkout.jpg" alt="Check Out" name="submit" style="padding:0; border:0;" /></a> (via Paypal)
+</form>
+
 {% endblock %}

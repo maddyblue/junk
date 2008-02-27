@@ -116,4 +116,11 @@ def pay(request):
 	else:
 		total = 0
 
-	return render(request, 'main/pay.html', {'p': p, 't': total})
+	return render(request, 'main/pay.html', {'p': p, 't': total, 'paypal': settings.PAYPAL_BUSINESS_ADDRESS, 'external': settings.EXTERNAL_ADDRESS})
+
+@login_required
+def paid(request):
+	return render(request, 'main/paid.html')
+
+def paypal(request):
+	pass
