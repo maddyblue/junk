@@ -6,17 +6,18 @@
 
 <table border="1" cellspacing="0" cellpadding="1">
 	<tr>
-		<th>Location + Ad</th>
+		<th>Date + Location + Ad</th>
 		<th>Cost</th>
 	</tr>
 {% for i in p %}
 	<tr>
-		<td>{{ i.1.name }} at {{ i.0 }} on days:<br />
-		{% for l in i.3 %}
-			{{ l.date|date:"n/j" }}{% if not forloop.last %},{% endif %}
+		<td><b>Reservations on {{ i.0.date|date:"n/j" }}:</b>
+		{% for l in i.2 %}
+			<br />
+			{{ l.reservation.ad.name }} at {{ l.reservation.location }}{% if not forloop.last %},{% endif %}
 		{% endfor %}
 		</td>
-		<td>${{ i.2 }}</td>
+		<td>${{ i.1 }}</td>
 	</tr>
 {% endfor %}
 	<tr>
