@@ -1,7 +1,6 @@
 import commands
 import os
 import os.path
-from django import newforms as forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -109,10 +108,6 @@ class Reservation(models.Model):
 
 	class Admin:
 		pass
-
-class UploadForm(forms.Form):
-	image = forms.FileField()
-	name = forms.CharField(max_length=100)
 
 class Paydue(models.Model):
 	user = models.ForeignKey(User)

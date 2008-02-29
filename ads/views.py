@@ -1,16 +1,12 @@
 import datetime
 import math
-import os
-import os.path
-import sys
+from darc.ads.forms import *
 from darc.ads.models import *
 from darc.main.views import render
-from django import newforms as forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import get_object_or_404
 
 def get_list(loc):
 	ads = Reservation.objects.filter(location=loc, checkedout=True, start__lte=datetime.date.today(), end__gte=datetime.date.today())
