@@ -1,11 +1,7 @@
-import datetime
 from darc.blog.models import *
-from darc.ads.models import *
-from django import newforms as forms
+from darc.main.forms import RegisterForm
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
 def render(request, template, dictionary={}):
@@ -17,11 +13,6 @@ def render(request, template, dictionary={}):
 
 def index(request):
 	return render(request, 'main/index.html', {'entry': Blog.objects.all().order_by('-date')[0:1], 'entries': Blog.objects.all().order_by('-date')[1:9]})
-
-class RegisterForm(forms.Form):
-	username = forms.CharField(max_length=30)
-	email = forms.CharField(max_length=75)
-	password = forms.CharField(max_length=100, widget=forms.PasswordInput)
 
 def register(request):
 	if request.method == 'POST':
@@ -42,85 +33,3 @@ def register(request):
 		form = RegisterForm()
 
 	return render(request, 'main/register.html', {'form': form})
-
-@login_required
-def account(request):
-	ads = Ad.objects.filter(user=request.user)
-	reservations = Reservation.objects.filter(user=request.user)
-	return render(request, 'main/account.html', {'ads': ads, 'reservations': reservations})
-
-class PasswordForm(forms.Form):
-	new_password = forms.CharField(max_length=100, widget=forms.PasswordInput)
-	confirm_password = forms.CharField(max_length=100, widget=forms.PasswordInput)
-
-	def clean(self):
-		np = ''
-		cp = ''
-
-		for k, v in self.cleaned_data.iteritems():
-			if k == 'new_password':
-				np = v
-			elif k == 'confirm_password':
-				cp = v
-
-		if np != cp:
-			raise forms.ValidationError('Passwords do not match.')
-
-		return self.cleaned_data
-
-@login_required
-def password_change(request):
-	if request.method == 'POST':
-		form = PasswordForm(request.POST)
-		if form.is_valid():
-			request.user.set_password(form.cleaned_data['new_password'])
-			request.user.save()
-			return render(request, 'main/password-change-done.html')
-	else:
-		form = PasswordForm()
-
-	return render(request, 'main/password-change.html', {'form': form})
-
-@login_required
-def pay(request):
-	paydues = Paydue.objects.filter(user=request.user, date__lt=datetime.date.today()).select_related().order_by('date', 'ads_location.id', 'ads_ad.id')
-	payments = Payment.objects.filter(user=request.user).values('amount')
-
-	paid = 0
-	for i in payments:
-		paid += i['amount']
-
-	p = []
-	total = 0
-	owed = 0
-	d = None
-
-	for i in paydues:
-		total += i.cost
-
-		if total <= paid:
-			continue
-
-		owed += i.cost
-
-		if d != i.date:
-			d = i.date
-			p.append([i, 0, []])
-
-		p[-1][-2] += i.cost
-		p[-1][-1].append(i)
-
-	if paid < total:
-		p[0][-2] -= owed - total + paid
-		total -= paid
-	else:
-		total = 0
-
-	return render(request, 'main/pay.html', {'p': p, 't': total, 'paypal': settings.PAYPAL_BUSINESS_ADDRESS, 'external': settings.EXTERNAL_ADDRESS})
-
-@login_required
-def paid(request):
-	return render(request, 'main/paid.html')
-
-def paypal(request):
-	pass

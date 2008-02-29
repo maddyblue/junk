@@ -1,4 +1,4 @@
-{% extends "main/default.html" %}
+{% extends "account/default.html" %}
 
 {% block head %}
 
@@ -13,9 +13,9 @@
 
 <h1>Your Account</h1>
 
-<p><a href="{% url darc.main.views.pay %}">Pay your bill</a></p>
+<p><a href="{% url darc.account.views.pay %}">Pay your bill</a></p>
 
-<p><a href="{% url darc.main.views.password_change %}">Change password</a></p>
+<p><a href="{% url darc.account.views.password_change %}">Change password</a></p>
 
 <h2>Uploaded Ads</h2>
 

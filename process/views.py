@@ -1,0 +1,2 @@
+def paypal(request):
+	pass
