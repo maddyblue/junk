@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def index(request):
 	ads = Ad.objects.filter(user=request.user)
-	reservations = Reservation.objects.filter(user=request.user)
+	reservations = Reservation.objects.filter(user=request.user, checkedout=True)
 	return render(request, 'account/index.html', {'ads': ads, 'reservations': reservations})
 
 @login_required
