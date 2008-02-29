@@ -112,7 +112,7 @@ class Reservation(models.Model):
 
 class UploadForm(forms.Form):
 	image = forms.FileField()
-	name = forms.CharField(max_length=100, required=False)
+	name = forms.CharField(max_length=100)
 
 class Paydue(models.Model):
 	user = models.ForeignKey(User)
@@ -126,13 +126,23 @@ class Paydue(models.Model):
 	class Admin:
 		pass
 
+PAYMENT_IADS = 1
+PAYMENT_PAYPAL = 2
+
+PAYMENT_CHOICES = (
+	(PAYMENT_IADS, 'iAds Credit'),
+	(PAYMENT_PAYPAL, 'Paypal')
+)
+
 class Payment(models.Model):
 	user = models.ForeignKey(User)
 	amount = models.DecimalField(max_digits=6, decimal_places=2)
-	date = models.DateField()
+	date = models.DateTimeField(auto_now_add=True)
+	type = models.PositiveSmallIntegerField(default=PAYMENT_IADS, choices=PAYMENT_CHOICES)
+	data = models.TextField(blank=True)
 
 	def __unicode__(self):
-		return '%s on %s for $%s' % (self.user, self.date, self.amount)
+		return '%s on %s for $%s from ' % (self.user, self.date, self.amount, self.get_type_display())
 
 	class Admin:
 		pass
