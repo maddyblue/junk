@@ -115,7 +115,7 @@ def checkoutdata(request):
 
 @login_required
 def checkout(request):
-	r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('combo')
+	r = Reservation.objects.filter(user=request.user, checkedout=False).order_by('end', 'start')
 
 	if request.method == 'POST':
 		for i in r:

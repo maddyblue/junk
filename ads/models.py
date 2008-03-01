@@ -68,12 +68,16 @@ STATUS_NOTCHECKED = 1
 STATUS_CHECKED = 2
 STATUS_UPLOADING = 3
 STATUS_DONE = 4
+STATUS_BAD = 5
+STATUS_DELETED = 6
 
 STATUS_CHOICES = (
 	(STATUS_NOTCHECKED, 'Not yet checked by our staff.'),
 	(STATUS_CHECKED, 'Checked by our staff, but not uploaded to our ad server.'),
 	(STATUS_UPLOADING, 'Checked by our staff and currently uploading to our ad server.'),
-	(STATUS_DONE, 'Checked by our staff and uploaded to our ad server.')
+	(STATUS_DONE, 'Checked by our staff and uploaded to our ad server.'),
+	(STATUS_BAD, 'Marked by our staff as bad.'),
+	(STATUS_DELETED, 'Deleted by user.')
 )
 
 class Ad(models.Model):
