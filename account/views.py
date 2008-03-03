@@ -58,7 +58,7 @@ def pay(request):
 	else:
 		total = 0
 
-	return render(request, 'account/pay.html', {'p': p, 't': total, 'paypal': settings.PAYPAL_BUSINESS_ADDRESS, 'external': settings.EXTERNAL_ADDRESS})
+	return render(request, 'account/pay.html', {'p': p, 't': total, 'paypal': settings.PAYPAL_BUSINESS_ADDRESS, 'external': settings.EXTERNAL_ADDRESS, 'paypal_url': settings.PAYPAL_URL})
 
 @login_required
 def paid(request):

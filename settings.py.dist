@@ -71,10 +71,12 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+	'darc.account',
 	'darc.ads',
 	'darc.blog',
 	'darc.main',
 	'darc.mod',
+	'darc.process',
 	'django.contrib.admin',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
@@ -95,3 +97,4 @@ AWS_SECRET_ACCESS_KEY = ''
 BUCKET_NAME = ''
 PAYPAL_BUSINESS_ADDRESS = ''
 EXTERNAL_ADDRESS = 'http://i-ads.com/'
+PAYPAL_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr'
