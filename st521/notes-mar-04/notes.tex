@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\begin{document}
+
+Notes - 04 Mar
+
+Recall - Long time analysis - Classification of states. Recurrent state: $P(X_n=i$ for some $n \ge 1|X_0=i)=1$. Transient state: $P(X_n=i$ for some $n \ge 1|X_0=i)<1$. First passage time: the smallest time it takes to go from state i to state j. We are interested in mean first passage time.
+
+Theorem 3.1.2 - (1) j is recurrent if $\Sigma_n P_{jj}^n = \infty$. (2) j is transient if $\Sigma_n P_{jj}^n < \infty$. (3) If j is transient, then $P_{ij}^n \rightarrow 0$ as $n \rightarrow \infty$ for all i.
+
+Example 3.1.6 - Random Walk. We consider the simple random walk in ex 2.2.2. $X_n = X_0 + \Sigma_{k=1}^n B_k$, $\{B_k\}$ are i.i.d. Bernoulli variables. $P(B_k=1)=p, P(B_k=-1) = 1-p = q$. Consider state j. $P_{jj}^{2n-1} = 0$ for n = 1, 2, 3, \dots. (2n-1 = odd numbers, n = 1, 2, 3, \dots.) To return in 2n steps: we must take n steps in one direction and then n in other direction. This has probability (3.1.3) $P_{jj}^{2n} = \binom{2n}{n} p^n(1-p)^n = \frac{(2n)!}{n!n!}(p(1-p))^n$. We approximate these terms by an expression valid for n large then consider the sum of the approximations. Deciding if a series converges or not is not affected if we drop a finite number of terms from the beginning of the series. We use an asympotic expression for n! valid for n large.
+
+Stirling formula - (3.1.4) $n! \sim n^n \sqrt{n} e^{-n} \sqrt{2 \pi}$ n large, which means $\lim_{n\rightarrow \infty} \frac{n!}{n^n \sqrt{n} e^{-n} \sqrt{2 \pi}} = 1$. We can substitute (3.1.4) into the series $\Sigma_n P_{jj}^{2n}$ without affecting convergence/divergence. $P_{jj}^{2n} \sim \frac{(4p(1-p))^n}{\sqrt{\pi n}}$. When $p=1/2, P_{jj}^{2n} \sim \frac{1}{\sqrt{\pi n}}, \Sigma_n P_{jj}^n = \infty$. Any state is recurrent when $p=1/2$. If $p \ne 1/2, 4p(1-p) < 1, \Sigma_n P_{jj}^n < \infty$. Any state is transient when $p \ne 1/2$. Note: thereom 3.1.3 implies that any state is either recurrent or transient.
+
+Theorem 3.1.4 - the number of times $N(i)$ that a Markov chain visits its starting point i satisfies $P(N(i)=\infty) = \{1$ if i is recurrent, 0 if i is transient. Proof - After any return to i, a subsequent return is guaranteed iff $f_{ii}=1$.
+
+Another classification -
+
+Definition 3.1.5 - Let $T_j = min\{n \ge i: X_n=j\}$ be the time of the first visit to state j where $T_j=\infty$ if $X_n$ never visits j. ($T_j$ depends on $X_0$.)
+
+Theorem 3.1.5 - $P(T_i=\infty | X_0=i) > 0$ iff i is transient. When i is transient, $E(T_i|X_0=i) = \infty$. What about reurrent states?
+
+Definition 3.1.6 - The mean recurrence time $\mu_i$ of a state i is: $\mu_i = E(T_i|X_0=i) = \{\Sigma_{n=1}^{\infty} f_{ii} (n)$ for i recurrent, $\infty$ for i transient. $\mu_i$ may be infinite when i is recurrent.
+
+Definition 3.1.7 - A recurrent state i is null if $\mu_i = \infty$ and positive if $\mu_i < \infty$.
+
+Theorem 3.1.6 - A recurrent state is null iff $P_{ii}^n \rightarrow 0$ as $n \rightarrow \infty$ and if this holds, $P_{ji}^n \rightarrow 0$ for all j. Proof later.
+
+Example 3.1.7 - Consider the genotype example 3.1.4. AA and aa are recurrent (0 = "aa"). $f_{00}(1) = 1, f_{00}(n)=0, n > 1, \Rightarrow f_{00} = 1$. These states are positive.
+
+Example 3.1.8 - For simple random walk, ex 3.1.6, when $p = 1/2, P_{jj}^n \approx \frac{1}{\sqrt{\pi n}} \rightarrow 0$ as $n \rightarrow \infty$. So any state in a simple random walk with $p = 1/2$ is null recurrent.
+
+The last classification of states we discuss: recall in the simple random walk, the chain can return only with an even number of steps, 2, 4, 6, /dots all divisible by 2.
+
+Definition 3.1.8 - The greatest common divisor of a set of integers $\{n_1, n_2, \dots\}$ written g.c.d.($n_1, n_2, \dots$) is the largest integer m such that m divides $n_1, n_2, \dots$ all without remainder.
+
+Example 3.1.9 - gcd(2, 4, 6, 8) = 2. gcd(2, 3, 5) = 1.
+
+Definition 3.1.9 - The period d(i) of state i is $d(i) =$ gcd$\{n: P_{ii}^n > 0\}$. If d(i) = 1, i is called aperiodic. If d(i) $>$ 1, i is called periodic.
+
+Ex 3.1.10 - Consider the OFF/ON system in ex 3.1.5. If $0 < p < 1, 0 < q < 1$, then $P_{00}, P_{01}, P_{10}, P_{11}$ are all strictly between 0 and 1. Hence $d(i) = 1$ for $i = 0, 1$. Suppose $p = q = 1$, then $P_{00}^n > 0$ for n even, $P_{00}^n = 0$ for n odd. d(0) = 2.
+
+Example 3.1.11 - Simple random walk is periodic with d(i) = 2 when $p = 1/2$.
+
+Ex 3.1.12 - Consider gambler's ruin in $\S$2.4, modified so A has \$1 initially, A has a backer that guarantees A's losses (ex 2.4.5), B is infinitely wealthy. We assume $r_1 = r_2 = \dots = 0, p_0 = p_1 = \dots = p, q_1 = q_2 = \dots = q$. Exercise: P = (q p 0 ... \& 0 q 0 p 0 ... \& 0 0 q 0 p 0 ...). $P_{11}^1 = 0, P_{11}^2 > 0, P_{11}^3 > 0, d(i) = 1$, single gcd(2, 3) = 1.
+
+Definition 3.1.10 - If all the states of a Markov chain are aperiodic, we call the chain aperiodic.
+
+Definition 3.1.11 - A state is ergodic if it is recurrent, positive, and aperiodic.
+
+Ex 3.1.13 - Consider a branching process. 0 is absorbing and once there a chain never leaves. So $P_{00}^n = 1$ for all n, and 0 is recurrent. Using the formulas for $f_{ii}, \mu_0=1$, 0 is positive, 0 is aperiodic, so 0 is ergodic. All other states are transient.
+
+$\S$3.2 - Classification of Chains
+
+Definition 3.2.1 - State i communicates with state j $i \rightarrow j$ if the chain may visit j with positive probability having started in i. $i \rightarrow j \Leftrightarrow P_{ij}^m > 0$ some m. If $i \rightarrow j$ and $j \rightarrow i$, then i and j intercommunicate, $i \leftrightarrow j$.
+
+Example 3.2.1 - In the roulette wheel in ex 2.1.6, all nonzero states intercommunicate, and 0 only communicates with itself.
+
+\end{document}
