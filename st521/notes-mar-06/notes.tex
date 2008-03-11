@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\begin{document}
+
+Notes - 06 Mar
+
+Theorem 3.2.1 - If $i \ne j$ then $i \rightarrow j$ iff $f_{ij} > 0$. Proof: exercise. Note, $i \leftrightarrow i$ since $P_{ii}^0 = 1$. If we fix $i$, we could search for all states $j$ that intercommunicate with it.
+
+Def 3.2.2 - All the states that intercommunicate with a given state form a communication class. $i \leftrightarrow j, j \leftrightarrow k,$ so $i \leftrightarrow k$.
+
+Definition 3.2.3 - An equivalence relation $\sim$ on a set $S$ is an operation on pairs of elements satisfying (1) $a \sim a, a \in S$, (2) $a \sim b \Rightarrow b \sim a, a, b \in S$, (3) $a \sim b, b \sim c \Rightarrow a \sim c$.
+
+Theorem 3.2.2 - $\leftrightarrow$ is an equivalence relation.
+
+Example 3.2.2 - In the roulette wheel, ex 3.2.1, there are two communication classes $\{0\}, \{1, 2, \dots, 38\}$.
+
+Example 3.2.3 - In the genotype example, ex 2.1.7, each state forms its own class, $\{AA\}, \{aa\}, \{Aa\}$.
+
+Example 3.2.4 - In the ON/OFF system, ex 2.2.3, with $0 < p < 1, 0 < q < 1$, there is one class: $\{ON, OFF\}$.
+
+Theorem 3.2.3 - If $i \leftrightarrow j$, (1) $i$ is transient iff $j$ is transient, (2) $i$ and $j$ have the same period, (3) $i$ is null recurrent iff $j$ is null recurrent.
+
+Proof - (1) if $i \leftrightarrow j$, there are $m, n \ge 0$ such that $\alpha = P_{ij}^m P_{ji}^n > 0$. By the Chapman-Kolmogorov equations (2.2.1) $P_{ii}^{m+r+n} \ge P_{ij}^m P_{jj}^r P_{ji}^n$ for any inteteg $r > 0$. Summing over $r$, $\Sigma_{r=0}^\infty P_{ii}^r < \infty \Rightarrow \Sigma_{r=0}^\infty P_{jj}^r < \infty$. The argument holds with $j$ and $i$ reversed. By thm 3.1.2, (1) holds. (2) excercise. (3) will be proved below.
+
+Definition 3.2.4 - A set $C$ of states in the state space $S$ is closed if $P_{ij} = 0$ for all $i \in C$ and $j \not \in C$. A closed set with one element is called absorbing. Once a Markov chain takes a value in a closed set, it never leaves.
+
+Example 3.2.5 - Consider the chain with $S = \{0, 1, 2\}$. $\{0, 2\}$ forms a closed set. \begin{displaymath} P = \left( \begin{array}{ccc} 0 & 0 & 1 \\ 1/4 & 1/2 & 1/4 \\ 1 & 0 & 0 \end{array} \right) \end{displaymath}.
+
+Definition 3.2.5 - A set $C$ of states in the state space $S$ is irreducible if $i \leftrightarrow j$ for all $i, j \in C$. The communication classes of a Markov chain are irreducible.
+
+Because of theorem 3.2.3, Definition 3.2.6 - An irreducible set $C$ is periodic, transient, or null recurrent if all or any of the states in $C$ have these properties.
+
+Definition 3.2.7 - If the entire state space is irreducible, we say the Markov chain is irreducible.
+
+Theorem 3.2.4 - In an irreducible Markov chain, either all states are transient or all states are recurrent.
+
+Theorem 3.2.5 - Decomposition Theorem - The state space $S$ can be partitioned uniquely as $S = T \cup C_1 \cup C_2 \cup \dots, T = \{$transient states$\}, \{C_i\} =$ irreducible, closed sets of recurrent states. Lots of words in notes.
+
+Proof: Let $\{C_j\}$ be the recurrent equivalence classes of intercommunication ($\leftrightarrow$). We only need to show that each $C_r$ is closed. Suppose on the contrary that $i \in C_r, j \not \in C_r$, and $P_{ij}> 0, j \not \leftrightarrow i$, so $P(X_n$ never returns to $i) \ge P(X_n $reaches $j), P(X_n \ne i$ for $n \ge 1 | X_0=i) \ge P(X_1 = j | X_0 = i) > 0$. This contradicts the assumption that $i$ is recurrent.
+
+Markov chains with finite state spaces are special. For example, it is impossible to stay in transient states for all time.
+
+Theorem 3.2.6 - If the state space is finite, then at least one state is recurrent and all recurrent states are positive.
+
+Proof - assume all states are transient. $1 = \Sigma_{j \in S} P_{ij}^n$ (finite sum). So, $1 = \lim_{n \rightarrow \infty} \Sigma_{j \in S} P_{ij}^n = \Sigma_{j \in S} \sim_{n \rightarrow \infty} P_{ij}^n = 0$ (by thm 3.1.2(3)). (in general $\lim_{n \rightarrow \infty} \Sigma_{i=0}^\infty a_i(n) \ne \Sigma_{i=0}^\infty \lim_{n \rightarrow \infty} a_i(n)$). That is a contradiction. The same argument works for the closed set of all null recurrent states (exercise).
+
+Theorem 3.2.7 - Suppose the state space is finite. $i$ is transient $\iff$ there is a state $j$ with $i \rightarrow j$ but $j \not \rightarrow i$.
+
+Example 3.2.6 - Consider a Markov chain with $S = \{0, 1, 2, 3, 4\}$. \begin{displaymath} P = \left( \begin{array}{ccccc} 1/2 & 1/2 & 0 & 0 & 0 \\ 1/4 & 1/4 & 0 & 0 & 0 \\ 0 & 0 & 1/4 & 1/2 & 1/4 \\ 0 & 0 & 1/3 & 1/3 & 1/3 \\ 0 & 0 & 1/2 & 1/8 & 3/8 \end{array} \right) \end{displaymath} $C_1 = \{0, 1\}, C_2 = \{2, 3, 4\}$ are both closed. They are both irreducible. They must contain positive recurrent states. $S = C_1 \cup C_2$.
+
+Example 3.2.7 - Consider random walk with (1 0 0 ... \& q 0 p 0 ... \& 0 q 0 p 0 ... \& 0 0 q 0 p 0 ... \& ... \& ... 0 q 0 p \& 0 ... 0 0 1), states 0, ..., N.
+
+Three classes $C_1 = \{0\}, T = \{1, 2, \dots, N-1\}, C_2 = \{N\}. \{1, 2, \dots, N-1\} \rightarrow \{0\}$, but $\{0\} \not \rightarrow \{1, 2, \dots, N-1\}. \{1, 2, \dots, N-1\} \rightarrow \{N\}$, but $\{N\} \not \rightarrow \{1, 2, \dots, N-1\}. \{0\}$ and $\{N\}$ are absorbing.
+
+\end{document}
