@@ -1,0 +1,34 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\begin{document}
+
+Notes - 25 Mar
+
+Decomposition Theorem - $S$ = state space. $\Pi$ is a stationary distribution. If (1) $\Pi_j \ge 0, \Sigma_{j \in S} \Pi_j = 1$, (!!!) (2) $\Pi = \Pi P, \Pi$ is a LEFT eigenvector of the prob transition matrix. This implies $\Pi = \Pi P^n, n \ge 1$. Does $\Pi$ exist? (Thm 3.3.2:) Finite dimension state space $\Rightarrow$ theory of eigenvectors.
+
+Theorem 3.3.3 (no assumption of finite state) - An irreducible chain has a stationary distribution $\Pi \iff$ all the states are positive recurrent. In this case, $\Pi$ is unique, $\Pi_i = \frac{1}{\mu_i}, i \in S$. Let $\rho_i(k) =$ mean number of visits to state $i$ between successive visits to state $k$.
+
+Theorem (3.3.3) - $\mu_k = \Sigma_{i \in S} \rho_i(k)$.
+
+Theorem - If $\rho(k) = (\rho_i(k))$, if the communication class of $k$ is irreducible and recurrent, then $\rho_i(k) < \infty$ for all $i$ and $\rho(k) = \rho(k)P$.
+
+Theorem - Every positive recurrent irreducible Markov chain has a stationary distribution.
+
+-- Start of the real lecture --
+
+Theorem 3.3.7 - If the chain is irreducible and recurrent there is a solution of $x = xP$ with strictly positive entries that is unique up to a multiplicative factor. The chain is positive if $\Sigma X_i < \infty$ and null if $\Sigma X_i = \infty$. Now we are ready to prove theorem 3.3.3.
+
+Proof of Theorem 3.3.3 - Suppose $\Pi$ is a stationary distribution. If all the states are transient then $P_{ij}^n \rightarrow 0$ as $n \rightarrow \infty$ by Thm 3.1.2. By (3.3.1), (3.3.4) $\Pi_j = \Sigma_i \Pi_i P_{ij}^n \rightarrow 0, n \rightarrow \infty$ for all $j$. This contradicts defn 3.3.2(1), hence all states are recurrent. (More argument in notes.) We next show that all states are positive and $\Pi_i = \mu_i^{-1}$ for all $i$. Suppose $X_0$ has distribution $\Pi$.  Exercise: $\Pi_j \mu_j = \Sigma_{n=1}^\infty P(T_j \ge n | X_0=j) P(X_0=j) = \Sigma_{n=1}^\infty P(T_j \ge n, X_0=j)$. $P(T_j \ge 1, X_0=j) = P(X_0=j), n \ge 2, P(T_j \ge n | X_0=j) = P(X_0=j, X_m \ne j, 1 \le m \le n-1) = P(X_m \ne j, 1 \le m \le n-1) - P(X_m \ne j, 0 \le m \le n-1) = P(X_m \ne j, 0 \le m \le n-2) - P(X_m \ne j, 0 \le m \le n-1) = a_{n-2} - a_{n-1}, a_n = P(X_m \ne j, 0 \le m \le n)$. Sum over $n, \Pi_j \mu_j = P(X_0=j) + P(X_0 \ne j) - \lim_{n \rightarrow \infty} a_n = 1 - \lim_{n \rightarrow \infty} a_n$. $a_n \rightarrow P(X_m \ne j$ for all $m) = 0$ since $j$ is recurrent. We have shown that $\mu_j \Pi_j = 1$ so $\mu_j = \Pi_j^{-1} < \infty$ if $\Pi_j < 0$. To show $\Pi_j > 0$ for all $j$, assume some $\Pi_j=0$. $0 = \Pi_j = \Sigma_{j (\mathrm{might be i instead of j})} \Pi_i P_{ij}^n \ge \Pi_i P_{ij}^n$ for all $i, n$. This means $\Pi_i = 0$ when $j \rightarrow i$. The chain is irreducible so $\Pi_i = 0$ for all $i$. This contradicts $\Sigma_i \Pi_i = 1$. Hence $\mu_j < \infty$ for all $j$, and all the states are positive. The other direction follows from the intermediate steps.
+
+Proof of Thm 3.2.3 (3) is given on page 163.
+
+Example 3.3.5 - OFF/ON system: ex 3.3.2 - P = (1/2 1/2 \& 1/4 3/4). We can compute $\Pi = (1/3, 2/3) \Rightarrow \mu_1 = 3, \mu_2 = 3/2$. (What is new here is that we can now compute the mean recurrence times, $\mu_i$.)
+
+Example 3.3.6 - Consider Gambler's Ruin in ex 3.3.4 where $P < 1/2$. P = (1-p p 0 \dots \& 1-p 0 p 0 \dots \& 0 1-p 0 p 0 \dots \& \dots). Using the formula for $\Pi_n$ computed there, $\mu_n = \Pi_n^{-1} = \frac{1-p}{1-2p} ( \frac{1-p}{p} )^n, n \ge 0, p = 1/4 \Rightarrow \mu_n = \frac{3}{2} 3^n, n \ge 0$.
+
+Theorem 3.3.3 can be used to determine if an irreducible chain is positive recurrent.
+
+Theorem 3.3.8 - Let $s \in S$ be a state of an irreducible chain. The chain is transient iff there is a nonzero solution $\{Y_i, i \in S\}$ of the equations (3.3.5) $Y_i = \Sigma_{j \in S, j \ne s} P_{ij} Y_j, i \ne s$, with $|Y_j| \le 1$ for all $j$.
+
+\end{document}
