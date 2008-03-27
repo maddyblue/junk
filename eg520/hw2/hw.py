@@ -1,4 +1,4 @@
-from math import cos, sqrt
+from math import cos, sqrt, log
 
 def f(n):
 	return n ** 2 + 4 * cos(n)
@@ -118,3 +118,38 @@ alpha = 0.05
 
 #x = fixedstepsize(x[0], x[1], alpha)
 #x = fixedstepsize(x[0], x[1], alpha)
+
+def ff(x):
+	return 3. * (x - 2.) ** 3.
+
+def df(x):
+	return 9. * x
+
+def ddf(x):
+	return 9.
+
+def quad(x):
+	d01 = x[-1] - x[-2]
+	d12 = x[-2] - x[-3]
+
+	fp = (ff(x[-1]) - ff(x[-2])) / (x[-1] - x[-2])
+	fp1 = (ff(x[-2]) - ff(x[-3])) / (x[-2] - x[-3])
+	fpp = (fp - fp1) / (x[-1] - x[-2])
+
+	#fp = df(x[-1])
+	#fpp = ddf(x[-1])
+
+	r = fp / fpp
+
+	#print fx[-1], x[-1], d01, d12, f01, f12, r, x[-1] - r
+	print 'x(k+1) = %f - %f / %f [%f] = %f. %f / %f = %f' % (x[-1], fp, fpp, r, x[-1] - r, df(x[-1]), ddf(x[-1]), df(x[-1]) / ddf(x[-1]))
+
+	return x[-1] - r
+
+x = [6., 5., 4.]
+
+for i in range(10):
+	x.append(quad(x))
+
+for i in x:
+	print 'f(%f) = %f' % (i, ff(i))
