@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\begin{document}
+
+Notes - 8 April
+
+$X_n$ irreducible positive recurrent M.C. Stationary distribution $\Pi$. Time reversal $Y_n = X_{N-n}, 0 \le n \le N$. $Y_n$ is a M.C. $P(Y_{n+1} = j | Y_n = i) = \frac{\Pi_j}{\Pi_i} P_{ji}$. $X_n$ is reversible if $\Pi_i P_{ij} = \Pi_j P_{ji}$ for all $i, j$.
+
+If there is a distribution $\Pi$ such that (3.5.1) holds, then $\Pi$ is the stationary distribution and $X_n$ is reversible.
+
+Example 3.5.1 - Consider ON/OFF system in ex 2.2.3, P = (1-p, p \& q, 1-q), $0 \le p \le 1, 0 \le q \le 1$. (3.5.1) $\Rightarrow \Pi_0 P_{00} = \Pi_0 P_{00}, \dots$ (see notes). $\Rightarrow \Pi_0 P = \Pi_1 q$. Recall the stationary distribution is $\Pi_0 = \frac{q}{p+q}, \Pi_1 = \frac{p}{p+q}$. These equations hold, so the chain is reversible.
+
+Example 3.5.2 - Ehrenfest Model of Diffusion - (See notes for drawing.) Two containers (A, B), stopped at top, connected with a small tube at the neck. Filled with $M$ total molecules of a gas. At each time, one molecule picked at random moves between the containers. $X_n =$ number of molecules in A at time $n$. $X_n$ is a M.C. P = (0, 1, 0, \dots \& 1/m, 0, 1-(1/m), 0 \dots \& 0, 2/m, 0, 1-(2/m), 0, \dots \& \dots). $P_{i, i+1} = 1 - \frac{i}{m}, P_{i, i-1} = \frac{i}{m}, 0 \le i \le m$. If we look for solutions of (3.5.1) we find $\Pi_i = \binom{m}{i}(\frac{1}{2})^m$, which is a stationary distribution and the chain is reversible.
+
+$\S$ 3.6 - Chains with finitely many states
+
+As discussed before, the theory is much simpler when there is a finite state space. Theorem 3.2.6 implies If $X_n$ is irreducible and has a finite state space, then it is positive recurrent.
+
+Theorem 3.6.1 - An irreducible aperiodic chain with a finite state space has a stationary distribution which is also a limiting distribution.
+
+Theorem 3.6.2 - Perron-Fr\"obenius - If $P$ is the transition probability matrix of an irreducible chain with period $d$ and a finite state space, (1) $\lambda_0 = 1$ is an eigenvalue of $P$. (2) the $d$ complex roots: $\lambda_1 = e^{2\pi i/d}, \lambda_2 = e^{2\pi i 2/d}, \dots, \lambda_d = e^{2\pi i \frac{d-1}{d}}, i = \sqrt{-1}, (\lambda_m)^d = 1$ are eigenvalues of $P$ (look in notes for cool drawing of the unit circle with $d$ roots drawn as spokes). (3) the remaining eigenvalues $\lambda_{d+1}, \dots, \lambda_{m}$ satisfy $|\lambda_m| \le 1$.
+
+What this means: the power method. Let $P$ be a matrix. Suppose $\{V_1, \dots, V_N\}$ is a basis of eigenvectors. $P V_i = \lambda_i V_i$. Let $V$ be arbitrary, then $V = \Sigma_{j=1}^N \alpha_j V_j$ for some $\{\alpha_1, \dots, \alpha_N\}$. Think of $V$ as being the initial condition of a markov process ($X_0$). So [some stuff that I don't get and isn't in the notes.] $P^nV = \Sigma_j \alpha_j \lambda_j^n V_j$. Suppose $\lambda_1$ is the largest $|\lambda_1| > |\lambda_j|, j \ne 1$. More stuff I don't understand.
+
+Example 3.6.1 - Suppose the chain is aperiodic and $P$ has distinct eigenvalues. There is a $B$ with $P = B^{-1} \wedge B = B^{-1}$ (diagonal matrix with $\lambda_i$ in diagonals, $0 \le i \le N$, 0 else) $B, P^n = B^{-1} \wedge^n B$ and $|\lambda_i|^n \rightarrow 0$ for $i \ge 1$. $|\lambda_0| = 1$.
+
+$\S$ 3.7 - Branching Processes
+
+Unfortunately the preceeding theory is not directly useful. Consider the branching process: $\{Z_{nj}, n \ge 1, j \ge 1\}$ i.i.d. nonnegative i.v., pmf $\{P_k\}$. $X_0 = 1, X_1 = Z_{1, X_0}, X_2 = Z_{21} + Z_{22} + \dots + Z_{2, X_1}, \dots, X_n = Z_{n, 1} + \dots + Z_{n, X_{n-1}}$. If there is a strictly positive probability that each family is empty, $P(X_n=0) > 0$ then 0 is an absorbing state. Hence, 0 is a positive recurrent state and all other states are transient. The chain is not irreducible, but there is a unique stationary distribution: $\Pi_0 = 1, \Pi_i = 0$ for $i \ge 1$. This gives no interesting information. The difficulty is that the process can behave in a number of different ways depending on, for example, whether or not it becomes extinct. We study the behavior conditional on some event, e.g. extinction. Recall $\rho_k = P(X_1=k), \phi(s) = E(s^{X_1}), N =$ inf$\{n: X_n = 0\} =$ time of extinction [inf = min]. $N = \infty$ if $X_n \ne 0$ for all $n$. If $N = \infty$, the process grows without bound and if $N < \infty$, the process is limited in size and eventually becomes extinct. Recall the probability $\eta = P(N < \infty)$ of extinction is the smallest nonnegative root of $S = \phi(s)$. We let $E_n = \{n < N < \infty \}$ be the event that extinction occurs at some time larger than $n$. We studied the distribution of the $X_n$ conditional on $E_n$. We let $P_{0, j}(n) = P(X_n = j|E_n)$ be the conditional probability that $X_n = j$ given the future extinction. We try to compute $\Pi_{0, j} = \lim_{n \rightarrow \infty} P_{0, j}(n)$ (if the limit exists). To avoid trivial cases, we assume $0 < \rho_0 + \rho_1 < 1, \rho_0 > 0$ (some chance we will have more than one offspring). This implies $0 < P(E_n) < 1$ and $ 0 < \eta \le 1$.
+
+Theorem 3.7.1 - If $E(X_1) < \infty$, then $\Pi_{0, j} = \lim_{n \rightarrow \infty} P_{0, j}(n)$ exists. The generating function $G(s) = \Sigma_{j=0}^\infty \Pi_{0, j} s^j$ satisfies (3.7.1) $G(\eta^{-1} \phi(s\eta)) = \alpha G(s) + 1 - \alpha, \alpha = \phi'(\eta)$. If $\mu = E(X_1) \le 1$, then $\eta \equiv 1$ and $\alpha = \mu$, so (3.7.2) $G(\phi(s)) = \mu G(s) + 1 - \mu$ for all $\mu, G'(\eta) \le 1$ and $G'(\eta) = 1 \iff \mu = 1$. See outline of proof in notes.
+
+Theorem 3.7.2 - (1) If $E(X_1) \ne 1, \Sigma_j \Pi_{0, j} = 1$, (2) If $E(X_1) = 1, \Pi_{0, j} = 0$ for all $j$.
+
+$\S$ 3.8 Review (in notes)
+
+\end{document}
