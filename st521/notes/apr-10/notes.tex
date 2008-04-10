@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\begin{document}
+
+Notes - 10 April
+
+Chapter 4 - Continuous Time Markov Chains
+
+Continuous time chains stay in each state a random time that is a continuous random variable that may depend on the state. $X(t) =$ state at time $t, t \ge 0$. $X(t)$ may or may not be a Markov process.
+
+$\S$ 4.1 - The Poisson Process
+
+Example 4.1.1 - We use a Geiger counter to observe the emission of particles from a radioactive source. If we switch on the counter at time zero, the count $N(t)$ is the outcome of an apparently random process. Observations: (a) $N(0) = 0, N(t) \in \{0, 1, 2, 3, \dots\}$, (b) If $s < t, N(s) \le N(t)$. We conjecture a continuity assumption: in a time period $(t, t + h)$ the probability of an emission is proportional to $h$ for small $h$.
+
+Definition 4.1.1 - A Poisson process with intensity $\lambda$ is a process $N = \{N(t), t \ge 0\}$ taking values in $S = \{0, 1, 2, 3, \dots\}$ such that (a) $N(0) = 0$, (b) $S < t \Rightarrow N(s) \le N(t)$, (c) $P(N(t + h) = n + m | N(t) = n) = \{\lambda h + O(h)$ for $m = 1, O(h)$ for $m > 1, 1 - \lambda h + O(h)$ for $m = 0$. $O(h)$ means an expression $A(h)$ such that $\lim_{h \rightarrow 0} \frac{|A(h)|}{h} \rightarrow 0$, (d) If $s < t$, the number $N(t) - N(s)$ of emissions in $(s, t]$ is independent of the times of emissions in $(0, s]$ (this is pretty much the Markov condition).
+
+Definition 4.1.2 - $N(t) =$ the number of arrivals or occurences or events or emissions at time $t$. $N$ is called a counting process.
+
+Theorem 4.1.1 - $N(t)$ has the Poisson distribution with parameter $\lambda t$, i.e., (4.1.1) $P(N(t) = j) = \frac{(\lambda t)^j}{j!} e^{-\lambda t}, j = 0, 1, 2, \dots$.
+
+Proof: We condition $N(t+h)$ on $N(t)$. $P(N(t+h) = j) = \Sigma_i P(N(t) = i)P(N(t+h) = j| N(t) = j) = \Sigma_i P(N(t)=i)P((j-i)$ arrivals in $(t, t+h]) = P(N+t) = j-1)P($1 arrival in $(t, t+h=) + P(N(t) = j) P($no arrivals in $(t, t+h]) + O(h)$. Set $P_j(t) = P(N(t) = j), P_j(t+h) = \lambda h P_{j-1}(t) + (1 - \lambda h) P_j(t) + O(h), P_0(t+h) = (1-\lambda h)P_0(t) + O(h), j \ne 0$. Assuming $P_j(t)$ is a smooth function, we subtract $P_j(t)$ from each side, divide by $h$ and let $h \downarrow 0$. $\lim_{h \rightarrow 0}\frac{P_j(t+h) - P_j(t)}{h}$, etc. (4.1.2) $P_j'(t) = \lambda P_{j-1}(t) - \lambda P_j(t), j \ne 0$. (4.1.3) $P_0'(t) = -\lambda P_0(t)$. The initial condition is (4.1.4) $P_j(0) = \delta_{j0} = \{1$ for $j = 0, 0$ for $j \ne 0$. This is a big system of equations that we need to solve to go further.
+
+Two approaches: (4.1.3) + (4.1.4) together yield $P_0(t) = e^{-\lambda t}$. We substitute into (4.1.2) with $j = 1, P_1'(t) = \lambda e^{-\lambda t} - \lambda P_1(t). P_1'(t) + \lambda P_1(t) = \lambda e^{-\lambda t}, e^{\lambda t} P_1'(t) + e^{\lambda t} \lambda P_1(t) = e^{\lambda t} \lambda e ^{-\lambda t} \Rightarrow \frac{d}{dt}(e^{\lambda t}P_1(t) = \lambda, e^{\lambda t}P_1(t) = \lambda t + c \Rightarrow P_1(t) = \lambda t e^{-\lambda t}$. Iteration yields $P_j(t) = \frac{(\lambda t)^j}{j!} e^{-\lambda t}$.
+
+Second approach: Define a generating function $G(s, t) = \Sigma_{j=0}^\infty P_j(t) s^j$. Multiply (4.1.2) by $s^j$ and sum (some details) $\Rightarrow \frac{\nabla G}{\nabla t} = \lambda(s-1) G, G(s, 0) = 1$. The solution is (4.1.5) $G(s, t) = e^{\lambda(s-1)t} = e^{-\lambda t} \Sigma_{j=0}^\infty \frac{(\lambda t)^j}{j!}s^j$. Reformulation of the process: important for computational purposes.
+
+Definition 4.1.3 - Let $T_0, T_1, T_2, \dots$ be given by (4.1.6) $T_0 = 0, T_n = \mathrm{inf}_t \{N(t) = n\}$ (inf = min). $T_n$ is the arrival or waiting time for the nth event. The interarrival or sojourn times $X_1, X_2, \dots$ are given by (4.1.7) $X_n = T_n - T_{n-1}$. If we know $N$, we can compute $X_1, X_2, \dots$. Vice versa if we know the entire collection of sojourn times $\{X_n\}$ then (4.1.8) $T_n = \Sigma_{i=1}^n X_i, N(t) = \mathrm{max}_{T_n \le t} n$. See picture in notes.
+
+Theorem 4.1.2 - The random variables $X_1, X_2, \dots$ are i.i.d. with exponential distribution with parameter $\lambda$.
+
+\end{document}
