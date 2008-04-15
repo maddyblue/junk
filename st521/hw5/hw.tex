@@ -49,9 +49,45 @@ HW 5
 	\item %2
 		\begin{enumerate}
 			\item For states 0, 1, 2, 3 the smallest number of steps is 4. For states 4, 5 the smallest number of steps is 6.
+			\item $d(i) = 2$ for all $i$.
 			\item
-			\item
+				\begin{displaymath}
+					P = \left( \begin{array}{cccccc}
+					0 & 1 & 0 & 0 & 0 & 0 \\
+					0 & 0 & 1 & 0 & 0 & 0 \\
+					0 & 0 & 0 & 1 & 0 & 0 \\
+					1/2 & 0 & 0 & 0 & 1/2 & 0 \\
+					0 & 0 & 0 & 0 & 0 & 1 \\
+					1 & 0 & 0 & 0 & 0 & 0
+					\end{array} \right)
+				\end{displaymath}
+				So:
+				\begin{displaymath}
+					\begin{array}{l}
+						\Pi_0 = \frac{1}{2} \Pi_3 + \Pi_5 \\
+						\Pi_1 = \Pi_0 \\
+						\Pi_2 = \Pi_1 \\
+						\Pi_3 = \Pi_2 \\
+						\Pi_4 = \frac{1}{2} \Pi_3 \\
+						\Pi_5 = \Pi_4
+					\end{array}
+				\end{displaymath}
+				Write things in terms of $\Pi_0$:
+				\begin{displaymath}
+					\begin{array}{l}
+						\Pi_0 = \Pi_1 = \Pi_2 = \Pi_3 \\
+						\Pi_4 = \Pi_5 = \frac{1}{2} \Pi_0 \\
+					\end{array}
+				\end{displaymath}
+				Hence $5 \Pi_0 = 1 \Rightarrow \Pi_0 = 1/5$. Thus $\Pi = (1/5, 1/5, 1/5, 1/5, 1/10, 1/10)$.
 		\end{enumerate}
+	\item %3
+		\begin{enumerate}
+			\item All states are recurrent, so $\mu_{10} = \Sigma_{n=1}^\infty n P(X_1 \ne 10, \dots X_{n-1} \ne 10, X_n = 10 | X_0 = 10)$. For $n \le 10$, the probability is zero. For $n > 10, f_{10, 10}(n) = (\frac{1}{2})^n$. So we get $\Sigma_{n=11}^\infty n (\frac{1}{2})^n$. The summation approaches 0.01171875, which doesn't make sense, so I probably did something wrong.
+			\item The expected number of times the chain visits state 9 before it is back to state 10 is 2. Since every time we hit state 9 we have a 1/2 chance of moving to state 10, it follows that, on average, each visit to state 10 has been proceeded by 2 visits to state 9.
+		\end{enumerate}
+	\item %4
+		$\eta_j$ is a recursive definition. For the terminating case, $\eta_j = 1$, if $X_0 = j$ and $j \in A$, then $X_n \in A$ for $n = 0$, hence $T_A = 0$, and so $T_A < \infty$. For the recursive case, we multiply each successive probability of proceeding to the next state until we hit a state in $A$, then (when we are in a state in $A$) we drop out a 1 from the terminating case. So, if $T_A = \infty$, there must be no way to get to a state in $A$ from state $j$, hence the $p_{jk}$ terms would keep piling up, making that term negligibly close to 0, thus $T_A$ would approach infinity, so $P(T_A < \infty | X_0 = j)$ approaches 0 as well.
 \end{enumerate}
 
 \end{document}
