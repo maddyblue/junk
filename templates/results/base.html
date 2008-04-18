@@ -45,7 +45,7 @@
 	<br/><a href="/databrowse/results/result/">databrowse</a>
 	<br/><a href="{% url biosensor.results.views.upload %}">upload</a></p>
 	<hr />
-	{% for dates in result_list %}
+	{% for dates in r %}
 		{% for result in dates %}
 			{% ifequal forloop.counter 1 %}
 				<p><b>{{ result.run_date|date:"j M y" }}:</b>
@@ -58,7 +58,12 @@
 
 <div id="content">
 	{% block content %}
-		{% for dates in result_list %}
+		Page {{ page.number }} of {{ p.num_pages }}:
+			<a href="{% url biosensor.results.views.index %}">start</a>
+			{% if page.has_previous %}<a href="{% url biosensor.results.views.index %}?p={{ page.previous_page_number }}">previous</a>{% endif %}
+			{% if page.has_next %}<a href="{% url biosensor.results.views.index %}?p={{ page.next_page_number }}">next</a>{% endif %}
+			<a href="{% url biosensor.results.views.index %}?p={{ p.num_pages }}">end</a>
+		{% for dates in results %}
 			{% for result in dates %}
 				{% ifequal forloop.counter 1 %}
 					<p><b>{{ result.run_date|date:"j M y" }}:</b>

@@ -1,14 +1,37 @@
+from django.core.paginator import QuerySetPaginator
 from django.shortcuts import render_to_response, get_object_or_404
 from biosensor.results.models import *
 import datetime
 import re
 import math
 
-def result_list():
+def render(request, template, dict={}):
+	r = Result.objects.all().order_by('-run_date', '-upload_date')
+	p = QuerySetPaginator(r, 50)
+
+	try:
+		page_num = int(request.GET['p'])
+		if page_num < 1:
+			page_num = 1
+		elif page_num > p.num_pages:
+			page_num = p.num_pages
+	except:
+		page_num = 1
+
+	page = p.page(page_num)
+
+	dict['p'] = p
+	dict['page'] = page
+	dict['results'] = result_list(page.object_list)
+	dict['r'] = result_list(r)
+
+	return render_to_response(template, dict)
+
+def result_list(results):
 	result_list = []
 	d = ''
 
-	for res in Result.objects.all().order_by('-run_date', '-upload_date'):
+	for res in results:
 		nd = res.run_date.strftime("%d %b %y")
 		if nd != d:
 			d = nd
@@ -19,10 +42,10 @@ def result_list():
 	return result_list
 
 def index(request):
-	return render_to_response('results/base.html', {'result_list': result_list()})
+	return render(request, 'results/base.html')
 
 def electrode(request):
-	return render_to_response('results/electrode.html', {'electrodes': Electrode.objects.all().order_by('sensor', 'we'), 'result_list': result_list()})
+	return render(request, 'results/electrode.html', {'electrodes': Electrode.objects.all().order_by('sensor', 'we')})
 
 def sensor(request):
 	return sensors(request, '')
@@ -65,7 +88,7 @@ def sensors(request, rangetype):
 		i = float(i)
 		perc.append([i, i / m, se / m, se])
 
-	return render_to_response('results/sensors.html', {'sensors': sensors, 'type': t, 'result_list': result_list(), 'perc': perc})
+	return render(request, 'results/sensors.html', {'sensors': sensors, 'type': t, 'perc': perc})
 
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
@@ -76,14 +99,13 @@ def detail(request, result_id):
 	except KeyError:
 		pass
 
-
 	try:
 		s = Sensor.objects.get(sensor=r.sensor)
 		e = Electrode.objects.get(sensor=s, we=r.electrode)
 	except:
 		e = None
 
-	return render_to_response('results/detail.html', {'result': r, 'e': e, 'result_list': result_list()})
+	return render(request, 'results/detail.html', {'result': r, 'e': e})
 
 def upload(request):
 	months = {
