@@ -23,9 +23,9 @@
 					<td>high</td>
 				</tr>
 				<tr>
-					<td><input type="text" name="low" style="width: 50px;" value="{{ result.characterize_low }}"/></td>
-					<td><input type="text" name="mid" style="width: 50px;" value="{{ result.characterize_mid }}"/></td>
-					<td><input type="text" name="high" style="width: 50px;" value="{{ result.characterize_high }}"/></td>
+					<td><input type="text" name="low" style="width: 50px;" value="{{ result.characterize_low|default:"20.0" }}"/></td>
+					<td><input type="text" name="mid" style="width: 50px;" value="{{ result.characterize_mid|default:"25.0" }}"/></td>
+					<td><input type="text" name="high" style="width: 50px;" value="{{ result.characterize_high|default:"40.0" }}"/></td>
 				</tr>
 			</table>
 		</td>

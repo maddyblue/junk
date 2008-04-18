@@ -46,7 +46,7 @@ FNR == 1 {
 
 		print "set label 'base = " base "A' at " ctime ", " base " point lt 1 offset 1" > fplt;
 		print "set label 'peak = " peak "A' at " ctime ", " peak " point lt 1 offset 1" > fplt;
-		print "set label 'peak + base = " peak + base "' at " low ", " (base + peak) / 2 > fplt;
+		print "set label 'peak - base = " peak - base "' at " low ", " (base + peak) / 2 > fplt;
 		print "set output \"" FILENAME ".c.png\"" > fplt;
 		print "plot [" low - 2 ":" high + 5 "] \"" FILENAME ".avg\" with lines" > fplt;	
 		print "unset label" > fplt;

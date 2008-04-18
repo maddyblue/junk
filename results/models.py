@@ -118,7 +118,7 @@ class Result(models.Model):
 		elif self.analysis == 'i - t Curve' and self.characterize:
 			r = calc_range(self.get_upload_file_filename() + '.avg', MODE_CHARACTERIZE, self.characterize_low, self.characterize_mid, self.characterize_high)
 			self.characterize_peak = r[1]
-			self.characterize_value = r[0] + r[1]
+			self.characterize_value = r[1] - r[0]
 			self.characterize_base = r[0]
 			self.characterize_time = r[2]
 
