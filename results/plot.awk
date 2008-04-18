@@ -18,21 +18,6 @@ FNR == 1 {
 	print "set xlabel \"" xlabel "\"" > fplt;
 	print "set ylabel \"Current/A\"" > fplt;
 
-	print "set output \"" FILENAME ".dat1.png\"" > fplt;
-	print "plot \"" FILENAME ".dat1\" with lines" > fplt;
-
-	print "set output \"" FILENAME ".dat2.png\"" > fplt;
-	print "plot \"" FILENAME ".dat2\" with lines" > fplt;
-
-	print "set output \"" FILENAME ".dat3.png\"" > fplt;
-	print "plot \"" FILENAME ".dat3\" with lines" > fplt;
-
-	print "set output \"" FILENAME ".dat4.png\"" > fplt;
-	print "plot \"" FILENAME ".dat4\" with lines" > fplt;
-
-	print "set output \"" FILENAME ".dat5.png\"" > fplt;
-	print "plot \"" FILENAME ".dat5\" with lines" > fplt;
-
 	print "set output \"" FILENAME ".avg.png\"" > fplt;
 	print "plot \"" FILENAME ".avg\" with lines" > fplt;
 
@@ -54,10 +39,17 @@ FNR == 1 {
 	}
 	else if(analysis == "i - t Curve")
 	{
-		print "set output \"" FILENAME ".+20.png\"" > fplt;
-		print "plot [20:] \"" FILENAME ".avg\" with lines" > fplt;
 		print "set output \"" FILENAME ".+15.png\"" > fplt;
-		print "plot [15:][-4e-10:] \"" FILENAME ".avg\" with lines" > fplt;
+		print "plot [15:] \"" FILENAME ".avg\" with lines" > fplt;
+		print "set output \"" FILENAME ".r5.png\"" > fplt;
+		print "plot [:][-5e-10:5e-10] \"" FILENAME ".avg\" with lines" > fplt;
+
+		print "set label 'base = " base "A' at " ctime ", " base " point lt 1 offset 1" > fplt;
+		print "set label 'peak = " peak "A' at " ctime ", " peak " point lt 1 offset 1" > fplt;
+		print "set label 'peak + base = " peak + base "' at " low ", " (base + peak) / 2 > fplt;
+		print "set output \"" FILENAME ".c.png\"" > fplt;
+		print "plot [" low - 2 ":" high + 5 "] \"" FILENAME ".avg\" with lines" > fplt;	
+		print "unset label" > fplt;
 	}
 
 	print "set terminal png size 200, 100" > fplt;

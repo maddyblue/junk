@@ -9,10 +9,33 @@
 {% block content %}
 
 <h1>{{ result }}</h1>
-<table border="0" cellpadding="0" cellspacing="1"><tr>
-<td><a href="/uploads/{{ result.id }}">[ download .txt data ]</a></td>
-<td><form action="." method="post"><input type="submit" name="reanalyze" value="reanalyze"/></form></td>
-</tr></table>
+<form action="." method="post">
+<table border="0" cellpadding="0" cellspacing="1">
+	<tr>
+		<td>
+			<a href="/uploads/{{ result.id }}">[ download .txt data ]</a>
+		</td>
+		<td>
+			<table border="0" cellpadding="0" cellspacing="1">
+				<tr>
+					<td>low</td>
+					<td>mid</td>
+					<td>high</td>
+				</tr>
+				<tr>
+					<td><input type="text" name="low" style="width: 50px;" value="{{ result.characterize_low }}"/></td>
+					<td><input type="text" name="mid" style="width: 50px;" value="{{ result.characterize_mid }}"/></td>
+					<td><input type="text" name="high" style="width: 50px;" value="{{ result.characterize_high }}"/></td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<input type="checkbox" name="characterize" {% if result.characterize %}checked{% endif %}/> characterize
+			<br/><input type="submit" name="reanalyze" value="reanalyze"/>
+		</td>
+	</tr>
+</table>
+</form>
 <ul>
 	<li><a href="/uploads/sensors/s{{ result.sensor|stringformat:"02d" }}.png">sensor: {{ result.sensor|default_if_none:"unknown" }}</a></li>
 	{% if e %}
@@ -47,6 +70,11 @@
 	<li>average diff over -0.2 to 0.2 range: {{ result.range_p2 }}</li>
 	<li>average diff over -0.1 to 0.1 range: {{ result.range_p1 }}</li>
 	{% endifequal %}
+	{% ifequal result.analysis "i - t Curve" %}
+	{% if result.characterize %}
+	<li>characterization value: {{ result.characterize_value }}A</li>
+	{% endif %}
+	{% endifequal %}
 </ul>
 <p><img src="/uploads/{{ result.id }}.avg.png"/></p>
 {% ifequal result.analysis "Cyclic Voltammetry" %}
@@ -54,14 +82,12 @@
 <p><img src="/uploads/{{ result.id }}.-2_2.png"/></p>
 {% endifequal %}
 {% ifequal result.analysis "i - t Curve" %}
-<p><img src="/uploads/{{ result.id }}.+20.png"\></p>
+{% if result.characterize %}
+<p><img src="/uploads/{{ result.id }}.c.png"\></p>
+{% endif %}
 <p><img src="/uploads/{{ result.id }}.+15.png"\></p>
+<p><img src="/uploads/{{ result.id }}.r5.png"\></p>
 {% endifequal %}
 <p><img src="/uploads/{{ result.id }}.png"/></p>
-<p><img src="/uploads/{{ result.id }}.dat1.png"/></p>
-<p><img src="/uploads/{{ result.id }}.dat2.png"/></p>
-<p><img src="/uploads/{{ result.id }}.dat3.png"/></p>
-<p><img src="/uploads/{{ result.id }}.dat4.png"/></p>
-<p><img src="/uploads/{{ result.id }}.dat5.png"/></p>
 
 {% endblock %}

@@ -95,6 +95,12 @@ def detail(request, result_id):
 
 	try:
 		if request.POST['reanalyze'] == 'reanalyze':
+			r.characterize = 'characterize' in request.POST and request.POST['characterize'] == 'on'
+			r.characterize_low = float(request.POST['low'])
+			r.characterize_mid = float(request.POST['mid'])
+			r.characterize_high = float(request.POST['high'])
+			r.save()
+
 			r.analyze()
 	except KeyError:
 		pass
@@ -118,8 +124,15 @@ def upload(request):
 		'Nov': 11,
 		'Dec': 12
 	}
+	
+	form = UploadForm()
 
-	if request.method == 'POST':
+	if request.method == 'POST' and 'all' in request.POST:
+		res = Result.objects.all()
+
+		for r in res:
+			r.analyze()
+	elif request.method == 'POST':
 		form = UploadForm(request.POST, request.FILES)
 		if form.is_valid():
 			f = request.FILES['upload_file']
@@ -160,6 +173,10 @@ def upload(request):
 			elif s[1] == 'i - t Curve':
 				r.sample_interval = s[9].split(' = ')[1]
 				r.sensitivity = s[12].split(' = ')[1]
+				r.charaterize = form.cleaned_data['characterize']
+				r.charaterize_low = form.cleaned_data['characterize_low']
+				r.charaterize_mid = form.cleaned_data['characterize_mid']
+				r.charaterize_high = form.cleaned_data['characterize_high']
 
 			if form.cleaned_data['sensor'] is None and len(r.filename) >= 3 and r.filename[0] == 's':
 				r.sensor = r.filename[1:3]
@@ -177,6 +194,5 @@ def upload(request):
 			r.analyze()
 
 			return render_to_response('results/upload.html', {'form': UploadForm(), 'upload': r})
-	else:
-		form = UploadForm()
+
 	return render_to_response('results/upload.html', {'form': form})
