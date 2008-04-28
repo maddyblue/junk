@@ -2,3 +2,5 @@
 *.dvi
 *.log
 *.pyc
+*.out
+*.toc
