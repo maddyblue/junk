@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\begin{document}
+
+Notes - 22 April
+
+HW 6 - question 2 does have a limiting distribution.
+
+(Recall we are talking about birth processes.)
+
+Definition 4.2.1 - $N(t)$ (continuous-time birth process). Assume: (a) $N(0) \ge 0$, (b) $s < t \Rightarrow N(s) \le N(t)$, (c) $P(N(t+h) = n+m | N(t) = m) = \{ \lambda_n h + O(h)$ for $m = 1, O(h)$ for $m > 1, 1 - \lambda_n h + O(h)$ for $m = 0$, (d) If $s < t$ then (conditional on the value of $N(s)$, the increment $N(t) - N(s)$ is independent of the times of arrivals prior to $s$.
+
+Transition probabilities: $P_{ij}(t) = P(N(t) = j|N(0)=i) = P(N(s+t) = j|N(s)=i), s \le t$.
+
+Forward System - Assume $\lambda_{-1} = 0, P_{ij}(0) = \delta_{ij}$, then (4.2.1) $P_{ij}'(t) = \lambda_{j-1}P_{ij-1}(t) - \lambda_j P_{ij}(t)$.
+
+Backward System - (4.2.2) $P_{ij}'(t) = \lambda_i, P_{i+1j}(t) - \lambda_i P_{ij}(t), j \ge i$. (Yes, that is $P_{i+1j}$. I asked in class and verified it. I don't understand why...)
+
+Theorem 4.2.3 - The forward system has a unique solution that also satisfies the backward system. Proof: First note that (4.2.3) $P_{ij}(t) = 0$ if $j < i$. We solve the forward problem with $j=i$, so $P_{ii}'(t) = \lambda_{i-1}P_{ii-1}(t) - \lambda_i P_{ii}(t)$ (first term after equals goes to zero), so (4.2.4) $P_{ii}(t) = e^{-\lambda_it}$. We substitute into the forward equation with $j=i+1$ to find that $P_{ii+1}(t)$ exists (using standard ODE theory). By induction, we conclude the solution of the forward system exists and is unique. We use the Laplace transform: $\widehat{P_{ij}}(\theta) = \int_0^\infty e^{-\theta t} P_{ij}(t)dt, P_{ij}(t) \widehat{\rightarrow} = \widehat{P_{ij}}(\theta)$. This transforsm derivatives with respect to $t$ to products in the $\theta$ variable domain. If we transform both sides of the forward equation, we get $(\theta + \lambda_j) \widehat{P_{ij}}(\theta) = \delta_{ij} + \lambda_{j-1} \widehat{P_{ij-1}}(\theta)$. This difference equation can be solved: (4.2.5) $\widehat{P_{ij}}(\theta) = \frac{1}{\lambda_j} \frac{\lambda_i}{\theta + \lambda_i} \frac{\lambda_{i+1}}{\theta + \lambda_{i+1}} \dots \frac{\lambda_j}{\theta + \lambda_j}, j \ge i$. Using the inverse Laplace transform gives $P_{ij}(t)$.
+
+To show the claim about the backward equations, we also take the Laplace transform in the same way but now with the backward equation to find that any solution (call it $\Pi$---it may be $P$, may not be) with $\widehat{\Pi_{ij}}(\theta) = \int_0^\infty e^{-\theta t} \Pi_{ij}(t) dt$ satisfies $(\theta + \lambda_j) \widehat{\Pi_{ij}}(\theta) = \delta_{ij} + \lambda_i \widehat{\Pi_{i+1j}}(\theta)$. Note that $\widehat{P}_{ij}$ satisfies this equation, but so can other functions. (TeX note: the widehat change here is meaningless.)
+
+Theorem 4.2.4 - If $\{P_{ij}(t)\}$ is the unique solution of the forward system then any solution $\{\Pi_{ij}\}$ of the backwards system satisfies $P_{ij}(t) \le \Pi_{ij}(t)$ for all $t$. Proof not given.
+
+Observe: if (4.2.6) $\Sigma_j P_{iJ}(t) \equiv 1$ (for all $t$), then Thm 4.2.4 would imply that $\{P_{ij}\}$ is the unique solution of the backward system that is a probability distribution. However (4.2.6) may not hold.
+
+Definition 4.2.5 - An explosion occurs if the birth rates $\lambda_n$ increase sufficiently quickly that there is a positive probability that the process $N$ can pass through all finite states in finite (bounded) time.
+
+Definition 4.2.6 - Let $T_\infty = \lim_{n \rightarrow \infty} T_n$ be the limit of the arrival times. We say $N$ is honest if $P(T_\infty = \infty) = 1$ and dishonest otherwise.
+
+Theorem 4.2.5 - (4.2.6) holds (for each $i \{P_{ij}(t)\}$ is a probability distribution in $j$) if and only if $N$ is honest. Proof: (4.2.6) is equivalent to $P(T_\infty > t) = 1$, any $t$, why? Exercise.
+
+Theorem 4.2.6 - $N$ is honest $\iff \Sigma_n \lambda_n^{-1} = \infty$. This says that if the birth rates are sufficiently small (increase sufficiently slowly) then $N$ is honest. $\Sigma a_n = \infty, a_n$ decreases sufficiently slowly, e.g. $\Sigma_n \frac{1}{n} = \infty$. If the $\lambda_n$ increase sufficiently quickly that $\Sigma_n \lambda_n^{-1}$ converges, then $N$ is dishonest. We can think of the deficit as $1 - \Sigma_j P_{ij}(t)$ as the probability $P(T_\infty \le t)$ of escaping to infinity at time $t$ starting from state $i$.
+
+Theorem 4.2.6 follows from:
+
+Theorem 4.2.7 - Let $X_1, X_2, \dots$ be independent random variables with $X_n$ having the exponential distribution with parameter $\lambda_{n-1}$ and let $T_\infty = \Sigma_n X_n$. Then $P(T_\infty < \infty) = \{0$ for $\Sigma_n \lambda_n^{-1} = \infty, 1$ for $\Sigma_n \lambda_n^{-1} < \infty$. Proof in notes. When the rates vary, the situation becomes more complicated.
+
+Last topic in this section: what does the condition $(d)$ mean? Recall that a sequence of random variables $\{X_n, n \ge 0\}$ satisfies the Markov property if, conditional on the event $\{X_n = i\}$ events related to the collection $\{X_m, m > n\}$ are independent of events related to the collection $\{X_m, m < n\}$.
+
+Theorem 4.2.8 - Weak Markov Property - Let $N(t)$ be a birth process and $T$ a fixed time. Conditional on the event $\{N(T) = i\}$ the evolution of the process after $T$ is independent of the evolution before $T$. Proof: definition 4.2.1(a).
+
+\end{document}
