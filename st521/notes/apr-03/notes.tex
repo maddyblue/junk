@@ -23,7 +23,7 @@ Some physical situations have the property that observations of the system taken
 
 Definition 3.5.1 - The reversed chain or time reversal $Y_n$ is $Y_n = X_{N-n}, 0 \le n \le N$.
 
-Theorem 3.5.1 - $Y_n$ is a Markov chain with $P(Y_{n+1} = j | Y_n = i) = \frac{\Pi_j}{\Pi_j} P_{ji}$. Proof: $P(Y_{n+1} = i_{n+1} | Y_n = i_n, \dots, Y_0 = i_0) = \frac{P(Y_k = i_j, 0 \le k \le n + 1)}{P(Y_k = i_k, 0 \le k \le n)} = \frac{P(X_{N-n-1} = i_{n+1}, X_{N-n} = i_n, \dots, X_N = i_0)}{P(X_{N-n} = i_n, \dots, X_N = i_0)} = \frac{\Pi_{i_{n+1}} P_{i_{n+1}, i_n} P_{i_n, i_{n-1}}, \dots, P_{i_1, i_0}}{\dots} = \frac{\Pi_{i_{n+1}} P_{i{n+1}, i_n}}{\Pi_{i_n}}$.
+Theorem 3.5.1 - $Y_n$ is a Markov chain with $P(Y_{n+1} = j | Y_n = i) = \frac{\Pi_j}{\Pi_i} P_{ji}$. Proof: $P(Y_{n+1} = i_{n+1} | Y_n = i_n, \dots, Y_0 = i_0) = \frac{P(Y_k = i_j, 0 \le k \le n + 1)}{P(Y_k = i_k, 0 \le k \le n)} = \frac{P(X_{N-n-1} = i_{n+1}, X_{N-n} = i_n, \dots, X_N = i_0)}{P(X_{N-n} = i_n, \dots, X_N = i_0)} = \frac{\Pi_{i_{n+1}} P_{i_{n+1}, i_n} P_{i_n, i_{n-1}}, \dots, P_{i_1, i_0}}{\dots} = \frac{\Pi_{i_{n+1}} P_{i{n+1}, i_n}}{\Pi_{i_n}}$.
 
 Definition 3.5.2 - The chain is reversible if the probability transition matricies of $X_n$ and its time reversal $Y_n$ are the same, (3.5.1) $\Pi_i P_{ij} = \Pi_j P_{ji}$ for all $i, j$. (3.5.1) are called the detailed balance equations. A transition matrix $P$ and a probability distribution $\lambda$ are in detailed balance if $\lambda_i P_{ij} = \lambda_j P_{ji}$ for all $i, j$. An irreducible chain $X_n$ with a stationary distribution $\Pi$ is reversible in equilibrium if its probability transition matrix is in detailed balance with $\Pi$.
 
