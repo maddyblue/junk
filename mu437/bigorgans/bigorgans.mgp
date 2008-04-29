@@ -1,0 +1,202 @@
+%deffont "standard"   tfont "Vera.ttf"
+%deffont "thick"      tfont "VeraBd.ttf"
+%deffont "typewriter" tfont "VeraMono.ttf"
+%%
+%default 1 area 90 90, leftfill, size 2, fore "white", back "black", font "thick"
+%default 2 size 7, vgap 10, prefix " "
+%default 3 size 2, bar "gray70", vgap 10
+%default 4 size 5, vgap 30, prefix " ", font "standard"
+%%
+%tab 1 size 5, vgap 40, prefix "  ", icon box "green" 50
+%tab 2 size 4, vgap 40, prefix "      ", icon arc "yellow" 50
+%tab 3 size 3, vgap 40, prefix "            ", icon delta3 "white" 40
+%%
+%page
+
+World's Largest Pipe Organs
+
+	ordered by number of ranks, not pipes (arbitrary)
+	mostly in USA, few in Germany, England
+		handful in Mexico, Austria, Australia, France, Latvia, Canada
+	number of pipes:
+		30k: 1 (Atlantic City Convention Hall)
+		25k: 1 (Wanamaker)
+		20k: 2 (First Congregational Church, LA; West Point)
+		15k: 3 (St. Stephen's Cathedral, Germany; Crystal Cathedral, CA; Auditorio Nacional, Mexico)
+		10k: ~13
+		5k: 60+
+
+	list might be out of date...
+	this presentation is online at:
+		http://mattjibson.com/organ
+
+%%
+%page
+
+ #10 - #4
+
+	4 - First Congregational Church, LA
+	5 - St. Stephen's Cathedral, Germany
+	6 - Crystal Cathedral, CA
+	7 - Auditorio Nacional, Mexico
+	8 - First Church of Christ, Scientist, Boston
+	9 - St. Matthew Lutheran Church, PA
+	10 - St. Bartholomew's, NY
+
+%%
+%page
+
+Mormon Tabernacle Organ (#12)
+
+	5 manuals, 12k pipes
+	gone through many additions
+		Ridges, Aeolian-Skinner, Schoenstein
+	facade pipes made of wood, painted to look like metal
+	tabernacle is an elongated dome
+	acoustics are really awesome - echo
+	daily concerts
+
+%%
+%page
+
+Backlit Tab Organ
+
+%newimage -zoom 90 "motab1.jpg"
+
+%%
+%page
+
+USMA Cadet Chapel (#3)
+
+	West Point, NY; largest church organ
+	4 manual, 380 ranks, 874 stops, 23,500 pipes
+
+%newimage "west_point_003.jpg"
+
+%%
+%page
+
+Boardwalk Hall Auditorium (#2)
+
+	Atlantic City Convention Hall, NJ
+	largest [broken] organ in the world
+	7 manuals, 33,114 pipes
+	449 ranks, 337 registers, 852 stops
+	only about 140 registers currently working
+	not enough money to get the rest going
+	only full-length 64' diaphone; one of only two full-length 64' reeds
+	built by Midmer-Losh
+	loudest and largest instrument ever constructed
+		some stops on 100" of wind, many on 50"
+	pictures of it are cooler...
+		(more pics on flickr)
+
+%%
+%page
+
+Pedal 32' Diaphone, Bombarde
+
+%newimage "ladder.jpg"
+
+%%
+%page
+
+32' metal Diapason
+
+%newimage "dwarfed.jpg"
+
+%%
+%page
+
+64' Dulzian
+
+%newimage "perspective.jpg"
+
+%%
+%page
+
+Original 5 manual console
+
+%newimage "5manual_orig.jpg"
+
+%%
+%page
+
+Big daddy 7 manual
+
+%newimage "console.jpg"
+
+%%
+%page
+
+Wanamaker Grand Court (#1)
+
+	Macy's store in Philadelphia, PA
+	built by the Los Angeles Organ company for the 1904 World's Fair
+		successors to Murray M. Harris
+	designed to be largest
+	imitation full size orchestra
+	costs caused Harris to get ousted from his own company ($40k over at $105k)
+	still bankrupt the company after it was built
+	placed in storage until 1909
+
+%%
+%page
+
+At the 1904 World's Fair
+
+%newimage -zoom 80 "The-Organ-at-the-1904-Fair.jpg"
+
+%%
+%page
+
+Wanamaker Organ
+
+	bought by John Wanamaker for his seven-story department store in Philadelphia
+	~10k pipes at the time, but Johnny wanted more
+	built a private organ factory in the store to expand it, added 8k pipes
+	extensive concerts at this time - free after-hours
+		Dupre, Vierne, Boulanger, etc.
+			Dupre loved it so much he improvised a musical depiction of the life of Jesus Christ (Symphonie-Passion)
+	1924: John's son Rodman asked Dupre and Courboin to dream up a big organ
+	made a bloody huge string division
+		largest organ chamber ever constructed
+			67' long, 26' deep, 16' high
+
+%%
+%page
+
+String Division
+
+%newimage "String-Division-Middle-Sect.jpg"
+
+%%
+%page
+
+Ranks and Pipes, and Stats
+
+	6 manuals, 461 ranks
+	396 registers, ~416 stops
+
+	PEDAL - 75 ranks, 81 stops, 2,540 pipes
+	CHOIR - 24 ranks, 19 stops, 1,452 pipes
+	GREAT - 58 ranks, 43 stops, 3,634 pipes
+	SWELL - 71 ranks, 51 stops, 4,422 pipes
+	SOLO - 51 ranks, 35 stops, 3,640 pipes
+	ETHEREAL - 24 ranks, 21 stops, 1,670 pipes
+	STRING - 88 ranks, 87 stops, 6,340 pipes
+	STENTOR - 3 ranks, 9 stops, 243 pipes
+	ORCHESTRAL - 39 ranks, 40 stops, 2,811 pipes
+	ECHO - 33 ranks, 22 stops, 2,013 pipes
+
+	28,482 pipes
+
+%%
+%page
+
+Wanamaker Organ
+
+	still played today - 2 daily concerts
+	largest working organ in the world
+
+%newimage "ConsoleOrgueWanamaker.jpg"
