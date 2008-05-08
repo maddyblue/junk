@@ -559,4 +559,44 @@ Theorem 4.5.7 - Under appropriate assumptions, $P_{ij}(t)$ satisfy the forward K
 
 Example 4.5.1 - A linear growth process has $\lambda_n = \lambda \cdot n + a, \lambda > 0, \mu_n = \mu \cdot n, \mu > 0$. $a$ describes infinitesimal ``immigration''. Rates grow linearly in population ($\lambda, \mu$). Forward equations: $P_{i0}'(t) = -a P_{i0}(t) + \mu P_{i1}(t), P_{ij}'(t) = (\lambda(j-1) + a)P_{i, j-1} (t) - ((\lambda + \mu)j + 1)P_{ij}(t) + \mu(j+1) P_{i, j+1}(t), j \ge 1$. If we multiply by $j$ and sum, the expected value $m(t) = E(X(t)) = \Sigma_{j=1}^\infty j P_{ij}(t)$. (4.5.15) = $\{m'(t) = a + (\lambda - \mu) m(t), m(0) = i$ when $X(0) = i$. (4.5.16) $m(t) = at + i, \lambda = \mu$, (4.5.17) $m(t) = \frac{a}{\lambda - \mu} (e^{(\lambda - \mu)t}-1)+ ie^{(\lambda-\mu)t}, \lambda \ne \mu$. So $m(t) \rightarrow \{ \infty$ for $\lambda \ge \mu, \frac{a}{\mu - \lambda}$ for $\lambda < \mu$.
 
+Example 4.5.2 - Consider a Markov Process where $S = \{0, 1\}$, (on/off system). The infinitesimal matrix is $A = \binom{-\alpha,  \alpha}{\beta, -\beta}$. The process varies between 0 and 1 with sojourn times in 0 iid with exponential distribution with parameter $\alpha$ and sojourn times in 1 iid with exponential distribution with parameter $\beta$. This is a finite-state birth-death process: $\lambda_0 = \alpha, \lambda_1 = 0, \mu_0 = 0, \mu_1 = \beta$. 1st Kol. equation: $P_{00}'(t) = -\alpha P_{00}(t) + \beta P_{01}(t) = \beta - (\alpha + \beta) P_{00}(t) \Rightarrow P_{00}(t) = \frac{\beta}{\alpha + \beta} + \frac{\alpha}{\alpha + \beta} e^{-(\alpha + \beta) t}, P_{01}(t) = \frac{\alpha}{\alpha + \beta} - \frac{\alpha}{\alpha + \beta} e^{-(\alpha + \beta) t}, P_{11}(t) = \frac{\alpha}{\alpha + \beta} + \frac{\beta}{\alpha + \beta} e^{-(\alpha + \beta) t}, P_{10}(t) = \dots$. $\lim_{t \rightarrow \infty} P_{00}(t) = \lim_{t \rightarrow \infty} P_{10}(t) = \frac{\beta}{\alpha + \beta}, \lim_{t \rightarrow \infty} P_{11}(t) = \lim_{t \rightarrow \infty} P_{01}(t) = \frac{\alpha}{\alpha + \beta}$. There is a limiting distribution.
+
+\subsection{Limiting Behavior of Birth-Death Processes}
+
+General result:
+
+Theorem 4.6.1 - If $X(t)$ is a birth-death process with no absorbing states. Then $\lim_{t \rightarrow \infty} P_{ij}(t) = \Pi_j \ge 0$ exists for all $i$. However, it is possible that $\Pi_j = 0$ for all $j$.
+
+Definition 4.6.1 - If the $\{\Pi_j\}$ in Theorem 4.6.1 are strictly positive and satisfy $\Sigma_j \Pi_j = 1$, then $\{\Pi_j\}$ is the limiting probability distribution for the process.
+
+Theorem 4.6.2 - If $X(t)$ is a birth-death process with no absorbing states and with limiting distribution $\{\Pi j\}$ then $\{\Pi j\}$ is also a stationary distribution: $\Pi_j = \Sigma_{i=0}^\infty \Pi_i P_{ij}(t), t \ge 0$. Read proof in notes.
+
+There is an explicit formula for determining the limiting distribution.
+
+Theorem 4.6.3 - Let $X(t)$ be a birth-death process with no absorbing states. Let (4.6.1) $\{\theta_0 = 1, \theta_j = \frac{\lambda_0 \lambda_1 \cdots \lambda_{j-1}}{\mu_1 \mu_2 \cdots \mu_j}, j \ge 1$. If $\Sigma_j \theta_j < \infty$, (4.6.3) $\{\Pi_0 = \frac{1}{\Sigma_{k=0}^\infty \theta_k}, \Pi_j = \theta_j \Pi_0 = \frac{\theta_j}{\Sigma_{k=0}^\infty \theta_k}$. If $\Sigma_j \theta_j = \infty, \Pi_j = 0$ for all $j$. Proof: Kol. forward equations: (4.6.3) $\{P_{i0}'(t) = -\lambda_0 P_{i0}(t) + \mu_1 P_{i1}(t), P_{ij}'(t) = \lambda_{j-1}P_{ij-1}(t) - (\lambda_j + \mu_j) P_{ij}(t) + \mu_{j+1}P_{ij+1}(t), j \ge 1, P_{ij}(0) = \delta_{ij}$. As $t \rightarrow \infty, P_{i0}'(t) \rightarrow$ limit, and $P_{ij}'(t) \rightarrow$ limit. $P_{ij}(t) \rightarrow$ constant $\Rightarrow \lim_{t \rightarrow \infty} P_{ij}'(t) = 0 = \Rightarrow 0 = -\lambda_0 \Pi_0 + \mu_1 \Pi_1, 0 = \lambda_{j-1} \Pi_{j-1} - (\lambda_j + \mu_j) \Pi_j + \mu_{j+1} \Pi_{j+1}, j \ge 1$. By induction $\Pi_0 = (\Sigma_k \theta_k)^{-1}$, and so on.
+
+Example 4.6.1 - Linear growth with immigration, (birth) $\lambda_n = a + n \cdot \lambda$, (death) $\mu_n = n \cdot \mu$. If $\lambda < \mu$, the population mean converges $m(t) \rightarrow \frac{a}{\mu - \lambda}, t \rightarrow \infty$. We can compute as above when $\lambda < \mu, \theta_0 = 1, \theta_1 = \frac{a}{\mu}, \theta_2 = \cdots, \Rightarrow \Pi_0 = (1 - \frac{\lambda}{\mu})^{a / \lambda}, \Pi_k = (\frac{\lambda}{\mu})^k \frac{(a/\lambda)(a/\lambda+1)\cdots(a/\lambda+k-1)}{k!}(1 - \frac{\lambda}{\mu})^{a/k}, k > 1$.
+
+Example 4.6.2 - Logistic process - $S = \{N, N+1, N+2, \dots, M\}$. Details in notes.
+
+\section{Markov Chain Monte Carlo}
+
+Difficult Problem: Compute realizations of a random vector $X$ whose component random variables are dependent. We describe a way to do this.
+
+\subsection{Background}
+
+We consider a finite state Markov chain $\{X_n\}$ with state space $S = \{1, 2, \dots, N\}, P_{ij} =$ transition probability matrix, $X_0 =$ initial condition. We assume $X_n$ is irreducible and aperiodic. We let $\{\Pi_j\}$ be the stationary distribution of $X_n$, (5.1.1) $\{\Pi = \Pi P, \Sigma_{j=1}^N \Pi_j = 1$, $\{\Pi_j\}$ is also the limiting distribution. (5.1.2) $\Pi_j = \lim_{n \rightarrow \infty} P(X_n = j), j = 1, \dots, N$.
+
+Sometimes the following method can be used to solve (5.1.1). Suppose there are positive numbers $\theta_j, j = 1, \dots, N$ such that (5.1.2) $\{\theta_i P_{ij} = \theta_j P_{ji}, i \ne j, \Sigma_{j=1}^N \theta_j = 1$. Summing $\Sigma_{i=1}^N \theta_j P_{ij} = \theta_j \Sigma_{i=1}^N P_{ji} = \theta_j$. So $\theta_j = \Pi_{ji}, j = 1, \dots, N$.
+
+We also solve
+
+Theorem 5.1.1 - Let $h$ be a function on $S$, then with probability 1, (5.1.3) $\lim_{n \rightarrow \infty} \frac{1}{h} \Sigma_{i=1}^n h(X_j) = \Sigma_{j=1}^n \Pi_j h(j)$. Proof: $\frac{1}{n} \Sigma_{i=1}^n h(X_i) =$ expected value of $\{h(X_i)\}$. $P_j(n) =$ proportion of time the chain is in state $j$ up to time $n$, then $\frac{1}{n} \Sigma_{i=1}^n h(X_i) = \Sigma_{j=1}^n h(j) P_j(n)$ as $n \rightarrow \infty, P_j(n) \rightarrow \Pi_j$.
+
+A Markov chain is time reversible if $\Pi_i P_{ij} = \Pi_j P_{ji}, j \ne i$. If the initial state is chosen according to $\{\Pi_j\}$, then the sequence of states considered backwards is a Markov chain with transition probability matrix $P_{ij}$.
+
+Suppose we want to generate the value of a random variable $X$ having pmf $P(X=j) = P_j, j = 1, \dots, N$. If we can generate an irreducible aperiodic Markov chain with limiting distribution $\{P_j\}$ then we can approximately generate $X$ by running the chain for $n$ steps to obtain $X_n$ for $n$ large.
+
+If the goal is to generate many random variables with distribution $\{P_j\}$ so as to estimate (5.1.4) $E(h(X)) = \Sigma_{j=1}^N h(j) P_j$ then we estimate $E(h(X))$ using (5.1.5) $\frac{1}{n} \Sigma_{i=1}^n h(X_i)$. Since early states can be influenced by the initial condition, $\frac{1}{n-k} \Sigma_{i=k+1}^n h(X_i)$.
+
 \end{document}
