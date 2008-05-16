@@ -82,8 +82,13 @@ close = 0.2
 
 # Newton's method (problem 9.3)
 
-def g(x1, x2):
-	return [-400. * (x2 - x1 ** 2.) * x1 - 2. * (1 - x1), 200. * (x2 - x1 ** 2.)]
+def g(x1, x2, gamma):
+	#return [-400. * (x2 - x1 ** 2.) * x1 - 2. * (1 - x1), 200. * (x2 - x1 ** 2.)]
+	#return [4. * x1 + 2. * x2 - 6, 6. * x2 + 2. * x1 - 6]
+	#return [6. * x1 + 4. * x2 - 12, 8. * x2 + 4. * x1 - 12]
+	a = 2. * (gamma + 1.) * x1 + 2. * gamma * x2 - 6. * gamma
+	b = 2. * (gamma + 2.) * x2 + 2. * gamma * x1 - 6. * gamma
+	return [a, b]
 
 def Finv(x1, x2):
 	c = 1. / ((1200. * x1 ** 2. - 400. * x2 + 2.) * 200. - (-400. * x1) * (x1 - 400.))
@@ -93,9 +98,21 @@ def Finv(x1, x2):
 		[c * (-x1 + 400.), c * (1200. * x1 ** 2. - 400. * x2 + 2.)]
 	]
 
+def FFinv(x1, x2, gamma):
+	a = (gamma + 1.) * 2.
+	b = c = gamma * 2.
+	d = (gamma + 2.) * 2.
+	
+	m = 1. / (a * d - b * c)
+	
+	return [[ d * m, -b * m], [-c * m, a * m]]
+
 def Newton(x1, x2):
-	gg = g(x1, x2)
-	ff = Finv(x1, x2)
+	gamma = 1.e9
+	gg = g(x1, x2, gamma)
+	ff = FFinv(x1, x2, gamma)
+	#ff = [[3/10., -1/10.], [-1/10., 1/5.]]
+	##ff = [[1/4., -1/8.], [-1/8., 3/16.]]
 	y1 = gg[0] * ff[0][0] + gg[1] * ff[0][1]
 	y2 = gg[0] * ff[1][0] + gg[1] * ff[1][1]
 	newx1 = x1 - y1
@@ -113,8 +130,8 @@ def fixedstepsize(x1, x2, alpha):
 x = [0, 0]
 alpha = 0.05
 
-#x = Newton(x[0], x[1])
-#x = Newton(x[0], x[1])
+for i in range(2):
+	x = Newton(x[0], x[1])
 
 #x = fixedstepsize(x[0], x[1], alpha)
 #x = fixedstepsize(x[0], x[1], alpha)
@@ -146,10 +163,10 @@ def quad(x):
 
 	return x[-1] - r
 
-x = [6., 5., 4.]
+#x = [6., 5., 4.]
 
-for i in range(10):
-	x.append(quad(x))
+#for i in range(10):
+#	x.append(quad(x))
 
-for i in x:
-	print 'f(%f) = %f' % (i, ff(i))
+#for i in x:
+#	print 'f(%f) = %f' % (i, ff(i))
