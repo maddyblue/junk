@@ -78,9 +78,17 @@ FNR == 1 {
 	if(idx == 4)
 	{
 		avgname = FILENAME ".avg";
+		range1 = FILENAME ".-1_1";
+		range2 = FILENAME ".-2_2";
 
 		avgtime = (time[0] + time[1] + time[2] + time[3] + time[4]) / 5;
 		avgdata = (data[0] + data[1] + data[2] + data[3] + data[4]) / 5;
 		print avgtime " " avgdata > avgname;
+
+		if(avgtime >= -.2 && avgtime <= .2)
+			print avgtime " " avgdata > range2;
+
+		if(avgtime >= -.1 && avgtime <= .1)
+			print avgtime " " avgdata > range1;
 	}
 }

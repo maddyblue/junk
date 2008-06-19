@@ -87,6 +87,7 @@ def sensors(request, rangetype):
 		se = sterror.pop(0)
 		i = float(i)
 		perc.append([i, i / m, se / m, se])
+		#perc.append([i, m, se, 0])
 
 	return render(request, 'results/sensors.html', {'sensors': sensors, 'type': t, 'perc': perc})
 
@@ -119,6 +120,8 @@ def upload(request):
 		'Feb': 2,
 		'Mar': 3,
 		'Apr': 4,
+		'May': 5,
+		'June': 6,
 		'Sept': 9,
 		'Oct': 10,
 		'Nov': 11,
