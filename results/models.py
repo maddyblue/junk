@@ -41,7 +41,7 @@ def calc_range(fname, mode=MODE_DIFF, low=0, mid=0, high=0):
 		i_mid = get_point(time, mid)
 		i_high = get_point(time, high)
 		m = min(value[i_mid:i_high])
-		i_m = value.index(m)
+		i_m = value.index(m, i_mid, i_high)
 		slope = (value[i_mid] - value[i_low]) / (time[i_mid] - time[i_low])
 		t = (time[i_m] - time[i_mid]) * slope + value[i_mid]
 		return (t, m, time[i_m])
@@ -97,7 +97,7 @@ class Result(models.Model):
 	low_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
 	high_time = models.DecimalField(null=True, max_digits=20, decimal_places=16)
 	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=16)
-	characterize = models.BooleanField(null=True, default=False)
+	characterize = models.BooleanField(null=True, blank=True, default=False)
 	characterize_low = models.DecimalField(null=True, max_digits=10, decimal_places=4, default='20.0')
 	characterize_mid = models.DecimalField(null=True, max_digits=10, decimal_places=4, default='25.0')
 	characterize_high = models.DecimalField(null=True, max_digits=10, decimal_places=4, default='40.0')
