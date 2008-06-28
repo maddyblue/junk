@@ -177,6 +177,7 @@ def upload(request):
 				r.charaterize_low = form.cleaned_data['characterize_low']
 				r.charaterize_mid = form.cleaned_data['characterize_mid']
 				r.charaterize_high = form.cleaned_data['characterize_high']
+				r.characterize_concentration = form.cleaned_data['characterize_concentration']
 
 			if form.cleaned_data['sensor'] is None and len(r.filename) >= 3 and r.filename[0] == 's':
 				r.sensor = r.filename[1:3]
@@ -193,6 +194,6 @@ def upload(request):
 
 			r.analyze()
 
-			return render_to_response('results/upload.html', {'form': UploadForm(), 'upload': r})
+			return render(request, 'results/upload.html', {'form': UploadForm(), 'upload': r})
 
-	return render_to_response('results/upload.html', {'form': form})
+	return render(request, 'results/upload.html', {'form': form})
