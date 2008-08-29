@@ -24,17 +24,6 @@ def get_psd(fname):
 	(pxx, fxx) = pylab.psd(wav, 2**17, wp[2])
 	return (pxx, fxx)
 
-def sign(n):
-	"""
-	Returns -1 if n < 0, 1 if n > 0, and 0 else.
-	"""
-
-	if n < 0:
-		return -1
-	elif n > 0:
-		return 1
-	return 0
-
 def get_peaks(dat, n):
 	"""
 	Return a list of the incidies of the n highest peaks from the array dat.
@@ -49,7 +38,7 @@ def get_peaks(dat, n):
 	for i in range(len(dat)):
 		cur = dat[i]
 		dif = cur - prev
-		s = sign(dif)
+		s = cmp(dif, 0)
 
 		if s == -1 and sprev == 1:
 			pp[k:k+1] = [i - 1]
@@ -73,14 +62,13 @@ def get_peaks(dat, n):
 
 	return p
 
-def get_percs(psd, psd_freqs, peaks):
+def get_percs(psd, psd_freqs, peaks, peaks_freqs):
 	"""
 	Returns a list of the percentages of each entry in peaks' energy contribution to the entire wave.
 	"""
 
 	s = sum(psd)
-	c = [psd[i] for i in peaks]
-	perc = [i / s for i in c]
+	perc = [i / s for i in peaks_freqs]
 
 	return perc
 
