@@ -41,9 +41,9 @@ class Entry:
 		print '\t%s' %fname
 		self.fname = fname
 		self.psd, self.psd_freqs = utilities.get_psd(fname)
-		self.peaks = utilities.get_peaks(self.psd, numpeaks)
+		self.peaks, self.peaks_energy = utilities.get_peaks(self.psd, numpeaks)
 		self.peaks_freqs = [self.psd_freqs[i] for i in self.peaks]
-		self.percs = utilities.get_percs(self.psd, self.psd_freqs, self.peaks, self.peaks_freqs)
+		self.percs = utilities.get_percs(self.psd, self.psd_freqs, self.peaks, self.peaks_energy)
 		self.peaks_notes = utilities.get_note(self.peaks_freqs)
 
 		if base:

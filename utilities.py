@@ -60,15 +60,15 @@ def get_peaks(dat, n):
 		c[i:i+1] = [rr[idx]]
 		rr[idx] = 0
 
-	return p
+	return p, c
 
-def get_percs(psd, psd_freqs, peaks, peaks_freqs):
+def get_percs(psd, psd_freqs, peaks, peaks_energy):
 	"""
 	Returns a list of the percentages of each entry in peaks' energy contribution to the entire wave.
 	"""
 
 	s = sum(psd)
-	perc = [i / s for i in peaks_freqs]
+	perc = [i / s for i in peaks_energy]
 
 	return perc
 
