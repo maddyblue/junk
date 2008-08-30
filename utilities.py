@@ -6,7 +6,9 @@ import wave
 from freqs import keys, freqs
 from math import log
 
-def get_psd(fname):
+PSD_NFFT = 2**17
+
+def get_psd(fname, nfft=PSD_NFFT):
 	"""
 	Given a filename of a wav, returns a tuple of the power spectral density using Welch's method and associated frequencies.
 	"""
@@ -21,7 +23,7 @@ def get_psd(fname):
 		wav.append(audioop.getsample(md, wp[1], i))
 	wav = numpy.array(wav)
 
-	(pxx, fxx) = pylab.psd(wav, 2**17, wp[2])
+	(pxx, fxx) = pylab.psd(wav, nfft, wp[2])
 	return (pxx, fxx)
 
 def get_peaks(dat, n):
