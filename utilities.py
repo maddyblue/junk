@@ -116,7 +116,7 @@ def write_wav(wav, fs, fname):
 	"""
 
 	w = wave.open(fname, 'wb')
-	w.setnchannels(2)
+	w.setnchannels(1)
 	w.setsampwidth(2)
 	w.setframerate(fs)
 
