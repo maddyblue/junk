@@ -124,9 +124,12 @@ def write_wav(wav, fs, fname):
 	wav = wav - wav.min() # adjust so wav.min() = 0
 	wav = (wav * 2**14 / wav.max()).astype('int16')
 
+	frames = ''
+
 	for d in wav:
 		msb = d >> 8
 		lsb = d - (msb << 8)
-		w.writeframes(chr(lsb) + chr(msb))
+		frames += chr(lsb) + chr(msb)
 
+	w.writeframes(frames)
 	w.close()

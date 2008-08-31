@@ -68,7 +68,10 @@ class Rank:
 
 	def write_rank(self, length=1, fs=11025, basedir='out'):
 		outdir = os.path.join(basedir, str(self.numpeaks), self.directory)
-		os.makedirs(outdir)
+		try:
+			os.makedirs(outdir)
+		except:
+			pass
 
 		self.get_synth(freqs.freqs[1:-1])
 
