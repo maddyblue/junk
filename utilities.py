@@ -90,3 +90,43 @@ def get_note(frequencies):
 		ret.append(n)
 
 	return ret
+
+def mk_wav(freq, length, fs):
+	"""
+	Return a tuple of a time-series array and corresponding times at given frequency (Hz), length (sec), and sampling freqency (samples/sec).
+	"""
+
+	degrees = 360.0;
+	x = numpy.arange(0, degrees * length, degrees / fs) / degrees
+	wav = numpy.sin(numpy.pi * freq * x)
+
+	return wav, x
+
+def write_wav, freq, length, fs, fname):
+	"""
+	Wrapper for mk_wav + write_wav.
+	"""
+
+	(wav, x) = mk_wav(freq, length, fs)
+	write_wav(wav, fs, length)
+
+def write_wav(wav, fs, fname):
+	"""
+	Write wav data at sampling frequency fs to file fname. wav must be a numpy.array. It may be in any encoding, and will be converted properly internally.
+	"""
+
+	w = wave.open(fname, 'wb')
+	w.setnchannels(2)
+	w.setsampwidth(2)
+	w.setframerate(fs)
+
+	# scale wave to 16-bit unsigned integers
+	wav = wav - wav.min() # adjust so wav.min() = 0
+	wav = (wav * 2**14 / wav.max()).astype('int16')
+
+	for d in wav:
+		msb = d >> 8
+		lsb = d - (msb << 8)
+		w.writeframes(chr(lsb) + chr(msb))
+
+	w.close()
