@@ -102,13 +102,13 @@ def mk_wav(freq, length, fs):
 
 	return wav, x
 
-def write_wav, freq, length, fs, fname):
+def write_wavspec(freq, length, fs, fname):
 	"""
 	Wrapper for mk_wav + write_wav.
 	"""
 
 	(wav, x) = mk_wav(freq, length, fs)
-	write_wav(wav, fs, length)
+	write_wav(wav, fs, fname)
 
 def write_wav(wav, fs, fname):
 	"""
