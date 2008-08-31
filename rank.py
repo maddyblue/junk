@@ -15,6 +15,7 @@ class Rank:
 		master_wavdir is the name of the directory containing parameter directory
 		files is a dict with keys as filenames and values as frequencies close to the aural (heard) frequency of the recording: the base frequency will be the closest one to this value
 		"""
+
 		print 'processing rank %s:' %directory
 		self.directory = directory
 		self.entries = []
@@ -24,16 +25,22 @@ class Rank:
 
 		self.entries.sort(cmp=lambda x, y: cmp(x.base, y.base))
 		self.bases = [e.base for e in self.entries]
+		self.fit = []
 
 		for i in range(numpeaks):
 			f = [log(e.peaks_freqs[i] / e.base) for e in self.entries]
-			fit = numpy.lib.polyfit(self.bases, f, 3)
-			print 'harmonic fit %i: %s' %(i, fit)
+			self.fit.append(numpy.lib.polyfit(self.bases, f, 3))
 
 	def __str__(self):
 		ret = 'Rank %s:\n' %self.directory
+
 		for e in self.entries:
 			ret += str(e)
+
+		ret += '\n'
+
+		for i in range(len(self.fit)):
+			ret += '\tharmonic fit %i: %s\n' %(i, self.fit[i])
 
 		return ret
 
