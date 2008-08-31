@@ -25,11 +25,18 @@ class Rank:
 
 		self.entries.sort(cmp=lambda x, y: cmp(x.base, y.base))
 		self.bases = [e.base for e in self.entries]
-		self.perc_fit = []
 
+		perc_fit = []
+		harm_fit = []
 		for i in range(numpeaks):
-			f = [e.percs[i] for e in self.entries]
-			self.perc_fit.append(numpy.lib.polyfit(self.bases, f, 3))
+			p = [e.percs[i] for e in self.entries]
+			perc_fit.append(numpy.lib.polyfit(self.bases, p, 3))
+			h = [e.peaks_freqs[i] / e.base for e in self.entries]
+			harm_fit.append(h)
+		self.perc_fit = numpy.array(perc_fit)
+		self.harm_fit = numpy.array(harm_fit)
+
+		self.synth = {}
 
 	def __str__(self):
 		ret = 'Rank %s:\n' %self.directory
@@ -41,6 +48,56 @@ class Rank:
 
 		for i in range(len(self.perc_fit)):
 			ret += '\tperc fit %i: %s\n' %(i, self.perc_fit[i])
+
+		for i in range(len(self.harm_fit)):
+			ret += '\tharm fit %i: %s\n' %(i, self.harm_fit[i])
+
+		return ret
+
+	def get_synth(self, synthfreqs):
+		ret = {}
+		for f in synthfreqs:
+			if f not in self.synth:
+				self.synth[f] = Synth(f, self.perc_fit, self.harm_fit, self.bases)
+
+			ret[f] = self.synth[f]
+
+		return ret
+
+class Synth:
+	def __init__(self, freq, perc, harm, bases):
+		assert(len(perc) == len(harm))
+
+		harm_idx = 0
+		for i in range(len(bases)):
+			if bases[i] < freq:
+				harm_idx = i
+		harm_col = harm[:,harm_idx]
+
+		p = []
+		h = []
+		for i in range(len(perc)):
+			p.append(numpy.polyval(perc[i], freq))
+			h.append(harm_col[i] * freq)
+
+		self.freq = freq
+		self.perc = numpy.array(p)
+		self.harm = numpy.array(h)
+
+	def __str__(self):
+		ret = '%7.2f: ' %self.freq
+
+		for i in range(len(self.perc)):
+			ret += '%7.2f(%4.1f), ' %(self.harm[i], self.perc[i] * 100)
+
+		return ret[:-2]
+
+	def wav(self, length, fs):
+		ret = 0
+
+		for i in range(len(self.perc)):
+			(w, x) = utilities.mk_wav(self.harm[i], length, fs)
+			ret += ret + (w * self.perc[i])
 
 		return ret
 

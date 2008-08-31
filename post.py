@@ -17,4 +17,5 @@ ranks = []
 for wavdir, wavlist in wavfiles.iteritems():
 	ranks.append(Rank(wavdir, wavlist, numpeaks))
 
-print ranks[0]
+r = ranks[0]
+print r
