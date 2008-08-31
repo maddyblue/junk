@@ -2,8 +2,11 @@ import freqs
 import numpy
 import os.path
 import utilities
+import warnings
 
 from math import log
+
+warnings.simplefilter('ignore', numpy.RankWarning)
 
 class Rank:
 	def __init__(self, directory, files, numpeaks, master_wavdir='wav'):
@@ -42,8 +45,8 @@ class Entry:
 		self.fname = fname
 		self.psd, self.psd_freqs = utilities.get_psd(fname)
 		self.peaks, self.peaks_energy = utilities.get_peaks(self.psd, numpeaks)
-		self.peaks_freqs = [self.psd_freqs[i] for i in self.peaks]
-		self.percs = utilities.get_percs(self.psd, self.psd_freqs, self.peaks, self.peaks_energy)
+		self.peaks_freqs = numpy.array([self.psd_freqs[i] for i in self.peaks])
+		self.percs = self.peaks_energy / self.psd.sum()
 		self.peaks_notes = utilities.get_note(self.peaks_freqs)
 
 		if base:
