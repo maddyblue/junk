@@ -1,5 +1,6 @@
 import freqs
 import numpy
+import os
 import os.path
 import utilities
 import warnings
@@ -18,6 +19,7 @@ class Rank:
 
 		print 'processing rank %s:' %directory
 		self.directory = directory
+		self.numpeaks = numpeaks
 		self.entries = []
 
 		for fname, base in files.iteritems():
@@ -63,6 +65,17 @@ class Rank:
 			ret[f] = self.synth[f]
 
 		return ret
+
+	def write_rank(self, length=1, fs=11025, basedir='out'):
+		outdir = os.path.join(basedir, str(self.numpeaks), self.directory)
+		os.makedirs(outdir)
+
+		self.get_synth(freqs.freqs[1:-1])
+
+		for key in freqs.keys[1:-1]:
+			outname = os.path.join(outdir, '%02i-%3s-%f.wav' %(key[0], key[1].replace(' ', '_'), key[2]))
+			print outname
+			utilities.write_wav(self.synth[key[2]].wav(length, fs), fs, outname)
 
 class Synth:
 	def __init__(self, freq, perc, harm, bases):
