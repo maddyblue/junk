@@ -25,11 +25,11 @@ class Rank:
 
 		self.entries.sort(cmp=lambda x, y: cmp(x.base, y.base))
 		self.bases = [e.base for e in self.entries]
-		self.fit = []
+		self.perc_fit = []
 
 		for i in range(numpeaks):
-			f = [log(e.peaks_freqs[i] / e.base) for e in self.entries]
-			self.fit.append(numpy.lib.polyfit(self.bases, f, 3))
+			f = [e.percs[i] for e in self.entries]
+			self.perc_fit.append(numpy.lib.polyfit(self.bases, f, 3))
 
 	def __str__(self):
 		ret = 'Rank %s:\n' %self.directory
@@ -39,8 +39,8 @@ class Rank:
 
 		ret += '\n'
 
-		for i in range(len(self.fit)):
-			ret += '\tharmonic fit %i: %s\n' %(i, self.fit[i])
+		for i in range(len(self.perc_fit)):
+			ret += '\tperc fit %i: %s\n' %(i, self.perc_fit[i])
 
 		return ret
 
