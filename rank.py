@@ -66,16 +66,16 @@ class Rank:
 
 		return ret
 
-	def write_rank(self, length=1, fs=11025, basedir='out'):
+	def write_rank(self, length=1, fs=11025, basedir='out', range_low=1, range_high=-1):
 		outdir = os.path.join(basedir, str(self.numpeaks), self.directory)
 		try:
 			os.makedirs(outdir)
 		except:
 			pass
 
-		self.get_synth(freqs.freqs[1:-1])
+		self.get_synth(freqs.freqs[range_low:range_high])
 
-		for key in freqs.keys[1:-1]:
+		for key in freqs.keys[range_low:range_high]:
 			outname = os.path.join(outdir, '%02i-%3s-%f.wav' %(key[0], key[1].replace(' ', '_'), key[2]))
 			print outname
 			utilities.write_wav(self.synth[key[2]].wav(length, fs), fs, outname)
@@ -130,13 +130,11 @@ class Entry:
 		self.peaks_notes = utilities.get_note(self.peaks_freqs)
 
 		if base:
-			lb = log(base)
 			bi = None
 			diff = 100
 
 			for i in self.peaks_freqs:
-				li = log(i)
-				d = abs(lb - li)
+				d = abs(base - i)
 				if d < diff:
 					diff = d
 					bi = i

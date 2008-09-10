@@ -1,5 +1,7 @@
 import audioop
 import numpy
+import os
+import os.path
 import pylab
 import wave
 
@@ -8,7 +10,7 @@ from math import log
 
 PSD_NFFT = 2**17
 
-def get_psd(fname, nfft=PSD_NFFT):
+def get_psd(fname, nfft=PSD_NFFT, plot=False):
 	"""
 	Given a filename of a wav, returns a tuple of the power spectral density using Welch's method and associated frequencies.
 	"""
@@ -16,7 +18,7 @@ def get_psd(fname, nfft=PSD_NFFT):
 	w = wave.open(fname)
 	wp = w.getparams()
 	wd = w.readframes(wp[3])
-	md = audioop.tomono(wd, wp[1], 1, 0)
+	md = audioop.tomono(wd, wp[1], 1, 1)
 
 	wav = []
 	for i in range(wp[3]):
@@ -24,15 +26,18 @@ def get_psd(fname, nfft=PSD_NFFT):
 	wav = numpy.array(wav)
 
 	(pxx, fxx) = pylab.psd(wav, nfft, wp[2])
+
+	if plot:
+		pylab.show()
+
 	return (pxx, fxx)
 
 def get_peaks(dat, n):
 	"""
-	Return a list of the incidies of the n highest peaks from the array dat.
+	Return a tuple of the list of the incidies and their energy of the n highest peaks from the array dat.
 	"""
 
 	sprev = prev = 0
-	k = 0
 
 	pp = []
 	rr = []
@@ -42,13 +47,14 @@ def get_peaks(dat, n):
 		dif = cur - prev
 		s = cmp(dif, 0)
 
+		# at a peak
 		if s == -1 and sprev == 1:
-			pp[k:k+1] = [i - 1]
-			rr[k:k+1] = [dat[i - 1]]
-			k += 1
+			pp.append(i - 1)
+			rr.append(dat[i - 1])
+		# peak at end of data
 		elif s == 1 and i == len(dat):
-			pp[k:k+1] = [i]
-			rr[k:k+1] = [cur]
+			pp.append(i)
+			rr.append(cur)
 
 		prev = cur
 		sprev = s
@@ -58,8 +64,8 @@ def get_peaks(dat, n):
 
 	for i in range(n):
 		idx = rr.index(max(rr))
-		p[i:i+1] = [pp[idx]]
-		c[i:i+1] = [rr[idx]]
+		p.append(pp[idx])
+		c.append(rr[idx])
 		rr[idx] = 0
 
 	return numpy.array(p), numpy.array(c)
@@ -133,3 +139,15 @@ def write_wav(wav, fs, fname):
 
 	w.writeframes(frames)
 	w.close()
+
+def write_reference(length=2, fs=11025, outdir='out'):
+	outdir = os.path.join(outdir, 'reference')
+	try:
+		os.makedirs(outdir)
+	except:
+		pass
+
+	for key in keys:
+		outname = os.path.join(outdir, ('%02i-%3s-%f.wav' %(key[0], key[1], key[2])).replace(' ', '_'))
+		print outname
+		write_wavspec(key[2], length, fs, outname)
