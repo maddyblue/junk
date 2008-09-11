@@ -14,7 +14,8 @@ class Rank:
 		"""
 		directory is the name of the directory containing the files
 		master_wavdir is the name of the directory containing parameter directory
-		files is a dict with keys as filenames and values as frequencies close to the aural (heard) frequency of the recording: the base frequency will be the closest one to this value
+		files is a dict with keys as filenames and values as frequencies close to the aural (heard) frequency of the recording: the base frequency will be the closest one to this value in the resulting peaks list. Hence, if the base frequency does not
+		appear in the first numpeaks peaks, the assigned base frequency will be incorrect.
 		"""
 
 		print 'processing rank %s:' %directory
