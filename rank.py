@@ -31,13 +31,18 @@ class Rank:
 
 		perc_fit = []
 		harm_fit = []
+		harm_polyfit = []
 		for i in range(numpeaks):
 			p = [e.percs[i] for e in self.entries]
 			perc_fit.append(numpy.lib.polyfit(self.bases, p, 3))
+
 			h = [e.peaks_freqs[i] / e.base for e in self.entries]
 			harm_fit.append(h)
+			harm_polyfit.append(numpy.lib.polyfit(self.bases, h, len(self.bases)))
+
 		self.perc_fit = numpy.array(perc_fit)
 		self.harm_fit = numpy.array(harm_fit)
+		self.harm_polyfit = numpy.array(harm_polyfit)
 
 		self.synth = {}
 
@@ -54,6 +59,9 @@ class Rank:
 
 		for i in range(len(self.harm_fit)):
 			ret += '\tharm fit %i: %s\n' %(i, self.harm_fit[i])
+
+		for i in range(len(self.harm_polyfit)):
+			ret += '\tharm polyfit %i: %s\n' %(i, self.harm_polyfit[i])
 
 		return ret
 
@@ -162,11 +170,11 @@ class Entry:
 				disp = ''
 
 			if not disp:
-				h = self.peaks_freqs[0] / peak
+				h = self.base / peak
 				rh = round(h)
 				ratio = rh / h
 
-				if (1 - self.closeness) < ratio and (1 + self.closeness) and ratio:
+				if (1 - self.closeness) < ratio and (1 + self.closeness) > ratio:
 					disp = ' <- harmonic 1/%i' %rh
 
 			ret += '\t%3i: %7.2f (%5.2f%%): %-3s (%7.2f)%s\n' %(idx, peak, self.percs[idx] * 100, freqs.keys[self.peaks_notes[idx]][1], freqs.keys[self.peaks_notes[idx]][2], disp)
