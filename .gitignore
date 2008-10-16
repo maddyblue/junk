@@ -1,2 +1,5 @@
 *.wav
 *.pyc
+*.aux
+*.log
+*.pdf
