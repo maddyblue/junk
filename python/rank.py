@@ -10,7 +10,7 @@ from math import log
 warnings.simplefilter('ignore', numpy.RankWarning)
 
 class Rank:
-	def __init__(self, directory, files, numpeaks, master_wavdir='wav'):
+	def __init__(self, directory, files, numpeaks, master_wavdir='../wav'):
 		"""
 		directory is the name of the directory containing the files
 		master_wavdir is the name of the directory containing parameter directory
