@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	if((in = readfile("../wav/haupt-principal-8/c3.wav", s, si)) == NULL)
 		return 1;
 
-	nfft = 64;
+	nfft = pow(2, 17);
 	fs = si->samplerate;
 	n = si->frames;
 
@@ -55,7 +55,7 @@ int psd(double *x, int n, int nfft, int fs, double *pxx, double *freqs)
 		for(i = 0; i < n; i++)
 			d[i] = x[i];
 
-		for(; i < nfft; x++)
+		for(; i < nfft; i++)
 			d[i] = 0;
 
 		n = nfft;
