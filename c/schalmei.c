@@ -12,9 +12,27 @@ int main(int argc, char *argv[])
 {
 	SNDFILE *s;
 	struct SF_INFO *si;
-	double *in, *pxx, *freqs;
-	int i, nfft, fs, n, numfreqs;
+	double *in, *pxx, *freqs, *out;
+	int i, nfft, fs, n, numfreqs, *pks;
 
+	/* Vandermonde test
+	if((in = (double *)calloc(4, sizeof(double))) == NULL)
+		return 1;
+
+	in[0] = 1;
+	in[1] = 2;
+	in[2] = 3;
+	in[3] = 4;
+
+	out = vander(4, in, 0);
+
+	for(i = 0; i < 4; i++)
+	{
+		printf("%10.5f, %10.5f, %10.5f, %10.5f\n", out[i * 4 + 0], out[i * 4 + 1], out[i * 4 + 2], out[i * 4 + 3]);
+	}
+	//*/
+
+	//*
 	if((si = (struct SF_INFO *)malloc(sizeof(*si))) == NULL)
 		return 1;
 
@@ -33,8 +51,16 @@ int main(int argc, char *argv[])
 
 	psd(in, n, nfft, fs, pxx, freqs);
 
+	/*
 	for(i = 0; i < numfreqs; i++)
 		printf("%10.5f: %20.10f\n", freqs[i], pxx[i]);
+	//*/
+
+	n = 75;
+	pks = peaks(n, numfreqs, pxx);
+
+	for(i = 0; i < n; i++)
+		printf("%2i: %10.5fHz (%08.5f)\n", i, freqs[pks[i]], pxx[pks[i]]);
 
 	return 0;
 }
@@ -173,4 +199,99 @@ void fft(int n, double *in, double *out)
 
 	p = fftw_plan_r2r_1d(n, in, out, FFTW_R2HC, FFTW_ESTIMATE);
 	fftw_execute(p);
+}
+
+double * vander(int n, double *in, int order)
+{
+	double *r;
+	int i, j;
+
+	if(order == 0)
+		order = n;
+	else if(order > n || order < 0)
+		return NULL;
+
+	if((r = (double *)calloc(order * n, sizeof(double))) == NULL)
+		return NULL;
+
+	for(i = 0; i < order; i++)
+		for(j = 0; j < n; j++)
+			r[j * n + i] = pow(in[j], order - i - 1);
+
+	return r;
+}
+
+int cmp(double a, double b)
+{
+	if(a < b)
+		return -1;
+	else if(a > b)
+		return 1;
+
+	return 0;
+}
+
+int * peaks(int n, int len, double *in)
+{
+	int i, idx, s, sprev, *indicies;
+	double prev, cur, dif;
+	double *pp, *rr;
+
+	if((pp = (double *)calloc(len, sizeof(double))) == NULL)
+		return NULL;
+	if((rr = (double *)calloc(len, sizeof(double))) == NULL)
+		return NULL;
+	if((indicies = (int *)calloc(n, sizeof(int))) == NULL)
+		return NULL;
+
+	sprev = prev = 0;
+	idx = 0;
+
+	for(i = 0; i < len; i++)
+	{
+		cur = in[i];
+		dif = cur - prev;
+		s = cmp(dif, 0);
+
+		// at a peak
+		if(s == -1 && sprev == 1)
+		{
+			pp[idx] = i - 1;
+			rr[idx] = in[i - 1];
+			idx++;
+		}
+		// peak at end of data
+		else if(s == 1 && i == len)
+		{
+			pp[idx] = i;
+			rr[idx] = cur;
+			idx++;
+		}
+
+		prev = cur;
+		sprev = s;
+	}
+
+	for(i = 0; i < n; i++)
+	{
+		// find max value
+		sprev = 0;
+		prev = pp[0];
+		for(s = 0; s < idx; s++)
+		{
+			if(rr[s] > prev)
+			{
+				sprev = s;
+				prev = rr[s];
+			}
+		}
+
+		indicies[i] = pp[sprev];
+		rr[sprev] = 0;
+	}
+
+	free(pp);
+	free(rr);
+
+	return indicies;
 }
