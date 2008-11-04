@@ -1,5 +1,6 @@
-\documentclass{article}
+\documentclass[twocolumn]{article}
 \usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
 \begin{document}
 
 \title{Organ Sound Synthesis by Harmonic Interpolation}
@@ -7,9 +8,11 @@
 
 \maketitle{}
 
-\section*{Abstract}
+\begin{abstract}
 
 In this paper I present a method of synthesizing pipe organ sounds by interpolating harmonics of recordings. This method allows unique waves to be generated at all frequencies without the need for sample playback or playback rate manipulation.
+
+\end{abstract}
 
 \section{Introduction}
 
@@ -25,9 +28,30 @@ In order to create a method that meets those requirements, it must be (1) produc
 
 \subsection{Recording Analysis}
 
-After recordings of the chosen notes are made and edited to include only the primary pipe speech (i.e., after the initial attack and final release of the note where other effects occur), each recording is processed through a power spectral density (PSD) function. A PSD function determine the power distribution of a signal in the frequency domain. This allows us to see the power of the signal at discrete frequencies. The $N$ (an arbitrary number chosen by the user) largest peaks in each distribution are found by searching for three consecutive points where the middle point has greater value than both surrounding points. The percentage power contribution of each peak is found by dividing the power of the peak by the total power of the distribution. Finally, the expected base frequency is recorded as the closest frequency to it that is also one of the $N$ peaks. We cannot use an exact base frequency because the PSD function produces a list of discrete frequencies. Furthermore, the number of peaks chosen so that there is a close match (within 2Hz, generally). This is generally not an issue as the base frequency is almost always one of the first two peaks.
+After recordings of the chosen notes are made and edited to include only the primary pipe speech (i.e., after the initial attack and before the final release of the note, Figure \ref{time}), each recording is processed through a power spectral density (PSD) function (Figure \ref{psd}). A PSD function determines the power distribution of a signal in the frequency domain. This allows us to see the power of the signal at discrete frequencies. The $N$ (an arbitrary number chosen by the user) largest peaks in each distribution are found by searching for three consecutive points where the middle point has greater value than both surrounding points (Figure \ref{peaks}). The percentage power contribution of each peak is found by dividing the power of the peak by the total power of the distribution. Finally, the expected base frequency is recorded as the closest frequency to it that is also one of the $N$ peaks. We cannot use an exact base frequency because the PSD function produces a list of discrete frequencies. Furthermore, the number of peaks chosen so that there is a close match (within 2Hz, generally). This is generally not an issue as the base frequency is almost always one of the first two peaks.
 
-At this point processing on individual recordings is complete and they may be processed as a set. The first peak power contribution of each recording is taken, along with that recording's base frequency. A least squares polynomial fit algorithm is applied with $x$ values (sample points) as base frequencies, and $y$ values (values to fit) as the peak power contribution corresponding to that base frequency. A degree of 3 tends to produce good results. This is repeated for all of the other $N$ peaks (e.g., the polynomial fit algorithm is applied to all of the second, third, etc. peak power contributions up to $N$). These algorithms generate $a$s, $b$s, and $c$s for the polynomial $a x^2 + b x + c = y$, where $x$ is the desired frequency and $y$ is the resultant power contribution for each of the first $N$ power contributions, which gives us continuous functions from which to generate individual (and likely unique) at any frequency harmonic structures.
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/time.png}
+\caption{Excerpt of a recorded wave, shown in the time domain.}
+\label{time}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/psd.png}
+\caption{Excerpt of the PSD of a recorded wave, shown in the frequency domain.}
+\label{psd}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/peaks.png}
+\caption{Excerpt of the PSD of a recorded wave, shown in the frequency domain. The first five peaks are marked with red circles.}
+\label{peaks}
+\end{figure}
+
+At this point processing on individual recordings is complete and they may be processed as a set. The first peak power contribution of each recording is taken, along with that recording's base frequency. A least squares polynomial fit algorithm is applied with $x$ values (sample points) as base frequencies, and $y$ values (values to fit) as the peak power contribution corresponding to that base frequency. A degree of 3 tends to produce good results. This is repeated for all of the other $N$ peaks (e.g., the polynomial fit algorithm is applied to all of the second, third, etc. peak power contributions up to $N$). These algorithms generate $a$s, $b$s, and $c$s for the polynomial $a x^2 + b x + c = y$, where $x$ is the desired frequency and $y$ is the resultant power contribution for each of the first $N$ power contributions, which gives us continuous functions from which to generate individual (and likely unique) waves at any frequency harmonic structures.
 
 \subsection{Sound Synthesis}
 
