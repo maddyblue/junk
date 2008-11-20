@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[twocolumn]{article}
 \usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
 \usepackage{graphicx}
 \begin{document}
@@ -11,17 +11,83 @@
 
 \begin{abstract}
 
-Advancing our understanding of how the central nervous system works under specific conditions requires real-time, simultaneous detection of a number of key signaling molecules, like nitric oxide (NO). NO diffuses widely and rapidly, has a lifetime in milliseconds, and presents among other high concertration, interfering compounds in the nanomolar range in most biological systems. Current microelectrode-based electrochemical NO sensors have diameters in the micrometer range, much larger than biological cells which are in the micron range, and are thus insufficient for analyzing cell-to-cell interactions. A chip was fabricated using the $0.6\mu m$ CMOS process to overcome these difficulties, with a $5 \times 5$ array of sensors in the 2$\mu m$ range. Characterazition results of the chip indicate sensitivity into the 20$\mu$ molar range and suggest higher-sensitivity devices can offer improvement.
+Advancing our understanding of how the central nervous system works under specific conditions requires real-time, simultaneous detection of a number of key signaling molecules, like nitric oxide (NO). NO diffuses widely and rapidly, has a lifetime in milliseconds, and presents among other high concentration, interfering compounds in the nanomolar range in most biological systems. Current microelectrode-based electrochemical NO sensors have diameters in the micrometer range, much larger than biological cells which are in the micron range, and are thus insufficient for analyzing cell-to-cell interactions. A chip was fabricated using the $0.6\mu m$ CMOS process to overcome these difficulties, with a $5 \times 5$ array of sensors in the 2$\mu m$ range. Characterazition results of the chip indicate sensitivity into the 20$\mu M$ range and suggest higher-sensitivity devices can offer improvement.
 
 \end{abstract}
 
 \section{Introduction}
 
-\section{Background}
+\section{Electrochemistry Background}
+
+\section{Silicon Technology Background}
 
 \section{Experimental Setup}
 
+Fabrication was done at Avago, Inc.\ as two circular wafers, each with many chips. The wafers were diced by Aspen Technologies to separate the chips. To prepare a single chip, a well of PDMS was constructed such that the exterior would not exceed the edge of the chip and would allow for pins to be lowered onto the bonding pads, and the interior would allow the sensor array to be exposed (Fig. \ref{chip-diagram}). This was done so that solution and ovaries could be put over the sensor array with no interference to the bonding pads. The well was attached to the chip with glue, producing a seal that would not allow leakage of the interior solution to the bonding pads. The well was high enough so that the interior could hold at least 70$mL$ of solution. The interior was wide enough so that ovaries could be easily attached to the surface.
+
+The first characterization of the chip was needed to find the best electrode cell configuration, i.e., the cell with the largest response for a given input. Recall that there are 25 sensor areas. Each area contains multiple working electrodes, and one or more reference and auxiliary electrodes. Two or more working electrodes were tested at each sensor area. Sensors were cleaned directly before a test by cyclic voltammetry (CV) from $-0.8V$ to $1.5V$ at $1V/s$ for 100 cycles in 0.1$M$ $\mathrm{H}_2 \mathrm{SO}_4$. A CV was performed from $-0.2V$ to $1.0V$ at $0.25V/s$ in $200\mu M$ norepinefrin (NE).
+
+To find the ideal potential at which to run the amperometry characterization, a HDV was performed. This is done by running multiple amperometry experiments at identical conditions except for a changing potential.
+
+\begin{figure} %{{{ chip-diagram
+\centering
+\setlength{\unitlength}{0.007 \linewidth}
+\begin{picture}(100, 100)
+	% 1x1 square
+	\newsavebox{\sensor}
+	\savebox{\sensor}(1, 1){
+		\multiput(0, 0)(0, 1){2}{\line(1, 0){1}}
+		\multiput(0, 0)(1, 0){2}{\line(0, 1){1}}
+	}
+
+	% 5x5 sensor grid
+	\multiput(45, 45.5)(0, 2){5}{\usebox{\sensor}}
+	\multiput(47, 45.5)(0, 2){5}{\usebox{\sensor}}
+	\multiput(49, 45.5)(0, 2){5}{\usebox{\sensor}}
+	\multiput(51, 45.5)(0, 2){5}{\usebox{\sensor}}
+	\multiput(53, 45.5)(0, 2){5}{\usebox{\sensor}}
+
+	% vertical pads
+	\multiput(0, 0.5)(0, 2){50}{\usebox{\sensor}}
+	\multiput(98, 0.5)(0, 2){50}{\usebox{\sensor}}
+
+	% horizontal pads
+	\multiput(2, 0.5)(2, 0){48}{\usebox{\sensor}}
+	\multiput(2, 98.5)(2, 0){48}{\usebox{\sensor}}
+
+	% exterior
+	\multiput(0, 0)(0, 100){2}{\line(100, 0){100}}
+	\multiput(0, 0)(100, 0){2}{\line(0, 100){100}}
+
+	% well exterior
+	\multiput(2, 2)(0, 96){2}{\line(96, 0){96}}
+	\multiput(2, 2)(96, 0){2}{\line(0, 96){96}}
+
+	% well interior
+	\put(50, 50){\circle{15}}
+
+	\put(10, 10){bonding pads}
+	\put(10, 10){\vector(-1, -1){8.5}}
+
+	\put(35, 35){$5 \times 5$ sensor array}
+	\put(50, 39){\vector(0, 1){11}}
+
+	\put(35, 65){well interior edge}
+	\put(50, 64){\vector(0, -1){6.5}}
+
+	\put(10, 89){well exterior edge}
+	\put(25, 93){\vector(0, 1){5}}
+
+	\put(70, 89){chip edge}
+	\put(80, 93){\vector(0, 1){7}}
+\end{picture}
+\caption{Chip with PDMS well.}
+\label{chip-diagram}
+\end{figure} %}}}
+
 \section{Experimental Results}
+
+Ovary slice results show that our current instrumentation is not sensitive enough to detect statistically significant signals.
 
 \section{Conclusion}
 
