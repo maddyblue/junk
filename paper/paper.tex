@@ -10,7 +10,7 @@
 
 \begin{abstract}
 
-In this paper I present a method of synthesizing pipe organ sounds by interpolating harmonics of recordings. This method allows unique waves to be generated at all frequencies without the need for sample playback or playback rate manipulation.
+Synthetic sound generation techniques for pipe organs are currently based on samples and wave tables. These require expensive and time-consuming editing and recording. In this paper I present a method of synthesizing pipe organ sounds by interpolating certain harmonics of recordings. The $N$ largest frequency components of the power spectral density of each recording are found and analyzed to find their percentage power contribution to the overall recording and harmonic above the fundamental. Simple polynomial fit algorithms are applied to each of the $N$ components and a function generated to describe them at any point. Unique waves can be generated in real time at arbitrary frequencies without the need for samples or wave tables.
 
 \end{abstract}
 
@@ -34,21 +34,21 @@ Recordings of the chosen notes are made and edited to include only the primary p
 
 \begin{figure}
 \centering
-\includegraphics[width=\linewidth]{figures/time.png}
+\includegraphics[width=\linewidth]{figures/recording-time.png}
 \caption{Excerpt of a recorded wave, shown in the time domain.}
 \label{time}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=\linewidth]{figures/psd.png}
+\includegraphics[width=\linewidth]{figures/recording-psd.png}
 \caption{Excerpt of the PSD of a recorded wave, shown in the frequency domain.}
 \label{psd}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=\linewidth]{figures/peaks.png}
+\includegraphics[width=\linewidth]{figures/recording-peaks.png}
 \caption{Excerpt of the PSD of a recorded wave, shown in the frequency domain. The first five peaks are marked with red circles.}
 \label{peaks}
 \end{figure}
@@ -61,6 +61,27 @@ To synthesize a desired sound at base frequency $F$Hz, find the frequencies of t
 
 \section{Results}
 
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/synth-time.png}
+\caption{Excerpt of a synthesized wave, shown in the time domain.}
+\label{time}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/synth-psd.png}
+\caption{Excerpt of the PSD of a synthesized wave, shown in the frequency domain.}
+\label{psd}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/synth-peaks.png}
+\caption{Excerpt of the PSD of a synthesized wave, shown in the frequency domain. The first five peaks are marked with red circles.}
+\label{peaks}
+\end{figure}
+
 Results by listening test are acceptable. The produced sound is clearly of correct pitch and timbre. It is also, however, clearly computer generated. Furthermore, when going beyond the range of the lowest and highest recorded sounds, the generated sounds can get wildly inaccurate, with the percentage contribution multipliers quickly blowing up, yielding meaningless results. Thus, generated sounds should be confined to the interval between the lowest and highest recorded notes, or within a small margin thereof.
 
 As a result of using the closest recorded note to the desired frequency as the basis for the harmonic structure, there are very noticeable changes when listening to a full range sweep of produced noises (i.e., a generated tone corresponding to each note on an organ). This occurs when the closest recorded note switches to another recorded note. The change in harmonic structure is noticeable since it is so abrupt and unnatural.
@@ -71,7 +92,7 @@ Processing speed of this algorithm is on the order of several seconds per record
 
 \section{Discussion and Further Work}
 
-As touched on above, there are some boundaries between notes on a full range where the harmonic structure noticeably changes from one recorded note's structure to another's. It is not possible to simply apply a polynomial fitting algorithm to the harmonics as was done in the power contribution case. For example, consider a set consisting of two recordings of C1 and C2 (which are an octave apart). Both recordings have as their most powerful frequency (first peak) their base frequency. The lower recording has as its second most powerful frequency (second peak) twice the base frequency (one octave or $12/12^\mathrm{ths}$ above the base), as would be expected from a simple harmonic series. The higher recording, however, has as its second peak triple the base frequency (two octaves or $24/12^\mathrm{ths}$ above the base). If a simple linear interpolation is applied to determine the second peak, the second peaks for the in between C1 and C2 will evenly distribute between $12/12^\mathrm{ths}$ and $24/12^\mathrm{ths}$ above the base, which frequencies are not in the harmonic series, and thus not sound correct. Taking one note above the lowest recording, C$\sharp$1, this incorrect interpolation dictates the second peak should be $13/12^\mathrm{ths}$ above the base. D1 similarly has a second peak $14/12^\mathrm{ths}$ above the base, continuing up to B1 at $23/12^\mathrm{ths}$, and ending at C2 at $24/12^\mathrm{ths}$ above the base, or triple the base frequency.
+As touched on above, there are some boundaries between notes on a full range where the harmonic structure noticeably changes from one recorded note's structure to another's. It is not possible simply to apply a polynomial fitting algorithm to the harmonics as was done in the power contribution case. For example, consider a set consisting of two recordings of C1 and C2 (which are an octave apart). Both recordings have as their most powerful frequency (first peak) their base frequency. The lower recording has as its second most powerful frequency (second peak) twice the base frequency (one octave or $12/12^\mathrm{ths}$ above the base), as would be expected from a simple harmonic series. The higher recording, however, has as its second peak triple the base frequency (two octaves or $24/12^\mathrm{ths}$ above the base). If a simple linear interpolation is applied to determine the second peaks, the results between C1 and C2 will evenly distribute between $12/12^\mathrm{ths}$ and $24/12^\mathrm{ths}$ above the base, which frequencies are not in the harmonic series, and thus will not sound correct. For example, taking one note above the lowest recording, C$\sharp$1, this incorrect interpolation dictates the second peak should be $13/12^\mathrm{ths}$ above the base. D1 similarly has a second peak $14/12^\mathrm{ths}$ above the base, continuing up to B1 at $23/12^\mathrm{ths}$, and ending at C2 at $24/12^\mathrm{ths}$ above the base, or triple the base frequency.
 
 In general, the harmonics above the base are taken from a set of often-used harmonics, that tend to be integer multiples above or integer divisors below (e.g., $1/2$) the base frequency. Thus, a solution is perhaps a somewhat discretized list assigning a certain probability to each harmonic. Other algorithms involving optimization and genetic algorithms may suggest other models. These models, when applied to data from a recording set over a full range of notes, could yield methods to generate individual harmonic structure for all frequencies.
 
