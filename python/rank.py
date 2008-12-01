@@ -9,7 +9,70 @@ from math import log
 
 warnings.simplefilter('ignore', numpy.RankWarning)
 
+chuck_main = """
+fun float[] proc_harm(float freq)
+{
+	float ret[peaks];
+	int i;
+	0 => int idx;
+
+	for(0 => i; i < recs; i++)
+	{
+		if(bases[i] < freq)
+			i => idx;
+	}
+
+	for(0 => i; i < peaks; i++)
+	{
+		harms[i][idx] => ret[i];
+	}
+
+	return ret;
+}
+
+fun float[] proc_perc(float freq)
+{
+	float ret[peaks];
+	int i;
+	int j;
+
+	for(0 => i; i < peaks; i++)
+	{
+		0 => ret[i];
+
+		for(0 => j; j <= degs; j++)
+		{
+			percs[i][j] * Math.pow(freq, degs - j) +=> ret[i];
+		}
+	}
+
+	return ret;
+}
+
+me.arg(0) => string freqstr;
+if(freqstr.length() == 0) "440" => freqstr;
+Std.atoi(freqstr) => float freq;
+
+proc_harm(freq) @=> float harm[];
+proc_perc(freq) @=> float perc[];
+
+Pan2 p => dac;
+SinOsc s[peaks];
+for(0 => int i; i < peaks; i++)
+{
+	s[i] => p;
+	harm[i] * freq => s[i].freq;
+	perc[i] => s[i].gain;
+	//<<< harm[i] * freq, "Hz,", perc[i], "gain" >>>;
+}
+
+while(true) 1::second => now;
+"""
+
 class Rank:
+
+	PERC_FIT_DEGS = 3
+
 	def __init__(self, directory, files, numpeaks, master_wavdir='../wav'):
 		"""
 		directory is the name of the directory containing the files
@@ -34,7 +97,7 @@ class Rank:
 		harm_polyfit = []
 		for i in range(numpeaks):
 			p = [e.percs[i] for e in self.entries]
-			perc_fit.append(numpy.lib.polyfit(self.bases, p, 3))
+			perc_fit.append(numpy.lib.polyfit(self.bases, p, self.PERC_FIT_DEGS))
 
 			h = [e.peaks_freqs[i] / e.base for e in self.entries]
 			harm_fit.append(h)
@@ -75,7 +138,7 @@ class Rank:
 
 		return ret
 
-	def write_rank(self, length=1, fs=11025, basedir='out', range_low=1, range_high=-1):
+	def write_rank(self, length=1, fs=11025, basedir='../out', range_low=1, range_high=-1):
 		outdir = os.path.join(basedir, str(self.numpeaks), self.directory)
 		try:
 			os.makedirs(outdir)
@@ -88,6 +151,53 @@ class Rank:
 			outname = os.path.join(outdir, '%02i-%3s-%f.wav' %(key[0], key[1].replace(' ', '_'), key[2]))
 			print outname
 			utilities.write_wav(self.synth[key[2]].wav(length, fs), fs, outname)
+
+	def write_freq(self, freq, length=1, fs=11025, basedir='../out'):
+		outdir = os.path.join(basedir, str(self.numpeaks), self.directory)
+		try:
+			os.makedirs(outdir)
+		except:
+			pass
+
+		self.get_synth([freq])
+
+		outname = os.path.join(outdir, '%f.wav' %freq)
+		w = self.synth[freq].wav(length, fs)
+		utilities.write_wav(w, fs, outname)
+
+	def chuck_rank(self, basedir='../out', range_low=1, range_high=-1):
+		outdir = os.path.join(basedir, str(self.numpeaks), self.directory)
+		try:
+			os.makedirs(outdir)
+		except:
+			pass
+
+		self.get_synth(freqs.freqs[range_low:range_high])
+
+		for key in freqs.keys[range_low:range_high]:
+			outname = os.path.join(outdir, '%02i-%3s-%f.ck' %(key[0], key[1].replace(' ', '_'), key[2]))
+			utilities.write_chuck(self.synth[key[2]], outname)
+
+	def chuck(self, basedir='../out'):
+		outdir = os.path.join(basedir, str(self.numpeaks), self.directory)
+		try:
+			os.makedirs(outdir)
+		except:
+			pass
+
+		outname = os.path.join(outdir, '%s-%s.ck' %(self.directory, self.numpeaks))
+
+		f = open(outname, 'w')
+		f.write('%i => int peaks;\n' %self.numpeaks)
+		f.write('%i => int recs;\n' %len(self.bases))
+		f.write('%i => int degs;\n' %self.PERC_FIT_DEGS)
+
+		f.write('\n[ [ %s ] ] @=> float percs[][];\n' %'], ['.join([ ', '.join(k) for k in [ [ '%20.25f' %j for j in i] for i in self.perc_fit ]]))
+		f.write('\n[ [ %s ] ] @=> float harms[][];\n' %'], ['.join([ ', '.join(k) for k in [ [ '%10.5f' %j for j in i] for i in self.harm_fit ]]))
+		f.write('\n[ %s ] @=> float bases[];\n' %', '.join([ '%f' %i for i in self.bases ]))
+
+		f.write(chuck_main)
+		f.close()
 
 class Synth:
 	def __init__(self, freq, perc, harm, bases):
@@ -132,7 +242,8 @@ class Entry:
 	def __init__(self, fname, numpeaks, base=0):
 		print '\t%s' %fname
 		self.fname = fname
-		self.psd, self.psd_freqs = utilities.get_psd(fname)
+		self.wav, self.wp = utilities.get_wav(fname)
+		self.psd, self.psd_freqs = utilities.get_psd(self.wav, self.wp[2])
 		self.peaks, self.peaks_energy = utilities.get_peaks(self.psd, numpeaks)
 		self.peaks_freqs = numpy.array([self.psd_freqs[i] for i in self.peaks])
 		self.percs = self.peaks_energy / self.psd.sum()

@@ -10,22 +10,31 @@ from math import log
 
 PSD_NFFT = 2**17
 
-def get_psd(fname, nfft=PSD_NFFT, plot=False):
+def get_wav(fname):
 	"""
-	Given a filename of a wav, returns a tuple of the power spectral density using Welch's method and associated frequencies.
+	Given a filename of a wav, returns a tuple of the wav and its parameters.
 	"""
-
 	w = wave.open(fname)
 	wp = w.getparams()
 	wd = w.readframes(wp[3])
-	md = audioop.tomono(wd, wp[1], 1, 1)
+	if wp[0] > 1:
+		md = audioop.tomono(wd, wp[1], 1, 1)
+	else:
+		md = wd
 
 	wav = []
 	for i in range(wp[3]):
 		wav.append(audioop.getsample(md, wp[1], i))
 	wav = numpy.array(wav)
 
-	(pxx, fxx) = pylab.psd(wav, nfft, wp[2])
+	return wav, wp
+
+def get_psd(wav, fs, nfft=PSD_NFFT, plot=False):
+	"""
+	Given a wav, returns a tuple of the power spectral density using Welch's method and associated frequencies.
+	"""
+
+	(pxx, fxx) = pylab.psd(wav, nfft, fs)
 
 	if plot:
 		pylab.show()
@@ -104,22 +113,34 @@ def mk_wav(freq, length, fs):
 
 	degrees = 360.0;
 	x = numpy.arange(0, degrees * length, degrees / fs) / degrees
-	wav = numpy.sin(numpy.pi * freq * x)
+	wav = numpy.sin(2.0 * numpy.pi * freq * x)
 
 	return wav, x
+
+def mk_synth(freq, length, fs, harm, perc):
+	ret = 0
+
+	for i in range(len(perc)):
+		(w, x) = mk_wav(harm[i], length, fs)
+		ret += ret + (w * perc[i])
+
+	return ret
 
 def write_wavspec(freq, length, fs, fname):
 	"""
 	Wrapper for mk_wav + write_wav.
 	"""
 
-	(wav, x) = mk_wav(freq, length, fs)
+	wav, x = mk_wav(freq, length, fs)
 	write_wav(wav, fs, fname)
 
 def write_wav(wav, fs, fname):
 	"""
+	!!! THIS FUNCTION IS BROKEN !!!
 	Write wav data at sampling frequency fs to file fname. wav must be a numpy.array. It may be in any encoding, and will be converted properly internally.
 	"""
+
+	print 'writing a broken %s' %fname
 
 	w = wave.open(fname, 'wb')
 	w.setnchannels(1)
@@ -132,6 +153,7 @@ def write_wav(wav, fs, fname):
 
 	frames = ''
 
+	# something is probably wrong in this conversion
 	for d in wav:
 		msb = d >> 8
 		lsb = d - (msb << 8)
@@ -151,3 +173,24 @@ def write_reference(length=2, fs=11025, outdir='out'):
 		outname = os.path.join(outdir, ('%02i-%3s-%f.wav' %(key[0], key[1], key[2])).replace(' ', '_'))
 		print outname
 		write_wavspec(key[2], length, fs, outname)
+
+chuck_main = """
+Pan2 p => dac;
+SinOsc s[len];
+for(0 => int i; i < len; i++)
+{
+	s[i] => p;
+	freqs[i] => s[i].freq;
+	percs[i] => s[i].gain;
+}
+
+while(true) 1::second => now;
+"""
+
+def write_chuck(synth, outname):
+	f = open(outname, 'w')
+	f.write('%i => int len;\n\n' %len(synth.perc))
+	f.write('[ %s ] @=> float freqs[];\n' %', '.join([ str(i) for i in synth.harm ]))
+	f.write('[ %s ] @=> float percs[];\n' %', '.join([ str(i) for i in synth.perc ]))
+	f.write(chuck_main)
+	f.close()
