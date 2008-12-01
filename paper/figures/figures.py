@@ -38,7 +38,7 @@ def mkgraphs(wname, prefix):
 	print peak_freqs
 	pylab.plot(peak_freqs, peak_db, 'ro', ms=4)
 	for i in range(n):
-		pylab.text(peak_freqs[i], peak_db[i], '%5.1fHz' %peak_freqs[i])
+		pylab.text(peak_freqs[i], peak_db[i], '%5.1fHz' %peak_freqs[i], ha='center', position=(peak_freqs[i], peak_db[i] + 1))
 	pylab.xlabel('Frequency (Hz)')
 	pylab.ylabel('Power (dB)')
 	pylab.savefig('%speaks.png' %prefix)
