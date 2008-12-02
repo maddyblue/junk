@@ -54,7 +54,14 @@ To synthesize a desired sound at base frequency $F$Hz, find the frequencies of t
 
 \section{Results}
 
-One test of this method involved recordings of five C$\sharp$s of the 8-foot principal rank (C$\sharp$1 to C$\sharp$5). The lowest recording, which has a base frequency of 137.16Hz, was used as a reference for comparison (Figures \ref{time}--\ref{peaks}). Using the above method a wave was synthesized. The resulting PSD from the synthesized wave (Figure \ref{synth-peaks}) shows peaks with similar frequencies and amplitudes to the reference. Clearly all of the other features of the wave (non-smoothness between peaks of Figure \ref{peaks}) are lost and not generated in this synthesized wave.
+One test of this method involved recordings of five C$\sharp$s of the 8-foot principal rank (C$\sharp$1 to C$\sharp$5). The lowest recording, which has a base frequency of 137.16Hz, was used as a reference for comparison (Figures \ref{time}--\ref{peaks}). Using the above method a wave was synthesized (Figure \ref{synth-time}). The resulting PSD from the synthesized wave (Figure \ref{synth-peaks}) shows peaks with similar frequencies and amplitudes to the reference. Clearly all of the other features of the wave (non-smoothness between peaks of Figure \ref{peaks}) are lost and not generated in this synthesized wave.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/synth-time.png}
+\caption{Excerpt of a synthesized wave, shown in the time domain.}
+\label{synth-time}
+\end{figure}
 
 \begin{figure}
 \centering
@@ -83,6 +90,6 @@ The method described herein does not model many parts pipe speech: (1) the begin
 
 \section{Conclusion}
 
-I have presented a novel approach to sound synthesis meeting requirements that current implementations cannot. While in an introductory phase, this method has shown promising results and proof-of-concept implementation. Further work is warranted.
+Current sound synthesis techniques are computationally and monetarily expensive, and harmonically identical. The method presented above for organ sound synthesis produces functions that can describe unique waveforms at arbitrary frequencies within the range of the recordings. Since many parts of pipe speech are not modeled and other harmonic problems remain, this method is not fit for use in production systems. However, the results show a working proof-of-concept implementation, and suggest further work is warranted.
 
 \end{document}
