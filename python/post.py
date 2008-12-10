@@ -40,12 +40,11 @@ def figures(rank):
 if __name__ == '__main__':
 	n = 5;
 
-	fname = '../wav/haupt-principal-8/c1.wav'
+	if len(sys.argv) == 2:
+		n = int(sys.argv[1])
 
-	if len(sys.argv) >= 2:
-		fname = sys.argv[1]
-		if len(sys.argv) == 3:
-			n = float(sys.argv[2])
+	if n < 2:
+		n = 2
 
 	ranks = []
 

@@ -178,8 +178,7 @@ class Rank:
 			outname = os.path.join(outdir, '%02i-%3s-%f.ck' %(key[0], key[1].replace(' ', '_'), key[2]))
 			utilities.write_chuck(self.synth[key[2]], outname)
 
-	def chuck(self, basedir='../out'):
-		outdir = os.path.join(basedir, str(self.numpeaks), self.directory)
+	def chuck(self, outdir='../out/chuck'):
 		try:
 			os.makedirs(outdir)
 		except:
