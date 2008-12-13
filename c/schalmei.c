@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	double *in, *pxx, *freqs, *out;
 	int i, nfft, fs, n, numfreqs, *pks;
 
-	/* Vandermonde test
+	//* Vandermonde test
 	if((in = (double *)calloc(4, sizeof(double))) == NULL)
 		return 1;
 
@@ -26,10 +26,18 @@ int main(int argc, char *argv[])
 
 	out = vander(4, in, 0);
 
-	for(i = 0; i < 4; i++)
-	{
-		printf("%10.5f, %10.5f, %10.5f, %10.5f\n", out[i * 4 + 0], out[i * 4 + 1], out[i * 4 + 2], out[i * 4 + 3]);
-	}
+	pf(4, 4, out);
+	out = invert(4, out);
+	pf(4, 4, out);
+
+	if((in = (double *)calloc(16, sizeof(double))) == NULL)
+		return 1;
+
+	in = transpose(4, 4, out);
+	pf(4, 4, in);
+
+	return 0;
+
 	//*/
 
 	//*
@@ -63,6 +71,120 @@ int main(int argc, char *argv[])
 		printf("%2i: %10.5fHz (%08.5f)\n", i, freqs[pks[i]], pxx[pks[i]]);
 
 	return 0;
+}
+
+void pf(int rows, int cols, double *x)
+{
+	int i, j;
+
+	for(i = 0; i < rows; i++)
+	{
+		for(j = 0; j < cols; j++)
+			printf("%5.2f ", x[i * cols + j]);
+		printf("\n");
+	}
+	printf("\n");
+}
+
+double * transpose(int rows, int cols, double *x)
+{
+	double *result;
+	int i, j;
+
+	if((result = (double *)calloc((size_t)(cols * rows), sizeof(double))) == NULL)
+		return NULL;
+
+	for(i = 0; i < rows; i++)
+		for(j = 0; j < cols; j++)
+			result[j * rows + i] = x[i * cols + j];
+
+	return result;
+}
+
+double * invert(int size, double *x)
+{
+	double *result, *work, *temp;
+	double c;
+	int cols = size * 2;
+	int i, j, k, lead = 0;
+
+	if((work = (double *)calloc((size_t)(cols * size), sizeof(double))) == NULL)
+		return NULL;
+
+	if((result = (double *)calloc((size_t)(cols * size), sizeof(double))) == NULL)
+	{
+		free(work);
+		return NULL;
+	}
+
+	if((temp = (double *)calloc((size_t)size, sizeof(double))) == NULL)
+	{
+		free(work);
+		free(result);
+		return NULL;
+	}
+
+	for(i = 0; i < size; i++)
+	{
+		for(j = 0; j < size; j++)
+		{
+			work[i * cols + j] = x[i * size + j];
+			work[i * cols + j + size] = 0;
+		}
+
+		work[i * cols + size + i] = 1;
+	}
+
+	for(j = 0; j < size; j++)
+	{
+		if(cols <= lead)
+			break;
+
+		i = j;
+		while(work[i * cols + lead] == 0)
+		{
+			i++;
+			if(size == i)
+			{
+				i = j;
+				lead++;
+				if(cols == lead)
+					break;
+			}
+		}
+
+		// swap rows i and j
+		for(k = 0; k < cols; k++)
+		{
+			temp[i * cols + k] = work[i * cols + k];
+			work[i * cols + k] = work[j * cols + k];
+			work[j * cols + k] = temp[i * cols + k];
+		}
+
+		// divide row j by work[j][lead]
+		c = work[j * cols + lead];
+		for(k = 0; k < cols; k++)
+			work[j * cols + k] /= c;
+
+		for(i = 0; i < size; i++)
+		{
+			if(i != j)
+			{
+				// subtract work[i][lead] multiplied by row j from row i
+				c = work[i * cols + lead];
+				for(k = 0; k < cols; k++)
+					work[i * cols + k] -= work[j * cols + k] * c;
+			}
+		}
+
+		lead++;
+	}
+
+	for(i = 0; i < size; i++)
+		for(j = 0; j < size; j++)
+			result[i * size + j] = work[i * cols + j + size];
+
+	return result;
 }
 
 int psd(double *x, int n, int nfft, int fs, double *pxx, double *freqs)

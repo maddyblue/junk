@@ -8,5 +8,8 @@ double * hanning(size_t);
 double * vander(int, double *, int);
 int cmp(double, double);
 int * peaks(int, int, double *);
+double * invert(int, double *);
+double * transpose(int, int, double *);
+void pf(int, int, double *);
 
 #endif
