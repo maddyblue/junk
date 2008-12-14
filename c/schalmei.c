@@ -15,7 +15,22 @@ int main(int argc, char *argv[])
 	double *in, *pxx, *freqs, *out;
 	int i, nfft, fs, n, numfreqs, *pks;
 
-	//* Vandermonde test
+	#define M_xrows 3
+	#define M_xcols 2
+	#define M_yrows 2
+	#define M_ycols 4
+
+	double x[M_xrows * M_xcols] = {3, 4, 4, 5, 0, 3};
+	double y[M_yrows * M_ycols] = {2, 6, -1, 0, 3, -2, 7, 1};
+
+	pf(M_xrows, M_xcols, x);
+	pf(M_yrows, M_ycols, y);
+
+	out = mult(M_xrows, M_xcols, x, M_yrows, M_ycols, y);
+
+	pf(M_xrows, M_ycols, out);
+
+	/* Vandermonde test
 	if((in = (double *)calloc(4, sizeof(double))) == NULL)
 		return 1;
 
@@ -40,7 +55,7 @@ int main(int argc, char *argv[])
 
 	//*/
 
-	//*
+	/*
 	if((si = (struct SF_INFO *)malloc(sizeof(*si))) == NULL)
 		return 1;
 
@@ -64,18 +79,48 @@ int main(int argc, char *argv[])
 		printf("%10.5f: %20.10f\n", freqs[i], pxx[i]);
 	//*/
 
+	/*
 	n = 75;
 	pks = peaks(n, numfreqs, pxx);
 
 	for(i = 0; i < n; i++)
 		printf("%2i: %10.5fHz (%08.5f)\n", i, freqs[pks[i]], pxx[pks[i]]);
+	//*/
 
 	return 0;
+}
+
+double * mult(int xrows, int xcols, double *x, int yrows, int ycols, double *y)
+{
+	double *result;
+	int i, j, m, n;
+
+	if(xcols != yrows)
+		return NULL;
+
+	if((result = (double *)calloc((size_t)(xrows * ycols), sizeof(double))) == NULL)
+		return NULL;
+
+	for(i = 0; i < xrows; i++)
+	{
+		for(j = 0; j < ycols; j++)
+		{
+			result[i * ycols + j] = 0;
+
+			for(m = 0; m < xcols; m++)
+				result[i * ycols + j] += x[i * xcols + m] * y[m * ycols + j];
+		}
+	}
+
+	return result;
 }
 
 void pf(int rows, int cols, double *x)
 {
 	int i, j;
+
+	if(x == NULL)
+		return;
 
 	for(i = 0; i < rows; i++)
 	{

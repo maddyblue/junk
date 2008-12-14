@@ -11,5 +11,6 @@ int * peaks(int, int, double *);
 double * invert(int, double *);
 double * transpose(int, int, double *);
 void pf(int, int, double *);
+double * mult(int, int, double *, int, int, double *);
 
 #endif
