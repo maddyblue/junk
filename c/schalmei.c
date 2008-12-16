@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 	double *in, *pxx, *freqs, *out;
 	int i, nfft, fs, n, numfreqs, *pks;
 
+	/*
+
 	#define M_xrows 3
 	#define M_xcols 2
 	#define M_yrows 2
@@ -29,6 +31,8 @@ int main(int argc, char *argv[])
 	out = mult(M_xrows, M_xcols, x, M_yrows, M_ycols, y);
 
 	pf(M_xrows, M_ycols, out);
+
+	//*/
 
 	/* Vandermonde test
 	if((in = (double *)calloc(4, sizeof(double))) == NULL)
@@ -87,7 +91,49 @@ int main(int argc, char *argv[])
 		printf("%2i: %10.5fHz (%08.5f)\n", i, freqs[pks[i]], pxx[pks[i]]);
 	//*/
 
+	#define X_LEN 4
+
+	double x[X_LEN] = {1, 2, 3, 4};
+	double y[X_LEN] = {5, 6, 7, 8};
+	double *r;
+	int order = 2;
+	r = polyfit(X_LEN, x, y, order);
+	pf(order, 1, r);
+
 	return 0;
+}
+
+double * polyfit(int len, double *x, double *y, int order)
+{
+	double *result = NULL, *v, *xt, *xt_x, *xt_x_inv, *xt_x_inv_xt;
+
+	if(order < 1 || order > len)
+		return NULL;
+
+	if((v = vander(len, x, order)) == NULL)
+		goto polyfit_end;
+	if((xt = transpose(len, len, v)) == NULL)
+		goto free_v;
+	if((xt_x = mult(len, len, xt, len, len, v)) == NULL)
+		goto free_xt;
+	if((xt_x_inv = invert(len, xt_x)) == NULL)
+		goto free_xt_x;
+	if((xt_x_inv_xt = mult(len, len, xt_x_inv, len, len, xt)) == NULL)
+		goto free_xt_x_inv;
+	result = mult(len, len, xt_x_inv_xt, len, 1, y);
+
+	free(xt_x_inv_xt);
+free_xt_x_inv:
+	free(xt_x_inv);
+free_xt_x:
+	free(xt_x);
+free_xt:
+	free(xt);
+free_v:
+	free(v);
+
+polyfit_end:
+	return result;
 }
 
 double * mult(int xrows, int xcols, double *x, int yrows, int ycols, double *y)
@@ -120,7 +166,10 @@ void pf(int rows, int cols, double *x)
 	int i, j;
 
 	if(x == NULL)
+	{
+		printf("NULL\n");
 		return;
+	}
 
 	for(i = 0; i < rows; i++)
 	{

@@ -12,5 +12,6 @@ double * invert(int, double *);
 double * transpose(int, int, double *);
 void pf(int, int, double *);
 double * mult(int, int, double *, int, int, double *);
+double * polyfit(int, double *, double *, int);
 
 #endif
