@@ -3,6 +3,8 @@
 
 int psd(double *, int, int, int, double *, double *);
 double * readfile(char *, SNDFILE *, struct SF_INFO *);
+double * readdumpfile(char *, int *);
+int dumpfile(int, double *, char *);
 void fft(int, double *, double *);
 double * hanning(size_t);
 double * vander(int, double *, int);

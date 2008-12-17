@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
 	//*/
 
-	/*
+	//*
 	if((si = (struct SF_INFO *)malloc(sizeof(*si))) == NULL)
 		return 1;
 
@@ -69,6 +69,12 @@ int main(int argc, char *argv[])
 	nfft = pow(2, 17);
 	fs = si->samplerate;
 	n = si->frames;
+
+	i = dumpfile(n, in, "test");
+	in = readdumpfile("test", &n);
+	dumpfile(n, in, "test1");
+
+	return;
 
 	numfreqs = nfft / 2 + 1;
 	if((pxx = (double *)calloc((size_t)(numfreqs), sizeof(double))) == NULL)
@@ -99,6 +105,50 @@ int main(int argc, char *argv[])
 	int order = 2;
 	r = polyfit(X_LEN, x, y, order);
 	pf(order, 1, r);
+
+	return 0;
+}
+
+double * readdumpfile(char *fname, int *len)
+{
+	double *x, *ret = NULL;
+	FILE *f;
+	int i;
+
+	if((f = fopen(fname, "r")) == NULL)
+		return NULL;
+
+	if(1 != fscanf(f, "%i\n", len))
+		goto readdump_end;
+
+	if((x = (double *)calloc((size_t)*len, sizeof(double))) == NULL)
+		goto readdump_end;
+
+	for(i = 0; i < *len; i++)
+		if(1 != fscanf(f, "%lf\n", &x[i]))
+			goto readdump_end;
+
+	ret = x;
+
+readdump_end:
+	fclose(f);
+	return ret;
+}
+
+int dumpfile(int len, double *x, char *fname)
+{
+	FILE *f;
+	int i;
+
+	if((f = fopen(fname, "w")) == NULL)
+		return 1;
+
+	fprintf(f, "%i\n", len);
+
+	for(i = 0; i < len; i++)
+		fprintf(f, "%17.15f\n", x[i]);
+
+	fclose(f);
 
 	return 0;
 }
