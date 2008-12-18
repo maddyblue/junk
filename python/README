@@ -3,7 +3,7 @@ Prerequisites are:
 	matplotlib (http://matplotlib.sourceforge.net/)
 
 Run by:
-python post.py [n]
+python schalmei.py [n]
 
 n is the number of sinusiods to generate. If n is not specified, it will default to 5.
 
