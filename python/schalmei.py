@@ -5,11 +5,21 @@ import utilities
 master_wavdir = 'wav'
 wavfiles = {
 	'haupt-principal-8': {
-		'c1.wav': 138,
-		'c2.wav': 277,
-		'c3.wav': 550,
-		'c4.wav': 1100,
-		'c5.wav': 2200
+		'c#3.wav': 138,
+		'd#3.wav': 155,
+		'f3.wav': 174,
+		'g3.wav': 195,
+		'a3.wav': 220,
+		'b3.wav': 246,
+		'c#4.wav': 277,
+		'c#5.wav': 554,
+		'c#6.wav': 1108,
+		'd#6.wav': 1244,
+		'f6.wav': 1396,
+		'g6.wav': 1567,
+		'a6.wav': 1760,
+		'b6.wav': 1975,
+		'c#7.wav': 2217,
 		}
 }
 
