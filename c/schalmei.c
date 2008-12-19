@@ -395,7 +395,7 @@ double * invert(int size, double *x)
 		return NULL;
 	}
 
-	if((temp = (double *)calloc((size_t)size, sizeof(double))) == NULL)
+	if((temp = (double *)calloc((size_t)cols, sizeof(double))) == NULL)
 	{
 		free(work);
 		free(result);
