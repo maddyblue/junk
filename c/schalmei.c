@@ -10,106 +10,240 @@
 
 int main(int argc, char *argv[])
 {
+	#if 0 // {{{ dumpfiles
 	SNDFILE *s;
 	struct SF_INFO *si;
-	double *in, *pxx, *freqs, *out;
+	double *in;
 	int i, nfft, fs, n, numfreqs, *pks;
+	char buf[128];
+	char src[] = "../wav/haupt-principal-8/";
+	char dst[] = "dump/";
+	#define NUMFILES 15
 
-	/*
+	char files[NUMFILES][4] = {
+		"c#3",
+		"d#3",
+		"f3",
+		"g3",
+		"a3",
+		"b3",
+		"c#4",
+		"c#5",
+		"c#6",
+		"d#6",
+		"f6",
+		"g6",
+		"a6",
+		"b6",
+		"c#7"
+	};
 
-	#define M_xrows 3
-	#define M_xcols 2
-	#define M_yrows 2
-	#define M_ycols 4
-
-	double x[M_xrows * M_xcols] = {3, 4, 4, 5, 0, 3};
-	double y[M_yrows * M_ycols] = {2, 6, -1, 0, 3, -2, 7, 1};
-
-	pf(M_xrows, M_xcols, x);
-	pf(M_yrows, M_ycols, y);
-
-	out = mult(M_xrows, M_xcols, x, M_yrows, M_ycols, y);
-
-	pf(M_xrows, M_ycols, out);
-
-	//*/
-
-	/* Vandermonde test
-	if((in = (double *)calloc(4, sizeof(double))) == NULL)
-		return 1;
-
-	in[0] = 1;
-	in[1] = 2;
-	in[2] = 3;
-	in[3] = 4;
-
-	out = vander(4, in, 0);
-
-	pf(4, 4, out);
-	out = invert(4, out);
-	pf(4, 4, out);
-
-	if((in = (double *)calloc(16, sizeof(double))) == NULL)
-		return 1;
-
-	in = transpose(4, 4, out);
-	pf(4, 4, in);
-
-	return 0;
-
-	//*/
-
-	//*
 	if((si = (struct SF_INFO *)malloc(sizeof(*si))) == NULL)
 		return 1;
 
-	if((in = readfile("../wav/haupt-principal-8/c3.wav", s, si)) == NULL)
-		return 1;
+	nfft = pow(2, 17);
+
+	for(i = 0; i < NUMFILES; i++)
+	{
+		buf[0] = '\0';
+		strcat(buf, src);
+		strcat(buf, files[i]);
+		strcat(buf, ".wav");
+		printf("%i %s -> ", i, buf);
+
+		if((in = readfile(buf, s, si)) == NULL)
+			return 1;
+
+		buf[0] = '\0';
+		strcat(buf, dst);
+		strcat(buf, files[i]);
+		strcat(buf, ".dump");
+		printf("%s\n", buf);
+
+		dumpfile(si->frames, in, si->samplerate, buf);
+	}
+	#endif // }}}
+
+	#if 1 // {{{ readfiles
+	#define NUMFILES 11
+	#define NUMPEAKS 10
+	#define DEGREES 3
+
+	double *data, *pxx, *freqs, *peak_freqs, *percs, energy, last, cur, bases[NUMFILES], y[NUMFILES], *polyfits;
+	int i, j, len, nfft, fs, numpeaks, numfreqs, *pks;
+	FILE *f;
+	char buf[128];
+	char src[] = "dump/";
+
+	char files[NUMFILES][4] = {
+		"c#3",
+		"d#3",
+		"f3",
+		"g3",
+		"a3",
+		//"b3",
+		"c#4",
+		"c#5",
+		"c#6",
+		"d#6",
+		"f6",
+		"g6"/*,
+		"a6",
+		"b6",
+		"c#7"*/
+	};
+
+	double files_base[NUMFILES] = {
+		137.27,
+		154.77,
+		173.61,
+		195.14,
+		218.36,
+		//246,
+		275.22,
+		549.77,
+		1098.53,
+		1233.45,
+		1387.88,
+		1558.13/*,
+		1748,
+		1962,
+		2197*/
+	};
 
 	nfft = pow(2, 17);
-	fs = si->samplerate;
-	n = si->frames;
-
-	i = dumpfile(n, in, "test");
-	in = readdumpfile("test", &n);
-	dumpfile(n, in, "test1");
-
-	return;
-
 	numfreqs = nfft / 2 + 1;
+
 	if((pxx = (double *)calloc((size_t)(numfreqs), sizeof(double))) == NULL)
 		return 1;
 	if((freqs = (double *)calloc((size_t)(numfreqs), sizeof(double))) == NULL)
 		return 1;
+	if((peak_freqs = (double *)calloc((size_t)(NUMFILES * NUMPEAKS), sizeof(double))) == NULL)
+		return 1;
+	if((percs = (double *)calloc((size_t)(NUMFILES * NUMPEAKS), sizeof(double))) == NULL)
+		return 1;
+	if((polyfits = (double *)calloc((size_t)(NUMPEAKS * DEGREES), sizeof(double))) == NULL)
+		return 1;
 
-	psd(in, n, nfft, fs, pxx, freqs);
+	for(i = 0; i < NUMFILES; i++)
+	{
+		buf[0] = '\0';
+		strlcat(buf, src, sizeof(buf));
+		strlcat(buf, files[i], sizeof(buf));
+		strlcat(buf, ".dump", sizeof(buf));
+		printf("%15s: ", buf);
 
-	/*
-	for(i = 0; i < numfreqs; i++)
-		printf("%10.5f: %20.10f\n", freqs[i], pxx[i]);
-	//*/
+		if((data = readdumpfile(buf, &len, &fs)) == NULL)
+			return 1;
 
-	/*
-	n = 75;
-	pks = peaks(n, numfreqs, pxx);
+		printf("%5i samples, %5iHz ", len, fs);
 
-	for(i = 0; i < n; i++)
-		printf("%2i: %10.5fHz (%08.5f)\n", i, freqs[pks[i]], pxx[pks[i]]);
-	//*/
+		j = psd(data, len, nfft, fs, pxx, freqs);
 
-	#define X_LEN 4
+		if(j != 0)
+		{
+			printf("failed\n");
+			continue;
+		}
 
-	double x[X_LEN] = {1, 2, 3, 4};
-	double y[X_LEN] = {5, 6, 7, 8};
-	double *r;
-	int order = 2;
-	r = polyfit(X_LEN, x, y, order);
-	pf(order, 1, r);
+		pks = peaks(NUMPEAKS, numfreqs, pxx, freqs);
 
-	return 0;
+		for(j = 0, energy = 0; j < numfreqs; j++)
+			energy += pxx[j];
+
+		bases[i] = 0;
+		last = 10000;
+		for(j = 0; j < NUMPEAKS; j++)
+		{
+			peak_freqs[i * NUMPEAKS + j] = freqs[pks[j]];
+			percs[i * NUMPEAKS + j] = pxx[pks[j]] / energy;
+
+			//printf("\t%i: %7.2f, %5.2f\n", j, peak_freqs[i * NUMPEAKS + j], percs[i * NUMPEAKS + j]);
+
+			cur = fabs(files_base[i] - freqs[pks[j]]);
+			if(cur < last)
+			{
+				last = cur;
+				bases[i] = freqs[pks[j]];
+			}
+		}
+
+		free(data);
+		free(pks);
+
+		printf("base: %6.1f -> %7.2f\n", files_base[i], bases[i]);
+	}
+
+	for(i = 0; i < NUMPEAKS; i++)
+	{
+		for(j = 0; j < NUMFILES; j++)
+		{
+			y[j] = percs[j * NUMPEAKS + i];
+			peak_freqs[i * NUMFILES + j] /= bases[j];
+		}
+
+		data = polyfit(NUMFILES, bases, y, DEGREES);
+
+		for(j = 0; j < DEGREES; j++)
+			polyfits[i * DEGREES + j] = data[j];
+
+		free(data);
+	}
+
+	if((f = fopen("out.ck", "w")) == NULL)
+		return NULL;
+
+	fprintf(f, "%i => int peaks;\n", NUMPEAKS);
+	fprintf(f, "%i => int recs;\n", NUMFILES);
+	fprintf(f, "%i => int degs;\n", DEGREES - 1);
+
+	fprintf(f, "\n[ ");
+	chuckmatrix(f, NUMPEAKS, DEGREES, polyfits);
+	fprintf(f, " ] @=> float percs[][];\n");
+
+	fprintf(f, "\n[ ");
+	chuckmatrix(f, NUMPEAKS, NUMFILES, peak_freqs);
+	fprintf(f, " ] @=> float harms[][];\n");
+
+	fprintf(f, "\n[ ");
+	for(i = 0; i < NUMFILES; i++)
+	{
+		if(i > 0)
+			fprintf(f, ", ");
+
+		fprintf(f, "%17.15f", bases[i]);
+	}
+	fprintf(f, " ] @=> float bases[];\n");
+
+	fprintf(f, chuck_file);
+
+	fclose(f);
+
+	#endif // }}}
 }
 
-double * readdumpfile(char *fname, int *len)
+void chuckmatrix(FILE * f, int r, int c, double *x)
+{
+	int i, j;
+
+	for(i = 0; i < r; i++)
+	{
+		if(i > 0)
+			fprintf(f, ", ");
+
+		fprintf(f, "[ ");
+		for(j = 0; j < c; j++)
+		{
+			if(j > 0)
+				fprintf(f, ", ");
+
+			fprintf(f, "%17.15f", x[i * c + j]);
+		}
+		fprintf(f, " ]");
+	}
+}
+
+double * readdumpfile(char *fname, int *len, int *fs)
 {
 	double *x, *ret = NULL;
 	FILE *f;
@@ -118,7 +252,7 @@ double * readdumpfile(char *fname, int *len)
 	if((f = fopen(fname, "r")) == NULL)
 		return NULL;
 
-	if(1 != fscanf(f, "%i\n", len))
+	if(2 != fscanf(f, "%i %i\n", len, fs))
 		goto readdump_end;
 
 	if((x = (double *)calloc((size_t)*len, sizeof(double))) == NULL)
@@ -135,7 +269,7 @@ readdump_end:
 	return ret;
 }
 
-int dumpfile(int len, double *x, char *fname)
+int dumpfile(int len, double *x, int fs, char *fname)
 {
 	FILE *f;
 	int i;
@@ -143,7 +277,7 @@ int dumpfile(int len, double *x, char *fname)
 	if((f = fopen(fname, "w")) == NULL)
 		return 1;
 
-	fprintf(f, "%i\n", len);
+	fprintf(f, "%i %i\n", len, fs);
 
 	for(i = 0; i < len; i++)
 		fprintf(f, "%17.15f\n", x[i]);
@@ -162,15 +296,15 @@ double * polyfit(int len, double *x, double *y, int order)
 
 	if((v = vander(len, x, order)) == NULL)
 		goto polyfit_end;
-	if((xt = transpose(len, len, v)) == NULL)
+	if((xt = transpose(len, order, v)) == NULL)
 		goto free_v;
-	if((xt_x = mult(len, len, xt, len, len, v)) == NULL)
+	if((xt_x = mult(order, len, xt, len, order, v)) == NULL)
 		goto free_xt;
-	if((xt_x_inv = invert(len, xt_x)) == NULL)
+	if((xt_x_inv = invert(order, xt_x)) == NULL)
 		goto free_xt_x;
-	if((xt_x_inv_xt = mult(len, len, xt_x_inv, len, len, xt)) == NULL)
+	if((xt_x_inv_xt = mult(order, order, xt_x_inv, order, len, xt)) == NULL)
 		goto free_xt_x_inv;
-	result = mult(len, len, xt_x_inv_xt, len, 1, y);
+	result = mult(order, len, xt_x_inv_xt, len, 1, y);
 
 	free(xt_x_inv_xt);
 free_xt_x_inv:
@@ -224,7 +358,7 @@ void pf(int rows, int cols, double *x)
 	for(i = 0; i < rows; i++)
 	{
 		for(j = 0; j < cols; j++)
-			printf("%5.2f ", x[i * cols + j]);
+			printf("%12.10f ", x[i * cols + j]);
 		printf("\n");
 	}
 	printf("\n");
@@ -300,9 +434,9 @@ double * invert(int size, double *x)
 		// swap rows i and j
 		for(k = 0; k < cols; k++)
 		{
-			temp[i * cols + k] = work[i * cols + k];
+			temp[k] = work[i * cols + k];
 			work[i * cols + k] = work[j * cols + k];
-			work[j * cols + k] = temp[i * cols + k];
+			work[j * cols + k] = temp[k];
 		}
 
 		// divide row j by work[j][lead]
@@ -327,6 +461,9 @@ double * invert(int size, double *x)
 	for(i = 0; i < size; i++)
 		for(j = 0; j < size; j++)
 			result[i * size + j] = work[i * cols + j + size];
+
+	free(work);
+	free(temp);
 
 	return result;
 }
@@ -480,9 +617,9 @@ double * vander(int n, double *in, int order)
 	if((r = (double *)calloc(order * n, sizeof(double))) == NULL)
 		return NULL;
 
-	for(i = 0; i < order; i++)
-		for(j = 0; j < n; j++)
-			r[j * n + i] = pow(in[j], order - i - 1);
+	for(i = 0; i < n; i++)
+		for(j = 0; j < order; j++)
+			r[i * order + j] = pow(in[i], order - j - 1);
 
 	return r;
 }
@@ -497,13 +634,14 @@ int cmp(double a, double b)
 	return 0;
 }
 
-int * peaks(int n, int len, double *in)
+int * peaks(int n, int len, double *in, double *freqs)
 {
 	int i, idx, s, sprev, *indicies;
 	double prev, cur, dif;
-	double *pp, *rr;
+	int *pp;
+	double *rr;
 
-	if((pp = (double *)calloc(len, sizeof(double))) == NULL)
+	if((pp = (int *)calloc(len, sizeof(int))) == NULL)
 		return NULL;
 	if((rr = (double *)calloc(len, sizeof(double))) == NULL)
 		return NULL;
