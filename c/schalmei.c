@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 	}
 
 	if((f = fopen("out.ck", "w")) == NULL)
-		return NULL;
+		return 1;
 
 	fprintf(f, "%i => int peaks;\n", NUMPEAKS);
 	fprintf(f, "%i => int recs;\n", NUMFILES);
