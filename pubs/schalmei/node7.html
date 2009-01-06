@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Discussion and Further Work</TITLE>
+<META NAME="description" CONTENT="Discussion and Further Work">
+<META NAME="keywords" CONTENT="schalmei">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="schalmei.css">
+
+<LINK REL="next" HREF="node8.html">
+<LINK REL="previous" HREF="node6.html">
+<LINK REL="up" HREF="schalmei.html">
+<LINK REL="next" HREF="node8.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html86"
+  HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html84"
+  HREF="schalmei.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html78"
+  HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html87"
+  HREF="node8.html">Conclusion</A>
+<B> Up:</B> <A NAME="tex2html85"
+  HREF="schalmei.html">Organ Sound Synthesis by</A>
+<B> Previous:</B> <A NAME="tex2html79"
+  HREF="node6.html">Results</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00050000000000000000">
+Discussion and Further Work</A>
+</H1>
+
+<P>
+As touched on above, there are some boundaries between notes on a full range where the harmonic structure noticeably changes from one recorded note's structure to another's. It is not possible simply to apply a polynomial fitting algorithm to the harmonics as was done in the power contribution case. For example, consider a set consisting of two recordings of C1 and C2 (which are an octave apart). Both recordings have as their most powerful frequency (first peak) their base frequency. The lower recording has as its second most powerful frequency (second peak) twice the base frequency (one octave or <!-- MATH
+ $12/12^\mathrm{ths}$
+ -->
+<IMG
+ WIDTH="61" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img10.png"
+ ALT="$12/12^\mathrm{ths}$"> above the base), as would be expected from a simple harmonic series. The higher recording, however, has as its second peak triple the base frequency (two octaves or <!-- MATH
+ $24/12^\mathrm{ths}$
+ -->
+<IMG
+ WIDTH="61" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img11.png"
+ ALT="$24/12^\mathrm{ths}$"> above the base). If a simple linear interpolation is applied to determine the second peaks, the results between C1 and C2 will evenly distribute between <!-- MATH
+ $12/12^\mathrm{ths}$
+ -->
+<IMG
+ WIDTH="61" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img10.png"
+ ALT="$12/12^\mathrm{ths}$"> and <!-- MATH
+ $24/12^\mathrm{ths}$
+ -->
+<IMG
+ WIDTH="61" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img11.png"
+ ALT="$24/12^\mathrm{ths}$"> above the base, which frequencies are not in the harmonic series, and thus will not sound correct. For example, taking one note above the lowest recording, C<IMG
+ WIDTH="10" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$\sharp$">1, this incorrect interpolation dictates the second peak should be <!-- MATH
+ $13/12^\mathrm{ths}$
+ -->
+<IMG
+ WIDTH="61" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$13/12^\mathrm{ths}$"> above the base. D1 similarly has a second peak <!-- MATH
+ $14/12^\mathrm{ths}$
+ -->
+<IMG
+ WIDTH="61" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$14/12^\mathrm{ths}$"> above the base, continuing up to B1 at <!-- MATH
+ $23/12^\mathrm{ths}$
+ -->
+<IMG
+ WIDTH="61" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img14.png"
+ ALT="$23/12^\mathrm{ths}$">, and ending at C2 at <!-- MATH
+ $24/12^\mathrm{ths}$
+ -->
+<IMG
+ WIDTH="61" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img11.png"
+ ALT="$24/12^\mathrm{ths}$"> above the base, or triple the base frequency.
+
+<P>
+In general, the harmonics above the base are taken from a set of often-used harmonics, that tend to be integer multiples above or integer divisors below (e.g., <IMG
+ WIDTH="28" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img15.png"
+ ALT="$1/2$">) the base frequency. Thus, a solution is perhaps a somewhat discretized list assigning a certain probability to each harmonic. Other algorithms involving optimization and genetic algorithms may suggest other models. These models, when applied to data from a recording set over a full range of notes, could yield methods to generate individual harmonic structure for all frequencies.
+
+<P>
+Of interest to sound engineers and others interested in vocoders is the possibility of applying this method on a recording set not consisting of all one instrument. For example, a recording set of a bass drum, oboe, and voice could produce unique results with varying components of each at all ranges. This application, however, is not worth while until the harmonic structure is a function of frequency, as discussed in the proceeding paragraph.
+
+<P>
+The method described herein does not model many parts pipe speech: (1) the beginning of pipe speech, called chiff, is an important part of all pipe organs that is specifically modified (not removed) by the builder during installation; (2) the end of pipe speech, which is of less importance; (3) sibilance, the sound of air moving over a pipe mouth during nominal speech. Without these it is clear that the produced sound does not come from a genuine pipe. The above method works well on sounds that have a few significant frequencies making up much of the sound. These three parts of pipe speech have no such property, and so are perhaps modeled better in the time domain, instead of the frequency domain.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html86"
+  HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html84"
+  HREF="schalmei.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html78"
+  HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html87"
+  HREF="node8.html">Conclusion</A>
+<B> Up:</B> <A NAME="tex2html85"
+  HREF="schalmei.html">Organ Sound Synthesis by</A>
+<B> Previous:</B> <A NAME="tex2html79"
+  HREF="node6.html">Results</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+mjibson
+2009-01-06
+</ADDRESS>
+</BODY>
+</HTML>

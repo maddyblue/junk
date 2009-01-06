@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Recording Analysis</TITLE>
+<META NAME="description" CONTENT="Recording Analysis">
+<META NAME="keywords" CONTENT="schalmei">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="schalmei.css">
+
+<LINK REL="next" HREF="node5.html">
+<LINK REL="previous" HREF="node3.html">
+<LINK REL="up" HREF="node3.html">
+<LINK REL="next" HREF="node5.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html58"
+  HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html56"
+  HREF="node3.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html50"
+  HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html59"
+  HREF="node5.html">Sound Synthesis</A>
+<B> Up:</B> <A NAME="tex2html57"
+  HREF="node3.html">Method</A>
+<B> Previous:</B> <A NAME="tex2html51"
+  HREF="node3.html">Method</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00031000000000000000">
+Recording Analysis</A>
+</H2>
+
+<P>
+Recordings of the chosen notes are made and edited to include only the primary pipe speech, excluding the initial attack and final release of the note where other effects occur (Figure <A HREF="#time">1</A>). The power spectral density (PSD) of each recording is estimated (e.g., using Welch's method&nbsp;[<A
+ HREF="node9.html#welch1967uff">2</A>], Figure <A HREF="#peaks">2</A>). A PSD function determines the power distribution of a signal in the frequency domain. This allows determination of the power of the signal at discrete frequencies. The <IMG
+ WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$N$"> (an arbitrary number chosen by the user) largest peaks in each distribution are found by searching for three consecutive points where the middle point has greater value than both surrounding points (Figure <A HREF="#peaks">2</A>). The percentage power contribution of each peak is found by dividing the power of the peak by the total power of the distribution. Finally, the expected base frequency is recorded as the closest frequency to it that is also one of the <IMG
+ WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$N$"> peaks. The exact base frequency cannot be used because the PSD function produces a list of discrete frequencies. Furthermore, the number of peaks is chosen so that there is a close match (within 2Hz, generally). This is generally not an issue because the base frequency is almost always one of the first two peaks.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="time"></A><A NAME="22"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 1:</STRONG>
+Excerpt of a recorded wave.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER"><IMG
+  WIDTH="800" HEIGHT="600" ALIGN="BOTTOM" BORDER="0"
+ SRC="./recording-time.png"
+ ALT="Image recording-time">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="peaks"></A><A NAME="27"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 2:</STRONG>
+Excerpt of the PSD of a recorded wave. The first five peaks are marked with red circles.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER"><IMG
+  WIDTH="800" HEIGHT="600" ALIGN="BOTTOM" BORDER="0"
+ SRC="./recording-peaks.png"
+ ALT="Image recording-peaks">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+At this point processing on individual recordings is complete, and they can now be processed as a set. The first peak power contribution of each recording is taken, along with that recording's base frequency. A least-squares polynomial fit algorithm is applied where the base frequency (<IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="$F$">) is the independent variable and the peak power contribution corresponding to that base frequency (<IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img3.png"
+ ALT="$P$">) is the dependent variable. Third-degree polynomials tend to produce good results. This procedure is repeated for all of the other <IMG
+ WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$N$"> peaks so that the polynomial fit algorithm is applied to all of the second, third, etc. peak power contributions up to <IMG
+ WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$N$">. These algorithms generate coefficients <IMG
+ WIDTH="12" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="img4.png"
+ ALT="$a$">, <IMG
+ WIDTH="11" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img5.png"
+ ALT="$b$">, and <IMG
+ WIDTH="11" HEIGHT="13" ALIGN="BOTTOM" BORDER="0"
+ SRC="img6.png"
+ ALT="$c$"> for the simple polynomial <BR>
+<DIV ALIGN="RIGHT">
+
+<!-- MATH
+ \begin{equation}
+P = aF^2 + bF + c,
+\end{equation}
+ -->
+<TABLE WIDTH="100%" ALIGN="CENTER">
+<TR VALIGN="MIDDLE"><TD ALIGN="CENTER" NOWRAP><A NAME="eq:power"></A><IMG
+ WIDTH="130" HEIGHT="27" BORDER="0"
+ SRC="img7.png"
+ ALT="\begin{displaymath}
+P = aF^2 + bF + c,\end{displaymath}"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(1)</TD></TR>
+</TABLE>
+<BR CLEAR="ALL"></DIV><P></P>
+where <IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="$F$"> is the desired frequency and <IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img3.png"
+ ALT="$P$"> is the resultant power contribution for each of the first <IMG
+ WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$N$"> power contributions. This produces continuous functions from which to generate individual (and likely unique) harmonic structures at any frequency.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html58"
+  HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html56"
+  HREF="node3.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html50"
+  HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html59"
+  HREF="node5.html">Sound Synthesis</A>
+<B> Up:</B> <A NAME="tex2html57"
+  HREF="node3.html">Method</A>
+<B> Previous:</B> <A NAME="tex2html51"
+  HREF="node3.html">Method</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+mjibson
+2009-01-06
+</ADDRESS>
+</BODY>
+</HTML>
