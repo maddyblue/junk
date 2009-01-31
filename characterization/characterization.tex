@@ -1,4 +1,4 @@
-\documentclass[twocolumn]{article}
+\documentclass{article}
 \usepackage{graphicx}
 \begin{document}
 
@@ -9,7 +9,7 @@
 
 \begin{abstract}
 
-Advancing our understanding of how the central nervous system works under specific conditions requires real-time, simultaneous detection of a number of key signaling molecules, like nitric oxide (NO). NO diffuses widely and rapidly, has a lifetime in milliseconds, and presents among other high concentration, interfering compounds in the nanomolar range in most biological systems. Current microelectrode-based electrochemical NO sensors have diameters in the micrometer range, much larger than biological cells which are in the micron range, and are thus insufficient for analyzing cell-to-cell interactions. A chip was fabricated using the $0.6\mu m$ CMOS process to overcome these difficulties, with a $5 \times 5$ array of sensors in the 2$\mu m$ range. Characterization results of the chip indicate sensitivity into the 20$\mu M$ range and suggest higher-sensitivity devices can offer improvement.
+Advancing our understanding of how the central nervous system works under specific conditions requires real-time, simultaneous detection of a number of key signaling molecules, like nitric oxide (NO). NO diffuses widely and rapidly, has a lifetime in milliseconds, and presents among other high concentration, interfering compounds in the nanomolar range in most biological systems. Current microelectrode-based electrochemical NO sensors have diameters in the micrometer range, much larger than biological cells which are in the micron range, and are thus insufficient for analyzing cell-to-cell interactions. A chip was fabricated using the 0.6$\mu$m CMOS process to overcome these difficulties, with a $5 \times 5$ array of sensors in the 2$\mu$m range. Characterization results of the chip with norepinephrin indicate sensitivity into the 20$\mu$M range and suggest higher-sensitivity devices can offer improvement.
 
 \end{abstract}
 
@@ -112,8 +112,6 @@ The final stage of characterization was done to build a find the current generat
 
 Furthermore, the previous experiment was done using both 2 and 4 working electrodes shorted together in parallel (which was possible due to the common reference and auxiliary electrodes for the sensor area we were using). This created a larger effective surface area on the working electrode, theoretically able to sustain a higher current. To verify that this was a valid technique CVs were performed using 100$\mu$M NE in neurobasal (NB) from -0.2V to 1.0V at 0.025V/s. The value was taken to be the lowest recorded point.
 
-Many ovary slices were tested throughout characterization experiments. These were done by preparing a chip with a well and testing it for basic functionality by performing an arbitrary CV. Ovaries were extracted from mice and attached to the surface of the chip over the sensor array, covered in vitrogen. Neurebasal was periodically added to keep the cell from dying and drying out. The ovaries and chips were kept at $37\,^{\circ}\mathrm{C}$ in order to keep them alive. A heat lamp was used during testing with a thermometer measuring temperature directly above the well in an effort to keep the temperature at $37\,^{\circ}\mathrm{C}$. Amperometry tests were run at $0.85V$ for 30 minutes. After the main test, three injections were performed, each of 20$\mu$L: (1) a blank of NB to test for injection noise, (2) 25$\mu$M NE in NB to test the chip's current response to NE, (3) a 1:1 ratio by volume of KCl:NB to release all remaining NE from the cell, which would provide the maximum expected signal from the main 30 minute block.
-
 \section{Experimental Results}
 
 Of the 21 different sensor area configurations (numbered 0 - 20), sensor 10 (Fig. \ref{sensor-10} provided the highest average results over the $-0.2V$ to $0.2V$ range. This sensor has common auxiliary and reference electrodes and eight individual working electrodes each $8\mu m$ wide. A similarly good sensor (which ranked first under the range $-0.1V$ to $0.1V$) has a similar configuration, but with working electrodes 10$\mu$m wide.
@@ -142,8 +140,6 @@ Concentration response characterization shows reasonable results in the 25$\mu$M
 \caption{2- and 4-pad characterizations with 1st order best fit lines.}
 \label{char}
 \end{figure}
-
-Ovary test results show our potentiostat is not sensitive enough to detect possible NE releases from the cell. As we expect releases in the nanomolar and subnanomolar range, which we cannot currently detect due to potentiostat limitations, this is expected \cite{amperometry-review}. The three injections at the end of the testing are not statistically differentiable and do not correspond to our expectations of what should occur. It could also mean the chip sensors were damaged or restricted during ovary attachment and cannot function as expected. \{Note: need to have Megan prepare another full chip less ovary and do the three test injections.\}
 
 \section{Conclusion}
 
