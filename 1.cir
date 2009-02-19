@@ -1,0 +1,74 @@
+Design:  /top/students/UNGRAD/ECE/dolmant/home/potentiostat/1.default
+.options  tnom=27
+.temp 27
+V_I$3157 POS2 0 offsetv
+V_I$1272 POS1 0 offsetv
+V_I$1475 VCCP 0 supplyv
+V_I$1476 VCCM 0 '-supplyv'
+V_I$3150 N$4493 0 supplyv
+V_I$3159 N$4492 0 '-supplyv'
+L_I$2539 N$2853 N$2855  100p
+R_I$2540 N$2855 WE 100
+R_I$412 N$2852 N$2853 1k
+R_I$208 WE out1 1Meg
+R_I$2948 out1 N$4085 0.1K
+R_I$3155 N$4085 out2 1Meg
+C_I$2542 WE 0 10f
+C_I$2541 N$2855 0 10f
+C_I$1882 N$2852 N$2853 5f
+X_I$5186_I$1 POS2 N$4085 N$4493 N$4492 out2  OPA827 
+X_I$4984_I$1 POS1 WE VCCP VCCM out1  OPA827 
+I_I$411 0 N$2852 10uA
+.op  NO_SMALL_SIGNAL
+*
+* Beginning of translation table for device INSTANCE names
+*  Netlist Name       Schematic Name
+*
+*  R_I$412            /I$412
+*  I_I$411            /I$411
+*  C_I$2541           /I$2541
+*  C_I$2542           /I$2542
+*  C_I$1882           /I$1882
+*  R_I$208            /I$208
+*  R_I$3155           /I$3155
+*  X_I$4984_I$1       /I$4984/I$1
+*  L_I$2539           /I$2539
+*  V_I$3150           /I$3150
+*  V_I$3157           /I$3157
+*  V_I$3159           /I$3159
+*  V_I$1272           /I$1272
+*  R_I$2948           /I$2948
+*  V_I$1475           /I$1475
+*  V_I$1476           /I$1476
+*  R_I$2540           /I$2540
+*  X_I$5186_I$1       /I$5186/I$1
+* End of translation table for device INSTANCE names
+*
+* Beginning of translation table for device MODEL names
+*  Netlist Name       Schematic Name
+*
+*  OPA827             OPA827
+*  ACCUSIM            ACCUSIM
+* End of translation table for device MODEL names
+*
+* Beginning of translation table for NODE names
+*  Netlist Name       Schematic Name
+*
+*  0                  //ground
+*  N$4493             /N$4493
+*  N$4492             /N$4492
+*  out2               /out2
+*  VCCP               /VCCP
+*  VCCM               /VCCM
+*  out1               /out1
+*  N$4085             /N$4085
+*  POS2               /POS2
+*  N$2855             /N$2855
+*  WE                 /WE
+*  N$2853             /N$2853
+*  N$2852             /N$2852
+*  POS1               /POS1
+* End of translation table for NODE names
+* >KEEP
+* >ENDKEEP
+.END

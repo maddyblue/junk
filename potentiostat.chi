@@ -1,0 +1,1683 @@
+1*******19-Feb-09 *******  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  *******13:08:58******
+
+0* potentiostat
+
+0****     INPUT LISTING                                               
+
+0***********************************************************************
+    2  .OPTIONS  TNOM=27
+    3  .TEMP 27
+    4  
+    5  * OPA827 - operational amplifier SPICE MODEL
+    6  *
+    7  * Amplifier classification: Low-noise, high-precision, JFET-input, operational amplifier
+    8  *
+    9  * Model Definition by T E Kuehl - Texas Instruments Inc.
+   10  *
+   11  * Rev. A - 26 September 2008, by W.K. SANDS
+   12  *
+   13  *     This macromodel has been optimized to model the AC, DC, noise, and transient response performance within
+   14  *     the device data sheet specified limits. Correct operation of this macromodel has been verified on
+   15  *     MicroSim P-Spice ver. 8.0, DesignSoft TINA, and on PENZAR Development TopSPICE ver. 6.82d. For help
+   16  *     with other analog simulation software, please consult your software supplier.
+   17  *
+   18  * Copyright 2008 by Texas Instruments Corporation
+   19  *
+   20  * BEGIN MODEL OPA827
+   21  * PINOUT ORDER +IN -IN +V -V OUT
+   22  * PINOUT ORDER  3   2   7  4  6
+   23  .SUBCKT OPA827 3 2 7 4 6
+   24  * BEGIN MODEL FEATURES
+   25  * OPEN LOOP GAIN AND PHASE, INPUT OFFSET VOLTAGE W TEMPCO,
+   26  * INPUT VOLTAGE NOISE WITH 1/F, INPUT CURRENT NOISE, INPUT
+   27  * BIAS CURRENT W TEMPERATURE EFFECTS, INPUT CAPACITANCE,
+   28  * INPUT COMMON MODE VOLTAGE RANGE, INPUT CLAMPS TO RAILS,
+   29  * CMRR WITH FREQUENCY EFFECTS, PSRR WITH FREQUENCY EFFECTS,
+   30  * SLEW RATE, OPEN LOOP OUTPUT IMPEDANCE, SETTLING TIME TO
+   31  * 0.01 PERCENT, QUIESCENT CURRENT WITH TEMPCO, OUTPUT
+   32  * CURRENT THROUGH SUPPLIES, OUTPUT CURRENT LIMIT, OUTPUT
+   33  * CLAMPS TO RAILS, OUTPUT SWING, OVERLOAD RECOVERY TIME,
+   34  * AND OUTPUT OVERSHOOT VERSUS CLOAD
+   35  * END MODEL FEATURES
+   36  * BEGIN SIMULATION NOTES
+   37  * FOR MORE ACCURATE INPUT BIAS CURRENT YOU MAY WANT TO SET
+   38  * GMIN FROM THE DEFAULT OF 1E-12 TO 1E-13
+   39  * FOR AID IN DC CONVERGENCE SET ITL1 FROM 400 TO 4000
+   40  * FOR AID IN TRANSIENT ANALYSIS SET ITL4 FROM 50 TO 500
+   41  * MODEL TEMPERATURE RANGE IS -40 C TO +125 C
+   42  * NOT ALL PARAMETERS TRACK THOSE OF THE REAL PART VS TEMP
+   43  * END SIMULATION NOTES
+   44  Q26 8 9 10 QON
+   45  Q27 11 9 12 QOP
+   46  Q28 13 14 15 QOP 23
+   47  Q29 16 17 18 QON 23
+   48  I4 8 17 5E-5
+   49  I5 14 11 5E-5
+   50  R34 19 18 1
+   51  R35 15 19 1
+   52  R47 20 19 7
+   53  E25 11 0 4 0 1
+   54  E26 8 0 7 0 1
+   55  I9 7 4 3.55E-3
+   56  R65 4 7 325E3
+   57  R67 12 17 1
+   58  R68 14 10 1
+   59  R70 21 22 2250
+   60  R71 23 22 2250
+   61  I11 8 24 5.25E-4
+   62  D5 25 8 DD
+   63  V9 25 26 -0.4
+   64  D6 27 26 DD
+   65  V10 27 11 -0.4
+   66  E27 28 11 29 11 0.505
+   67  C9 9 28 1E-12
+   68  R75 28 9 1E3
+   69  G2 9 28 30 28 -1E-3
+   70  G3 26 28 23 21 -0.19E-3
+   71  R76 28 26 1.4E9
+   72  C10 30 31 6E-12
+   73  R77 30 26 2.2K
+   74  E28 32 28 30 28 1
+   75  D7 33 34 DD
+   76  R78 28 31 220
+   77  D8 35 36 DD
+   78  C11 21 23 0.4E-12
+   79  C12 37 0 4.5E-12
+   80  C13 2 0 4.5E-12
+   81  L3 20 6 1E-9
+   82  R95 6 20 100
+   83  E29 32 33 38 0 -2
+   84  E30 32 36 38 0 2
+   85  R96 33 34 1E12
+   86  R97 36 35 1E12
+   87  D9 39 0 DD
+   88  I12 0 39 1M
+   89  R98 38 0 1E12
+   90  V11 39 38 0.655
+   91  V12 7 16 2.68
+   92  V13 13 4 2.68
+   93  E42 40 0 41 0 0.023
+   94  R113 8 29 1E9
+   95  C25 40 29 1E-9
+   96  E43 42 0 8 0 0.023
+   97  C26 42 41 1E-9
+   98  R114 0 41 1E9
+   99  E44 43 0 8 0 1
+  100  E45 44 0 11 0 1
+  101  E46 45 0 46 0 1
+  102  R115 43 47 1E6
+  103  R116 44 48 1E6
+  104  R117 45 49 1E6
+  105  R118 0 47 10
+  106  R119 0 48 10
+  107  R120 0 49 10
+  108  E47 50 51 49 0 0.026
+  109  R121 52 46 1E3
+  110  R122 46 53 1E3
+  111  C27 43 47 1E-12
+  112  C28 44 48 1E-12
+  113  C29 45 49 1E-12
+  114  E48 54 50 48 0 -0.06
+  115  E49 55 54 47 0 0.01
+  116  R123 54 55 1E9
+  117  R124 50 54 1E9
+  118  R125 51 50 1E9
+  119  E50 52 0 2 0 1
+  120  E51 53 0 55 0 1
+  121  D37 56 57 DL
+  122  V145 57 0 3
+  123  R316 0 56 1E8
+  124  G54 2 0 56 0 2E-10
+  125  I67 2 0 5E-12
+  126  G55 37 0 56 0 2E-10
+  127  I68 37 0 5E-12
+  128  D38 58 0 DIN
+  129  D39 59 0 DIN
+  130  I69 0 58 1E-3
+  131  I70 0 59 1E-3
+  132  G56 2 55 58 59 2E-11
+  133  G57 2 55 60 0 2.4E-7
+  134  R317 0 60 1E4
+  135  R318 0 60 1E4
+  136  D40 61 0 DVN
+  137  D41 62 0 DVN
+  138  I71 0 61 1E-3
+  139  I72 0 62 1E-3
+  140  E52 37 55 61 62 0.31
+  141  R319 55 37 1E9
+  142  V146 26 35 -0.2
+  143  V147 34 26 -0.2
+  144  V148 63 11 0
+  145  V149 8 22 0
+  146  J5 64 37 64 JC
+  147  J6 64 2 64 JC
+  148  V150 8 64 0.25
+  149  J7 55 65 55 JC
+  150  J8 2 65 2 JC
+  151  V151 65 11 0.25
+  152  E53 51 66 38 0 5.61E-4
+  153  R320 66 51 1E9
+  154  V152 66 3 62E-6
+  155  G58 7 4 38 0 -6E-3
+  156  D42 4 6 DD
+  157  D43 6 7 DD
+  158  R321 67 68 70
+  159  R322 67 69 70
+  160  Q30 70 24 63 QIS
+  161  Q31 24 24 63 QIS
+  162  V153 67 70 0.7
+  163  M1 21 37 68 68 NI L=30U W=300U
+  164  M2 23 2 69 69 NI L=30U W=300U
+  165  M4 71 67 72 72 NS L=30U W=300U
+  166  V157 8 73 4.9
+  167  R327 71 8 1E5
+  168  E55 8 74 8 71 1
+  169  R330 73 72 1E3
+  170  Q32 9 75 8 QSP
+  171  R331 75 74 1E4
+  172  C30 55 2 0.45E-12
+  173  .MODEL DD D
+Warning 501: MODEL "OPA827.DD": No parameter specified. Default values are used. 
+  174  .MODEL DVN D KF=2.5E-15
+  175  .MODEL DIN D KF=1E-15
+  176  .MODEL DL D IS=0.95E-11 N=1.4 XTI=1.5
+  177  .MODEL NI NMOS VTO=2 KP=1200U IS=1E-18
+  178  .MODEL NS NMOS VTO=0 KP=1200U IS=1E-18
+  179  .MODEL QSP PNP
+Warning 501: MODEL "OPA827.QSP": No parameter specified. Default values are used. 
+  180  .MODEL QIS NPN
+Warning 501: MODEL "OPA827.QIS": No parameter specified. Default values are used. 
+  181  .MODEL JC NJF IS=1E-18
+  182  .MODEL QON NPN BF=1400 RC=25 TF=150P CJC=100F
+  183  .MODEL QOP PNP BF=1400 RC=25 TF=150P CJC=100F
+  184  .ENDS OPA827
+  185  
+  186  .PARAM CUR=10P
+  187  .PARAM OFFSETV=-0.000071
+  188  .PARAM SUPPLYV=15
+  189  
+  190  V_I$3157 POS2 0 OFFSETV
+  191  V_I$1272 POS1 0 OFFSETV
+  192  V_I$1475 VCCP 0 SUPPLYV
+  193  V_I$1476 VCCM 0 '-SUPPLYV'
+  194  V_I$3150 N$4493 0 SUPPLYV
+  195  V_I$3159 N$4492 0 '-SUPPLYV'
+  196  L_I$2539 N$2853 N$2855  100P
+  197  R_I$2540 N$2855 WE 100
+  198  R_I$412 N$2852 N$2853 1K
+  199  R_I$208 WE OUT1 1MEG
+  200  R_I$2948 OUT1 N$4085 0.1K
+  201  R_I$3155 N$4085 OUT2 1MEG
+  202  C_I$2542 WE 0 10F
+  203  C_I$2541 N$2855 0 10F
+  204  C_I$1882 N$2852 N$2853 5F
+  205  X_I$5186_I$1 POS2 N$4085 N$4493 N$4492 OUT2  OPA827 
+  206  X_I$4984_I$1 POS1 WE VCCP VCCM OUT1  OPA827 
+  207  I_I$411 0 N$2852 PWL(0 0 1 100P)
+  208  
+  209  .TRANS 1U 1
+  210  .EXTRACT label=vmax1 max(v(out1))
+  211  .EXTRACT label=vmin1 min(v(out1))
+  212  .EXTRACT label=vmax2 max(v(out2))
+  213  .EXTRACT label=vmin2 min(v(out2))
+  214  .PLOT V(OUT1)
+  215  .PLOT V(OUT2)
+  216  .PLOT I(I_I$411)
+  217  
+  218  .OP  NO_SMALL_SIGNAL
+  219  .END
+
+End of file 
+
+
+***** 0  error(s). 
+***** 3  warning(s). 
+
+
+
+***** GENERATION ...
+
+
+***** 0  error(s). 
+***** 3  warning(s). 
+
+
+INFORMATION ABOUT COMPILATION 
+
+
+Memory space allocated (bytes): 504186
+268 elements
+145 nodes 
+43 input signals
+
+ Eldo VERSION :  ELDO v6.1_1.1 (Production version)  Fri Apr 18 10:56:56 MET DST 2003
+
+
+*** DATE: 19-Feb-2009  13:08:58
+
+*** TITLE: * potentiostat
+
+TEMPERATURE : 27.000000 degrees C
+
+1***************19-Feb-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************13:08:58*****************
+
+0* potentiostat
+
+0****                 MODELS PARAMETERS                                    TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+ DEVICE          DIODE
+ MODEL: OPA827.DD
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 1.0000E-14 A       N       = 1.0000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          DIODE
+ MODEL: OPA827.DVN
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 1.0000E-14 A       N       = 1.0000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 2.5000E-15 -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          DIODE
+ MODEL: OPA827.DIN
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 1.0000E-14 A       N       = 1.0000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 1.0000E-15 -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          DIODE
+ MODEL: OPA827.DL
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 9.5000E-12 A       N       = 1.4000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 1.5000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          MOS
+ MODEL: OPA827.NI
+ TYPE            N
+ LEVEL 1 : Berkeley Spice compatible model
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+VTO     = 2.0000E+00 V       KP      = 1.2000E-03 A/V^2   GAMMA   = 0.0        V^1/2  
+PHI     = 6.0000E-01 V       LAMBDA  = 0.0        1/V     UO      = 6.0000E+02 unit1  
+NSUB    = 0.0        At/cm^3 NSS     = 0.0        At/cm^2 TPG     = 1.0000E+00 -      
+CGSO    = 0.0        F/m     CGDO    = 0.0        F/m     CGBO    = 0.0        F/m    
+KF      = 0.0        -       AF      = 1.0000E+00 -       
+
+ *** Common extrinsic model parameters ***
+OPTACM  = 0          -       ARLEV   = 6          -       ALEV    = 6          -      
+RLEV    = 6          -       
+ * Access resistances related parameters *
+RD      = 0.0        Ohm     RS      = 0.0        Ohm     RSH     = 0.0        Ohm/Sq.
+RDC     = 0.0        Ohm     RSC     = 0.0        Ohm     
+ * Geometry related parameters *
+LD      = 0.0        m       WD      = 0.0        m       DL      = 0.0        m      
+DW      = 0.0        m       LDIF    = 0.0        m       HDIF    = 0.0        m      
+WMLT    = 1.0000E+00 -       LMLT    = 1.0000E+00 -       DEL     = 0.0        m      
+XJ      = 0.0        m       
+ * Static bulk-diode related parameters *
+DIOLEV  = 1          -       JS      = 0.0        A/m^2   JSW     = 0.0        A/m    
+IS      = 1.0000E-18 A       N       = 1.0000E+00 -       NDS     = 1.0000E+00 -      
+VNDS    =-1.0000E+00 V       VDLIN   = 5.0000E-01 -       
+ * Dynamic bulk-diode related parameters *
+DCAPLEV = 2          -       CJGATE  = 0.0                CBD     = 0.0        F      
+CBS     = 0.0        F       CJ      = 0.0        F/m^2   CJSW    = 0.0        F/m    
+FC      = 5.0000E-01 -       MJ      = 5.0000E-01 -       MJSW    = 3.3000E-01 -      
+TT      = 0.0        s       PB      = 8.0000E-01 V       PBSW    = 8.0000E-01 V      
+ * Temperature related Parameters 
+EG      = 1.1100E+00 eV      GAP1    = 7.0200E-04 eV/degK GAP2    = 1.1080E+03 degK   
+TNOM    = 2.7000E+01 degC    TLEV    = 0          -       TLEVC   = 0          -      
+TLEVI   = 1          -       XTI     = 0.0        -       
+ * Temperature Access Resistance related parameters * TLEVR = 1 
+TRD1    = 0.0        1/degK  TRS1    = 0.0        1/degK  TRSH1   = 0.0        1/degK 
+TRD2    = 0.0        unit2   TRS2    = 0.0        unit2   TRSH2   = 0.0        unit2  
+
+unit1 represents cm^2/V.s
+unit2 represents 1/degK^2
+
+ DEVICE          MOS
+ MODEL: OPA827.NS
+ TYPE            N
+ LEVEL 1 : Berkeley Spice compatible model
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+VTO     = 0.0        V       KP      = 1.2000E-03 A/V^2   GAMMA   = 0.0        V^1/2  
+PHI     = 6.0000E-01 V       LAMBDA  = 0.0        1/V     UO      = 6.0000E+02 unit1  
+NSUB    = 0.0        At/cm^3 NSS     = 0.0        At/cm^2 TPG     = 1.0000E+00 -      
+CGSO    = 0.0        F/m     CGDO    = 0.0        F/m     CGBO    = 0.0        F/m    
+KF      = 0.0        -       AF      = 1.0000E+00 -       
+
+ *** Common extrinsic model parameters ***
+OPTACM  = 0          -       ARLEV   = 6          -       ALEV    = 6          -      
+RLEV    = 6          -       
+ * Access resistances related parameters *
+RD      = 0.0        Ohm     RS      = 0.0        Ohm     RSH     = 0.0        Ohm/Sq.
+RDC     = 0.0        Ohm     RSC     = 0.0        Ohm     
+ * Geometry related parameters *
+LD      = 0.0        m       WD      = 0.0        m       DL      = 0.0        m      
+DW      = 0.0        m       LDIF    = 0.0        m       HDIF    = 0.0        m      
+WMLT    = 1.0000E+00 -       LMLT    = 1.0000E+00 -       DEL     = 0.0        m      
+XJ      = 0.0        m       
+ * Static bulk-diode related parameters *
+DIOLEV  = 1          -       JS      = 0.0        A/m^2   JSW     = 0.0        A/m    
+IS      = 1.0000E-18 A       N       = 1.0000E+00 -       NDS     = 1.0000E+00 -      
+VNDS    =-1.0000E+00 V       VDLIN   = 5.0000E-01 -       
+ * Dynamic bulk-diode related parameters *
+DCAPLEV = 2          -       CJGATE  = 0.0                CBD     = 0.0        F      
+CBS     = 0.0        F       CJ      = 0.0        F/m^2   CJSW    = 0.0        F/m    
+FC      = 5.0000E-01 -       MJ      = 5.0000E-01 -       MJSW    = 3.3000E-01 -      
+TT      = 0.0        s       PB      = 8.0000E-01 V       PBSW    = 8.0000E-01 V      
+ * Temperature related Parameters 
+EG      = 1.1100E+00 eV      GAP1    = 7.0200E-04 eV/degK GAP2    = 1.1080E+03 degK   
+TNOM    = 2.7000E+01 degC    TLEV    = 0          -       TLEVC   = 0          -      
+TLEVI   = 1          -       XTI     = 0.0        -       
+ * Temperature Access Resistance related parameters * TLEVR = 1 
+TRD1    = 0.0        1/degK  TRS1    = 0.0        1/degK  TRSH1   = 0.0        1/degK 
+TRD2    = 0.0        unit2   TRS2    = 0.0        unit2   TRSH2   = 0.0        unit2  
+
+unit1 represents cm^2/V.s
+unit2 represents 1/degK^2
+
+ DEVICE          BIPOLAR STRUCT          VERTICAL
+ MODEL: OPA827.QSP
+ TYPE            P
+ LEVEL 1 :  Berkeley Compatible Model - v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model Parameters  *
+IS      = 1.0000E-16 A       BF      = 1.0000E+02 -       NF      = 1.0000E+00 -      
+VAF     = 0.0        V       IKF     = 0.0        A       ISE     = 0.0        A      
+NE      = 1.5000E+00 -       BR      = 1.0000E+00 -       NR      = 1.0000E+00 -      
+VAR     = 0.0        V       IKR     = 0.0        A       ISC     = 0.0        A      
+NC      = 2.0000E+00 -       NKF     = 5.0000E-01 -       
+ *  Parasitic Resistance Parameters  *
+RC      = 0.0        Ohm     RE      = 0.0        Ohm     RB      = 0.0        Ohm    
+IRB     = 0.0        A       RBM     = 0.0        Ohm     
+ *  Transit Time related Parameters  *
+TF      = 0.0        s       XTF     = 0.0        -       VTF     = 0.0        -      
+ITF     = 0.0        A       PTF     = 0.0        deg.    TR      = 0.0        s      
+ *  Junction Capacitance Parameters  *
+DCAP    = 1.0000E+00 -       CJE     = 0.0        F       VJE     = 7.5000E-01 V      
+MJE     = 3.3000E-01 -       CJS     = 0.0        F       VJS     = 7.5000E-01 V      
+MJS     = 0.0        -       CJC     = 0.0        F       VJC     = 7.5000E-01 V      
+MJC     = 3.3000E-01 -       XCJC    = 1.0000E+00 -       XJBS    = 1.0000E+00 -      
+FC      = 5.0000E-01 -       
+ *  Noise related Parameters  *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+ *  Temperature related Parameters  *
+EG      = 1.1100E+00 eV      GAP1    = 7.0200E-04 eV/degK GAP2    = 1.1080E+03 degK   
+TLEV    = 0          -       XTB     = 0.0        -       XTI     = 3.0000E+00 -      
+TNOM    = 2.7000E+01 degC    TLEVC   = 0.0        -       CTE     = 0.0        1/degK 
+CTC     = 0.0        1/degK  CTS     = 0.0        1/degK  TVJE    = 0.0        V/degK 
+TVJC    = 0.0        V/degK  TVJS    = 0.0        V/degK  TIS1    = 0.0        1/degK 
+TIS2    = 0.0        unit1   TISE1   = 0.0        1/degK  TISE2   = 0.0        unit1  
+TISC1   = 0.0        1/degK  TISC2   = 0.0        unit1   TISS1   = 0.0        1/degK 
+TISS2   = 0.0        unit1   TRE1    = 0.0        1/degK  TRE2    = 0.0        unit1  
+TRC1    = 0.0        1/degK  TRC2    = 0.0        unit1   TRB1    = 0.0        1/degK 
+TRB2    = 0.0        unit1   TRM1    = 0.0        1/degK  TRM2    = 0.0        unit1  
+TBF1    = 0.0        1/degK  TBF2    = 0.0        unit1   TBR1    = 0.0        1/degK 
+TBR2    = 0.0        unit1   TIRB1   = 0.0        1/degK  TIRB2   = 0.0        unit1  
+TIKF1   = 0.0        1/degK  TIKF2   = 0.0        unit1   TIKR1   = 0.0        1/degK 
+TIKR2   = 0.0        unit1   TITF1   = 0.0        1/degK  TITF2   = 0.0        unit1  
+TVAF1   = 0.0        1/degK  TVAF2   = 0.0        unit1   TVAR1   = 0.0        1/degK 
+TVAR2   = 0.0        unit1   TTF1    = 0.0        1/degK  TTF2    = 0.0        unit1  
+TTR1    = 0.0        1/degK  TTR2    = 0.0        unit1   MODLEV  = 0.0        -      
+VBO     = 0.0        V       GBO     = 0.0        mho     CBO     = 0.0        A      
+CCO     = 1.0000E+00 A       CEX     = 1.0000E+00 -       RCM     = 0.0        ohm    
+RCV     = 0.0        ohm     DOPE    = 1.0000E+15 1/cm^3  KE      = 0.0        1/V    
+KC      = 0.0        1/V     RBMOD   = 0.0        -       TVTF1   = 0.0        1/degK 
+TVTF2   = 0.0        unit1   TXTF1   = 0.0        1/degK  TXTF2   = 0.0        unit1  
+DTEMP   = 0.0        degC    OPTACM  = 0.0        -       CBCP    = 0.0        F      
+CBEP    = 0.0        F       CCSP    = 0.0        F       
+
+unit1 represents 1/degK^2
+
+ DEVICE          BIPOLAR STRUCT          VERTICAL
+ MODEL: OPA827.QIS
+ TYPE            N
+ LEVEL 1 :  Berkeley Compatible Model - v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model Parameters  *
+IS      = 1.0000E-16 A       BF      = 1.0000E+02 -       NF      = 1.0000E+00 -      
+VAF     = 0.0        V       IKF     = 0.0        A       ISE     = 0.0        A      
+NE      = 1.5000E+00 -       BR      = 1.0000E+00 -       NR      = 1.0000E+00 -      
+VAR     = 0.0        V       IKR     = 0.0        A       ISC     = 0.0        A      
+NC      = 2.0000E+00 -       NKF     = 5.0000E-01 -       
+ *  Parasitic Resistance Parameters  *
+RC      = 0.0        Ohm     RE      = 0.0        Ohm     RB      = 0.0        Ohm    
+IRB     = 0.0        A       RBM     = 0.0        Ohm     
+ *  Transit Time related Parameters  *
+TF      = 0.0        s       XTF     = 0.0        -       VTF     = 0.0        -      
+ITF     = 0.0        A       PTF     = 0.0        deg.    TR      = 0.0        s      
+ *  Junction Capacitance Parameters  *
+DCAP    = 1.0000E+00 -       CJE     = 0.0        F       VJE     = 7.5000E-01 V      
+MJE     = 3.3000E-01 -       CJS     = 0.0        F       VJS     = 7.5000E-01 V      
+MJS     = 0.0        -       CJC     = 0.0        F       VJC     = 7.5000E-01 V      
+MJC     = 3.3000E-01 -       XCJC    = 1.0000E+00 -       XJBS    = 1.0000E+00 -      
+FC      = 5.0000E-01 -       
+ *  Noise related Parameters  *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+ *  Temperature related Parameters  *
+EG      = 1.1100E+00 eV      GAP1    = 7.0200E-04 eV/degK GAP2    = 1.1080E+03 degK   
+TLEV    = 0          -       XTB     = 0.0        -       XTI     = 3.0000E+00 -      
+TNOM    = 2.7000E+01 degC    TLEVC   = 0.0        -       CTE     = 0.0        1/degK 
+CTC     = 0.0        1/degK  CTS     = 0.0        1/degK  TVJE    = 0.0        V/degK 
+TVJC    = 0.0        V/degK  TVJS    = 0.0        V/degK  TIS1    = 0.0        1/degK 
+TIS2    = 0.0        unit1   TISE1   = 0.0        1/degK  TISE2   = 0.0        unit1  
+TISC1   = 0.0        1/degK  TISC2   = 0.0        unit1   TISS1   = 0.0        1/degK 
+TISS2   = 0.0        unit1   TRE1    = 0.0        1/degK  TRE2    = 0.0        unit1  
+TRC1    = 0.0        1/degK  TRC2    = 0.0        unit1   TRB1    = 0.0        1/degK 
+TRB2    = 0.0        unit1   TRM1    = 0.0        1/degK  TRM2    = 0.0        unit1  
+TBF1    = 0.0        1/degK  TBF2    = 0.0        unit1   TBR1    = 0.0        1/degK 
+TBR2    = 0.0        unit1   TIRB1   = 0.0        1/degK  TIRB2   = 0.0        unit1  
+TIKF1   = 0.0        1/degK  TIKF2   = 0.0        unit1   TIKR1   = 0.0        1/degK 
+TIKR2   = 0.0        unit1   TITF1   = 0.0        1/degK  TITF2   = 0.0        unit1  
+TVAF1   = 0.0        1/degK  TVAF2   = 0.0        unit1   TVAR1   = 0.0        1/degK 
+TVAR2   = 0.0        unit1   TTF1    = 0.0        1/degK  TTF2    = 0.0        unit1  
+TTR1    = 0.0        1/degK  TTR2    = 0.0        unit1   MODLEV  = 0.0        -      
+VBO     = 0.0        V       GBO     = 0.0        mho     CBO     = 0.0        A      
+CCO     = 1.0000E+00 A       CEX     = 1.0000E+00 -       RCM     = 0.0        ohm    
+RCV     = 0.0        ohm     DOPE    = 1.0000E+15 1/cm^3  KE      = 0.0        1/V    
+KC      = 0.0        1/V     RBMOD   = 0.0        -       TVTF1   = 0.0        1/degK 
+TVTF2   = 0.0        unit1   TXTF1   = 0.0        1/degK  TXTF2   = 0.0        unit1  
+DTEMP   = 0.0        degC    OPTACM  = 0.0        -       CBCP    = 0.0        F      
+CBEP    = 0.0        F       CCSP    = 0.0        F       
+
+unit1 represents 1/degK^2
+
+ DEVICE          JFET
+ MODEL: OPA827.JC
+ TYPE            N
+ LEVEL 1 :  Standard Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  DC Behaviour related Parameters  *
+VT0     =-2.0000E+00 V       BETA    = 1.0000E-04 A/V^2   LAMBDA  = 0.0        1/V    
+IS      = 1.0000E-18 A       
+ *  Capacitances related Parameters  *
+CAPOP   = 1          -       CGD     = 0.0        F       CGS     = 0.0        F      
+M       = 5.0000E-01 -       PB      = 1.0000E+00 V       FC      = 5.0000E-01 -      
+TT      = 0.0        s       
+ *  Resistances and Areas related Parameters  *
+RD      = 0.0        Ohm     RS      = 0.0        Ohm     RD_SCALE= 0          -      
+RS_SCALE= 0          -       
+
+ACM     = 0          -       
+ *  Noise related Parameters  *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+ *  Temperature related Parameters  *
+EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -       TRD1    = 0.0        1/degK 
+TRS1    = 0.0        1/degK  
+
+
+ DEVICE          BIPOLAR STRUCT          VERTICAL
+ MODEL: OPA827.QON
+ TYPE            N
+ LEVEL 1 :  Berkeley Compatible Model - v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model Parameters  *
+IS      = 1.0000E-16 A       BF      = 1.4000E+03 -       NF      = 1.0000E+00 -      
+VAF     = 0.0        V       IKF     = 0.0        A       ISE     = 0.0        A      
+NE      = 1.5000E+00 -       BR      = 1.0000E+00 -       NR      = 1.0000E+00 -      
+VAR     = 0.0        V       IKR     = 0.0        A       ISC     = 0.0        A      
+NC      = 2.0000E+00 -       NKF     = 5.0000E-01 -       
+ *  Parasitic Resistance Parameters  *
+RC      = 2.5000E+01 Ohm     RE      = 0.0        Ohm     RB      = 0.0        Ohm    
+IRB     = 0.0        A       RBM     = 0.0        Ohm     
+ *  Transit Time related Parameters  *
+TF      = 1.5000E-10 s       XTF     = 0.0        -       VTF     = 0.0        -      
+ITF     = 0.0        A       PTF     = 0.0        deg.    TR      = 0.0        s      
+ *  Junction Capacitance Parameters  *
+DCAP    = 1.0000E+00 -       CJE     = 0.0        F       VJE     = 7.5000E-01 V      
+MJE     = 3.3000E-01 -       CJS     = 0.0        F       VJS     = 7.5000E-01 V      
+MJS     = 0.0        -       CJC     = 1.0000E-13 F       VJC     = 7.5000E-01 V      
+MJC     = 3.3000E-01 -       XCJC    = 1.0000E+00 -       XJBS    = 1.0000E+00 -      
+FC      = 5.0000E-01 -       
+ *  Noise related Parameters  *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+ *  Temperature related Parameters  *
+EG      = 1.1100E+00 eV      GAP1    = 7.0200E-04 eV/degK GAP2    = 1.1080E+03 degK   
+TLEV    = 0          -       XTB     = 0.0        -       XTI     = 3.0000E+00 -      
+TNOM    = 2.7000E+01 degC    TLEVC   = 0.0        -       CTE     = 0.0        1/degK 
+CTC     = 0.0        1/degK  CTS     = 0.0        1/degK  TVJE    = 0.0        V/degK 
+TVJC    = 0.0        V/degK  TVJS    = 0.0        V/degK  TIS1    = 0.0        1/degK 
+TIS2    = 0.0        unit1   TISE1   = 0.0        1/degK  TISE2   = 0.0        unit1  
+TISC1   = 0.0        1/degK  TISC2   = 0.0        unit1   TISS1   = 0.0        1/degK 
+TISS2   = 0.0        unit1   TRE1    = 0.0        1/degK  TRE2    = 0.0        unit1  
+TRC1    = 0.0        1/degK  TRC2    = 0.0        unit1   TRB1    = 0.0        1/degK 
+TRB2    = 0.0        unit1   TRM1    = 0.0        1/degK  TRM2    = 0.0        unit1  
+TBF1    = 0.0        1/degK  TBF2    = 0.0        unit1   TBR1    = 0.0        1/degK 
+TBR2    = 0.0        unit1   TIRB1   = 0.0        1/degK  TIRB2   = 0.0        unit1  
+TIKF1   = 0.0        1/degK  TIKF2   = 0.0        unit1   TIKR1   = 0.0        1/degK 
+TIKR2   = 0.0        unit1   TITF1   = 0.0        1/degK  TITF2   = 0.0        unit1  
+TVAF1   = 0.0        1/degK  TVAF2   = 0.0        unit1   TVAR1   = 0.0        1/degK 
+TVAR2   = 0.0        unit1   TTF1    = 0.0        1/degK  TTF2    = 0.0        unit1  
+TTR1    = 0.0        1/degK  TTR2    = 0.0        unit1   MODLEV  = 0.0        -      
+VBO     = 0.0        V       GBO     = 0.0        mho     CBO     = 0.0        A      
+CCO     = 1.0000E+00 A       CEX     = 1.0000E+00 -       RCM     = 0.0        ohm    
+RCV     = 0.0        ohm     DOPE    = 1.0000E+15 1/cm^3  KE      = 0.0        1/V    
+KC      = 0.0        1/V     RBMOD   = 0.0        -       TVTF1   = 0.0        1/degK 
+TVTF2   = 0.0        unit1   TXTF1   = 0.0        1/degK  TXTF2   = 0.0        unit1  
+DTEMP   = 0.0        degC    OPTACM  = 0.0        -       CBCP    = 0.0        F      
+CBEP    = 0.0        F       CCSP    = 0.0        F       
+
+unit1 represents 1/degK^2
+
+ DEVICE          BIPOLAR STRUCT          VERTICAL
+ MODEL: OPA827.QOP
+ TYPE            P
+ LEVEL 1 :  Berkeley Compatible Model - v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model Parameters  *
+IS      = 1.0000E-16 A       BF      = 1.4000E+03 -       NF      = 1.0000E+00 -      
+VAF     = 0.0        V       IKF     = 0.0        A       ISE     = 0.0        A      
+NE      = 1.5000E+00 -       BR      = 1.0000E+00 -       NR      = 1.0000E+00 -      
+VAR     = 0.0        V       IKR     = 0.0        A       ISC     = 0.0        A      
+NC      = 2.0000E+00 -       NKF     = 5.0000E-01 -       
+ *  Parasitic Resistance Parameters  *
+RC      = 2.5000E+01 Ohm     RE      = 0.0        Ohm     RB      = 0.0        Ohm    
+IRB     = 0.0        A       RBM     = 0.0        Ohm     
+ *  Transit Time related Parameters  *
+TF      = 1.5000E-10 s       XTF     = 0.0        -       VTF     = 0.0        -      
+ITF     = 0.0        A       PTF     = 0.0        deg.    TR      = 0.0        s      
+ *  Junction Capacitance Parameters  *
+DCAP    = 1.0000E+00 -       CJE     = 0.0        F       VJE     = 7.5000E-01 V      
+MJE     = 3.3000E-01 -       CJS     = 0.0        F       VJS     = 7.5000E-01 V      
+MJS     = 0.0        -       CJC     = 1.0000E-13 F       VJC     = 7.5000E-01 V      
+MJC     = 3.3000E-01 -       XCJC    = 1.0000E+00 -       XJBS    = 1.0000E+00 -      
+FC      = 5.0000E-01 -       
+ *  Noise related Parameters  *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+ *  Temperature related Parameters  *
+EG      = 1.1100E+00 eV      GAP1    = 7.0200E-04 eV/degK GAP2    = 1.1080E+03 degK   
+TLEV    = 0          -       XTB     = 0.0        -       XTI     = 3.0000E+00 -      
+TNOM    = 2.7000E+01 degC    TLEVC   = 0.0        -       CTE     = 0.0        1/degK 
+CTC     = 0.0        1/degK  CTS     = 0.0        1/degK  TVJE    = 0.0        V/degK 
+TVJC    = 0.0        V/degK  TVJS    = 0.0        V/degK  TIS1    = 0.0        1/degK 
+TIS2    = 0.0        unit1   TISE1   = 0.0        1/degK  TISE2   = 0.0        unit1  
+TISC1   = 0.0        1/degK  TISC2   = 0.0        unit1   TISS1   = 0.0        1/degK 
+TISS2   = 0.0        unit1   TRE1    = 0.0        1/degK  TRE2    = 0.0        unit1  
+TRC1    = 0.0        1/degK  TRC2    = 0.0        unit1   TRB1    = 0.0        1/degK 
+TRB2    = 0.0        unit1   TRM1    = 0.0        1/degK  TRM2    = 0.0        unit1  
+TBF1    = 0.0        1/degK  TBF2    = 0.0        unit1   TBR1    = 0.0        1/degK 
+TBR2    = 0.0        unit1   TIRB1   = 0.0        1/degK  TIRB2   = 0.0        unit1  
+TIKF1   = 0.0        1/degK  TIKF2   = 0.0        unit1   TIKR1   = 0.0        1/degK 
+TIKR2   = 0.0        unit1   TITF1   = 0.0        1/degK  TITF2   = 0.0        unit1  
+TVAF1   = 0.0        1/degK  TVAF2   = 0.0        unit1   TVAR1   = 0.0        1/degK 
+TVAR2   = 0.0        unit1   TTF1    = 0.0        1/degK  TTF2    = 0.0        unit1  
+TTR1    = 0.0        1/degK  TTR2    = 0.0        unit1   MODLEV  = 0.0        -      
+VBO     = 0.0        V       GBO     = 0.0        mho     CBO     = 0.0        A      
+CCO     = 1.0000E+00 A       CEX     = 1.0000E+00 -       RCM     = 0.0        ohm    
+RCV     = 0.0        ohm     DOPE    = 1.0000E+15 1/cm^3  KE      = 0.0        1/V    
+KC      = 0.0        1/V     RBMOD   = 0.0        -       TVTF1   = 0.0        1/degK 
+TVTF2   = 0.0        unit1   TXTF1   = 0.0        1/degK  TXTF2   = 0.0        unit1  
+DTEMP   = 0.0        degC    OPTACM  = 0.0        -       CBCP    = 0.0        F      
+CBEP    = 0.0        F       CCSP    = 0.0        F       
+
+unit1 represents 1/degK^2
+
+
+Searching Operating Point between -4.500000E+01V and 
+                                  4.500000E+01V
+
+
+
+1***************19-Feb-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************13:08:58*****************
+
+0* potentiostat
+0****                 OPTION SUMMARY                                        TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+
+
+*** DC Control Options : 
+
+GMIN           = 1.00e-12 NMAXSIZE       = 60000    ITL1           = 100      
+GRAMP          = 0        NETSIZE        = 100      VMIN           = UNDEF    
+VMAX           = UNDEF    
+
+*** Accuracy Control Options : 
+
+ITOL           = 1.00e-06 EPS            = 5.00e-03 VNTOL          = 1.00e-06 
+RELTOL         = 1.00e-03 RELERR         = 5.00e-02 PIVREL         = 1.00e-03 
+PIVTOL         = 1.00e-13 ABSTOL         = 1.00e-12 FLXTOL         = 1.00e-11 
+MAXORD         = 2.00e+00 
+
+*** Time-step Control Options : 
+
+ZOOMTIME       = 1.00e+00 STEP           = 0.00e+00 STARTSMP       = 0.00e+00 
+FREQSMP        = 0.00e+00 COURESOL       = 0.00e+00 TRTOL          = 7.00e+00 
+HMIN           = 1.00e-12 ITL3           = 3        ITL4           = 13       
+FT             = 1.25e-01 DCLOG          = 1.00e+00 LVLTIM         = 2        
+LVLCNV         = 2        DVDT           = -1       RELVAR         = 1.50e-01 
+ABSVAR         = 2.00e-01 SAMPLE         = 0.00e+00 HMAX           = UNDEF    
+
+
+*** MosFet default Options : 
+
+SCALE          = 1.00e+00 SCALM          = 1.00e+00 SCALEBSIM      = 1.00e+00 
+DEFAD          = UNDEF    DEFAS          = UNDEF    DEFPD          = UNDEF    
+DEFPS          = UNDEF    DEFW           = 1.00e-04 DEFL           = 1.00e-04 
+DEFNRD         = UNDEF    DEFNRS         = UNDEF    XA             = 6.00e-06 
+LIMRMOS        = UNDEF    SHRINK         = 1.00e+00 
+
+*** General Information Options : 
+
+SDA            = 0        CPTIME         = UNDEF    STAT           = 0        
+TIMEDIV        = 0        SIMUDIV        = 10       SAVETIME       = 0        
+MAXTRAN        = 1000     MAXNODES       = 500      MAXV           = 1.00e+13 
+LIMPROBE       = 1000     FLICKER_NOISE  = 0        THERMAL_NOISE  = 0        
+TNOM           = 2.70e+01 TMAX           = UNDEF    
+SPICDC         = 0        SPIOUT         = 0        NEWTON         = 1        
+OSR            = 0        TRAP           = 1        GEAR           = 0        
+BE             = 0        PROBEOP        = 0        NOLAT          = 0        
+NWLAT          = 0        ANALOG         = 0        BBDEBUG        = 0        
+NOSIZECHK      = 0        QTRUNC         = 0        UNBOUND        = 0        
+LCAPOP         = 0        STVER          = 0        MOTOROLA       = 0        
+AMS            = 0        ASPEC          = 0        INPUT          = 0        
+NOINIT         = 0        PSF            = 0        WSF            = 0        
+WSFASCII       = 0        NOBIN          = 0        NOCOU          = 0        
+WL             = 0        NODE           = 0        LIST           = 0        
+SPI3BIN        = 0        SPI3ASC        = 0        NOMOD          = 0        
+WSF            = 0        WSFASCII       = 0        NOBIN          = 0        
+NOCOU          = 0        WL             = 0        NODE           = 0        
+LIST           = 0        SPI3BIN        = 0        SPI3ASC        = 0        
+NOMOD          = 0        RMOS           = 0        NWRMOS         = 1        
+NONWRMOS       = 0        USEDEFAP       = 0        NOASCII        = 0        
+NOAEX          = 0        AEX            = 0        AEX            = 0        
+ASCII          = 2        MIXED          = 0        SWITCH         = 0        
+USERSWITCH     = 0        TIMING         = 0        MODWL          = 1        
+ULOGIC         = 0        
+
+
+
+***>CPU TIME 6s 020ms <***
+
+---> Simplified G RAMPING  : 0.000000%
+---> Simplified G RAMPING  : 10.000000%
+---> Simplified G RAMPING  : 20.000000%
+---> Simplified G RAMPING  : 30.000000%
+---> Simplified G RAMPING  : 40.000000%
+---> Simplified G RAMPING  : 50.000000%
+---> Simplified G RAMPING  : 60.000000%
+---> Simplified G RAMPING  : 70.000000%
+---> Simplified G RAMPING  : 80.000000%
+---> Simplified G RAMPING  : 90.000000%
+---> Simplified G RAMPING  : 100.000000%
+
+***> DC CPU TIME 6s 270ms <***
+
+DC:1 iterations FOR DC analysis
+
+
+
+
+1***************19-Feb-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************13:08:58*****************
+
+0* potentiostat
+0****                 INITIAL TRANSIENT SOLUTION                           TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+  NODE         VOLTAGE    
+ N$2852       1.6740E-06
+ N$2853       1.6740E-06
+ N$2855       1.6740E-06
+ N$4085       1.7153E-06
+ N$4492      -1.5000E+01
+ N$4493       1.5000E+01
+ OUT1       6.9246E-06
+ OUT2      -5.2087E-02
+ POS1      -7.1000E-05
+ POS2      -7.1000E-05
+ VCCM      -1.5000E+01
+ VCCP       1.5000E+01
+ WE       1.6740E-06
+ X_I$4984_I$1.8       1.5000E+01
+ X_I$4984_I$1.9       7.9447E-06
+ X_I$4984_I$1.10      -6.9630E-01
+ X_I$4984_I$1.11      -1.5000E+01
+ X_I$4984_I$1.12       6.9631E-01
+ X_I$4984_I$1.13      -1.2320E+01
+ X_I$4984_I$1.14      -6.9634E-01
+ X_I$4984_I$1.15      -1.0803E-03
+ X_I$4984_I$1.16       1.2320E+01
+ X_I$4984_I$1.17       6.9636E-01
+ X_I$4984_I$1.18       1.0949E-03
+ X_I$4984_I$1.19       7.2893E-06
+ X_I$4984_I$1.20       6.9246E-06
+ X_I$4984_I$1.21       1.4421E+01
+ X_I$4984_I$1.23       1.4421E+01
+ X_I$4984_I$1.24      -1.4243E+01
+ X_I$4984_I$1.25      -3.9999E-01
+ X_I$4984_I$1.26       7.9147E-06
+ X_I$4984_I$1.27      -1.5400E+01
+ X_I$4984_I$1.28       1.5000E-01
+ X_I$4984_I$1.29       1.5000E+01
+ X_I$4984_I$1.30       7.9147E-06
+ X_I$4984_I$1.31       1.5000E-01
+ X_I$4984_I$1.32       7.9147E-06
+ X_I$4984_I$1.33       2.0669E-04
+ X_I$4984_I$1.34      -1.9999E-01
+ X_I$4984_I$1.35       2.0001E-01
+ X_I$4984_I$1.36      -1.9087E-04
+ X_I$4984_I$1.37       1.5557E-06
+ X_I$4984_I$1.38       9.9390E-05
+ X_I$4984_I$1.39       6.5510E-01
+ X_I$4984_I$1.40       0.0       
+ X_I$4984_I$1.41       0.0       
+ X_I$4984_I$1.42       3.4500E-01
+ X_I$4984_I$1.43       1.5000E+01
+ X_I$4984_I$1.44      -1.5000E+01
+ X_I$4984_I$1.45       1.6148E-06
+ X_I$4984_I$1.46       1.6148E-06
+ X_I$4984_I$1.47       1.5000E-04
+ X_I$4984_I$1.48      -1.5000E-04
+ X_I$4984_I$1.49       1.6148E-11
+ X_I$4984_I$1.50      -8.9442E-06
+ X_I$4984_I$1.51      -8.9442E-06
+ X_I$4984_I$1.52       1.6740E-06
+ X_I$4984_I$1.53       1.5557E-06
+ X_I$4984_I$1.54       5.5668E-08
+ X_I$4984_I$1.55       1.5557E-06
+ X_I$4984_I$1.56       1.2530E-03
+ X_I$4984_I$1.57       3.0000E+00
+ X_I$4984_I$1.58       6.5510E-01
+ X_I$4984_I$1.59       6.5510E-01
+ X_I$4984_I$1.60       0.0       
+ X_I$4984_I$1.61       6.5510E-01
+ X_I$4984_I$1.62       6.5510E-01
+ X_I$4984_I$1.64       1.4750E+01
+ X_I$4984_I$1.65      -1.4750E+01
+ X_I$4984_I$1.66      -9.0000E-06
+ X_I$4984_I$1.67      -2.2251E+00
+ X_I$4984_I$1.68      -2.2071E+00
+ X_I$4984_I$1.69      -2.2071E+00
+ X_I$4984_I$1.70      -2.9251E+00
+ X_I$4984_I$1.71       1.5000E+01
+ X_I$4984_I$1.72       1.0100E+01
+ X_I$4984_I$1.73       1.0100E+01
+ X_I$4984_I$1.74       1.5000E+01
+ X_I$4984_I$1.75       1.5000E+01
+ X_I$5186_I$1.8       1.5000E+01
+ X_I$5186_I$1.9      -5.2088E-02
+ X_I$5186_I$1.10      -7.4839E-01
+ X_I$5186_I$1.11      -1.5000E+01
+ X_I$5186_I$1.12       6.4422E-01
+ X_I$5186_I$1.13      -1.2320E+01
+ X_I$5186_I$1.14      -7.4844E-01
+ X_I$5186_I$1.15      -5.3175E-02
+ X_I$5186_I$1.16       1.2320E+01
+ X_I$5186_I$1.17       6.4426E-01
+ X_I$5186_I$1.18      -5.1000E-02
+ X_I$5186_I$1.19      -5.2087E-02
+ X_I$5186_I$1.20      -5.2087E-02
+ X_I$5186_I$1.21       1.4421E+01
+ X_I$5186_I$1.23       1.4421E+01
+ X_I$5186_I$1.24      -1.4243E+01
+ X_I$5186_I$1.25      -4.5209E-01
+ X_I$5186_I$1.26      -5.2088E-02
+ X_I$5186_I$1.27      -1.5400E+01
+ X_I$5186_I$1.28       1.5000E-01
+ X_I$5186_I$1.29       1.5000E+01
+ X_I$5186_I$1.30      -5.2088E-02
+ X_I$5186_I$1.31       1.5000E-01
+ X_I$5186_I$1.32      -5.2088E-02
+ X_I$5186_I$1.33      -5.1889E-02
+ X_I$5186_I$1.34      -2.5209E-01
+ X_I$5186_I$1.35       1.4791E-01
+ X_I$5186_I$1.36      -5.2287E-02
+ X_I$5186_I$1.37       1.5557E-06
+ X_I$5186_I$1.38       9.9390E-05
+ X_I$5186_I$1.39       6.5510E-01
+ X_I$5186_I$1.40       0.0       
+ X_I$5186_I$1.41       0.0       
+ X_I$5186_I$1.42       3.4500E-01
+ X_I$5186_I$1.43       1.5000E+01
+ X_I$5186_I$1.44      -1.5000E+01
+ X_I$5186_I$1.45       1.6355E-06
+ X_I$5186_I$1.46       1.6355E-06
+ X_I$5186_I$1.47       1.5000E-04
+ X_I$5186_I$1.48      -1.5000E-04
+ X_I$5186_I$1.49       1.6354E-11
+ X_I$5186_I$1.50      -8.9442E-06
+ X_I$5186_I$1.51      -8.9442E-06
+ X_I$5186_I$1.52       1.7153E-06
+ X_I$5186_I$1.53       1.5557E-06
+ X_I$5186_I$1.54       5.5668E-08
+ X_I$5186_I$1.55       1.5557E-06
+ X_I$5186_I$1.56       1.2530E-03
+ X_I$5186_I$1.57       3.0000E+00
+ X_I$5186_I$1.58       6.5510E-01
+ X_I$5186_I$1.59       6.5510E-01
+ X_I$5186_I$1.60       0.0       
+ X_I$5186_I$1.61       6.5510E-01
+ X_I$5186_I$1.62       6.5510E-01
+ X_I$5186_I$1.64       1.4750E+01
+ X_I$5186_I$1.65      -1.4750E+01
+ X_I$5186_I$1.66      -9.0000E-06
+ X_I$5186_I$1.67      -2.2251E+00
+ X_I$5186_I$1.68      -2.2071E+00
+ X_I$5186_I$1.69      -2.2071E+00
+ X_I$5186_I$1.70      -2.9251E+00
+ X_I$5186_I$1.71       1.5000E+01
+ X_I$5186_I$1.72       1.0100E+01
+ X_I$5186_I$1.73       1.0100E+01
+ X_I$5186_I$1.74       1.5000E+01
+ X_I$5186_I$1.75       1.5000E+01
+
+
+
+   VOLTAGE SOURCE CURRENT
+
+NAME      CURRENT      VOLTAGE      POWER        
+V_I$3157  -5.2506E-12  -7.1000E-05   3.7279E-16  
+V_I$1272  -5.2506E-12  -7.1000E-05   3.7279E-16  
+V_I$1475  -4.7286E-03   1.5000E+01  -7.0928E-02  
+V_I$1476   4.7285E-03  -1.5000E+01  -7.0928E-02  
+V_I$3150  -4.7285E-03   1.5000E+01  -7.0928E-02  
+V_I$3159   4.7286E-03  -1.5000E+01  -7.0928E-02  
+X_I$5186_I$1.I4   5.0000E-05   1.4356E+01   7.1779E-04  
+X_I$5186_I$1.I5   5.0000E-05   1.4252E+01   7.1258E-04  
+X_I$5186_I$1.E25   0.0         -1.5000E+01   0.0         
+X_I$5186_I$1.E26   0.0          1.5000E+01   0.0         
+X_I$5186_I$1.I9   3.5500E-03   3.0000E+01   1.0650E-01  
+X_I$5186_I$1.I11   5.2500E-04   2.9243E+01   1.5353E-02  
+X_I$5186_I$1.V9   1.5462E-11  -4.0000E-01  -6.1849E-12  
+X_I$5186_I$1.V10   1.5358E-11  -4.0000E-01  -6.1433E-12  
+X_I$5186_I$1.E27   3.0339E-11   1.5150E+01   4.5964E-10  
+X_I$5186_I$1.G2   2.0209E-04  -2.0209E-01  -4.0839E-05  
+X_I$5186_I$1.G3   1.4445E-10  -2.0209E-01  -2.9192E-11  
+X_I$5186_I$1.E28   2.4216E-26  -2.0209E-01  -4.8937E-27  
+X_I$5186_I$1.E29   2.3384E-11  -1.9878E-04  -4.6483E-15  
+X_I$5186_I$1.E30  -2.3384E-11   1.9878E-04  -4.6483E-15  
+X_I$5186_I$1.I12   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$5186_I$1.V11   9.9390E-17   6.5500E-01   6.5101E-17  
+X_I$5186_I$1.V12   1.0868E-03   2.6800E+00   2.9126E-03  
+X_I$5186_I$1.V13   1.0868E-03   2.6800E+00   2.9127E-03  
+X_I$5186_I$1.E42   0.0          0.0          0.0         
+X_I$5186_I$1.E43   0.0          3.4500E-01   0.0         
+X_I$5186_I$1.E44  -1.5000E-05   1.5000E+01  -2.2500E-04  
+X_I$5186_I$1.E45   1.5000E-05  -1.5000E+01  -2.2500E-04  
+X_I$5186_I$1.E46  -1.6354E-12   1.6355E-06  -2.6747E-18  
+X_I$5186_I$1.E47  -5.2506E-12   4.2522E-13  -2.2326E-24  
+X_I$5186_I$1.E48  -5.2596E-12   8.9999E-06  -4.7336E-17  
+X_I$5186_I$1.E49  -5.2521E-12   1.5000E-06  -7.8781E-18  
+X_I$5186_I$1.E50  -7.9808E-11   1.7153E-06  -1.3689E-16  
+X_I$5186_I$1.E51   7.9808E-11   1.5557E-06   1.2415E-16  
+X_I$5186_I$1.V145  -1.2530E-11   3.0000E+00  -3.7589E-11  
+X_I$5186_I$1.G54   2.5059E-13   1.7153E-06   4.2984E-19  
+X_I$5186_I$1.I67   5.0000E-12   1.7153E-06   8.5763E-18  
+X_I$5186_I$1.G55   2.5059E-13   1.5557E-06   3.8984E-19  
+X_I$5186_I$1.I68   5.0000E-12   1.5557E-06   7.7783E-18  
+X_I$5186_I$1.I69   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$5186_I$1.I70   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$5186_I$1.G56   0.0          1.5962E-07   0.0         
+X_I$5186_I$1.G57   0.0          1.5962E-07   0.0         
+X_I$5186_I$1.I71   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$5186_I$1.I72   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$5186_I$1.E52   2.4249E-11   0.0          0.0         
+X_I$5186_I$1.V146   2.3384E-11  -2.0000E-01  -4.6768E-12  
+X_I$5186_I$1.V147   2.3384E-11  -2.0000E-01  -4.6768E-12  
+X_I$5186_I$1.V150   5.9000E-11   2.5000E-01   1.4750E-11  
+X_I$5186_I$1.V151   5.9000E-11   2.5000E-01   1.4750E-11  
+X_I$5186_I$1.E53  -5.2507E-12   5.5758E-08  -2.9277E-19  
+X_I$5186_I$1.V152  -5.2506E-12   6.2000E-05  -3.2554E-16  
+X_I$5186_I$1.G58  -5.9634E-07   3.0000E+01  -1.7890E-05  
+X_I$5186_I$1.V153   5.1471E-04   7.0000E-01   3.6029E-04  
+X_I$5186_I$1.V157  -1.8945E-16   4.9000E+00  -9.2831E-16  
+X_I$5186_I$1.E55   1.5052E-11   1.8945E-11   2.8516E-22  
+X_I$4984_I$1.I4   5.0000E-05   1.4304E+01   7.1518E-04  
+X_I$4984_I$1.I5   5.0000E-05   1.4304E+01   7.1518E-04  
+X_I$4984_I$1.E25   0.0         -1.5000E+01   0.0         
+X_I$4984_I$1.E26   0.0          1.5000E+01   0.0         
+X_I$4984_I$1.I9   3.5500E-03   3.0000E+01   1.0650E-01  
+X_I$4984_I$1.I11   5.2500E-04   2.9243E+01   1.5353E-02  
+X_I$4984_I$1.V9   1.5410E-11  -4.0000E-01  -6.1641E-12  
+X_I$4984_I$1.V10   1.5410E-11  -4.0000E-01  -6.1641E-12  
+X_I$4984_I$1.E27   2.9974E-11   1.5150E+01   4.5410E-10  
+X_I$4984_I$1.G2   1.4999E-04  -1.4999E-01  -2.2498E-05  
+X_I$4984_I$1.G3   1.0714E-10  -1.4999E-01  -1.6070E-11  
+X_I$4984_I$1.E28   3.2226E-26  -1.4999E-01  -4.8337E-27  
+X_I$4984_I$1.E29   2.3384E-11  -1.9878E-04  -4.6483E-15  
+X_I$4984_I$1.E30  -2.3384E-11   1.9878E-04  -4.6483E-15  
+X_I$4984_I$1.I12   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$4984_I$1.V11   9.9390E-17   6.5500E-01   6.5101E-17  
+X_I$4984_I$1.V12   1.0868E-03   2.6800E+00   2.9127E-03  
+X_I$4984_I$1.V13   1.0868E-03   2.6800E+00   2.9126E-03  
+X_I$4984_I$1.E42   0.0          0.0          0.0         
+X_I$4984_I$1.E43   0.0          3.4500E-01   0.0         
+X_I$4984_I$1.E44  -1.5000E-05   1.5000E+01  -2.2500E-04  
+X_I$4984_I$1.E45   1.5000E-05  -1.5000E+01  -2.2500E-04  
+X_I$4984_I$1.E46  -1.6148E-12   1.6148E-06  -2.6077E-18  
+X_I$4984_I$1.E47  -5.2506E-12   4.1986E-13  -2.2045E-24  
+X_I$4984_I$1.E48  -5.2596E-12   8.9999E-06  -4.7336E-17  
+X_I$4984_I$1.E49  -5.2521E-12   1.5000E-06  -7.8781E-18  
+X_I$4984_I$1.E50  -5.9192E-11   1.6740E-06  -9.9089E-17  
+X_I$4984_I$1.E51   5.9192E-11   1.5557E-06   9.2082E-17  
+X_I$4984_I$1.V145  -1.2530E-11   3.0000E+00  -3.7589E-11  
+X_I$4984_I$1.G54   2.5059E-13   1.6740E-06   4.1950E-19  
+X_I$4984_I$1.I67   5.0000E-12   1.6740E-06   8.3702E-18  
+X_I$4984_I$1.G55   2.5059E-13   1.5557E-06   3.8984E-19  
+X_I$4984_I$1.I68   5.0000E-12   1.5557E-06   7.7783E-18  
+X_I$4984_I$1.I69   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$4984_I$1.I70   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$4984_I$1.G56   0.0          1.1838E-07   0.0         
+X_I$4984_I$1.G57   0.0          1.1838E-07   0.0         
+X_I$4984_I$1.I71   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$4984_I$1.I72   1.0000E-03  -6.5510E-01  -6.5510E-04  
+X_I$4984_I$1.E52   2.4249E-11   0.0          0.0         
+X_I$4984_I$1.V146   2.3384E-11  -2.0000E-01  -4.6768E-12  
+X_I$4984_I$1.V147   2.3384E-11  -2.0000E-01  -4.6768E-12  
+X_I$4984_I$1.V150   5.9000E-11   2.5000E-01   1.4750E-11  
+X_I$4984_I$1.V151   5.9000E-11   2.5000E-01   1.4750E-11  
+X_I$4984_I$1.E53  -5.2507E-12   5.5758E-08  -2.9277E-19  
+X_I$4984_I$1.V152  -5.2506E-12   6.2000E-05  -3.2554E-16  
+X_I$4984_I$1.G58  -5.9634E-07   3.0000E+01  -1.7890E-05  
+X_I$4984_I$1.V153   5.1471E-04   7.0000E-01   3.6029E-04  
+X_I$4984_I$1.V157  -1.8945E-16   4.9000E+00  -9.2831E-16  
+X_I$4984_I$1.E55   1.5000E-11   1.8945E-11   2.8417E-22  
+I_I$411    0.0         -1.6740E-06   0.0         
+
+   TOTAL POWER DISSIPATION:  2.9026E-01 WATTS
+
+   POWER DISSIPATION THROUGH CONTROLLED SOURCES:  9.9911E-04 WATTS
+
+
+
+
+Memdur=0
+
+***>CPU TIME 0s 260ms <***
+
+DC convergence has achieved using:
+.OPTION GRAMP=9 
+
+1***************19-Feb-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************13:08:58*****************
+
+0* potentiostat
+
+0****                 OPERATING POINT INFORMATION                          TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       1.6740E-06   1.6740E-06   1.6740E-06   6.9246E-06   1.7153E-06  -5.2087E-02  -5.3175E-02  -5.2087E-02  
+V-       1.6740E-06   1.6740E-06   6.9246E-06   1.7153E-06  -5.2087E-02  -5.1000E-02  -5.2087E-02  -5.2087E-02  
+ID       0.0          0.0         -5.2506E-12   5.2094E-08   5.2088E-08  -1.0876E-03  -1.0876E-03   5.2089E-08  
+DIP: 1 R_I$2540
+DIP: 2 R_I$412
+DIP: 3 R_I$208
+DIP: 4 R_I$2948
+DIP: 5 R_I$3155
+DIP: 6 X_I$5186_I$1.R34
+DIP: 7 X_I$5186_I$1.R35
+DIP: 8 X_I$5186_I$1.R47
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+ID      -5.2506E-12  -5.2506E-12  -4.7286E-03   4.7285E-03  -4.7285E-03   4.7286E-03   1.5462E-11   1.5358E-11  
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+      -1.5000E+01   6.4422E-01  -7.4844E-01   1.4421E+01   1.4421E+01   1.5000E-01   1.5000E-01  -5.2088E-02  
+V-       1.5000E+01   6.4426E-01  -7.4839E-01   1.5000E+01   1.5000E+01  -5.2088E-02  -5.2088E-02  -5.2088E-02  
+ID      -9.2308E-05  -4.9224E-05  -4.9224E-05  -2.5735E-04  -2.5735E-04   2.0209E-04   1.4435E-10   0.0         
+DIP: 1 X_I$5186_I$1.R65
+DIP: 2 X_I$5186_I$1.R67
+DIP: 3 X_I$5186_I$1.R68
+DIP: 4 X_I$5186_I$1.R70
+DIP: 5 X_I$5186_I$1.R71
+DIP: 6 X_I$5186_I$1.R75
+DIP: 7 X_I$5186_I$1.R76
+DIP: 8 X_I$5186_I$1.R77
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+V12     -1.5000E+01   1.5000E+01   1.5150E+01  -2.0209E-01  -1.9878E-04   1.9878E-04   0.0          3.4500E-01  
+ID       0.0          0.0          3.0339E-11   2.4216E-26   2.3384E-11  -2.3384E-11   0.0          0.0         
+DIP: 1 X_I$5186_I$1.E25
+DIP: 2 X_I$5186_I$1.E26
+DIP: 3 X_I$5186_I$1.E27
+DIP: 4 X_I$5186_I$1.E28
+DIP: 5 X_I$5186_I$1.E29
+DIP: 6 X_I$5186_I$1.E30
+DIP: 7 X_I$5186_I$1.E42
+DIP: 8 X_I$5186_I$1.E43
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       1.5000E-01  -5.2087E-02  -5.1889E-02  -5.2287E-02   9.9390E-05   1.5000E+01   0.0          1.5000E+01  
+V-       1.5000E-01  -5.2087E-02  -2.5209E-01   1.4791E-01   0.0          1.5000E+01   0.0          1.5000E-04  
+ID       0.0          0.0          2.0020E-13  -2.0020E-13   9.9390E-17   0.0          0.0          1.5000E-05  
+DIP: 1 X_I$5186_I$1.R78
+DIP: 2 X_I$5186_I$1.R95
+DIP: 3 X_I$5186_I$1.R96
+DIP: 4 X_I$5186_I$1.R97
+DIP: 5 X_I$5186_I$1.R98
+DIP: 6 X_I$5186_I$1.R113
+DIP: 7 X_I$5186_I$1.R114
+DIP: 8 X_I$5186_I$1.R115
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+      -1.5000E+01   1.6355E-06   0.0          0.0          0.0          1.7153E-06   1.6355E-06   5.5668E-08  
+V-      -1.5000E-04   1.6354E-11   1.5000E-04  -1.5000E-04   1.6354E-11   1.6355E-06   1.5557E-06   1.5557E-06  
+ID      -1.5000E-05   1.6354E-12  -1.5000E-05   1.5000E-05  -1.6354E-12   7.9808E-11   7.9808E-11  -1.5000E-15  
+DIP: 1 X_I$5186_I$1.R116
+DIP: 2 X_I$5186_I$1.R117
+DIP: 3 X_I$5186_I$1.R118
+DIP: 4 X_I$5186_I$1.R119
+DIP: 5 X_I$5186_I$1.R120
+DIP: 6 X_I$5186_I$1.R121
+DIP: 7 X_I$5186_I$1.R122
+DIP: 8 X_I$5186_I$1.R123
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+V12      1.5000E+01  -1.5000E+01   1.6355E-06   4.2522E-13   8.9999E-06   1.5000E-06   1.7153E-06   1.5557E-06  
+ID      -1.5000E-05   1.5000E-05  -1.6354E-12  -5.2506E-12  -5.2596E-12  -5.2521E-12  -7.9808E-11   7.9808E-11  
+DIP: 1 X_I$5186_I$1.E44
+DIP: 2 X_I$5186_I$1.E45
+DIP: 3 X_I$5186_I$1.E46
+DIP: 4 X_I$5186_I$1.E47
+DIP: 5 X_I$5186_I$1.E48
+DIP: 6 X_I$5186_I$1.E49
+DIP: 7 X_I$5186_I$1.E50
+DIP: 8 X_I$5186_I$1.E51
+
+
+
+        DIODE 1      DIODE 2      DIODE 3      DIODE 4      DIODE 5      DIODE 6      DIODE 7      DIODE 8      
+MODEL   OPA827.DD    OPA827.DD    OPA827.DD    OPA827.DD    OPA827.DD    OPA827.DL    OPA827.DIN   OPA827.DIN   
+ID      -1.5462E-11  -1.5358E-11   2.3184E-11   2.3184E-11   1.0000E-03  -1.2530E-11   1.0000E-03   1.0000E-03  
+VD      -1.5452E+01  -1.5348E+01   2.0020E-01   2.0020E-01   6.5510E-01  -2.9987E+00   6.5510E-01   6.5510E-01  
+REQ      9.9998E+11   9.9998E+11   1.1236E+09   1.1236E+09   2.5864E+01   9.8823E+11   2.5864E+01   2.5864E+01  
+CAP      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+
+DIODE: 1 X_I$5186_I$1.D5
+DIODE: 2 X_I$5186_I$1.D6
+DIODE: 3 X_I$5186_I$1.D7
+DIODE: 4 X_I$5186_I$1.D8
+DIODE: 5 X_I$5186_I$1.D9
+DIODE: 6 X_I$5186_I$1.D37
+DIODE: 7 X_I$5186_I$1.D38
+DIODE: 8 X_I$5186_I$1.D39
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+ID       9.9390E-17   1.0868E-03   1.0868E-03  -1.2530E-11   2.3384E-11   2.3384E-11   5.9000E-11   5.9000E-11  
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+      -8.9442E-06  -8.9442E-06   0.0          0.0          0.0          1.5557E-06  -9.0000E-06  -2.2251E+00  
+V-       5.5668E-08  -8.9442E-06   1.2530E-03   0.0          0.0          1.5557E-06  -8.9442E-06  -2.2071E+00  
+ID      -8.9999E-15  -4.2522E-22  -1.2530E-11   0.0          0.0          0.0         -5.5758E-17  -2.5735E-04  
+DIP: 1 X_I$5186_I$1.R124
+DIP: 2 X_I$5186_I$1.R125
+DIP: 3 X_I$5186_I$1.R316
+DIP: 4 X_I$5186_I$1.R317
+DIP: 5 X_I$5186_I$1.R318
+DIP: 6 X_I$5186_I$1.R319
+DIP: 7 X_I$5186_I$1.R320
+DIP: 8 X_I$5186_I$1.R321
+
+
+
+        BIPT 1       BIPT 2       BIPT 3       BIPT 4       BIPT 5       BIPT 6       BIPT 7       BIPT 8       
+MODEL   OPA827.QON   OPA827.QOP   OPA827.QOP   OPA827.QON   OPA827.QIS   OPA827.QIS   OPA827.QSP   OPA827.QON   
+
+IB       3.5120E-08  -3.5120E-08  -7.7630E-07   7.7627E-07   5.1470E-06   5.1471E-06   1.5052E-11   3.5120E-08  
+IC       4.9189E-05  -4.9189E-05  -1.0868E-03   1.0868E-03   5.1471E-04   5.1471E-04  -3.0104E-11   4.9189E-05  
+IE       4.9224E-05  -4.9224E-05  -1.0876E-03   1.0876E-03   5.1985E-04   5.1985E-04  -1.5052E-11   4.9224E-05  
+VBE      6.9630E-01  -6.9630E-01  -6.9527E-01   6.9526E-01   7.5703E-01   7.5703E-01  -1.5054E-07   6.9630E-01  
+VBC     -1.5052E+01   1.4948E+01   1.1572E+01  -1.1676E+01  -1.1318E+01   0.0          1.5052E+01  -1.5000E+01  
+VCE      1.5748E+01  -1.5644E+01  -1.2267E+01   1.2371E+01   1.2075E+01   7.5703E-01  -1.5052E+01   1.5696E+01  
+BETADC   1.4006E+03   1.4006E+03   1.4000E+03   1.4000E+03   1.0000E+02   1.0000E+02  -2.0000E+00   1.4006E+03  
+GM       1.9018E-03   1.9018E-03   4.2021E-02   4.2019E-02   1.9900E-02   1.9900E-02   3.8659E-15   1.9018E-03  
+RPI      7.3614E+05   7.3614E+05   3.3317E+04   3.3318E+04   5.0250E+03   5.0250E+03   9.9615E+13   7.3614E+05  
+RX       0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+RO       1.0000E+12   1.0000E+12   9.9999E+11   9.9999E+11   1.0000E+12   9.9615E+11   1.0000E+12   1.0000E+12  
+CPI      2.8527E-13   2.8527E-13   6.3032E-12   6.3029E-12   0.0          0.0          0.0          2.8527E-13  
+CMU      3.6577E-14   3.6657E-14   9.1326E-13   9.1072E-13   0.0          0.0          0.0          3.6617E-14  
+CBX      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+CCS      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+CBS      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+CXS      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+BETAAC   1.4000E+03   1.4000E+03   1.4000E+03   1.4000E+03   1.0000E+02   1.0000E+02   3.8510E-01   1.4000E+03  
+FT       9.4045E+08   9.4022E+08   9.2676E+08   9.2708E+08   1.9900E+18   1.9900E+18   3.8659E+05   9.4033E+08  
+Region  ON           ON           ON           ON           ON           ON           ON           ON           
+VTH_D   -1.5051E+01  -1.4947E+01  -1.1570E+01  -1.1675E+01  -1.1318E+01   0.0         -1.5052E+01  -1.4999E+01  
+
+BIPT: 1 X_I$5186_I$1.Q26
+BIPT: 2 X_I$5186_I$1.Q27
+BIPT: 3 X_I$5186_I$1.Q28
+BIPT: 4 X_I$5186_I$1.Q29
+BIPT: 5 X_I$5186_I$1.Q30
+BIPT: 6 X_I$5186_I$1.Q31
+BIPT: 7 X_I$5186_I$1.Q32
+BIPT: 8 X_I$4984_I$1.Q26
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+      -2.2251E+00   1.5000E+01   1.0100E+01   1.5000E+01   7.2893E-06  -1.0803E-03   6.9246E-06  -1.5000E+01  
+V-      -2.2071E+00   1.5000E+01   1.0100E+01   1.5000E+01   1.0949E-03   7.2893E-06   7.2893E-06   1.5000E+01  
+ID      -2.5735E-04  -1.8945E-16  -1.9007E-16  -1.5052E-11  -1.0876E-03  -1.0876E-03  -5.2099E-08  -9.2308E-05  
+DIP: 1 X_I$5186_I$1.R322
+DIP: 2 X_I$5186_I$1.R327
+DIP: 3 X_I$5186_I$1.R330
+DIP: 4 X_I$5186_I$1.R331
+DIP: 5 X_I$4984_I$1.R34
+DIP: 6 X_I$4984_I$1.R35
+DIP: 7 X_I$4984_I$1.R47
+DIP: 8 X_I$4984_I$1.R65
+
+
+
+        I 1          I 2          I 3          I 4          I 5          I 6          I 7          I 8          
+dV      -2.0209E-01  -2.0209E-01   1.7153E-06   1.5557E-06   1.5962E-07   1.5962E-07   3.0000E+01  -1.4999E-01  
+I        2.0209E-04   1.4445E-10   2.5059E-13   2.5059E-13   0.0          0.0         -5.9634E-07   1.4999E-04  
+DIP: 1 X_I$5186_I$1.G2
+DIP: 2 X_I$5186_I$1.G3
+DIP: 3 X_I$5186_I$1.G54
+DIP: 4 X_I$5186_I$1.G55
+DIP: 5 X_I$5186_I$1.G56
+DIP: 6 X_I$5186_I$1.G57
+DIP: 7 X_I$5186_I$1.G58
+DIP: 8 X_I$4984_I$1.G2
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       6.9631E-01  -6.9634E-01   1.4421E+01   1.4421E+01   1.5000E-01   1.5000E-01   7.9147E-06   1.5000E-01  
+V-       6.9636E-01  -6.9630E-01   1.5000E+01   1.5000E+01   7.9447E-06   7.9147E-06   7.9147E-06   1.5000E-01  
+ID      -4.9224E-05  -4.9224E-05  -2.5735E-04  -2.5735E-04   1.4999E-04   1.0714E-10   0.0          0.0         
+DIP: 1 X_I$4984_I$1.R67
+DIP: 2 X_I$4984_I$1.R68
+DIP: 3 X_I$4984_I$1.R70
+DIP: 4 X_I$4984_I$1.R71
+DIP: 5 X_I$4984_I$1.R75
+DIP: 6 X_I$4984_I$1.R76
+DIP: 7 X_I$4984_I$1.R77
+DIP: 8 X_I$4984_I$1.R78
+
+
+
+        DIODE 1      DIODE 2      DIODE 3      DIODE 4      DIODE 5      DIODE 6      DIODE 7      DIODE 8      
+MODEL   OPA827.DVN   OPA827.DVN   OPA827.DD    OPA827.DD    OPA827.DD    OPA827.DD    OPA827.DD    OPA827.DD    
+ID       1.0000E-03   1.0000E-03  -1.4958E-11  -1.5062E-11  -1.5410E-11  -1.5410E-11   2.3184E-11   2.3184E-11  
+VD       6.5510E-01   6.5510E-01  -1.4948E+01  -1.5052E+01  -1.5400E+01  -1.5400E+01   2.0020E-01   2.0020E-01  
+REQ      2.5864E+01   2.5864E+01   9.9998E+11   9.9998E+11   9.9998E+11   9.9998E+11   1.1236E+09   1.1236E+09  
+CAP      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+
+DIODE: 1 X_I$5186_I$1.D40
+DIODE: 2 X_I$5186_I$1.D41
+DIODE: 3 X_I$5186_I$1.D42
+DIODE: 4 X_I$5186_I$1.D43
+DIODE: 5 X_I$4984_I$1.D5
+DIODE: 6 X_I$4984_I$1.D6
+DIODE: 7 X_I$4984_I$1.D7
+DIODE: 8 X_I$4984_I$1.D8
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+V12      0.0          5.5758E-08   1.8945E-11  -1.5000E+01   1.5000E+01   1.5150E+01  -1.4999E-01  -1.9878E-04  
+ID       2.4249E-11  -5.2507E-12   1.5052E-11   0.0          0.0          2.9974E-11   3.2226E-26   2.3384E-11  
+DIP: 1 X_I$5186_I$1.E52
+DIP: 2 X_I$5186_I$1.E53
+DIP: 3 X_I$5186_I$1.E55
+DIP: 4 X_I$4984_I$1.E25
+DIP: 5 X_I$4984_I$1.E26
+DIP: 6 X_I$4984_I$1.E27
+DIP: 7 X_I$4984_I$1.E28
+DIP: 8 X_I$4984_I$1.E29
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+ID      -5.2506E-12   5.1471E-04  -1.8945E-16   1.5410E-11   1.5410E-11   9.9390E-17   1.0868E-03   1.0868E-03  
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       6.9246E-06   2.0669E-04  -1.9087E-04   9.9390E-05   1.5000E+01   0.0          1.5000E+01  -1.5000E+01  
+V-       6.9246E-06  -1.9999E-01   2.0001E-01   0.0          1.5000E+01   0.0          1.5000E-04  -1.5000E-04  
+ID       0.0          2.0020E-13  -2.0020E-13   9.9390E-17   0.0          0.0          1.5000E-05  -1.5000E-05  
+DIP: 1 X_I$4984_I$1.R95
+DIP: 2 X_I$4984_I$1.R96
+DIP: 3 X_I$4984_I$1.R97
+DIP: 4 X_I$4984_I$1.R98
+DIP: 5 X_I$4984_I$1.R113
+DIP: 6 X_I$4984_I$1.R114
+DIP: 7 X_I$4984_I$1.R115
+DIP: 8 X_I$4984_I$1.R116
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+V12      1.9878E-04   0.0          3.4500E-01   1.5000E+01  -1.5000E+01   1.6148E-06   4.1986E-13   8.9999E-06  
+ID      -2.3384E-11   0.0          0.0         -1.5000E-05   1.5000E-05  -1.6148E-12  -5.2506E-12  -5.2596E-12  
+DIP: 1 X_I$4984_I$1.E30
+DIP: 2 X_I$4984_I$1.E42
+DIP: 3 X_I$4984_I$1.E43
+DIP: 4 X_I$4984_I$1.E44
+DIP: 5 X_I$4984_I$1.E45
+DIP: 6 X_I$4984_I$1.E46
+DIP: 7 X_I$4984_I$1.E47
+DIP: 8 X_I$4984_I$1.E48
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       1.6148E-06   0.0          0.0          0.0          1.6740E-06   1.6148E-06   5.5668E-08  -8.9442E-06  
+V-       1.6148E-11   1.5000E-04  -1.5000E-04   1.6148E-11   1.6148E-06   1.5557E-06   1.5557E-06   5.5668E-08  
+ID       1.6148E-12  -1.5000E-05   1.5000E-05  -1.6148E-12   5.9192E-11   5.9192E-11  -1.5000E-15  -8.9999E-15  
+DIP: 1 X_I$4984_I$1.R117
+DIP: 2 X_I$4984_I$1.R118
+DIP: 3 X_I$4984_I$1.R119
+DIP: 4 X_I$4984_I$1.R120
+DIP: 5 X_I$4984_I$1.R121
+DIP: 6 X_I$4984_I$1.R122
+DIP: 7 X_I$4984_I$1.R123
+DIP: 8 X_I$4984_I$1.R124
+
+
+
+        JFET 1       JFET 2       JFET 3       JFET 4       JFET 5       JFET 6       JFET 7       JFET 8       
+MODEL   OPA827.JC    OPA827.JC    OPA827.JC    OPA827.JC    OPA827.JC    OPA827.JC    OPA827.JC    OPA827.JC    
+ID       1.4750E-11   1.4750E-11   1.4750E-11   1.4750E-11   1.4750E-11   1.4750E-11   1.4750E-11   1.4750E-11  
+VGS     -1.4750E+01  -1.4750E+01  -1.4750E+01  -1.4750E+01  -1.4750E+01  -1.4750E+01  -1.4750E+01  -1.4750E+01  
+VDS      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+GM       0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+GDS      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+CGS      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+CGD      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+JFET: 1 X_I$5186_I$1.J5
+JFET: 2 X_I$5186_I$1.J6
+JFET: 3 X_I$5186_I$1.J7
+JFET: 4 X_I$5186_I$1.J8
+JFET: 5 X_I$4984_I$1.J5
+JFET: 6 X_I$4984_I$1.J6
+JFET: 7 X_I$4984_I$1.J7
+JFET: 8 X_I$4984_I$1.J8
+
+
+
+        DIODE 1      DIODE 2      DIODE 3      DIODE 4      DIODE 5      DIODE 6      DIODE 7      DIODE 8      
+MODEL   OPA827.DD    OPA827.DL    OPA827.DIN   OPA827.DIN   OPA827.DVN   OPA827.DVN   OPA827.DD    OPA827.DD    
+ID       1.0000E-03  -1.2530E-11   1.0000E-03   1.0000E-03   1.0000E-03   1.0000E-03  -1.5010E-11  -1.5010E-11  
+VD       6.5510E-01  -2.9987E+00   6.5510E-01   6.5510E-01   6.5510E-01   6.5510E-01  -1.5000E+01  -1.5000E+01  
+REQ      2.5864E+01   9.8823E+11   2.5864E+01   2.5864E+01   2.5864E+01   2.5864E+01   9.9998E+11   9.9998E+11  
+CAP      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+
+DIODE: 1 X_I$4984_I$1.D9
+DIODE: 2 X_I$4984_I$1.D37
+DIODE: 3 X_I$4984_I$1.D38
+DIODE: 4 X_I$4984_I$1.D39
+DIODE: 5 X_I$4984_I$1.D40
+DIODE: 6 X_I$4984_I$1.D41
+DIODE: 7 X_I$4984_I$1.D42
+DIODE: 8 X_I$4984_I$1.D43
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+      -8.9442E-06   0.0          0.0          0.0          1.5557E-06  -9.0000E-06  -2.2251E+00  -2.2251E+00  
+V-      -8.9442E-06   1.2530E-03   0.0          0.0          1.5557E-06  -8.9442E-06  -2.2071E+00  -2.2071E+00  
+ID      -4.1986E-22  -1.2530E-11   0.0          0.0          0.0         -5.5758E-17  -2.5735E-04  -2.5735E-04  
+DIP: 1 X_I$4984_I$1.R125
+DIP: 2 X_I$4984_I$1.R316
+DIP: 3 X_I$4984_I$1.R317
+DIP: 4 X_I$4984_I$1.R318
+DIP: 5 X_I$4984_I$1.R319
+DIP: 6 X_I$4984_I$1.R320
+DIP: 7 X_I$4984_I$1.R321
+DIP: 8 X_I$4984_I$1.R322
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+ID      -1.2530E-11   2.3384E-11   2.3384E-11   5.9000E-11   5.9000E-11  -5.2506E-12   5.1471E-04  -1.8945E-16  
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       1.6740E-06  -5.2088E-02  -5.2088E-02   1.4421E+01   0.0          3.4500E-01   1.5000E+01  -1.5000E+01  
+V-       1.6740E-06   1.5000E-01   1.5000E-01   1.4421E+01   1.5000E+01   0.0          1.5000E-04  -1.5000E-04  
+ID       0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+DIP: 1 C_I$1882
+DIP: 2 X_I$5186_I$1.C9
+DIP: 3 X_I$5186_I$1.C10
+DIP: 4 X_I$5186_I$1.C11
+DIP: 5 X_I$5186_I$1.C25
+DIP: 6 X_I$5186_I$1.C26
+DIP: 7 X_I$5186_I$1.C27
+DIP: 8 X_I$5186_I$1.C28
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       1.6355E-06   1.5557E-06   7.9447E-06   7.9147E-06   1.4421E+01   0.0          3.4500E-01   1.5000E+01  
+V-       1.6354E-11   1.7153E-06   1.5000E-01   1.5000E-01   1.4421E+01   1.5000E+01   0.0          1.5000E-04  
+ID       0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+DIP: 1 X_I$5186_I$1.C29
+DIP: 2 X_I$5186_I$1.C30
+DIP: 3 X_I$4984_I$1.C9
+DIP: 4 X_I$4984_I$1.C10
+DIP: 5 X_I$4984_I$1.C11
+DIP: 6 X_I$4984_I$1.C25
+DIP: 7 X_I$4984_I$1.C26
+DIP: 8 X_I$4984_I$1.C27
+
+
+
+        BIPT 1       BIPT 2       BIPT 3       BIPT 4       BIPT 5       BIPT 6       
+MODEL   OPA827.QOP   OPA827.QOP   OPA827.QON   OPA827.QIS   OPA827.QIS   OPA827.QSP   
+
+IB      -3.5120E-08  -7.7627E-07   7.7630E-07   5.1470E-06   5.1471E-06   1.5000E-11  
+IC      -4.9189E-05  -1.0868E-03   1.0868E-03   5.1471E-04   5.1471E-04  -3.0000E-11  
+IE      -4.9224E-05  -1.0876E-03   1.0876E-03   5.1985E-04   5.1985E-04  -1.5000E-11  
+VBE     -6.9630E-01  -6.9526E-01   6.9527E-01   7.5703E-01   7.5703E-01  -1.5002E-07  
+VBC      1.5000E+01   1.1624E+01  -1.1624E+01  -1.1318E+01   0.0          1.5000E+01  
+VCE     -1.5696E+01  -1.2319E+01   1.2319E+01   1.2075E+01   7.5703E-01  -1.5000E+01  
+BETADC   1.4006E+03   1.4000E+03   1.4000E+03   1.0000E+02   1.0000E+02  -2.0000E+00  
+GM       1.9018E-03   4.2019E-02   4.2021E-02   1.9900E-02   1.9900E-02   3.8659E-15  
+RPI      7.3614E+05   3.3318E+04   3.3317E+04   5.0250E+03   5.0250E+03   9.9615E+13  
+RX       0.0          0.0          0.0          0.0          0.0          0.0         
+RO       1.0000E+12   9.9999E+11   9.9999E+11   1.0000E+12   9.9615E+11   1.0000E+12  
+CPI      2.8527E-13   6.3029E-12   6.3032E-12   0.0          0.0          0.0         
+CMU      3.6617E-14   9.1198E-13   9.1198E-13   0.0          0.0          0.0         
+CBX      0.0          0.0          0.0          0.0          0.0          0.0         
+CCS      0.0          0.0          0.0          0.0          0.0          0.0         
+CBS      0.0          0.0          0.0          0.0          0.0          0.0         
+CXS      0.0          0.0          0.0          0.0          0.0          0.0         
+BETAAC   1.4000E+03   1.4000E+03   1.4000E+03   1.0000E+02   1.0000E+02   3.8510E-01  
+FT       9.4033E+08   9.2691E+08   9.2692E+08   1.9900E+18   1.9900E+18   3.8659E+05  
+Region  ON           ON           ON           ON           ON           ON           
+VTH_D   -1.4999E+01  -1.1622E+01  -1.1622E+01  -1.1318E+01   0.0         -1.5000E+01  
+
+BIPT: 1 X_I$4984_I$1.Q27
+BIPT: 2 X_I$4984_I$1.Q28
+BIPT: 3 X_I$4984_I$1.Q29
+BIPT: 4 X_I$4984_I$1.Q30
+BIPT: 5 X_I$4984_I$1.Q31
+BIPT: 6 X_I$4984_I$1.Q32
+
+
+
+        MOS 1        MOS 2        MOS 3        MOS 4        MOS 5        MOS 6        
+MODEL   OPA827.NI    OPA827.NI    OPA827.NS    OPA827.NI    OPA827.NI    OPA827.NS    
+
+ID       2.5735E-04   2.5735E-04   1.8945E-16   2.5735E-04   2.5735E-04   1.8945E-16  
+VGS      2.2071E+00   2.2071E+00  -1.2325E+01   2.2071E+00   2.2071E+00  -1.2325E+01  
+VDS      1.6628E+01   1.6628E+01   4.9000E+00   1.6628E+01   1.6628E+01   4.9000E+00  
+VBS      0.0          0.0          0.0          0.0          0.0          0.0         
+VTH      2.0000E+00   2.0000E+00   0.0          2.0000E+00   2.0000E+00   0.0         
+VDSAT    2.0710E-01   2.0710E-01   0.0          2.0710E-01   2.0710E-01   0.0         
+GM       2.4858E-03   2.4859E-03   0.0          2.4859E-03   2.4859E-03   0.0         
+GDS      0.0          0.0          0.0          0.0          0.0          0.0         
+GMB      0.0          0.0          0.0          0.0          0.0          0.0         
+CBD      0.0          0.0          0.0          0.0          0.0          0.0         
+CBS      0.0          0.0          0.0          0.0          0.0          0.0         
+CGS      0.0          0.0          0.0          0.0          0.0          0.0         
+CGD      0.0          0.0          0.0          0.0          0.0          0.0         
+CGB      0.0          0.0          0.0          0.0          0.0          0.0         
+Region  saturation   saturation   subthreshold saturation   saturation   subthreshold 
+VTH_D    2.0710E-01   2.0710E-01  -1.2325E+01   2.0710E-01   2.0710E-01  -1.2325E+01  
+
+MOS: 1 X_I$5186_I$1.M1
+MOS: 2 X_I$5186_I$1.M2
+MOS: 3 X_I$5186_I$1.M4
+MOS: 4 X_I$4984_I$1.M1
+MOS: 5 X_I$4984_I$1.M2
+MOS: 6 X_I$4984_I$1.M4
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          
+V12      1.5000E-06   1.6740E-06   1.5557E-06   0.0          5.5758E-08   1.8945E-11  
+ID      -5.2521E-12  -5.9192E-11   5.9192E-11   2.4249E-11  -5.2507E-12   1.5000E-11  
+DIP: 1 X_I$4984_I$1.E49
+DIP: 2 X_I$4984_I$1.E50
+DIP: 3 X_I$4984_I$1.E51
+DIP: 4 X_I$4984_I$1.E52
+DIP: 5 X_I$4984_I$1.E53
+DIP: 6 X_I$4984_I$1.E55
+
+
+
+        I 1          I 2          I 3          I 4          I 5          I 6          
+dV      -1.4999E-01   1.6740E-06   1.5557E-06   1.1838E-07   1.1838E-07   3.0000E+01  
+I        1.0714E-10   2.5059E-13   2.5059E-13   0.0          0.0         -5.9634E-07  
+DIP: 1 X_I$4984_I$1.G3
+DIP: 2 X_I$4984_I$1.G54
+DIP: 3 X_I$4984_I$1.G55
+DIP: 4 X_I$4984_I$1.G56
+DIP: 5 X_I$4984_I$1.G57
+DIP: 6 X_I$4984_I$1.G58
+
+
+
+        DIP 1        DIP 2        DIP 3        
+V+       1.5000E+01   1.0100E+01   1.5000E+01  
+V-       1.5000E+01   1.0100E+01   1.5000E+01  
+ID      -1.8945E-16  -1.9007E-16  -1.5000E-11  
+DIP: 1 X_I$4984_I$1.R327
+DIP: 2 X_I$4984_I$1.R330
+DIP: 3 X_I$4984_I$1.R331
+
+
+
+        DIP 1        DIP 2        DIP 3        
+V+      -1.5000E+01   1.6148E-06   1.5557E-06  
+V-      -1.5000E-04   1.6148E-11   1.6740E-06  
+ID       0.0          0.0          0.0         
+DIP: 1 X_I$4984_I$1.C28
+DIP: 2 X_I$4984_I$1.C29
+DIP: 3 X_I$4984_I$1.C30
+
+
+
+        DIP 1        DIP 2        DIP 3        
+V+       1.6740E-06  -5.2087E-02   6.9246E-06  
+V-       1.6740E-06  -5.2087E-02   6.9246E-06  
+ID       0.0         -5.2089E-08   5.2099E-08  
+DIP: 1 L_I$2539
+DIP: 2 X_I$5186_I$1.L3
+DIP: 3 X_I$4984_I$1.L3
+
+
+
+Eldo NEWTON: VNTOL=1.000000e-06 RELTOL=7.500000e-04
+
+................................................
+Simulation progress           : 10%
+Elapsed CPU time              : 0h 0mn 0s 140
+................................................
+Simulation progress           : 30%
+Elapsed CPU time              : 0h 0mn 0s 250
+................................................
+Simulation progress           : 60%
+Elapsed CPU time              : 0h 0mn 0s 420
+................................................
+Simulation progress           : 100%
+Elapsed CPU time              : 0h 0mn 0s 600
+
+
+1***************19-Feb-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************13:08:58*****************
+
+0* potentiostat
+0****                 EXTRACT INFORMATION                                   TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+* VMAX1 =  6.9246E-06   
+* VMIN1 = -9.3075E-05   
+* VMAX2 =  9.4000E-01   
+* VMIN2 = -5.2087E-02   
+
+1***************19-Feb-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************13:08:58*****************
+
+0* potentiostat
+0****                 ACCOUNTING INFORMATION                                TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+
+
+    NUNODS NCNODS NUMNOD   NUMEL   DIODES    BJT  JFET  MOSFET
+
+        13    145    153     264       24     14     8       6
+
+
+    NSTOP    NTERM    PERSPA  
+
+      190      712 9.803e+01
+
+    NUMTTP  NUMRTP  LTERTP  LTERTPNW NWNOCON
+
+        38       0       0       0       0
+
+  DIGITAL  INWCALL    ITERNW   MEMSIZE
+
+        0      455 4.417e+00  33013486
+
+    NDEVCALL       NKIRCH  NMAXCALL      ITERM     LATENCY
+
+     1384506            0         2   1.00e+00   0.000e+00%
+
+
+  TRANSIENT JOB TIME                 0
+
+
+
+
+***>CPU TIME 0s 600ms <***
+
+
+***>GLOBAL CPU TIME 6s 930ms <***
+
+
+***>GLOBAL ELAPSED TIME 8s <***
+
+
+  Job started at 19-Feb-2009 13:08:58
+  Job end at     19-Feb-2009 13:09:06
+
+  Run on cae15 (SunOS 5.9)
+

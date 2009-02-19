@@ -1,0 +1,22 @@
+A 5 u Eddm_part 499c4571d895.03.81.52.e0.47.00.3b.fc 10 2 2 0
+V v 8 1 499d03ba981b.03.81.52.e0.47.00.40.90
+F f 8 "part.part_8"
+V v 9 1 499d03da2203.03.81.52.e0.47.00.40.90
+F f 9 "part.part_9"
+V v 10 1 499d0492351b.03.81.52.e0.47.00.40.90
+F f 10 "part.part_10"
+O 10
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic" 1 mgc_schematic 499c44a503d1.03.81.52.e0.47.01.3b.fc 499c44a503d1.03.81.52.e0.47.00.3b.fc
+P "eddm__refer_state" "eddm__refer_floating"
+R csduv 1 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/opa827" 10 mgc_symbol 499d04922fd1.03.81.52.e0.47.00.40.90 499c44792620.03.81.52.e0.47.00.3b.fc
+O 9
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic" 1 mgc_schematic 499c44a503d1.03.81.52.e0.47.01.3b.fc 499c44a503d1.03.81.52.e0.47.00.3b.fc
+P "eddm__refer_state" "eddm__refer_floating"
+R csduv 1 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/opa827" 9 mgc_symbol 499d03da21c9.03.81.52.e0.47.00.40.90 499c44792620.03.81.52.e0.47.00.3b.fc
+O 8
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic" 1 mgc_schematic 499c44a503d1.03.81.52.e0.47.01.3b.fc 499c44a503d1.03.81.52.e0.47.00.3b.fc
+P "eddm__refer_state" "eddm__refer_floating"
+R csduv 1 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/opa827" 8 mgc_symbol 499d03ba97e6.03.81.52.e0.47.00.40.90 499c44792620.03.81.52.e0.47.00.3b.fc

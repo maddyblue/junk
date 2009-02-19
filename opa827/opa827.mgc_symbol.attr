@@ -1,0 +1,13 @@
+A 5 u mgc_symbol 499c45c14839.03.81.52.e0.47.00.3b.fc 12 2 1 0
+V v 10 1 499d04922fd1.03.81.52.e0.47.00.40.90
+F f 10 "opa827.smbl_10"
+V v 11 1 499d053fd036.03.81.52.e0.47.00.40.90
+F f 11 "opa827.smbl_11"
+V v 12 1 499d06ece1de.03.81.52.e0.47.00.40.90
+F f 12 "opa827.smbl_12"
+O 12
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/part" 10 Eddm_part 499d0492351b.03.81.52.e0.47.00.40.90 499c4571d895.03.81.52.e0.47.00.3b.fc
+O 11
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/part" 10 Eddm_part 499d0492351b.03.81.52.e0.47.00.40.90 499c4571d895.03.81.52.e0.47.00.3b.fc
+O 10
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/part" 10 Eddm_part 499d0492351b.03.81.52.e0.47.00.40.90 499c4571d895.03.81.52.e0.47.00.3b.fc
