@@ -204,16 +204,12 @@ C_I$2541 N$2855 0 10f
 C_I$1882 N$2852 N$2853 5f
 X_I$5186_I$1 POS2 N$4085 N$4493 N$4492 out2  OPA827 
 X_I$4984_I$1 POS1 WE VCCP VCCM out1  OPA827 
-I_I$411 0 N$2852 pwl(0 0 1 100p)
+I_I$411 0 N$2852 DC cur AC
 
-.trans 1u 1
-.extract label=vmax1 max(v(out1))
-.extract label=vmin1 min(v(out1))
-.extract label=vmax2 max(v(out2))
-.extract label=vmin2 min(v(out2))
-.plot v(out1)
-.plot v(out2)
-.plot i(I_I$411)
+.ac dec 100 1 1g
+.pz V(out2)
+.defwave tia_gain=v(out2) / i(I_I$411)
+.plot wdb(tia_gain)
 
 .op  NO_SMALL_SIGNAL
 .END
