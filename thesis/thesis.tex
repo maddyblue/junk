@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{report}
 \usepackage{cite}
 \usepackage{graphicx}
 \begin{document}
@@ -8,17 +8,27 @@
 
 \maketitle{}
 
+\pagenumbering{roman}
+\setcounter{page}{2}
+
 \begin{abstract}
 
 Advancing our understanding of how the central nervous system works under specific conditions requires real-time, simultaneous detection of a number of key signaling molecules, like nitric oxide (NO). NO diffuses widely and rapidly, has a lifetime in milliseconds, and presents among other high concentration, interfering compounds in the nanomolar range in most biological systems. Current microelectrode-based electrochemical NO sensors have diameters in the micrometer range, much larger than biological cells which are in the micron range, and are thus insufficient for analyzing cell-to-cell interactions. A chip was fabricated using the 0.6$\mu$m CMOS process to overcome these difficulties, with a $5 \times 5$ array of sensors in the 2$\mu$m range. Characterization results of the chip with norepinephrin indicate sensitivity into the 20$\mu$M range and suggest higher-sensitivity devices can offer improvement.
 
 \end{abstract}
 
-\section{Introduction}
+\tableofcontents\newpage
+\listoffigures\newpage
+%\listoftables\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\chapter{Introduction}
 
 Neurotransmitters play an important role in central nervous systems. Of interest is detecting molecular gradients that are essential in the development of tissue and organ systems. Nitric oxide, a neurotransmitter, is important in this development. Molecular gradients are difficult to detect because of the relative large size of the cells compared to the electrochemical sensors used in sensing systems. Furthermore, in order to detect a gradient, an sensor array must be used in order to collect real-time spatial data. Previous work described the methodology of creating such a sensor array based on CMOS technology. This chip has been fabricated. This paper describes the characterization of the chip in response to expected signals from living cells.
 
-\section{Electrochemistry}
+\chapter{Electrochemistry}
 
 Electrochemistry is a process for determining the compounds in a solution. This is accomplished by causing reduction or oxidation within the solution by raising or lowering the potential near some electrode surfaces and measuring the amount of current that is generated.
 
@@ -28,7 +38,7 @@ One technique is amperometry, where a constant potential is applied across the e
 
 Another common technique is cyclic voltammetry (CV). Here the potential is swept (at a rate called the scan rate) over a certain range linearly with time, where the range is again dependent on the reduction-oxidation (redox) potential of the analyte. Since both reduction and oxidation potentials are within the range, both occur, and there multiple current spikes in opposite directions. Cyclic voltammetry is useful for determining all of the analytes in a solution since each can present their own current spikes. When the scan rate is high, CV is able to detect analytes that have a short lifetime, like neurotransmitters. High scan rates, however, produce a large background current and thus have a poor limit of detection.
 
-\section{Silicon Technology}
+\chapter{Silicon Technology}
 
 The process used in fabricating the chip was the standard 0.6 $\mu$m CMOS process. The CMOS process involves multiple steps that add or remove specific layers of material. To start, a cylindrical (6 inch diameter) ingot of high-purity silicon is created, from which thin (around 500$\mu$m) slices are sawed off called wafers. Chips are square and several milimeters on each side, thus a wafer holds many chips. Due to material and process faults, there are bad areas of the wafer. Chips at these locations do not work, which operational testing is able to determine.
 
@@ -43,7 +53,7 @@ The simplified fabrication procedure (Fig. \ref{fab-steps}) for the chip began w
 \label{fab-steps}
 \end{figure}
 
-\section{Experimental Setup}
+\chapter{Experimental Setup}
 
 All experiments were done on a Micromanipulator, Inc.\ Probestation. Probe tips and other objects (e.g., pipette tips, thermometer) were held in place by micromanipulators. All electrochemistry experiments were done with a CH Instruments 1207 potentiostat.
 
@@ -115,7 +125,7 @@ Furthermore, the previous experiment was done using both 2 and 4 working electro
 
 Many ovary slices were tested throughout characterization experiments. These were done by preparing a chip with a well and testing it for basic functionality by performing an arbitrary CV. Ovaries were extracted from mice and attached to the surface of the chip over the sensor array, covered in vitrogen. Neurebasal was periodically added to keep the cell from dying and drying out. The ovaries and chips were kept at $37\,^{\circ}\mathrm{C}$ in order to keep them alive. A heat lamp was used during testing with a thermometer measuring temperature directly above the well in an effort to keep the temperature at $37\,^{\circ}\mathrm{C}$. Amperometry tests were run at $0.85V$ for 30 minutes. After the main test, three injections were performed, each of 20$\mu$L: (1) a blank of NB to test for injection noise, (2) 25$\mu$M NE in NB to test the chip's current response to NE, (3) a 1:1 ratio by volume of KCl:NB to release all remaining NE from the cell, which would provide the maximum expected signal from the main 30 minute block.
 
-\section{Experimental Results}
+\chapter{Experimental Results}
 
 Of the 21 different sensor area configurations (numbered 0 - 20), sensor 10 (Fig. \ref{sensor-10} provided the highest average results over the $-0.2V$ to $0.2V$ range. This sensor has common auxiliary and reference electrodes and eight individual working electrodes each $8\mu m$ wide. A similarly good sensor (which ranked first under the range $-0.1V$ to $0.1V$) has a similar configuration, but with working electrodes 10$\mu$m wide.
 
@@ -140,13 +150,13 @@ Concentration response characterization shows reasonable results in the 25$\mu$M
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{figures/char.png}
-\caption{2- and 4-pad characterizations with 1st order best fit lines.}
+\caption{2- and 4-pad characterizations with 1st order best-fit lines.}
 \label{char}
 \end{figure}
 
 Ovary test results show our potentiostat is not sensitive enough to detect possible NE releases from the cell. As we expect releases in the nanomolar and subnanomolar range, which we cannot currently detect due to potentiostat limitations, this is expected \cite{amperometry-review}. The three injections at the end of the testing are not statistically differentiable and do not correspond to our expectations of what should occur. It could also mean the chip sensors were damaged or restricted during ovary attachment and cannot function as expected.
 
-\section{Conclusion}
+\chapter{Conclusion}
 
 We fabricated a chip with an array of electrochemical sensor cells of varying make. This chip was characterized to find high-performing cells, an optimum amperometry potential for these cells, and the response to various concentrations of expected chemicals that would be released by living cells. Further research with highly-sensitive instruments is needed to determine the limit of detection of this chip.
 

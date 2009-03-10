@@ -1,7 +1,10 @@
 *.aux
 *.bbl
 *.blg
+*.lof
 *.log
+*.lot
 *.orig
 *.pdf
 *.swp
+*.toc
