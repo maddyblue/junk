@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>Mentor over X</title>
+</head>
+<body>
+<p/>This document describes the process of allowing the Mentor Graphics programs (da, ic, accusim, etc.) to be run on any machine with an internet connection, not just the machines in engineering labs on CSU campus. This process works for both Windows and Unix-based systems (the BSDs, Linux, anything else that runs X), and isn't freaking slow like Virtual Lab. As a primer to those unfamiliar with X, it may be easiest to visualize your computer acting as the monitor for some other machine. All of the software is still being run on the remote machine, but the display is being sent over the internet to your machine. This means that you will still have normal access to your U: drive while using the Mentor software.
+<hr/>
+<ol>
+	<li>
+		<p/><b>Install and configure X Windows.</b>
+		<p/><b>On Windows:</b> you must download and install <a href="http://www.cygwin.com/">Cygwin</a>. The default distribution comes with X installed, but you should add a few things. When you reach the package selection screen, add thesepackages to the list:
+		<p/><tt>X11 -&gt; X-start-menu-icons
+		<br/>X11 -&gt; xhost
+		<br/>X11 -&gt; font-adobe-dpi100
+		<br/>Shells -&gt; rxvt
+		<br/>Net -&gt; openssh</tt>
+		<p/>Click through the rest of the installer.
+		<p/><b>On Unix:</b> install X and configure it as you normally would for your distribution.
+	</li>
+	<li>
+		<p/><b>Install Mentor fonts.</b>
+		<p/>Download the font files <a href="mentor_fonts.zip">here</a>. Extract this file into your X11 fonts directory (usually <tt>/usr/X11R6/lib/X11/fonts</tt> on Unix, <tt>C:\cygwin\usr\share\fonts</tt> on Windows) so the tree would look like: <tt>/usr/X11R6/lib/X11/fonts/mentor_fonts/*.pcf</tt>. If you do not have write access to that directory, you can just leave the extracted directory in your home directory. It really doesn't matter where they go.
+	</li>
+	<li>
+		<p/><b>Add the new fonts directory to the X font path.</b>
+		<p/><b>On Windows:</b> open up the startxwin.bat script in a text editor (usually lives at <tt>C:\cygwin\bin</tt>). Scroll down to line 78 or so, with the line that starts: <tt>%RUN% XWin</tt>. On the line after this, add a new line:
+		<p/><tt>%RUN% xset +fp /usr/share/fonts/mentor_fonts</tt>
+		<p/><b>On Unix:</b> add a new FontPath entry to your X conf file. On many new distributions with x.org installed, this file usually lives at <tt>/etc/X11/xorg.conf</tt>. The new entry will look like:
+		<p/><tt>FontPath "/usr/X11R6/lib/X11/fonts/mentor_fonts"</tt>
+		<p/>Another way of doing this from a running X server is to use xset:
+		<pre>
+xset +fp /usr/X11R6/lib/X11/fonts/mentor_fonts
+xset fp rehash</pre>
+	</li>
+	<li>
+		<p/><b>Start your X server and allow connections from other hosts.</b>
+		<p/>Start your X server. On Unix use the normal startx or xdm. On Windows run the startxwin.bat script by double clicking it (the same one we just edited).
+	</li>
+	<li>
+		<p/><b>Set up your DISPLAY variable and run stuff.</b> This can be done in two ways:
+		<p/><b>(Note: if you are going to run esim, you must use the second option. I do not know how to make esim work correctly over an SSH-tunneled X connection.)</b>
+		<ol>
+			<li>
+				<p/>After starting your X server, open up a console (like rxvt or xterm). Then ssh into the host with the -Y parameter:
+				<p/><tt>ssh -Y username@cae15.engr.colostate.edu</tt>
+				<p/>This will set the DISPLAY variable and tunnel it over your ssh connection. It has the advantages of being secure (as compared to the solution below) and there is no need to bother with firewall port forwarding.
+				<p/>If you like PuTTY, check the <tt>Enable X11 forwarding</tt> box under Connection -&gt; SSH -&gt; X11. You may have to specify your X display location if it doesn't pick it up automatically. If so, use <tt>localhost:0</tt>.
+			</li>
+			<li>
+				<p/>Only use this second solution if the first one (ssh -X) didn't work.
+				<p/>To allow other machines to connect to it, you need to run xhost:
+				<p/><tt>xhost +</tt>
+				<p/>The + tells the server to allow all connections from anywhere. This is easy, but not secure. You can alternatively specify the hostname after the plus sign. This permission is only valid per session. To make it permanent, add <tt>xhost +</tt> to your X startup file. On Windows, you can add the line right after the XWin line (i.e., right before the <tt>%RUN% xterm ...</tt> line) like so:
+				<p/><tt>%RUN% xhost +</tt>
+				<p/>Logon to one of the cae machines via ssh. If you are on Windows, you can use the openssh program you install with Cygwin above, or use <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>. SSH to the machine of your choice (like <tt>cae15.engr.colostate.edu</tt>). Now run (on the remote machine):
+				<p/><tt>echo $SSH_CLIENT</tt>
+				<p/>This will show the IP address you are connecting from:
+				<pre>
+cae15 % echo $SSH_CLIENT
+129.82.228.75 1046 22</pre>
+				<p/>So, my IP address is 129.82.228.75. To set the appropriate envirnoment variable under csh:
+				<p/><tt>setenv DISPLAY 129.82.228.75:0</tt>
+				<p/>But use your own IP address, of course. Don't forget the &quot;:0&quot; at the end.
+				<p/><b>Caveat:</b> if you are behind a firewall or NAT machine, you must forward/allow port 6000 to your machine, which is the default port on which X listens.
+			</li>
+		</ol>
+
+		<p/>Now you should be able to start da and ic as normal. Super.
+	</li>
+</ol>
+
+<hr/>
+
+<b>Notes</b>
+
+<ul>
+	<li>
+		Sometimes it is needful to run both da and ic at the same time. To do that, just stick an ampersand after the commands to make them run in the background:
+		<pre>
+% d
+% da &amp;
+% i
+% ic &amp;</pre>
+		<p/>You could just start two shells, but this is easier.
+	</li>
+	<li>
+		You can run *any* program from *any* Unix client using this method. For example, <tt>matlab</tt> is installed on the cae machines. Tired of using a pirated copy? Use the University's! Better yet, use the awesome fast Linux machines:
+		<pre>
+ssh -Y user@nausicaa.engr.colostate.edu
+nausicaa.engr.colostate.edu % matlab	</pre>
+		<p/>(A list of these servers is <a href="http://www.engr.colostate.edu/ens/support/network/telnet.cfm">here</a>.)
+	</li>
+	<li>
+		<p/>Since we do lots of .cir and .net file editing for esim, I found it best to mount my U: drive from home using <a href="http://www.engr.colostate.edu/ens/support/network/lan.cfm">this proces</a>, and editing the files with an editor running on my local machine.
+	</li>
+</ul>
+
+<p/>Any questions, bugs, or other stuff? Contact Matt Jibson at <tt>matt.jibson@gmail.com</tt>.
+
+<script type="text/javascript"> 
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script> 
+<script type="text/javascript"> 
+var pageTracker = _gat._getTracker("UA-2154348-1");
+pageTracker._trackPageview();
+</script> 
+
+</body>
+</html>
