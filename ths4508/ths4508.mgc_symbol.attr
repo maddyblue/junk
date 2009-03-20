@@ -1,0 +1,13 @@
+A 5 u mgc_symbol 49a781eac300.03.81.52.e0.47.00.52.ff 10 2 1 0
+V v 8 1 49a8e2327bb1.03.81.52.e0.47.00.53.58
+F f 8 "ths4508.smbl_8"
+V v 9 1 49a8e236f151.03.81.52.e0.47.00.53.58
+F f 9 "ths4508.smbl_9"
+V v 10 1 49a8e6a7bc47.03.81.52.e0.47.00.53.58
+F f 10 "ths4508.smbl_10"
+O 10
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/part" 6 Eddm_part 49a8373c582b.03.81.52.e0.47.00.53.58 49a78321c02e.03.81.52.e0.47.00.52.ff
+O 9
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/part" 6 Eddm_part 49a8373c582b.03.81.52.e0.47.00.53.58 49a78321c02e.03.81.52.e0.47.00.52.ff
+O 8
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/part" 6 Eddm_part 49a8373c582b.03.81.52.e0.47.00.53.58 49a78321c02e.03.81.52.e0.47.00.52.ff

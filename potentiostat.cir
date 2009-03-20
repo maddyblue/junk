@@ -1,721 +1,178 @@
 * potentiostat
 .options  tnom=27
 .temp 27
-
-* OPA827 - operational amplifier SPICE MODEL
-*
-* Amplifier classification: Low-noise, high-precision, JFET-input, operational amplifier
-*
-* Model Definition by T E Kuehl - Texas Instruments Inc.
-*
-* Rev. A - 26 September 2008, by W.K. SANDS
-*
-*     This macromodel has been optimized to model the AC, DC, noise, and transient response performance within
-*     the device data sheet specified limits. Correct operation of this macromodel has been verified on
-*     MicroSim P-Spice ver. 8.0, DesignSoft TINA, and on PENZAR Development TopSPICE ver. 6.82d. For help
-*     with other analog simulation software, please consult your software supplier.
-*
-* Copyright 2008 by Texas Instruments Corporation
-*
-* BEGIN MODEL OPA827
-* PINOUT ORDER +IN -IN +V -V OUT
-* PINOUT ORDER  3   2   7  4  6
-.SUBCKT OPA827 3 2 7 4 6
-* BEGIN MODEL FEATURES
-* OPEN LOOP GAIN AND PHASE, INPUT OFFSET VOLTAGE W TEMPCO,
-* INPUT VOLTAGE NOISE WITH 1/F, INPUT CURRENT NOISE, INPUT
-* BIAS CURRENT W TEMPERATURE EFFECTS, INPUT CAPACITANCE,
-* INPUT COMMON MODE VOLTAGE RANGE, INPUT CLAMPS TO RAILS,
-* CMRR WITH FREQUENCY EFFECTS, PSRR WITH FREQUENCY EFFECTS,
-* SLEW RATE, OPEN LOOP OUTPUT IMPEDANCE, SETTLING TIME TO
-* 0.01 PERCENT, QUIESCENT CURRENT WITH TEMPCO, OUTPUT
-* CURRENT THROUGH SUPPLIES, OUTPUT CURRENT LIMIT, OUTPUT
-* CLAMPS TO RAILS, OUTPUT SWING, OVERLOAD RECOVERY TIME,
-* AND OUTPUT OVERSHOOT VERSUS CLOAD
-* END MODEL FEATURES
-* BEGIN SIMULATION NOTES
-* FOR MORE ACCURATE INPUT BIAS CURRENT YOU MAY WANT TO SET
-* GMIN FROM THE DEFAULT OF 1E-12 TO 1E-13
-* FOR AID IN DC CONVERGENCE SET ITL1 FROM 400 TO 4000
-* FOR AID IN TRANSIENT ANALYSIS SET ITL4 FROM 50 TO 500
-* MODEL TEMPERATURE RANGE IS -40 C TO +125 C
-* NOT ALL PARAMETERS TRACK THOSE OF THE REAL PART VS TEMP
-* END SIMULATION NOTES
-Q26 8 9 10 QON
-Q27 11 9 12 QOP
-Q28 13 14 15 QOP 23
-Q29 16 17 18 QON 23
-I4 8 17 5E-5
-I5 14 11 5E-5
-R34 19 18 1
-R35 15 19 1
-R47 20 19 7
-E25 11 0 4 0 1
-E26 8 0 7 0 1
-I9 7 4 3.55E-3
-R65 4 7 325E3
-R67 12 17 1
-R68 14 10 1
-R70 21 22 2250
-R71 23 22 2250
-I11 8 24 5.25E-4
-D5 25 8 DD
-V9 25 26 -0.4
-D6 27 26 DD
-V10 27 11 -0.4
-E27 28 11 29 11 0.505
-C9 9 28 1E-12
-R75 28 9 1E3
-G2 9 28 30 28 -1E-3
-G3 26 28 23 21 -0.19E-3
-R76 28 26 1.4E9
-C10 30 31 6E-12
-R77 30 26 2.2K
-E28 32 28 30 28 1
-D7 33 34 DD
-R78 28 31 220
-D8 35 36 DD
-C11 21 23 0.4E-12
-C12 37 0 4.5E-12
-C13 2 0 4.5E-12
-L3 20 6 1E-9
-R95 6 20 100
-E29 32 33 38 0 -2
-E30 32 36 38 0 2
-R96 33 34 1E12
-R97 36 35 1E12
-D9 39 0 DD
-I12 0 39 1M
-R98 38 0 1E12
-V11 39 38 0.655
-V12 7 16 2.68
-V13 13 4 2.68
-E42 40 0 41 0 0.023
-R113 8 29 1E9
-C25 40 29 1E-9
-E43 42 0 8 0 0.023
-C26 42 41 1E-9
-R114 0 41 1E9
-E44 43 0 8 0 1
-E45 44 0 11 0 1
-E46 45 0 46 0 1
-R115 43 47 1E6
-R116 44 48 1E6
-R117 45 49 1E6
-R118 0 47 10
-R119 0 48 10
-R120 0 49 10
-E47 50 51 49 0 0.026
-R121 52 46 1E3
-R122 46 53 1E3
-C27 43 47 1E-12
-C28 44 48 1E-12
-C29 45 49 1E-12
-E48 54 50 48 0 -0.06
-E49 55 54 47 0 0.01
-R123 54 55 1E9
-R124 50 54 1E9
-R125 51 50 1E9
-E50 52 0 2 0 1
-E51 53 0 55 0 1
-D37 56 57 DL
-V145 57 0 3
-R316 0 56 1E8
-G54 2 0 56 0 2E-10
-I67 2 0 5E-12
-G55 37 0 56 0 2E-10
-I68 37 0 5E-12
-D38 58 0 DIN
-D39 59 0 DIN
-I69 0 58 1E-3
-I70 0 59 1E-3
-G56 2 55 58 59 2E-11
-G57 2 55 60 0 2.4E-7
-R317 0 60 1E4
-R318 0 60 1E4
-D40 61 0 DVN
-D41 62 0 DVN
-I71 0 61 1E-3
-I72 0 62 1E-3
-E52 37 55 61 62 0.31
-R319 55 37 1E9
-V146 26 35 -0.2
-V147 34 26 -0.2
-V148 63 11 0
-V149 8 22 0
-J5 64 37 64 JC
-J6 64 2 64 JC
-V150 8 64 0.25
-J7 55 65 55 JC
-J8 2 65 2 JC
-V151 65 11 0.25
-E53 51 66 38 0 5.61E-4
-R320 66 51 1E9
-V152 66 3 62E-6
-G58 7 4 38 0 -6E-3
-D42 4 6 DD
-D43 6 7 DD
-R321 67 68 70
-R322 67 69 70
-Q30 70 24 63 QIS
-Q31 24 24 63 QIS
-V153 67 70 0.7
-M1 21 37 68 68 NI L=30U W=300U
-M2 23 2 69 69 NI L=30U W=300U
-M4 71 67 72 72 NS L=30U W=300U
-V157 8 73 4.9
-R327 71 8 1E5
-E55 8 74 8 71 1
-R330 73 72 1E3
-Q32 9 75 8 QSP
-R331 75 74 1E4
-C30 55 2 0.45E-12
-.MODEL DD D
-.MODEL DVN D KF=2.5E-15
-.MODEL DIN D KF=1E-15
-.MODEL DL D IS=0.95E-11 N=1.4 XTI=1.5
-.MODEL NI NMOS VTO=2 KP=1200U IS=1E-18
-.MODEL NS NMOS VTO=0 KP=1200U IS=1E-18
-.MODEL QSP PNP
-.MODEL QIS NPN
-.MODEL JC NJF IS=1E-18
-.MODEL QON NPN BF=1400 RC=25 TF=150P CJC=100F
-.MODEL QOP PNP BF=1400 RC=25 TF=150P CJC=100F
-.ENDS OPA827
-
-* BEGIN MODEL LM6211
-*//////////////////////////////////////////////////////////////////////
-* (C) National Semiconductor, Corporation.
-* Models developed and under copyright by:
-* National Semiconductor, Corporation.
-*/////////////////////////////////////////////////////////////////////
-* Legal Notice:
-* The model may be copied, and distributed without any modifications;
-* however, reselling or licensing the material is illegal.
-* We reserve the right to make changes to the model without prior notice.
-* Pspice Models are provided "AS IS, WITH NO WARRANTY OF ANY KIND"
-*////////////////////////////////////////////////////////////////////
-* LM6211 SPICE MODEL PERFROMANCE
-*////////////////////////////////////////////////////////////////////
-* MODEL FEATURES INCLUDE OUTPUT SWING, OUTPUT CURRENT THRU
-* THE SUPPLY RAILS, OUTPUT SWING VS IO, OUTPUT CURRENT LIMIT,
-* OPEN LOOP GAIN AND PHASE, SLEW RATE, COMMON MODE REJECTION
-* WITH FREQ EFFECTS, POWER SUPPLY REJECTION WITH FREQ EFFECTS,
-* INPUT VOLTAGE NOISE WITH 1/F, INPUT CURRENT NOISE, INPUT
-* CAPACITANCE, INPUT BIAS CURRENT, INPUT COMMON MODE RANGE,
-* INPUT OFFSET, HIGH CLOAD EFFECTS, AND QUIESCENT CURRENT
-* VS VOLTAGE AND TEMPERATURE.
-*///////////////////////////////////////////////////////////////////
-* MODEL TEMP RANGE IS -40 TO +125 DEG C.
-* NOTE THAT MODEL IS FUNCTIONAL OVER THIS RANGE BUT NOT ALL
-* PARAMETERS TRACK THOSE OF THE REAL PART.
-*///////////////////////////////////////////////////////////////////
-*BEGIN MODEL LM6211
-* PINOUT ORDER +IN -IN +V -V OUT
-* PINOUT ORDER  3   4   5  2  1
-.SUBCKT LM6211 3 4 5 2 1
-Q12 6 7 8 QP
-Q13 9 9 10 QP
-Q14 11 11 9 QP
-Q15 8 12 10 QP
-Q17 13 8 14 QOP
-Q18 15 15 16 QN
-Q19 16 16 17 QN
-Q20 6 18 19 QN
-Q21 20 6 21 QON
-Q22 8 15 6 QN
-R10 18 22 100
-R11 12 23 100
-R12 14 5 8
-R13 2 21 4
-G1 6 19 24 25 -2E-4
-R16 24 26 100
-C2 26 1 24E-12
-R17 7 11 8
-R18 19 17 4
-D5 1 5 DD
-D6 2 1 DD
-E2 19 0 2 0 1
-E3 10 0 5 0 1
-I12 5 2 0.85E-3
-R22 2 5 250E3
-G4 24 25 27 28 2E-3
-R40 24 25 9E6
-E14 25 19 10 19 0.5
-D11 24 10 DD
-D12 19 24 DD
-R41 20 1 2
-R42 1 13 2
-Q23 8 29 10 QP
-Q24 15 30 10 QP
-Q25 6 31 19 QN
-Q26 7 32 19 QN
-Q33 33 34 10 QP
-R45 35 36 4
-R46 37 36 4
-R47 38 39 300
-R49 19 27 300
-R50 19 28 300
-R51 40 41 300
-Q35 41 41 42 QP
-Q37 42 42 41 QN
-D13 42 10 DD
-D14 41 10 DD
-D15 43 44 DD
-D16 43 41 DD
-V9 42 44 0
-V10 39 44 0.1E-3
-D17 45 0 DIN
-D18 46 0 DIN
-I14 0 45 0.1E-3
-I15 0 46 0.1E-3
-C13 38 0 5E-12
-C14 4 0 5E-12
-D19 47 0 DVN
-D20 48 0 DVN
-I16 0 47 0.1E-3
-I17 0 48 0.1E-3
-E15 40 4 47 48 1.75
-G5 38 40 45 46 2.8E-8
-E16 49 0 10 0 1
-E17 50 0 19 0 1
-E18 51 0 52 0 1
-R56 49 53 1E6
-R57 50 54 1E6
-R58 51 55 1E6
-R59 0 53 100
-R60 0 54 100
-R61 0 55 100
-E19 56 3 55 0 16E-3
-R62 57 52 1E3
-R63 52 58 1E3
-C15 49 53 1E-12
-C16 50 54 1E-12
-C17 51 55 1E-12
-E20 59 56 54 0 -0.32
-E21 38 59 53 0 0.18
-C19 27 28 10E-12
-M1 28 44 35 35 MIP L=2U W=650U
-M2 27 41 37 37 MIP L=2U W=650U
-G6 34 10 60 0 2.5E-6
-G7 29 10 60 0 3.4E-7
-G8 30 10 60 0 1.45E-7
-G9 19 31 60 0 1.7E-7
-G10 19 32 60 0 7.25E-8
-R64 0 60 1E12
-R132 1 24 1E8
-V52 60 0 1
-G11 5 2 61 0 2E-6
-V53 43 19 0.15
-V54 33 36 0.9
-G12 38 40 62 0 9.2E-7
-R136 0 62 12E3
-R137 0 62 12E3
-R138 3 56 1E9
-R139 56 59 1E9
-R140 59 38 1E9
-E54 58 0 38 0 1
-E55 57 0 40 0 1
-C23 38 40 0.25E-12
-E72 22 19 21 2 5
-E73 23 10 14 10 5
-G37 40 0 63 0 20E-12
-I46 40 0 0.115E-12
-I48 0 64 1E-3
-D69 64 0 DD
-V38 64 65 0.7
-R197 0 65 1E6
-E23 61 0 65 0 -571
-R198 0 61 1E6
-R199 66 61 1E6
-D70 67 66 DD
-V139 67 68 25.7
-V140 66 63 25.1
-I49 0 69 1E-3
-D71 69 0 DD
-V141 69 70 0.7
-R200 0 70 1E6
-E24 68 0 70 0 1
-G38 38 0 63 0 20E-12
-I50 38 0 0.115E-12
-R201 0 63 1E9
-R202 0 63 1E9
-R203 0 60 1E12
-.MODEL QON NPN VAF=40
-.MODEL QOP PNP VAF=40
-.MODEL MIP PMOS KP=600U VTO=-0.7
-.MODEL DD D
-.MODEL QN NPN
-.MODEL QP PNP
-.MODEL DVN D KF=2.5E-16
-.MODEL DIN D KF=8E-17
-.ENDS LM6211
-* END MODEL LM6211
-
-* BEGIN MODEL LMP7715
-*//////////////////////////////////////////////////////////////
-*Rev.a August-2006
-*//////////////////////////////////////////////////////////////////////
-* (C) National Semiconductor, Corporation.
-* Models developed and under copyright by:
-* National Semiconductor, Corporation.
-*/////////////////////////////////////////////////////////////////////
-* Legal Notice:
-* The model may be copied, and distributed without any modifications;
-* however, reselling or licensing the material is illegal.
-* We reserve the right to make changes to the model without prior notice.
-* Pspice Models are provided "AS IS, WITH NO WARRANTY OF ANY KIND"
-*////////////////////////////////////////////////////////////////////
-*MODEL FEATURES INCLUDE OUTPUT SWING, OUTPUT CURRENT THRU
-*THE SUPPLY RAILS, OUTPUT SWING VS IO, OUTPUT CURRENT LIMIT,
-*OPEN LOOP GAIN AND PHASE, SLEW RATE, COMMON MODE REJECTION
-*WITH FREQ EFFECTS, POWER SUPPLY REJECTION WITH FREQ EFFECTS,
-*INPUT VOLTAGE NOISE WITH 1/F, INPUT CURRENT NOISE, INPUT
-*CAPACITANCE, INPUT BIAS CURRENT, INPUT COMMON MODE RANGE,
-*INPUT OFFSET, HIGH CLOAD EFFECTS, QUIESCENT CURRENT, AND
-*QUIESCENT CURRENT VS VOLTAGE
-*//////////////////////////////
-*MODEL TEMP RANGE IS -55 TO +125 DEG C.
-*NOTE THAT MODEL IS FUNCTIONAL OVER THIS RANGE BUT NOT ALL
-*PARAMETERS TRACK THOSE OF THE REAL PART.
-*//////////////////////////////
-* PINOUT ORDER +IN -IN +V -V OUT
-* PINOUT ORDER  3   4   6  2  1
-.SUBCKT LMP7715 3 4 6 2 1
-Q12 7 8 9 QP
-Q13 10 10 11 QP
-Q14 12 12 10 QP
-Q15 9 13 11 QP
-Q17 14 9 15 QOP
-Q18 16 16 17 QN
-Q19 17 17 18 QN
-Q20 7 19 20 QN
-Q21 21 7 22 QON
-Q22 9 16 7 QN
-R10 19 22 100
-R11 13 15 100
-R12 15 6 3
-R13 2 22 30
-G1 7 20 23 24 -2E-4
-R16 23 25 300
-C2 25 1 20E-12
-R17 8 12 3
-R18 20 18 30
-D5 1 6 DD
-D6 2 1 DD
-E2 20 0 2 0 1
-E3 11 0 6 0 1
-I12 6 2 1E-6
-R22 26 6 13E3
-G4 23 24 27 28 2E-3
-R40 23 24 2E6
-E14 24 20 11 20 0.5
-D11 23 11 DD
-D12 20 23 DD
-C11 1 0 0.5E-12
-R41 21 1 30
-R42 1 14 3
-Q23 9 29 11 QP
-Q24 16 30 11 QP
-Q25 7 31 20 QN
-Q26 8 32 20 QN
-Q33 33 34 11 QP
-R45 35 36 12
-R46 37 36 12
-R47 38 39 300
-R49 20 27 300
-R50 20 28 300
-R51 40 41 300
-Q35 42 42 43 QP
-Q36 41 41 42 QP
-Q37 43 43 44 QN
-Q38 44 44 41 QN
-D13 43 11 DD
-D14 41 11 DD
-D15 45 46 DD
-D16 45 41 DD
-V9 43 46 0
-V10 39 46 -152E-6
-D17 47 0 DIN
-D18 48 0 DIN
-I14 0 47 0.1E-3
-I15 0 48 0.1E-3
-C13 38 0 1.5E-12
-C14 4 0 1.5E-12
-D19 49 0 DVN
-D20 50 0 DVN
-I16 0 49 0.1E-3
-I17 0 50 0.1E-3
-E15 40 4 49 50 1.24
-G5 38 40 47 48 2.8E-8
-E16 51 0 11 0 1
-E17 52 0 20 0 1
-E18 53 0 54 0 1
-R56 51 55 1E6
-R57 52 56 1E6
-R58 53 57 1E6
-R59 0 55 100
-R60 0 56 100
-R61 0 57 100
-E19 58 3 57 0 20E-3
-R62 59 54 1E3
-R63 54 60 1E3
-C15 51 55 1E-12
-C16 52 56 1E-12
-C17 53 57 1E-12
-E20 61 58 56 0 0.3
-E21 38 61 55 0 -0.3
-C19 27 28 20E-12
-M1 28 46 35 35 MIP L=2U W=350U
-M2 27 41 37 37 MIP L=2U W=350U
-G6 34 11 62 0 4E-6
-G7 29 11 62 0 3.4E-7
-G8 30 11 62 0 1.45E-7
-G9 20 31 62 0 1.7E-7
-G10 20 32 62 0 7.25E-8
-R64 0 62 1E12
-E49 63 24 62 0 30
-E50 64 23 62 0 -30
-V50 65 64 15
-V51 66 63 -15
-R128 63 0 1E12
-R129 64 0 1E12
-M42 23 66 24 67 PSW L=1.5U W=150U
-M43 24 65 23 68 NSW L=1.5U
-R130 67 0 1E12
-R131 68 0 1E12
-R132 1 23 500E6
-M45 69 5 11 11 PEN L=2U W=100U
-M46 69 5 20 20 NEN L=2U W=100U
-M47 62 70 0 0 NEN L=2U W=10000U
-R133 62 71 1E6
-V52 71 0 1
-M48 70 72 0 0 NEN L=2U W=100U
-R134 70 71 1E4
-M49 72 69 0 0 NEN L=2U W=100U
-R135 72 71 1E4
-C20 71 72 2E-12
-C21 71 70 110E-12
-M50 26 73 2 2 NEN L=2U W=100U
-G11 6 2 62 0 0.76E-3
-E51 73 2 62 0 2
-I18 0 38 1.5E-12
-I19 0 4 1.5E-12
-V53 45 20 0
-V54 33 36 0.18
-G12 38 40 74 0 1E-6
-R136 0 74 12E3
-R137 0 74 12E3
-R138 3 58 1E9
-R139 58 61 1E9
-R140 61 38 1E9
-R141 2 73 1E9
-E54 60 0 38 0 1
-E55 59 0 40 0 1
-C23 38 40 0.25E-12
-R142 5 6 1E6
-.MODEL QON NPN VAF=40
-.MODEL QOP PNP VAF=40
-.MODEL MIP PMOS KP=600U VTO=-0.7
-.MODEL DD D
-.MODEL QN NPN
-.MODEL QP PNP
-.MODEL DVN D KF=5E-16
-.MODEL DIN D KF=8E-17
-.MODEL PSW PMOS KP=200U VTO=-7.5 IS=1E-18
-.MODEL NSW NMOS KP=200U VTO=7.5 IS=1E-18
-.MODEL PEN PMOS KP=200U VTO=-0.5 IS=1E-18
-.MODEL NEN NMOS KP=200U VTO=0.5 IS=1E-18
-.ENDS
-* END MODEL LMP7715
-
-* THS4508 SUBCIRCUIT Rev-0
-* FULLY DIFFERENTIAL HIGH SPEED MONLITHIC OPERATIONAL AMPLIFIER
-* RELEASED 01-23-06
-*
-* THIS MODEL SIMULATES TYPICAL VALUES FOR THE FOLLOWING:
-* FREQUENCY RESPONSE OF THE MAIN DIFFERENTIAL AMP,
-* OUTPUT VOLTAGE LIMIT
-* INPUT VOLTAGE NOISE, INPUT CURRENT NOISE
-* INPUT BIAS CURRENT, INPUT OFFSET VOLTAGE
-* CM SET POINT, CM GAIN, CM OFFSET, CM BANDWIDTH
-*
-* THIS MODEL WILL NOT PROVIDE ACCURATE SIMULATION OF:
-* OUTPUT LOADING EFFECTS, SLEW RATE, SETTLING TIME
-* OUTPUT IMPEDANCE, DISTORTION
-* INPUT OFFSET vs INPUT COMMON-MODE VOLTAGE
-* CMRR AND PSRR
-
-* IN PSPICE THIS MODEL WILL NOT CONVERGE IN TRANSIENT ANALYSIS USING PULSES THAT CAUSE GREATER THAN 4000V/us SLEW RATE
-
-*$
-.SUBCKT THS4508 IN+ IN- Vs+ Vs- OUT- OUT+ CM
-
-*Level Shift Input
-QLS+       NCQLS+ 001 NEQLS+ PNP 2.5
-QLS-       NCQLS- IN- NEQLS- PNP  2.5
-ILs+       NILs+ INs+ 500u
-ILs-       NILs- INs- 500u
-QDLS+C     NCQLS+ NCQLS+ Vs- NPN  2.5
-QDLS-C     NCQLS- NCQLS- Vs- NPN  2.5
-QDLS+E     INs+ INs+ NEQLS+ NPN  2.5
-QDLS-E     INs- INs- NEQLS- NPN  2.5
-RLs+       Vs+ NILs+ 500
-RLs-       Vs- NILs- 500
-
-*INPUT*
-Q9          Vs- INs+ 005 PNP_IN  2.5
-Q10         Vs- INs- 031 PNP_IN  2.505
-Q11         Vs+ INs- 006 NPN_IN  2.5
-Q12         Vs+ INs+ 002 NPN_IN  2.495
-
-Q19         039 005 008 NPN  5.198
-Q20         038 031 009 NPN  5
-Q21         033 006 009 PNP  5.198
-Q22         035 002 008 PNP  5
-R1          009 008 90
-VI1          002 003 DC 0.69995
-VI2          004 005 DC 0.701
-VI3          006 007 DC 0.701
-VI10         036 031 DC 0.70005
-R20         036 Vs+  2.7k
-R21         004 Vs+  2.7k
-R22         Vs- 003  2.7k
-R23         Vs- 007  2.7k
-C1          0 001  0.3p
-C2          0 IN-  0.3p
-V1          001 IN+ 000u
-IB+         IN+ 0 13u
-IB-         IN- 0 13u
-
-*HIGH Z NODE*
-Q23         041 041 039 PNP  5
-Q24         027 041 038 PNP  5
-Q17         037 037 038 PNP  5
-Q18         029 037 039 PNP  5
-Q15         032 032 033 NPN  5
-Q16         034 034 035 NPN  5
-Q14         029 032 035 NPN  5
-Q13         027 034 033 NPN  5
-I8         Vs+ 032 DC 750u
-I9         Vs+ 034 DC 750u
-I11         037 Vs- DC 750u
-I12         041 Vs- DC 750u
-R30         029 027  1meg
-C5         029 027  0.45p
-R16         038 Vs+  500
-R17         039 Vs+  500
-R18         038 Vs+  500
-R19         039 Vs+  500
-R24         Vs- 035  500
-R25         Vs- 033  500
-R26         Vs- 035  500
-R27         Vs- 033  500
-
-*VOLTAGE LIMIT*
-Q116         027 027 128 NPN  5
-V116         Vs+ 128   1.75
-Q118         027 027 138 PNP  5
-V118         138 Vs-   1.75
-Q216         029 029 228 NPN  5
-V216         Vs+ 228   1.75
-Q218         029 029 238 PNP  5
-V218         238 Vs-   1.75
-RQ      Vs+ Vs- 1000
-
-*FREQUENCY SHAPING*
-E2         028 0 027 0 1
-E3         030 0 029 0 1
-C3         0 024  3p
-C4         0 017  3p
-L1         025 028  2n
-L2         030 026  2n
-R10         024 025  25
-R11         017 026  25
-
-*OUTPUT BUFFER*
-Q1         Vs+ 012 013 NPN  50
-Q2         Vs- 015 016 PNP  50
-Q3         Vs+ 017 015 NPN  13
-Q4         Vs- 017 012 PNP  13
-Q5         Vs+ 019 020 NPN  50
-Q6         Vs- 021 023 PNP  50
-Q7         Vs+ 024 021 NPN  13
-Q8         Vs- 024 019 PNP  13
-I4         011 012 DC 2m
-I5         015 014 DC 2m
-I6         018 019 DC 2m
-I7         021 022 DC 2m
-R4         Vs- 014  100
-R7         018 Vs+  100
-R12         011 Vs+  100
-R13         Vs- 022  100
-R5         OUT- 013  1
-R6         016 OUT-  1
-R8         OUT+ 020  1
-R9         023 OUT+  1
-
-*CM CIRCUIT*
-R2         OUT+ 010  10k
-R3         010 OUT-  10k
-*C102   OUT+ 010 100p
-*C103   010 OUT- 100p
-R114       CM CM2  100
-C114       CM2 0 2.3p
-R14         Vs+ CM2  50k
-R15         Vs- CM2  50k
-V3         043 CM2 5m
-F2         041 Vs- VF2 1
-VF2        040 Vs- 0V
-F1         037 Vs- VF1 1
-VF1        042 040 0V
-G1         042 Vs+ 010 043 .002
-*R100   042 0 1meg
-*C100   042 0 10p
-
-.MODEL NPN_IN NPN KF=1E-11
-.MODEL PNP_IN PNP KF=1E-11
-.MODEL NPN NPN
-.MODEL PNP PNP
-.ENDS
-
-.param cur=10p
-.param offsetv=0
-.param supplyv=5
-
-V_I$3157 POS2 0 offsetv
-V_I$1272 POS1 0 offsetv
-V_I$1475 VCCP 0 supplyv
-V_I$1476 VCCM 0 '-supplyv'
-V_I$3150 N$4493 0 supplyv
-V_I$3159 N$4492 0 '-supplyv'
-L_I$2539 N$2853 N$2855  100p
-R_I$2540 N$2855 WE 100
-R_I$412 N$2852 N$2853 1k
-R_I$208 WE out1 .1Meg
-R_I$2948 out1 N$4085 0.1K
-R_I$3155 N$4085 out2 1Meg
-C_I$2542 WE 0 10f
-C_I$2541 N$2855 0 10f
-C_I$1882 N$2852 N$2853 5f
-*X_I$5186_I$1 POS2 N$4085 N$4493 N$4492 out2 LMP7715
-*X_I$4984_I$1 POS1 WE VCCP VCCM out1 LMP7715
-X_I$5186_I$1 POS2 N$4085 N$4493 N$4492 N$9996 out2 0 THS4508
-X_I$4984_I$1 POS1 WE VCCP VCCM N$9999 out1 0 THS4508
-*THS4508 IN+ IN- Vs+ Vs- OUT- OUT+ CM
-*I_I$411 0 N$2852 pwl(0 0 10u 0 20u 100p 30u 0)
-I_I$411 0 N$2852 pwl(0 0 10u 0 20u 100p 50u 100p 100u 200p 150u 0 300u 0 320u 100p 340u 0)
-*I_I$411 0 N$2852 AC
-
-.tran 1n 500u
-.plot v(out2)
-.plot v(out1)
-.plot i(I_I$411)
-*.ac dec 100 1 1g
-*.pz V(out2)
-*.defwave tia_gain=v(out2) / i(I_I$411)
-*.plot wdb(tia_gain)
-
 .op  NO_SMALL_SIGNAL
-.END
 
+*//////////////////////////////////////////////////////////////////////
+* (C) National Semiconductor, Inc.
+* Models developed and under copyright by:
+* National Semiconductor, Inc.  
+
+*/////////////////////////////////////////////////////////////////////
+* Legal Notice: This material is intended for free software support.
+* The file may be copied, and distributed; however, reselling the 
+*  material is illegal
+
+*////////////////////////////////////////////////////////////////////
+* For ordering or technical information on these models, contact:
+* National Semiconductor's Customer Response Center
+*                 7:00 A.M.--7:00 P.M.  U.S. Central Time
+*                                (800) 272-9959
+* For Applications support, contact the Internet address:
+*  amps-apps@galaxy.nsc.com
+
+* ////////////////////////////////////////////////////////
+* LMC6001A Precision CMOS Single Operational Amplifier
+* ////////////////////////////////////////////////////////
+*
+* Connections:      Non-inverting input
+*                   |   Inverting input
+*                   |   |   Positive power supply
+*                   |   |   |   Negative power supply
+*                   |   |   |   |   Output
+*                   |   |   |   |   |
+*                   |   |   |   |   |
+.SUBCKT LMC6001A/NS 1   2  99  50  28
+* CAUTION:  SET .OPTIONS GMIN=1E-16 TO CORRECTLY MODEL INPUT BIAS CURRENT.
+*
+* Features:
+* Operates from single supply
+* Rail-to-rail output swing
+* Low offset voltage (max) =           350uV
+* Ultra low input current =             25fA
+* Slew rate =                        1.5V/uS
+* Gain-bandwidth product =            1.3MHz 
+* Supply current =                     450uA
+*
+* NOTE: This CMOS electrometer simulates guaranteed (100% tested)
+*       input offset voltage (VOS) & input bias current (IB)
+*
+* NOTE: - Noise is not modeled.
+*       - Asymmetrical gain is not modeled.
+*
+CI1 1  50 2P
+CI2 2  50 2P
+* 1.634 Hz pole capacitor
+C3  98 9  9.715N
+* 1.1 MHz pole capacitor
+C4  6  5  13.95P
+* 4.98 MHz pole capacitor
+C5  98 15 31.9F
+* Drain-substrate capacitor
+C6  50 4  3P
+* 28.6 MHz pole capacitor
+C7  98 11 5.62F
+DP1 1  99 DA
+DP2 50 1  DD
+DP3 2  99 DB
+DP4 50 2  DC
+D1  9  8  DX
+D2  10 9  DX
+D3  18 20 DX
+D4  21 18 DX
+D5  26 24 DX
+D6  25 27 DX
+D7  22 99 DX
+D8  50 22 DX
+D9  0  14 DX
+D10 12 0  DX
+EH  97 98 99    49 1.0
+EN  0  96 0     50 1.0
+* Input offset voltage -|
+EOS 7  1  POLY(1) 16 49 350U 1
+EP  97 0  99    0  1.0
+E1  97 19 99    18 1.0
+* Sourcing load +Vs current
+F1  99 0  VA2   1
+* Sinking load -Vs current
+F2  0  50 VA3   1
+F3  13 0  VA1   1
+G1  98 9  5     6  0.1
+G2  98 11 9     49 1U
+G3  98 15 11    49 1U
+* DC CMRR
+G4  98 16 POLY(2) 1 49 2 49 0 1.26E-8 1.26E-8
+G5  98 18 15    49 1U
+I1  99 4  33.46U
+I2  99 50 366.5U
+* Load dependent pole 
+L1  22 28 80.4U
+* CMR lead inductor
+L2  16 17 73.1M
+* 3.30 MHz lead inductor
+L3  98 3  48.2M
+M1  5  2  4     99 MX
+M2  6  7  4     99 MX
+R3  5  50 5.18K
+R4  6  50 5.18K
+R5  98 9  1E7
+R8  99 49 50K
+R9  49 50 50K
+R10 18 3  1E6
+R12 98 11 1E6
+R13 98 17 1K
+* -Rout
+R16 23 24 70.7
+* +Rout
+R17 23 25 80.3
+* +Isc slope control
+R18 20 29 64K
+* -Isc slope control
+R19 21 30 130K
+R21 98 15 1E6
+R22 22 28 636
+VA1 19 23 0V
+VA2 14 13 0V
+VA3 13 12 0V
+V2  97 8  0.713V
+V3  10 96 0.710V
+V4  29 22 1.170V
+V5  22 30 0.63V
+V6  26 22 0.63V
+V7  22 27 0.63V
+* Input bias and offset current differences
+.MODEL  DA D    (IS=425FA)
+.MODEL  DB D    (IS=425FA)
+.MODEL  DC D    (IS=405FA)
+.MODEL  DD D    (IS=400FA)
+.MODEL  DX D    (IS=1.0E-14)
+.MODEL  MX PMOS (VTO=-2.456 KP=7.0547E-4)
+.ENDS
+*$
+
+* Connections:      Non-inverting input
+*                   |   Inverting input
+*                   |   |   Positive power supply
+*                   |   |   |   Negative power supply
+*                   |   |   |   |   Output
+*                   |   |   |   |   |
+*                   |   |   |   |   |
+*.SUBCK LMC6001A/NS 1   2  99  50  28
+.OPTIONS GMIN=1E-16
+
+.param rf=100k
+.param rg=1k
+.param rf2=100k
+.param rg2=1k
+
+V_I$3651 vsp2 0 5
+V_I$3649 vsm2 0 -5
+V_I$3031 vsp 0 5
+V_I$3029 vsm 0 -5
+R_I$3442 inm2 out2 rf2
+R_I$3441 out inm2 rg2
+R_I$3027 inm out rf
+R_I$3005 N$3493 inm rg
+X_I$3647_I$1 0 inm2 vsp2 vsm2 out2  LMC6001A/NS
+X_I$3239_I$1 0 inm vsp vsm out  LMC6001A/NS
+I_I$2985 0 N$3493 pwl(0 0 10u 0 20u 100p 30u 0 50u 100p 70u 0 75u 1n 80u 0)
+
+.tran 1n 100u
+.plot i(R_I$3005)
+.plot v(out)
+.plot v(out2)
+
+.extract max(v(out)) - min(v(out))
+.extract max(v(out2)) - min(v(out2))
+
+.END

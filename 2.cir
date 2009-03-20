@@ -1,0 +1,56 @@
+Design:  /top/students/UNGRAD/ECE/dolmant/home/potentiostat/2.default
+.options  tnom=27
+.temp 27
+V_I$3651 vsp2 0 5
+V_I$3649 vsm2 0 -5
+V_I$3031 vsp 0 5
+V_I$3029 vsm 0 -5
+R_I$3442 inm2 out2 rf2
+R_I$3441 out inm2 rg2
+R_I$3027 inm out rf
+R_I$3005 N$3493 inm rg
+X_I$3647_I$1 0 inm2 vsp2 vsm2 out2  OPA827 
+X_I$3239_I$1 0 inm vsp vsm out  OPA827 
+I_I$2985 0 N$3493 10uA
+.op  NO_SMALL_SIGNAL
+*
+* Beginning of translation table for device INSTANCE names
+*  Netlist Name       Schematic Name
+*
+*  V_I$3651           /I$3651
+*  V_I$3029           /I$3029
+*  V_I$3031           /I$3031
+*  R_I$3005           /I$3005
+*  V_I$3649           /I$3649
+*  R_I$3027           /I$3027
+*  R_I$3441           /I$3441
+*  R_I$3442           /I$3442
+*  X_I$3647_I$1       /I$3647/I$1
+*  X_I$3239_I$1       /I$3239/I$1
+*  I_I$2985           /I$2985
+* End of translation table for device INSTANCE names
+*
+* Beginning of translation table for device MODEL names
+*  Netlist Name       Schematic Name
+*
+*  OPA827             OPA827
+*  ACCUSIM            ACCUSIM
+* End of translation table for device MODEL names
+*
+* Beginning of translation table for NODE names
+*  Netlist Name       Schematic Name
+*
+*  0                  //ground
+*  out                /out
+*  vsp2               /vsp2
+*  vsm2               /vsm2
+*  out2               /out2
+*  inm2               /inm2
+*  N$3493             /N$3493
+*  vsm                /vsm
+*  vsp                /vsp
+*  inm                /inm
+* End of translation table for NODE names
+* >KEEP
+* >ENDKEEP
+.END

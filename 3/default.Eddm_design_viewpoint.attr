@@ -1,0 +1,19 @@
+A 5 u Eddm_design_viewpoint 49b5d15995ff.03.81.52.e0.47.00.1a.49 1 2 11 0
+V v 1 4 49b5d15ad77d.03.81.52.e0.47.00.1a.49
+F f 1 "default.dvpt_1"
+F o 0 
+F o 0 
+F o 0 
+O 1
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/3/part" 1 Eddm_part 49b5d1506d14.03.81.52.e0.47.00.16.e8 49b5d1506d13.03.81.52.e0.47.00.16.e8
+R cspuv 1 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/3/schematic" 2 mgc_schematic 49b5d150b12d.03.81.52.e0.47.00.16.e8 49b5d0e2a8a1.03.81.52.e0.47.00.16.e8
+R cspuv 2 "$MGC_APLIB/resistor_h/part" 11 Eddm_part 65fa04ce4d05.02.93.22.13.28.00.00.00 65fa30d7d062.02.93.22.13.44.00.00.00
+R cspuv 3 "$MGC_APLIB/current_source/part" 8 Eddm_part 65c75a1c3a43.02.b9.00.05.17.00.00.00 650375b3cc50.02.93.22.13.44.00.00.00
+R cspuv 4 "$MGC_APLIB/voltage_source/part" 7 Eddm_part 65c76a316868.02.b9.00.05.17.00.00.00 650375b6ffbc.02.93.22.13.44.00.00.00
+R cspuv 5 "$MGC_APLIB/resistor_h/resistor_h" 10 mgc_symbol 675572d3d867.02.93.22.1e.2a.00.00.00 65fa30d7d063.02.93.22.13.44.00.00.00
+R cspuv 6 "$MGC_APLIB/voltage_source/voltage_source" 5 mgc_symbol 65c34d1fb535.02.b9.00.05.17.00.00.00 650375b6ffbd.02.93.22.13.44.00.00.00
+R cspuv 7 "$MGC_APLIB/current_source/current_source" 6 mgc_symbol 656c46bbf5b9.02.b9.00.05.17.00.00.00 650375b3cc4f.02.93.22.13.44.00.00.00
+R cspuv 8 "$MGC_APLIB/ground/part" 12 Eddm_part 65bd0cf58b9d.02.b9.00.05.17.00.00.00 650375b3cc8a.02.93.22.13.44.00.00.00
+R cspuv 9 "$MGC_APLIB/ground/MG_STD" 6 mgc_symbol 65bd0cf58b9c.02.b9.00.05.17.00.00.00 650375b3cc89.02.93.22.13.44.00.00.00
+R cspuv 10 "$MGC_APLIB/ground/ANSI" 6 mgc_symbol 65bd0be77a3a.02.b9.00.05.17.00.00.00 650375b3cc88.02.93.22.13.44.00.00.00

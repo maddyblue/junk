@@ -1,0 +1,389 @@
+* potentiostat
+.options  tnom=27
+.temp 27
+
+* THS4508 SUBCIRCUIT Rev-0
+* FULLY DIFFERENTIAL HIGH SPEED MONLITHIC OPERATIONAL AMPLIFIER
+* RELEASED 01-23-06
+*
+* THIS MODEL SIMULATES TYPICAL VALUES FOR THE FOLLOWING:
+* FREQUENCY RESPONSE OF THE MAIN DIFFERENTIAL AMP,
+* OUTPUT VOLTAGE LIMIT
+* INPUT VOLTAGE NOISE, INPUT CURRENT NOISE
+* INPUT BIAS CURRENT, INPUT OFFSET VOLTAGE
+* CM SET POINT, CM GAIN, CM OFFSET, CM BANDWIDTH
+*
+* THIS MODEL WILL NOT PROVIDE ACCURATE SIMULATION OF:
+* OUTPUT LOADING EFFECTS, SLEW RATE, SETTLING TIME
+* OUTPUT IMPEDANCE, DISTORTION
+* INPUT OFFSET vs INPUT COMMON-MODE VOLTAGE
+* CMRR AND PSRR
+
+* IN PSPICE THIS MODEL WILL NOT CONVERGE IN TRANSIENT ANALYSIS USING PULSES THAT CAUSE GREATER THAN 4000V/us SLEW RATE
+
+*$
+.SUBCKT THS4508 IN+ IN- Vs+ Vs- OUT- OUT+ CM
+
+*Level Shift Input
+QLS+       NCQLS+ 001 NEQLS+ PNP 2.5
+QLS-       NCQLS- IN- NEQLS- PNP  2.5
+ILs+       NILs+ INs+ 500u
+ILs-       NILs- INs- 500u
+QDLS+C     NCQLS+ NCQLS+ Vs- NPN  2.5
+QDLS-C     NCQLS- NCQLS- Vs- NPN  2.5
+QDLS+E     INs+ INs+ NEQLS+ NPN  2.5
+QDLS-E     INs- INs- NEQLS- NPN  2.5
+RLs+       Vs+ NILs+ 500
+RLs-       Vs- NILs- 500
+
+*INPUT*
+Q9          Vs- INs+ 005 PNP_IN  2.5
+Q10         Vs- INs- 031 PNP_IN  2.505
+Q11         Vs+ INs- 006 NPN_IN  2.5
+Q12         Vs+ INs+ 002 NPN_IN  2.495
+
+Q19         039 005 008 NPN  5.198
+Q20         038 031 009 NPN  5
+Q21         033 006 009 PNP  5.198
+Q22         035 002 008 PNP  5
+R1          009 008 90
+VI1          002 003 DC 0.69995
+VI2          004 005 DC 0.701
+VI3          006 007 DC 0.701
+VI10         036 031 DC 0.70005
+R20         036 Vs+  2.7k
+R21         004 Vs+  2.7k
+R22         Vs- 003  2.7k
+R23         Vs- 007  2.7k
+C1          0 001  0.3p
+C2          0 IN-  0.3p
+V1          001 IN+ 000u
+IB+         IN+ 0 13u
+IB-         IN- 0 13u
+
+*HIGH Z NODE*
+Q23         041 041 039 PNP  5
+Q24         027 041 038 PNP  5
+Q17         037 037 038 PNP  5
+Q18         029 037 039 PNP  5
+Q15         032 032 033 NPN  5
+Q16         034 034 035 NPN  5
+Q14         029 032 035 NPN  5
+Q13         027 034 033 NPN  5
+I8         Vs+ 032 DC 750u
+I9         Vs+ 034 DC 750u
+I11         037 Vs- DC 750u
+I12         041 Vs- DC 750u
+R30         029 027  1meg
+C5         029 027  0.45p
+R16         038 Vs+  500
+R17         039 Vs+  500
+R18         038 Vs+  500
+R19         039 Vs+  500
+R24         Vs- 035  500
+R25         Vs- 033  500
+R26         Vs- 035  500
+R27         Vs- 033  500
+
+*VOLTAGE LIMIT*
+Q116         027 027 128 NPN  5
+V116         Vs+ 128   1.75
+Q118         027 027 138 PNP  5
+V118         138 Vs-   1.75
+Q216         029 029 228 NPN  5
+V216         Vs+ 228   1.75
+Q218         029 029 238 PNP  5
+V218         238 Vs-   1.75
+RQ      Vs+ Vs- 1000
+
+*FREQUENCY SHAPING*
+E2         028 0 027 0 1
+E3         030 0 029 0 1
+C3         0 024  3p
+C4         0 017  3p
+L1         025 028  2n
+L2         030 026  2n
+R10         024 025  25
+R11         017 026  25
+
+*OUTPUT BUFFER*
+Q1         Vs+ 012 013 NPN  50
+Q2         Vs- 015 016 PNP  50
+Q3         Vs+ 017 015 NPN  13
+Q4         Vs- 017 012 PNP  13
+Q5         Vs+ 019 020 NPN  50
+Q6         Vs- 021 023 PNP  50
+Q7         Vs+ 024 021 NPN  13
+Q8         Vs- 024 019 PNP  13
+I4         011 012 DC 2m
+I5         015 014 DC 2m
+I6         018 019 DC 2m
+I7         021 022 DC 2m
+R4         Vs- 014  100
+R7         018 Vs+  100
+R12         011 Vs+  100
+R13         Vs- 022  100
+R5         OUT- 013  1
+R6         016 OUT-  1
+R8         OUT+ 020  1
+R9         023 OUT+  1
+
+*CM CIRCUIT*
+R2         OUT+ 010  10k
+R3         010 OUT-  10k
+*C102   OUT+ 010 100p
+*C103   010 OUT- 100p
+R114       CM CM2  100
+C114       CM2 0 2.3p
+R14         Vs+ CM2  50k
+R15         Vs- CM2  50k
+V3         043 CM2 5m
+F2         041 Vs- VF2 1
+VF2        040 Vs- 0V
+F1         037 Vs- VF1 1
+VF1        042 040 0V
+G1         042 Vs+ 010 043 .002
+*R100   042 0 1meg
+*C100   042 0 10p
+
+.MODEL NPN_IN NPN KF=1E-11
+.MODEL PNP_IN PNP KF=1E-11
+.MODEL NPN NPN
+.MODEL PNP PNP
+.ENDS
+
+* THS4509 SUBCIRCUIT Rev-A
+* FULLY DIFFERENTIAL HIGH SPEED MONLITHIC OPERATIONAL AMPLIFIER 
+* WRITTEN 01-24-06
+* THIS MODEL SIMULATES TYPICAL VALUES FOR THE FOLLOWING:
+* FREQUENCY RESPONSE OF THE MAIN DIFFERENTIAL AMP, OUTPUT VOLTAGE LIMIT,   
+* INPUT VOLTAGE NOISE, INPUT CURRENT NOISE, INPUT BIAS CURRENT, INPUT OFFSET VOLTAGE, CM SET POINT, OFFSET, AND BANDWIDTH
+* THIS MODEL WILL NOT PROVIDE ACCURATE SIMULATION OF:  OUTPUT LOADING EFFECTS, SLEW RATE, SETTLING TIME
+* OUTPUT IMPEDANCE, DISTORTION, INPUT OFFSET vs INPUT COMMON-MODE VOLTAGE, CMRR AND PSRR
+* IN PSPICE THIS MODEL WILL NOT CONVERGE IN TRANSIENT ANALYSIS USING PULSES THAT CAUSE GREATER THAN 4000V/us SLEW RATE
+
+*$
+.SUBCKT THS4509 IN+ IN- Vs+ Vs- OUT- OUT+ CM
+
+*INPUT*
+Q9         Vs- 001 005 PNP_IN  2.5
+Q10         Vs- IN- 031 PNP_IN  2.505
+Q11         Vs+ IN- 006 NPN_IN  2.5
+Q12         Vs+ 001 002 NPN_IN  2.495
+Q19         039 005 008 NPN  5.198
+Q20         038 031 009 NPN  5
+Q21         033 006 009 PNP  5.198
+Q22         035 002 008 PNP  5
+R1          009 008  90  
+VI1         002 003 0.69995  
+VI2         004 005 0.701  
+VI3         006 007 0.701  
+VI10        036 031 0.70005  
+R20         036 Vs+  2.7k  
+R21         004 Vs+  2.7k  
+R22         Vs- 003  2.7k  
+R23         Vs- 007  2.7k  
+C1         0 001   0.3p  
+C2         0 IN-    0.3p  
+V1         001 IN+ 000u
+IB+	IN+ 0	8u
+IB-	IN- 0	8u
+
+*HIGH Z NODE*
+Q23         041 041 039 PNP  5
+Q24         027 041 038 PNP  5
+Q17         037 037 038 PNP  5
+Q18         029 037 039 PNP  5
+Q15         032 032 033 NPN  5
+Q16         034 034 035 NPN  5
+Q14         029 032 035 NPN  5
+Q13         027 034 033 NPN  5
+I8         Vs+ 032 DC 750u  
+I9         Vs+ 034 DC 750u  
+I11         037 Vs- DC 750u  
+I12         041 Vs- DC 750u  
+R30         029 027  1meg 
+C5         029 027  0.45p  
+R16         038 Vs+  500  
+R17         039 Vs+  500  
+R18         038 Vs+  500  
+R19         039 Vs+  500  
+R24         Vs- 035  500  
+R25         Vs- 033  500  
+R26         Vs- 035  500  
+R27         Vs- 033  500  
+
+*VOLTAGE LIMIT*
+Q116         027 027 128 NPN  5
+V116         Vs+ 128   1.75 
+Q118         027 027 138 PNP  5
+V118         138 Vs-   1.75  
+Q216         029 029 228 NPN  5
+V216         Vs+ 228   1.75 
+Q218         029 029 238 PNP  5
+V218         238 Vs-   1.75  
+RQ	Vs+ Vs- 475
+
+*FREQUENCY SHAPING*
+E2         028 0 027 0 1
+E3         030 0 029 0 1
+C3         0 024  3p  
+C4         0 017  3p  
+L1         025 028  2n  
+L2         030 026  2n  
+R10         024 025  25  
+R11         017 026  25  
+
+*OUTPUT BUFFER*
+Q1         Vs+ 012 013 NPN  50
+Q2         Vs- 015 016 PNP  50
+Q3         Vs+ 017 015 NPN  13
+Q4         Vs- 017 012 PNP  13
+Q5         Vs+ 019 020 NPN  50
+Q6         Vs- 021 023 PNP  50
+Q7         Vs+ 024 021 NPN  13
+Q8         Vs- 024 019 PNP  13
+I4         011 012 DC 2m  
+I5         015 014 DC 2m  
+I6         018 019 DC 2m  
+I7         021 022 DC 2m 
+R4         Vs- 014  100  
+R7         018 Vs+  100  
+R12         011 Vs+  100  
+R13         Vs- 022  100  
+R5         OUT- 013  1  
+R6         016 OUT-  1  
+R8         OUT+ 020  1  
+R9         023 OUT+  1  
+
+*CM CIRCUIT*
+R2         OUT+ 010  10k  
+R3         010 OUT-  10k  
+*C102 	OUT+ 010 100p
+*C103 	010 OUT- 100p
+R114       CM CM2  100 
+C114 	   CM2 0 2.3p
+R14         Vs+ CM2  50k  
+R15         Vs- CM2  50k  
+V3         043 CM2 3m
+F2         041 Vs- VF2 1
+VF2        040 Vs- 0V
+F1         037 Vs- VF1 1
+VF1        042 040 0V
+G1         042 Vs+ 010 043 .002
+*R100	042 0 1meg
+*C100 	042 0 10p
+
+.MODEL NPN_IN NPN KF=1E-11
+.MODEL PNP_IN PNP KF=1E-11
+.MODEL NPN NPN
+.MODEL PNP PNP
+.ENDS
+
+.param cur=10p
+.param supplyv=5
+
+.param rf1=100k
+.param rg1=50 !10k
+.param rf2=30k
+.param rg2=10k
+.param ibm=6.79181e-4 !2.6e-5
+.param ibp=7.02099e-4 !2.6e-5
+.param rbiasm=9.96573e2 !1.66e4
+.param rbiasp=1.00316e3 !1.66e4
+*.param offsetv=1.1662e-7
+
+*.step param cmv 0 1 LIN 4
+*.step param rf1 5k 50k LIN 4
+*.step param rg1 50 1k LIN 5
+
+V_I$2997 vsp 0 5V
+R_I$3006 N$3283 inp rg1
+R_I$3005 N$3279 inm rg1
+R_I$2999 inm outp rf1
+R_I$2991 inp2 outp2 rf2
+R_I$2989 inm2 outm2 rf2
+R_I$2988 outm inm2 rg2
+R_I$2987 outp inp2 rg2
+R_I$2986 inp outm rf1
+R_I$2983 0 N$3279 rbiasm
+R_I$2982 0 N$3283 rbiasp
+X_I$3003_I$1 inp inm vsp 0 outm outp cm1 THS4508 
+X_I$2996_I$1 np2 inm2 vsp 0 outm2 outp2 cm2 THS4508 
+I_I$2985 0 N$3279 pwl(0 0 10u 0 20u 100p 30u 0)
+I_I$2984 0 N$3283 ibp
+I_I$2979 0 N$3279 ibm
+
+*THS4508 IN+ IN- Vs+ Vs- OUT- OUT+ CM
+
+.tran 1n 50u
+.defwave vid=v(inp) - v(inm)
+.defwave vic=(v(inp) + v(inm))/2
+.defwave vod=v(outp) - v(outm)
+.defwave voc=(v(outp) + v(outm))/2
+.defwave Adm=w(vod)/w(vid)
+.defwave Acm=w(voc)/w(vic)
+.defwave Acdm=w(vod)/w(vic)
+.defwave CMRR=abs(w(Adm)/w(Acdm))
+
+*#com
+.plot i(R_I$3005)
+*.plot w(Adm)
+*.plot w(Acm)
+*.plot w(acdm)
+*.plot w(cmrr)
+*.plot w(vid)
+*.plot w(vod)
+*.plot w(vic)
+*.plot w(voc)
+.plot v(inm)
+.plot v(inp)
+.plot v(outp)
+.plot v(outm)
+*.plot v(cm1)
+*.plot i(I_I$217)
+*#endcom
+
+*.extract label=maxvod max(w(vod)) - min(w(vod))
+*.extract label=gain1 rf1 / rg2
+*.extract label=gain2 rf2 / rg2
+*.extract label=d max(w(vid)) - min(w(vid))
+.extract max(i(R_I$3005)) - min(i(R_I$3005))
+.extract min(i(R_I$3005))
+.extract max(v(inm)) - min(v(inm))
+*.extract max(v(inp)) - min(v(inp))
+*.extract min(v(inm)) - min(v(inp))
+
+.paramopt ibp=(10u, 1p, 1)
+.paramopt ibm=(10u, 1p, 1)
+.paramopt rbiasp=(500, 100, 1k)
+.paramopt rbiasm=(500, 100, 1k)
+*.paramopt rg1=(10k, 1k, 1meg)
+*.paramopt offsetv=(60n, 1p, 1)
+.extract tran label=mininp min(v(inp)) goal=0.7
+.extract tran label=mininm min(v(inm)) goal=0.7
+.extract tran label=same (min(v(inm)) - min(v(inp))) goal=0
+*.extract tran label=diff (max(v(inm)) - min(v(inm))) goal=600n
+*.optimize
+
+#com
+.defwave vid2=v(inp2) - v(inm2)
+.defwave vic2=(v(inp2) + v(inm2))/2
+.defwave vod2=v(outp2) - v(outm2)
+.defwave voc2=(v(outp2) + v(outm2))/2
+.defwave Adm2=w(vod2)/w(vid2)
+.defwave Acm2=w(voc2)/w(vic2)
+.plot w(Adm2)
+.plot w(Acm2)
+.plot w(vid2)
+.plot w(vod2)
+.plot w(vic2)
+.plot w(voc2)
+.plot v(outp2)
+.plot v(outm2)
+.extract label=maxvod2 max(w(vod2)) - min(w(vod2))
+#endcom
+
+.op  NO_SMALL_SIGNAL
+.END
+

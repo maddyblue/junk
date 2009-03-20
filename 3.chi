@@ -1,0 +1,251 @@
+1******* 9-Mar-09 *******  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  *******20:48:03******
+
+0.options  tnom=27
+
+0****     INPUT LISTING                                               
+
+0***********************************************************************
+    2  .TEMP 27
+    3  
+    4  V_I$206 N$617 0 0.7
+    5  R_I$2 N$617 0 5K
+    6  *C_I$409 N$616 N$617 10P
+    7  I_I$204 0 N$617 PWL(0 0 4U 1) 
+    8  
+    9  .TRANS 1N 10U
+   10  .PLOT V(N$617)
+   11  *.plot v(N$616)
+   12  .PLOT I(R_I$2)
+   13  .PLOT I(I_I$204)
+   14  
+   15  .OP  NO_SMALL_SIGNAL
+   16  .END
+
+End of file 
+
+
+***** 0  error(s). 
+***** 0  warning(s). 
+
+
+
+***** GENERATION ...
+
+
+***** 0  error(s). 
+***** 0  warning(s). 
+
+
+INFORMATION ABOUT COMPILATION 
+
+
+Memory space allocated (bytes): 310836
+3 elements
+1 nodes 
+2 input signals
+
+ Eldo VERSION :  ELDO v6.1_1.1 (Production version)  Fri Apr 18 10:56:56 MET DST 2003
+
+
+*** DATE:  9-Mar-2009  20:48:03
+
+*** TITLE: .options  tnom=27
+
+TEMPERATURE : 27.000000 degrees C
+
+
+
+
+1*************** 9-Mar-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************20:48:03*****************
+
+0.options  tnom=27
+0****                 OPTION SUMMARY                                        TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+
+
+*** DC Control Options : 
+
+GMIN           = 1.00e-12 NMAXSIZE       = 60000    ITL1           = 100      
+GRAMP          = 0        NETSIZE        = 100      VMIN           = UNDEF    
+VMAX           = UNDEF    
+
+*** Accuracy Control Options : 
+
+ITOL           = 1.00e-06 EPS            = 5.00e-03 VNTOL          = 1.00e-06 
+RELTOL         = 1.00e-03 RELERR         = 5.00e-02 PIVREL         = 1.00e-03 
+PIVTOL         = 1.00e-13 ABSTOL         = 1.00e-12 FLXTOL         = 1.00e-11 
+MAXORD         = 1.00e+00 
+
+*** Time-step Control Options : 
+
+ZOOMTIME       = 1.00e+00 STEP           = 0.00e+00 STARTSMP       = 0.00e+00 
+FREQSMP        = 0.00e+00 COURESOL       = 0.00e+00 TRTOL          = 7.00e+00 
+HMIN           = 1.00e-12 ITL3           = 3        ITL4           = 13       
+FT             = 1.25e-01 DCLOG          = 1.00e+00 LVLTIM         = 2        
+LVLCNV         = 2        DVDT           = -1       RELVAR         = 1.50e-01 
+ABSVAR         = 2.00e-01 SAMPLE         = 0.00e+00 HMAX           = UNDEF    
+
+
+*** MosFet default Options : 
+
+SCALE          = 1.00e+00 SCALM          = 1.00e+00 SCALEBSIM      = 1.00e+00 
+DEFAD          = UNDEF    DEFAS          = UNDEF    DEFPD          = UNDEF    
+DEFPS          = UNDEF    DEFW           = 1.00e-04 DEFL           = 1.00e-04 
+DEFNRD         = UNDEF    DEFNRS         = UNDEF    XA             = 6.00e-06 
+LIMRMOS        = UNDEF    SHRINK         = 1.00e+00 
+
+*** General Information Options : 
+
+SDA            = 0        CPTIME         = UNDEF    STAT           = 0        
+TIMEDIV        = 0        SIMUDIV        = 10       SAVETIME       = 0        
+MAXTRAN        = 1000     MAXNODES       = 500      MAXV           = 1.00e+13 
+LIMPROBE       = 1000     FLICKER_NOISE  = 0        THERMAL_NOISE  = 0        
+TNOM           = 2.70e+01 TMAX           = UNDEF    
+SPICDC         = 0        SPIOUT         = 0        NEWTON         = 1        
+OSR            = 0        TRAP           = 0        GEAR           = 0        
+BE             = 1        PROBEOP        = 0        NOLAT          = 0        
+NWLAT          = 0        ANALOG         = 0        BBDEBUG        = 0        
+NOSIZECHK      = 0        QTRUNC         = 0        UNBOUND        = 0        
+LCAPOP         = 0        STVER          = 0        MOTOROLA       = 0        
+AMS            = 0        ASPEC          = 0        INPUT          = 0        
+NOINIT         = 0        PSF            = 0        WSF            = 0        
+WSFASCII       = 0        NOBIN          = 0        NOCOU          = 0        
+WL             = 0        NODE           = 0        LIST           = 0        
+SPI3BIN        = 0        SPI3ASC        = 0        NOMOD          = 0        
+WSF            = 0        WSFASCII       = 0        NOBIN          = 0        
+NOCOU          = 0        WL             = 0        NODE           = 0        
+LIST           = 0        SPI3BIN        = 0        SPI3ASC        = 0        
+NOMOD          = 0        RMOS           = 0        NWRMOS         = 1        
+NONWRMOS       = 0        USEDEFAP       = 0        NOASCII        = 0        
+NOAEX          = 0        AEX            = 0        AEX            = 0        
+ASCII          = 2        MIXED          = 0        SWITCH         = 0        
+USERSWITCH     = 0        TIMING         = 0        MODWL          = 1        
+ULOGIC         = 0        
+
+
+
+***> DC CPU TIME 0s 010ms <***
+
+DC:2 iterations FOR DC analysis
+
+
+
+
+1*************** 9-Mar-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************20:48:03*****************
+
+0.options  tnom=27
+0****                 INITIAL TRANSIENT SOLUTION                           TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+  NODE         VOLTAGE    
+N$617        7.0000E-01  
+
+
+   VOLTAGE SOURCE CURRENT
+
+NAME      CURRENT      VOLTAGE      POWER        
+V_I$206   -1.4000E-04   7.0000E-01  -9.8000E-05  
+I_I$204    0.0         -7.0000E-01   0.0         
+
+   TOTAL POWER DISSIPATION:  9.8000E-05 WATTS
+
+
+
+
+
+1*************** 9-Mar-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************20:48:03*****************
+
+0.options  tnom=27
+
+0****                 OPERATING POINT INFORMATION                          TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+        V_I$206      
+ID      -1.4000E-04  
+
+        R_I$2        
+V+       7.0000E-01  
+V-       0.0         
+ID       1.4000E-04  
+
+Eldo NEWTON: VNTOL=1.000000e-06 RELTOL=6.111111e-04
+
+................................................
+Simulation progress           : 10%
+Elapsed CPU time              : 0h 0mn 0s 10
+................................................
+Simulation progress           : 20%
+Elapsed CPU time              : 0h 0mn 0s 10
+................................................
+Simulation progress           : 40%
+Elapsed CPU time              : 0h 0mn 0s 10
+................................................
+Simulation progress           : 60%
+Elapsed CPU time              : 0h 0mn 0s 10
+................................................
+Simulation progress           : 100%
+Elapsed CPU time              : 0h 0mn 0s 20
+
+
+
+1*************** 9-Mar-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************20:48:03*****************
+
+0.options  tnom=27
+0****                 ACCOUNTING INFORMATION                                TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+
+
+    NUNODS NCNODS NUMNOD   NUMEL   DIODES    BJT  JFET  MOSFET
+
+         1      1      1       3        0      0     0       0
+
+
+    NSTOP    NTERM    PERSPA  
+
+        2        3 2.500e+01
+
+    NUMTTP  NUMRTP  LTERTP  LTERTPNW NWNOCON
+
+        22       0       0       0       0
+
+  DIGITAL  INWCALL    ITERNW   MEMSIZE
+
+        0       44 1.913e+00    890510
+
+    NDEVCALL       NKIRCH  NMAXCALL      ITERM     LATENCY
+
+           0            0         2   1.00e+00   0.000e+00%
+
+
+  TRANSIENT JOB TIME                 0
+
+
+
+
+***>CPU TIME 0s 020ms <***
+
+
+***>GLOBAL CPU TIME 0s 050ms <***
+
+
+***>GLOBAL ELAPSED TIME 0s <***
+
+
+  Job started at  9-Mar-2009 20:48:03
+  Job end at      9-Mar-2009 20:48:03
+
+  Run on cae15 (SunOS 5.9)
+

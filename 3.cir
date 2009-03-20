@@ -1,0 +1,16 @@
+.options  tnom=27
+.temp 27
+
+V_I$206 N$617 0 0.7
+R_I$2 N$617 0 5K
+*C_I$409 N$616 N$617 10P
+I_I$204 0 N$617 pwl(0 0 4u 1) ! 8u 10n 10u 10n)
+
+.trans 1n 10u
+.plot v(N$617)
+*.plot v(N$616)
+.plot i(R_I$2)
+.plot i(I_I$204)
+
+.op  NO_SMALL_SIGNAL
+.END
