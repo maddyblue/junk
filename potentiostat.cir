@@ -150,29 +150,48 @@ V7  22 27 0.63V
 *.SUBCK LMC6001A/NS 1   2  99  50  28
 .OPTIONS GMIN=1E-16
 
-.param rf=100k
-.param rg=1k
-.param rf2=100k
-.param rg2=1k
+.param rf=1.0e2
+.param rg=9.59e2
+.param rdrain=2.189e5
+.param rf2=2.63e2
 
-V_I$3651 vsp2 0 5
-V_I$3649 vsm2 0 -5
-V_I$3031 vsp 0 5
+.paramopt rf=(90k, 100, 1Meg)
+.paramopt rg=(10k, 100, 1Meg)
+.paramopt rdrain=(10k, 100, 1Meg)
+.paramopt rf2=(10k, 100, 1Meg)
+
+*.extract tran label=idiff max(i(V_I$4484)) - min(i(V_I$4484)) goal=1e-8
+.extract tran label=vdiff (min(v(inm)) - min(v(inp))) goal=0
+.extract tran label=vdiff2 max(v(out2)) - min(v(out2)) goal=1e-2
+.extract tran label=mvin2 min(v(inm2)) goal=0
+*.optimize
+
+*.step param rf 1k 1Meg LIN 5
+*.step param rg 1k 1Meg LIN 5
+*.step C_I$4737 INSTPAR .01f 1p LIN 5
+
+V_I$5550 N$5746 0 -5
+V_I$5343 N$5748 0 5
+V_I$4939 inp N$5138 0
+V_I$4484 out inm2 0
 V_I$3029 vsm 0 -5
-R_I$3442 inm2 out2 rf2
-R_I$3441 out inm2 rg2
+V_I$3031 vsp 0 5
+R_I$5344 inm2 out2 rf2
 R_I$3027 inm out rf
-R_I$3005 N$3493 inm rg
-X_I$3647_I$1 0 inm2 vsp2 vsm2 out2  LMC6001A/NS
-X_I$3239_I$1 0 inm vsp vsm out  LMC6001A/NS
-I_I$2985 0 N$3493 pwl(0 0 10u 0 20u 100p 30u 0 50u 100p 70u 0 75u 1n 80u 0)
+R_I$3005 0 inm rg
+R_I$5141 N$5138 0 rdrain
+X_I$5548_I$1 0 inm2 N$5748 N$5746 out2  LMC6001A/NS
+X_I$3239_I$1 inp inm vsp vsm out  LMC6001A/NS
+I_I$3855 0 N$5138 pwl(0 0 10u 0 20u 100p 30u 0 50u 0 70u 1n 90u 0)
+*pulse(0 100p 0 2u 2u 10u 20u)
 
-.tran 1n 100u
-.plot i(R_I$3005)
-.plot v(out)
+.tran 1n 200u
+.plot i(I_I$3855)
+*.plot v(out)
+.plot v(inm)
+.plot v(inm2)
+.plot v(inp)
+.plot i(V_I$4484)
 .plot v(out2)
-
-.extract max(v(out)) - min(v(out))
-.extract max(v(out2)) - min(v(out2))
 
 .END

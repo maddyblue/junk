@@ -1,33 +1,37 @@
 Design:  /top/students/UNGRAD/ECE/dolmant/home/potentiostat/2.default
 .options  tnom=27
 .temp 27
-V_I$3651 vsp2 0 5
-V_I$3649 vsm2 0 -5
-V_I$3031 vsp 0 5
+V_I$5550 N$5746 0 -5
+V_I$5343 N$5748 0 5
+V_I$4939 inp N$5138 0
+V_I$4484 out inm2 0
 V_I$3029 vsm 0 -5
-R_I$3442 inm2 out2 rf2
-R_I$3441 out inm2 rg2
+V_I$3031 vsp 0 5
+R_I$5344 inm2 out2 rf2
 R_I$3027 inm out rf
-R_I$3005 N$3493 inm rg
-X_I$3647_I$1 0 inm2 vsp2 vsm2 out2  OPA827 
-X_I$3239_I$1 0 inm vsp vsm out  OPA827 
-I_I$2985 0 N$3493 10uA
+R_I$3005 0 inm rg
+R_I$5141 N$5138 0 rdrain
+X_I$5548_I$1 0 inm2 N$5748 N$5746 out2  OPA827 
+X_I$3239_I$1 inp inm vsp vsm out  OPA827 
+I_I$3855 0 N$5138 10uA
 .op  NO_SMALL_SIGNAL
 *
 * Beginning of translation table for device INSTANCE names
 *  Netlist Name       Schematic Name
 *
-*  V_I$3651           /I$3651
+*  V_I$5343           /I$5343
+*  R_I$5141           /I$5141
+*  R_I$5344           /I$5344
 *  V_I$3029           /I$3029
 *  V_I$3031           /I$3031
+*  V_I$4484           /I$4484
 *  R_I$3005           /I$3005
-*  V_I$3649           /I$3649
 *  R_I$3027           /I$3027
-*  R_I$3441           /I$3441
-*  R_I$3442           /I$3442
-*  X_I$3647_I$1       /I$3647/I$1
 *  X_I$3239_I$1       /I$3239/I$1
-*  I_I$2985           /I$2985
+*  I_I$3855           /I$3855
+*  X_I$5548_I$1       /I$5548/I$1
+*  V_I$5550           /I$5550
+*  V_I$4939           /I$4939
 * End of translation table for device INSTANCE names
 *
 * Beginning of translation table for device MODEL names
@@ -41,15 +45,16 @@ I_I$2985 0 N$3493 10uA
 *  Netlist Name       Schematic Name
 *
 *  0                  //ground
-*  out                /out
-*  vsp2               /vsp2
-*  vsm2               /vsm2
 *  out2               /out2
+*  N$5748             /N$5748
+*  N$5746             /N$5746
+*  inm                /inm
+*  out                /out
+*  inp                /inp
+*  N$5138             /N$5138
 *  inm2               /inm2
-*  N$3493             /N$3493
 *  vsm                /vsm
 *  vsp                /vsp
-*  inm                /inm
 * End of translation table for NODE names
 * >KEEP
 * >ENDKEEP
