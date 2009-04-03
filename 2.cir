@@ -1,43 +1,45 @@
 Design:  /top/students/UNGRAD/ECE/dolmant/home/potentiostat/2.default
 .options  tnom=27
 .temp 27
-V_I$5550 N$5746 0 -5
+V_I$7423 N$7980 out 0
+V_I$7221 N$7979 inp 0
 V_I$5343 N$5748 0 5
-V_I$4939 inp N$5138 0
-V_I$4484 out inm2 0
 V_I$3029 vsm 0 -5
 V_I$3031 vsp 0 5
+V_I$5550 N$5746 0 -5
 R_I$5344 inm2 out2 rf2
 R_I$3027 inm out rf
 R_I$3005 0 inm rg
-R_I$5141 N$5138 0 rdrain
-X_I$5548_I$1 0 inm2 N$5748 N$5746 out2  OPA827 
-X_I$3239_I$1 inp inm vsp vsm out  OPA827 
-I_I$3855 0 N$5138 10uA
+R_I$6412 inp 0 rdrain
+R_I$6816 0 inm2 rg2
+X_I$5548_I$1 N$7980 inm2 N$5748 N$5746 out2  LMC6001A/NS 
+X_I$3239_I$1 N$7979 inm vsp vsm out  LMC6001A/NS 
+I_I$6209 0 inp 5f
 .op  NO_SMALL_SIGNAL
 *
 * Beginning of translation table for device INSTANCE names
 *  Netlist Name       Schematic Name
 *
 *  V_I$5343           /I$5343
-*  R_I$5141           /I$5141
 *  R_I$5344           /I$5344
+*  I_I$6209           /I$6209
 *  V_I$3029           /I$3029
 *  V_I$3031           /I$3031
-*  V_I$4484           /I$4484
 *  R_I$3005           /I$3005
 *  R_I$3027           /I$3027
 *  X_I$3239_I$1       /I$3239/I$1
-*  I_I$3855           /I$3855
+*  R_I$6412           /I$6412
+*  V_I$7221           /I$7221
+*  V_I$7423           /I$7423
+*  R_I$6816           /I$6816
 *  X_I$5548_I$1       /I$5548/I$1
 *  V_I$5550           /I$5550
-*  V_I$4939           /I$4939
 * End of translation table for device INSTANCE names
 *
 * Beginning of translation table for device MODEL names
 *  Netlist Name       Schematic Name
 *
-*  OPA827             OPA827
+*  LMC6001A/NS        LMC6001A/NS
 *  ACCUSIM            ACCUSIM
 * End of translation table for device MODEL names
 *
@@ -45,14 +47,15 @@ I_I$3855 0 N$5138 10uA
 *  Netlist Name       Schematic Name
 *
 *  0                  //ground
+*  out                /out
+*  N$7980             /N$7980
+*  N$7979             /N$7979
+*  inp                /inp
+*  inm2               /inm2
 *  out2               /out2
 *  N$5748             /N$5748
 *  N$5746             /N$5746
 *  inm                /inm
-*  out                /out
-*  inp                /inp
-*  N$5138             /N$5138
-*  inm2               /inm2
 *  vsm                /vsm
 *  vsp                /vsp
 * End of translation table for NODE names

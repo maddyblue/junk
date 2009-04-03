@@ -1,14 +1,13 @@
-A 5 u mgc_schematic 499c44a503d1.03.81.52.e0.47.00.3b.fc 3 2 1 0
-V v 1 1 499c44a503d1.03.81.52.e0.47.01.3b.fc
-F o 0 ""
+A 5 u mgc_schematic 499c44a503d1.03.81.52.e0.47.00.3b.fc 4 2 1 0
 V v 2 1 499c4571eeae.03.81.52.e0.47.00.3b.fc
 F o 0 ""
 V v 3 1 499d085614da.03.81.52.e0.47.00.40.90
 F o 0 ""
+V v 4 1 49d122e57def.03.81.52.e0.47.00.09.96
+F o 0 ""
+O 4
+R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic/sheet1" 3 mgc_sheet 49d122e57bab.03.81.52.e0.47.00.09.96 499c44a52481.03.81.52.e0.47.00.3b.fc
 O 3
 R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic/sheet1" 2 mgc_sheet 499d085612ba.03.81.52.e0.47.00.40.90 499c44a52481.03.81.52.e0.47.00.3b.fc
 O 2
 R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic/sheet1" 1 mgc_sheet 499c44a52482.03.81.52.e0.47.00.3b.fc 499c44a52481.03.81.52.e0.47.00.3b.fc
-O 1
-R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic/sheet1" 1 mgc_sheet 499c44a52482.03.81.52.e0.47.00.3b.fc 499c44a52481.03.81.52.e0.47.00.3b.fc
-P "eddm__refer_state" "eddm__refer_floating"

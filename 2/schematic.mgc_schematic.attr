@@ -1,13 +1,13 @@
-A 5 u mgc_schematic 49a832565f34.03.81.52.e0.47.00.53.58 52 2 1 0
-V v 50 1 49cc0979eee4.03.81.52.e0.47.00.59.93
+A 5 u mgc_schematic 49a832565f34.03.81.52.e0.47.00.53.58 68 2 1 0
+V v 66 1 49d5c707719d.03.81.52.e0.47.00.22.ff
 F o 0 ""
-V v 51 1 49cc849cc649.03.81.52.e0.47.00.59.93
+V v 67 1 49d5c71f06da.03.81.52.e0.47.00.22.ff
 F o 0 ""
-V v 52 1 49cc92c6404a.03.81.52.e0.47.00.59.93
+V v 68 1 49d5c7252306.03.81.52.e0.47.00.22.ff
 F o 0 ""
-O 52
-R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic/sheet1" 51 mgc_sheet 49cc92c63acc.03.81.52.e0.47.00.59.93 49a832566c35.03.81.52.e0.47.00.53.58
-O 51
-R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic/sheet1" 50 mgc_sheet 49cc849cc3d4.03.81.52.e0.47.00.59.93 49a832566c35.03.81.52.e0.47.00.53.58
-O 50
-R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic/sheet1" 49 mgc_sheet 49cc0979e637.03.81.52.e0.47.00.59.93 49a832566c35.03.81.52.e0.47.00.53.58
+O 68
+R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic/sheet1" 67 mgc_sheet 49d5c725201f.03.81.52.e0.47.00.22.ff 49a832566c35.03.81.52.e0.47.00.53.58
+O 67
+R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic/sheet1" 66 mgc_sheet 49d5c71f01d2.03.81.52.e0.47.00.22.ff 49a832566c35.03.81.52.e0.47.00.53.58
+O 66
+R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic/sheet1" 65 mgc_sheet 49d5c7076e06.03.81.52.e0.47.00.22.ff 49a832566c35.03.81.52.e0.47.00.53.58

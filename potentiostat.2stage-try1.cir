@@ -153,8 +153,8 @@ V7  22 27 0.63V
 .param rf=100k
 .param rg=70k
 .param rdrain=10Meg
-.param rf2=100k
-.param rg2=100
+.param rf2=1000k
+.param rg2=10
 *.param vbias=-3.2382e-10
 .param rf2=2.63e2
 .param ibias=-6.73658e-17
@@ -184,34 +184,32 @@ V7  22 27 0.63V
 *.step param rdrain 10Meg 100Meg LIN 5
 .param ib=0
 
-V_I$7423 N$7980 out 0
-V_I$7221 N$7979 inp 0
 V_I$5343 N$5748 0 5
 V_I$3029 vsm 0 -5
 V_I$3031 vsp 0 5
 V_I$5550 N$5746 0 -5
+R_I$6816 out inm2 rg2
+R_I$6412 inp 0 rdrain
 R_I$5344 inm2 out2 rf2
+R_I$6614 inp N$7370 1m
 R_I$3027 inm out rf
 R_I$3005 0 inm rg
-R_I$6412 inp 0 rdrain
-R_I$6816 0 inm2 rg2
-X_I$5548_I$1 N$7980 inm2 N$5748 N$5746 out2  LMC6001A/NS 
-X_I$3239_I$1 N$7979 inm vsp vsm out  LMC6001A/NS 
+X_I$5548_I$1 0 inm2 N$5748 N$5746 out2  LMC6001A/NS 
+X_I$3239_I$1 N$7370 inm vsp vsm out  LMC6001A/NS 
 I_I$6209 0 inp pwl(0 ib 20u ib 50u 'ib+100p' 70u ib) AC
 
 .defwave iinp=i(I_I$6209) - i(R_I$6412)
 .defwave gain=v(out) / v(inp)
 
 .tran 1n 200u
-*.plot tran v(inm)
+.plot tran v(inm)
 *.plot tran v(inp)
 *.plot tran i(I_I$6209)
-*.plot tran i(R_I$6412)
+.plot tran i(R_I$6412)
 .plot tran v(out)
-*.plot tran i(R_I$6816)
+.plot tran i(R_I$6816)
 .plot tran v(out2)
-*.plot tran i(R_I$5344)
-.plot tran v(inm2)
+*.plot tran i(R_I$6614)
 *.plot w(gain)
 *.plot tran w(iinp)
 *.plot i(V_I$4484)
