@@ -1,14 +1,14 @@
-A 5 u mgc_sheet 49a832566c35.03.81.52.e0.47.00.53.58 67 2 37 0
-V v 65 2 49d5c7076e06.03.81.52.e0.47.00.22.ff
-F f 65 "sheet1.ssht_65"
-F f 65 "sheet1.sgfx_65"
-V v 66 2 49d5c71f01d2.03.81.52.e0.47.00.22.ff
-F f 66 "sheet1.ssht_66"
-F f 66 "sheet1.sgfx_66"
-V v 67 2 49d5c725201f.03.81.52.e0.47.00.22.ff
-F f 67 "sheet1.ssht_67"
-F f 67 "sheet1.sgfx_67"
-O 67
+A 5 u mgc_sheet 49a832566c35.03.81.52.e0.47.00.53.58 70 2 37 0
+V v 68 2 49da2ecae0f8.03.81.52.e0.47.00.0f.63
+F f 68 "sheet1.ssht_68"
+F f 68 "sheet1.sgfx_68"
+V v 69 2 49da2f903fbe.03.81.52.e0.47.00.0f.63
+F f 69 "sheet1.ssht_69"
+F f 69 "sheet1.sgfx_69"
+V v 70 2 49da3179b708.03.81.52.e0.47.00.0f.63
+F f 70 "sheet1.ssht_70"
+F f 70 "sheet1.sgfx_70"
+O 70
 P "eddm__stream_to_use" "eddm__propl_dstream"
 R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic" 1 mgc_schematic 49a832565f35.03.81.52.e0.47.00.53.58 49a832565f34.03.81.52.e0.47.00.53.58
 R csduv 7 "$MGC_APLIB/resistor_h/part" 11 Eddm_part 65fa04ce4d05.02.93.22.13.28.00.00.00 65fa30d7d062.02.93.22.13.44.00.00.00
@@ -25,7 +25,7 @@ R csduv 33 "$MGC_APLIB/current_source/part" 8 Eddm_part 65c75a1c3a43.02.b9.00.05
 R csduv 34 "$MGC_APLIB/current_source/current_source" 6 mgc_symbol 656c46bbf5b9.02.b9.00.05.17.00.00.00 650375b3cc4f.02.93.22.13.44.00.00.00
 R csduv 35 "$MGC_APLIB/resistor/part" 12 Eddm_part 65fa0338c6c4.02.93.22.13.28.00.00.00 65fa30d7c664.02.93.22.13.44.00.00.00
 R csduv 36 "$MGC_APLIB/resistor/resistor" 10 mgc_symbol 65fa0338b430.02.93.22.13.28.00.00.00 65fa30d7cf9c.02.93.22.13.44.00.00.00
-O 66
+O 69
 P "eddm__stream_to_use" "eddm__propl_dstream"
 R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic" 1 mgc_schematic 49a832565f35.03.81.52.e0.47.00.53.58 49a832565f34.03.81.52.e0.47.00.53.58
 R csduv 7 "$MGC_APLIB/resistor_h/part" 11 Eddm_part 65fa04ce4d05.02.93.22.13.28.00.00.00 65fa30d7d062.02.93.22.13.44.00.00.00
@@ -42,7 +42,7 @@ R csduv 33 "$MGC_APLIB/current_source/part" 8 Eddm_part 65c75a1c3a43.02.b9.00.05
 R csduv 34 "$MGC_APLIB/current_source/current_source" 6 mgc_symbol 656c46bbf5b9.02.b9.00.05.17.00.00.00 650375b3cc4f.02.93.22.13.44.00.00.00
 R csduv 35 "$MGC_APLIB/resistor/part" 12 Eddm_part 65fa0338c6c4.02.93.22.13.28.00.00.00 65fa30d7c664.02.93.22.13.44.00.00.00
 R csduv 36 "$MGC_APLIB/resistor/resistor" 10 mgc_symbol 65fa0338b430.02.93.22.13.28.00.00.00 65fa30d7cf9c.02.93.22.13.44.00.00.00
-O 65
+O 68
 P "eddm__stream_to_use" "eddm__propl_dstream"
 R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2/schematic" 1 mgc_schematic 49a832565f35.03.81.52.e0.47.00.53.58 49a832565f34.03.81.52.e0.47.00.53.58
 R csduv 7 "$MGC_APLIB/resistor_h/part" 11 Eddm_part 65fa04ce4d05.02.93.22.13.28.00.00.00 65fa30d7d062.02.93.22.13.44.00.00.00
