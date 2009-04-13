@@ -1,6 +1,7 @@
 from django.core.paginator import QuerySetPaginator
 from django.shortcuts import render_to_response, get_object_or_404
 from biosensor.results.models import *
+from biosensor import settings
 import datetime
 import re
 import math
@@ -96,11 +97,21 @@ def detail(request, result_id):
 
 	try:
 		if request.POST['reanalyze'] == 'reanalyze':
-			r.characterize = 'characterize' in request.POST and request.POST['characterize'] == 'on'
-			r.characterize_low = float(request.POST['low'])
-			r.characterize_mid = float(request.POST['mid'])
-			r.characterize_high = float(request.POST['high'])
-			r.save()
+			if r.analysis == 'i - t Curve':
+				r.characterize = 'characterize' in request.POST and request.POST['characterize'] == 'on'
+				if(request.POST['low']):
+					r.characterize_low = request.POST['low']
+				else:
+					r.characterize_low = None
+				if(request.POST['mid']):
+					r.characterize_mid = request.POST['mid']
+				else:
+					r.characterize_mid = None
+				if(request.POST['high']):
+					r.characterize_high = request.POST['high']
+				else:
+					r.characterize_high = None
+				r.save()
 
 			r.analyze()
 	except KeyError:
@@ -141,7 +152,7 @@ def upload(request):
 		form = UploadForm(request.POST, request.FILES)
 		if form.is_valid():
 			f = request.FILES['upload_file']
-			s = f['content'].splitlines()
+			s = f.read().splitlines()
 			d = re.split('[\., :]+', s[0])
 
 			r = Result(
@@ -151,21 +162,10 @@ def upload(request):
 				notes = form.cleaned_data['notes'],
 				upload_date = datetime.datetime.now(),
 				run_date = datetime.datetime(int(d[2]), months[d[0]], int(d[1]), int(d[3]), int(d[4]), int(d[5])),
-				filename = request.FILES['upload_file']['filename'],
+				filename = f.name,
 				analysis = s[1],
 				use = form.cleaned_data['use'],
 				init_e = s[8].split(' = ')[1],
-				high_e = 0,
-				low_e = 0,
-				init_pn = '',
-				scan_rate = 0,
-				high_val = 0,
-				high_time = 0,
-				low_val = 0,
-				low_time = 0,
-				range_all = 0,
-				range_p2 = 0,
-				range_p1 = 0
 			)
 
 			if s[1] == 'Cyclic Voltammetry':
@@ -183,6 +183,14 @@ def upload(request):
 				r.charaterize_mid = form.cleaned_data['characterize_mid']
 				r.charaterize_high = form.cleaned_data['characterize_high']
 				r.characterize_concentration = form.cleaned_data['characterize_concentration']
+			elif s[1] == 'Differential Pulse Voltammetry':
+				r.final_e = s[9].split(' = ')[1]
+				r.incr_e = s[10].split(' = ')[1]
+				r.amplitude = s[11].split(' = ')[1]
+				r.pulse_width = s[12].split(' = ')[1]
+				r.sample_width = s[13].split(' = ')[1]
+				r.pulse_period = s[14].split(' = ')[1]
+				r.sensitivity = s[16].split(' = ')[1]
 
 			if form.cleaned_data['sensor'] is None and len(r.filename) >= 3 and r.filename[0] == 's':
 				r.sensor = r.filename[1:3]
@@ -191,10 +199,7 @@ def upload(request):
 				r.electrode = r.filename[4:6]
 
 			r.save()
-
-			r.save_upload_file_file(str(r.id), f['content'])
-			r.upload_file = r.get_upload_file_filename()
-
+			r.upload_file.save(str(r.id), f)
 			r.save()
 
 			r.analyze()

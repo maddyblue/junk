@@ -14,7 +14,9 @@
 	<tr>
 		<td>
 			<a href="/uploads/{{ result.id }}">[ download .txt data ]</a>
+			<br/><input type="submit" name="reanalyze" value="reanalyze"/>
 		</td>
+		{% ifequal result.analysis "i - t Curve" %}
 		<td>
 			<table border="0" cellpadding="0" cellspacing="1">
 				<tr>
@@ -31,8 +33,8 @@
 		</td>
 		<td>
 			<input type="checkbox" name="characterize" {% if result.characterize %}checked{% endif %}/> characterize
-			<br/><input type="submit" name="reanalyze" value="reanalyze"/>
 		</td>
+		{% endifequal %}
 	</tr>
 </table>
 </form>
@@ -58,6 +60,15 @@
 	<li>init pn: {{ result.init_pn }}</li>
 	<li>scan rate: {{ result.scan_rate }}</li>
 	<li>sample interval: {{ result.sample_interval }}</li>
+	{% endifequal %}
+	{% ifequal result.analysis "Differential Pulse Voltammetry" %}
+	<li>final e: {{ result.final_e }}</li>
+	<li>incr e: {{ result.incr_e }}</li>
+	<li>amplitude: {{ result.amplitude }}</li>
+	<li>pulse width: {{ result.pulse_width }}</li>
+	<li>sample width: {{ result.sample_width }}</li>
+	<li>pulse period: {{ result.pulse_period }}</li>
+	<li>characterization value: {{ result.characterize_value }}</li>
 	{% endifequal %}
 	<li>sensitivity: {{ result.sensitivity }}</li>
 	<li>solution: {{ result.solution }}</li>
@@ -88,6 +99,8 @@
 <p><img src="/uploads/{{ result.id }}.+15.png"\></p>
 <p><img src="/uploads/{{ result.id }}.r5.png"\></p>
 {% endifequal %}
+{% ifnotequal result.analysis "Differential Pulse Voltammetry" %}
 <p><img src="/uploads/{{ result.id }}.png"/></p>
+{% endifnotequal %}
 
 {% endblock %}

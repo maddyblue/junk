@@ -1,6 +1,8 @@
+*.orig
 *.pyc
-uploads
-biosensor.db
-settings.py
+*.swp
 *~
+biosensor.db
 media
+settings.py
+uploads

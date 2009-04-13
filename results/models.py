@@ -1,11 +1,9 @@
 from django.conf import settings
 from django.db import models
-from django import newforms as forms
+from django import forms
 import commands
 
 def get_point(time, target):
-	t = 0
-	
 	for i in time:
 		if target < i:
 			return time.index(i)
@@ -73,8 +71,8 @@ def calc_range(fname, mode=MODE_DIFF, low=0, mid=0, high=0):
 	return abs(avg1 - avg2)
 
 class Result(models.Model):
-	sensor = models.IntegerField(null=True)
-	electrode = models.IntegerField(null=True)
+	sensor = models.IntegerField(null=True, blank=True)
+	electrode = models.IntegerField(null=True, blank=True)
 	run_date = models.DateTimeField()
 	upload_date = models.DateTimeField()
 	upload_file = models.FileField(upload_to="uploads")
@@ -82,56 +80,66 @@ class Result(models.Model):
 	notes = models.TextField(max_length=500, blank=True)
 	filename = models.CharField(max_length=100)
 	analysis = models.CharField(max_length=100)
-	init_e = models.DecimalField(max_digits=4, decimal_places=2)
-	high_e = models.DecimalField(null=True, max_digits=4, decimal_places=2)
-	low_e = models.DecimalField(null=True, max_digits=4, decimal_places=2)
+	init_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
+	high_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
+	low_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
 	init_pn = models.CharField(null=True, blank=True, max_length=1)
-	scan_rate = models.DecimalField(null=True, max_digits=4, decimal_places=3)
-	sample_interval = models.DecimalField(max_digits=6, decimal_places=5)
-	sensitivity = models.DecimalField(max_digits=12, decimal_places=11)
-	range_all = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	range_p2  = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	range_p1  = models.DecimalField(null=True, max_digits=20, decimal_places=18)
+	scan_rate = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
+	sample_interval = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
+	final_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
+	incr_e = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=4)
+	amplitude = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=4)
+	pulse_width = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
+	sample_width = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
+	pulse_period = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
+	sensitivity = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=11)
+	range_all = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	range_p2  = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	range_p1  = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
 	use = models.BooleanField(null=True, default=True)
-	high_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	low_val = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	high_time = models.DecimalField(null=True, max_digits=20, decimal_places=16)
-	low_time = models.DecimalField(null=True, max_digits=20, decimal_places=16)
+	high_val = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	low_val = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	high_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=16)
+	low_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=16)
 	characterize = models.BooleanField(null=True, blank=True, default=False)
-	characterize_low = models.DecimalField(null=True, max_digits=10, decimal_places=4, default='20.0')
-	characterize_mid = models.DecimalField(null=True, max_digits=10, decimal_places=4, default='25.0')
-	characterize_high = models.DecimalField(null=True, max_digits=10, decimal_places=4, default='40.0')
-	characterize_concentration = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	characterize_peak = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	characterize_value = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	characterize_base = models.DecimalField(null=True, max_digits=20, decimal_places=18)
-	characterize_time = models.DecimalField(null=True, max_digits=20, decimal_places=10)
-	
+	characterize_low = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
+	characterize_mid = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
+	characterize_high = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
+	characterize_concentration = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	characterize_peak = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	characterize_value = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	characterize_base = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	characterize_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=10)
 
 	def analyze(self):
-		commands.getstatusoutput(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + self.get_upload_file_filename())
+		print 'analieo'
+		name = self.upload_file.name
+		commands.getstatusoutput(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + name)
 
 		if self.analysis == 'Cyclic Voltammetry':
-			self.range_all = calc_range(self.get_upload_file_filename() + '.avg')
-			self.range_p2  = calc_range(self.get_upload_file_filename() + '.-2_2')
-			self.range_p1  = calc_range(self.get_upload_file_filename() + '.-1_1')
+			self.range_all = calc_range(name + '.avg')
+			self.range_p2  = calc_range(name + '.-2_2')
+			self.range_p1  = calc_range(name + '.-1_1')
 		elif self.analysis == 'i - t Curve' and self.characterize:
-			r = calc_range(self.get_upload_file_filename() + '.avg', MODE_CHARACTERIZE, self.characterize_low, self.characterize_mid, self.characterize_high)
+			r = calc_range(self.upload_file.name + '.avg', MODE_CHARACTERIZE, self.characterize_low, self.characterize_mid, self.characterize_high)
 			self.characterize_peak = r[1]
 			self.characterize_value = r[1] - r[0]
 			self.characterize_base = r[0]
 			self.characterize_time = r[2]
 
-			commands.getstatusoutput('%s -v analysis="%s" -v low=%g -v high=%g -v peak=%g -v base=%g -v ctime=%g -f %sresults/plot.awk %s' %(settings.PROG_AWK, self.analysis, self.characterize_mid, self.characterize_time, self.characterize_peak, self.characterize_base, self.characterize_time, settings.MEDIA_ROOT, self.get_upload_file_filename()))
+			commands.getstatusoutput('%s -v analysis="%s" -v low=%g -v high=%g -v peak=%g -v base=%g -v ctime=%g -f %sresults/plot.awk %s' %(settings.PROG_AWK, self.analysis, self.characterize_mid, self.characterize_time, self.characterize_peak, self.characterize_base, self.characterize_time, settings.MEDIA_ROOT, name))
 
-		r = calc_range(self.get_upload_file_filename() + '.avg', MODE_HI_LOW)
-		self.low_val = r[0][0]
-		self.low_time = r[0][1]
-		self.high_val = r[1][0]
-		self.high_time = r[1][1]
+		r = calc_range(name + '.avg', MODE_HI_LOW)
+		self.low_val = str(r[0][0])
+		self.low_time = str(r[0][1])
+		self.high_val = str(r[1][0])
+		self.high_time = str(r[1][1])
+
+		if self.analysis == 'Differential Pulse Voltammetry':
+			self.characterize_value = str(r[1][0] - r[0][0])
 
 		self.save()
-		commands.getstatusoutput(settings.PROG_GNUPLOT + ' ' + self.get_upload_file_filename() + '.plt')
+		commands.getstatusoutput(settings.PROG_GNUPLOT + ' ' + name + '.plt')
 
 	def __unicode__(self):
 		return self.filename + ': ' + self.run_date.strftime('%d %b %y %H:%M:%S')
@@ -182,7 +190,3 @@ class UploadForm(forms.Form):
 	solution = forms.CharField(max_length=100, required=False)
 	notes = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
 	use = forms.BooleanField(required=False)
-	characterize = forms.BooleanField(required=False)
-	characterize_low = forms.DecimalField(required=False, initial='20.0')
-	characterize_mid = forms.DecimalField(required=False, initial='25.0')
-	characterize_high = forms.DecimalField(required=False, initial='40.0')

@@ -1,6 +1,7 @@
 BEGIN {
 	line = -1;
 	FS = ", ";
+	avg = 1;
 
 	if(analysis == "Cyclic Voltammetry")
 	{
@@ -9,6 +10,11 @@ BEGIN {
 	else if(analysis == "i - t Curve")
 	{
 		xlabel = "Time/sec";
+	}
+	else if(analysis == "Differential Pulse Voltammetry")
+	{
+		xlabel = "Potential/V";
+		avg = 0;
 	}
 }
 
@@ -20,14 +26,17 @@ FNR == 1 {
 
 	print "set output \"" FILENAME ".avg.png\"" > fplt;
 	print "plot \"" FILENAME ".avg\" with lines" > fplt;
-
 	print "set output \"" FILENAME ".png\"" > fplt;
-	print "plot \\" > fplt;
-	print "\"" FILENAME ".dat1\" with lines , \\" > fplt;
-	print "\"" FILENAME ".dat2\" with lines, \\" > fplt;
-	print "\"" FILENAME ".dat3\" with lines, \\" > fplt;
-	print "\"" FILENAME ".dat4\" with lines, \\" > fplt;
-	print "\"" FILENAME ".dat5\" with lines" > fplt;
+
+	if(avg == 1)
+	{
+		print "plot \\" > fplt;
+		print "\"" FILENAME ".dat1\" with lines , \\" > fplt;
+		print "\"" FILENAME ".dat2\" with lines, \\" > fplt;
+		print "\"" FILENAME ".dat3\" with lines, \\" > fplt;
+		print "\"" FILENAME ".dat4\" with lines, \\" > fplt;
+		print "\"" FILENAME ".dat5\" with lines" > fplt;
+	}
 
 	if(analysis == "Cyclic Voltammetry")
 	{
@@ -68,27 +77,35 @@ FNR == 1 {
 }
 
 /^[-0-9]/ {
-	line += 1;
-	idx = line % 5;
-	data[idx] = $2;
-	time[idx] = $1;
-	fname = FILENAME ".dat" idx + 1;
-	print $1 " " $2 > fname;
-
-	if(idx == 4)
+	if(avg == 0)
 	{
 		avgname = FILENAME ".avg";
-		range1 = FILENAME ".-1_1";
-		range2 = FILENAME ".-2_2";
+		print $1 " " $2 > avgname;
+	}
+	else
+	{
+		line += 1;
+		idx = line % 5;
+		data[idx] = $2;
+		time[idx] = $1;
+		fname = FILENAME ".dat" idx + 1;
+		print $1 " " $2 > fname;
 
-		avgtime = (time[0] + time[1] + time[2] + time[3] + time[4]) / 5;
-		avgdata = (data[0] + data[1] + data[2] + data[3] + data[4]) / 5;
-		print avgtime " " avgdata > avgname;
+		if(idx == 4)
+		{
+			avgname = FILENAME ".avg";
+			range1 = FILENAME ".-1_1";
+			range2 = FILENAME ".-2_2";
 
-		if(avgtime >= -.2 && avgtime <= .2)
-			print avgtime " " avgdata > range2;
+			avgtime = (time[0] + time[1] + time[2] + time[3] + time[4]) / 5;
+			avgdata = (data[0] + data[1] + data[2] + data[3] + data[4]) / 5;
+			print avgtime " " avgdata > avgname;
 
-		if(avgtime >= -.1 && avgtime <= .1)
-			print avgtime " " avgdata > range1;
+			if(avgtime >= -.2 && avgtime <= .2)
+				print avgtime " " avgdata > range2;
+
+			if(avgtime >= -.1 && avgtime <= .1)
+				print avgtime " " avgdata > range1;
+		}
 	}
 }
