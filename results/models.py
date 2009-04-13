@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django import forms
-import commands
+import os
 
 def get_point(time, target):
 	for i in time:
@@ -13,10 +13,7 @@ MODE_HI_LOW = 2
 MODE_CHARACTERIZE = 3
 
 def calc_range(fname, mode=MODE_DIFF, low=0, mid=0, high=0):
-	try:
-		f = open(fname)
-	except IOError:
-		return 0
+	f = open(fname)
 
 	time = []
 	value = []
@@ -112,9 +109,8 @@ class Result(models.Model):
 	characterize_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=10)
 
 	def analyze(self):
-		print 'analieo'
 		name = self.upload_file.name
-		commands.getstatusoutput(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + name)
+		os.popen(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + name)
 
 		if self.analysis == 'Cyclic Voltammetry':
 			self.range_all = calc_range(name + '.avg')
@@ -127,7 +123,7 @@ class Result(models.Model):
 			self.characterize_base = r[0]
 			self.characterize_time = r[2]
 
-			commands.getstatusoutput('%s -v analysis="%s" -v low=%g -v high=%g -v peak=%g -v base=%g -v ctime=%g -f %sresults/plot.awk %s' %(settings.PROG_AWK, self.analysis, self.characterize_mid, self.characterize_time, self.characterize_peak, self.characterize_base, self.characterize_time, settings.MEDIA_ROOT, name))
+			os.popen('%s -v analysis="%s" -v low=%g -v high=%g -v peak=%g -v base=%g -v ctime=%g -f %sresults/plot.awk %s' %(settings.PROG_AWK, self.analysis, self.characterize_mid, self.characterize_time, self.characterize_peak, self.characterize_base, self.characterize_time, settings.MEDIA_ROOT, name))
 
 		r = calc_range(name + '.avg', MODE_HI_LOW)
 		self.low_val = str(r[0][0])
@@ -139,7 +135,7 @@ class Result(models.Model):
 			self.characterize_value = str(r[1][0] - r[0][0])
 
 		self.save()
-		commands.getstatusoutput(settings.PROG_GNUPLOT + ' ' + name + '.plt')
+		os.popen(settings.PROG_GNUPLOT + ' ' + name + '.plt')
 
 	def __unicode__(self):
 		return self.filename + ': ' + self.run_date.strftime('%d %b %y %H:%M:%S')
