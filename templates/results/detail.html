@@ -74,8 +74,8 @@
 	<li>solution: {{ result.solution }}</li>
 	<li>notes: {{ result.notes|linebreaksbr }}</li>
 	<li>used in sensor results page: {{ result.use|yesno }}</li>
-	<li>high value: {{ result.high_val }} at {{ result.high_time }}s</li>
-	<li>low value: {{ result.low_val }} at {{ result.low_time }}s</li>
+	<li>high value: {{ result.high_val }} at {{ result.high_time }}</li>
+	<li>low value: {{ result.low_val }} at {{ result.low_time }}</li>
 	{% ifequal result.analysis "Cyclic Voltammetry" %}
 	<li>average diff over full range: {{ result.range_all }}</li>
 	<li>average diff over -0.2 to 0.2 range: {{ result.range_p2 }}</li>
@@ -83,7 +83,7 @@
 	{% endifequal %}
 	{% ifequal result.analysis "i - t Curve" %}
 	{% if result.characterize %}
-	<li>characterization value: {{ result.characterize_value }}A</li>
+	<li>characterization value: {{ result.characterize_value }}</li>
 	{% endif %}
 	{% endifequal %}
 </ul>

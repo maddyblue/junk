@@ -50,7 +50,7 @@
 			{% ifequal forloop.counter 1 %}
 				<p><b>{{ result.run_date|date:"j M y" }}:</b>
 			{% endifequal %}
-			<br />{{ result.run_date|date:"H:i:s" }} <a href="{% url biosensor.results.views.detail result.id %}">{{ result.filename }}</a>
+			<br />{{ result.run_date|date:"H:i:s" }} <a href="{% url biosensor.results.views.detail result.id %}">{{ result.filename }}</a>{% if result.use %}*{% endif %}
 		{% endfor %}
 		</p>
 	{% endfor %}
