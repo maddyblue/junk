@@ -2,6 +2,7 @@ from django.core.paginator import QuerySetPaginator
 from django.shortcuts import render_to_response, get_object_or_404
 from biosensor.results.models import *
 from biosensor import settings
+from decimal import Decimal
 import datetime
 import re
 import math
@@ -52,45 +53,50 @@ def sensor(request):
 	return sensors(request, '')
 
 def sensors(request, rangetype):
-	if rangetype == '1':
-		r = 'p1'
-		t = '0.1 to -0.1'
-	elif rangetype == '0':
-		r = 'all'
-		t = 'all'
-	else:
-		r = 'p2'
-		t = '0.2 to -0.2'
+	sensors = Result.objects.filter(use=True)
 
-	sensors = Result.objects.exclude(use=False).order_by('-range_' + r)
+	count = {}
+	avg = {}
+	stdev = {}
+	sterror = {}
 
-	avg = []
-	stdev = []
-	sterror = []
+	for s in sensors:
+		for l in s.notes.splitlines():
+			p = l.partition(' = ')
+			if p[0] == 'ip':
+				s.characterize_value = Decimal(p[2])
+				s.save()
+				break
 
-	for i in range(21):
-		a = []
-		for s in sensors.filter(sensor=i).values():
-			a.append(s['range_' + r])
+		if s.sensor not in count:
+			count[s.sensor] = 0
+			avg[s.sensor] = 0
 
-		curavg = sum(a) / len(a)
-		curstdev = math.sqrt(sum(list((i - curavg) ** 2 for i in a)) / len(a))
-		cursterror = curstdev / math.sqrt(len(a))
+		avg[s.sensor] += float(s.characterize_value)
+		count[s.sensor] += 1
 
-		avg.append(curavg)
-		stdev.append(curstdev)
-		sterror.append(cursterror)
+	sensors = sensors.order_by('-characterize_value')
+
+	for k in avg.keys():
+		avg[k] /= count[k]
+		l = sensors.filter(sensor=k)
+		vl = list((float(i.characterize_value) - avg[k]) ** 2 for i in l)
+		stdev[k] = math.sqrt(sum(vl) / count[k])
+		sterror[k] = stdev[k] / math.sqrt(count[k])
+
+	senlist = []
+	for k, v in avg.iteritems():
+		senlist.append((k, v))
+	senlist.sort(cmp=lambda x, y: cmp(x[1], y[1]), reverse=True)
 
 	perc = []
-	m = float(max(avg) / 100)
+	m = senlist[0][1] / 100
 
-	for i in avg:
-		se = sterror.pop(0)
-		i = float(i)
-		perc.append([i, i / m, se / m, se])
-		#perc.append([i, m, se, 0])
+	for (id, v) in senlist:
+		se = sterror[id]
+		perc.append([id, v, v / m, se / m, se])
 
-	return render(request, 'results/sensors.html', {'sensors': sensors, 'type': t, 'perc': perc})
+	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc})
 
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)

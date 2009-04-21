@@ -47,47 +47,42 @@
 
 <table class="graph" cellspacing="5" cellpadding="0">
 	<thead>
-		<tr><th colspan="4">Average by {{ type }} range</th></tr>
-	</thead>
-	<tbody>
 		<tr>
 			<td></td>
 			<td></td>
 			<td>% of max</td>
 			<td>avg value</td>
 		</tr>
+	</thead>
+	<tbody>
 	{% for p in perc %}
 		<tr>
-			<td><a href="/uploads/sensors/s{{ forloop.counter0|stringformat:"02d" }}.png">Sensor {{ forloop.counter0 }}</a></td>
+			<td><a href="/uploads/sensors/s{{ p.0|stringformat:"02d" }}.png">Sensor {{ p.0 }}</a></td>
 			<td class="bar">
-				<div style="width: {{ p.1 }}%"></div>
+				<div style="width: {{ p.2 }}%"></div>
 			</td>
-			<td>{{ p.1|floatformat:1 }}% +/- {{ p.2|floatformat:1 }}%</td>
-			<td>{{ p.0|stringformat:".2e" }} +/- {{ p.3|stringformat:".2e" }}</td>
+			<td>{{ p.2|floatformat:1 }}% +/- {{ p.3|floatformat:1 }}%</td>
+			<td>{{ p.1|stringformat:".2e" }} +/- {{ p.4|stringformat:".2e" }}</td>
 		</tr>
 	{% endfor %}
 	</tbody>
 </table>
 
-<p>Ordered by descending {{ type }} range.</p>
+<p>Ordered by descending characterization value.</p>
 
 <table border="1" cellspacing="0" cellpadding="1">
 <tr>
 	<td>Sensor</td>
 	<td>File</td>
 	<td>Date</td>
-	<td><a href="{% url biosensor.results.views.sensor %}0">Range All</a></td>
-	<td><a href="{% url biosensor.results.views.sensor %}2">Range 0.2 to -0.2</a></td>
-	<td><a href="{% url biosensor.results.views.sensor %}1">Range 0.1 to -0.1</a></td>
+	<td>Value</td>
 </tr>
 {% for sensor in sensors %}
 	<tr>
 		<td><a href="/uploads/sensors/s{{ sensor.sensor|stringformat:"02d" }}.png">{{ sensor.sensor}}</a></td>
 		<td><a href="/results/{{ sensor.id }}">{{ sensor.filename }}</a></td>
 		<td>{{ sensor.run_date|date:"j M y H:i:s" }}</td>
-		<td>{{ sensor.range_all|stringformat:".3e" }}</td>
-		<td>{{ sensor.range_p2|stringformat:".3e" }}</td>
-		<td>{{ sensor.range_p1|stringformat:".3e" }}</td>
+		<td>{{ sensor.characterize_value|stringformat:".3e" }}</td>
 	</tr>
 {% endfor %}
 
