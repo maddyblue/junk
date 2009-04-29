@@ -1,0 +1,14 @@
+\appendix
+\addcontentsline{toc}{chapter}{Appendix}
+\chapter{Potentiostat Web Manager Code}
+
+The following code was used to manage, analyze, and graph output results from CH Instruments 1207 and 660B potentiostats that had been converted to text. It supports cyclic voltammetry, amperometry, and differential pulse voltammetry files. It is written for Python 2.6 and uses the Django package. Included here are the files that performed management, analysis, and graphing. It is available in its entirety online at http://github.com/mjibson/biosensor/. \newline
+
+\normalsize biosensor/models.py:
+\scriptsize \verbatiminput{verbatim/biosensor/models.py}
+
+\normalsize biosensor/plot.awk:
+\scriptsize \verbatiminput{verbatim/biosensor/plot.awk}
+
+\normalsize biosensor/views.py:
+\scriptsize \verbatiminput{verbatim/biosensor/views.py}
