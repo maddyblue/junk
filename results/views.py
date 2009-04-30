@@ -100,6 +100,7 @@ def sensors(request, rangetype):
 	avg = {}
 	stdev = {}
 	sterror = {}
+	f = open(settings.MEDIA_ROOT + 'uploads/sensors/sensors.dat', 'w')
 
 	for s in sensors:
 		for l in s.notes.splitlines():
@@ -109,6 +110,10 @@ def sensors(request, rangetype):
 				s.save()
 				break
 
+		area = Electrode.objects.get(sensor__sensor=s.sensor, we=s.electrode).area
+		if area is not None:
+			f.write('%s %s %s\n' %(s.sensor, area, s.characterize_value))
+
 		if s.sensor not in count:
 			count[s.sensor] = 0
 			avg[s.sensor] = 0
@@ -116,6 +121,7 @@ def sensors(request, rangetype):
 		avg[s.sensor] += float(s.characterize_value)
 		count[s.sensor] += 1
 
+	f.close()
 	sensors = sensors.order_by('-characterize_value')
 
 	for k in avg.keys():
@@ -137,6 +143,7 @@ def sensors(request, rangetype):
 		se = sterror[id]
 		perc.append([id, v, v / m, se / m, se])
 
+	os.popen(settings.PROG_GNUPLOT + ' uploads/sensors/sensors.plt')
 	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc})
 
 def detail(request, result_id):
