@@ -172,6 +172,8 @@ class Electrode(models.Model):
 	we = models.PositiveSmallIntegerField()
 	size = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
 	spacing = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
+	pitch = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
+	area = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=7)
 
 	def __unicode__(self):
 		return "s" + self.sensor.__unicode__() + "w" + str(self.we) + " - size: " + str(self.size) + ", spacing: " + str(self.spacing)

@@ -47,6 +47,7 @@
 	<li>working electrode: {{ e.sensor.get_we_display }}</li>
 	<li>electrode size (um): {{ e.size }}</li>
 	<li>electrode spacing (um): {{ e.spacing|default_if_none:"" }}</li>
+	<li>electrode area (um): {{ e.area|default_if_none:"" }}</li>
 	{% else %}
 	<li>electrode: {{ result.electrode|default_if_none:"unknown" }}</li>
 	{% endif %}
