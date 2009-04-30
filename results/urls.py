@@ -6,5 +6,5 @@ urlpatterns = patterns('biosensor.results.views',
 	(r'^upload/$', 'upload'),
 	(r'^electrode/$', 'electrode'),
 	(r'^sensors/$', 'sensor'),
-	(r'^sensors/(?P<rangetype>\d+)/$', 'sensors')
+	(r'^limit/$', 'limit')
 )

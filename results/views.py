@@ -5,6 +5,7 @@ from biosensor import settings
 from decimal import Decimal
 import datetime
 import re
+import os
 import math
 
 def render(request, template, dict={}):
@@ -48,6 +49,46 @@ def index(request):
 
 def electrode(request):
 	return render(request, 'results/electrode.html', {'electrodes': Electrode.objects.all().order_by('sensor', 'we')})
+
+def limit(request):
+	lod = Result.objects.filter(notes__contains='lod = ')
+
+	limits = {}
+
+	for s in lod:
+		for l in s.notes.splitlines():
+			p = l.partition(' = ')
+			if p[0] == 'lod':
+				if s.sensor not in limits:
+					limits[s.sensor] = []
+
+				c = s.solution.partition('M')[0]
+				conc = Decimal(c[:-1])
+
+				if c[-1] == 'm':
+					conc *= Decimal('1e-3')
+				elif c[-1] == 'u':
+					conc *= Decimal('1e-6')
+				else:
+					raise ValueError, 'unknown modifier'
+
+				limits[s.sensor].append((conc, Decimal(p[2])))
+				break
+
+	limlist = []
+	for s, lim in limits.iteritems():
+		f = open('uploads/sensors/limit.%i.dat' %s, 'w')
+
+		for conc, value in lim:
+			limlist.append((s, conc, value))
+			f.write('%s %s\n' %(conc, value))
+
+		f.close()
+
+	os.popen(settings.PROG_GNUPLOT + ' uploads/sensors/limit.plt')
+	limlist.sort(cmp=lambda x, y: cmp(x[1], y[1]), reverse=True)
+
+	return render(request, 'results/limit.html', {'limits': limlist})
 
 def sensor(request):
 	return sensors(request, '')

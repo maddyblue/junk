@@ -1,0 +1,34 @@
+{% extends "results/base.html" %}
+
+{% block title %}
+
+- Detection Limits
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Detection Limits</h1>
+
+{% for limit in limits %}
+<br/>{{ limit.0 }} &amp; {{ limit.1 }} &amp; {{ limit.2 }} \\
+{% endfor %}
+
+<img src="/uploads/sensors/limit.png" />
+
+<table border="1" cellspacing="0" cellpadding="1">
+<tr>
+	<td>Sensor</td>
+	<td>Concentration</td>
+	<td>Value</td>
+</tr>
+{% for limit in limits %}
+	<tr>
+		<td>{{ limit.0 }}</td>
+		<td>{{ limit.1 }}</td>
+		<td>{{ limit.2 }}</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

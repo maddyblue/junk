@@ -68,6 +68,12 @@
 	</tbody>
 </table>
 
+<p>Latex table:</p>
+
+{% for p in perc %}
+<br/>{{ p.0 }} &amp; {{ p.2|floatformat:1 }} $\pm$ {{ p.3|floatformat:1 }} &amp; {{ p.1|stringformat:".2e" }} $\pm$ {{ p.4|stringformat:".2e" }} \\
+{% endfor %}
+
 <p>Ordered by descending characterization value.</p>
 
 <table border="1" cellspacing="0" cellpadding="1">
@@ -85,5 +91,6 @@
 		<td>{{ sensor.characterize_value|stringformat:".3e" }}</td>
 	</tr>
 {% endfor %}
+</table>
 
 {% endblock %}
