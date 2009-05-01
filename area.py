@@ -3,6 +3,36 @@ from biosensor.results.models import *
 from decimal import *
 
 m = {
+	0: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
+	1: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
+	2: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
+	3: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
+	4: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
 	5: {
 		1: 10.885,
 		2: 11.342
@@ -19,9 +49,33 @@ m = {
 		1: 21.771,
 		2: 21.738
 	},
+	9: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
 	10: {
 		1: 11.342,
 		2: 10.885
+	},
+	11: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
+	12: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
+	13: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
 	},
 	14: {
 		1: 14.267,
@@ -42,12 +96,24 @@ m = {
 	18: {
 		1: 21.738,
 		2: 21.772
+	},
+	19: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
+	},
+	20: {
+		1: 1,
+		2: 2.250,
+		3: 4,
+		4: 4
 	}
 }
 
 for sensor, areas in m.iteritems():
 	for num, area in areas.iteritems():
-		sensors = Electrode.objects.filter(sensor__electrode_system=1, sensor__sensor=sensor, we__endswith=num)
+		sensors = Electrode.objects.filter(sensor__sensor=sensor, we__endswith=num)
 		for s in sensors:
 			print '%s -- area: %s, new area: %s' %(s, s.area, area)
 			s.area = Decimal(str(area))

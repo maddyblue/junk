@@ -19,6 +19,7 @@
 	<td>Work</td>
 	<td>Size (um)</td>
 	<td>Spacing (um)</td>
+	<td>Area (um)</td>
 </tr>
 {% for e in electrodes %}
 	<tr>
@@ -28,7 +29,8 @@
 		<td>{{ e.sensor.get_aux_display }}</td>
 		<td>{{ e.sensor.get_we_display }}</td>
 		<td>{{ e.size }}</td>
-		<td>{{ e.spacing|default_if_none:"&nbsp;" }}</td>
+		<td>{{ e.spacing|default_if_none:"" }}</td>
+		<td>{{ e.area|default_if_none:"" }}</td>
 	</tr>
 {% endfor %}
 
