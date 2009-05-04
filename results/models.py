@@ -8,11 +8,9 @@ def get_point(time, target):
 		if target < i:
 			return time.index(i)
 
-MODE_DIFF = 1
-MODE_HI_LOW = 2
-MODE_CHARACTERIZE = 3
+MODE_HI_LOW = 1
 
-def calc_range(fname, mode=MODE_DIFF, low=0, mid=0, high=0):
+def calc_range(fname, mode):
 	f = open(fname)
 
 	time = []
@@ -31,41 +29,8 @@ def calc_range(fname, mode=MODE_DIFF, low=0, mid=0, high=0):
 		mini = value.index(minv)
 		maxi = value.index(maxv)
 		return [[minv, time[mini]], [maxv, time[maxi]]]
-	elif mode == MODE_CHARACTERIZE:
-		i_low = get_point(time, low)
-		i_mid = get_point(time, mid)
-		i_high = get_point(time, high)
-		m = min(value[i_mid:i_high])
-		i_m = value.index(m, i_mid, i_high)
-		slope = (value[i_mid] - value[i_low]) / (time[i_mid] - time[i_low])
-		t = (time[i_m] - time[i_mid]) * slope + value[i_mid]
-		return (t, m, time[i_m])
-
-	idx_min = time.index(min(time)) + 1
-	idx_max = time.index(max(time)) + 1
-
-	if idx_min == len(value):
-		idx = idx_max
 	else:
-		idx = idx_min
-
-	value1 = value[:idx]
-	value2 = value[idx:]
-
-	avg1 = 0
-
-	for i in value1:
-		avg1 = avg1 + i
-
-	avg2 = 0
-
-	for i in value2:
-		avg2 = avg2 + i
-
-	avg1 = avg1 / len(value1)
-	avg2 = avg2 / len(value2)
-
-	return abs(avg1 - avg2)
+		raise ValueError, 'unknown mode: %s' %mode
 
 class Result(models.Model):
 	sensor = models.IntegerField(null=True, blank=True)
@@ -81,7 +46,7 @@ class Result(models.Model):
 	high_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
 	low_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
 	init_pn = models.CharField(null=True, blank=True, max_length=1)
-	scan_rate = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
+	scan_rate = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=3)
 	sample_interval = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
 	final_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
 	incr_e = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=4)
@@ -90,9 +55,6 @@ class Result(models.Model):
 	sample_width = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
 	pulse_period = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
 	sensitivity = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=11)
-	range_all = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-	range_p2  = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-	range_p1  = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
 	use = models.BooleanField(null=True, default=True)
 	high_val = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
 	low_val = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
@@ -102,7 +64,6 @@ class Result(models.Model):
 	characterize_low = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
 	characterize_mid = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
 	characterize_high = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
-	characterize_concentration = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
 	characterize_peak = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
 	characterize_value = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
 	characterize_base = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
@@ -111,19 +72,6 @@ class Result(models.Model):
 	def analyze(self):
 		name = self.upload_file.name
 		os.popen(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + name)
-
-		if self.analysis == 'Cyclic Voltammetry':
-			self.range_all = calc_range(name + '.avg')
-			self.range_p2  = calc_range(name + '.-2_2')
-			self.range_p1  = calc_range(name + '.-1_1')
-		elif self.analysis == 'i - t Curve' and self.characterize:
-			r = calc_range(self.upload_file.name + '.avg', MODE_CHARACTERIZE, self.characterize_low, self.characterize_mid, self.characterize_high)
-			self.characterize_peak = r[1]
-			self.characterize_value = r[1] - r[0]
-			self.characterize_base = r[0]
-			self.characterize_time = r[2]
-
-			os.popen('%s -v analysis="%s" -v low=%g -v high=%g -v peak=%g -v base=%g -v ctime=%g -f %sresults/plot.awk %s' %(settings.PROG_AWK, self.analysis, self.characterize_mid, self.characterize_time, self.characterize_peak, self.characterize_base, self.characterize_time, settings.MEDIA_ROOT, name))
 
 		r = calc_range(name + '.avg', MODE_HI_LOW)
 		self.low_val = str(r[0][0])

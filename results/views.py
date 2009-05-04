@@ -91,9 +91,6 @@ def limit(request):
 	return render(request, 'results/limit.html', {'limits': limlist})
 
 def sensor(request):
-	return sensors(request, '')
-
-def sensors(request, rangetype):
 	sensors = Result.objects.filter(use=True)
 
 	count = {}
@@ -229,14 +226,10 @@ def upload(request):
 				r.scan_rate = s[12].split(' = ')[1]
 				r.sample_interval = s[14].split(' = ')[1]
 				r.sensitivity = s[16].split(' = ')[1]
+
 			elif s[1] == 'i - t Curve':
 				r.sample_interval = s[9].split(' = ')[1]
 				r.sensitivity = s[12].split(' = ')[1]
-				r.charaterize = form.cleaned_data['characterize']
-				r.charaterize_low = form.cleaned_data['characterize_low']
-				r.charaterize_mid = form.cleaned_data['characterize_mid']
-				r.charaterize_high = form.cleaned_data['characterize_high']
-				r.characterize_concentration = form.cleaned_data['characterize_concentration']
 			elif s[1] == 'Differential Pulse Voltammetry':
 				r.final_e = s[9].split(' = ')[1]
 				r.incr_e = s[10].split(' = ')[1]
