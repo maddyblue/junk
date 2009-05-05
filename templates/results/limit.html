@@ -10,11 +10,16 @@
 
 <h1>Detection Limits</h1>
 
+<p>Concentration vs. Output:</p>
+<img src="/uploads/sensors/limit.png" />
+
+<p>Latex table:</p>
+
 {% for limit in limits %}
 <br/>{{ limit.0 }} &amp; {{ limit.1 }} &amp; {{ limit.2 }} \\
 {% endfor %}
 
-<img src="/uploads/sensors/limit.png" />
+<p>Ordered by descending concentration.</p>
 
 <table border="1" cellspacing="0" cellpadding="1">
 <tr>

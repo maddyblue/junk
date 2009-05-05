@@ -54,6 +54,15 @@ def limit(request):
 	lod = Result.objects.filter(notes__contains='lod = ')
 
 	limits = {}
+	pltname = 'uploads/sensors/limit.plt'
+	plt = open(pltname, 'w')
+
+	plt.write('set terminal png size 640, 480\n')
+	plt.write('set xlabel "Concentration"\n')
+	plt.write('set ylabel "Current/A"\n')
+	plt.write('set output "uploads/sensors/limit.png"\n')
+
+	pltstr = []
 
 	for s in lod:
 		for l in s.notes.splitlines():
@@ -83,10 +92,20 @@ def limit(request):
 			limlist.append((s, conc, value))
 			f.write('%s %s\n' %(conc, value))
 
+		plt.write('f%(id)i(x) = m%(id)i * x + b%(id)i\n' %{'id': s})
+		plt.write('fit f%(id)i(x) "uploads/sensors/limit.%(id)i.dat" via m%(id)i, b%(id)i\n' %{'id': s})
+		pltstr.append('"uploads/sensors/limit.%(id)s.dat" title "%(id)i", m%(id)i * x + b%(id)i title "m*x+b for %(id)i"' %{'id': s})
+
 		f.close()
 
-	os.popen(settings.PROG_GNUPLOT + ' uploads/sensors/limit.plt')
 	limlist.sort(cmp=lambda x, y: cmp(x[1], y[1]), reverse=True)
+
+	plt.write('plot [0:%s] \\\n' %(limlist[0][1] * Decimal('1.1')))
+	plt.write(', \\\n'.join(pltstr))
+
+	plt.close()
+
+	os.popen('%s %s' %(settings.PROG_GNUPLOT, pltname))
 
 	return render(request, 'results/limit.html', {'limits': limlist})
 
