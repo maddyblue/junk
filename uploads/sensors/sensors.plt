@@ -12,8 +12,16 @@ plot "uploads/sensors/sensors.dat" using 2:3, \
 set ylabel "current density (current / area)"
 set output "uploads/sensors/density.png"
 
-g(x) = n*x + c
-fit g(x) "uploads/sensors/sensors.dat" using 2:($3 / $2) via n, c
+f(x) = m*x + b
+fit f(x) "uploads/sensors/sensors.dat" using 2:($3 / $2) via m, b
 
 plot "uploads/sensors/sensors.dat" using 2:($3 / $2), \
-	n * x + c title "m*x+b"
+	m * x + b title "m*x+b"
+
+set output "uploads/sensors/density-high.png"
+
+f(x) = m*x + b
+fit [10:] f(x) "uploads/sensors/sensors.dat" using 2:($3 / $2) via m, b
+
+plot [10:] "uploads/sensors/sensors.dat" using 2:($3 / $2), \
+	m * x + b title "m*x+b"
