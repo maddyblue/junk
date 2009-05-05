@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.conf import settings
 from django.db import models
 from django import forms
@@ -79,8 +80,11 @@ class Result(models.Model):
 		self.high_val = str(r[1][0])
 		self.high_time = str(r[1][1])
 
-		if self.analysis == 'Differential Pulse Voltammetry':
-			self.characterize_value = str(r[1][0] - r[0][0])
+		for l in self.notes.splitlines():
+			p = l.partition(' = ')
+			if p[0] == 'ip':
+				self.characterize_value = Decimal(p[2])
+				break
 
 		self.save()
 		os.popen(settings.PROG_GNUPLOT + ' ' + name + '.plt')

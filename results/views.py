@@ -100,13 +100,6 @@ def sensor(request):
 	f = open(settings.MEDIA_ROOT + 'uploads/sensors/sensors.dat', 'w')
 
 	for s in sensors:
-		for l in s.notes.splitlines():
-			p = l.partition(' = ')
-			if p[0] == 'ip':
-				s.characterize_value = Decimal(p[2])
-				s.save()
-				break
-
 		area = Electrode.objects.get(sensor__sensor=s.sensor, we=s.electrode).area
 		if area is not None:
 			f.write('%s %s %s\n' %(s.sensor, area, s.characterize_value))
