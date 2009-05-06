@@ -116,7 +116,29 @@ def sensor(request):
 	avg = {}
 	stdev = {}
 	sterror = {}
-	f = open(settings.MEDIA_ROOT + 'uploads/sensors/sensors.dat', 'w')
+	dat = 'uploads/sensors/sensors.dat'
+	f = open(settings.MEDIA_ROOT + dat, 'w')
+
+	pltname = 'uploads/sensors/sensors.plt'
+	dat = '"%s"' %dat
+	plt = open(pltname, 'w')
+
+	plt.write('set terminal png size 640, 480\n')
+	plt.write('set xlabel "area/um"\n')
+	plt.write('set ylabel "current/A"\n')
+	plt.write('f(x) = m*x + b\n')
+	plt.write('fit f(x) %s using 2:3 via m, b\n' %dat)
+	plt.write('set output "uploads/sensors/sensors.png"\n')
+	plt.write('plot %s using 2:3 notitle, f(x) notitle\n' %dat)
+	plt.write('f(x) = m*x + b\n')
+	plt.write('fit f(x) %s using 2:($3 / $2) via m, b\n' %dat)
+	plt.write('set ylabel "current density (current / area)"\n')
+	plt.write('set output "uploads/sensors/density.png"\n')
+	plt.write('plot %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
+	plt.write('f(x) = m*x + b\n')
+	plt.write('fit [10:] f(x) %s using 2:($3 / $2) via m, b\n' %dat)
+	plt.write('set output "uploads/sensors/density-high.png"\n')
+	plt.write('plot [10:] %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
 
 	for s in sensors:
 		area = Electrode.objects.get(sensor__sensor=s.sensor, we=s.electrode).area
@@ -152,7 +174,9 @@ def sensor(request):
 		se = sterror[id]
 		perc.append([id, v, v / m, se / m, se])
 
-	os.popen(settings.PROG_GNUPLOT + ' uploads/sensors/sensors.plt')
+	plt.close()
+
+	os.popen('%s %s' %(settings.PROG_GNUPLOT, pltname))
 	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc})
 
 def detail(request, result_id):
