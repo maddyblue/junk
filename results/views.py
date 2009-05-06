@@ -140,6 +140,10 @@ def sensor(request):
 	plt.write('fit [10:] f(x) %s using 2:($3 / $2) via m, b\n' %dat)
 	plt.write('set output "uploads/sensors/density-high.png"\n')
 	plt.write('plot [10:] %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
+	plt.write('f(x) = m*x + b\n')
+	plt.write('fit [0:5] f(x) %s using 2:($3 / $2) via m, b\n' %dat)
+	plt.write('set output "uploads/sensors/density-low.png"\n')
+	plt.write('plot [0:5] %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
 
 	for s in sensors:
 		area = Electrode.objects.get(sensor__sensor=s.sensor, we=s.electrode).area
@@ -182,6 +186,9 @@ def sensor(request):
 
 	plt.write('set output "uploads/sensors/density-high-multi.png"\n')
 	plt.write('plot [10:25] %s\n' %','.join(pltdenstr))
+
+	plt.write('set output "uploads/sensors/density-low-multi.png"\n')
+	plt.write('plot [0:5] %s\n' %','.join(pltdenstr))
 
 	for k in avg.keys():
 		avg[k] /= count[k]
