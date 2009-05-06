@@ -116,6 +116,7 @@ def sensor(request):
 	avg = {}
 	stdev = {}
 	sterror = {}
+	pltdat = {}
 	dat = 'uploads/sensors/sensors.dat'
 	f = open(settings.MEDIA_ROOT + dat, 'w')
 
@@ -132,7 +133,7 @@ def sensor(request):
 	plt.write('plot %s using 2:3 notitle, f(x) notitle\n' %dat)
 	plt.write('f(x) = m*x + b\n')
 	plt.write('fit f(x) %s using 2:($3 / $2) via m, b\n' %dat)
-	plt.write('set ylabel "current density (current / area)"\n')
+	plt.write('set ylabel "current density"\n')
 	plt.write('set output "uploads/sensors/density.png"\n')
 	plt.write('plot %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
 	plt.write('f(x) = m*x + b\n')
@@ -142,18 +143,45 @@ def sensor(request):
 
 	for s in sensors:
 		area = Electrode.objects.get(sensor__sensor=s.sensor, we=s.electrode).area
-		if area is not None:
-			f.write('%s %s %s\n' %(s.sensor, area, s.characterize_value))
-
 		if s.sensor not in count:
 			count[s.sensor] = 0
 			avg[s.sensor] = 0
+			pltdat[s.sensor] = []
+
+		if area is not None:
+			f.write('%s %s %s\n' %(s.sensor, area, s.characterize_value))
+			pltdat[s.sensor].append('%s %s' %(area, s.characterize_value))
 
 		avg[s.sensor] += float(s.characterize_value)
 		count[s.sensor] += 1
 
 	f.close()
 	sensors = sensors.order_by('-characterize_value')
+
+	pltstr = []
+	pltdenstr = []
+	for k, v in pltdat.iteritems():
+		f = open('uploads/sensors/sensors.%i.dat' %k, 'w')
+		pltstr.append('"uploads/sensors/sensors.%(i)i.dat" title "%(i)i"' %{'i': k})
+		pltdenstr.append('"uploads/sensors/sensors.%(i)i.dat" using 1:($2 / $1) title "%(i)i"' %{'i': k})
+		for s in v:
+			f.write(s + '\n')
+		f.close()
+
+	plt.write('set terminal png size 1200, 1200\n')
+	plt.write('set pointsize 1.5\n')
+
+	plt.write('set xlabel "area/um"\n')
+	plt.write('set ylabel "current/A"\n')
+	plt.write('set output "uploads/sensors/sensors-multi.png"\n')
+	plt.write('plot [0:30] %s\n' %','.join(pltstr))
+
+	plt.write('set ylabel "current density"\n')
+	plt.write('set output "uploads/sensors/density-multi.png"\n')
+	plt.write('plot [0:30] %s\n' %','.join(pltdenstr))
+
+	plt.write('set output "uploads/sensors/density-high-multi.png"\n')
+	plt.write('plot [10:25] %s\n' %','.join(pltdenstr))
 
 	for k in avg.keys():
 		avg[k] /= count[k]
