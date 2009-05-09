@@ -153,7 +153,7 @@ In addition to the characterizations above, DPV tests were done to compare worki
 		\hline
 		\textbf{2 auxilliary} & 0, 1, 2, 20 (Figure \ref{s00}) & & & \\
 		\hline
-		\textbf{common reference, top \& bottom, line between} & 3, 4, 9, 19 (Figure \ref{s03}) & & & \\
+		\textbf{common reference, top \& bottom} & 3, 4, 9, 19 (Figure \ref{s03}) & & & \\
 		\hline
 		\textbf{common reference top, common auxilliary bottom} & & 5 (Figure \ref{s05}) & 6, 7 (Figure \ref{s06}) & 8, 17 (Figure \ref{s17}) \\
 		\hline
@@ -166,7 +166,7 @@ In addition to the characterizations above, DPV tests were done to compare worki
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s00.png}
-	\caption{Sensor 00.}
+	\caption{Sensor 0.}
 	\label{s00}
 \end{figure}
 
@@ -226,7 +226,7 @@ In addition to the characterizations above, DPV tests were done to compare worki
 	\label{s17}
 \end{figure}
 
-To test the importance of the position of a working electrode (e.g., its relative position to the auxilliary and reference electrodes), the standard DPV tests were done on multiple working electrodes on sensors 16 (Figure \ref{s16}) and 17 (Figure \ref{s17}), which have identical working-electrode types (4-electrode, type ``F''). Two tests were done on each of working electrodes 12 and 32, and averaged by working electrode (Table \ref{electrode position}). The working electrodes closest to the auxilliary electrode both performed better than the two working electrodes furthest from the auxilliary electrode. We conclude that closeness to an auxilliary electrode yields better results than closeness to the reference electrode.
+To test the importance of the position of a working electrode (e.g., its relative position to the auxilliary and reference electrodes), the standard DPV tests were done on multiple working electrodes on sensors 16 (Figure \ref{s16}) and 17 (Figure \ref{s17}), which have identical working-electrode types (4-electrode, type ``F''). Two tests were done on each of working electrodes 12 and 32, and averaged by working electrode (Table \ref{dpv-specific}). The working electrodes closest to the auxilliary electrode both performed better than the two working electrodes furthest from the auxilliary electrode. We conclude that closeness to an auxilliary electrode yields better results than closeness to the reference electrode.
 
 From the same tests we can also conclude that the sensor-site orientation of sensor 17 (common reference on one side, common auxilliary on the other) is better than sensor 16 (common reference on one side, common auxilliary surrounding the working electrodes on three sides).
 
@@ -234,14 +234,68 @@ From the same tests we can also conclude that the sensor-site orientation of sen
 	\begin{tabular}{llll}
 		sensor & electrode & output & distance to auxilliary electrode \\
 		\hline
-		16 & 12 & 5.157 & high \\
-		16 & 32 & 6.494 & low
-		17 & 11 & 6.562 & high \\
-		17 & 12 & 4.949 & high \\
-		17 & 31 & 6.913 & low \\
-		17 & 32 & 6.593 & low \\
-		% TODO: get accurate distances
+		7 & 12 & 5.169 & 45.48 \\
+		7 & 32 & 3.245 & 20.40 \\
+		16 & 12 & 5.157 & 13.50 \\
+		16 & 32 & 6.494 & 13.50 \\
+		17 & 11 & 6.562 & 43.47 \\
+		17 & 12 & 4.949 & 43.47 \\
+		17 & 31 & 6.913 & 18.46 \\
+		17 & 32 & 6.593 & 18.46 \\
+		18 & 12 & 5.570 & 18.50 \\
+		18 & 32 & 5.683 & 18.50 \\
 	\end{tabular}
-	\caption{Electrode position results.}
-	\label{electrode position}
+	\caption{Results of further DPV tests on specific working electrodes.}
+	\label{dpv-specific}
+\end{table}
+
+\begin{table}
+	\begin{tabular}{llll}
+		sensor & electrode from & electrode to & distance ($\mu \mathrm{m}$) \\
+		\hline
+		0 & *01 & *01 & 3.00 \\
+		0 & *02 & *02 & 3.00 \\
+		0 & *03 & *03 & 2.50 \\
+		0 & *04 & *04 & 3.00 \\
+		\multicolumn{4}{l}{sensor 0 is the same as sensor 1, 2} \\
+		3 & we01 & ae01 & 3.00 \\
+		3 & we02 & ae02 & 3.00 \\
+		3 & we03 & ae03 & 2.50 \\
+		3 & we04 & ae04 & 3.00 \\
+		\multicolumn{4}{l}{sensor 3 is the same as sensor 4, 9} \\
+		5 & we1*, we2* & comae & 26.55 \\
+		5 & we3*, we4* & comae & 11.51 \\
+		6 & we1*, we2* & comae & 35.54 \\
+		6 & we3*, we4* & comae & 15.51 \\
+		7 & we1*, we2* & comae & 45.48 \\
+		7 & we3*, we4* & comae & 20.40 \\
+		8 & we1*, we2* & comae & 33.53 \\
+		8 & we3*, we4* & comae & 13.53 \\
+		10 & we* & comae & 11.5 \\
+		11 & we01 & comae & 14.47 \\
+		11 & we02 & comae & 14.24 \\
+		11 & we03, we04 & comae & 13.96 \\
+		12 & we01 & comae & 19.50 \\
+		12 & we02 & comae & 19.21 \\
+		12 & we03, we04 & comae & 18.98 \\
+		13 & we01 & comae & 24.53 \\
+		13 & we02 & comae & 24.26 \\
+		13 & we03, we04 & comae & 24.05 \\
+		14 & we* & comae & 20.50 \\
+		15 & we* & comae & 15.50 \\
+		16 & we* & comae & 13.50 \\
+		17 & we1*, we2* & comae & 43.47 \\
+		17 & we3*, we4* & comae & 18.46 \\
+		18 & we* & comae & 18.50 \\
+		19 & we01 & ae01 & 2.00 \\
+		19 & we02 & ae02 & 3.00 \\
+		19 & we03 & ae03 & 2.50 \\
+		19 & we04 & ae04 & 3.00 \\
+		20 & we01 & ae01 & 2.00 \\
+		20 & we02 & ae02 & 3.00 \\
+		20 & we03 & ae03 & 2.50 \\
+		20 & we04 & ae04 & 3.00
+	\end{tabular}
+	\caption[Electrode distances.]{Electrode distances, measured by the two closest edges. ``we'' means working electrode; ``ae'' means auxilliary electrode; ``re'' means reference electrode. ``com'' means common. For example, comae means common auxilliary electrode. A * means all electrodes that fit the rest of the expression. For example, *01 means we01, ae01, re01.}
+	\label{electrode distance}
 \end{table}
