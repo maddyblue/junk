@@ -212,7 +212,35 @@ def sensor(request):
 	plt.close()
 
 	os.popen('%s %s' %(settings.PROG_GNUPLOT, pltname))
-	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc})
+
+	chips = ['3', '4']
+	res = {}
+
+	f = Result.objects.filter(run_date__gte=datetime.datetime(2009, 5, 8), run_date__lte=datetime.datetime(2009, 5, 10))
+	for chip in chips:
+		for r in f.filter(filename__contains='chip%s' %chip):
+			s = 's%02iw%02i' %(r.sensor, r.electrode)
+			if s not in res:
+				res[s] = {}
+			if chip not in res[s]:
+				res[s][chip] = []
+			res[s][chip].append(float(r.characterize_value))
+
+	s = res.keys()
+	s.sort()
+	specific = [['sensor', 'electrode']]
+	specific[0].extend(chips)
+
+	for k in s:
+		d = [k[1:3], k[4:6]]
+		for c in chips:
+			if c not in res[k]:
+				d.append('')
+			else:
+				d.append('%.3e' %(sum(res[k][c]) / len(res[k][c])))
+		specific.append(d)
+
+	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc, 'chips': chips, 'specific': specific})
 
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)

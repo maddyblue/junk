@@ -90,6 +90,21 @@
 <br/>{{ p.0 }} &amp; {{ p.2|floatformat:1 }} $\pm$ {{ p.3|floatformat:1 }} &amp; {{ p.1|stringformat:".2e" }} $\pm$ {{ p.4|stringformat:".2e" }} \\
 {% endfor %}
 
+<p>Latex table, specific tests:</p>
+
+{% for s in specific %}
+	<br/>
+	{% for c in s %}
+		{% if not forloop.first %}
+			&amp;
+		{% endif %}
+		{{ c }}
+	{% endfor %}
+	{% if not forloop.last %}
+		\\
+	{% endif%}
+{% endfor %}
+
 <p>Ordered by descending characterization value.</p>
 
 <table border="1" cellspacing="0" cellpadding="1">
