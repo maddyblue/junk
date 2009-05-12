@@ -1,0 +1,57 @@
+\NeedsTeXFormat{LaTeX2e}% LaTeX 2.09 can't be used (nor non-LaTeX)
+[1994/12/01]% LaTeX date must be December 1994 or later
+\ProvidesPackage{thesis}[2004/09/01 v1.00]
+
+%\topmargin -1.0 in
+\leftmargin 1.5 in
+\textwidth 6 in
+%\textheight 9 in
+
+%%%%%%%%%%%%%%title page%%%%%%%%%%%%%%%%%%%%%%
+\def\author#1{\gdef\@author{#1}}
+\def\department#1{\gdef\@department{#1}}
+\def\semester#1{\gdef\@semester{#1}}
+\def\maketitle
+{
+        \begin{titlepage}
+        \begin{center}
+        \begin{large}\textbf{THESIS}\end{large}\\
+        \vspace{0.5in}
+        \begin{large}\textsc{\@title}\end{large}\\
+        \vfill
+        Submitted by\\
+        \@author\\
+        Department of \@department\\
+        \vfill
+        In partial fulfillment of the requirements\\
+        for the Degree of Master of Science\\
+        Colorado State Univesity\\
+        Fort Collins, Colorado\\
+        \@semester\\
+        \end{center}
+        \end{titlepage}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%abstract%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewenvironment{abstract}{
+        \begin{center}
+        \begin{large}ABSTARCT OF THESIS\end{large}\\
+	\textsc{\@title}
+        \end{center}
+	%\singlespacing
+	\begin{small}
+}
+{
+	\end{small}
+	\singlespacing{
+        \begin{flushright}
+        \@author\\
+        \@department\ Department\\
+        Colorado State University\\
+        Fort Collins, CO 80523\\
+        \@semester\\
+        \end{flushright}}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
