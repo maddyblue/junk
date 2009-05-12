@@ -109,13 +109,24 @@ def limit(request):
 
 	return render(request, 'results/limit.html', {'limits': limlist})
 
+def mean(list):
+	return sum(list) / len(list)
+
+def stdev(list):
+	a = mean(list)
+	v = [(i - a) ** 2 for i in list]
+	return math.sqrt(sum(v) / len(list))
+
+def sterror(list):
+	return stdev(list) / math.sqrt(len(list))
+
 def sensor(request):
 	sensors = Result.objects.filter(use=True)
 
 	count = {}
 	avg = {}
-	stdev = {}
-	sterror = {}
+	dev = {}
+	error = {}
 	pltdat = {}
 	dat = 'uploads/sensors/sensors.dat'
 	f = open(settings.MEDIA_ROOT + dat, 'w')
@@ -194,8 +205,8 @@ def sensor(request):
 		avg[k] /= count[k]
 		l = sensors.filter(sensor=k)
 		vl = list((float(i.characterize_value) - avg[k]) ** 2 for i in l)
-		stdev[k] = math.sqrt(sum(vl) / count[k])
-		sterror[k] = stdev[k] / math.sqrt(count[k])
+		dev[k] = math.sqrt(sum(vl) / count[k])
+		error[k] = dev[k] / math.sqrt(count[k])
 
 	senlist = []
 	for k, v in avg.iteritems():
@@ -206,7 +217,7 @@ def sensor(request):
 	m = senlist[0][1] / 100
 
 	for (id, v) in senlist:
-		se = sterror[id]
+		se = error[id]
 		perc.append([id, v, v / m, se / m, se])
 
 	plt.close()
@@ -229,7 +240,8 @@ def sensor(request):
 	s = res.keys()
 	s.sort()
 	specific = [['sensor', 'electrode']]
-	specific[0].extend(chips)
+	for c in chips:
+		specific[0].append('chip %s' %c)
 
 	for k in s:
 		d = [k[1:3], k[4:6]]
@@ -237,7 +249,7 @@ def sensor(request):
 			if c not in res[k]:
 				d.append('')
 			else:
-				d.append('%.3e' %(sum(res[k][c]) / len(res[k][c])))
+				d.append('%.3e $\pm$ %.3e' %(mean(res[k][c]), sterror(res[k][c])))
 		specific.append(d)
 
 	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc, 'chips': chips, 'specific': specific})
