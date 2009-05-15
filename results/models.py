@@ -95,26 +95,37 @@ class Result(models.Model):
 	class Admin:
 		pass
 
-ELECTRODE_CHOICES = (
-	(1, 'Common'),
-	(2, 'One'),
-	(3, 'Two')
+WE_3 = 0
+WE_C = 1
+WE_I = 2
+WE_F = 3
+
+WE_CHOICES = (
+	(WE_3, 'three'),
+	(WE_C, 'four: C'),
+	(WE_I, 'four: inverse C'),
+	(WE_F, 'four: F')
 )
 
-ELECTRODE_SYSTEM_CHOICES = (
-	(1, 'Four'),
-	(2, 'Three')
+SEN_2_AUX      = 0
+SEN_COMR       = 1
+SEN_COMR_COMA  = 2
+SEN_COMR_COMA3 = 3
+
+SENSOR_CHOICES = (
+	(SEN_2_AUX, '2 aux'),
+	(SEN_COMR, 'com ref at top and bottom'),
+	(SEN_COMR_COMA, 'com ref at top, com aux at bottom'),
+	(SEN_COMR_COMA3, 'com ref at top, com aux on 3 sides')
 )
 
 class Sensor(models.Model):
 	sensor = models.PositiveSmallIntegerField()
-	electrode_system = models.PositiveSmallIntegerField(choices=ELECTRODE_SYSTEM_CHOICES)
-	ref = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
-	aux = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
-	we  = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
+	sensor_type = models.PositiveSmallIntegerField(choices=SENSOR_CHOICES)
+	we_type = models.PositiveSmallIntegerField(choices=WE_CHOICES)
 
 	def __unicode__(self):
-		return str(self.sensor)
+		return '%02i: %s, %s-electrode' %(self.sensor, self.get_sensor_type_display(), self.get_we_type_display())
 
 	class Admin:
 		pass
@@ -122,13 +133,12 @@ class Sensor(models.Model):
 class Electrode(models.Model):
 	sensor = models.ForeignKey(Sensor)
 	we = models.PositiveSmallIntegerField()
-	size = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
-	spacing = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
-	pitch = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
-	area = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=7)
+	area = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3)
+	perimeter = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3)
+	distance = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2, help_text='shortest distance from working to aux electrode')
 
 	def __unicode__(self):
-		return "s" + self.sensor.__unicode__() + "w" + str(self.we) + " - size: " + str(self.size) + ", spacing: " + str(self.spacing)
+		return 's%02dw%02d - area: %s, perimeter: %s, distance: %s' %(self.sensor.sensor, self.we, self.area, self.perimeter, self.distance)
 
 	class Admin:
 		pass

@@ -1,4 +1,5 @@
 from django.core.paginator import QuerySetPaginator
+from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from biosensor.results.models import *
 from biosensor import settings
@@ -365,3 +366,144 @@ def upload(request):
 			return render(request, 'results/upload.html', {'form': UploadForm(), 'upload': r})
 
 	return render(request, 'results/upload.html', {'form': form})
+
+
+def syncdata(request):
+	# (WE, area, perimeter)
+	ap = {
+		WE_3: [
+			(1, 1, 4),
+			(2, 2.25, 6),
+			(3, 4, 8),
+			(4, 4, 8)
+		],
+		WE_C: [
+			(1, 10.885, 24.7),
+			(2, 11.342, 25.081)
+		],
+		WE_I: [
+			(1, 14.267, 30.793),
+			(2, 15.119, 32.835)
+		],
+		WE_F: [
+			(1, 21.771, 46.636),
+			(2, 21.738, 46.796)
+		]
+	}
+
+	# (sensor, working electrode)
+	sensors = {
+		0: (SEN_2_AUX, WE_3),
+		1: (SEN_2_AUX, WE_3),
+		2: (SEN_2_AUX, WE_3),
+		3: (SEN_COMR, WE_3),
+		4: (SEN_COMR, WE_3),
+		5: (SEN_COMR_COMA, WE_C),
+		6: (SEN_COMR_COMA, WE_I),
+		7: (SEN_COMR_COMA, WE_I),
+		8: (SEN_COMR_COMA, WE_F),
+		9: (SEN_COMR, WE_3),
+		10: (SEN_COMR_COMA3, WE_I),
+		11: (SEN_COMR_COMA3, WE_3),
+		12: (SEN_COMR_COMA3, WE_3),
+		13: (SEN_COMR_COMA3, WE_3),
+		14: (SEN_COMR_COMA3, WE_C),
+		15: (SEN_COMR_COMA3, WE_C),
+		16: (SEN_COMR_COMA3, WE_F),
+		17: (SEN_COMR_COMA, WE_I),
+		18: (SEN_COMR_COMA3, WE_F),
+		19: (SEN_COMR, WE_3),
+		20: (SEN_2_AUX, WE_3)
+	}
+
+	Sensor.objects.all().delete()
+	Electrode.objects.all().delete()
+
+	for sensor, (sen, we) in sensors.iteritems():
+		s = Sensor(sensor=sensor, sensor_type=sen, we_type=we)
+		s.save()
+
+		if we == WE_3:
+			elist = [0]
+		else:
+			elist = [10, 20, 30, 40]
+
+		for electrode, area, perimeter in ap[we]:
+			for i in elist:
+				e = Electrode(sensor=s, we=Decimal(str(i + electrode)), area=Decimal(str(area)), perimeter=Decimal(str(perimeter)))
+
+				if sensor <= 4 or sensor == 9:
+					if electrode == 3:
+						d = 2.5
+					else:
+						d = 3.0
+				elif sensor == 5:
+					if i <= 20:
+						d = 26.55
+					else:
+						d = 11.51
+				elif sensor == 6:
+					if i <= 20:
+						d = 35.54
+					else:
+						d = 15.51
+				elif sensor == 7:
+					if i <= 20:
+						d = 45.48
+					else:
+						d = 20.40
+				elif sensor == 8:
+					if i <= 20:
+						d = 33.53
+					else:
+						d = 13.53
+				elif sensor == 10:
+					d = 11.5
+				elif sensor == 11:
+					if electrode == 1:
+						d = 14.47
+					elif electrode == 2:
+						d = 14.24
+					else:
+						d = 13.96
+				elif sensor == 12:
+					if electrode == 1:
+						d = 19.50
+					elif electrode == 2:
+						d = 19.21
+					else:
+						d = 18.98
+				elif sensor == 13:
+					if electrode == 1:
+						d = 24.53
+					elif electrode == 2:
+						d = 24.26
+					else:
+						d = 24.05
+				elif sensor == 14:
+					d = 20.50
+				elif sensor == 15:
+					d = 15.50
+				elif sensor == 16:
+					d = 13.50
+				elif sensor == 17:
+					if i <= 20:
+						d = 43.47
+					else:
+						d = 18.46
+				elif sensor == 18:
+					d = 18.50
+				elif sensor == 19 or sensor == 20:
+					if electrode == 1:
+						d = 2.00
+					elif electrode == 3:
+						d = 2.50
+					else:
+						d = 3.00
+
+				e.distance = Decimal(str(d))
+				del d # throw exception next time if not set
+
+				e.save()
+
+	return HttpResponse('<html><body>syncdata successful.</body></html>')

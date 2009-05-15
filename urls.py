@@ -14,5 +14,6 @@ urlpatterns = patterns('',
 	(r'^admin/(.*)', admin.site.root),
 	(r'^databrowse/(.*)', databrowse.site.root),
 	(r'^uploads/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'uploads'}),
+	(r'^syncdata/$', 'biosensor.results.views.syncdata'),
 	(r'^$', include('biosensor.results.urls')),
 )

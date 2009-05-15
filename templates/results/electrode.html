@@ -14,23 +14,17 @@
 <tr>
 	<td>Sensor</td>
 	<td>WE</td>
-	<td>Ref</td>
-	<td>Aux</td>
-	<td>Work</td>
-	<td>Size (um)</td>
-	<td>Spacing (um)</td>
-	<td>Area (um)</td>
+	<td>Area (um^2)</td>
+	<td>Perimeter (um)</td>
+	<td>Distance (um)</td>
 </tr>
 {% for e in electrodes %}
 	<tr>
-		<td><a href="/uploads/sensors/s{{ e.sensor.sensor|stringformat:"02d" }}.png">{{ e.sensor.sensor }}</a></td>
-		<td>{{ e.we }}</td>
-		<td>{{ e.sensor.get_ref_display }}</td>
-		<td>{{ e.sensor.get_aux_display }}</td>
-		<td>{{ e.sensor.get_we_display }}</td>
-		<td>{{ e.size }}</td>
-		<td>{{ e.spacing|default_if_none:"" }}</td>
-		<td>{{ e.area|default_if_none:"" }}</td>
+		<td><a href="/uploads/sensors/s{{ e.sensor.sensor|stringformat:"02d" }}.png">{{ e.sensor.sensor|stringformat:"02d" }}</a>: {{ e.sensor.get_sensor_type_display }}</td>
+		<td>{{ e.we }}: {{ e.sensor.get_we_type_display }}</td>
+		<td>{{ e.area }}</td>
+		<td>{{ e.perimeter }}</td>
+		<td>{{ e.distance }}</td>
 	</tr>
 {% endfor %}
 
