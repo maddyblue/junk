@@ -303,7 +303,7 @@ def upload(request):
 		'Nov': 11,
 		'Dec': 12
 	}
-	
+
 	form = UploadForm()
 
 	if request.method == 'POST' and 'all' in request.POST:
