@@ -1,188 +1,152 @@
+from decimal import Decimal
 from django.conf import settings
 from django.db import models
 from django import forms
 import os
 
 def get_point(time, target):
-  for i in time:
-    if target < i:
-      return time.index(i)
+	for i in time:
+		if target < i:
+			return time.index(i)
 
-MODE_DIFF = 1
-MODE_HI_LOW = 2
-MODE_CHARACTERIZE = 3
+MODE_HI_LOW = 1
 
-def calc_range(fname, mode=MODE_DIFF, low=0, mid=0, high=0):
-  f = open(fname)
+def calc_range(fname, mode):
+	f = open(fname)
 
-  time = []
-  value = []
+	time = []
+	value = []
 
-  for line in f:
-    l = line.split()
-    time.append(float(l[0]))
-    value.append(float(l[1]))
+	for line in f:
+		l = line.split()
+		time.append(float(l[0]))
+		value.append(float(l[1]))
 
-  f.close()
+	f.close()
 
-  if mode == MODE_HI_LOW:
-    minv = min(value)
-    maxv = max(value)
-    mini = value.index(minv)
-    maxi = value.index(maxv)
-    return [[minv, time[mini]], [maxv, time[maxi]]]
-  elif mode == MODE_CHARACTERIZE:
-    i_low = get_point(time, low)
-    i_mid = get_point(time, mid)
-    i_high = get_point(time, high)
-    m = min(value[i_mid:i_high])
-    i_m = value.index(m, i_mid, i_high)
-    slope = (value[i_mid] - value[i_low]) / (time[i_mid] - time[i_low])
-    t = (time[i_m] - time[i_mid]) * slope + value[i_mid]
-    return (t, m, time[i_m])
-
-  idx_min = time.index(min(time)) + 1
-  idx_max = time.index(max(time)) + 1
-
-  if idx_min == len(value):
-    idx = idx_max
-  else:
-    idx = idx_min
-
-  value1 = value[:idx]
-  value2 = value[idx:]
-
-  avg1 = 0
-
-  for i in value1:
-    avg1 = avg1 + i
-
-  avg2 = 0
-
-  for i in value2:
-    avg2 = avg2 + i
-
-  avg1 = avg1 / len(value1)
-  avg2 = avg2 / len(value2)
-
-  return abs(avg1 - avg2)
+	if mode == MODE_HI_LOW:
+		minv = min(value)
+		maxv = max(value)
+		mini = value.index(minv)
+		maxi = value.index(maxv)
+		return [[minv, time[mini]], [maxv, time[maxi]]]
+	else:
+		raise ValueError, 'unknown mode: %s' %mode
 
 class Result(models.Model):
-  sensor = models.IntegerField(null=True, blank=True)
-  electrode = models.IntegerField(null=True, blank=True)
-  run_date = models.DateTimeField()
-  upload_date = models.DateTimeField()
-  upload_file = models.FileField(upload_to="uploads")
-  solution = models.CharField(max_length=100, blank=True)
-  notes = models.TextField(max_length=500, blank=True)
-  filename = models.CharField(max_length=100)
-  analysis = models.CharField(max_length=100)
-  init_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
-  high_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
-  low_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
-  init_pn = models.CharField(null=True, blank=True, max_length=1)
-  scan_rate = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
-  sample_interval = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
-  final_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
-  incr_e = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=4)
-  amplitude = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=4)
-  pulse_width = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
-  sample_width = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
-  pulse_period = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
-  sensitivity = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=11)
-  range_all = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  range_p2  = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  range_p1  = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  use = models.BooleanField(null=True, default=True)
-  high_val = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  low_val = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  high_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=16)
-  low_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=16)
-  characterize = models.BooleanField(null=True, blank=True, default=False)
-  characterize_low = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
-  characterize_mid = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
-  characterize_high = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
-  characterize_concentration = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  characterize_peak = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  characterize_value = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  characterize_base = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
-  characterize_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=10)
+	sensor = models.IntegerField(null=True, blank=True)
+	electrode = models.IntegerField(null=True, blank=True)
+	run_date = models.DateTimeField()
+	upload_date = models.DateTimeField()
+	upload_file = models.FileField(upload_to="uploads")
+	solution = models.CharField(max_length=100, blank=True)
+	notes = models.TextField(max_length=500, blank=True)
+	filename = models.CharField(max_length=100)
+	analysis = models.CharField(max_length=100)
+	init_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
+	high_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
+	low_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
+	init_pn = models.CharField(null=True, blank=True, max_length=1)
+	scan_rate = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=3)
+	sample_interval = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
+	final_e = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=2)
+	incr_e = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=4)
+	amplitude = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=4)
+	pulse_width = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
+	sample_width = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=5)
+	pulse_period = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=3)
+	sensitivity = models.DecimalField(null=True, blank=True, max_digits=12, decimal_places=11)
+	use = models.BooleanField(null=True, default=True)
+	high_val = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	low_val = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	high_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=16)
+	low_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=16)
+	characterize = models.BooleanField(null=True, blank=True, default=False)
+	characterize_low = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
+	characterize_mid = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
+	characterize_high = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
+	characterize_peak = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	characterize_value = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	characterize_base = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=18)
+	characterize_time = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=10)
 
-  def analyze(self):
-    name = self.upload_file.name
-    os.popen(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + name)
+	def analyze(self):
+		name = self.upload_file.name
+		os.popen(settings.PROG_AWK + ' -v analysis="' + self.analysis + '" -f ' + settings.MEDIA_ROOT + 'results/plot.awk ' + name)
 
-    if self.analysis == 'Cyclic Voltammetry':
-      self.range_all = calc_range(name + '.avg')
-      self.range_p2  = calc_range(name + '.-2_2')
-      self.range_p1  = calc_range(name + '.-1_1')
-    elif self.analysis == 'i - t Curve' and self.characterize:
-      r = calc_range(self.upload_file.name + '.avg', MODE_CHARACTERIZE, self.characterize_low, self.characterize_mid, self.characterize_high)
-      self.characterize_peak = r[1]
-      self.characterize_value = r[1] - r[0]
-      self.characterize_base = r[0]
-      self.characterize_time = r[2]
+		r = calc_range(name + '.avg', MODE_HI_LOW)
+		self.low_val = str(r[0][0])
+		self.low_time = str(r[0][1])
+		self.high_val = str(r[1][0])
+		self.high_time = str(r[1][1])
 
-      os.popen('%s -v analysis="%s" -v low=%g -v high=%g -v peak=%g -v base=%g -v ctime=%g -f %sresults/plot.awk %s' %(settings.PROG_AWK, self.analysis, self.characterize_mid, self.characterize_time, self.characterize_peak, self.characterize_base, self.characterize_time, settings.MEDIA_ROOT, name))
+		for l in self.notes.splitlines():
+			p = l.partition(' = ')
+			if p[0] == 'ip':
+				self.characterize_value = Decimal(p[2])
+				break
 
-    r = calc_range(name + '.avg', MODE_HI_LOW)
-    self.low_val = str(r[0][0])
-    self.low_time = str(r[0][1])
-    self.high_val = str(r[1][0])
-    self.high_time = str(r[1][1])
+		self.save()
+		os.popen(settings.PROG_GNUPLOT + ' ' + name + '.plt')
 
-    if self.analysis == 'Differential Pulse Voltammetry':
-      self.characterize_value = str(r[1][0] - r[0][0])
+	def __unicode__(self):
+		return self.filename + ': ' + self.run_date.strftime('%d %b %y %H:%M:%S')
 
-    self.save()
-    os.popen(settings.PROG_GNUPLOT + ' ' + name + '.plt')
+	class Admin:
+		pass
 
-  def __unicode__(self):
-    return self.filename + ': ' + self.run_date.strftime('%d %b %y %H:%M:%S')
+WE_3 = 0
+WE_C = 1
+WE_I = 2
+WE_F = 3
 
-  class Admin:
-    pass
-
-ELECTRODE_CHOICES = (
-  (1, 'Common'),
-  (2, 'One'),
-  (3, 'Two')
+WE_CHOICES = (
+	(WE_3, 'three'),
+	(WE_C, 'four: C'),
+	(WE_I, 'four: inverse C'),
+	(WE_F, 'four: F')
 )
 
-ELECTRODE_SYSTEM_CHOICES = (
-  (1, 'Four'),
-  (2, 'Three')
+SEN_2_AUX      = 0
+SEN_COMR       = 1
+SEN_COMR_COMA  = 2
+SEN_COMR_COMA3 = 3
+
+SENSOR_CHOICES = (
+	(SEN_2_AUX, '2 aux'),
+	(SEN_COMR, 'com ref at top and bottom'),
+	(SEN_COMR_COMA, 'com ref at top, com aux at bottom'),
+	(SEN_COMR_COMA3, 'com ref at top, com aux on 3 sides')
 )
 
 class Sensor(models.Model):
-  sensor = models.PositiveSmallIntegerField()
-  electrode_system = models.PositiveSmallIntegerField(choices=ELECTRODE_SYSTEM_CHOICES)
-  ref = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
-  aux = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
-  we  = models.PositiveSmallIntegerField(choices=ELECTRODE_CHOICES)
+	sensor = models.PositiveSmallIntegerField()
+	sensor_type = models.PositiveSmallIntegerField(choices=SENSOR_CHOICES)
+	we_type = models.PositiveSmallIntegerField(choices=WE_CHOICES)
 
-  def __unicode__(self):
-    return str(self.sensor)
+	def __unicode__(self):
+		return '%02i: %s, %s-electrode' %(self.sensor, self.get_sensor_type_display(), self.get_we_type_display())
 
-  class Admin:
-    pass
+	class Admin:
+		pass
 
 class Electrode(models.Model):
-  sensor = models.ForeignKey(Sensor)
-  we = models.PositiveSmallIntegerField()
-  size = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
-  spacing = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2)
+	sensor = models.ForeignKey(Sensor)
+	we = models.PositiveSmallIntegerField()
+	area = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3)
+	perimeter = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3)
+	distance = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2, help_text='shortest distance from working to aux electrode')
 
-  def __unicode__(self):
-    return "s" + self.sensor.__unicode__() + "w" + str(self.we) + " - size: " + str(self.size) + ", spacing: " + str(self.spacing)
+	def __unicode__(self):
+		return 's%02dw%02d - area: %s, perimeter: %s, distance: %s' %(self.sensor.sensor, self.we, self.area, self.perimeter, self.distance)
 
-  class Admin:
-    pass
+	class Admin:
+		pass
 
 class UploadForm(forms.Form):
-  upload_file = forms.FileField()
-  sensor = forms.IntegerField(required=False)
-  electrode = forms.IntegerField(required=False)
-  solution = forms.CharField(max_length=100, required=False)
-  notes = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
-  use = forms.BooleanField(required=False)
+	upload_file = forms.FileField()
+	sensor = forms.IntegerField(required=False)
+	electrode = forms.IntegerField(required=False)
+	solution = forms.CharField(max_length=100, required=False)
+	notes = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
+	use = forms.BooleanField(required=False)
