@@ -1,4 +1,5 @@
 from __future__ import with_statement
+from datetime import time
 
 import commands
 import gtk
@@ -73,7 +74,7 @@ class Iads(threading.Thread):
 		self.window.connect('key-press-event', self.press)
 		self.window.fullscreen()
 
-		global WIDTH, HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT
+		global WIDTH, HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, TIME_OFF, TIME_ON
 		self.screen = self.window.get_screen()
 		WIDTH = self.screen.get_width()
 		HEIGHT = self.screen.get_height()
@@ -82,15 +83,29 @@ class Iads(threading.Thread):
 			url = globals()['LIST_HOST'] + 'info/' + globals()['LOCATION_ID']
 			logging.debug('downloading info: %s', url)
 			info = urllib2.urlopen(url).read().split()
-			SCREEN_WIDTH = int(info[0])
-			SCREEN_HEIGHT = int(info[1])
+
+			for i in info:
+				t = [int(v) for v in i[1:].split(':')]
+
+				if i[0] == 'h':
+					SCREEN_HEIGHT = int(i[1:])
+				elif i[0] == 'w':
+					SCREEN_WIDTH = int(i[1:])
+				elif i[0] == 'f':
+					TIME_OFF = time(t[0], t[1], t[2])
+				elif i[0] == 'n':
+					TIME_ON = time(t[0], t[1], t[2])
 		except:
 			logging.error('could not download screen info', exc_info=True)
 			SCREEN_WIDTH = 0
 			SCREEN_HEIGHT = 0
+			TIME_OFF = time.min
+			TIME_ON = time.min
 
 		logging.info('display size: ' + str(WIDTH) + 'x' + str(HEIGHT))
 		logging.info('screen size: ' + str(SCREEN_WIDTH) + 'x' + str(SCREEN_HEIGHT))
+		logging.info('time on: ' + str(TIME_ON))
+		logging.info('time off: ' + str(TIME_OFF))
 
 		self.logo = Ad('logo.png')
 
@@ -183,6 +198,7 @@ class Iads(threading.Thread):
 			t = threading.Timer(globals()['ROTATE_TIME'], self.next_ad)
 			t.start()
 			t.join()
+			commands.getoutput('/usr/X11R6/bin/xset dpms force on')
 
 	def update(self):
 		self.update_adlist()
@@ -207,11 +223,12 @@ rootLogger.addHandler(timedRotate)
 
 logging.info('startup')
 
+LOCATION_ID = ''
 UPDATE_TIME = 300
 ROTATE_TIME = 30
 LIST_HOST = 'http://i-ads.com/'
 AD_HOST = 'http://s3.amazonaws.com/iads-ads/'
-LOCATION_ID = ''
+XSET = '/usr/X11R6/bin/xset dpms force '
 
 try:
 	f = open('conf')
@@ -225,6 +242,14 @@ try:
 	AD_HOST = d.pop(0).strip()
 except:
 	pass
+
+logging.info('location id: ' + LOCATION_ID)
+logging.info('update time: ' + str(UPDATE_TIME))
+logging.info('rotate time: ' + str(ROTATE_TIME))
+logging.info('list host: ' + LIST_HOST)
+logging.info('ad host: ' + AD_HOST)
+
+#commands.getoutput('/usr/X11R6/bin/xset dpms force off')
 
 iads = Iads()
 iads.start()
