@@ -9,6 +9,10 @@ import re
 import os
 import math
 
+import matplotlib
+matplotlib.use('AGG')
+import matplotlib.pyplot as plt
+
 def render(request, template, dict={}):
 	r = Result.objects.all().order_by('-run_date', '-upload_date')
 	p = QuerySetPaginator(r, 50)
@@ -164,9 +168,8 @@ def sensor(request):
 			avg[s.sensor] = 0
 			pltdat[s.sensor] = []
 
-		if area is not None:
-			f.write('%s %s %s\n' %(s.sensor, area, s.characterize_value))
-			pltdat[s.sensor].append('%s %s' %(area, s.characterize_value))
+		f.write('%s %s %s\n' %(s.sensor, area, s.characterize_value))
+		pltdat[s.sensor].append('%s %s' %(area, s.characterize_value))
 
 		avg[s.sensor] += float(s.characterize_value)
 		count[s.sensor] += 1
@@ -183,9 +186,6 @@ def sensor(request):
 		for s in v:
 			f.write(s + '\n')
 		f.close()
-
-	plt.write('set terminal png size 1200, 1200\n')
-	plt.write('set pointsize 1.5\n')
 
 	plt.write('set xlabel "area/um"\n')
 	plt.write('set ylabel "current/A"\n')
@@ -241,19 +241,88 @@ def sensor(request):
 	s = res.keys()
 	s.sort()
 	specific = [['sensor', 'electrode']]
+	pltdat = []
 	for c in chips:
 		specific[0].append('chip %s' %c)
 
 	for k in s:
 		d = [k[1:3], k[4:6]]
+		electrode = Electrode.objects.get(sensor__sensor=d[0], we=d[1])
 		for c in chips:
 			if c not in res[k]:
 				d.append('')
 			else:
-				d.append('%.3e $\pm$ %.3e' %(mean(res[k][c]), sterror(res[k][c])))
+				m = mean(res[k][c])
+				e = sterror(res[k][c])
+				density = [i / float(electrode.area) for i in res[k][c]]
+				d.append('%.3e $\pm$ %.3e' %(m, e))
+				pltdat.append((
+					electrode.sensor.sensor,
+					electrode.we,
+					c, # chip
+					m, # output mean
+					e, # output standard error
+					mean(density),
+					sterror(density),
+					float(electrode.area),
+					float(electrode.perimeter),
+					float(electrode.distance),
+					float(electrode.perimeter / electrode.area),
+					float(electrode.area / electrode.area_ae)
+				))
 		specific.append(d)
 
+	plot('perim_area_v_density', pltdat, PLT_PERIM_AREA, PLT_MEAN_DEN, axis = {'xmin': 1.5, 'xmax': 4.5})
+	plot('distance_v_density', pltdat, PLT_DIST, PLT_MEAN_DEN)
+	plot('area_ratio_v_output', pltdat, PLT_AREA_RATIO, PLT_MEAN, axis = {'xmin': -0.1, 'xmax': 1.1})
+
 	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc, 'chips': chips, 'specific': specific})
+
+def zipcol(lst, col):
+	return [i[col] for i in lst]
+
+PLT_SENSOR = 0
+PLT_WE = 1
+PLT_CHIP = 2
+PLT_MEAN = 3
+PLT_STERR = 4
+PLT_MEAN_DEN = 5
+PLT_STERR_DEN = 6
+PLT_AREA = 7
+PLT_PERIM = 8
+PLT_DIST = 9
+PLT_PERIM_AREA = 10
+PLT_AREA_RATIO = 11
+
+colnames = [
+	'sensor',
+	'working electrode',
+	'chip',
+	r'output ($\mathrm{A}$)',
+	'output standard error',
+	r'density ($\mathrm{A} / \mu \mathrm{m}^2$)',
+	'density standard error',
+	r'working electrode area ($\mu \mathrm{m}^2$)',
+	r'working electrode perimeter ($\mu \mathrm{m}$)',
+	r'distance between WE and AE ($\mu \mathrm{m}$)',
+	r'WE perimeter / area ($\mu \mathrm{m}$)',
+	'WE area / AE area'
+]
+
+def plot(name, lst, x, y, axis={}):
+	plt.errorbar(
+		zipcol(lst, x),
+		zipcol(lst, y),
+		yerr=zipcol(lst, y + 1),
+		fmt='.'
+	)
+
+	plt.xlabel(colnames[x])
+	plt.ylabel(colnames[y])
+	plt.axis(**axis)
+
+	plt.savefig(settings.MEDIA_ROOT + 'uploads/sensors/' + name)
+	plt.clf()
 
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
@@ -416,6 +485,31 @@ def syncdata(request):
 		20: (SEN_2_AUX, WE_3)
 	}
 
+	# (area, perimeter), or None if same as WE
+	ae = [
+		None,               # 00
+		None,               # 01
+		None,               # 02
+		None,               # 03
+		None,               # 04
+		(115, 56),          # 05
+		(152.5, 71),        # 06
+		(177.5, 81),        # 07
+		(161.25, 74.5),     # 08
+		None,               # 09
+		(865, 356),         # 10
+		(820, 338),         # 11
+		(1045, 428),        # 12
+		(1270, 518),        # 13
+		(1333.75, 543.5),   # 14
+		(1108.75, 453.5),   # 15
+		(1121.875, 458.75), # 16
+		(186.25, 84.5),     # 17
+		(1346.875, 548.75), # 18
+		None,               # 19
+		None                # 20
+	]
+
 	Sensor.objects.all().delete()
 	Electrode.objects.all().delete()
 
@@ -431,6 +525,13 @@ def syncdata(request):
 		for electrode, area, perimeter in ap[we]:
 			for i in elist:
 				e = Electrode(sensor=s, we=Decimal(str(i + electrode)), area=Decimal(str(area)), perimeter=Decimal(str(perimeter)))
+
+				if ae[sensor] is None:
+					e.area_ae = e.area
+					e.perimeter_ae = e.perimeter
+				else:
+					e.area_ae = Decimal(str(ae[sensor][0]))
+					e.perimeter_ae = Decimal(str(ae[sensor][1]))
 
 				if sensor <= 4 or sensor == 9:
 					if electrode == 3:

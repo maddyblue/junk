@@ -133,9 +133,11 @@ class Sensor(models.Model):
 class Electrode(models.Model):
 	sensor = models.ForeignKey(Sensor)
 	we = models.PositiveSmallIntegerField()
-	area = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3)
-	perimeter = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3)
-	distance = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2, help_text='shortest distance from working to aux electrode')
+	area = models.DecimalField(max_digits=5, decimal_places=3)
+	area_ae = models.DecimalField(max_digits=8, decimal_places=3, help_text='auxilliary electrode area')
+	perimeter = models.DecimalField(max_digits=5, decimal_places=3)
+	perimeter_ae = models.DecimalField(max_digits=8, decimal_places=3, help_text='auxilliary electrode perimeter')
+	distance = models.DecimalField(max_digits=4, decimal_places=2, help_text='shortest distance from working to aux electrode')
 
 	def __unicode__(self):
 		return 's%02dw%02d - area: %s, perimeter: %s, distance: %s' %(self.sensor.sensor, self.we, self.area, self.perimeter, self.distance)
