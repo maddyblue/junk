@@ -1,43 +1,43 @@
 \chapter{Chip Design and Characterization Results}
 
-After the chip was fabricated, characterizations were done on each sensor site to determine the best shape, size, pitch, and organization of the electrodes. There are 21 sensor sites on the chip. Each sensor site has four working-electrode areas. Each area has either one or two working electrodes, depending on if it is a 3- or 4-electrode system, respectively.
+After the chip was fabricated, characterizations were done on each sensor site to determine the best shape, size, and organization of the electrodes. There are 21 sensor sites on the chip. Each sensor site has four working-electrode areas. Each area has either one or two working electrodes, depending on if it is a 3- or 4-electrode system, respectively.
 
 \section{Sensor Site Characterization}
 
-The 21 sensor sites were characterized to find the best general electrode construction. This was done using differential pulse voltammetry (DPV). DPV is a technique similar to cyclic voltammetry (CV), but which is better because [TODO]. A CH Instruments 660B potentiostat was used to perform all of the following tests. Tests were performed on a probestation (Figure \ref{probestation}) by attaching a PDMS well to prevent solutions from leaking onte probe pads (Figure \ref{chip-top}), then lowering pins onto the probe pads of the chip (Figure \ref{chippins}, \ref{chippins-top}), which were connected to the reference, auxilliary, and working electrode leads of the potentiostat (Figure \ref{potentiostatleads}).
+The 21 sensor sites were characterized to find the best general electrode construction. This was done using differential pulse voltammetry (DPV), a technique similar to cyclic voltammetry (CV). In CV, the potential across the electrodes is varied linearly with time up and down, in cycles. In DPV, the potential across the electrodes is varied in a step pattern. The current is measured before and after each step, and the difference is returned. The start of each subsequent step is higher than the previous. This allows the background current to be removed from the output, yielding a more accurate result than CV. A CH Instruments 660B potentiostat was used to perform all of the following tests. Tests were performed on a probestation (Figure \ref{probestation}). A PDMS well was attached to the chip to prevent solutions from leaking onto probe pads (Figure \ref{chip-top}). Pins were lowered onto the probe pads of the chip (Figure \ref{chippins}, \ref{chippins-top}), which were connected to the reference, auxilliary, and working electrode leads of the potentiostat (Figure \ref{potentiostatleads}).
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{figures/probestation.png}
-	\caption[Probestation.]{Probestation enclosed in a Faraday cage, and connected to the potentiostat.}
+	\caption[Probestation]{Probestation enclosed in a Faraday cage, and connected to the potentiostat}
 	\label{probestation}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{figures/chip-top.png}
-	\caption{Chip with PDMS well attached.}
+	\caption{Chip with PDMS well attached}
 	\label{chip-top}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{figures/chippins.png}
-	\caption{Pins lowered onto probe pads of the chip.}
+	\caption{Pins lowered onto probe pads of the chip}
 	\label{chippins}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{figures/chippins-top.png}
-	\caption{Pins lowered onto probe pads of the chip, top view.}
+	\caption{Pins lowered onto probe pads of the chip, top view}
 	\label{chippins-top}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{figures/potentiostatleads.png}
-	\caption[Potentiostat leads connected to pins.]{Potentiostat leads for reference, auxilliary, and working electrodes connected to chip pins (white, red, and green, respectively).}
+	\caption[Potentiostat leads connected to pins]{Potentiostat leads for reference, auxilliary, and working electrodes connected to chip pins (white, red, and green, respectively)}
 	\label{potentiostatleads}
 \end{figure}
 
@@ -69,13 +69,13 @@ The method used was to test two random sensors on each of the 21 sensor sites wi
 		11 & 14.4 $\pm$ 1.9 & 1.01e-10 $\pm$ 1.33e-11 \\
 		3 & 11.3 $\pm$ 1.3 & 7.93e-11 $\pm$ 9.48e-12
 	\end{tabular}
-	\caption[DPV results for sensor sites.]{DPV results for sensor sites sorted by decreasing value.}
+	\caption[DPV results for sensor sites]{DPV results for sensor sites sorted by decreasing value}
 	\label{DPV results}
 \end{table}
 
 \section{Limit of Detection}
 
-Sensor sites 17 and 8 had the best results. Since those sensors have different electrode configuration [TODO: discuss electrode configuration, shape, etc.], testing was done on both sensors to determine the lowest detectable concentration using the same DPV procedure as above, but with decreasing concentrations of norepinephrine starting at 0.3mM and decreasing by a factor of 3 each iteration (Figure \ref{limit figure}). Sensor 17 (Table \ref{limit 17}) was able to detect down to about 3$\mu$M with a linear fit of $A = 1.88996e-6 * M - 2.36855e-12$, where $A$ is the resulting current in amperes and $M$ is the concentration molarity. Sensor 8 (Table \ref{limit 8}) was able to detect down to about 10$\mu$M with a linear fit of $A = 8.29117e-7 * M + 4.3417e-11$, where $A$ is the resulting current in amperes and $M$ is the concentration molarity.
+Sensor sites 17 and 8 had the best results. Testing was done on both sensors to determine the lowest detectable concentration using the same DPV procedure as above, but with decreasing concentrations of norepinephrine starting at 0.3mM and decreasing by a factor of 3 each iteration (Figure \ref{limit figure}). Sensor 17 (Table \ref{limit 17}) was able to detect down to about 3$\mu$M with a linear fit of $A = 1.88996e-6 * M - 2.36855e-12$, where $A$ is the resulting current in amperes and $M$ is the concentration molarity. Sensor 8 (Table \ref{limit 8}) was able to detect down to about 10$\mu$M with a linear fit of $A = 8.29117e-7 * M + 4.3417e-11$, where $A$ is the resulting current in amperes and $M$ is the concentration molarity.
 
 \begin{table}
 	\begin{tabular}{ll}
@@ -90,7 +90,7 @@ Sensor sites 17 and 8 had the best results. Since those sensors have different e
 		0.000011 & 1.306E-11 \\
 		0.000011 & 1.439E-11 \\
 	\end{tabular}
-	\caption[Detection limit results for sensor 17.]{Detection limit results for sensor 17 sorted by decreasing concentration.}
+	\caption[Detection limit results for sensor 17]{Detection limit results for sensor 17 sorted by decreasing concentration}
 	\label{limit 17}
 \end{table}
 
@@ -105,14 +105,14 @@ Sensor sites 17 and 8 had the best results. Since those sensors have different e
 		0.000033 & 3.276E-11 \\
 		0.000033 & 3.296E-11 \\
 	\end{tabular}
-	\caption[Detection limit results for sensor 8.]{Detection limit results for sensor 8 sorted by decreasing concentration.}
+	\caption[Detection limit results for sensor 8]{Detection limit results for sensor 8 sorted by decreasing concentration}
 	\label{limit 8}
 \end{table}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{figures/limit.png}
-	\caption{Detection limits.}
+	\caption{Detection limits}
 	\label{limit figure}
 \end{figure}
 
@@ -123,21 +123,21 @@ In addition to the characterizations above, DPV tests were done to compare worki
 \begin{figure}
 	\centering
 	\includegraphics[width=0.3\linewidth]{figures/4-C.png}
-	\caption{``C''-type working-electrode pair.}
+	\caption{``C''-type working-electrode pair}
 	\label{4-C}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.3\linewidth]{figures/4-I.png}
-	\caption{``Inverse C''-type working-electrode pair.}
+	\caption{``Inverse C''-type working-electrode pair}
 	\label{4-I}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.3\linewidth]{figures/4-F.png}
-	\caption{``F''-type working-electrode pair.}
+	\caption{``F''-type working-electrode pair}
 	\label{4-F}
 \end{figure}
 
@@ -150,7 +150,7 @@ In addition to the characterizations above, DPV tests were done to compare worki
 		4, ``inverse C'' & 14.267, 15.119 & 30.793, 32.835 \\
 		4, ``F'' & 21.771, 21.738 & 46.636, 46.796
 	\end{tabular}
-	\caption[Working-electrode areas and perimiters.]{Working-electrode areas, in $\mu \mathrm{m}^2$, and perimiters, in $\mu \mathrm{m}$. The 3-electrode entry lists the different sizes that are in one sensor site. The two electrodes with an area of 4 have different spacings [TODO: define spacing]. The 4-electrode entries list the areas of the left and right electrode, respectively. All working-electrode areas within one sensor site are the same for 4-electrode systems.}
+	\caption[Working-electrode areas and perimiters]{Working-electrode areas, in $\mu \mathrm{m}^2$, and perimiters, in $\mu \mathrm{m}$. The 3-electrode entry lists the different sizes that are in one sensor site. The two electrodes with an area of 4 have different spacings [TODO: define spacing]. The 4-electrode entries list the areas of the left and right electrode, respectively. All working-electrode areas within one sensor site are the same for 4-electrode systems.}
 	\label{electrode-area}
 \end{table}
 
@@ -166,70 +166,70 @@ In addition to the characterizations above, DPV tests were done to compare worki
 		\hline
 		\textbf{common reference top, common auxilliary on 3 sides} & 11, 12, 13 (Figure \ref{s11}) & 14, 15 (Figure \ref{s14}) & 10 (Figure \ref{s10}) & 16, 18 (Figure \ref{s16})
 	\end{tabular}
-	\caption{Sensor site configurations.}
+	\caption{Sensor site configurations}
 	\label{sensor-config}
 \end{table}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s00.png}
-	\caption{Sensor 0.}
+	\caption{Sensor 0}
 	\label{s00}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s03.png}
-	\caption{Sensor 3.}
+	\caption{Sensor 3}
 	\label{s03}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s05.png}
-	\caption{Sensor 5.}
+	\caption{Sensor 5}
 	\label{s05}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s06.png}
-	\caption{Sensor 6.}
+	\caption{Sensor 6}
 	\label{s06}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s10.png}
-	\caption{Sensor 10.}
+	\caption{Sensor 10}
 	\label{s10}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s11.png}
-	\caption{Sensor 11.}
+	\caption{Sensor 11}
 	\label{s11}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s14.png}
-	\caption{Sensor 14.}
+	\caption{Sensor 14}
 	\label{s14}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s16.png}
-	\caption{Sensor 16.}
+	\caption{Sensor 16}
 	\label{s16}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figures/s17.png}
-	\caption{Sensor 17.}
+	\caption{Sensor 17}
 	\label{s17}
 \end{figure}
 
@@ -257,54 +257,157 @@ From the same tests we can also conclude that the sensor-site orientation of sen
 		18 & 32 & 5.683e-10 &                         & 4.965e-10 $\pm$ 2.8e-12 & 18.50 & 21.738
 
 	\end{tabular}
-	\caption[Results of further DPV tests on specific working electrodes.]{Results of further DPV tests on specific working electrodes. Outputs are given from averaged data from runs on chips 1, 3, and 4 with standard error in amperes. The distance column lists the distance of the working to the auxilliary electrode from Table \ref{electrode distance} in $\mu \mathrm{m}$. The area column lists the area of the working electrode from Table \ref{electrode-area} in $\mu \mathrm{m}^2$. Chip 2 was not performing well and was skipped. Chips 3 and 4 used the same solution. Chip 1 used a separate solution. They were both mixed to be identical, but at concentrations this low, that is difficult to guarantee. Thus, do not use these data without adjusting for relative performance.}
+	\caption[Results of further DPV tests on specific working electrodes]{Results of further DPV tests on specific working electrodes. Outputs are given from averaged data from runs on chips 1, 3, and 4 with standard error in amperes. The distance column lists the distance of the working to the auxilliary electrode from Table \ref{electrode-properties-1}, \ref{electrode-properties-2}, \ref{electrode-properties-3} in $\mu \mathrm{m}$. The area column lists the area of the working electrode from Table \ref{electrode-area} in $\mu \mathrm{m}^2$. Chip 2 was not performing well and was skipped. Chips 3 and 4 used the same solution. Chip 1 used a separate solution. They were both mixed to be identical, but at concentrations this low, that is difficult to guarantee. Thus, do not use these data without adjusting for relative performance.}
 	\label{dpv-specific}
 \end{table}
 
 \begin{table}
-	\begin{tabular}{llll}
-		sensor & electrode from & electrode to & distance ($\mu \mathrm{m}$) \\
+	\begin{tabular}{lllllll}
+		sensor & WE & area & perimeter & WE distance to AE & AE area & AE perimeter \\
 		\hline
-		0 & *01 & *01 & 3.00 \\
-		0 & *02 & *02 & 3.00 \\
-		0 & *03 & *03 & 2.50 \\
-		0 & *04 & *04 & 3.00 \\
-		\multicolumn{4}{l}{sensor 0 is the same as sensor 1, 2} \\
-		3 & we01 & ae01 & 3.00 \\
-		3 & we02 & ae02 & 3.00 \\
-		3 & we03 & ae03 & 2.50 \\
-		3 & we04 & ae04 & 3.00 \\
-		\multicolumn{4}{l}{sensor 3 is the same as sensor 4, 9} \\
-		5 & we1*, we2* & comae & 26.55 \\
-		5 & we3*, we4* & comae & 11.51 \\
-		6 & we1*, we2* & comae & 35.54 \\
-		6 & we3*, we4* & comae & 15.51 \\
-		7 & we1*, we2* & comae & 45.48 \\
-		7 & we3*, we4* & comae & 20.40 \\
-		8 & we1*, we2* & comae & 33.53 \\
-		8 & we3*, we4* & comae & 13.53 \\
-		10 & we* & comae & 11.5 \\
-		11 & we01 & comae & 14.47 \\
-		11 & we02 & comae & 14.24 \\
-		11 & we03, we04 & comae & 13.96 \\
-		12 & we01 & comae & 19.50 \\
-		12 & we02 & comae & 19.21 \\
-		12 & we03, we04 & comae & 18.98 \\
-		13 & we01 & comae & 24.53 \\
-		13 & we02 & comae & 24.26 \\
-		13 & we03, we04 & comae & 24.05 \\
-		14 & we* & comae & 20.50 \\
-		15 & we* & comae & 15.50 \\
-		16 & we* & comae & 13.50 \\
-		17 & we1*, we2* & comae & 43.47 \\
-		17 & we3*, we4* & comae & 18.46 \\
-		18 & we* & comae & 18.50 \\
-		19 & we01 & ae01 & 2.00 \\
-		19 & we02 & ae02 & 3.00 \\
-		19 & we03 & ae03 & 2.50 \\
-		19 & we04 & ae04 & 3.00 \\
-		\multicolumn{4}{l}{sensor 19 is the same as sensor 20}
+		0 & 1 & 1 & 4 & 3 & 1 & 4 \\
+		0 & 2 & 2.25 & 6 & 3 & 2.25 & 6 \\
+		0 & 3 & 4 & 8 & 2.5 & 4 & 8 \\
+		0 & 4 & 4 & 8 & 3 & 4 & 8 \\
+		1 & 1 & 1 & 4 & 3 & 1 & 4 \\
+		1 & 2 & 2.25 & 6 & 3 & 2.25 & 6 \\
+		1 & 3 & 4 & 8 & 2.5 & 4 & 8 \\
+		1 & 4 & 4 & 8 & 3 & 4 & 8 \\
+		2 & 1 & 1 & 4 & 3 & 1 & 4 \\
+		2 & 2 & 2.25 & 6 & 3 & 2.25 & 6 \\
+		2 & 3 & 4 & 8 & 2.5 & 4 & 8 \\
+		2 & 4 & 4 & 8 & 3 & 4 & 8 \\
+		3 & 1 & 1 & 4 & 3 & 1 & 4 \\
+		3 & 2 & 2.25 & 6 & 3 & 2.25 & 6 \\
+		3 & 3 & 4 & 8 & 2.5 & 4 & 8 \\
+		3 & 4 & 4 & 8 & 3 & 4 & 8 \\
+		4 & 1 & 1 & 4 & 3 & 1 & 4 \\
+		4 & 2 & 2.25 & 6 & 3 & 2.25 & 6 \\
+		4 & 3 & 4 & 8 & 2.5 & 4 & 8 \\
+		4 & 4 & 4 & 8 & 3 & 4 & 8 \\
+		5 & 11 & 10.885 & 24.7 & 26.55 & 115 & 56 \\
+		5 & 12 & 11.342 & 25.081 & 26.55 & 115 & 56 \\
+		5 & 21 & 10.885 & 24.7 & 26.55 & 115 & 56 \\
+		5 & 22 & 11.342 & 25.081 & 26.55 & 115 & 56 \\
+		5 & 31 & 10.885 & 24.7 & 11.51 & 115 & 56 \\
+		5 & 32 & 11.342 & 25.081 & 11.51 & 115 & 56 \\
+		5 & 41 & 10.885 & 24.7 & 11.51 & 115 & 56 \\
+		5 & 42 & 11.342 & 25.081 & 11.51 & 115 & 56 \\
+		6 & 11 & 14.267 & 30.793 & 35.54 & 152.5 & 71 \\
+		6 & 12 & 15.119 & 32.835 & 35.54 & 152.5 & 71 \\
+		6 & 21 & 14.267 & 30.793 & 35.54 & 152.5 & 71 \\
+		6 & 22 & 15.119 & 32.835 & 35.54 & 152.5 & 71 \\
+		6 & 31 & 14.267 & 30.793 & 15.51 & 152.5 & 71 \\
+		6 & 32 & 15.119 & 32.835 & 15.51 & 152.5 & 71 \\
+		6 & 41 & 14.267 & 30.793 & 15.51 & 152.5 & 71 \\
+		6 & 42 & 15.119 & 32.835 & 15.51 & 152.5 & 71 \\
+		7 & 11 & 14.267 & 30.793 & 45.48 & 177.5 & 81 \\
+		7 & 12 & 15.119 & 32.835 & 45.48 & 177.5 & 81 \\
+		7 & 21 & 14.267 & 30.793 & 45.48 & 177.5 & 81 \\
+		7 & 22 & 15.119 & 32.835 & 45.48 & 177.5 & 81 \\
+		7 & 31 & 14.267 & 30.793 & 20.4 & 177.5 & 81 \\
+		7 & 32 & 15.119 & 32.835 & 20.4 & 177.5 & 81 \\
+		7 & 41 & 14.267 & 30.793 & 20.4 & 177.5 & 81 \\
+		7 & 42 & 15.119 & 32.835 & 20.4 & 177.5 & 81
 	\end{tabular}
-	\caption[Electrode distances.]{Electrode distances, measured by the two closest edges. ``we'' means working electrode; ``ae'' means auxilliary electrode; ``re'' means reference electrode. ``com'' means common. For example, comae means common auxilliary electrode. A * means all electrodes that fit the rest of the expression. For example, *01 means we01, ae01, re01.}
-	\label{electrode distance}
+	\caption[Electrode properties for sensors 0--7]{Electrode properties for sensors 0--7. Areas are in $\mu \mathrm{m}^2$. Perimeters and distances are in $\mu \mathrm{m}$. WE distance to AE lists shortest distance between the two electrodes.}
+	\label{electrode-properties-1}
+\end{table}
+
+\begin{table}
+	\begin{tabular}{lllllll}
+		sensor & WE & WE area & WE perimeter & WE distance to AE & AE area & AE perimeter \\
+		\hline
+		8 & 11 & 21.771 & 46.636 & 33.53 & 161.25 & 74.5 \\
+		8 & 12 & 21.738 & 46.796 & 33.53 & 161.25 & 74.5 \\
+		8 & 21 & 21.771 & 46.636 & 33.53 & 161.25 & 74.5 \\
+		8 & 22 & 21.738 & 46.796 & 33.53 & 161.25 & 74.5 \\
+		8 & 31 & 21.771 & 46.636 & 13.53 & 161.25 & 74.5 \\
+		8 & 32 & 21.738 & 46.796 & 13.53 & 161.25 & 74.5 \\
+		8 & 41 & 21.771 & 46.636 & 13.53 & 161.25 & 74.5 \\
+		8 & 42 & 21.738 & 46.796 & 13.53 & 161.25 & 74.5 \\
+		9 & 1 & 1 & 4 & 3 & 1 & 4 \\
+		9 & 2 & 2.25 & 6 & 3 & 2.25 & 6 \\
+		9 & 3 & 4 & 8 & 2.5 & 4 & 8 \\
+		9 & 4 & 4 & 8 & 3 & 4 & 8 \\
+		10 & 11 & 14.267 & 30.793 & 11.5 & 865 & 356 \\
+		10 & 12 & 15.119 & 32.835 & 11.5 & 865 & 356 \\
+		10 & 21 & 14.267 & 30.793 & 11.5 & 865 & 356 \\
+		10 & 22 & 15.119 & 32.835 & 11.5 & 865 & 356 \\
+		10 & 31 & 14.267 & 30.793 & 11.5 & 865 & 356 \\
+		10 & 32 & 15.119 & 32.835 & 11.5 & 865 & 356 \\
+		10 & 41 & 14.267 & 30.793 & 11.5 & 865 & 356 \\
+		10 & 42 & 15.119 & 32.835 & 11.5 & 865 & 356 \\
+		11 & 1 & 1 & 4 & 14.47 & 820 & 338 \\
+		11 & 2 & 2.25 & 6 & 14.24 & 820 & 338 \\
+		11 & 3 & 4 & 8 & 13.96 & 820 & 338 \\
+		11 & 4 & 4 & 8 & 13.96 & 820 & 338 \\
+		12 & 1 & 1 & 4 & 19.5 & 1045 & 428 \\
+		12 & 2 & 2.25 & 6 & 19.21 & 1045 & 428 \\
+		12 & 3 & 4 & 8 & 18.98 & 1045 & 428 \\
+		12 & 4 & 4 & 8 & 18.98 & 1045 & 428 \\
+		13 & 1 & 1 & 4 & 24.53 & 1270 & 518 \\
+		13 & 2 & 2.25 & 6 & 24.26 & 1270 & 518 \\
+		13 & 3 & 4 & 8 & 24.05 & 1270 & 518 \\
+		13 & 4 & 4 & 8 & 24.05 & 1270 & 518 \\
+		14 & 11 & 10.885 & 24.7 & 20.5 & 1333.75 & 543.5 \\
+		14 & 12 & 11.342 & 25.081 & 20.5 & 1333.75 & 543.5 \\
+		14 & 21 & 10.885 & 24.7 & 20.5 & 1333.75 & 543.5 \\
+		14 & 22 & 11.342 & 25.081 & 20.5 & 1333.75 & 543.5 \\
+		14 & 31 & 10.885 & 24.7 & 20.5 & 1333.75 & 543.5 \\
+		14 & 32 & 11.342 & 25.081 & 20.5 & 1333.75 & 543.5 \\
+		14 & 41 & 10.885 & 24.7 & 20.5 & 1333.75 & 543.5 \\
+		14 & 42 & 11.342 & 25.081 & 20.5 & 1333.75 & 543.5
+	\end{tabular}
+	\caption[Electrode properties for sensors 8--14]{Electrode properties for sensors 8--14. Areas are in $\mu \mathrm{m}^2$. Perimeters and distances are in $\mu \mathrm{m}$. WE distance to AE lists shortest distance between the two electrodes.}
+	\label{electrode-properties-2}
+\end{table}
+
+\begin{table}
+	\begin{tabular}{lllllll}
+		sensor & WE & area & perimeter & WE distance to AE & AE area & AE perimeter \\
+		\hline
+		15 & 11 & 10.885 & 24.7 & 15.5 & 1108.75 & 453.5 \\
+		15 & 12 & 11.342 & 25.081 & 15.5 & 1108.75 & 453.5 \\
+		15 & 21 & 10.885 & 24.7 & 15.5 & 1108.75 & 453.5 \\
+		15 & 22 & 11.342 & 25.081 & 15.5 & 1108.75 & 453.5 \\
+		15 & 31 & 10.885 & 24.7 & 15.5 & 1108.75 & 453.5 \\
+		15 & 32 & 11.342 & 25.081 & 15.5 & 1108.75 & 453.5 \\
+		15 & 41 & 10.885 & 24.7 & 15.5 & 1108.75 & 453.5 \\
+		15 & 42 & 11.342 & 25.081 & 15.5 & 1108.75 & 453.5 \\
+		16 & 11 & 21.771 & 46.636 & 13.5 & 1121.875 & 458.75 \\
+		16 & 12 & 21.738 & 46.796 & 13.5 & 1121.875 & 458.75 \\
+		16 & 21 & 21.771 & 46.636 & 13.5 & 1121.875 & 458.75 \\
+		16 & 22 & 21.738 & 46.796 & 13.5 & 1121.875 & 458.75 \\
+		16 & 31 & 21.771 & 46.636 & 13.5 & 1121.875 & 458.75 \\
+		16 & 32 & 21.738 & 46.796 & 13.5 & 1121.875 & 458.75 \\
+		16 & 41 & 21.771 & 46.636 & 13.5 & 1121.875 & 458.75 \\
+		16 & 42 & 21.738 & 46.796 & 13.5 & 1121.875 & 458.75 \\
+		17 & 11 & 14.267 & 30.793 & 43.47 & 186.25 & 84.5 \\
+		17 & 12 & 15.119 & 32.835 & 43.47 & 186.25 & 84.5 \\
+		17 & 21 & 14.267 & 30.793 & 43.47 & 186.25 & 84.5 \\
+		17 & 22 & 15.119 & 32.835 & 43.47 & 186.25 & 84.5 \\
+		17 & 31 & 14.267 & 30.793 & 18.46 & 186.25 & 84.5 \\
+		17 & 32 & 15.119 & 32.835 & 18.46 & 186.25 & 84.5 \\
+		17 & 41 & 14.267 & 30.793 & 18.46 & 186.25 & 84.5 \\
+		17 & 42 & 15.119 & 32.835 & 18.46 & 186.25 & 84.5 \\
+		18 & 11 & 21.771 & 46.636 & 18.5 & 1346.875 & 548.75 \\
+		18 & 12 & 21.738 & 46.796 & 18.5 & 1346.875 & 548.75 \\
+		18 & 21 & 21.771 & 46.636 & 18.5 & 1346.875 & 548.75 \\
+		18 & 22 & 21.738 & 46.796 & 18.5 & 1346.875 & 548.75 \\
+		18 & 31 & 21.771 & 46.636 & 18.5 & 1346.875 & 548.75 \\
+		18 & 32 & 21.738 & 46.796 & 18.5 & 1346.875 & 548.75 \\
+		18 & 41 & 21.771 & 46.636 & 18.5 & 1346.875 & 548.75 \\
+		18 & 42 & 21.738 & 46.796 & 18.5 & 1346.875 & 548.75 \\
+		19 & 1 & 1 & 4 & 2 & 1 & 4 \\
+		19 & 2 & 2.25 & 6 & 3 & 2.25 & 6 \\
+		19 & 3 & 4 & 8 & 2.5 & 4 & 8 \\
+		19 & 4 & 4 & 8 & 3 & 4 & 8 \\
+		20 & 1 & 1 & 4 & 2 & 1 & 4 \\
+		20 & 2 & 2.25 & 6 & 3 & 2.25 & 6 \\
+		20 & 3 & 4 & 8 & 2.5 & 4 & 8 \\
+		20 & 4 & 4 & 8 & 3 & 4 & 8
+	\end{tabular}
+	\caption[Electrode properties for sensors 15--20]{Electrode properties for sensors 15--20. Areas are in $\mu \mathrm{m}^2$. Perimeters and distances are in $\mu \mathrm{m}$. WE distance to AE lists shortest distance between the two electrodes.}
+	\label{electrode-properties-3}
 \end{table}
