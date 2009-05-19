@@ -12,6 +12,7 @@ import math
 import matplotlib
 matplotlib.use('AGG')
 import matplotlib.pyplot as plt
+from pylab import setp
 
 def render(request, template, dict={}):
 	r = Result.objects.all().order_by('-run_date', '-upload_date')
@@ -268,13 +269,15 @@ def sensor(request):
 					float(electrode.perimeter),
 					float(electrode.distance),
 					float(electrode.perimeter / electrode.area),
-					float(electrode.area / electrode.area_ae)
+					float(electrode.area / electrode.area_ae),
+					electrode.sensor.sensor_type
 				))
 		specific.append(d)
 
 	plot('perim_area_v_density', pltdat, PLT_PERIM_AREA, PLT_MEAN_DEN, axis = {'xmin': 1.5, 'xmax': 4.5})
 	plot('distance_v_density', pltdat, PLT_DIST, PLT_MEAN_DEN)
 	plot('area_ratio_v_output', pltdat, PLT_AREA_RATIO, PLT_MEAN, axis = {'xmin': -0.1, 'xmax': 1.1})
+	plot('shape_v_density', pltdat, PLT_SENSOR_SHAPE, PLT_MEAN_DEN, shape_hack=True, axis = {'xmin': -0.5, 'xmax': 3.5})
 
 	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc, 'chips': chips, 'specific': specific})
 
@@ -293,6 +296,7 @@ PLT_PERIM = 8
 PLT_DIST = 9
 PLT_PERIM_AREA = 10
 PLT_AREA_RATIO = 11
+PLT_SENSOR_SHAPE = 12
 
 colnames = [
 	'sensor',
@@ -306,10 +310,12 @@ colnames = [
 	r'working electrode perimeter ($\mu \mathrm{m}$)',
 	r'distance between WE and AE ($\mu \mathrm{m}$)',
 	r'WE perimeter / area ($\mu \mathrm{m}$)',
-	'WE area / AE area'
+	'WE area / AE area',
+	'sensor shape'
 ]
 
-def plot(name, lst, x, y, axis={}):
+def plot(name, lst, x, y, axis={}, shape_hack=False):
+
 	plt.errorbar(
 		zipcol(lst, x),
 		zipcol(lst, y),
@@ -320,6 +326,13 @@ def plot(name, lst, x, y, axis={}):
 	plt.xlabel(colnames[x])
 	plt.ylabel(colnames[y])
 	plt.axis(**axis)
+
+	if x == PLT_SENSOR_SHAPE:
+		xa = plt.axes().xaxis
+		xa.set_ticklabels(['2 AE', 'RE top & bottom', 'RE top, AE bottom', 'RE top, AE on 3 sides'])
+		xa.set_ticks([0, 1, 2, 3])
+		labels = plt.axes().get_xticklabels()
+		setp(labels, fontsize=8)
 
 	plt.savefig(settings.MEDIA_ROOT + 'uploads/sensors/' + name)
 	plt.clf()

@@ -27,5 +27,15 @@
 		<td>{{ e.distance }}</td>
 	</tr>
 {% endfor %}
+</table>
+
+<h1>Latex Table</h1>
+
+{% for e in electrodes %}
+<br/>
+{{ e.sensor.sensor }} &amp; {{ e.we }} &amp;
+{{ e.area }} &amp; {{ e.perimeter }} &amp; {{ e.distance }} &amp;
+{{ e.area_ae }} &amp; {{ e.perimeter_ae }} \\
+{% endfor %}
 
 {% endblock %}
