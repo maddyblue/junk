@@ -59,17 +59,7 @@ def electrode(request):
 
 def limit(request):
 	lod = Result.objects.filter(notes__contains='lod = ')
-
 	limits = {}
-	pltname = 'uploads/sensors/limit.plt'
-	plt = open(pltname, 'w')
-
-	plt.write('set terminal png size 640, 480\n')
-	plt.write('set xlabel "concentration"\n')
-	plt.write('set ylabel "current (A)"\n')
-	plt.write('set output "uploads/sensors/limit.png"\n')
-
-	pltstr = []
 
 	for s in lod:
 		for l in s.notes.splitlines():
@@ -91,28 +81,26 @@ def limit(request):
 				limits[s.sensor].append((conc, Decimal(p[2])))
 				break
 
+	for sensor, dat in limits.iteritems():
+		xdat = map(float, zipcol(dat, 0))
+		ydat = map(float, zipcol(dat, 1))
+
+		plt.plot(xdat, ydat, '+', label='%s' %sensor)
+		plt.plot(xdat, polyval(polyfit(xdat, ydat, 1), xdat), label='fit for %s' %sensor)
+
+	plt.xlabel(r'concentration ($\mathrm{M}$)')
+	plt.ylabel(r'current ($\mathrm{A}$)')
+	plt.axis(xmin=0, xmax=0.00035)
+	plt.legend(loc='upper left')
+	plt.savefig(settings.MEDIA_ROOT + 'uploads/sensors/limit.png')
+	plt.clf()
+
 	limlist = []
 	for s, lim in limits.iteritems():
-		f = open('uploads/sensors/limit.%i.dat' %s, 'w')
-
 		for conc, value in lim:
 			limlist.append((s, conc, value))
-			f.write('%s %s\n' %(conc, value))
-
-		plt.write('f%(id)i(x) = m%(id)i * x + b%(id)i\n' %{'id': s})
-		plt.write('fit f%(id)i(x) "uploads/sensors/limit.%(id)i.dat" via m%(id)i, b%(id)i\n' %{'id': s})
-		pltstr.append('"uploads/sensors/limit.%(id)s.dat" title "%(id)i", m%(id)i * x + b%(id)i title "m*x+b for %(id)i"' %{'id': s})
-
-		f.close()
 
 	limlist.sort(cmp=lambda x, y: cmp(x[1], y[1]), reverse=True)
-
-	plt.write('plot [0:%s] \\\n' %(limlist[0][1] * Decimal('1.1')))
-	plt.write(', \\\n'.join(pltstr))
-
-	plt.close()
-
-	os.popen('%s %s' %(settings.PROG_GNUPLOT, pltname))
 
 	return render(request, 'results/limit.html', {'limits': limlist})
 
