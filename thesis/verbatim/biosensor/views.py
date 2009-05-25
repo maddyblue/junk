@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from biosensor.results.models import *
 from biosensor import settings
 from decimal import Decimal
+from numpy import polyfit, polyval
 import datetime
 import re
 import os
@@ -64,8 +65,8 @@ def limit(request):
 	plt = open(pltname, 'w')
 
 	plt.write('set terminal png size 640, 480\n')
-	plt.write('set xlabel "Concentration"\n')
-	plt.write('set ylabel "Current/A"\n')
+	plt.write('set xlabel "concentration"\n')
+	plt.write('set ylabel "current (A)"\n')
 	plt.write('set output "uploads/sensors/limit.png"\n')
 
 	pltstr = []
@@ -120,7 +121,7 @@ def mean(list):
 
 def stdev(list):
 	a = mean(list)
-	v = [(i - a) ** 2 for i in list]
+	v = [(i - a) ** 2.0 for i in list]
 	return math.sqrt(sum(v) / len(list))
 
 def sterror(list):
@@ -133,82 +134,23 @@ def sensor(request):
 	avg = {}
 	dev = {}
 	error = {}
-	pltdat = {}
-	dat = 'uploads/sensors/sensors.dat'
-	f = open(settings.MEDIA_ROOT + dat, 'w')
-
-	pltname = 'uploads/sensors/sensors.plt'
-	dat = '"%s"' %dat
-	plt = open(pltname, 'w')
-
-	plt.write('set terminal png size 640, 480\n')
-	plt.write('set xlabel "area/um"\n')
-	plt.write('set ylabel "current/A"\n')
-	plt.write('f(x) = m*x + b\n')
-	plt.write('fit f(x) %s using 2:3 via m, b\n' %dat)
-	plt.write('set output "uploads/sensors/sensors.png"\n')
-	plt.write('plot %s using 2:3 notitle, f(x) notitle\n' %dat)
-	plt.write('f(x) = m*x + b\n')
-	plt.write('fit f(x) %s using 2:($3 / $2) via m, b\n' %dat)
-	plt.write('set ylabel "current density"\n')
-	plt.write('set output "uploads/sensors/density.png"\n')
-	plt.write('plot %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
-	plt.write('f(x) = m*x + b\n')
-	plt.write('fit [10:] f(x) %s using 2:($3 / $2) via m, b\n' %dat)
-	plt.write('set output "uploads/sensors/density-high.png"\n')
-	plt.write('plot [10:] %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
-	plt.write('f(x) = m*x + b\n')
-	plt.write('fit [0:5] f(x) %s using 2:($3 / $2) via m, b\n' %dat)
-	plt.write('set output "uploads/sensors/density-low.png"\n')
-	plt.write('plot [0:5] %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
 
 	for s in sensors:
 		area = Electrode.objects.get(sensor__sensor=s.sensor, we=s.electrode).area
 		if s.sensor not in count:
 			count[s.sensor] = 0
 			avg[s.sensor] = 0
-			pltdat[s.sensor] = []
-
-		f.write('%s %s %s\n' %(s.sensor, area, s.characterize_value))
-		pltdat[s.sensor].append('%s %s' %(area, s.characterize_value))
 
 		avg[s.sensor] += float(s.characterize_value)
 		count[s.sensor] += 1
 
-	f.close()
 	sensors = sensors.order_by('-characterize_value')
-
-	pltstr = []
-	pltdenstr = []
-	for k, v in pltdat.iteritems():
-		f = open('uploads/sensors/sensors.%i.dat' %k, 'w')
-		pltstr.append('"uploads/sensors/sensors.%(i)i.dat" title "%(i)i"' %{'i': k})
-		pltdenstr.append('"uploads/sensors/sensors.%(i)i.dat" using 1:($2 / $1) title "%(i)i"' %{'i': k})
-		for s in v:
-			f.write(s + '\n')
-		f.close()
-
-	plt.write('set xlabel "area/um"\n')
-	plt.write('set ylabel "current/A"\n')
-	plt.write('set output "uploads/sensors/sensors-multi.png"\n')
-	plt.write('plot [0:30] %s\n' %','.join(pltstr))
-
-	plt.write('set ylabel "current density"\n')
-	plt.write('set output "uploads/sensors/density-multi.png"\n')
-	plt.write('plot [0:30] %s\n' %','.join(pltdenstr))
-
-	plt.write('set output "uploads/sensors/density-high-multi.png"\n')
-	plt.write('plot [10:25] %s\n' %','.join(pltdenstr))
-
-	plt.write('set output "uploads/sensors/density-low-multi.png"\n')
-	plt.write('plot [0:5] %s\n' %','.join(pltdenstr))
 
 	for k in avg.keys():
 		avg[k] /= count[k]
-		l = sensors.filter(sensor=k)
-		vl = list((float(i.characterize_value) - avg[k]) ** 2 for i in l)
-		dev[k] = math.sqrt(sum(vl) / count[k])
-		error[k] = dev[k] / math.sqrt(count[k])
+		v = list(float(i.characterize_value) for i in sensors.filter(sensor=k))
+		dev[k] = stdev(v)
+		error[k] = sterror(v)
 
 	senlist = []
 	for k, v in avg.iteritems():
@@ -216,15 +158,55 @@ def sensor(request):
 	senlist.sort(cmp=lambda x, y: cmp(x[1], y[1]), reverse=True)
 
 	perc = []
-	m = senlist[0][1] / 100
+	m = senlist[0][1] / 100.0
 
 	for (id, v) in senlist:
 		se = error[id]
 		perc.append([id, v, v / m, se / m, se])
 
-	plt.close()
+	# matplotlib data for use=True
 
-	os.popen('%s %s' %(settings.PROG_GNUPLOT, pltname))
+	res = {}
+
+	for r in sensors:
+		s = 's%02iw%02i' %(r.sensor, r.electrode)
+		if s not in res:
+			res[s] = []
+		res[s].append(float(r.characterize_value))
+
+	s = res.keys()
+	s.sort()
+	pltdat = []
+
+	for k in s:
+		d = [k[1:3], k[4:6]]
+		electrode = Electrode.objects.get(sensor__sensor=d[0], we=d[1])
+		m = mean(res[k])
+		e = sterror(res[k])
+		density = [i / float(electrode.area) for i in res[k]]
+		d.append('%.3e $\pm$ %.3e' %(m, e))
+		pltdat.append((
+			electrode.sensor.sensor,
+			electrode.we,
+			None, # chip
+			m, # output mean
+			e, # output standard error
+			mean(density),
+			sterror(density),
+			float(electrode.area),
+			float(electrode.perimeter),
+			float(electrode.distance),
+			float(electrode.perimeter / electrode.area),
+			float(electrode.area / electrode.area_ae),
+			electrode.sensor.sensor_type
+		))
+
+	p_output = plot('area_v_output', pltdat, PLT_AREA, PLT_MEAN, fit=True)
+	p_density = plot('area_v_density', pltdat, PLT_AREA, PLT_MEAN_DEN, fit=True)
+	plot('area_low_v_density', pltdat, PLT_AREA, PLT_MEAN_DEN, axis = {'xmin': 0, 'xmax': 5})
+	plot('area_high_v_density', pltdat, PLT_AREA, PLT_MEAN_DEN, axis = {'xmin': 10})
+
+	# matplotlib data for specific tests
 
 	chips = ['3', '4']
 	res = {}
@@ -274,12 +256,12 @@ def sensor(request):
 				))
 		specific.append(d)
 
-	plot('perim_area_v_density', pltdat, PLT_PERIM_AREA, PLT_MEAN_DEN, axis = {'xmin': 1.5, 'xmax': 4.5})
+	plot('perim_area_v_density', pltdat, PLT_PERIM_AREA, PLT_MEAN_DEN, axis = {'xmin': 1.5, 'xmax': 4.5}, fit=True)
 	plot('distance_v_density', pltdat, PLT_DIST, PLT_MEAN_DEN)
 	plot('area_ratio_v_output', pltdat, PLT_AREA_RATIO, PLT_MEAN, axis = {'xmin': -0.1, 'xmax': 1.1})
 	plot('shape_v_density', pltdat, PLT_SENSOR_SHAPE, PLT_MEAN_DEN, shape_hack=True, axis = {'xmin': -0.5, 'xmax': 3.5})
 
-	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc, 'chips': chips, 'specific': specific})
+	return render(request, 'results/sensors.html', {'sensors': sensors, 'perc': perc, 'chips': chips, 'specific': specific, 'p_output': '%.3e * x + %.3e' %(p_output[0], p_output[1]), 'p_density': '%.3e * x + %.3e' %(p_density[0], p_density[1])})
 
 def zipcol(lst, col):
 	return [i[col] for i in lst]
@@ -314,14 +296,20 @@ colnames = [
 	'sensor shape'
 ]
 
-def plot(name, lst, x, y, axis={}, shape_hack=False):
+def plot(name, lst, x, y, axis={}, shape_hack=False, fit=False):
+	xdat = zipcol(lst, x)
+	ydat = zipcol(lst, y)
 
 	plt.errorbar(
-		zipcol(lst, x),
-		zipcol(lst, y),
+		xdat,
+		ydat,
 		yerr=zipcol(lst, y + 1),
 		fmt='.'
 	)
+
+	if fit:
+		p = polyfit(xdat, ydat, 1)
+		plt.plot(xdat, polyval(p, xdat))
 
 	plt.xlabel(colnames[x])
 	plt.ylabel(colnames[y])
@@ -336,6 +324,9 @@ def plot(name, lst, x, y, axis={}, shape_hack=False):
 
 	plt.savefig(settings.MEDIA_ROOT + 'uploads/sensors/' + name)
 	plt.clf()
+
+	if fit:
+		return p
 
 def detail(request, result_id):
 	r = get_object_or_404(Result, pk=result_id)
