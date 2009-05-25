@@ -64,8 +64,8 @@ def limit(request):
 	plt = open(pltname, 'w')
 
 	plt.write('set terminal png size 640, 480\n')
-	plt.write('set xlabel "Concentration"\n')
-	plt.write('set ylabel "Current/A"\n')
+	plt.write('set xlabel "concentration"\n')
+	plt.write('set ylabel "current (A)"\n')
 	plt.write('set output "uploads/sensors/limit.png"\n')
 
 	pltstr = []
@@ -142,15 +142,15 @@ def sensor(request):
 	plt = open(pltname, 'w')
 
 	plt.write('set terminal png size 640, 480\n')
-	plt.write('set xlabel "area/um"\n')
-	plt.write('set ylabel "current/A"\n')
+	plt.write('set xlabel "area (um^2)"\n')
+	plt.write('set ylabel "current (A)"\n')
 	plt.write('f(x) = m*x + b\n')
 	plt.write('fit f(x) %s using 2:3 via m, b\n' %dat)
 	plt.write('set output "uploads/sensors/sensors.png"\n')
 	plt.write('plot %s using 2:3 notitle, f(x) notitle\n' %dat)
 	plt.write('f(x) = m*x + b\n')
 	plt.write('fit f(x) %s using 2:($3 / $2) via m, b\n' %dat)
-	plt.write('set ylabel "current density"\n')
+	plt.write('set ylabel "current density (A/um^2)"\n')
 	plt.write('set output "uploads/sensors/density.png"\n')
 	plt.write('plot %s using 2:($3 / $2) notitle, f(x) notitle\n' %dat)
 	plt.write('f(x) = m*x + b\n')
@@ -178,37 +178,11 @@ def sensor(request):
 	f.close()
 	sensors = sensors.order_by('-characterize_value')
 
-	pltstr = []
-	pltdenstr = []
-	for k, v in pltdat.iteritems():
-		f = open('uploads/sensors/sensors.%i.dat' %k, 'w')
-		pltstr.append('"uploads/sensors/sensors.%(i)i.dat" title "%(i)i"' %{'i': k})
-		pltdenstr.append('"uploads/sensors/sensors.%(i)i.dat" using 1:($2 / $1) title "%(i)i"' %{'i': k})
-		for s in v:
-			f.write(s + '\n')
-		f.close()
-
-	plt.write('set xlabel "area/um"\n')
-	plt.write('set ylabel "current/A"\n')
-	plt.write('set output "uploads/sensors/sensors-multi.png"\n')
-	plt.write('plot [0:30] %s\n' %','.join(pltstr))
-
-	plt.write('set ylabel "current density"\n')
-	plt.write('set output "uploads/sensors/density-multi.png"\n')
-	plt.write('plot [0:30] %s\n' %','.join(pltdenstr))
-
-	plt.write('set output "uploads/sensors/density-high-multi.png"\n')
-	plt.write('plot [10:25] %s\n' %','.join(pltdenstr))
-
-	plt.write('set output "uploads/sensors/density-low-multi.png"\n')
-	plt.write('plot [0:5] %s\n' %','.join(pltdenstr))
-
 	for k in avg.keys():
 		avg[k] /= count[k]
-		l = sensors.filter(sensor=k)
-		vl = list((float(i.characterize_value) - avg[k]) ** 2 for i in l)
-		dev[k] = math.sqrt(sum(vl) / count[k])
-		error[k] = dev[k] / math.sqrt(count[k])
+		v = list(float(i.characterize_value) for i in sensors.filter(sensor=k))
+		dev[k] = stdev(v)
+		error[k] = sterror(v)
 
 	senlist = []
 	for k, v in avg.iteritems():
@@ -216,7 +190,7 @@ def sensor(request):
 	senlist.sort(cmp=lambda x, y: cmp(x[1], y[1]), reverse=True)
 
 	perc = []
-	m = senlist[0][1] / 100
+	m = senlist[0][1] / 100.0
 
 	for (id, v) in senlist:
 		se = error[id]
