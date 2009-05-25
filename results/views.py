@@ -120,7 +120,7 @@ def mean(list):
 
 def stdev(list):
 	a = mean(list)
-	v = [(i - a) ** 2 for i in list]
+	v = [(i - a) ** 2.0 for i in list]
 	return math.sqrt(sum(v) / len(list))
 
 def sterror(list):
