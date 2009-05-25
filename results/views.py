@@ -256,7 +256,7 @@ def sensor(request):
 				))
 		specific.append(d)
 
-	plot('perim_area_v_density', pltdat, PLT_PERIM_AREA, PLT_MEAN_DEN, axis = {'xmin': 1.5, 'xmax': 4.5})
+	plot('perim_area_v_density', pltdat, PLT_PERIM_AREA, PLT_MEAN_DEN, axis = {'xmin': 1.5, 'xmax': 4.5}, fit=True)
 	plot('distance_v_density', pltdat, PLT_DIST, PLT_MEAN_DEN)
 	plot('area_ratio_v_output', pltdat, PLT_AREA_RATIO, PLT_MEAN, axis = {'xmin': -0.1, 'xmax': 1.1})
 	plot('shape_v_density', pltdat, PLT_SENSOR_SHAPE, PLT_MEAN_DEN, shape_hack=True, axis = {'xmin': -0.5, 'xmax': 3.5})
