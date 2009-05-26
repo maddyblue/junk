@@ -1,5 +1,21 @@
 \chapter{Chip Design and Characterization Results}
 
+Due to the above limitations, a chip was designed that was able to meet the requirements, and test hypotheses, for integrated biosensing. The process used to achieve these goals was CMOS, the standard process used in microchip fabrication. Our process was able to produce feature definition at the 0.6 $\mu \mathrm{m}$ size. The electrodes are platinum on a glass substrate. There are 21 sensor sites, arranged in a $5 \times 5$ grid, with varying configurations and distances between electrodes, making each site unique (Figure \ref{biosensorchip-sensors}). The size of the chip is $9 \mathrm{mm} \times 9 \mathrm{mm}$, with bonding pads on the exterior at $160 \mathrm{mm} \times 160 \mathrm{mm}$ each (Figure \ref{biosensorchip}).
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{figures/biosensorchip-sensors.png}
+	\caption{Sensors layout of the chip}
+	\label{biosensorchip-sensors}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{figures/biosensorchip.png}
+	\caption{Full layout of the chip}
+	\label{biosensorchip}
+\end{figure}
+
 After the chip was fabricated, characterizations were done on each sensor site to determine the best shape, size, and organization of the electrodes. There are 21 sensor sites on the chip. Each sensor site has four working-electrode areas. Each area has either one or two working electrodes, depending on if it is a 3- or 4-electrode system, respectively. This chapter describes the chip, sensor sites, and electrode systems, and the experiments used to characterize them.
 
 \section{Sensor Configurations}
@@ -451,11 +467,11 @@ The 21 sensor sites were characterized to find the best general electrode constr
 
 \subsection{All Sites}
 
-The first set of tests was done by performing DPV from -0.2V to 0.2V on two randomly-chosen WE areas of each sensor site, three times each (six tests on each sensor site). The solution used was 0.3mM norepinephrine in 0.1M $\mathrm{H}_2\mathrm{SO}_4$. Before a WE area was used, it was cleaned by CV from -0.3V to 1.5V at 1V/s with 20 cycles, with a solution of 0.1M $\mathrm{H}_2\mathrm{SO}_4$. The result of each individual test was taken to be the distance of the baseline to the bottom of the peak centered around 0.0V. The result of each sensor site was taken to be the average of the six tests on that site.
+The first set of tests was done by performing DPV from -0.2V to 0.2V on two randomly-chosen WE areas of each sensor site, three times each (six tests on each sensor site). The solution used was 0.3mM norepinephrine (NE) in 0.1M $\mathrm{H}_2\mathrm{SO}_4$. Before a WE area was used, it was cleaned by CV from -0.3V to 1.5V at 1V/s with 20 cycles, with a solution of 0.1M $\mathrm{H}_2\mathrm{SO}_4$. The result of each individual test was taken to be the distance of the baseline to the bottom of the peak centered around 0.0V. The result of each sensor site was taken to be the average of the six tests on that site.
 
 \subsection{Limit of Detection}
 
-The second set of tests was done on sensors 17 and 8, which were the two highest-performing sensors from the previous test. The same procedure was used as above, except decreasing concentrations of norepinephrine were used.
+The second set of tests was done on sensors 17 and 8, which were the two highest-performing sensors from the previous test. The same procedure was used as above, except decreasing concentrations of NE were used.
 
 \subsection{Specific Electrodes}
 
