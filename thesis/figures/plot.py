@@ -31,6 +31,8 @@ def plot(dat, xl, yl, format, name, notick=False):
 
 plot(readfile('hdv.dat'), r'potential ($\mathrm{V}$)', r'output ($\mu \mathrm{A}$)', '+', 'hdv.png')
 plot(readfile('216.avg'), r'time ($\mathrm{s}$)', r'current ($\mathrm{A}$)', '-', '216.png')
+plot(readfile('256.avg'), r'potential ($\mathrm{V}$)', r'current ($\mathrm{A}$)', '-', '256.png')
+plot(readfile('63'), r'potential ($\mathrm{V}$)', r'current ($\mathrm{A}$)', '-', '63.png')
 
 plot(([0, 1], [1, 1]), r'time ($\mathrm{s}$)', r'potential ($\mathrm{V}$)', '-', 'amperometry.png', True)
 plot(([0, 1, 2, 3, 4], [0, 1, 0, 1, 0]), r'time ($\mathrm{s}$)', r'potential ($\mathrm{V}$)', '-', 'cv.png', True)
