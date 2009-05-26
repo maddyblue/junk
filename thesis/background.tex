@@ -1,0 +1,67 @@
+\chapter{Background and Existing Approaches}
+
+\section{Introduction to Electrochemistry}
+
+Electrochemistry is a process for determining the compounds in a solution. This is accomplished by causing reduction or oxidation within the solution by raising or lowering the potential near some electrode surfaces and measuring the amount of current that is generated.
+
+Specifically, three electrodes (reference, auxiliary, working) are placed into a solution with an electroactive analyte. The potential difference between the electrodes is raised which creates a potential gradient at both electrode-solution interfaces, but a zero potential gradient in the bulk solution between the electrodes (Figure \ref{kissinger-6-5}). The field strength typically becomes zero at less than $10^{-6}\mathrm{m}$ from the surface of the electrode \cite{kissinger1996fca}. When the electroactive analyte nears an electrode, if the potential is high enough, an electron will find favorable conditions in the analyte and transfer from the surface of the electrode to the analyte. At this point there is a concentration gradient between the new, reduced, analyte and the original. The reduced analyte begins to diffuse into the bulk solution, causing more reductions to occur. This happens continuously and at an exponentially decreasing rate until all of the analyte has been reduced. The continuing transfer of electrons causes current to flow. A similar response called oxidation occurs if the potential is lowered and the electron transfers back to the electrode from the analyte. The potential is kept constant by the potentiostat (a device which performs these operations), which measures the current needed to keep the potential constant (Figure \ref{kissinger-6-4}).
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{figures/kissinger-6-5.png}
+	\caption[Schematic representation of potential gradients in a three-electrode cell]{Schematic representation of potential gradients in a three-electrode cell: (a) $i = 0$; (b) $i \ne 0$. This is Figure 6.5 from \cite{kissinger1996iai}.}
+	\label{kissinger-6-5}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{figures/kissinger-6-4.png}
+	\caption[Schematic representation of a primitive three-electrode controlled-potential apparatus]{Schematic representation of a primitive three-electrode controlled-potential apparatus. This is Figure 6.4 from \cite{kissinger1996iai}.}
+	\label{kissinger-6-4}
+\end{figure}
+
+One technique is amperometry, where a constant potential is applied across the electrodes to reduce or oxidize a specific analyte (Figure \ref{ec-amperometry}). When electroactive chemicals approach the electrode surfaces due to injection or diffusion, the output current changes until those chemicals are fully reduced or oxidized (Figure \ref{ec-res-amperometry}). This technique is able to detect low concentrations and has a fast response time. However, its selectivity is low since all analyte that reduce under the potential applied will also reduce, in addition to the target. Furthermore, the electrodes can foul over time, reducing response, and must be cleaned to reproduce results. Electrode surfaces can be made resistive to fouling by applying substances like nafion to the surface. Fouling happens with the other techniques listed here, too, but those allow for discrete experiments to be run over a short time, between which cleaning can be performed.
+
+Another common technique is cyclic voltammetry (CV). Here the potential is swept (at a rate called the scan rate) over a certain range linearly with time, where the range is again dependent on the reduction-oxidation (redox) potential of the analyte (Figure \ref{ec-cv}). Since both reduction and oxidation potentials are within the range, both occur, and there multiple current spikes in opposite directions (Figure \ref{ec-res-cv}). CV is useful for determining all of the analytes in a solution since each can present their own current spikes. When the scan rate is high, CV is able to detect analytes that have a short lifetime, like neurotransmitters. High scan rates, however, produce a large background current and thus have a poor limit of detection.
+
+A third technique is differential pulse voltammetry (DPV) \cite{kissinger1996sac}, a technique similar to CV. In CV, the potential across the electrodes is varied linearly with time up and down, in cycles. In DPV, the potential across the electrodes is varied in a step pattern. The start of each subsequent step is higher than the previous (Figure \ref{ec-dpv}). The current is measured before and after each step, and the difference is returned (Figure \ref{ec-res-dpv}). This allows the charging current to be removed from the output, yielding a more accurate result than CV.
+
+\begin{figure}
+	\centering
+	\subfigure[Amperometry]{
+		\includegraphics[width=0.3\linewidth]{figures/amperometry.png}
+		\label{ec-amperometry}
+	}
+	\subfigure[Cyclic Voltammetry]{
+		\includegraphics[width=0.3\linewidth]{figures/cv.png}
+		\label{ec-cv}
+	}
+	\subfigure[Differential Pulse Voltammetry]{
+		\includegraphics[width=0.3\linewidth]{figures/dpv.png}
+		\label{ec-dpv}
+	}
+	\caption{Comparison of inputs of electrochemistry techniques}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\subfigure[Amperometry]{
+		\includegraphics[width=0.3\linewidth]{figures/216.png}
+		\label{ec-res-amperometry}
+	}
+	\subfigure[Cyclic Voltammetry]{
+		\includegraphics[width=0.3\linewidth]{figures/63.png}
+		\label{ec-res-cv}
+	}
+	\subfigure[Differential Pulse Voltammetry]{
+		\includegraphics[width=0.3\linewidth]{figures/256.png}
+		\label{ec-res-dpv}
+	}
+	\caption[Comparison of results of electrochemistry techniques]{Comparison of results of electrochemistry techniques. All above results were obtained by measurements on our chip.}
+\end{figure}
+
+\section{Existing Approaches}
+
+Previous work in this field is insufficient for our needs. We expect signals in the picoamp range on the microsecond timescale, and thus require circuitry able to amplify and measure quickly \cite{mosharok2005aee}. Other work has not addressed timing requirements \cite{zhang2005eam} \cite{steffan2007scp}, assumes slow concentration change times on the order of seconds \cite{murari2005ipn}, or uses oversampling (which is slow) to detect low concentrations \cite{murari2005ipn} \cite{stanacevic2007vpa}.
+
+\section{Summary}
