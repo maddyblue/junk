@@ -1,5 +1,7 @@
 \chapter{Chip Design and Characterization Results}
 
+As discussed above, current approaches are either using relatively large electrodes, or have only used microelectrodes that were fabricated without specific regard for shape, size, distance and configuration. Thus, there is a need to identify the relationships among those characteristics and their impact on signal strength. This chapter describes the design goals of the chip, formulates hypothesis about its design, tests them, and draws some conclusions about the importance of shape, size, distance, and configuration.
+
 Due to the above limitations, a chip was designed that was able to meet the requirements, and test hypotheses, for integrated biosensing \cite{karegar2007ema}. The process used to achieve these goals was CMOS, the standard process used in microchip fabrication. Our process was able to produce feature definition at the 0.6 $\mu \mathrm{m}$ size. The electrodes are platinum on a glass substrate. There are 21 sensor sites, arranged in a $5 \times 5$ grid, with varying configurations and distances between electrodes, making each site unique (Figure \ref{biosensorchip-sensors}). The size of the chip is $9 \mathrm{mm} \times 9 \mathrm{mm}$, with bonding pads on the exterior at $160 \mathrm{mm} \times 160 \mathrm{mm}$ each (Figure \ref{biosensorchip}).
 
 \begin{figure}
@@ -24,7 +26,7 @@ There are 21 sensor sites on the chip. Each site uses one of four sensor-site co
 
 \subsection{Working Electrodes}
 
-Each site has 4 working-electrode areas. There are four configurations, which are either 3- or 4-electrode systems. Three electrode systems have one auxiliary electrode (AE), one reference electrode (RE), and one working electrode (WE). Four electrode systems have one AE, one RE, and two WEs. These two WEs can work in tandem, one as a producer, one a consumer, with appropriate instruments. No tests here used such an instrument, but work on 4-electrode systems indicates larger output in those systems [TODO: cite refs]. The working-electrode configurations are (Table \ref{WE-size}):
+Each site has 4 working-electrode areas. There are four configurations, which are either 3- or 4-electrode systems. Three electrode systems have one auxiliary electrode (AE), one reference electrode (RE), and one working electrode (WE). Four electrode systems have one AE, one RE, and two WEs. These two WEs can work in tandem (one as a generator, one a collector, with appropriate instruments), and are interdigitated \cite{frey2003dip}. No tests here used such an instrument, but work on 4-electrode systems indicates larger output in those systems \cite{iwasaki1995emi}. The working-electrode configurations are (Table \ref{WE-size}):
 
 \begin{description}
 \item[3 electrode] where there is one WE, one RE, and one AE. WEs are numbered 1, 2, 3, 4, have areas ($\mu \mathrm{m}^2$) 1, 2.25, 4, 4, and perimeters ($\mu \mathrm{m}$) 4, 6, 8, 8, respectively.
@@ -605,7 +607,7 @@ This hypothesis is that the output current is proportional to the ratio of the W
 
 \subsection{Working Electrode Perimeter over Area vs. Output Density}
 
-This hypothesis is that the output current density is proportional to the WE perimeter divided by the WE area. Figure \ref{perim_area_v_density} shows the tests and a linear-fit curve. We can see a correlation, indicating that the perimeter plays an important part, with respect to area. This conclusion is supported by [TODO: get refs], which show that most of the electron transfer happens near the edge of the electrode.
+This hypothesis is that the output current density is proportional to the WE perimeter divided by the WE area. Figure \ref{perim_area_v_density} shows the tests and a linear-fit curve. We can see a correlation, indicating that most of the electron transfer happens near the edge of the electrode.
 
 \begin{figure}
 	\centering
