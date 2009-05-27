@@ -7,51 +7,48 @@
 \textwidth 6 in
 %\textheight 9 in
 
-%%%%%%%%%%%%%%title page%%%%%%%%%%%%%%%%%%%%%%
+% title page
 \def\author#1{\gdef\@author{#1}}
 \def\department#1{\gdef\@department{#1}}
 \def\semester#1{\gdef\@semester{#1}}
 \def\maketitle
 {
-        \begin{titlepage}
-        \begin{center}
-        \begin{large}\textbf{THESIS}\end{large}\\
-        \vspace{0.5in}
-        \begin{large}\textsc{\@title}\end{large}\\
-        \vfill
-        Submitted by\\
-        \@author\\
-        Department of \@department\\
-        \vfill
-        In partial fulfillment of the requirements\\
-        for the Degree of Master of Science\\
-        Colorado State Univesity\\
-        Fort Collins, Colorado\\
-        \@semester\\
-        \end{center}
-        \end{titlepage}
+	\begin{titlepage}
+	\begin{center}
+	\begin{large}\textbf{THESIS}\end{large}\\
+	\vspace{0.5in}
+	\begin{large}\textsc{\@title}\end{large}\\
+	\vfill
+	Submitted by\\
+	\@author\\
+	Department of \@department\\
+	\vfill
+	In partial fulfillment of the requirements\\
+	for the Degree of Master of Science\\
+	Colorado State Univesity\\
+	Fort Collins, Colorado\\
+	\@semester\\
+	\end{center}
+	\end{titlepage}
 }
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%abstract%%%%%%%%%%%%%%%%%%%%%%%%%
+% abstract
 \renewenvironment{abstract}{
-        \begin{center}
-        \begin{large}ABSTARCT OF THESIS\end{large}\\
+	\begin{center}
+	\begin{large}ABSTRACT OF THESIS\end{large}\\
 	\textsc{\@title}
-        \end{center}
+	\end{center}
 	%\singlespacing
 	\begin{small}
 }
 {
 	\end{small}
 	\singlespacing{
-        \begin{flushright}
-        \@author\\
-        \@department\ Department\\
-        Colorado State University\\
-        Fort Collins, CO 80523\\
-        \@semester\\
-        \end{flushright}}
+	\begin{flushright}
+	\@author\\
+	\@department\ Department\\
+	Colorado State University\\
+	Fort Collins, CO 80523\\
+	\@semester\\
+	\end{flushright}}
 }
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
