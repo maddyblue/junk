@@ -4,8 +4,10 @@
 *.lof
 *.log
 *.lot
+*.nav
 *.orig
 *.out
 *.pdf
+*.snm
 *.swp
 *.toc
