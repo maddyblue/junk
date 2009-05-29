@@ -14,6 +14,7 @@
 \begin{document}
 
 \setbeamertemplate{footline}[page number]
+\setbeamertemplate{bibliography item}[text]
 
 \begin{frame}
 	\titlepage
@@ -21,8 +22,7 @@
 
 \section{Introduction}
 \subsection{Neurotransmitter Detection}
-\begin{frame}
-	\frametitle{Neurotransmitter Detection}
+\begin{frame}{Neurotransmitter Detection}
 	\begin{itemize}
 		\item need to detect neurotransmitters, like nitric oxide (NO)
 		\item need to detect how much NO there is at many places at once, so we need a gradient
@@ -35,8 +35,7 @@
 \end{frame}
 
 \subsection{Objectives}
-\begin{frame}
-	\frametitle{Objectives}
+\begin{frame}{Objectives}
 	\begin{itemize}
 		\item Anita Karegar designed a chip 2 years ago with an array of sensors
 		\item first ever design with hypotheses about shape, size, distance and configuration of electrodes
@@ -47,8 +46,7 @@
 
 \section{Background and Existing Approaches}
 \subsection{Introduction to Electrochemistry}
-\begin{frame}
-	\frametitle{Introduction to Electrochemistry}
+\begin{frame}{Introduction to Electrochemistry}
 	\begin{itemize}
 		\item used to determine compounds in a solution: how much of what
 		\item put electrodes in a solution
@@ -58,8 +56,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Amperometry}
+\begin{frame}{Amperometry}
 	\begin{itemize}
 		\item constant potential
 		\item measure current spikes from injected or diffused compounds
@@ -70,8 +67,7 @@
 	\includegraphics[width=0.5\linewidth]{figures/216.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Cyclic Voltammetry}
+\begin{frame}{Cyclic Voltammetry}
 	\begin{itemize}
 		\item potential changes linearly with time up and down
 		\item compounds have a specific potential at which they reduce/oxidize
@@ -82,8 +78,7 @@
 	\includegraphics[width=0.5\linewidth]{figures/63.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Differential Pulse Voltammetry}
+\begin{frame}{Differential Pulse Voltammetry}
 	\begin{itemize}
 		\item potential changes in increasing steps
 		\item measures before and after change, returns difference
@@ -95,20 +90,18 @@
 \end{frame}
 
 \subsection{Existing Approaches}
-\begin{frame}
-	\frametitle{Existing Approaches}
+\begin{frame}{Existing Approaches}
 	three fields of work:
 	\begin{description}
-		\item[smaller electrodes] for detection of lower concentrations and use in sensor arrays: in the last 20 years size has decreased from $250 \mu \mathrm{m}$ to $100 \mathrm{nm}$
-		\item[integrated potentiostats] for use on chip, no bulky additional instrument per sensor: various designs focusing on arrays, low currents, and uses in biosensors
-		\item[electrode arrays] for detecting gradients: $2 \times 2$ to $4 \times 4$ arrays, all square or round (or unknown) shapes, no integrated potentiostats
+		\item[smaller electrodes] for detection of lower concentrations and use in sensor arrays: in the last 20 years size has decreased from $250 \mu \mathrm{m}$ to $100 \mathrm{nm}$ \cite{shibuki1990emd, zhang2002nmn, bedioui1996cmm, zhang2002nse, kim2003img, wang2005mcn}
+		\item[integrated potentiostats] for use on chip, no bulky additional instrument per sensor: various designs focusing on arrays, low currents, and uses in biosensors \cite{frey2003dip, murari2005ipn, stanacevic2007vpa, steffan2007scp}
+		\item[electrode arrays] for detecting gradients: $2 \times 2$ to $4 \times 4$ arrays, all square or round (or unknown) shapes, no integrated potentiostats \cite{george2001fsp, naware2003dam, hafez2005eif, zhang2005eam}
 	\end{description}
 \end{frame}
 
 \section{Chip Design and Characterization Results}
 \subsection{Chip Design}
-\begin{frame}
-	\frametitle{Chip Design}
+\begin{frame}{Chip Design}
 	\begin{itemize}
 		\item $5 \times 5$ array, 21 sensor sites
 		\item each site has 4 working electrode (WE) areas
@@ -120,8 +113,7 @@
 \end{frame}
 
 \subsection{Working Electrodes}
-\begin{frame}
-	\frametitle{Working Electrodes}
+\begin{frame}{Working Electrodes}
 	\begin{itemize}
 		\item 2 electrode systems: 3- and 4-electrode
 		\item 4 WE types
@@ -138,8 +130,7 @@
 \end{frame}
 
 \subsection{Sites}
-\begin{frame}
-	\frametitle{Sites (1 of 4 configurations)}
+\begin{frame}{Sites (1 of 4 configurations)}
 	\begin{block}{2 auxiliary}
 		\begin{itemize}
 			\item four electrodes, all same size and spacing
@@ -150,8 +141,7 @@
 	\includegraphics[width=0.5\linewidth]{figures/s00.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Sites (2 of 4 configurations)}
+\begin{frame}{Sites (2 of 4 configurations)}
 	\begin{block}{common reference, top \& bottom}
 		\begin{itemize}
 			\item large reference electrode (RE) at top and bottom of site
@@ -162,8 +152,7 @@
 	\includegraphics[width=0.3\linewidth]{figures/s03.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Sites (3 of 4 configurations)}
+\begin{frame}{Sites (3 of 4 configurations)}
 	\begin{block}{common reference top, common auxiliary bottom}
 		\begin{itemize}
 			\item large reference electrode at top
@@ -174,8 +163,7 @@
 	\includegraphics[width=0.3\linewidth]{figures/s05.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Sites (4 of 4 configurations)}
+\begin{frame}{Sites (4 of 4 configurations)}
 	\begin{block}{common reference top, common auxiliary on 3 sides}
 		\begin{itemize}
 			\item large reference electrode at top
@@ -187,24 +175,21 @@
 \end{frame}
 
 \subsection{Experiment Setup}
-\begin{frame}
-	\frametitle{Experiment Setup}
+\begin{frame}{Experiment Setup}
 	\begin{itemize}
 		\item create PDMS well, glue onto chip: holds solution
 	\end{itemize}
 	\includegraphics[width=\linewidth]{figures/chip-top.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Experiment Setup}
+\begin{frame}{Experiment Setup}
 	\begin{itemize}
 		\item equipment: Faraday cage, CHI 660B potentiostat, probestation \& micromanipulators, PC
 	\end{itemize}
 	\includegraphics[width=0.95\linewidth]{figures/probestation.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Experiment Setup}
+\begin{frame}{Experiment Setup}
 	\begin{itemize}
 		\item connect potentiostat leads to probe pins
 		\item lower probe pins onto chip
@@ -214,8 +199,7 @@
 \end{frame}
 
 \subsection{Experiment Procedure}
-\begin{frame}
-	\frametitle{Experiment Procedure}
+\begin{frame}{Experiment Procedure}
 	\begin{block}{all sites}
 		test all 21 sites, 2 random WEs, 3 times each: 6 tests per site
 	\end{block}
@@ -228,8 +212,7 @@
 \end{frame}
 
 \subsection{Experiment Results}
-\begin{frame}
-	\frametitle{Output vs. Working Electrode Area}
+\begin{frame}{Output vs. Working Electrode Area}
 	\textbf{hypothesis:} output proportional to WE area
 	\begin{itemize}
 		\item easily conclusive: design criteria
@@ -238,8 +221,7 @@
 	\includegraphics[width=0.8\linewidth]{figures/area_v_output.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Output Density vs. Working Electrode Area}
+\begin{frame}{Output Density vs. Working Electrode Area}
 	\textbf{hypothesis:} output density proportional to WE area
 	\begin{itemize}
 		\item general trend
@@ -248,20 +230,17 @@
 	\includegraphics[width=0.8\linewidth]{figures/area_v_density.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Output Density vs. Working Electrode Area}
+\begin{frame}{Output Density vs. Working Electrode Area}
 	3-electrode systems
 	\includegraphics[width=0.8\linewidth]{figures/area_low_v_density.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Output Density vs. Working Electrode Area}
+\begin{frame}{Output Density vs. Working Electrode Area}
 	4-electrode systems
 	\includegraphics[width=0.8\linewidth]{figures/area_high_v_density.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Ratio of Working to Auxiliary Electrode Areas}
+\begin{frame}{Ratio of Working to Auxiliary Electrode Areas}
 	\textbf{hypothesis:} output proportional to ratio of WE to AE areas
 	\begin{itemize}
 		\item when ratio near unity, low output
@@ -271,8 +250,7 @@
 	\includegraphics[width=0.8\linewidth]{figures/area_ratio_v_output.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{WE Perimeter over Area vs. Output Density}
+\begin{frame}{WE Perimeter over Area vs. Output Density}
 	\textbf{hypothesis:} output density proportional to WE perimeter over area
 	\begin{itemize}
 		\item curve fits well, conclusive
@@ -281,8 +259,7 @@
 	\includegraphics[width=0.8\linewidth]{figures/perim_area_v_density.png}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Distance from Working to Auxiliary Electrode}
+\begin{frame}{Distance from Working to Auxiliary Electrode}
 	\textbf{hypothesis:} output proportional to distance from WE to AE
 	\begin{itemize}
 		\item in general it appears distance plays a minor role: inconclusive
@@ -292,8 +269,7 @@
 \end{frame}
 
 \subsection{Limit of Detection}
-\begin{frame}
-	\frametitle{Limit of Detection}
+\begin{frame}{Limit of Detection}
 	\begin{itemize}
 		\item tested sensors 17, 8 (best performers from all-sites test)
 		\item 17 got down to $3 \mu \mathrm{M}$
@@ -303,8 +279,7 @@
 \end{frame}
 
 \section{Slice Testing}
-\begin{frame}
-	\frametitle{Slice Testing}
+\begin{frame}{Slice Testing}
 	\begin{itemize}
 		\item this work is intended for living cells
 		\item so we did some proof-of-concept tests with living cells
@@ -315,8 +290,7 @@
 \end{frame}
 
 \subsection{Experiment Procedure}
-\begin{frame}
-	\frametitle{Experiment Procedure}
+\begin{frame}{Experiment Procedure}
 	\begin{itemize}
 		\item enclose in Faraday cage
 		\item heat to $37\,^{\circ}\mathrm{C}$ with lamp
@@ -326,8 +300,7 @@
 \end{frame}
 
 \subsection{Experiment Results}
-\begin{frame}
-	\frametitle{Experiment Results}
+\begin{frame}{Experiment Results}
 	\begin{itemize}
 		\item outputs with current spikes and exponential return to baseline (consistent with release profile)
 		\item comparable to previous work
@@ -339,8 +312,7 @@
 \end{frame}
 
 \section{Conclusion}
-\begin{frame}
-	\frametitle{Conclusion}
+\begin{frame}{Conclusion}
 	\begin{itemize}
 		\item built a working chip
 		\item tested various design hypotheses
@@ -352,6 +324,12 @@
 		\item found limit of detection for some good sensors
 		\item proof-of-concept work with ovary slices
 	\end{itemize}
+\end{frame}
+
+\section{References}
+\begin{frame}[allowframebreaks]{References}
+	\bibliography{thesis}{}
+	\bibliographystyle{ieeetr}
 \end{frame}
 
 \end{document}
