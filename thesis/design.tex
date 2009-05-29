@@ -4,7 +4,7 @@ As discussed above, current approaches are either using relatively large electro
 
 Previous work in this field is insufficient for our needs. We expect signals in the picoamp range on the microsecond timescale, and thus require circuitry able to amplify and measure quickly \cite{mosharok2005aee}. Other work has not addressed timing requirements \cite{zhang2005eam, steffan2007scp}, assumes slow concentration change times on the order of seconds \cite{murari2005ipn}, or uses oversampling (which is slow) to detect low concentrations \cite{murari2005ipn, stanacevic2007vpa}.
 
-Due to the above limitations, a chip was designed that was able to meet the requirements, and test hypotheses, for integrated biosensing \cite{karegar2007ema}. The process used to achieve these goals was CMOS, the standard process used in microchip fabrication. Our process was able to produce feature definition at the 0.6 $\mu \mathrm{m}$ size. The electrodes are platinum on a glass substrate. There are 21 sensor sites, arranged in a $5 \times 5$ grid, with varying configurations and distances between electrodes, making each site unique (Figure \ref{biosensorchip-sensors}). The size of the chip is $9 \mathrm{mm} \times 9 \mathrm{mm}$, with bonding pads on the exterior at $160 \mathrm{mm} \times 160 \mathrm{mm}$ each (Figure \ref{biosensorchip}).
+Due to the above limitations, a chip was designed that was able to meet the requirements, and test hypotheses, for integrated biosensing \cite{karegar2007ema}. The process used to achieve these goals was CMOS, the standard process used in microchip fabrication. Our process was able to produce feature definition at the 0.6 $\mu \mathrm{m}$ size. The electrodes are platinum on a glass substrate. There are 21 sensor sites, arranged in a $5 \times 5$ grid, with varying configurations and distances between electrodes, making each site unique (Figure \ref{biosensorchip-sensors}). Sensor sites are $500 \mu \mathrm{m}$ (center-to-center) apart. The size of the chip is $9 \mathrm{mm} \times 9 \mathrm{mm}$, with bonding pads on the exterior at $160 \mathrm{mm} \times 160 \mathrm{mm}$ each (Figure \ref{biosensorchip}).
 
 \begin{figure}
 	\centering
@@ -88,8 +88,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 
 \begin{description}
 
-\item[Sensor 0] is a 3-electrode system, with 2 AEs (Figure \ref{s00}). WE areas have electrodes spaced at 3 $\mu \mathrm{m}$ for areas 1, 2, 4, and 2.5 $\mu \mathrm{m}$ for area 3.
-\item[Sensor 1] is the same as Sensor 0 (Figure \ref{s01}).
+\item[Sensor 0] is a 3-electrode system, with 2 AEs (Figure \ref{s00}). WE areas have electrodes spaced at 3 $\mu \mathrm{m}$ for areas 1, 2, 4, and 2.5 $\mu \mathrm{m}$ for area 3. Pitch (center-to-center distance between WE areas) is $15 \mu \mathrm{m}$.
+\item[Sensor 1] is the same as Sensor 0 (Figure \ref{s01}), but with a pitch of $20 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -106,8 +106,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 2] is the same as Sensor 0 (Figure \ref{s02}).
-\item[Sensor 3] is a 3-electrode system, common RE at top and bottom (Figure \ref{s03}). WE areas have electrodes spaced at 3 $\mu \mathrm{m}$ for areas 1, 2, 4, and 2.5 $\mu \mathrm{m}$ for area 3.
+\item[Sensor 2] is the same as Sensor 0 (Figure \ref{s02}), but with a pitch of $25 \mu \mathrm{m}$..
+\item[Sensor 3] is a 3-electrode system, common RE at top and bottom (Figure \ref{s03}). WE areas have electrodes spaced at 3 $\mu \mathrm{m}$ for areas 1, 2, 4, and 2.5 $\mu \mathrm{m}$ for area 3. Pitch is $15 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -124,8 +124,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 4] is the same as Sensor 3 (Figure \ref{s04}).
-\item[Sensor 5] is a 4-electrode system, shape C, with a common RE at top, common AE at bottom (Figure \ref{s05}). WEs 11, 12, 21, 22 are 26.55 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 11.51 $\mu \mathrm{m}$ from the AE.
+\item[Sensor 4] is the same as Sensor 3 (Figure \ref{s04}), but with a pitch of $20 \mu \mathrm{m}$.
+\item[Sensor 5] is a 4-electrode system, shape C, with a common RE at top, common AE at bottom (Figure \ref{s05}). WEs 11, 12, 21, 22 are 26.55 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 11.51 $\mu \mathrm{m}$ from the AE. Pitch is $15 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -142,8 +142,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 6] is a 4-electrode system, shape inverse C, with a common RE at top, common AE at bottom (Figure \ref{s06}). WEs 11, 12, 21, 22 are 35.54 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 15.51 $\mu \mathrm{m}$ from the AE.
-\item[Sensor 7] is a 4-electrode system, shape inverse C, with a common RE at top, common AE at bottom (Figure \ref{s07}). WEs 11, 12, 21, 22 are 45.48 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 20.40 $\mu \mathrm{m}$ from the AE.
+\item[Sensor 6] is a 4-electrode system, shape inverse C, with a common RE at top, common AE at bottom (Figure \ref{s06}). WEs 11, 12, 21, 22 are 35.54 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 15.51 $\mu \mathrm{m}$ from the AE. Pitch is $20 \mu \mathrm{m}$.
+\item[Sensor 7] is a 4-electrode system, shape inverse C, with a common RE at top, common AE at bottom (Figure \ref{s07}). WEs 11, 12, 21, 22 are 45.48 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 20.40 $\mu \mathrm{m}$ from the AE. Pitch is $25 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -160,8 +160,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 8] is a 4-electrode system, shape F, with a common RE at top, common AE at bottom (Figure \ref{s08}). WEs 11, 12, 21, 22 are 33.53 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 13.53 $\mu \mathrm{m}$ from the AE.
-\item[Sensor 9] is the same as Sensor 3 (Figure \ref{s09}).
+\item[Sensor 8] is a 4-electrode system, shape F, with a common RE at top, common AE at bottom (Figure \ref{s08}). WEs 11, 12, 21, 22 are 33.53 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 13.53 $\mu \mathrm{m}$ from the AE. Pitch is $20 \mu \mathrm{m}$.
+\item[Sensor 9] is the same as Sensor 3 (Figure \ref{s09}), but with a pitch of $25 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -178,8 +178,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 10] is a 4-electrode system, shape inverse C, with a common RE at top, common AE on 3 sides (Figure \ref{s10}). WEs are 11.50 $\mu \mathrm{m}$ from the AE.
-\item[Sensor 11] is a 3-electrode system, with a common RE at top, common AE on 3 sides (Figure \ref{s11}). WEs 1, 2, 3, 4 are 14.47, 14.24, 13.96, 13.96 $\mu \mathrm{m}$ from the AE, respectively.
+\item[Sensor 10] is a 4-electrode system, shape inverse C, with a common RE at top, common AE on 3 sides (Figure \ref{s10}). WEs are 11.50 $\mu \mathrm{m}$ from the AE. Pitch is $15 \mu \mathrm{m}$.
+\item[Sensor 11] is a 3-electrode system, with a common RE at top, common AE on 3 sides (Figure \ref{s11}). WEs 1, 2, 3, 4 are 14.47, 14.24, 13.96, 13.96 $\mu \mathrm{m}$ from the AE, respectively. Pitch is $15 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -196,8 +196,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 12] is a 3-electrode system, with a common RE at top, common AE on 3 sides (Figure \ref{s12}). WEs 1, 2, 3, 4 are 19.5, 19.21, 18.98, 18.98 $\mu \mathrm{m}$ from the AE, respectively.
-\item[Sensor 13] is a 3-electrode system, with a common RE at top, common AE on 3 sides (Figure \ref{s13}). WEs 1, 2, 3, 4 are 24.53, 24.26, 24.05, 24.05 $\mu \mathrm{m}$ from the AE, respectively.
+\item[Sensor 12] is a 3-electrode system, with a common RE at top, common AE on 3 sides (Figure \ref{s12}). WEs 1, 2, 3, 4 are 19.5, 19.21, 18.98, 18.98 $\mu \mathrm{m}$ from the AE, respectively. Pitch is $20 \mu \mathrm{m}$.
+\item[Sensor 13] is a 3-electrode system, with a common RE at top, common AE on 3 sides (Figure \ref{s13}). WEs 1, 2, 3, 4 are 24.53, 24.26, 24.05, 24.05 $\mu \mathrm{m}$ from the AE, respectively. Pitch is $25 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -214,8 +214,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 14] is a 4-electrode system, shape C, with a common RE at top, common AE on 3 sides (Figure \ref{s14}). WEs are 20.50 $\mu \mathrm{m}$ from the AE.
-\item[Sensor 15] is a 4-electrode system, shape C, with a common RE at top, common AE on 3 sides (Figure \ref{s15}). WEs are 15.50 $\mu \mathrm{m}$ from the AE.
+\item[Sensor 14] is a 4-electrode system, shape C, with a common RE at top, common AE on 3 sides (Figure \ref{s14}). WEs are 20.50 $\mu \mathrm{m}$ from the AE. Pitch is $25 \mu \mathrm{m}$.
+\item[Sensor 15] is a 4-electrode system, shape C, with a common RE at top, common AE on 3 sides (Figure \ref{s15}). WEs are 15.50 $\mu \mathrm{m}$ from the AE. Pitch is $20 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -232,8 +232,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 16] is a 4-electrode system, shape F, with a common RE at top, common AE on 3 sides (Figure \ref{s16}). WEs are 13.50 $\mu \mathrm{m}$ from the AE.
-\item[Sensor 17] is a 4-electrode system, shape inverse C, with a common RE at top, common AE at bottom (Figure \ref{s17}). WEs 11, 12, 21, 22 are 43.47 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 18.46 $\mu \mathrm{m}$ from the AE.
+\item[Sensor 16] is a 4-electrode system, shape F, with a common RE at top, common AE on 3 sides (Figure \ref{s16}). WEs are 13.50 $\mu \mathrm{m}$ from the AE. Pitch is $20 \mu \mathrm{m}$.
+\item[Sensor 17] is a 4-electrode system, shape inverse C, with a common RE at top, common AE at bottom (Figure \ref{s17}). WEs 11, 12, 21, 22 are 43.47 $\mu \mathrm{m}$ from the AE. WEs 31, 32, 41, 42 are 18.46 $\mu \mathrm{m}$ from the AE. Pitch is $25 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -250,8 +250,8 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 18] is a 4-electrode system, shape F, with a common RE at top, common AE on 3 sides (Figure \ref{s18}). WEs are 18.50 $\mu \mathrm{m}$ from the AE.
-\item[Sensor 19] is the same as Sensor 3 (Figure \ref{s19}).
+\item[Sensor 18] is a 4-electrode system, shape F, with a common RE at top, common AE on 3 sides (Figure \ref{s18}). WEs are 18.50 $\mu \mathrm{m}$ from the AE. Pitch is $25 \mu \mathrm{m}$.
+\item[Sensor 19] is the same as Sensor 3 (Figure \ref{s19}), but with a pitch of $15 \mu \mathrm{m}$.
 
 \begin{figure}
 	\begin{minipage}{0.5\linewidth}
@@ -268,7 +268,7 @@ Of the sixteen possible sensor combinations, nine are used (Table \ref{sensor-co
 	\end{minipage}
 \end{figure}
 
-\item[Sensor 20] is the same as Sensor 0, except the first WE area has spacing 2 $\mu \mathrm{m}$ (Figure \ref{s20}).
+\item[Sensor 20] is the same as Sensor 0, except the first WE area has spacing 2 $\mu \mathrm{m}$ (Figure \ref{s20}) and with a pitch of $15 \mu \mathrm{m}$.
 
 \begin{figure}
 	\centering
