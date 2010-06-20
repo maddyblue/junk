@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{% block t1 %}{% endblock %} - Página Batismal</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="/styles/style.css" />
+	<link rel="stylesheet" type="text/css" href="/styles/extra.css" />
+	{% block head %}{% endblock %}
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16461487-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<div id="wrapper-menu-top">
+<div id="menu-top">
+	<ul>
+	</ul>
+</div><!--menu-top-->
+</div><!--wrapper-menu-top-->
+
+<div id="wrapper-header">
+<div id="header">
+<div id="wrapper-header2">
+<div id="wrapper-header3">
+	<h1>Missão Brasil Rio de Janeiro</h1>
+</div>
+</div>
+</div>
+</div>
+
+<div id="wrapper-content">
+<div id="wrapper-menu-page">
+	<div id="menu-page">
+	<h3>Navegação</h3>
+	<ul>
+		<li><a href="/">Carta do Presidente</a></li>
+		<li><a href="/batismos/">Batismos</a></li>
+		<li><a href="/batizadores/">Batizadores</a></li>
+		<li><a href="/relatorio/">Fazer Relatório</a></li>
+		<li><a href="/numeros/">Passar Números</a></li>
+	</ul>
+
+	<h3>Outras</h3>
+	<ul>
+		<li><a href="/galeria/">Galeria de Fotos</a></li>
+		<li><a href="/mandar/">Mandar Fotos</a></li>
+		<li><a href="/discursos/">Discursos do Presidente</a></li>
+		<li><a href="/unidades/">Números das Unidades</a></li>
+		<li><a href="/arquivos/">Arquivos</a></li>
+		<li><a href="/bispos/">Aniversários dos Bispos</a></li>
+	</ul>
+
+	<p><a href="/"><img src="/imgs/logo_tn.jpg" border="0" alt="" /></a></p>
+</div><!--menu-page-->
+</div>
+<div id="content">
+
+<h2>{% block t2 %}{% endblock %}</h2>
+
+{% block content %}
+
+{% include page %}
+
+{% endblock %}
+
+</div>
+</div>
+
+<div id="wrapper-footer">
+<div id="footer">
+&copy; 2010 Missão Brasil Rio de Janeiro
+</div>
+</div>
+
+</body>
+</html>

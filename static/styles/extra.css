@@ -1,0 +1,84 @@
+.relatorio {
+	text-align: center;
+	color: #880000;
+	font: bold 12px Verdana;
+}
+
+.relatorio td input{
+	width: 20px;
+	border: 1px solid black;
+}
+
+.relatorio td input:focus, .relatorio input:hover{
+	border: 1px solid red;
+}
+
+.relatorio td{
+	width: 6%;
+	padding: 0;
+	margin: 0;
+}
+
+.textmetas {
+	background-color: #65d9ff;
+}
+
+.textrealizadas {
+}
+
+#mainform {
+	width: 670px;
+}
+
+DIV.baptism {
+	background: none blue;
+	margin: 6px 0 6px 0;
+	width: auto;
+}
+
+DIV.confirmation {
+	background: none red;
+	margin: 6px 0 6px 0;
+	width: auto;
+}
+
+DIV.tr1 {
+	background: none #ffffcc;
+	border: solid black 1px;
+	color: #000000;
+	margin: 0 auto 0 auto;
+	padding: 0;
+	text-align: center;
+	width: 99%;
+}
+
+DIV.td1 {
+	border: none;
+	float: left;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+#batizadores {
+	text-align: center;
+}
+
+#batizadores div img {
+	width: 150px;
+	height: 200px;
+}
+
+#batizadores div.miniphotos img {
+	width: 75px;
+	height: 100px;
+}
+
+#batizadores div {
+	display: inline-block;
+	width: 500px;
+}
+
+input, textarea {
+	border: 1px solid #888;
+}
