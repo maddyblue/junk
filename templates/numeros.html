@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+
+{% block head %}
+
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js-static/jquery.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+<form id="zonaform">
+	<select id="zonaselect" name="zona">
+		{{ zones }}
+	</select>
+	<input id="zonabutton" type="button" value="Load" onclick="this.disabled=true; loadZona();" /> Se tiver um pergunta ou problema, ligue para Elder Jibson: 21 9621-6499
+</form>
+<br /><div id="mainform"></div><br />
+
+{% endblock %}

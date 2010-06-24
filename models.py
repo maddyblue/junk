@@ -413,3 +413,57 @@ class Report(db.Model):
 	confirmation_9_date  = db.StringProperty()
 	confirmation_10_name = db.StringProperty()
 	confirmation_10_date = db.StringProperty()
+
+class Indicator(DerefModel):
+	week = db.ReferenceProperty(Week, required=True)
+	submitted = db.DateTimeProperty(auto_now_add=True, required=True)
+#	FIX forms.py, IndicatorForm to ignore this column, when enabled
+#	area = db.ReferenceProperty(AreaSnap)
+	area = db.ReferenceProperty(Area, required=True)
+	PB    = db.IntegerProperty(required=True)
+	PC    = db.IntegerProperty(required=True)
+	PBM   = db.IntegerProperty(required=True)
+	PS    = db.IntegerProperty(required=True)
+	LM    = db.IntegerProperty(required=True)
+	OL    = db.IntegerProperty(required=True)
+	PP    = db.IntegerProperty(required=True)
+	RR    = db.IntegerProperty(required=True)
+	RC    = db.IntegerProperty(required=True)
+	NP    = db.IntegerProperty(required=True)
+	LMARC = db.IntegerProperty(required=True)
+	Con   = db.IntegerProperty(required=True)
+	NFM   = db.IntegerProperty(required=True)
+
+	# baptisms of men
+	BM = db.IntegerProperty(required=True, default=0)
+
+	PB_meta    = db.IntegerProperty(required=True)
+	PC_meta    = db.IntegerProperty(required=True)
+	PBM_meta   = db.IntegerProperty(required=True)
+	PS_meta    = db.IntegerProperty(required=True)
+	LM_meta    = db.IntegerProperty(required=True)
+	OL_meta    = db.IntegerProperty(required=True)
+	PP_meta    = db.IntegerProperty(required=True)
+	RR_meta    = db.IntegerProperty(required=True)
+	RC_meta    = db.IntegerProperty(required=True)
+	NP_meta    = db.IntegerProperty(required=True)
+	LMARC_meta = db.IntegerProperty(required=True)
+	Con_meta   = db.IntegerProperty(required=True)
+	NFM_meta   = db.IntegerProperty(required=True)
+
+BAPTISM_SEX_M = 'Masculino'
+BAPTISM_SEX_F = 'Feminino'
+
+BAPTISM_SEX_CHOICES = set([BAPTISM_SEX_M, BAPTISM_SEX_F])
+
+class Baptism(db.Model):
+	indicator = db.ReferenceProperty(Indicator, required=True)
+	name = db.StringProperty(required=True)
+	date = db.DateProperty(required=True)
+	age = db.IntegerProperty(required=True)
+	sex = db.StringProperty(choices=BAPTISM_SEX_CHOICES, required=True)
+
+class Confirmation(db.Model):
+	indicator = db.ReferenceProperty(Indicator, required=True)
+	name = db.StringProperty(required=True)
+	date = db.DateProperty(required=True)

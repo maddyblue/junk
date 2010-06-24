@@ -13,22 +13,23 @@ from models import *
 from forms import *
 from dump import dump
 
+# returns True if authenticated
 def basicAuth(func):
 	def callf(webappRequest, *args, **kwargs):
 		auth_header = webappRequest.request.headers.get('Authorization')
 
 		if auth_header == None:
 			webappRequest.response.set_status(401, message='Authorization Required')
-			webappRequest.response.headers['WWW-Authenticate'] = 'Basic realm="Página Batismal"'
+			webappRequest.response.headers['WWW-Authenticate'] = 'Basic realm="Protected"'
 		else:
 			auth_parts = auth_header.split(' ')
 			user_pass_parts = base64.b64decode(auth_parts[1]).split(':')
 			user_arg = user_pass_parts[0]
 			pass_arg = user_pass_parts[1]
 
-			if user_arg != 'USER' or pass_arg != 'PASS':
+			if user_arg != 'user' or pass_arg != 'pass':
 				webappRequest.response.set_status(401, message='Authorization Required')
-				webappRequest.response.headers['WWW-Authenticate'] = 'Basic realm="Página Batismal"'
+				webappRequest.response.headers['WWW-Authenticate'] = 'Basic realm="Protected"'
 			else:
 				return func(webappRequest, *args, **kwargs)
 
@@ -45,6 +46,15 @@ def render(s, p, t, d={}):
 def rendert(s, t, d={}):
 	path = os.path.join(os.path.dirname(__file__), 'templates', t)
 	s.response.out.write(template.render(path, d))
+
+def get_week():
+	n = 'week'
+	w = memcache.get(n)
+	if w is None:
+		w = Week.all().order('-date').get()
+		memcache.add(n, w, 3600) # cache the week for an hour
+
+	return w
 
 def get_mopts():
 	n = 'mopts'
@@ -73,23 +83,27 @@ def render_aopts():
 	return ''.join(['<option value="%s">%s</option>' %(a.key(), unicode(a)) for a in area])
 
 class MainPage(webapp.RequestHandler):
+	@basicAuth
 	def get(self):
 		render(self, 'carta.html', 'Carta do Presidente')
 
 class BatismosPage(webapp.RequestHandler):
+	@basicAuth
 	def get(self):
 		render(self, 'batismos.html', 'Batismos')
 
 class BatizadoresPage(webapp.RequestHandler):
+	@basicAuth
 	def get(self):
 		render(self, 'batizadores.html', 'Batizadores')
 
 class RelatorioPage(webapp.RequestHandler):
+	@basicAuth
 	def get(self):
 		contatos = ''.join(['<option value="%s">%s</option>' %(i, i) for i in range(101)])
 
 		d = {
-			'week': Week.all().order('-date').get(),
+			'week': get_week(),
 			'missionary': get_mopts(),
 			'area': get_aopts(),
 			'contatos': contatos,
@@ -99,7 +113,7 @@ class RelatorioPage(webapp.RequestHandler):
 
 class MainJS(webapp.RequestHandler):
 	def get(self):
-		week = Week.all().order('-date').get()
+		week = get_week()
 
 		dopt = '<option value=""></option>'
 		wdays = ['domingo', 'sábado', 'sexta', 'quinta', 'quarta', 'terça', 'segunda']
@@ -190,6 +204,7 @@ class SyncAreasPage(webapp.RequestHandler):
 		rendert(self, 'sync-areas.html', {'plist': [unicode(i) for i in plist]})
 
 class SendRelatorio(webapp.RequestHandler):
+	@basicAuth
 	def post(self):
 		f = ReportForm(data=self.request.POST)
 		if f.is_valid():
@@ -200,11 +215,132 @@ class SendRelatorio(webapp.RequestHandler):
 			for k, v in f.errors.items():
 				self.response.out.write('%s: %s\n' %(k, v.as_text()))
 
+def get_zopts():
+	n = 'zopts'
+	zopts = memcache.get(n)
+	if zopts is None:
+		zopts = render_zopts()
+		memcache.add(n, zopts)
+
+	return zopts
+
+def render_zopts():
+	zones = Zone.gql('where is_open = :1 order by name', True).fetch(1000)
+	return ''.join(['<option value="%s">%s</option>' %(z.key(), unicode(z)) for z in zones])
+
+class NumerosPage(webapp.RequestHandler):
+	@basicAuth
+	def get(self):
+		d = {
+			'zones': get_zopts(),
+		}
+
+		rendert(self, 'numeros.html', d)
+
+class LoadZone(webapp.RequestHandler):
+	@basicAuth
+	def post(self):
+		z = self.request.POST['zona']
+		zone = Zone.get(z)
+		w = get_week()
+		# TODO: use snapshot data from the Week instead of live data
+		areas = Area.gql('where is_open = :1 and zone = :2 order by name', True, zone).fetch(1000)
+
+		fields = ['PB', 'PC', 'PBM', 'PS', 'LM', 'OL', 'PP', 'RR', 'RC', 'NP', 'LMARC', 'Con', 'NFM']
+
+		formstr = '<form id="sendform" onsubmit="return false;">'
+		formstr += '<input type="hidden" name="zona" value="%s" />' %zone.key()
+		formstr += '<table class="relatorio">'
+		formstr += '<tr><td colspan="15"><h1>%s</h1></td></tr><tr><td</td><td></td>' %zone.name
+		formstr += ''.join(['<td>%s</td>' %i for i in fields])
+		formstr += '</tr>'
+
+		for a in areas:
+			formstr += '<tr><td rowspan="2">%s</td><td>Metas: </td>' %a.name
+			formstr += '<input type="hidden" name="area" value="%s" />' %a.key()
+			formstr += '<input type="hidden" name="%s-area" value="%s" />' %(a.key(), a.key())
+			formstr += '<input type="hidden" name="%s-week" value="%s" />' %(a.key(), w.key())
+			for i in fields:
+				formstr += '<td><input name="%s-%s_meta" class="textmetas" type="text" onchange="numeroChange(this);" value="0" /></td>' %(a.key(), i)
+
+			formstr += '</tr><tr><td>Realizadas: </td>'
+			for i in fields:
+				if i == 'PB': changestr = 'batismoChange(this, \'%s\');' %a.name
+				elif i == 'PC': changestr = 'confirmChange(this, \'%s\');' %a.name
+				else: changestr = 'numeroChange(this);'
+
+				formstr += '<td><input onchange="%s" name="%s-%s" class="textrealizadas" type="text" value="0" /></td>' %(changestr, a.key(), i)
+
+		formstr += '</tr></table>'
+		formstr += ''.join(['<div id="b_%s-PB" class="baptism"></div>' %a.key() for a in areas])
+		formstr += ''.join(['<div id="c_%s-PC" class="confirmation"></div>' %a.key() for a in areas])
+
+		formstr += '<div class="td3">Senha: <input name="senha" class="textbox" type="password" /><br /><input id="enviarbutton" type="button" value="Enviar" onclick="this.disabled=false; enviarNumeros();" /></div><div class="space-line"></div></form>'
+
+		self.response.out.write(formstr)
+
+class SendNumbers(webapp.RequestHandler):
+	@basicAuth
+	def post(self):
+		zone = Zone.get(self.request.POST['zona'])
+		inds = []
+		for a in self.request.POST.getall('area'):
+			f = IndicatorForm(data=self.request.POST, prefix=a)
+			if f.is_valid():
+				inds.append(f.save(commit=False))
+			else:
+				self.response.out.write('Faltando dados.')
+				return
+
+		db.put(inds)
+
+		ords = []
+#		for a in self.request.POST.getall('area'):
+		for i in inds:
+			a = i.get_key('area')
+
+			bn = 'b_%s-PB' %a
+			for b in self.request.POST.getall(bn):
+				p = '%s-%s' %(bn, b)
+				d = self.request.POST
+				d['%s-indicator' %p] = i.key()
+
+				f = BaptismForm(data=d, prefix=p)
+				if f.is_valid():
+					o = f.save(commit=False)
+					ords.append(o)
+
+					if o.age >= 18 and o.sex == BAPTISM_SEX_M:
+						i.BM += 1
+						if i not in ords:
+							ords.append(i)
+				else:
+					self.response.out.write('Faltando dados.')
+					return
+
+			cn = 'c_%s-PC' %a
+			for c in self.request.POST.getall(cn):
+				p = '%s-%s' %(cn, c)
+				d = self.request.POST
+				d['%s-indicator' %p] = i.key()
+
+				f = ConfirmationForm(data=d, prefix=p)
+				if f.is_valid():
+					ords.append(f.save(commit=False))
+				else:
+					self.response.out.write('Faltando dados.')
+					return
+
+		db.put(ords)
+
+		self.response.out.write('Enviado com sucesso.')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/batismos/', BatismosPage),
 	('/batizadores/', BatizadoresPage),
 	('/relatorio/', RelatorioPage),
+	('/numeros/', NumerosPage),
 
 	('/dump/', DumpPage),
 
@@ -213,6 +349,8 @@ application = webapp.WSGIApplication([
 	('/js/main.js', MainJS),
 
 	('/send-relatorio/', SendRelatorio),
+	('/send-numbers/', SendNumbers),
+	('/load-zone/', LoadZone),
 
 	], debug=True)
 

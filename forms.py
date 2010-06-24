@@ -8,3 +8,16 @@ class ReportForm(djangoforms.ModelForm):
 	class Meta:
 		model = Report
 		exclude = ['used']
+
+class IndicatorForm(djangoforms.ModelForm):
+	class Meta:
+		model = Indicator
+		exclude = ['BM']
+
+class BaptismForm(djangoforms.ModelForm):
+	class Meta:
+		model = Baptism
+
+class ConfirmationForm(djangoforms.ModelForm):
+	class Meta:
+		model = Confirmation

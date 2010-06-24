@@ -13,6 +13,12 @@ indexes:
 - kind: Area
   properties:
   - name: is_open
+  - name: zone
+  - name: name
+
+- kind: Area
+  properties:
+  - name: is_open
   - name: zone_name
   - name: name
 
@@ -21,7 +27,7 @@ indexes:
   - name: is_released
   - name: mission_name
 
-- kind: Missionary
+- kind: Zone
   properties:
-  - name: is_released=
-  - name: mission_name
+  - name: is_open
+  - name: name
