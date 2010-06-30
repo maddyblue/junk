@@ -1,0 +1,12 @@
+<form method="POST">
+
+{% for i in fotos %}
+
+<br/><a href="/viewimage/{{ i.0 }}"><img src="/image/{{ i.1 }}" /></a>
+<input type="hidden" name="check" value="{{ i.0 }}" />
+
+{% endfor %}
+
+<input type="submit"/>
+
+</form>

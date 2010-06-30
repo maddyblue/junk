@@ -1,0 +1,8 @@
+<img src="/image/{{ i }}"/>
+<table>
+<tr><td>Mandada:</td><td>{{ p.submitted|date:"d/m/Y" }}</td></tr>
+{% if p.date %}<tr><td>Data:</td><td>{{ p.date|date:"d/m/Y" }}</td></tr>{% endif %}
+{% if p.comment %}<tr><td>Comentário:</td><td>{{ p.comment|linebreaks }}</td></tr>{% endif %}
+{% if p.missionary_name %}<tr><td>Missionário:</td><td>{{ p.missionary_name }}</td></tr>{% endif %}
+{% if p.ward_name %}<tr><td>Ala:</td><td>{{ p.ward_name }}</td></tr>{% endif %}
+</table>

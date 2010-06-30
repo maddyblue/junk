@@ -4,6 +4,7 @@ import base64
 import os
 
 from datetime import timedelta
+from google.appengine.api import images
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -56,17 +57,17 @@ def get_week():
 
 	return w
 
-def get_mopts():
-	n = 'mopts'
+def get_mopts(released=False):
+	n = '%s-mopts' %released
 	mopts = memcache.get(n)
 	if mopts is None:
-		mopts = render_mopts()
+		mopts = render_mopts(released)
 		memcache.add(n, mopts)
 
 	return mopts
 
-def render_mopts():
-	missionary = Missionary.gql('where is_released = :1 order by mission_name', False).fetch(1000)
+def render_mopts(released):
+	missionary = Missionary.gql('where is_released = :1 order by mission_name', released).fetch(1000)
 	return ''.join(['<option value="%s">%s</option>' %(m.key(), unicode(m)) for m in missionary])
 
 def get_aopts():
@@ -81,6 +82,19 @@ def get_aopts():
 def render_aopts():
 	area = Area.gql('where is_open = :1 order by zone_name, name', True).fetch(1000)
 	return ''.join(['<option value="%s">%s</option>' %(a.key(), unicode(a)) for a in area])
+
+def get_wopts():
+	n = 'wopts'
+	wopts = memcache.get(n)
+	if wopts is None:
+		wopts = render_wopts()
+		memcache.add(n, wopts)
+
+	return wopts
+
+def render_wopts():
+	ward = Ward.gql('order by stake_name, name')
+	return ''.join(['<option value="%s">%s</option>' %(w.key(), unicode(w)) for w in ward])
 
 class MainPage(webapp.RequestHandler):
 	@basicAuth
@@ -126,6 +140,7 @@ class MainJS(webapp.RequestHandler):
 
 class DumpPage(webapp.RequestHandler):
 	def get(self):
+		memcache.flush_all()
 		dump()
 		print 'done'
 
@@ -335,22 +350,111 @@ class SendNumbers(webapp.RequestHandler):
 
 		self.response.out.write('Enviado com sucesso.')
 
+class MandarPage(webapp.RequestHandler):
+	def render(self, d={}):
+		m = '<option value=""></option><optgroup label="NO CAMPO">'
+		m += get_mopts(False)
+		m += '</optgroup><optgroup label="DESOBRIGADO">'
+		m += get_mopts(True)
+		m += '</optgroup>'
+
+		w = '<option value=""></option>'
+		w += get_wopts()
+
+		d['m'] = m
+		d['w'] = w
+
+		rendert(self, 'mandar.html', d)
+
+	def get(self):
+		self.render()
+
+	def post(self):
+		d = {}
+
+		# dates in Portuguese are d/m/Y, not m/d/Y: deal with it
+		d['date'] = self.request.POST['date']
+		date = self.request.POST['date'].split('/')
+		self.request.POST['date'] = '%s/%s/%s' %(date[1], date[0], date[2])
+
+		f = PhotoForm(data=self.request.POST)
+		if f.is_valid():
+			p = f.save(commit=False)
+
+			try:
+				im = images.resize(self.request.get('photo'), 600)
+				tn = images.resize(self.request.get('photo'), 100)
+			except:
+				d['bad'] = True
+			else:
+				pim = PhotoImage(data=im)
+				ptn = PhotoThumbnail(data=tn)
+				db.put([pim, ptn])
+				p.image = pim
+				p.thumbnail = ptn
+
+				if p.missionary: p.missionary_name = unicode(p.missionary)
+				if p.ward: p.ward_name = unicode(p.ward)
+
+				db.put(p)
+
+				d['done'] = True
+				f = PhotoForm()
+				d['date'] = ''
+
+		d['f'] = f
+		self.render(d)
+
+class GaleriaPage(webapp.RequestHandler):
+	def get(self):
+		fotos = [(i.key(), i.get_key('thumbnail')) for i in Photo.gql('where checked = :1 order by submitted', True).fetch(50)]
+		render(self, 'galeria.html', 'Galeria de Fotos', {'fotos': fotos})
+
+class Image(webapp.RequestHandler):
+	def get(self, key):
+		i = db.get(key)
+		self.response.headers['Content-Type'] = 'image/png'
+		self.response.out.write(i.data)
+
+class ViewImagePage(webapp.RequestHandler):
+	def get(self, key):
+		p = db.get(key)
+		render(self, 'viewimage.html', 'Foto', {'p': p, 'i': p.get_key('image')})
+
+class CheckPage(webapp.RequestHandler):
+	def get(self):
+		fotos = [(i.key(), i.get_key('image')) for i in Photo.gql('where checked = :1 order by submitted', False).fetch(1000)]
+		render(self, 'check.html', 'Checkar Fotos', {'fotos': fotos})
+
+	def post(self):
+		fotos = db.get(self.request.POST.getall('check'))
+		for f in fotos:
+			f.checked = True
+			self.response.out.write('approved: %s<br/>' %f.key())
+		db.put(fotos)
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/batismos/', BatismosPage),
 	('/batizadores/', BatizadoresPage),
 	('/relatorio/', RelatorioPage),
 	('/numeros/', NumerosPage),
+	('/mandar/', MandarPage),
+	('/galeria/', GaleriaPage),
+	('/viewimage/(.*)', ViewImagePage),
 
 	('/dump/', DumpPage),
 
 	('/sync-areas/', SyncAreasPage),
+	('/check/', CheckPage),
 
 	('/js/main.js', MainJS),
 
 	('/send-relatorio/', SendRelatorio),
 	('/send-numbers/', SendNumbers),
 	('/load-zone/', LoadZone),
+
+	('/image/(.*)', Image),
 
 	], debug=True)
 

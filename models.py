@@ -23,6 +23,7 @@ class Stake(db.Model):
 class Ward(db.Model):
 	name = db.StringProperty(required=True)
 	stake = db.ReferenceProperty(Stake, required=True)
+	stake_name = db.StringProperty(required=True)
 	is_branch = db.BooleanProperty(required=True)
 	uid = db.IntegerProperty(required=True)
 
@@ -33,11 +34,11 @@ class Ward(db.Model):
 		return '%s %s' %(d, self.name)
 
 	def __unicode__(self):
-		return '%s (%s)' %(self.name, self.stake.name)
+		return '%s - %s' %(self.stake_name, self.name)
 
 class Zone(db.Model):
 	name = db.StringProperty(required=True)
-	
+
 	# auto update
 	is_open = db.BooleanProperty()
 
@@ -467,3 +468,21 @@ class Confirmation(db.Model):
 	indicator = db.ReferenceProperty(Indicator, required=True)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)
+
+class PhotoImage(db.Model):
+	data = db.BlobProperty(required=True)
+
+class PhotoThumbnail(db.Model):
+	data = db.BlobProperty(required=True)
+
+class Photo(DerefModel):
+	missionary = db.ReferenceProperty(Missionary)
+	missionary_name = db.StringProperty()
+	ward = db.ReferenceProperty(Ward)
+	ward_name = db.StringProperty()
+	comment = db.TextProperty()
+	date = db.DateProperty()
+	submitted = db.DateTimeProperty(required=True, auto_now_add=True)
+	image = db.ReferenceProperty(PhotoImage)
+	thumbnail = db.ReferenceProperty(PhotoThumbnail)
+	checked = db.BooleanProperty()

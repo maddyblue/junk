@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+
+{% block t1 %}Mandar Fotos{% endblock %}
+{% block t2 %}Mandar Fotos{% endblock %}
+
+{% block head %}
+
+<link href="/styles/ui-lightness/jquery-ui-1.8.1.custom.css" rel="stylesheet" type="text/css"/>
+<script src="/js-static/jquery.js"></script>
+<script src="/js-static/jquery-ui-1.8.1.custom.min.js"></script>
+<script src="/js-static/jquery.ui.datepicker-pt-BR.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+{% if done %}
+<p>Foto mandada com sucesso.</p>
+{% endif %}
+
+{% if bad %}
+<p>Problema mandando a foto. Grande de mais, ou não uma foto.</p>
+{% endif %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#datepicker").datepicker();
+});
+</script>
+<form method="POST" enctype="multipart/form-data">
+<table>
+<tr>
+<td>Foto:</td><td>{{ f.photo.errors }}<input type="file" name="photo" /></td>
+</tr>
+<tr><td>Data:</td><td>{{ f.date.errors }}<input type="text" name="date" id="datepicker" value="{{ date }}"/></td></tr>
+<tr>
+<td>Comentário:</td><td>{{ f.comment.errors }}<textarea name="comment" cols="45" rows="5">{{ f.data.comment }}</textarea></td>
+</tr><tr>
+<td>Missionário:</td><td>{{ f.missionary.errors }}<select name="missionary">{{ m }}</select> (optativo)</td>
+</tr><tr>
+<td>Área/Ala:</td><td>{{ f.ward.errors }}<select name="ward">{{ w }}</select> (optativo)</td>
+</tr><tr>
+<td><input type="submit" name="submit" value="Mandar" /></td></tr>
+</table>
+</form>
+
+<br/><b>Só fotos de batismos vão ser aceitadas.</b>
+
+{% endblock %}

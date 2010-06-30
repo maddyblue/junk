@@ -27,6 +27,16 @@ indexes:
   - name: is_released
   - name: mission_name
 
+- kind: Photo
+  properties:
+  - name: checked
+  - name: submitted
+
+- kind: Ward
+  properties:
+  - name: stake_name
+  - name: name
+
 - kind: Zone
   properties:
   - name: is_open

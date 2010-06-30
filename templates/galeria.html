@@ -1,0 +1,11 @@
+<table width="100%">
+
+{% for f in fotos %}
+	{% if forloop.counter|divisibleby:5 %}</tr>{% endif %}
+	{% if not forloop.first and forloop.counter|divisibleby:5 %}<tr>{% endif %}
+
+	<td align="center"><a href="/viewimage/{{ f.0 }}"><img border="0" src="/image/{{ f.1 }}"/></a></td>
+
+{% endfor %}
+
+</tr></table>
