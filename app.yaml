@@ -22,11 +22,45 @@ handlers:
 
 - url: /remote_api
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
-#  login: admin
+  login: admin
 
 - url: /stats.*
   script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
-#  login: admin
+  login: admin
+
+- url: /_ah/queue/deferred
+  script: $PYTHON_LIB/google/appengine/ext/deferred/handler.py
+  login: admin
+
+- url: /_ah/bulkupdate/admin/.*
+  script: bulkupdate/handler.py
+  login: admin
+
+- url: /_ah/nuke/.*
+  script: nuke/nuke.py
+  login: admin
+
+- url: /_ah/missao-rio/.*
+  script: main.py
+  login: admin
 
 - url: /.*
   script: main.py
+
+admin_console:
+  pages:
+  - name: Check Photos
+    url: /_ah/missao-rio/check/
+  - name: Dump
+    url: /_ah/missao-rio/dump/
+  - name: Sync Areas
+    url: /_ah/missao-rio/sync-areas/
+
+  - name: Bulk Update Jobs
+    url: /_ah/bulkupdate/admin/
+
+  - name: Nuke
+    url: /_ah/nuke/
+
+derived_file_type:
+- python_precompiled

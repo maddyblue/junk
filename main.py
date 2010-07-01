@@ -142,7 +142,7 @@ class DumpPage(webapp.RequestHandler):
 	def get(self):
 		memcache.flush_all()
 		dump()
-		print 'done'
+		self.response.out.write('done')
 
 class SyncAreasPage(webapp.RequestHandler):
 	def get(self):
@@ -310,7 +310,6 @@ class SendNumbers(webapp.RequestHandler):
 		db.put(inds)
 
 		ords = []
-#		for a in self.request.POST.getall('area'):
 		for i in inds:
 			a = i.get_key('area')
 
@@ -424,7 +423,7 @@ class ViewImagePage(webapp.RequestHandler):
 class CheckPage(webapp.RequestHandler):
 	def get(self):
 		fotos = [(i.key(), i.get_key('image')) for i in Photo.gql('where checked = :1 order by submitted', False).fetch(1000)]
-		render(self, 'check.html', 'Checkar Fotos', {'fotos': fotos})
+		rendert(self, 'check.html', {'fotos': fotos})
 
 	def post(self):
 		fotos = db.get(self.request.POST.getall('check'))
@@ -443,11 +442,6 @@ application = webapp.WSGIApplication([
 	('/galeria/', GaleriaPage),
 	('/viewimage/(.*)', ViewImagePage),
 
-	('/dump/', DumpPage),
-
-	('/sync-areas/', SyncAreasPage),
-	('/check/', CheckPage),
-
 	('/js/main.js', MainJS),
 
 	('/send-relatorio/', SendRelatorio),
@@ -455,6 +449,11 @@ application = webapp.WSGIApplication([
 	('/load-zone/', LoadZone),
 
 	('/image/(.*)', Image),
+
+	# _ah
+	('/_ah/missao-rio/dump/', DumpPage),
+	('/_ah/missao-rio/sync-areas/', SyncAreasPage),
+	('/_ah/missao-rio/check/', CheckPage),
 
 	], debug=True)
 

@@ -418,6 +418,7 @@ class Report(db.Model):
 class Indicator(DerefModel):
 	week = db.ReferenceProperty(Week, required=True)
 	submitted = db.DateTimeProperty(auto_now_add=True, required=True)
+	used = db.BooleanProperty()
 #	FIX forms.py, IndicatorForm to ignore this column, when enabled
 #	area = db.ReferenceProperty(AreaSnap)
 	area = db.ReferenceProperty(Area, required=True)
@@ -457,14 +458,14 @@ BAPTISM_SEX_F = 'Feminino'
 
 BAPTISM_SEX_CHOICES = set([BAPTISM_SEX_M, BAPTISM_SEX_F])
 
-class Baptism(db.Model):
+class IndicatorBaptism(db.Model):
 	indicator = db.ReferenceProperty(Indicator, required=True)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)
 	age = db.IntegerProperty(required=True)
 	sex = db.StringProperty(choices=BAPTISM_SEX_CHOICES, required=True)
 
-class Confirmation(db.Model):
+class IndicatorConfirmation(db.Model):
 	indicator = db.ReferenceProperty(Indicator, required=True)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)

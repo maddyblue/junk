@@ -16,11 +16,11 @@ class IndicatorForm(djangoforms.ModelForm):
 
 class BaptismForm(djangoforms.ModelForm):
 	class Meta:
-		model = Baptism
+		model = IndicatorBaptism
 
 class ConfirmationForm(djangoforms.ModelForm):
 	class Meta:
-		model = Confirmation
+		model = IndicatorConfirmation
 
 class PhotoForm(djangoforms.ModelForm):
 	class Meta:
