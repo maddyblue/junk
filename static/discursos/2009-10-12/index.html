@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-10-12</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=3>Rio de Jane</font></b></span><span class=Normal__Char><b><font size=3>iro, 12 de outubro de 2009</font></b></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Dia da criança.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Estimados Elderes e Sisteres da Missão Maravilhosa</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Tenho ponderado muito sobre o que está acontecendo com a nossa missão. Não quero dar atenção a resultados baixos e sem expressão. Quero me concentrar em coisas positivas e que leva a missão a um nível mais e mais alto a cada semana.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Tenho observado que quando a zona SE EMPENHA, paga o preço e trabalha em união, os resultados são bem melhores.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>A missão acabou de passar por uma grande transformação. Saíram de uma só vez, (12) doze líderes de zona e 13 líderes de distrito. Uma liderança cheia de experiência e com fogo nos ossos, uma liderança com uma grande visão e disposta a pagar o preço. Tudo isso refletiu em 292 batismos em agosto. Depois dessa grande mudança e com a renovação de líderes a missão começou a ter resultados baixos e sem muita expressão.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Agora eu pergunto a vocês: Isso é verdade? Essa é a causa? Foram embora 25, mas ficaram 170. Não posso atribuir essa queda a essa renovação. Afinal temos um grupo selecionado de missionários. É hora de reagir. Confio nos novos líderes de zona nos novos líderes de distrito e em todos os missionários. Não creio que existam missionário que não queira batizar nesta missão, não creio que existam missionários que não sabem ensinar, não creio que existam missionários que não saiba o que fazer para ter sucesso como missionário, não creio que existam missionários que não saiba a importância do batismo, não creio que existam&nbsp; missionários que não saiba ensinar, convidar e batizar alguém. Mesmo os mais novos sabem dessas coisas.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Creio que existam missionários que não estão dispostos a pagar o preço para ter sucesso em sua missão, creio que existam missionários que não tem a visão do futuro e que não entende a importância de trabalhar pra morrer, de dar ao Senhor o seu melhor. Creio que existam missionários que são muito experientes na arte da racionalização e segue racionalizando a menor das regras da missão e as vezes até a maior das regras, creio que existam missionários que por não terem a visão da vida, espera receber de Deus uma bênção sem que estejam dispostos a mover uma folha do chão. Creio que existam missionários que ouve apenas sua própria voz e ainda diz: “Sou muito obediente”. Creio sim, que existam missionários que infelizmente ainda saem de casa pela manhã, sem saber para onde vão ou o que vão fazer durante o dia. Se não aprenderem sobre Planejamento aqui na missão, provavelmente nunca mais aprenderão. Seguirão seu caminho na vida como um barco sem rumo e sem um porto seguro para ancorar. Certamente não saberão planejar sua vida pós missão, que inclui: Casamento, família, finanças e profissão. É preciso abrir os olhos e enxergar um pouco mais sobre o que está se passando ao&nbsp; redor, a nossa frente. O aqui e o agora sempre serão mais importantes do que o ontem e o amanhã. O ontem já se foi e de nada adiantará o choro ou a tristeza. O amanhã não nos pertence. Se é assim, então paguemos o preço hoje para quando chegar o amanhã possamos lembrar do ontem com satisfação, alegria e um sentimento de dever cumprido.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Pagar o preço. Esse é o ponto. Ter o senso de urgência na obra. Trabalhar dando o seu melhor. Planejar com sabedoria. Eu prometo a todos os&nbsp;&nbsp; missionários que fizerem essas quatro coisas, que batizará semanalmente.</font></span>
+</p>
+<ol>
+  <li class=Normal style="    MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=3>Obedecer as regras da miss</font></u></b></span><span class=Normal__Char><b><u><font size=3>ã</font></u></b></span><span class=Normal__Char><b><u><font size=3>o</font></u></b></span><span class=Normal__Char><b><u><font size=3>, sem racionalizar</font></u></b></span><span class=Normal__Char><font size=3>. </font></span><span class=Normal__Char><font size=3>“</font></span><span class=Normal__Char><font size=3>N</font></span><span class=Normal__Char><font size=3>ã</font></span><span class=Normal__Char><font size=3>o</font></span><span class=Normal__Char><font size=3> sabeis que ele era santo? Mas, embora sendo santo, mostra aos filhos dos homens que, segundo a carne, se humilha ante o Pai e testifica-lhe que lhe ser</font></span><span class=Normal__Char><font size=3>á</font></span> <span class=Normal__Char><font size=3>obediente na observ</font></span><span class=Normal__Char><font size=3>â</font></span><span class=Normal__Char><font size=3>n</font></span><span class=Normal__Char><font size=3>cia de seus mandamentos.</font></span><span class=Normal__Char><font size=3>(2 N</font></span><span class=Normal__Char><font size=3>é</font></span><span class=Normal__Char><font size=3>f</font></span><span class=Normal__Char><font size=3>i 31:7)</font></span>
+  </li>
+  <li class=Normal style="    MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=3>Fazer um planejamento s</font></u></b></span><span class=Normal__Char><b><u><font size=3>á</font></u></b></span><span class=Normal__Char><b><u><font size=3>b</font></u></b></span><span class=Normal__Char><b><u><font size=3>io diariamente e semanalmente</font></u></b></span><span class=Normal__Char><font size=3>. </font></span><span class=Normal__Char><font size=3>“</font></span><span class=Normal__Char><font size=3>Organizai-vos; preparai todas as coisas ne</font></span><span class=Normal__Char><font size=3>cess</font></span><span class=Normal__Char><font size=3>á</font></span><span class=Normal__Char><font size=3>r</font></span><span class=Normal__Char><font size=3>ias e estabelecei uma dupla, sim, uma dupla de ora</font></span><span class=Normal__Char><font size=3>ç</font></span><span class=Normal__Char><font size=3>ã</font></span><span class=Normal__Char><font size=3>o, uma dupla de jejum, uma dupla de f</font></span><span class=Normal__Char><font size=3>é</font></span><span class=Normal__Char><font size=3>,</font></span><span class=Normal__Char><font size=3> uma dupla de aprendizado, uma dupla de gl</font></span><span class=Normal__Char><font size=3>ó</font></span><span class=Normal__Char><font size=3>r</font></span><span class=Normal__Char><font size=3>ia</font></span><span class=Normal__Char><font size=3>, uma </font></span><span class=Normal__Char><font size=3>á</font></span><span class=Normal__Char><font size=3>r</font></span><span class=Normal__Char><font size=3>ea de ordem, uma dupla</font></span><span class=Normal__Char><font size=3> de Deus.(D&amp;C 88:119)</font></span><span class=Normal__Char><font size=3>(Grifo nosso)</font></span>
+  </li>
+  <li class=Normal style="    MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=3>Pagar o pre</font></u></b></span><span class=Normal__Char><b><u><font size=3>ç</font></u></b></span><span class=Normal__Char><b><u><font size=3>o</font></u></b></span><span class=Normal__Char><b><u><font size=3>. Trabalhando a cada dia como</font></u></b></span><span class=Normal__Char><b><u><font size=3> se</font></u></b></span><span class=Normal__Char><b><u><font size=3> fosse o seu </font></u></b></span><span class=Normal__Char><b><u><font size=3>ú</font></u></b></span><span class=Normal__Char><b><u><font size=3>l</font></u></b></span><span class=Normal__Char><b><u><font size=3>timo dia na terra.</font></u></b></span> <span class=Normal__Char><font size=3>“</font></span><span class=Normal__Char><font size=3>Eis que o campo estava maduro e aben</font></span><span class=Normal__Char><font size=3>ç</font></span><span class=Normal__Char><font size=3>o</font></span><span class=Normal__Char><font size=3>ados sois por haverdes usado a foice e segado com vigor; sim, haveis trab</font></span><span class=Normal__Char><font size=3>alhado o dia todo e eis o n</font></span><span class=Normal__Char><font size=3>ú</font></span><span class=Normal__Char><font size=3>m</font></span><span class=Normal__Char><font size=3>ero de vossos feixes! E ser</font></span><span class=Normal__Char><font size=3>ã</font></span><span class=Normal__Char><font size=3>o</font></span><span class=Normal__Char><font size=3> recolhidos aos celeiros, para que n</font></span><span class=Normal__Char><font size=3>ã</font></span><span class=Normal__Char><font size=3>o</font></span><span class=Normal__Char><font size=3> sejam desperdi</font></span><span class=Normal__Char><font size=3>ç</font></span><span class=Normal__Char><font size=3>a</font></span><span class=Normal__Char><font size=3>dos.(Alma 26:5)</font></span>
+  </li>
+  <li class=Normal style="    MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=3>Orar com f</font></u></b></span><span class=Normal__Char><b><u><font size=3>é</font></u></b></span> <span class=Normal__Char><b><u><font size=3>em nada duvidando</font></u></b></span><span class=Normal__Char><b><u><font size=3>.</font></u></b></span> <span class=Normal__Char><font size=3>“</font></span><span class=Normal__Char><font size=3>Sim, aquele que se arrepende e exercita a f</font></span><span class=Normal__Char><font size=3>é</font></span> <span class=Normal__Char><font size=3>e faz boas obras e </font></span><span class=Normal__Char><b><u><font size=3>ora continuamente sem cessar</font></u></b></span><span class=Normal__Char><font size=3>—</font></span><span class=Normal__Char><font size=3>a </font></span><span class=Normal__Char><font size=3>esse </font></span><span class=Normal__Char><font size=3>é</font></span> <span class=Normal__Char><font size=3>permitido conhecer os mist</font></span><span class=Normal__Char><font size=3>é</font></span><span class=Normal__Char><font size=3>r</font></span><span class=Normal__Char><font size=3>ios de Deus; sim, e a esse ser</font></span><span class=Normal__Char><font size=3>á</font></span> <span class=Normal__Char><font size=3>permitido revelar coisas nunca antes reveladas; sim, a esse ser</font></span><span class=Normal__Char><font size=3>á</font></span> <span class=Normal__Char><font size=3>permitido levar milhares de almas ao arrependimento, assim como a n</font></span><span class=Normal__Char><font size=3>ó</font></span><span class=Normal__Char><font size=3>s</font></span><span class=Normal__Char><font size=3> nos foi permitido levar estes nossos irm</font></span><span class=Normal__Char><font size=3>ã</font></span><span class=Normal__Char><font size=3>o</font></span><span class=Normal__Char><font size=3>s ao </font></span><span class=Normal__Char><font size=3>arrepen</font></span><span class=Normal__Char><font size=3>dimento. </font></span><span class=Normal__Char><font size=3>(Alma 26:22).</font></span>
+  </li>
+</ol>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Tenho</font></span><span class=Normal__Char><font size=3> visto que muitos missionários perderam o hábito de falar com todas as pessoas. Muitos dizem que tem dificuldades para fazer contatos. Veja essa escritura:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“E é necessário que o poder de Deus esteja com ele para que obedeçais ao seu comando. Eis porém que não foi ele, mas sim o </font><span class=Normal__Char><b><u><font size=3>Espírito do Senhor que estava nele que lhe abriu a boca para falar, de maneira que não podia fechá-la</font></u></b></span><font size=3>”.(2 Néfi 1:27). </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Quando o missionário não abre a boca é porque não está com o Espírito Santo. Veja quem é que fecha a nossa boca: “(...) Apenas iniciara, imediatamente se apoderou de mim uma força que me dominou por completo; e tão assombrosa foi sua influência que </font><span class=Normal__Char><b><u><font size=3>se me travou a língua, de modo que eu não podia falar.</font></u></b></span><font size=3> Uma densa escuridão formou-se ao meu redor e pareceu-me, por um momento, que eu estava condenado a uma destruição súbita(Pérola de Grande Valor | JS-História 1:15).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Para conhecermos o Mestre será preciso pagar o preço. O seu preço poderá ser diferente de outros, mas será&nbsp; o seu melhor, tudo o que tem e é. “E agora, meus queridos irmãos, quisera que viésseis a Cristo, que é o Santo de Israel, e participásseis de sua salvação e do poder de sua redenção. Sim, vinde a ele e </font><span class=Normal__Char><b><u><font size=3>ofertai-lhe toda a vossa alma</font></u></b></span><font size=3>(...)(Ômni 1:26).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Muitos ainda dizem que estão fazendo tudo e dando o melhor para o Senhor. Uma dupla de missionários que não conseguem dar 20 lições por semana, nunca irá me convencer que fez o seu melhor e que deu tudo. Uma dupla de missionários que não conseguem falar com 20 pessoas na rua durante o dia, jamais vai me convencer que deu todo o seu melhor para o Senhor. Uma dupla de missionários que passa, duas, três, quatro semanas sem batizar ninguém, jamais irá me convencer que deu o melhor que tinha e fez tudo o que podia fazer. É uma questão muito simples de se entender. “</font><span class=Normal__Char><b><u><font size=3>Sim, aquele que se arrepende</font></u></b></span><font size=3> e </font><span class=Normal__Char><b><u><font size=3>exercita a fé</font></u></b></span><font size=3> e </font><span class=Normal__Char><b><u><font size=3>faz boas obras</font></u></b></span><font size=3> e </font><span class=Normal__Char><b><u><font size=3>ora continuamente sem cessar</font></u></b></span><font size=3>—</font><span class=Normal__Char><b><u><font size=3>a esse</font></u></b></span><font size=3> é </font><span class=Normal__Char><u><font size=3>permitido </font></u></span><font size=3>conhecer os mistérios de Deus; sim, e a esse será permitido revelar coisas nunca antes reveladas; sim, a esse </font><span class=Normal__Char><b><u><font size=3>será permitido levar milhares de almas ao arrependimento,</font></u></b></span><font size=3> assim como a nós nos foi permitido levar estes nossos irmãos ao arrependimento. (Alma 26:22).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Pague o preço. Pagar o preço significa fazer o que se precisa fazer. Trabalhar, trabalhar e trabalhar, viver a missão. Não deixar que nenhum preocupação ou pensamento fora do foco da missão penetre em sua mente. (Prov. 3:5)”Confia no SENHOR de todo o teu coração, e não te estribes no teu próprio entendimento”.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Viva a sua missão. “Ninguém pode servir a dois senhores; porque ou há de odiar um e amar o outro, ou se dedicará a um e desprezará o outro. Não podeis servir a Deus e a Mamom”.(Mateus 6:24).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Que tipo de experiências você está escrevendo em seu diário? Se trabalhardes todos os vossos dias arduamente, prometo que terás um diário repleto de experiências espirituais que o fará um missionário mais feliz, mais forte e muito mais eficaz.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Espero que todos estejam preparados para a conferência de zona. Favor orem para que esta névoa de descrença afaste-se da mente do povo. Orem para que Deus derrame seu Espírito com mais abundância sobre a cabeça do povo dessa cidade. Oremos para que Deus na sua infinita bondade nos abençoe com mais e mais fé. Orem para que o Nosso Poderoso Pai Celestial possa nos permitir batizar seus filhos. Orem para que satanás e suas hostes, estejam bem longe de nossos pesquisadores&nbsp; dos eleitos de Deus e em especial, dos nossos missionários e de nossos líderes e membros da Igreja aqui em nossa missão. Oremos para que cada missionário, possa ter o desejo de pagar o preço e viver sua missão de modo que tenha as mais significativas experiências espirituais&nbsp; nesta época de sua vida.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Oro para que cada um de vocês, possam ser missionários de Milagres, missionários de fé e missionários de poder.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Com amor</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>Pre</font></span><span class=Normal__Char><font size=3>sidente Bezerra</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<br></body>
+</html>

@@ -1,0 +1,860 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2010-04-12-eu-tenho-fe</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<div>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Rio de Janeiro 12 de abril de </font></b></span><span style=FONT-FAMILY:Tahoma><b><font size=3>2010</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Estimados Elderes e Sisteres</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="FONT-FAMILY:'Times New Roman'"><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="FONT-FAMILY:'Times New Roman'"><b><font size=3>E</font></b></span><span style=FONT-FAMILY:Tahoma><b><font size=3>u tenho fé? </font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Essa é uma boa pergunta, não acham? Claro que a resposta será positiva. Sim, eu tenho fé. Então já que sua resp</font></span><span style=FONT-FAMILY:Tahoma><font size=3>osta é sim, me digam quais foram </font></span><span style=FONT-FAMILY:Tahoma><font size=3>suas ações que demonstraram que você tem fé</font></span><span style=FONT-FAMILY:Tahoma><font size=3>?</font></span><span style=FONT-FAMILY:Tahoma><font size=3> Você</font></span><span style=FONT-FAMILY:Tahoma><font size=3>s</font></span><span style=FONT-FAMILY:Tahoma><font size=3> poderia</font></span><span style=FONT-FAMILY:Tahoma><font size=3>m</font></span><span style=FONT-FAMILY:Tahoma><font size=3> mencionar várias:</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 36pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>1.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>No verdadeiro exercício do arbítrio eu aceitei as condições impostas pelo evangelho de Jesus Cristo, das quais estão relacionadas:</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 72pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Symbol><font size=3>·</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Ser batizado e receber o Espírito Santo</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 72pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Symbol><font size=3>·</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Guardar os mandamentos.&nbsp; P</font></span><span style=FONT-FAMILY:Tahoma><font size=3>or exemplo:</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 36pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>a.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Viver a lei da castidade</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 36pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>b.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Pagar um dízimo honesto</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 36pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>c.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Viver a Palavra de Sabedoria</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 36pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>d.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Guardar o dia do Senhor</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 36pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>e.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Viver a Lei do Jejum</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 36pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>f.</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Servir de Testemunha de Deus</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 72pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Symbol><font size=3>·</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Cumprir uma Missão Honrosa. Aceitar as regras e diretrizes da missão. Tais como:</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>a.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Acordar todos os dia</font></span><span style=FONT-FAMILY:Tahoma><font size=3>s</font></span><span style=FONT-FAMILY:Tahoma><font size=3> às 6:30h</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>b.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Fazer 30 minutos de exercício todos os dias(exceto domingo)</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>c.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Estudar 1</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>hora individualmente e em companheirismo</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>d.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Estudar 30 minutos o idioma da missão</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>e.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Sair e s</font></span><span style=FONT-FAMILY:Tahoma><font size=3>ó retornar</font></span><span style=FONT-FAMILY:Tahoma><font size=3> para casa às 21:00h ou às 21:30h caso esteja ensinando</font></span><span style=FONT-FAMILY:Tahoma><font size=3>. </font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>f.</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>21h30min</font></span><span style=FONT-FAMILY:Tahoma><font size=3> Planejar, escrever no </font></span><span style=FONT-FAMILY:Tahoma><font size=3>diário</font></span><span style=FONT-FAMILY:Tahoma><font size=3> e preparar-se para deitar e orar</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>g.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>22h30min</font></span><span style=FONT-FAMILY:Tahoma><font size=3> Deitar-se</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>h.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Viver dentro do orçamento</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>(mesada) estabelecida.</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>i.</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não beber bebidas a base de cola</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>j.</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não ouvir músicas do mundo, só da Igreja(Coro do Tabernáculo e EFY)</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>k.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não tocar violão</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>l.</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não assistir filmes do mundo, apenas os produzidos pela Igreja oficialmente</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>m.</font></span>&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não usar gírias</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>n.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não ensinar sozinhos e nem ficar sozinhos com crianças</font></span><span style=FONT-FAMILY:Tahoma><font size=3>. Não fazer cócega, trocar fraldas, segurar crianças nem permitir que sentem no colo, não tomar conta de crianças, seja qual for a idade.</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>o.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Ter apenas uma hora de almoço</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>p.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Ter um dia de preparação. Usar a internet. Use somente o My LDSmail.net. Olhar sempre para o monitor do companheiro</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>(sempre). Não usar computador dos membros. Caso use indevidamente perderá o privilégio de usar o e-mail e computadores.</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>q.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Você se compromete a se desligar por completo de seus compromissos pessoais</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>r.</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não assistir televisão, nem ouvir rádio.</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>s.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não usar MP4 que tenha possibilidade de receber filmagens de computador. Nem usar fone de ouvidos</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>t.</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não usar câmera fotográfica nos dias de proselitismo. CUIDADO c</font></span><span style=FONT-FAMILY:Tahoma><font size=3>om</font></span><span style=FONT-FAMILY:Tahoma><font size=3> roubos</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>u.</font></span>&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não ter em casa: DVDs do mundo, CDs ou revistas que não seja a Liahona</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>v.</font></span>&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Amar e respeitar os companheiros</font></span><span style=FONT-FAMILY:Tahoma><font size=3>. V</font></span><span style=FONT-FAMILY:Tahoma><font size=3>eja</font></span><span style=FONT-FAMILY:Tahoma><font size=3> o que ele tem de melhor</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>w.</font></span>&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Nunca ficar sozinho. Nunca.</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>x.</font></span>&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não escrever nem receber cartas de moças que moram na área geográfica de sua missão. Escrever só para famílias</font></span><span style=FONT-FAMILY:Tahoma><font size=3>, homens. Nunca para crianças e moças. Nem telefonar ou escrever email e nem receber telefonemas de pessoa do sexo oposto. Só telefonemas para confirmar compromissos e cartas para fortalecer os recém conversos</font></span><span style=FONT-FAMILY:Tahoma><font size=3>.</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>y.</font></span>&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Falar </font></span><span style=FONT-FAMILY:Tahoma><font size=3>com os pais apenas duas vezes por ano. No natal e no dia das mães.</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 39pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>z.</font></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><font size=3>Não usar bicicleta, nem cama elástica. Não dirigir carros.</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Sua atitude em aceitar viver tod</font></span><span style=FONT-FAMILY:Tahoma><font size=3>o</font></span><span style=FONT-FAMILY:Tahoma><font size=3>s esses mandamentos e regras da missão é uma verdadeira demonstração </font></span><span style=FONT-FAMILY:Tahoma><font size=3>de fé. Sim, vocês tê</font></span><span style=FONT-FAMILY:Tahoma><font size=3>m fé.</font></span><span style=FONT-FAMILY:Tahoma><font size=3> QUAL NÍVEL? Bem, isso é outra coisa. Vejam essas escrituras e os tipos ou níveis de fé que existem:</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Fé em Jesus Cristo</font></b></span><br>
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 53.25pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>1.</font></b></span>&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><b><font size=3>Fé é um princípio de poder e ação </font></b></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 53.25pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>2.</font></b></span>&nbsp;&nbsp; <span style=FONT-FAMILY:Tahoma><b><font size=3>Nas escrituras existem vários níveis de fé:&nbsp; </font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 21pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Partícula</font></b></span><span style=FONT-FAMILY:Tahoma><font size=3> ………Alma 32:27 </font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 21pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Muita </font></b></span><span style=FONT-FAMILY:Tahoma><font size=3>………………… Mosias 27:14</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 21pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Forte </font></b></span><span style=FONT-FAMILY:Tahoma><font size=3>……………………………. Alma 7:17</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 21pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Profunda </font></b></span><span style=FONT-FAMILY:Tahoma><font size=3>………………………..…….. Mosias 4:3</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 21pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Extraordinária </font></b></span><span style=FONT-FAMILY:Tahoma><font size=3>..........................................Moroni 10:11</font></span>
+  </p>
+  <p style="MARGIN:0pt 0pt 0pt 21pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>Inabalável</font></b></span><span style=FONT-FAMILY:Tahoma><font size=3> …………………………………………… Jacó 4:6</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Conhecimento perfeito&nbsp; </font></b></span><span style=FONT-FAMILY:Tahoma><font size=3>………………………………. Alma 32:34</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>(Élder Marlin K. Jensen, SPM 1999).</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Sempre quando falo a respeito desse a</font></span><span style=FONT-FAMILY:Tahoma><font size=3>ssunto</font></span><span style=FONT-FAMILY:Tahoma><font size=3> vejo que muitos mission</font></span><span style=FONT-FAMILY:Tahoma><font size=3>ári</font></span><span style=FONT-FAMILY:Tahoma><font size=3>os ficam um pouco confuso</font></span><span style=FONT-FAMILY:Tahoma><font size=3>s</font></span><span style=FONT-FAMILY:Tahoma><font size=3> sobre</font></span><span style=FONT-FAMILY:Tahoma><font size=3> como aumentar a fé.</font></span><span style=FONT-FAMILY:Tahoma><font size=3> A</font></span><span style=FONT-FAMILY:Tahoma><font size=3>credito que todos querem ter um</font></span><span style=FONT-FAMILY:Tahoma><font size=3>a</font></span><span style=FONT-FAMILY:Tahoma><font size=3> fé inabável e outros até desejam ter o conhecimento perfeito.</font></span><span style=FONT-FAMILY:Tahoma><font size=3> Vejo alguns rogando silenciosamente</font></span><span style=FONT-FAMILY:Tahoma><font size=3>,</font></span><span style=FONT-FAMILY:Tahoma><font size=3> como aquele pai que</font></span><span style=FONT-FAMILY:Tahoma><font size=3> pediu</font></span><span style=FONT-FAMILY:Tahoma><font size=3> para</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>Jesus Cristo curar seu filho. “E Jesus disse-lhe: Se tu podes crer, tudo é possível ao que crê.&nbsp; E logo o pai do menino, clamando, com lágrimas, disse: Eu creio, Senhor! </font></span><span style=FONT-FAMILY:Tahoma><b><font size=3>ajuda a minha incredulidade</font></b></span><span style=FONT-FAMILY:Tahoma><font size=3>.”(Marcos 9:23-24)</font></span><span style=FONT-FAMILY:Tahoma><font size=3>.</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Como</font></span><span style=FONT-FAMILY:Tahoma><font size=3> obter um aumento considerável desse prin</font></span><span style=FONT-FAMILY:Tahoma><font size=3>cípio do evangelho tão poderoso? </font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:center">
+    <img alt="" height=351 src="images/MISSING" style=BORDER:none width=465></img>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#4c4c4c; FONT-FAMILY:Tahoma"><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#4c4c4c; FONT-FAMILY:Tahoma"><b><u><font size=3>A fé é um dom de Deus </font></u></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#4c4c4c; FONT-FAMILY:Tahoma"><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>“Porque pela graça sois salvos, por meio da fé; e isto não vem de vós</font></b></span><span style=FONT-FAMILY:Tahoma><b><font size=3>,</font></b></span> <span style=FONT-FAMILY:Tahoma><b><u><font size=3>é dom de Deus</font></u></b></span><span style=FONT-FAMILY:Tahoma><b><font size=3>.”</font></b></span> <span style=FONT-FAMILY:Tahoma><font size=3>(Efésios 2:8).</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#4c4c4c; FONT-FAMILY:Tahoma"><b><u><font size=3>C</font></u></b></span><span style="COLOR:#4c4c4c; FONT-FAMILY:Tahoma"><b><u><font size=3>oncedido através do Espírito Santo.</font></u></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#4c4c4c; FONT-FAMILY:Tahoma"><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>“E novamente vos exorto, meus irmãos, a não negardes os dons de Deus, pois eles são muitos; e eles vêm do mesmo Deus. E de diversas maneiras são esses dons administrados; mas é o mesmo Deus que opera tudo em tudo; </font></b></span><span style=FONT-FAMILY:Tahoma><b><u><font size=3>e eles são dados pelas manifestações do Espírito de Deus aos homens, para beneficiá-los</font></u></b></span><span style=FONT-FAMILY:Tahoma><b><font size=3>”</font></b></span><span style=FONT-FAMILY:Tahoma><b><font size=3>.</font></b></span> <span style=FONT-FAMILY:Tahoma><font size=3>(Morôni 10:8)</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#4c4c4c; FONT-FAMILY:Tahoma"><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>“</font></span><span style=FONT-FAMILY:Tahoma><font size=3>Porque a um pelo Espírito é dada a palavra da sabedoria; e a outro, pelo mesmo E</font></span><span style=FONT-FAMILY:Tahoma><font size=3>spírito, a palavra da ciência; </font></span> <span style=FONT-FAMILY:Tahoma><b><u><font size=3>E a outro, pelo mesmo Espírito, a fé</font></u></b></span><span style=FONT-FAMILY:Tahoma><font size=3>; e a outro, pelo mesmo Espírito, os dons de curar;</font></span><span style=FONT-FAMILY:Tahoma><font size=3> (I Cor. 12:8-9)</font></span><span style=FONT-FAMILY:Tahoma><font size=3>.</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>“</font></span><span style=FONT-FAMILY:Tahoma><font size=3>A outros é dado crer nas palavras deles, para que tenham também vid</font></span><span style=FONT-FAMILY:Tahoma><font size=3>a eterna se permanecerem fiéis. </font></span><span style=FONT-FAMILY:Tahoma><font size=3>E também a alguns é dado ter fé para serem curados;</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>E a outros é dado ter fé para curar.</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>E também a alguns é dada a </font></span><span style=FONT-FAMILY:Tahoma><b><font size=3>operação de milagres</font></b></span><span style=FONT-FAMILY:Tahoma><font size=3>; </font></span><span style=FONT-FAMILY:Tahoma><font size=3>E acontecerá que aquele que pedir em Espírito receberá em Espírito;</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>Aquele que pede em Espírito pede de acordo com a vontade de Deus; portanto é feito como pede.</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>E também vos digo: Todas as coisas devem ser feitas em nome de Cristo, tudo a</font></span><span style=FONT-FAMILY:Tahoma><font size=3>quilo que fizerdes no Espírito;</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>E no Espírito deveis render graças a Deus por todas as bênçãos com que sois abençoados.</font></span> <span style=FONT-FAMILY:Tahoma><b><u><font size=3>E deveis praticar a virtude e a santidade perante mim continuamente</font></u></b></span><span style=FONT-FAMILY:Tahoma><font size=3>. Assim seja. Amém.</font></span><span style=FONT-FAMILY:Tahoma><font size=3>”</font></span><span style=FONT-FAMILY:Tahoma><font size=3>(</font></span><span style=FONT-FAMILY:Tahoma><font size=3>D&amp;C </font></span><span style=FONT-FAMILY:Tahoma><font size=3>46:1</font></span><span style=FONT-FAMILY:Tahoma><font size=3>4,19-21,28,</font></span><span style=FONT-FAMILY:Tahoma><font size=3> 3</font></span><span style=FONT-FAMILY:Tahoma><font size=3>0-33</font></span><span style=FONT-FAMILY:Tahoma><font size=3>)</font></span><span style=FONT-FAMILY:Tahoma><font size=3>.</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Aprendemos que o Dom da fé está com Deus e para obtermos esse Dom será preciso orar e agir. Outra coisa muito importante é praticar a virtude e a santidade continuamente.</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>“(...)</font></span><span style=FONT-FAMILY:Tahoma><b><font size=3>por causa de sua extraordinária fé</font></b></span><span style=FONT-FAMILY:Tahoma><font size=3>(...)</font></span><span style=FONT-FAMILY:Tahoma><font size=3>Ora, era esta a fé possuída por aqueles de quem falei; eles são jovens, de opinião firme, e depositam continuamente sua confiança em Deus.</font></span><span style=FONT-FAMILY:Tahoma><font size=3>”</font></span><span style=FONT-FAMILY:Tahoma><font size=3>(Alma 57:25 - 27)</font></span><span style=FONT-FAMILY:Tahoma><font size=3>. Os 2 mil jovens de Helamã possíam uma fé entraordinária e uma fé forte.</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Muitos sabemos dos feitos daqueles que exerceram a fé em Jesus Cristo. Agora é a hora de exercermos nossa fé em Jesus Cristo. Pois a fé é como o testemunho, não podemos emprestar ou prestar testemunho por outra pessoa. Não podemos ter fé por alguém. Nossa fé é em Jesus Cristo, ela é pessoal intransferível. É um Dom concedido a nós indivídualmente, por intermédio de Deus e de acordo com Sua vontade. Precisamos</font></span><span style=FONT-FAMILY:Tahoma><font size=3> pagar o preço para aumentarmos</font></span><span style=FONT-FAMILY:Tahoma><font size=3> a fé, fazer crescer e não deixar desfalecer dentro de nós. Vejam o que Jesus Cristo fez a favor de Pedro:</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>“Mas eu roguei por ti, </font></span><span style=FONT-FAMILY:Tahoma><b><u><font size=3>para que a tua fé não desfaleça</font></u></b></span><span style=FONT-FAMILY:Tahoma><font size=3>; e tu, quando te converteres, confirma teus irmãos.”(Lucas 22:32).</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><b><u><font size=3>D</font></u></b></span><span style=FONT-FAMILY:Tahoma><b><u><font size=3>esfaleça</font></u></b></span><span style=FONT-FAMILY:Tahoma><b><u><font size=3>:</font></u></b></span><span style=FONT-FAMILY:Tahoma><font size=3>“</font></span><span style=FONT-FAMILY:Tahoma><font size=3> F</font></span><span style=FONT-FAMILY:Tahoma><font size=3>azer perder as forças ou o ânimo a.</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>Desanimar;”</font></span> <span style=FONT-FAMILY:Tahoma><font size=2>(dicionário priberam).</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Quando existe presença de desânimo, é um sinal de enfraquecimento de fé. Será preciso orar.</font></span><span style=FONT-FAMILY:Tahoma><font size=3> Orar muito</font></span><span style=FONT-FAMILY:Tahoma><font size=3> para não desfalecer e vencer. Quando oramos é</font></span><span style=FONT-FAMILY:Tahoma><font size=3> como se re</font></span><span style=FONT-FAMILY:Tahoma><font size=3>ativasse</font></span><span style=FONT-FAMILY:Tahoma><font size=3>mos</font></span><span style=FONT-FAMILY:Tahoma><font size=3> a fé novamente, recebemos</font></span><span style=FONT-FAMILY:Tahoma><font size=3> uma carga de energia</font></span><span style=FONT-FAMILY:Tahoma><font size=3> vinda do céu</font></span><span style=FONT-FAMILY:Tahoma><font size=3>. Tão grande é o poder da oração. Eu testifico.</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>Precisamos de fé para:</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>-</font></span><span style=FONT-FAMILY:Tahoma><font size=3>Encontrar mais homens</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>-E</font></span><span style=FONT-FAMILY:Tahoma><font size=3>nsinar mais homens</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>-Batizar mais </font></span><span style=FONT-FAMILY:Tahoma><font size=3>homens</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>-Confirmar mais </font></span><span style=FONT-FAMILY:Tahoma><font size=3>homens</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>Fé</font></span><span style=FONT-FAMILY:Tahoma><font size=3>,</font></span><span style=FONT-FAMILY:Tahoma><font size=3> todos vocês já provaram que tem. O que precisa</font></span><span style=FONT-FAMILY:Tahoma><font size=3>mos fazer para&nbsp; </font></span><span style=FONT-FAMILY:Tahoma><font size=3>aumentar a </font></span><span style=FONT-FAMILY:Tahoma><font size=3>nossa fé?</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:center">
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>“</font></b></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><b><font size=3>Sua fé aumentará por meio de estudo diligente, oração, serviço dedicado e obediência aos sussurros do Espírito Santo e aos mandamentos.(PME p.123)</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Prometo </font></span><span style=FONT-FAMILY:Tahoma><font size=3>aos</font></span><span style=FONT-FAMILY:Tahoma><font size=3> que </font></span><span style=FONT-FAMILY:Tahoma><font size=3>fizerem conforme a promessa que está escrito no Pregar Meu Evangelho</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>que terão um aumento de fé.</font></span> <span style=FONT-FAMILY:Tahoma><font size=3>Teremos mais sucesso na missão. Acredito que batizaremos 100 por semana com 30% de homens. </font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><b><font size=3>“De sorte que a fé é pelo ouvir, e o ouvir pela palavra de Deus.”</font></b></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>(</font></span><a href=http://www.bibliaonline.com.br/acf/rm/10/17+><span style="COLOR:#000000; FONT-FAMILY:Tahoma; TEXT-DECORATION:none"><font size=3>Romanos 10:17</font></span></a><span style=FONT-FAMILY:Tahoma><font size=3>)</font></span><span style=FONT-FAMILY:Tahoma><font size=3>.</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=MARGIN:0pt>
+    <span style="COLOR:#494949; FONT-FAMILY:Tahoma"><font size=3>"A f</font></span><span style="COLOR:#494949; FONT-FAMILY:Tahoma"><font size=3>é é pelo ouvir</font></span><span style="COLOR:#494949; FONT-FAMILY:Tahoma"><font size=3> a palavra d</font></span><span style="COLOR:#494949; FONT-FAMILY:Tahoma"><font size=3>e Deus, mediante o testemunho de Seus servos; esse testemunho sempre vem acompanhado do espí</font></span><span style="COLOR:#494949; FONT-FAMILY:Tahoma"><font size=3>rito de profecia e</font></span> <span style="COLOR:#494949; FONT-FAMILY:Tahoma"><font size=3>revelação.</font></span><span style="COLOR:#494949; FONT-FAMILY:Tahoma"><font size=3>”</font></span><span style="COLOR:#494949; FONT-FAMILY:Fd997605-Identity-H"><font size=2>[Joseph Smith, </font></span><span style="COLOR:#494949; FONT-FAMILY:Fd758737-Identity-H"><font size=2>Ensinamen tos do Profeta Joseph Smith,p.144</font></span><span style="COLOR:#494949; FONT-FAMILY:Fd758737-Identity-H"><font size=2>]</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#464646; FONT-FAMILY:Tahoma"><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#464646; FONT-FAMILY:Tahoma"><b><font size=3>VEJAM ESSAS CITAÇÕES, LEIAM E ME RESPONDAM: POR QUE NÃO BATIZAMOS 100 POR SEMANA COM 30% DE HOMENS?</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>•</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3> "A fé implica nessa confiança e convicção que</font></span> <span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>impele à ação . A crença é, de certo modo, passiva; um</font></span> <span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>consentimento ou aceitação somente; a fé é ativa e</font></span> <span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>positiva; compreende essa certeza e confianç</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>a que </font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>conduz às obras. Fé em Cristo abrange a crenç</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>a Nele </font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>combinada com a confiança. Não se pode ter fé</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3> sem </font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>crer. Não obstante, pode-se crer e, mesmo assim, nã</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>o </font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>ter fé. Fé é crença vivificada, ativa e viva, de modo que esse esforço s</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>e converte na força</font></span> <span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>impulsora por meio da qual os home</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>ns lutam pela </font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>excelência, suportando freqü</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>entemente vicissitudes e </font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>sofrime</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>ntos a fim de alcançar seus obj</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>etivos. A fé é</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3> o </font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>segredo da ambição, a alma do heroísmo, a força motriz</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3> do esforço." (Talmage, Regras de Fé, pp. 94-95, 100</font></span><span style="COLOR:#464646; FONT-FAMILY:Tahoma"><font size=3>)</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>• "A menos que o homem se atenha à</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3> doutrina e ande </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>pela fé, acei</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>tando a verdade e observando os </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>mandamentos conforme foram dados, ser-lhe-á</font></span> <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>impossível receber a</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3> vida eterna, independentemente </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>de quanto confessar com seus lábios que Jesus é</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3> o </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>Cristo, ou crer que Seu Pai O enviou ao mundo para a</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>redenção do homem. Assim Tiago está</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3> certo, quando </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>diz que os demônios </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>"crêem e estremecem</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>", mas nã</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>o </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>se arrependem. Por isso, é necessário que nã</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>o apenas </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>creiamos, mas nos arrependamos e, com fé, faç</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>amos </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>boas obras até o fim; e então </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>receberemos a </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>recompensa dos fiéis e</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3> um lugar do reino celestial de </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>Deus . " (Smith, Doutrina</font></span> <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>de Salvação, vaI. II, p . 307</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>)</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>• " Os milagres, sinais, os dons d</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>o Espí</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>rito, o </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>conhecimento de Deus e </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>da divindade, e todas as coisas </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>louváveis que possamos imaginar - todas elas são</font></span> <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>produtos da fé; todas elas se originam porque a fé</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3> se </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>torn</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>ou o princípio go</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>vernante na vida dos santos. De </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>igual maneira, onde estas coisas nã</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>o se acham </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>presentes, não existe a fé. " (McConkie, </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>Mormon </font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>Doctrine, p. 264</font></span><span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>)</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#414141; FONT-FAMILY:Tahoma"><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>• " É preciso a fé - a f</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>é invisí</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>vel - para o</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>s jovens </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>prosseg</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>uirem imediatamente com as suas </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>responsabilidades fami</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>liares, apesar das dificuldades </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>financeiras. É </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>preciso fé</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> para a jovem esposa dedicar-se </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>à família, ao invé</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>s de aceitar um emprego, </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>especialmente </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>quando seu jovem marido precisa </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>terminar os estudos. </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>É</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> preciso fé</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> para observar o Dia do </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>Senhor, quando se pode fazer horas-extra, negó</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>cios e </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>vender mercadorias. </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>É</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> preciso muita fé</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> para pagar o </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>dízimo, quando são </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>parcos os recursos e grandes as </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>necessidades . </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>É</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> preciso ter fé para jejuar e faz</font></span><span style="COLOR:#000000; FONT-FAMILY:Arial"><font size=3>e</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>r oraçõ</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>es </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>familiares e observar a Palavra de Sabedoria. </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>É</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> preciso</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>fé para realizar as visitas de mestre familiar, a obra</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>missioná</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>ria da estaca e outros serviços</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> quando é</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>necessário fazer sacrifícios</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>. </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>É</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> preciso fé para cumprir</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>missão no exterior. Ma</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>s podeis saber isto - que todas </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>estas coisas são o plantio, ao passo que famí</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>lias </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>dedicadas e devotas, segurança espiritual, paz e a vida</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>eterna são os frutos da colheita .</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>Lembrai-vos de que Abraão, Moisés, Elias e outros não</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>podiam ver claramente o fim desde o começo . Eles</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>caminhar</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>am pela fé sem auxílio da visão</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>. Lembrai-vos</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>ainda de que não haviam portas abertas; Labão não se</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>achava embriagado, e de que não havia a menor</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>esperança no momento em que Néfi exerceu a sua fé</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> e </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>partiu a fim de obter as placas. Na fornalha ardente nã</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>o </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>existiam roupa</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>s de amianto nem qualquer outro </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>recurso para proteger os três hebreus da horrí</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>vel morte; </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>a boca dos leões nã</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>o se achavam fechadas com </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>focinheiras de couro ou metal, quando Daniel foi</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>trancado na cova.</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>Lembrai-vos de que não havia nuvens no céu, nem</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>tinha Elias em mãos qualquer hidrô</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>metro ao prometer </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>o imediato término da prolongada seca; embora Josué</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>houvesse presenc</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>iado o milagre do Mar Vermelho, </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>como poderia, através de recursos humanos, saber que</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>as águas do Rio Jordã</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>o se manteriam abertas pelo </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>tempo exato, para que os israelitas fizessem a</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>&nbsp; </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>travessia, e que depois tomariam a correr rumo a o Mar</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>Vermelho</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>?</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>Lembrai</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>-vos de que não havia nuvens no céu, nem o</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>menor indício de chuvas, tampouco qualquer sinal do</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>dilúvio, quando Noé construiu a arca, de acordo com o</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>mandamento recebido</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>. Não havia um cordeiro preso</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>ao arbusto, quando Isaque e seu pai seguiram ao monte</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>Moriá, pa</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>ra fazer o saerifício. Recordai</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>-vos de que não</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>havia aldeias e cidades, fazendas e pomares, lares e</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>armazéns, e tam</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>pouco um florescente deserto em </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>Utah, quando os pe</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>rseguidos pioneiros cruzaram as </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>planícies . Lembrai</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>-vos ainda de que não havia seres</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>celestiais em Palmyra, às margens do Rio Susquehanna</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>ou no monte Cumora,</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> quando o ansioso Joseph entrou </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>s</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>ilentemente no bosque, ajoelhou</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>-se em oraçã</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>o na </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>barranca do rio, e subiu</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> as encostas do monte sagrado . </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>Mas podeis saber isto: a fé</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3> destemida consegue fechar a </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>boca de leõ</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>es, tornar inofensivas as chama</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>s vorazes e </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>abrir caminhos secos no leito de rios e mares. A fé</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>inabalável pode proteger contra inundações, pô</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>r fim a </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>secas, curar enfermos e dar origem a manifestaçõ</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>es </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>divinas. A </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>fé inquebrantá</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>vel pode ajudar-nos a viver os </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>mandamentos, trazendo, assim, as bênçãos incontáveis</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>de paz, perfeição e exaltaçã</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>o no reino de Deus.</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>"</font></span> <span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>(Spencer W . Kimball</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>, em Conference Report, outubro </font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>de 1952, pp . 50-51</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>)</font></span><span style="COLOR:#000000; FONT-FAMILY:Tahoma"><font size=3>.</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#616161; FONT-FAMILY:Tahoma"><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:center">
+    <span style="COLOR:#81355f; FONT-FAMILY:Tahoma"><b><font size=3>Fé em Jesus Cristo</font></b></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Se você tem fé em Cristo,</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>você acredita que Ele é o Filho </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>de Deus, o Unigênito do Pai </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>na carne;</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3> Você O aceita como </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>seu Salvador e Reden</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>tor, e segue Seus ensinamentos;</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Você acredita que seus </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>pecados podem ser perdoados por </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>meio de Sua Expiação. A </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>fé em Cristo significa que você </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>confia Nele e t</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>em certeza de que Ele ama você. </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>A fé conduz à ação</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3> que inclui o arrependimento, a</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>obediência e o serviço de</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>dicado. Se você tem fé em Jesus </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Cristo, você confia sufic</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>ientemente no Senhor a ponto de </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>seguir Seus mandam</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>entos, mesmo que não compreenda </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>plenamente as razões para fazê-lo. Você cumpre o que o</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Senhor deseja que você c</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>umpra. Você ajuda a fazer o bem </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>em sua própria vida e n</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>a vida das outras pessoas. Você </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>é capaz de fazer mila</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>gres de acordo com a vontade do </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Senhor. Sua fé se manifestará por meio de sua diligência</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>e trabalho.</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>A fé é um princípio de poder. Deus age pelo poder, mas </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Seu poder geralmente é exercido </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>em resposta à fé. (Ver Morôni 10:7.) Ele age de acordo co</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>m a fé que Seus filhos possuem. </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>A dúvid</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>a e o temor são o oposto da fé. </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Sua fé aumentará por meio de estudo diligente, oração, serviço dedicado e obediência</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>aos sussurros do Es</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>pírito Santo e aos mandamentos. </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Sua fé em Jesus Cristo cresce à medida que você passa a</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3> conhecê-Lo melhor e a conhecer </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>melhor os Seus ensinamentos. Ao estudar e pesquisar as escrituras, você aprenderá sobre</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>Seus caminhos, Seu amor por todas as pessoas e Seus mandamentos.</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>A</font></span> <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>fé inclui a confiança na missão e poder do Espírito Santo</font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>. Por meio da fé, você receberá </font></span><span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>respostas a suas orações e inspiração pessoal para guiá-lo no trabalho do Senhor.</font></span> <span style="COLOR:#616161; FONT-FAMILY:Tahoma"><font size=3>( Pregar Meu Evangelho. Capítulo 6. P.122.123)</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#231f20; FONT-FAMILY:Tahoma"><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Testifico que </font></span><span style=FONT-FAMILY:Tahoma><font size=3>se exercermos fé em Jesus Cristo, faremos dessa missão o maior milagre dos últimos tempos a respeito de obra missionária</font></span><span style=FONT-FAMILY:Tahoma><font size=3>. </font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Precisamos individualmente aumentar a nossa fé. Precisamos como missão aumentar a nossa fé. Nossa missão deve ser uma missão de Fé, uma missão </font></span><span style=FONT-FAMILY:Tahoma><font size=3>de </font></span><span style=FONT-FAMILY:Tahoma><font size=3>milagres e uma missão de convênios.</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Com amor</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Tahoma><font size=3>Presidente e Sister Bezerra</font></span>
+  </p>
+</div>
+<br></body>
+</html>

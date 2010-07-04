@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2008-12-15</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal>
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial';  TEXT-DECORATION:none"><b>Rio de Janeiro, 15 de dezembro de 2008</b></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial';  TEXT-DECORATION:none">Estimados Elderes e Sisteres</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial';  TEXT-DECORATION:none">Estamos vivendo um época maravilhosa. É&nbsp; Natal! Espero que você não perca o foco do seu propísito. Quando o mundo está totalmente voltado para algo é fácil nos envolvermos. Sabemos que o m</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">undo não compreende esta data e procura algo que não satisfaz(presentes, festa, diversões etc). Nós que somos discípulos de Ciristo devemos está sempre com os olhos fitos em sua glória, no seu propósito, que é o de “Levar a efeito a imortalidade e vida eterna do homem”.(Moisés 1:39).</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Temos que está atentos a luz que brilha mais forte e que está&nbsp; dentro de nós. A troca de presente é uma tradição milenar e nós estamos envolvidos de alguma forma, o comemorar através de uma ceia ou uma reunião especial faz parte desta data. Mas o que gostaria de pedir-lhes é que não perca foco de seu propósito e não deixe sua mente se envolver com sentimentos que atrapalhe sua concentração naquilo que se propôs a fazer. Na realidade esta é uma época onde todos nós deveríamos nos esforça muito mais para alegrar o nosso Salvador e presenteá-lo com aquilo que é de maior valor e regozijo, que é a Alma que se arrepende e faz convênios com Ele. Portanto que nesse mês de dezembro possamos trabalhar arduamente para presentear o Mestre o nosso Salvador com centenas de batismos.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Durantes essas duas semanas batizamos 38 pessoas, será preciso um pouco mais de esforço, dedicação, oração, obediência, disciplina, submissão, trabalho, ousadia, fé,amor ao próximo e fidelidade ao nosso Pai Celestial.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Espero que nestes dias de grande movimentos nas ruas, possamos aproveitar para fazer não só apenas 10 contatos a cada dia, espero que todos possam realizar 20 contatos, planejar para ensinar o máximo de pessoas. Acredito que se você ensina acima de 25 mensagens, ora com fé e leva pessoas a Igreja, não tem como ficar sem batizar.&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Lembre-se nossa meta é : <span class=Normal__Char style=" FONT-FAMILY:'Arial'"><b>MENOS DE CEM NUCA MAIS</b></span>” precisaremos batizar 70 pessoas nessas duas semana. 35 a cada semana, acredito que com esforço de cada dupla alcançaremos nossa meta.&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">“Quer ser feliz? Esquerça-se de si mesmo e dedique-se totalmente a esta grande causa. Concentre suas forças em ajudar as pessoas(...) Eleve-se um pouco mais, erga os que estão fracos, sustente as mãos que pendem cansadas. Viva o Evangelho de Jesus Cristo”.(Pres. Gordon B Hinckley. PME p. 182)&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Até a conferência!&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Com amor&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Presidente Bezerra</span>
+</p>
+<br></body>
+</html>

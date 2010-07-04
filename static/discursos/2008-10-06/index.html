@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2008-10-06</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<div>
+  <p style="MARGIN:6pt 0pt">
+    <span style=FONT-FAMILY:Arial><b><font size=3>Rio de Janeiro, 06 de outubro de 2008</font></b></span>
+  </p>
+  <p style="MARGIN:6pt 0pt">
+    <span style=FONT-FAMILY:Arial><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Estimados Elderes e Sisteres</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Essa semana 22 filhos do Pai Celestial entraram nas águas do batismo.</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3> Parabéns pelo esforço e trabalho de cada um.</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3> Muitos são os própositos para batizarmos os filhos do Pai Celestial.</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3> Mas, o mais nobre deles é:</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Salvação e Exaltação. </font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Que o Senhor vos abençõe na sua busca constante.</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Foi realmente uma conferência poderosa, espero que todos tenham tido a oportunidade de terem ouvido os profetas vivos. Estarei esperando seus relatos sobre seus sentimentos a respeito do que foi ensinado. Favor seja específico.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Estive ponderando sobre o que muitos missionários me escrevem. Uma das coisas que tenho observado é que muitos dizem que tem um bom LMA na ala, que os membros são bons e ajudam e que tem um bispo que apoia e mesmo assim não consegue batizar. Gostaria de saber de algumas coisas sobre o seu trabalho.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Você realmente trabalha com os membros? Ou existe um bom relacionamento apenas? Se existe um bom relacionamento já é um bom começo, mas gostaria de contribuir com algumas idéias que talvez ajude em seu trabalho.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>O que eu faria se fosse um missionário de tempo integral em uma área com um companheiro?</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>1 - Serviria aos membros - Levaria em minha bolsa, gracha de sapatos e uma escova e engracharia os sapatatos dos irmãos quando fosse almoçar em sua casa, antes da irmã servir o almoço, naqueles 15 minutos antes de colocar o almoço, pediria ao filho da casa que pegasse os sapatos de seu pai, e então engrecharia. </font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>2 - Trocaria uma lâmpada queimada na casa onde fui almoçar.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>3 - Faria algum serviço antes do almoço(É preciso ter sabedoria e cuidado para que não constranja os irmãos)</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>4 - Deixaria um bilhetinho com um pequeno chocolate em agradecimento pelo delicioso almoço(deixava encima da mesa ao sair.).</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>5 - Se a família tivesse algum jovem servindo missão, escreveria para ele falando do quanto seus pais eram especiais e o quanto era grato pelos almoços em sua casa.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>6 - Se alguém da família estava aniversariando, levaria um chocolate ou algo simples com um cartão simples, feito com a própria mão e entregaria ao anivarsariante da casa.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>6 - Nunca ficaria mais de uma hora na casa das irmãs onde almoçaria. Quando os membros percebem que estamos trabalhando arduamente, eles tem desejo de ajudar, quando ficamos em sua casa por horas depois do almoço batendo papo e atrapalhando a família, eles perdem a confiança e não tem desejo de ajudar, pois eles sabem que os missionário não devem demorar após o almoço.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Os membros</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3> mudam a atitude quando os missionários transmitem o espírito missionário através do serviço e do trabalho árdua.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Eu ainda trabalharia para batizar os membros de sua família que mora na área da ala.(Pais, irmãos, Tios, avós etc.) Isso fortalece muito os laços de amizade e confiança entre os membros e os missionários.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>A segunda idéia seria trabalhar com a liderança da ala também.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>1 – A ala está fazendo reunião de integração pelo menos a cada duas semanas? nessas reuniões os membros estão levando pesquisadores? Se não; pediria ao bispo para nos ajudar com essa reunião, dando ao LMA apoio para realiza-la.(Filmes, a noite dos talentos, a noite da pipoca, etc.) Sem pesquisadores não faz muito sentido a não ser que os membros novos estejam presentes.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>2 – Os irmãos do sacerdócio estão dividindo com os missionários pelo menos uma vez por mês por cada irmão? Se não, pediria ajuda ao bispo para elaborar um calendário para que esses irmãos que desejassem dividir pudessem se programar para esse dia.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>3 – Pediria ao bispo apoio para que a cada semana pudesse levar pesquisadores para noite familiar na casa de algum irmão que aceitasse fazer em sua casa, ou reversaria com</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3> outros.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>4 – No domingo pediria ajuda aos irmãos que tem carro para nos ajudar em pegar alguém que tenha dificuldade de ir até a Igreja.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>5 – Pediria ao bispo para realizar um serão sobre a obra missionária na ala pelo menos a cada 3 meses.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>6 – Chegaria sempre para o bispo e perguntaria se ele estava precisando de ajuda, faria uma amaizade sincera com o bispo e sempre o tratava como o ungido do Senhor e um amigo.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Quando o nosso relacionamento com os líderes e os membros da ala é de confiança, amizade, respeito e amor. Eles irão nos apoiar com referencias e nos ajudarão a batizar seus amigo, familiares e vizinhos. Ter um bom relacionamento é só o começo para dar início a uma grande experiência de sucesso em seu trabalho como missionário.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Espero ter ajudado. Tenho total confiança em voces e nem preciso declarar o meu amor, pois voces sabem que Sister Bezerra e eu amamos voces como se fossem nossos filhos e tudo o que queremos é ajudá-los a terem sucesso na missão e na vida.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Com amor</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Presidente Bezerra</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>P.S Falando de almoço na casa dos irmãos, gostaria de saber quantas vezes durante uma semana voce recebe dinheiro dos irmãos para almoçar. Favor responder.</font></span>
+  </p>
+  <p style=" MARGIN:0pt 0pt 10pt">
+    <span style=FONT-FAMILY:Calibri><font size=3>&nbsp;</font></span>
+  </p>
+</div>
+<br></body>
+</html>

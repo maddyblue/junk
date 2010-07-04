@@ -1,0 +1,504 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-10-19</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<div>
+  <p style=" MARGIN:0pt 0pt 10pt">
+    <span style=FONT-FAMILY:Calibri><font size=3>Rio de Janeiro 19 de outubro de 2009</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Estimados Elderes e Sisteres</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Reação!!!</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Parabéns pela reação que a missão teve nesta semana. Foram 63 batismos e 41 confirmações. Nos mês de setembro fomos a 4ª missão que mais batizou no Brasil e a que mais cresceu em batismos por missionário nos últimos 12 meses. Crescemos 5.1 batismos por missionário. Hoje somos a 1ª com 5.1 de crescimento. Nossa média hoje é de 10.6, somos a missão que mais cresceu neste item no Brasil. Em julho de 2008 éramos a 26º do Brasil.</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Esperamos que o crescimento continue a existir daqui para frente. Esse mês está com uma média de 47 batismos por semana, para continuarmos crescendo mês a mês será preciso batizar 75 pessoas essa semana. Em agosto ficamos com uma média de 58 batismos por semana, em setembro, 45,25 foi uma queda estrondosa, a diferença está nas confirmações. Em agosto foram 252 confirmações, ficando uma média de 50,4. Em setembro batizamos menos e confirmamos mais, foram 205 confirmações, ficando uma média de 51,25 confirmações, um milagre. Crescemos entre agosto e setembro. Como vocês já sabem a Igreja só registra as confirmações. Portanto precisamos batizar mais e confirmar mais. Até o momento estamos com 141 batismos e 116 confirmações. Precisaremos batizar 75 essa semana e confirmar 90 pessoas. Esse é o nosso objetivo dessa semana. Todas as pessoas que puderem ser batizadas antes de domingo e confirmada no domingo, faremos. Nosso objetivo é chegarmos a média de 75 batismos semanais. Vou mostrar para você de como é possível. Vou dar a receita:</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Uma boa dose de fé acrescentada a uma grande quantidade de obediência, adicione umas 10 horas de trabalho árduo durante o dia, sendo adicionado 30 minutos de planejamento diários, acrescido de muita oração, uma dose de união e muito desejo de batizar os eleitos de Deus.</font></span><font size=3><br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>RESUMINDO:</font></span><font size=3><br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>1 - FÉ - 2 OBEDIÊNCIA - 3 TRABALHO ÁRDUO - 4 UM BOM PLANEJAMENTO - 5 MUITA ORAÇÃO -6 UNIÃO - 7 DESEJO DE BATIZAR.</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Tenho sentido e visto que a dois grandes obstáculos que a nossa missão precisa vencer.</font></span><font size=3><br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>1 - DESOBEDIÊNCIA as regras da missão. "Eu, o Senhor, estou obrigado quando fazeis o que eu digo; mas quando não o fazeis, não tendes promessa alguma. (D&amp;C 82:10).</font></span><font size=3><br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>2 - DESUNIÃO entre as duplas, nos distritos e nas zonas. "Eis que isto vos dei como parábola e é como eu sou. Digo-vos: Sede um; e se não sois um, não sois meus".</font></span><font size=3><br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>(D&amp;C 38:27).</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Desobediência: Não vou numerar as formas e maneiras que um missionário mostra desobediência, mas gostaria de citar a racionalização como a maior e a pior causa da desobediência na missão. A liderança da missão(Assistentes, Líderes de Zona, Líderes de Distrito e Seniores, devem ficar muito atento quanto a obediência as regras da missão, pois a partir de agora farei um acompanhamento mais próximo. </font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>TODO CHAMADO É UMA OPORTUNIDADE PARA SERVIR E CRESCER</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>NENHUM CHAMADO ESTÁ ABAIXO DE NOSSA CAPACIDADE. TODO CHAMADO PROPORCIONA UMA OPORTUNIDADE DE SERVIR E CRESCER. O SENHOR ORGANIZOU A IGREJA DE MODO A OFERECER A CADA MEMBRO UMA OPORTUNIDADE DE SERVIR QUE, POR SUA VEZ, PROPORCIONARÁ CRESCIMENTO ESPIRITUAL PESSOAL. SEJA QUAL FOR O CHAMADO QUE TIVEREM, PEÇO QUE O VEJAM COMO UMA OPORTUNIDADE NÃO APENAS DE FORTALECER E ABENÇOAR AS PESSOAS, MAS TAMBÉM DE SE TORNAREM O QUE O PAI CELESTIAL ESPERA QUE SE TORNEM".(Presidente Dieter F. Uchtdorf)</font></span><font size=3><br>
+    <br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Ser um líder sem ser fiel a Deus ao presidente da missão e obediente as regras, não mais será possível nesta missão. "E um relatório dessa mordomia deles exigirei no dia do juízo".(D&amp;C 70:4). "Porque a quem muito é dado, muito é exigido; e o que pecar contra a luz maior receberá a condenação maior.(D&amp;C 82:3). Ser um líder é ser um exemplo. Ser um líder é ser uma luz. Ser um líder é ser uma força, um modelo a ser seguido. Ser um líder é ser um padrão. Para ser um bom líder é preciso primeiro ser um bom liderado, um bom servo.Veja o que o Apóstolo Paulo disse para nós: "Obedecei a vossos pastores, e sujeitai-vos a eles; porque velam por vossas almas, como aqueles que hão de dar conta delas; para que o façam com alegria e não gemendo, porque isso não vos seria útil". (Hebreus 13:17). Espero que os líderes dessa missão assumam suas mordomias com responsabilidade. "De maneira que cada um de nós dará conta de si mesmo a Deus".(Romanos 14:12). Precisamos cuidar de nós mesmos e dos que lideramos. Isso se faz com amor, preocupação, cuidado e correção.</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>" Quando alguém em uma posição de responsabilidade resiste a dar orientação ou a fazer correções necessárias, ele está pensando apenas em si mesmo. "(Elder Packer, Reunião de Treinamento de Presidentes de Estaca da Área Utah Norte, 23 de novembro de 1996) </font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>MATEUS 20 : 27 "QUANDO SERVIMOS AS PESSOAS, NÃO DEVEMOS SER MOTIVADOS PELO EGOÍSMO, MAS PELA CARIDADE. ESSE É O MODO PELO QUAL JESUS CRISTO VIVEU SUA VIDA, E É ASSIM QUE UM PORTADOR DO SACERDÓCIO PRECISA VIVER A SUA. O SALVADOR NÃO SE IMPORTAVA COM AS HONRAS DOS HOMENS. SATANÁS OFERECEU-LHE TODOS OS REINOS E A GLÓRIA DO MUNDO, MAS JESUS REJEITOU IMEDIATA E COMPLETAMENTE ESSA OFERTA</font></span><font size=3><br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>MATEUS 4 : 8 - 10.</font></span><font size=3><br>
+    <br>
+    <br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Elder disse Uchtdorf disse: "POR TODA SUA VIDA, O SALVADOR PROVAVELMENTE SE SENTIU CANSADO E PRESSIONADO, QUASE NUNCA TENDO UM MOMENTO PARA SI MESMO. NO ENTANTO, SEMPRE TINHA TEMPO PARA OS ENFERMOS, OS AFLITOS E OS DESPREZADOS. APESAR DESSE MAGNÍFICO EXEMPLO, VEMO-NOS COM MUITA FREQUÊNCIA E FACILIDADE BUSCANDO AS HONRAS DOS HOMENS, EM VEZ DE SERVIR AO SENHOR COM TODO O NOSSO PODER, MENTE E FORÇA."</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Percebo que muitos missionários almejam cargos de liderança, mas quando são chamados não correspondem ao chamado. Creio que o que mais importava neste caso, era o título a posição.</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>"ELE NOS PEDE QUE PERMANEÇAMOS FIRMES COM O PODER DO SACERDÓCIO EM NOSSO CORAÇÃO E EM NOSSA ALMA, ESFORÇANDO-NOS AO MÁXIMO NO CHAMADO QUE TEMOS NESTE MOMENTO. IRMÃOS, POR MAIS FORTES QUE SEJAM, VOCÊS NÃO PODEM NEM DEVEM ERGUER O PIANO SÓZINHOS. DA MESMA MANEIRA, NENHUM DE NÓS PODE NEM DEVE LEVAR A OBRA DO SENHOR SÓZINHO; MAS SE FICARMOS BEM UNIDOS CADA UM NO LUGAR INDICADO PELO SENHOR E ERGUERMOS A PARTE QUE NOS CABE, NADA IMPEDIRÁ A OBRA DIVINA DE IR AVANTE". "IRMÃOS, VAMOS PARAR DE ASPIRAR A CARGOS IMPORTANTES E DE RECUSAR-NOS A SERVIR! QUE NOS LEMBREMOS SEMPRE DA PROFUNDA LIÇÃO DE QUE SOMOS REPRESENTANTES DO SENHOR JESUS CRISTO, SUSTENTADOS PELO SANTO ESPÍRITO DE DEUS, FIÉIS E LEAIS ATÉ O FIM, TODOS INTEIRAMENTE DEVOTADOS À CAUSA DE SIÃO E COMPROMETIDOS POR CONVÊNIO A JUNTAR-NOS E A ESFORÇAR-NOS NO LUGAR EM QUE ESTAMOS". (Elder Uchtdorf).</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Espero que o missionário junior, tenha o nível de um missionário sênior e o sênior o nível do líder de distrito e o líder de distrito o nível do líder de zona e o líder de zona o nível do assistente. Nível de comprometimento com o chamado e a obra, nível de responsabilidade e maturidade, nível de obediência e fidelidade, o mesmo nível de dedicação e fidelidade a Deus, ao presidente e aos companheiros.</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>União. Tenho percebido que as zonas que mais batizam são as que estão mais unidas. Os companheiros que mais batizam, são os que estão mais unidos. É obvio. Deus não aprova a discórdia. "Pois em verdade, em verdade vos digo que aquele que tem o espírito de discórdia não é meu, mas é do diabo, que é o pai da discórdia e leva a cólera ao coração dos homens, para contenderem uns com os outros.Eis que esta não é minha doutrina, levar a cólera ao coração dos homens, uns contra os outros; esta, porém, é minha doutrina: que estas coisas devem cessar.(3 Néfi 11:29 - 30). Eu, o Senhor, perdoarei a quem desejo perdoar, mas de vós é exigido que perdoeis a todos os homens.(Seção 64:10).</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Espero que o nível de união entre nós possa melhorar e que sejamos irmãos em Cristo. Verdadeiramente. Espero que o nível de obediência as regras da missão seja erguido ao mais alto nível e que as nossas ofertas colocadas no altar de Deus, sejam oferta dada em retidão. </font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Com amor</font></span><font size=3><br>
+    <br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Presidente Bezerra</font></span><font size=3><br>
+    </font><span style=FONT-FAMILY:Calibri><font size=3>Missão Brasil Rio de Janeiro</font></span>
+  </p>
+</div>
+<br></body>
+</html>

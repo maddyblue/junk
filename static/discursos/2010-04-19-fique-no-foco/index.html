@@ -1,0 +1,649 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2010-04-19-fique-no-foco</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <a name=graphic02></a> <img alt=image height=431 src="images/dfzh62h7_229c32dp8cv_b.gif" width=573>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Rio 19 de abril de 2010</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Estimados Missionários</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Como reagir ao desânimo? Não é difícil, basta voltar para o foco daquilo que nos propomos a realizar. São muitas coisas que podem nos tirar do foco de nosso trabalho e objetivos. Na vida dos missionários principalmente. Por exemplo: PODEMOS SAIR DO FOCO DEVIDO:</font></span>
+</p>
+<ol>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma carta que n</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ã</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>o</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3> veio</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma doen</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ç</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>a</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3> na fam</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>í</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>l</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ia</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Um desentendimento com o companheiro</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Um reembolso que n</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ã</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>o</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3> chegou</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma namorada que acabou o relacionamento</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Um amigo ou parente que falece</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma dor no joelho </font></span><span class=List_0020Paragraph__Char><font size=3>ou na cabe</font></span><span class=List_0020Paragraph__Char><font size=3>ç</font></span><span class=List_0020Paragraph__Char><font size=3>a</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>A falta de </font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>á</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>g</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ua em nossa casa</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>V</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>á</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>r</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ios pensamentos dispersos</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Um grande acontecimento na cidade</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma amizade exagerada com membros</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma disc</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ó</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>r</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>dia com os l</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>í</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>d</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>eres </font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma fofoca na ala ou na miss</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ã</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>o</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Um batismo que cai</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Um pesquisador que n</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ã</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>o</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3> foi a Igreja</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma fam</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>í</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>l</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ia que desistiu de ouvir as mensagens</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Um insulto ou um desapontamento em um contato</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma confirma</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ç</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ã</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>o que caiu</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>O sapato apertado</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Um calo no p</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>é</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>A luz que foi cortada</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>O almo</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ç</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>o</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3> que caiu</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>A ten</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ç</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ã</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>o da espera dos dias antes da transfer</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ê</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>n</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>cia</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>A </font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ú</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>l</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>tima transf</font></span><span class=List_0020Paragraph__Char><font size=3>r</font></span><span class=List_0020Paragraph__Char><font size=3>ê</font></span><span class=List_0020Paragraph__Char><font size=3>n</font></span><span class=List_0020Paragraph__Char><font size=3>cia na miss</font></span><span class=List_0020Paragraph__Char><font size=3>ã</font></span><span class=List_0020Paragraph__Char><font size=3>o</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>As conversas levianas e sem prop</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ó</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>s</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ito com os companheiros e membros</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>Uma fraqueza de car</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>á</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>t</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>er</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>A pregui</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ç</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>a</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>O fingimento, faz que trabalha, mas na realidade est</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>á</font></span> <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>enrolando a si mesmo.</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>O interesse pelas coisas do mundo, TV, not</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>í</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>c</font></span><span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>ias etc</font></span>
+  </li>
+  <li class=List_0020Paragraph style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=List_0020Paragraph__Char style=" TEXT-DECORATION:none"><font size=3>A casa q</font></span><span class=List_0020Paragraph__Char><font size=3>ue mora.</font></span>
+  </li>
+</ol>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Se hoje, neste exato momento, você que acabou de ler esses pontos, está desanimado ou saiu do foco, quero compartilhar alguns pensamentos.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Bem, acredito que a primeira coisa que você tem que fazer é saber qual é o seu propósito, porque está aqui&nbsp; </font></span><span class=Normal__Char><font size=3>o que veio fazer e o que esperam de você. Qual é sua verdadeira identidade?</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><b><font size=3>“Jesus sabia&nbsp; quem era e por&nbsp; que estava neste planeta. Com isto, podia conduzir com força em lugar de incerteza ou fraquezas”. (Presidente Kimball,)</font></b></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>NO PREGAR MEU EVANGELHO p. 2&nbsp; </font></span><span class=Normal__Char><font size=3>tem uma frase que declara de maneira simples e clara o seu chamado. </font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“...Você foi chamado para </font><span class=Normal__Char><u><font size=3>representar Jesus Cristo</font></u></span><font size=3>, ajudando as pessoas a tornarem-se limpas de seus pecados...”</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Para que você foi chamado como um representande Jesus Cristo?</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Acredito qu</font></span><span class=Normal__Char><font size=3>e foi para:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Convidar as pessoas a achegarem-se a Cristo, ajudando-as a receber o evangelho restaurado&nbsp; por meio da fé em Jesus Cristo e em Sua Expiação, do arrependimento, do batismo, de se receber o dom do Espírito Santo e de perseverar até o fim.” (PME, p. 1).</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none; COLOR:#231f20"><font size=3>Os missionários devem ir “no poder da ordenação com o qual [foram ordenados], proclamando boas novas de grande alegria, sim, o evangelho eterno”. (D&amp;C 79:1) Você tem autoridade para pregar o evangelho. Se você possui o sacerdócio, tem autoridade p</font></span><span class=Normal__Char style=" COLOR:#231f20"><font size=3>ara ministrar as suas ordenanças. Ao exercer fervorosa e dignamente essa autoridade, você receberá poder espiritual, que é uma prova da veracidade de seu chamado. Não tenha medo nem seja tímido no cumprimento desse encargo. Tal como os filhos de Mosias, você deve ensinar com o poder e autoridade de Deus. (Ver Alma 17:2–3.) Quando você foi designado pela autoridade do sacerdócio, recebeu o direito e o privilégio de representar o Senhor. Você recebeu um certificado de ministério que confirma essa autoridade para o mundo. O Presidente Spencer W. Kimball disse: “A designação pode ser considerada de modo literal; você foi separado do pecado, separado do carnal; separado de tudo que é cruel, vil, maligno, barato ou vulgar; </font><span class=Normal__Char><i><font size=3>separado </font></i></span><font size=3>do mundo e levado para um nível mais elevado de pensamento e atividade. A bênção depende de seu desempenho fiel”. (</font><span class=Normal__Char><i><font size=3>The Teachings of Spencer W. Kimball</font></i></span><font size=3>, org. Edward L. Kimball, [1982], p. 478.)(PME p. 4)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Sua identidade é:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Sou um mensageiro da verdade restaurada. Um representate de Jesus Cristo. Meu propósito é SALVAR ALMAS.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none; COLOR:#231f20"><font size=3>Juntamente com sua autoridade você assumiu a responsabilidade de ser digno de seu chamado. Como representante do Senhor, você deve ser “o exemplo dos fiéis” (I Timóteo4:12). Esforce-se para viver de acordo com os manda</font></span><span class=Normal__Char style=" COLOR:#231f20"><font size=3>mentos de Deus e cumprir os convênios que fez no templo; conheça as escrituras; seja educado, pontual e digno de confiança; siga os padrões missionários de conduta, vestuário e aparência; ame as pessoas que você serve e com quem trabalha. Honre o nome de Cristo com suas ações. Além da autoridade, você também deve exercer o poder em seu trabalho. A autoridade que você recebeu pode conduzi-lo ao poder. De fato, o poder espiritual é uma prova de que sua autoridade é real. O poder espiritual é um dom que lhe possibilita fazer seu trabalho de modo mais eficaz. (PME p.4).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ao ponderar sobre o seu chamado, sua indentidade, quem você é e para que veio, isso o ajudará&nbsp; a manter-se no foco e vencer o desânimo.&nbsp; Se você tem um testemunho da veracidade de seu chamado, sab</font></span><span class=Normal__Char><font size=3>erá que Deus está contigo e como representante de Jesus Cristo, deve agir como Ele, esse testemunho e compreenção lhe dará forças e você estará sempre com a auto-estima elevada. Desânimo não é pecado, se deixar ser vencido pelo desânimo é o grande perigo, o início do fracasso.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Não fique desanimado pelo fato de não ter alcançado seus objetivos, se você fez tudo o que poderia ter feito. </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“</font></span><span class=Normal__Char><font size=3>Pois trabalhamos diligentemente para escrever, a fim de persuadir nossos filhos e também nossos irmãos a acreditarem em Cristo e a reconciliarem-se com Deus; pois sabemos que é pela graça que somos salvos, </font><span class=Normal__Char><b><font size=3>depois de tudo o que pudermos fazer.</font></b></span><font size=3>”(2 Néfi 25:23).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Mantenha-se no foco, você&nbsp; não veio para missão para falhar, esqueça de</font></span><span class=Normal__Char><font size=3> si mesmo, esses dois anos não são seus, esse tempo não é seu. Quaquer coisa que não tenha ligação direta com sua missão de salvar almas, que não é foco de seu chamado, não se envolva com elas.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“EM verdade, assi</font></span><span class=Normal__Char><font size=3>m vos diz o Senhor, meus amigos missionários: Vossas famílias estão bem; encontram-se em minhas mãos e eu lhes farei o que me parecer bem; pois em mim todo o poder existe.(Grifo nosso)(D&amp;C 100:1).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>A melhor maneira de &nbsp;vencer o desânimo é quando estamos ajoelhados ou correndo para salvar almas. Ou, correndo e orando ao mesmo tempo.</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“E aconteceu que enquanto assim meditava—estando extremamente desanimado em virtude das iniqüidades do povo nefita, suas secretas obras de trevas e seus assassinatos e suas pilhagens e toda sorte de maldades—aconteceu que enquanto assim meditava em seu coração, eis que ouviu uma voz, dizendo: Bem-aventurado és tu, Néfi, pelas coisas que tens feito; pois observei que foste infatigável em pregar a este povo as palavras que te dei. E não o temeste nem te preocupaste com tua própria vida, mas procuraste conhecer minha vontade e cumprir meus mandamentos.E agora, por teres feito isso com tanta perseverança, eis que te abençoarei para sempre e te farei poderoso em palavras e ações, em fé e em obras; sim, para que todas as coisas se realizem segundo tua palavra, pois nada pedirás que seja contrário a minha vontade.”</font></span><span class=Normal__Char><font size=2>(Helamã 10:3 - 5)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Amo você e confio em vocês</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Vamos lá....</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Com muito amor</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Presidente e Sister Bezerra</font></span>
+</p>
+<br></body>
+</html>

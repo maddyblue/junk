@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-04-23-a-guerra-e-real</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal>
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial';  TEXT-DECORATION:none"><b>Rio de Janeiro, 23 de abril de 2009</b></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'; TEXT-DECORATION:none"><b>A Guerra é Real</b></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial';  TEXT-DECORATION:none">E assim vai de cima para baixo e de cá&nbsp; para lá na Terra, procurando destruir a alma dos homens. (D&amp;C 10:27) Portanto ele </span><span class=Normal__Char style=" FONT-FAMILY:'Arial'"><u>faz guerra aos santos de Deus e cerca-os </u></span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">(D&amp;C76:29).</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char>“</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">Creio que testemunharemos uma crescente evidência do poder de Satanás, à medida que o reino de Deus se torna mais forte. Acredito que os esforços sempre maiores de Satanás são prova da veracidade deste trabalho. No futuro, a oposição será ao mesmo tempo mais sutil e mais aberta. Estará mascarada por maior sofisticação e astúcia, mas será também mais óbvia. Precisamos de mais espiritualidade para perceber todas as formas do mal e mais força para resistir a ele.</span><span class=Normal__Char>”</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'"> (Elder Faust, A Liahona novembro de 1975, p. 4.).</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'"><i>Presidente Marion G. Romney declarou:</i></span><span class=Normal__Char>“</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">Satanás está irrevogavelmente empenhado em combater e derrotar a influência do Espírito de Cristo sobre os homens. É o representante, promotor e protetor daquela </span><span class=Normal__Char>“</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">oposição em todas as coisas</span><span class=Normal__Char>”</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'"> mencionado por Nefi em suas instruções ao filho Jacó</span><span class=Normal__Char>”</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">(2Nefi 2:11-14-18.)</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">O inimigo endurece o coração das pessoas para que elas não aceitem o convênio do batismo e nem pratique o que é bom. </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char>“</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">E muitas outras coisas vãs e tolas o povo imaginou em seu coração; e ficaram muito perturbados, porque Satanás os incitava continuamente a praticar iniqüidades; sim, ele espalhava rumores e discórdias sobre toda a face da terra, a fim de endurecer o coração do povo contra o que era bom e contra o que iria acontecer. (O Livro de Mórmon | Helamã 16:22)&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Se vocês permanecerem do lado do Senhor, o adversário não poderá cruzar a linha para tentá-los.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">O Presidente George Albert Smith deu conselhos maravilhosos sobre o assunto, ao dizer: </span><span class=Normal__Char>“</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">Há uma linha demarcatória bem definida entre o território do Senhor e o território do diabo. Se vocês permanecerem do lado do Senhor, o adversário não poderá cruzar a linha para tentá-los. (</span><span class=Normal__Char>…</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">) Mas (</span><span class=Normal__Char>…</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">) caso atravessem a fronteira e forem para o lado do diabo, estarão no território dele. (</span><span class=Normal__Char>…</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">) E ele fará de tudo para que continuem o mais longe possível da linha demarcatória, pois sabe que só conseguirá destruí-los se os mantiver afastados dos locais seguros</span><span class=Normal__Char>”</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'"> (Conference Report<span class=Normal__Char style=" FONT-FAMILY:'Arial'"><i>, </i></span>outubro de 1945, p. 118).</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Minha segunda sugestão: aprendam a controlar seus pensamentos. Parte do plano de felicidade concedido a nós pelo Pai Celestial ensina que fomos mandados ao mundo para sermos testados. Portanto, sempre haverá tentações. Nossa missão como santos dos últimos dias é cumprir os mandamentos de Deus, apesar das tentações que Satanás põe em nosso caminho. Em minha vida, aprendi que é muito mais fácil fazê-lo quando controlamos nossos pensamentos </span><span class=Normal__Char>—</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'"> e principalmente quando memorizamos hinos, escrituras e bons poemas para substituir os maus pensamentos que se infiltram em nossa mente.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">O Presidente Boyd K. Packer aconselhou-nos a memorizar um hino para que, quando um pensamento ruim entrar em nossa mente, possamos substituí-lo pelo hino. Ao aplicar essa instrução, um amigo meu relatou: </span><span class=Normal__Char>“</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">Certo dia, saí do escritório para almoçar. Depois de andar cerca de dois quarteirões, percebi que estava cantarolando </span><span class=Normal__Char>‘</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">meu hino</span><span class=Normal__Char>’</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">: <span class=Normal__Char style=" FONT-FAMILY:'Arial'"><i>Sou um Filho de Deus</i></span>. Ao refletir sobre o que me levara a fazer isso ao caminhar, percebi que, ao atravessar a rua do meu escritório, uma jovem com trajes impróprios passara na minha frente. De imediato, meu subconsciente acionou a letra e a melodia de </span><span class=Normal__Char>‘</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">Sou um Filho de Deus</span><span class=Normal__Char>’</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">, que surgiram na minha mente para afugentar pensamentos inadequados</span><span class=Normal__Char>”</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">. Naquele dia, meu amigo aprendeu uma bela lição sobre sua capacidade de controlar os pensamentos. </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">O poder do inimigo é limitado.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Lemos em Tiago 4:7</span><span class=Normal__Char>“</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">Sujeitai-vos, pois, a Deus, resisti ao diabo, e ele fugirá de vós.</span><span class=Normal__Char>”</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">E por causa da retidão de seu povo, Satanás não tem poder; portanto não pode ser solto pelo espaço de muitos anos; pois não tem poder sobre o coração do povo, porque vivem em retidão e o Santo de Israel reina. (1 Néfi 22:26) </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Não devemos desafiar as forças do mal, pois se fizermos, certamente perderemos, devemos nos conservar em retidão, humildade, oração e em obediência aos mandamentos de Deus e as regras da missão. Só assim teremos forças para vencer todas as tentações e ajudar as pessoas a fazerem o mesmo.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Prepare bem seus pesquisadores para quando chegarem os mensageiros do inimigo, eles possam está preparados para resistir e continuarem progredindo na fé em Jesus Cristo. Se fizerem isso, acredito que muitos batismos não mais cairão como antes.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Temos um potêncial enorme para usar, temos uma cidade com mais de 6 milhões de pessoas e milhões buscam a verdade. Veja essa escritura:</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">"Pois ainda existe muita gente na Terra, em todas as seitas, partidos e denominações, que é cegada pela astúcia sutil dos homens que ficam à espreita para enganar, e que só está afastada da verdade por não saber onde encontrá-la</span><span class=Normal__Char>—</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">Portanto devemos consumir e esgotar nossa vida para trazer à luz todas as coisas ocultas das trevas, até onde as conheçamos; e elas são verdadeiramente manifestadas do céu</span><span class=Normal__Char>—</span><span class=Normal__Char style=" FONT-FAMILY:'Arial'">Dessas devemos, portanto, cuidar com grande diligência.(Doutrina e Convênios | Seção 123:12 - 14)&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Com amor&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Presidente Bezerra</span>
+</p>
+<br></body>
+</html>

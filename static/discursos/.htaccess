@@ -1,0 +1,4 @@
+AuthType Basic
+AuthUserFile /home/missaorj/public_html/htpasswd
+AuthName "Discursos do Presidente Bezerra"
+require valid-user

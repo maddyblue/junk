@@ -1,0 +1,550 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2010-05-10-santificacao</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<div style=" BORDER-WIDTH:0pt 0pt 0pt 0pt; BORDER-COLOR:#ffffff #ffffff #ffffff #ffffff;  BORDER-STYLE:none none none none">
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>SANTIFICAÇÃO</font></b></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Processo pelo qual a pessoa se livra do pecado e torna-se pura, limpa e santa, por meio da expiação de Jesus Cristo.(Guia para Estudo das Escrituras). </font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>“Por causa da transgressão vem a queda, queda essa que traz a morte; e sendo que haveis na</font></span><span class=Normal__Char><font size=2>scido no mundo pela água e sangue e espírito que eu fiz e assim vos haveis transformado de pó em alma vivente, do mesmo modo tereis de </font><span class=Normal__Char><b><u><font size=2>nascer de novo</font></u></b></span><font size=2> no reino do céu, da água e do Espírito, sendo limpos por sangue, sim, o sangue de meu Unigênito; para que sejais santificados de todo pecado e desfruteis as palavras da vida eterna neste mundo e a vida eterna no mundo vindouro, sim, glória imortal;Pois pela água guardais o mandamento, pelo Espírito sois justificados e pelo sangue sois santificados”;(Moisés 6:59 - 60)</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>“Darei minha própria definição ao termo santificação, e direi que consiste em sobrepujar cada</font></span> <span class=Normal__Char><font size=2>pecado, subjugando todos à lei de Cristo. Deus colocou em nós um espírito puro; quando ele predomina, sem</font></span> <span class=Normal__Char><font size=2>obstáculos ou impedimentos, triunfa sobre a carne,</font></span> <span class=Normal__Char><font size=2>dirige, governa e controla, como o Senhor controla os</font></span> <span class=Normal__Char><font size=2>céus e a Terra, a isto eu chamo a bênção da</font></span> <span class=Normal__Char><font size=2>santificação.”</font></span> <span class=Normal__Char><font size=2>(Journal of Discourses, vol. 10, p. 173,</font></span> <span class=Normal__Char><font size=2>também em “Preparai o Caminho do Senhor”, p. 47.)</font></span> &nbsp;
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    &nbsp;
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:center">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>A SANTIFICAÇÃO É&nbsp; UM PROCESSO QUE LEVA A PERF</font></b></span><span class=Normal__Char><b><font size=2>EIÇÃO</font></b></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:left">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>1.</font></b></span> <span class=Normal__Char><b><font size=2>PARA OBTER A EXALTAÇÃO, DEVEMOS</font></b></span> <span class=Normal__Char><b><font size=2>VIVER CADA LEI DO REINO CELESTIAL.</font></b></span> <span class=Normal__Char><b><i><u><font size=2>Disse Joseph Smith:</font></u></i></b></span><span class=Normal__Char><font size=2> “O Senhor deixou claro que, para obter a </font><span class=Normal__Char><i><font size=2>exaltação</font></i></span><font size=2> no </font><span class=Normal__Char><b><font size=2>reino</font></b></span></span> <span class=Normal__Char><b><font size=2>celestial</font></b></span><span class=Normal__Char><font size=2>, </font><span class=Normal__Char><b><font size=2>toda</font></b></span><font size=2> a alma deve estar em </font><span class=Normal__Char><b><font size=2>harmonia</font></b></span><font size=2> com </font><span class=Normal__Char><b><font size=2>cada</font></b></span><span class=Normal__Char><i><font size=2> lei, ordenança ensinamento</font></i></span><font size=2> desse reino.” A pessoa que deseja ser exaltada à morada mais alta, precisa obedecer a uma lei celestial, e a toda a lei também. . .para conseguir a salvação, não nos basta fazer apenas algumas coisas, mas tudo o que Deus ordenou. . .</font></span> <span class=Normal__Char><font size=2>(Ensinamentos do Profeta Joseph Smith, pp. 323-324)</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>2.</font></b></span> <span class=Normal__Char><b><font size=2>DEUS </font></b><span class=Normal__Char><b><i><font size=2>JAMAIS</font></i></b></span><b><font size=2> EXIGIRÁ DE NÓS O QUE NÃO PODEMOS FAZER</font></b></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><i><u><font size=2>Disse o Presidente Kimball:</font></u></i></b></span><span class=Normal__Char><b><font size=2> “</font></b></span><span class=Normal__Char><font size=2>Esse progresso em direção a </font><span class=Normal__Char><b><font size=2>vida eterna</font></b></span></span> <span class=Normal__Char><i><font size=2>baseia-se em atingir a perfeição. </font></i></span><span class=Normal__Char><font size=2>Viver </font><span class=Normal__Char><b><font size=2>todos</font></b></span><font size=2> os mandamentos assegura </font><span class=Normal__Char><i><font size=2>perdão total dos pecados,</font></i></span></span> <span class=Normal__Char><font size=2>assegurando </font><span class=Normal__Char><b><font size=2>também</font></b></span></span> <span class=Normal__Char><i><font size=2>a exaltação </font></i></span><span class=Normal__Char><font size=2>através do aperfeiçoamento que advém de se </font><span class=Normal__Char><b><i><font size=2>obedecer</font></i></b></span><span class=Normal__Char><i><font size=2> às instruções do Senhor.</font></i></span></span> <span class=Normal__Char><b><u><font size=2>Disse o Presidente Kimball:</font></u></b></span> <span class=Normal__Char><font size=2>No Sermão da Montanha,</font></span> <span class=Normal__Char><font size=2>ele ordenou a </font><span class=Normal__Char><b><font size=2>todos</font></b></span><font size=2> os homens:</font></span> <span class=Normal__Char><font size=2>"Portanto, sede vós perfeitos como perfeito é o vosso Pai Celeste.” (Mateus 5:48)</font></span> <span class=Normal__Char><b><u><font size=2>Ser perfeito significa triunfar sobre o pecado.</font></u></b></span><span class=Normal__Char><font size=2> Essa é uma ordem do Senhor. Ele </font><span class=Normal__Char><b><font size=2>é</font></b></span><font size=2> justo, sábio e bondoso,</font></span> <span class=Normal__Char><font size=2>e </font><span class=Normal__Char><b><font size=2>jamais</font></b></span><font size=2> exigiria de seus filhos algo inatingível</font></span> <span class=Normal__Char><font size=2>ou que não fosse para o beneficio do próprio homem.</font></span> <span class=Normal__Char><b><font size=2>Conseqüentemente</font></b></span><span class=Normal__Char><font size=2> podemos deduzir que a perfeição é um objetivo realizável.”</font></span> <span class=Normal__Char><font size=2>(Milagre do Perdão, p. 200)</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>3. O RENASCIMENTO ESPIRITUAL,</font></b></span> <span class=Normal__Char><b><font size=2>PERFEIÇÃO e SANTIFICAÇÃO SÃO ALCANÇADOS</font></b></span> <span class=Normal__Char><b><font size=2>POR ETAPAS, E SOMOS ABENÇOADOS SEGUNDO A MEDIDA DE NOSSO </font></b><span class=Normal__Char><b><u><font size=2>ESFORÇO</font></u></b></span><b><font size=2> e </font></b><span class=Normal__Char><b><u><font size=2>INTENTO</font></u></b></span><b><font size=2>.</font></b></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=2>Élder Bruce R. McConkie:</font></u></b></span><span class=Normal__Char><font size=2> Para ser salvos no Reino Celestial,</font></span> <span class=Normal__Char><b><font size=2>devemos</font></b></span><span class=Normal__Char><font size=2> tornar-nos perfeitos.</font></span> <span class=Normal__Char><font size=2>Porém, </font><span class=Normal__Char><b><font size=2>ninguém</font></b></span><font size=2> se torna perfeito </font><span class=Normal__Char><b><font size=2>nesta</font></b></span><font size=2> vida.</font></span> <span class=Normal__Char><b><font size=2>Somente</font></b></span><span class=Normal__Char><font size=2> o Senhor Jesus Cristo</font></span> <span class=Normal__Char><b><font size=2>alcançou</font></b></span><span class=Normal__Char><font size=2> este estado,</font></span> <span class=Normal__Char><font size=2>e ele tinha uma </font><span class=Normal__Char><b><font size=2>vantagem</font></b></span><font size=2> que nenhum de nós possui. Ele era o filho de Deus,</font></span> <span class=Normal__Char><font size=2>e veio a terra com uma</font></span> <span class=Normal__Char><font size=2>capacidade espiritual,</font></span> <span class=Normal__Char><font size=2>e talento,</font></span> <span class=Normal__Char><font size=2>e uma herança,</font></span> <span class=Normal__Char><font size=2>que ultrapassa todo o entendimento</font></span> <span class=Normal__Char><font size=2>com que todo o resto de nós nasceu. Nossas revelações afirmam</font></span> <span class=Normal__Char><font size=2>que ele </font><span class=Normal__Char><b><font size=2>era</font></b></span><font size=2> como Deus na vida pré-mortal e que sob direção do Pai, criou mundos sem numero.</font></span> <span class=Normal__Char><font size=2>Esse Ser Sagrado </font><span class=Normal__Char><b><font size=2>foi</font></b></span><font size=2> o Santíssimo de Israel na antiguidade</font></span> <span class=Normal__Char><b><font size=2>e</font></b></span><span class=Normal__Char><font size=2> o Ser Imaculado na vida mortal.</font></span> <span class=Normal__Char><b><font size=2>Viveu</font></b></span><span class=Normal__Char><font size=2> uma existência perfeita e </font><span class=Normal__Char><b><font size=2>estabeleceu</font></b></span><font size=2> o exemplo ideal.</font></span> <span class=Normal__Char><font size=2>Isto demonstra que podemos esforçar-nos</font></span> <span class=Normal__Char><font size=2>e prosseguir rumo a esta meta;</font></span> <span class=Normal__Char><font size=2>mas </font><span class=Normal__Char><b><font size=2>nenhum</font></b></span><font size=2> outro ser mortal</font></span> <span class=Normal__Char><font size=2>nem o maior dos Profetas</font></span> <span class=Normal__Char><b><font size=2>ou</font></b></span><span class=Normal__Char><font size=2> o</font></span> <span class=Normal__Char><font size=2>mais poderoso dos Apóstolos,</font></span> <span class=Normal__Char><b><font size=2>tampouco</font></b></span> <span class=Normal__Char><font size=2>qualquer santo justo em qualquer</font></span> <span class=Normal__Char><font size=2>época</font></span> <span class=Normal__Char><b><font size=2>jamais</font></b></span><span class=Normal__Char><font size=2> foi perfeito,</font></span> <span class=Normal__Char><font size=2>mas </font><span class=Normal__Char><b><font size=2>devemos</font></b></span><font size=2> tornar-nos perfeitos para ganhar uma herança celestial.</font></span> <span class=Normal__Char><font size=2>Como acontece ao renascimento e à santificação de nossas almas, tornar-nos perfeitos</font></span> <span class=Normal__Char><font size=2>em Cristo é um processo.</font></span> <span class=Normal__Char><b><font size=2>Começamos</font></b></span><span class=Normal__Char><font size=2> hoje a guardar os mandamentos,</font></span> <span class=Normal__Char><b><font size=2>observamo-lo</font></b></span><span class=Normal__Char><font size=2> um pouco mais amanhã, e progredimos </font><span class=Normal__Char><b><font size=2>de</font></b></span><font size=2> graça em graça, degrau por degrau, </font><span class=Normal__Char><b><font size=2>aperfeiçoando</font></b></span><font size=2> dessa maneira nossas almas.</font></span> <span class=Normal__Char><b><font size=2>Podemos</font></b></span><span class=Normal__Char><font size=2> ser perfeitos em algumas pequenas coisas.</font></span> <span class=Normal__Char><font size=2>E assim, </font><span class=Normal__Char><b><font size=2>de</font></b></span><font size=2> grau em grau</font></span> <span class=Normal__Char><font size=2>e </font><span class=Normal__Char><b><font size=2>de</font></b></span><font size=2> passo em passo,</font></span> <span class=Normal__Char><b><font size=2>começamos</font></b></span><span class=Normal__Char><font size=2> a trilhar o caminho da perfeição com</font></span> <span class=Normal__Char><font size=2>objetivo de nos tornarmos perfeitos </font><span class=Normal__Char><b><font size=2>como</font></b></span><font size=2> Deus,</font></span> <span class=Normal__Char><font size=2>nosso Pai Celestial, </font><span class=Normal__Char><b><font size=2>para que</font></b></span><font size=2> eventualmente </font><span class=Normal__Char><b><font size=2>sejamos</font></b></span><font size=2> herdeiros da vida eterna em seu reino.</font></span> <span class=Normal__Char><font size=2>Como membros da Igreja, </font><span class=Normal__Char><b><font size=2>se</font></b></span><font size=2> demarcarmos um caminho conduzindo a vida eterna; </font><span class=Normal__Char><b><font size=2>se</font></b></span><font size=2> iniciarmos os processos de renascimento espiritual</font></span> <span class=Normal__Char><b><font size=2>e</font></b></span><span class=Normal__Char><font size=2> seguirmos na direção certa;</font></span> <span class=Normal__Char><b><font size=2>se</font></b></span><span class=Normal__Char><font size=2> traçarmos um caminho de santificação para nossas almas, </font><span class=Normal__Char><b><font size=2>e</font></b></span><font size=2> gradualmente caminharmos nesse sentido; </font><span class=Normal__Char><b><font size=2>se</font></b></span><font size=2> estabelecermos um curso para que nos aperfeiçoemos,</font></span> <span class=Normal__Char><font size=2>e passo a passo, etapa por etapa,</font></span> <span class=Normal__Char><b><font size=2>aperfeiçoarmos</font></b></span><span class=Normal__Char><font size=2> nossas almas </font><span class=Normal__Char><b><font size=2>vencendo</font></b></span><font size=2> o</font></span> <span class=Normal__Char><font size=2>mundo, então teremos a </font><span class=Normal__Char><b><font size=2>garantia absoluta</font></b></span><font size=2> – </font><span class=Normal__Char><b><font size=2>não</font></b></span><font size=2> existe duvida alguma – </font><span class=Normal__Char><b><font size=2>de que</font></b></span><font size=2> alcançaremos a vida eterna.</font></span> <span class=Normal__Char><font size=2>Mesmo que o renascimento</font></span> <span class=Normal__Char><font size=2>espiritual se ache a frente, </font><span class=Normal__Char><b><font size=2>e</font></b></span><font size=2> a perfeição </font><span class=Normal__Char><b><font size=2>e</font></b></span><font size=2> o pleno grau de santificação também se ache a frente, </font><span class=Normal__Char><b><font size=2>se</font></b></span><font size=2> demarcarmos um caminho </font><span class=Normal__Char><b><font size=2>e</font></b></span><font size=2> o seguirmos da melhor maneira possível nesta vida, quando dela partirmos continuaremos exatamente no mesmo curso. Não mais estaremos sujeito às </font><span class=Normal__Char><b><font size=2>paixões</font></b></span><font size=2> e </font><span class=Normal__Char><b><font size=2>apetites</font></b></span><font size=2> da carne.</font><span class=Normal__Char><b><font size=2> Teremos</font></b></span><font size=2> atravessado de maneira bem sucedida nos testes </font><span class=Normal__Char><b><font size=2>desta</font></b></span><font size=2> provação mortal e,</font></span> <span class=Normal__Char><font size=2>no </font><span class=Normal__Char><b><font size=2>devido tempo</font></b></span><font size=2>,</font></span> <span class=Normal__Char><b><font size=2>receberemos</font></b></span><span class=Normal__Char><font size=2> a plenitude do reino de nosso Pai – q</font><span class=Normal__Char><b><font size=2>ue significa</font></b></span></span> <span class=Normal__Char><font size=2>a vida eterna em sua infinita presença. O Profeta nos ensinou que ha muitas coisas que precisamos fazer,</font></span> <span class=Normal__Char><font size=2>mesmo após a morte,</font></span> <span class=Normal__Char><font size=2>para alcançarmos nossa salvação.</font></span> <span class=Normal__Char><font size=2>Não seremos perfeitos no momento em que morrermos. Contudo, </font><span class=Normal__Char><b><font size=2>se</font></b></span><font size=2> já tivermos marcado um curso a</font></span> <span class=Normal__Char><font size=2>seguir,</font></span> <span class=Normal__Char><b><font size=2>e</font></b></span><span class=Normal__Char><font size=2> nossos intentos forem corretos, </font><span class=Normal__Char><b><font size=2>se</font></b></span><font size=2> nossos apetites estiverem</font></span> <span class=Normal__Char><font size=2>vencidos ,dominados,</font></span> <span class=Normal__Char><font size=2>e </font><span class=Normal__Char><b><font size=2>se</font></b></span><font size=2> crermos no Senhor</font></span> <span class=Normal__Char><b><font size=2>e</font></b></span><span class=Normal__Char><font size=2> estivermos fazendo,</font></span> <span class=Normal__Char><b><font size=2>o melhor</font></b></span><span class=Normal__Char><font size=2> possível,</font></span> <span class=Normal__Char><font size=2>o que de nós se requer, </font><span class=Normal__Char><b><font size=2>entraremos</font></b></span><font size=2> na eterna salvação, que é a plenitude da recompensa eterna</font></span> <span class=Normal__Char><font size=2>no reino de nosso Pai.</font></span> <span class=Normal__Char><b><font size=2>Creio</font></b></span><span class=Normal__Char><font size=2> que devemos ter esperança;</font></span> <span class=Normal__Char><b><font size=2>creio</font></b></span><span class=Normal__Char><font size=2> que podemos regozijar-nos que seja assim. </font><span class=Normal__Char><b><font size=2>Podemos</font></b></span><font size=2> falar a respeito dos princípios de salvação </font><span class=Normal__Char><b><font size=2>e dizer</font></b></span><font size=2> em quantos consistem </font><span class=Normal__Char><b><font size=2>e como</font></b></span><font size=2> as pessoas podem enquadrar-se nestes padrões.</font></span> <span class=Normal__Char><font size=2>Essa meta, às vezes, pode parecer </font><span class=Normal__Char><b><font size=2>árdua</font></b></span><font size=2>,</font></span> <span class=Normal__Char><b><font size=2>difícil</font></b></span><span class=Normal__Char><font size=2> além da capacidade humana de alcançar. Mas temos que tomar estas medidas para atingi-la.</font></span> <span class=Normal__Char><font size=2>Temos de </font><span class=Normal__Char><b><font size=2>nos conscientizar</font></b></span><font size=2> de que possuímos os</font></span> <span class=Normal__Char><font size=2>mesmos apetites</font></span> <span class=Normal__Char><font size=2>e paixões que </font><span class=Normal__Char><b><font size=2>todos</font></b></span><font size=2> os santos</font></span> <span class=Normal__Char><font size=2>e pessoas justas das dispensações que nos precederam.</font></span> <span class=Normal__Char><font size=2>Eles não eram diferentes de nós.</font></span> <span class=Normal__Char><b><font size=2>Eles conseguiram vencer a carne</font></b></span><span class=Normal__Char><font size=2>. (Bruce R. McConkie, “Jesus Christ and him Crucified”, Speeches of the Year, 1976, pp. 399-401)</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>4. A SANTIFICAÇÃO</font></b></span> <span class=Normal__Char><b><font size=2>“É” UM ESTADO DE SANTIDADE</font></b></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=2>Bruce R. McConkie</font></u></b></span> <span class=Normal__Char><b><u><font size=2>disse:</font></u></b></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Ser santificado </font></span><span class=Normal__Char><b><font size=2>é</font></b></span><span class=Normal__Char><font size=2> tornar-se</font></span> <span class=Normal__Char><font size=2>limpo,</font></span> <span class=Normal__Char><font size=2>puro</font></span> <span class=Normal__Char><font size=2>sem mancha;</font></span> <span class=Normal__Char><font size=2>Ser santificado </font><span class=Normal__Char><b><font size=2>é</font></b></span><font size=2> ser livre</font></span> <span class=Normal__Char><font size=2>do sangue</font></span> <span class=Normal__Char><font size=2>pecado do mundo;</font></span> <span class=Normal__Char><b><font size=2>é</font></b></span><span class=Normal__Char><font size=2> ser uma nova criatura do Espírito Santo,</font></span> <span class=Normal__Char><font size=2>alguém cujo corpo foi renovado por ter renascido do Espírito. Santificação </font><span class=Normal__Char><b><font size=2>é</font></b></span><font size=2> um estado de santidade,</font></span> <span class=Normal__Char><font size=2>uma condição alcançada </font><span class=Normal__Char><b><font size=2>apenas</font></b></span><font size=2> através da obediência às leis ordenanças do evangelho. O Plano de Salvação </font><span class=Normal__Char><b><font size=2>é</font></b></span><font size=2> o sistema</font></span> <span class=Normal__Char><b><font size=2>e</font></b></span><span class=Normal__Char><font size=2> meio dado aos homens,</font></span> <span class=Normal__Char><b><font size=2>pelo qual</font></b></span><span class=Normal__Char><font size=2> eles podem santificar suas almas</font></span> <span class=Normal__Char><b><font size=2>e assim</font></b></span><span class=Normal__Char><font size=2> se tornarem dignos de uma herança celestial. (McConkie, Mormon Doctrine, p. 675).</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>5. A SANTIFICAÇÃO É OPERADA PELO ESPIRITO SANTO</font></b></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=2>Élder McConkie declarou:</font></u></b></span> <span class=Normal__Char><font size=2>O processo de </font><span class=Normal__Char><b><font size=2>purificação</font></b></span><font size=2> que ocorre em nossa vida </font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>acontece </font></span><span class=Normal__Char><b><font size=2>porque</font></b></span><span class=Normal__Char><font size=2> recebemos o poder </font><span class=Normal__Char><b><font size=2>purificador</font></b></span><font size=2> do Espírito Santo.</font></span> <span class=Normal__Char><font size=2>O Espírito Santo </font><span class=Normal__Char><b><font size=2>é</font></b></span></span> <span class=Normal__Char><font size=2>um</font></span> <span class=Normal__Char><font size=2>revelador,</font></span> <span class=Normal__Char><font size=2>um santificador. O Espírito Santo </font><span class=Normal__Char><b><font size=2>revela</font></b></span><font size=2> a verdade a cada alma humana que </font><span class=Normal__Char><b><font size=2>obedece</font></b></span><font size=2> a lei. A obediência </font><span class=Normal__Char><b><font size=2>nos qualifica</font></b></span><font size=2> a conhecer a verdade.</font></span> <span class=Normal__Char><b><font size=2>Então</font></b></span><span class=Normal__Char><font size=2> o Espírito Santo nos santifica, </font><span class=Normal__Char><b><font size=2>para que</font></b></span><font size=2> nos tornemos limpos sem mancha, </font><span class=Normal__Char><b><font size=2>e</font></b></span><font size=2> eventualmente qualificados</font></span> <span class=Normal__Char><b><font size=2>a viver</font></b></span><span class=Normal__Char><font size=2> onde Deus e Cristo habitam. (McConkie, Jesus Chirst and Him Crucified, p. 403) </font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Procurando </font></span><span class=Normal__Char><b><font size=2>vencer</font></b></span><span class=Normal__Char><font size=2> nossos pecados pessoais, </font><span class=Normal__Char><b><font size=2>podemos </font></b></span><font size=2>realmente ser</font></span> <span class=Normal__Char><font size=2>limpos purificados</font></span> <span class=Normal__Char><font size=2>pelo </font><span class=Normal__Char><b><font size=2>poder</font></b></span><font size=2> do Espírito Santo.</font></span> <span class=Normal__Char><font size=2>Santificar significa </font><span class=Normal__Char><b><font size=2>tornar-se</font></b></span><font size=2> puro.</font></span> <span class=Normal__Char><font size=2>Há uma escritura em Perola de Grande Valor</font></span> <span class=Normal__Char><font size=2>que descreve parcialmente esse processo.</font></span> <span class=Normal__Char><u><font size=2>Falando a respeito de Adão, Moises diz:</font></u></span> <span class=Normal__Char><font size=2>“E assim nasceu do Espírito,</font></span> <span class=Normal__Char><font size=2>e foi vivificado </font><span class=Normal__Char><u><font size=2>o homem interior</font></u></span><font size=2>” (Moises 6:56),</font></span> <span class=Normal__Char><font size=2>indicando que </font><span class=Normal__Char><b><font size=2>o espírito</font></b></span><font size=2> de Adão tinha </font><span class=Normal__Char><b><font size=2>sido</font></b></span><font size=2> purificado</font></span> <span class=Normal__Char><font size=2>limpo.</font></span> <span class=Normal__Char><font size=2>A santificação </font><span class=Normal__Char><b><font size=2>se refere</font></b></span></span> <span class=Normal__Char><font size=2>tanto ao corpo físico como ao espírito. Quando Leí disse ao seu filho Jacó, que ele não devia escolher “a morte eterna, conforme a </font><span class=Normal__Char><b><font size=2>vontade</font></b></span><font size=2> da carne e o </font><span class=Normal__Char><b><font size=2>mal</font></b></span><font size=2> que nela há”. (II Néfi 2:29)</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>O mal</font></b></span><span class=Normal__Char><font size=2> que ha na carne, que Leí fala,é uma </font><span class=Normal__Char><b><font size=2>conseqüência</font></b></span><font size=2> da Queda da corrupção que </font><span class=Normal__Char><b><font size=2>pode entrar</font></b></span><font size=2> em nossos corpos por causa do pecado. Doutrina e Convênios afirma que os </font><span class=Normal__Char><b><font size=2>fieis</font></b></span><font size=2> portadores do Sacerdócio podem ser “santificados pelo Espírito para a </font><span class=Normal__Char><b><font size=2>renovação</font></b></span><font size=2> de seu corpo”.(D&amp;C 84:33).</font></span> <span class=Normal__Char><font size=2>Não somente </font><span class=Normal__Char><b><font size=2>o espírito</font></b></span></span> <span class=Normal__Char><font size=2>pode tornar-se puro,</font></span> <span class=Normal__Char><font size=2>mas também </font><span class=Normal__Char><b><font size=2>os elementos</font></b></span><font size=2> do corpo</font></span> <span class=Normal__Char><font size=2>físico serem</font></span> <span class=Normal__Char><font size=2>renovados</font></span> <span class=Normal__Char><font size=2>santificados. A santificação é a real limpeza</font></span> <span class=Normal__Char><font size=2>do corpo do espírito—a alma do homem.</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>6. DE GRAU EM GRAU, PASSO A PASSO, SANTIFICAMOS NOSSAS ALMAS</font></b></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=2>Élder McConkie:</font></u></b></span> <span class=Normal__Char><font size=2>Dizemos que o homem tem que </font><span class=Normal__Char><b><font size=2>nascer de novo</font></b></span><font size=2>,</font></span> <span class=Normal__Char><font size=2>significando que ele </font><span class=Normal__Char><b><font size=2>deve morrer</font></b></span></span> <span class=Normal__Char><b><font size=2>para as coisas</font></b></span> <span class=Normal__Char><font size=2>pertencentes às iniqüidades existentes no mundo.</font></span> <span class=Normal__Char><font size=2>Paulo afirmou, “que o nosso </font><span class=Normal__Char><b><font size=2>homem velho</font></b></span></span> <span class=Normal__Char><font size=2>foi com ele</font></span> <span class=Normal__Char><font size=2>crucificado, </font><span class=Normal__Char><b><font size=2>para que</font></b></span><font size=2> o corpo do pecado </font><span class=Normal__Char><u><font size=2>seja desfeito</font></u></span><font size=2>” ( Romanos 6:6). Nascemos de novo, quando </font><span class=Normal__Char><b><font size=2>morremos para</font></b></span><font size=2> a iniqüidade </font><span class=Normal__Char><b><font size=2>vivemos para</font></b></span><font size=2> o que diz respeito ao Espírito.</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Mas isso </font></span><span class=Normal__Char><b><font size=2>não acontece</font></b></span><span class=Normal__Char><font size=2> subitamente. É também </font><span class=Normal__Char><b><font size=2>um processo</font></b></span><font size=2>. Nascer de novo é uma </font><span class=Normal__Char><b><font size=2>transformação gradual</font></b></span><font size=2>, excetos em uns poucos </font><span class=Normal__Char><b><font size=2>casos isolados</font></b></span><font size=2>, que ocorrem de maneira </font><span class=Normal__Char><b><font size=2>tão milagrosa</font></b></span><font size=2>, que se acham </font><span class=Normal__Char><b><font size=2>registrados</font></b></span><font size=2> nas escrituras.No que concerne aos membros da Igreja em geral, nascemos de novo </font><span class=Normal__Char><b><font size=2>por etapas</font></b></span><font size=2>, e renascemos </font><span class=Normal__Char><b><font size=2>para </font></b></span><font size=2>maior luz maior conhecimento,maior ansiedade de justiça, </font><span class=Normal__Char><b><font size=2>à medida</font></b></span><font size=2> que guardamos os mandamentos.O mesmo acontece</font></span> <span class=Normal__Char><b><font size=2>quanto a ser</font></b></span><span class=Normal__Char><font size=2> santificado.Os que </font><span class=Normal__Char><b><font size=2>irão</font></b></span><font size=2> para o Reino Celestial do céu, tem </font><span class=Normal__Char><b><font size=2>de ser</font></b></span><font size=2> santificados, querendo dizer com isto que </font><span class=Normal__Char><b><font size=2>devem tornar-se</font></b></span><font size=2> limpos, puros sem manchas.</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Necessários se faz</font></span> <span class=Normal__Char><font size=2>que </font><span class=Normal__Char><b><font size=2>sejam queimados</font></b></span><font size=2> de suas almas </font><span class=Normal__Char><b><font size=2>todo</font></b></span><font size=2> o pecado e iniqüidade como que </font><span class=Normal__Char><b><font size=2>por fogo</font></b></span><font size=2> e que, numa expressão </font><span class=Normal__Char><b><font size=2>figurativa</font></b></span><font size=2>, haja um “batismo de fogo”.</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Este novamente também&nbsp;</font></span><span class=Normal__Char><b><font size=2>é um </font></b><span class=Normal__Char><b><u><font size=2>processo</font></u></b></span></span><span class=Normal__Char><font size=2>. Ninguém</font></span> <span class=Normal__Char><font size=2>é santificado </font><span class=Normal__Char><b><font size=2>num instante</font></b></span><font size=2>, ou de súbito.Porém, </font><span class=Normal__Char><b><font size=2>se guardarmos</font></b></span><font size=2> os mandamentos, e após o batismo </font><span class=Normal__Char><b><font size=2>prosseguirmos</font></b></span><font size=2> para frente com firmeza, então de grau em grau, passo a passo, </font><span class=Normal__Char><b><font size=2>santificaremos</font></b></span><font size=2> nossa alma </font><span class=Normal__Char><b><font size=2>até</font></b></span><font size=2> o glorioso dia em que e</font><span class=Normal__Char><b><font size=2>staremos</font></b></span><font size=2> qualificados </font><span class=Normal__Char><b><font size=2>a morar</font></b></span><font size=2> onde Deus e os anjos habitam. Assim </font><span class=Normal__Char><b><font size=2>é</font></b></span><font size=2> o plano de salvação. (McConkie, “Jesus Christ and Him Crucified”, p. 399) A santificação é uma </font><span class=Normal__Char><b><font size=2>recompensa pessoal</font></b></span><font size=2> que acompanha a </font><span class=Normal__Char><b><font size=2>retidão pessoal</font></b></span><font size=2>. Ela se torna possível por causa do </font><span class=Normal__Char><b><font size=2>sacrifício expiatório</font></b></span><font size=2> do Salvador. Em virtude de sua graça e amor,</font></span> <span class=Normal__Char><font size=2>podemos </font><span class=Normal__Char><b><font size=2>ser santificados</font></b></span><font size=2>, </font><span class=Normal__Char><b><font size=2>ao</font></b></span><font size=2> guardarmos os mandamentos.</font></span> <span class=Normal__Char><u><font size=2>A grande pergunta é:</font></u></span> <span class=Normal__Char><font size=2>POR ONDE POSSO COMEÇAR? Tenho tantas fraquezas e tentações que precisam ser vencidas!</font></span> <span class=Normal__Char><u><font size=2>O Presidente Kimball dá a resposta:</font></u></span> <span class=Normal__Char><b><font size=2>A perfeição</font></b></span><span class=Normal__Char><font size=2> realmente advém através de superarmos </font><span class=Normal__Char><b><font size=2>todos</font></b></span><font size=2> os obstáculos.</font></span> <span class=Normal__Char><font size=2>O Senhor revelou por intermédio de João:</font></span> <span class=Normal__Char><font size=2>“Ao que </font><span class=Normal__Char><b><font size=2>vencer</font></b></span><font size=2> lhe concederei que </font><span class=Normal__Char><b><font size=2>se assente</font></b></span><font size=2> comigo no meu trono;</font></span> <span class=Normal__Char><b><font size=2>assim</font></b></span><span class=Normal__Char><font size=2> como eu venci,</font></span> <span class=Normal__Char><b><font size=2>e me tornei</font></b></span><span class=Normal__Char><font size=2> como meu Pai no seu trono.” (Apocalipse 3:21).</font></span> <span class=Normal__Char><font size=2>Parece que </font><span class=Normal__Char><b><font size=2>o mal</font></b></span><font size=2> esta sempre a nos cercar. Um dos primeiros membros do Conselho dos Doze disse que </font><span class=Normal__Char><b><font size=2>há centenas</font></b></span><font size=2> de espíritos malignos</font></span> <span class=Normal__Char><b><font size=2>trabalhando</font></b></span><span class=Normal__Char><font size=2> contra cada um de nós.</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Portanto, </font></span><span class=Normal__Char><b><font size=2>devemos</font></b></span><span class=Normal__Char><font size=2> estar sempre alerta.</font></span> <span class=Normal__Char><b><font size=2>Cataloguemos</font></b></span><span class=Normal__Char><font size=2> nossas fraquezas</font></span> <span class=Normal__Char><font size=2>e </font><span class=Normal__Char><b><font size=2>lutemos</font></b></span><font size=2> contra elas,</font></span> <span class=Normal__Char><b><font size=2>para que</font></b></span><span class=Normal__Char><font size=2> possamos vence-las. Cristo aperfeiçoou-se, superando todos os obstáculos.</font></span> <span class=Normal__Char><font size=2>É somente superando </font><span class=Normal__Char><b><font size=2>todas</font></b></span><font size=2> as fraquezas e os problemas que </font><span class=Normal__Char><b><font size=2>poderemos</font></b></span><font size=2> aperfeiçoar-nos </font><span class=Normal__Char><b><font size=2>e</font></b></span></span> <span class=Normal__Char><b><font size=2>chegar</font></b></span><span class=Normal__Char><font size=2> cada vez mais perto da deidade.</font></span> <span class=Normal__Char><font size=2>O tempo para isso </font><span class=Normal__Char><b><font size=2>é agora</font></b></span><font size=2>, na mortalidade.</font></span> <span class=Normal__Char><u><font size=2>Alguém disse:</font></u></span> <span class=Normal__Char><font size=2>“Aquele que </font><span class=Normal__Char><b><font size=2>esta planejando</font></b></span><font size=2> corrigir-se está um passo atrasado. Precisa </font><span class=Normal__Char><b><font size=2>parar</font></b></span><font size=2> de planejar </font><span class=Normal__Char><b><font size=2>e </font></b></span><font size=2>começar a agir.</font></span> <span class=Normal__Char><font size=2>“Hoje é o dia.” Sem duvida </font><span class=Normal__Char><b><font size=2>o autodomínio</font></b></span></span> <span class=Normal__Char><font size=2>é um programa </font><span class=Normal__Char><b><font size=2>continuo—</font></b></span><font size=2>uma jornada,</font></span> <span class=Normal__Char><b><font size=2>não</font></b></span><span class=Normal__Char><font size=2> apenas o inicio. Os homens </font><span class=Normal__Char><b><font size=2>não se tornam</font></b></span><font size=2> íntegros de uma hora para outra,</font></span> <span class=Normal__Char><b><font size=2>assim como</font></b></span><span class=Normal__Char><font size=2> a pequenina bolota</font></span> <span class=Normal__Char><font size=2>não se transforma </font><span class=Normal__Char><b><font size=2>num carvalho</font></b></span><font size=2> num abrir e fechar de olhos. Entretanto, </font><span class=Normal__Char><b><font size=2>o progresso</font></b></span><font size=2> rumo a perfeição </font><span class=Normal__Char><b><font size=2>pode </font></b></span><font size=2>ser rápido,</font></span> <span class=Normal__Char><b><font size=2>desde que</font></b></span><span class=Normal__Char><font size=2> a</font></span> <span class=Normal__Char><font size=2>pessoa caminhe resolutamente</font></span> <span class=Normal__Char><font size=2>e a </font><span class=Normal__Char><b><font size=2>passos largos</font></b></span><font size=2> em direção ao objetivo.” (Milagre do Perdão p. 201).</font></span> <span class=Normal__Char><u><font size=2>O que o Presidente kimball quis dizer, quando afirmou que devemos “catalogar” nossas fraquezas?”</font></u></span> <span class=Normal__Char><font size=2>Catalogar significa</font></span> <span class=Normal__Char><font size=2>relacionar, dispor em categorias, classificarmos nossas fraquezas.</font><span class=Normal__Char><b><font size=2> O Padrão</font></b></span><font size=2> que usamos</font></span> <span class=Normal__Char><font size=2>é o Salvador. Pelos seus ensinamentos, </font><span class=Normal__Char><b><font size=2>aprendemos</font></b></span><font size=2> as virtudes cristãs que devemos possuir; </font><span class=Normal__Char><b><font size=2>então</font></b></span><font size=2> classificamos as nossas fraquezas </font><span class=Normal__Char><b><font size=2>com</font></b></span><font size=2> relação ao modelo de excelência.</font></span> <span class=Normal__Char><font size=2>Ao termos feito isso, poderemos, então, como sugeriu o Presidente Kimball, </font><span class=Normal__Char><b><font size=2>“lutar” para vence-las</font></b></span><font size=2>.</font></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=2>7. QUANDO FAZEMOS A NOSSA PARTE E NOS VOLTAMOS AO SENHOR, NOSSA VIDA SE MODIFICA, TRA</font></b></span><span class=Normal__Char><b><font size=2>NSFORMA </font></b></span><span class=Normal__Char><font size=2>E SE </font><span class=Normal__Char><b><font size=2>SANTIFICA.</font></b></span></span>
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char><b><u><font size=2>Presidente Kimball:</font></u></b></span><span class=Normal__Char><font size=2> Tiago deu a formula para esse domínio: “Sujeitai-vos, portanto, a Deus;</font></span> <span class=Normal__Char><font size=2>mas resisti ao diabo, e ele fugira de vós.”</font></span> <span class=Normal__Char><font size=2>(Tiago 4:7). Para </font><span class=Normal__Char><b><font size=2>abandonar</font></b></span><font size=2> ao pecado, </font><span class=Normal__Char><b><font size=2>transformar</font></b></span><font size=2> vidas, </font><span class=Normal__Char><b><font size=2>mudar</font></b></span><font size=2> personalidades, </font><span class=Normal__Char><b><font size=2>moldar</font></b></span><font size=2> o caráter ou remoldá-lo.</font></span> &nbsp;
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    &nbsp;
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Sei que que a santificação está ao alcance de todos os homens que habitam nesta</font></span> <span class=Normal__Char><font size=2>terra. É o meio pelo qual voltaremos a presença de Deus. A missão é um tempo sagrado que temos a oportunidade de dar um avanço enorme rumo a perfeição. Através dos atributos de Cristo que absorvemos para nós dUrante esse tempo sagrado PODEREMOS A CADA DIA NOS TORNARMOS MAIS SEMELHANTES AO MESTRE E SALVADOR JESUS CRISTO. ELE FOI, É E SERÁ PARA TODO O SEMPRE PERFEITO.</font></span> &nbsp;
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    &nbsp;
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Com amor</font></span> &nbsp;
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    &nbsp;
+  </p>
+  <p class=Normal dir=LTR style=" TEXT-ALIGN:justify">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=2>Presidente e Sister Bezer</font></span><span class=Normal__Char><font size=2>ra</font></span>
+  </p>
+</div>
+<br></body>
+</html>

@@ -1,0 +1,631 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-05-04-nascer-de-novo</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style="  TEXT-DECORATION:none; COLOR:#666633"><font size=5>Nascer de Novo</font></span>
+</p>
+<a name=table01></a>
+<div style=" TEXT-ALIGN:left">
+  <table class=zeroBorder width=567>
+    <tr valign=top>
+      <td class=gen196638 width=425>
+        <p class=Normal style=" TEXT-ALIGN:justify">
+          <a name=graphic03></a><img alt="" height=1 src="images/dfzh62h7_188gsnf9rf5_b.gif" width=30>
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>
+<p class=Normal_0020_0028Web_0029>
+  <span class=featuressubtitle21__Char><span class=featuressubtitle21__Char style=" TEXT-DECORATION:none">Presidente James E. Faust</span></span> &nbsp;<br>
+  <span class=Normal_0020_0028Web_0029__Char style="  COLOR:#666633"><i>Segundo Conselheiro na Primeira Presidência</i></span>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  <span class=Normal_0020_0028Web_0029__Char style=" TEXT-DECORATION:none"><b>"Os benefícios completos do perdão dos pecados por intermédio da Expiação do Salvador com</b></span><span class=Normal_0020_0028Web_0029__Char><b>eçam com o arrependimento e depois se expandem até o recebimento do Espírito Santo."</b></span>
+</p>
+<div>
+  <div class=gen196673>
+    <a name=table02></a>
+    <div style=" TEXT-ALIGN:center">
+      <table class=zeroBorder width=112>
+        <tr valign=top>
+          <td class=gen196697 width=84>
+            <p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+              <a name=graphic04></a><img alt="Presidente James E. Faust" height=140 src="images/dfzh62h7_189s3tdc7cs_b.gif" width=112>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<p class=Normal_0020_0028Web_0029>
+  &nbsp;
+</p>
+<p class=Normal_0020_0028Web_0029>
+  &nbsp;
+</p>
+<p class=Normal_0020_0028Web_0029>
+  &nbsp;
+</p>
+<p class=Normal_0020_0028Web_0029>
+  &nbsp;
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  <span class=Normal_0020_0028Web_0029__Char style=" TEXT-DECORATION:none">Queridos irmãos, irmãs e amigos, a responsabilidade de falar</span> a todos vocês é motivo de grande preocupação para mim. Oro para que me compreendam.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  <span class=Normal_0020_0028Web_0029__Char style=" TEXT-DECORATION:none">Meu batismo nesta Igreja foi um evento muito significativo em minha vida. Eu tinha oito anos de idade. Meus pais ensinaram a mim e a meus irmãos a importância dessa grand</span>iosa ordenança. Minha mãe disse-me que, após o batismo, eu seria responsável pelas coisas que fizesse de errado. Lembro-me claramente do dia do meu batismo. Fui batizado na pia batismal do Tabernáculo na Praça do Templo. As pessoas que seriam batizadas usavam macacões brancos e, uma por uma, eram conduzidas gentilmente pelos degraus da escada até a água. Uma das crianças batizadas naquele dia não fora totalmente imersa na água; por isso a ordenança foi repetida. Isso se fez necessário porque, como mostram as escrituras, "o batismo simboliza a morte, o sepultamento e a ressurreição, e só pode ser realizado por imersão".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#1#1><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>1</u></sup></span></span></a> Ele segue também o modelo deixado pelo Salvador que foi batizado no rio Jordão, onde havia muita água. Conforme registrado em Mateus: "E, sendo Jesus batizado, saiu logo da água".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#2#2><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>2</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Embora eu tivesse apenas oito anos de idade, as palavras da oração batismal penetraram-me profundamente a alma. Depois de dizer o meu nome, o Irmão Irvin G. Derrick, que me batizou, declarou: "Tendo sido comissionado por Jesus Cristo, eu te batizo em nome do Pai e do Filho e do Espírito Santo. Amém".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#3#3><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>3</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Desde que fui batizado, mais de 11 milhões de pessoas foram batizadas na Igreja de Jesus Cristo dos Santos dos Últimos Dias de maneira similar e pela mesma autoridade. Foram batizadas em lagos congelados, no mar e em piscinas (algumas delas construídas para este propósito). Um desses locais tem um grande significado histórico. Em 1840, Wilford Woodruff, na época um dos Doze Apóstolos, estava servindo como missionário na Inglaterra e sentiu que deveria ir a um distrito rural perto de Ledbury. Lá encontrou John Benbow, que possuía uma grande fazenda e um pequeno lago. John apresentou-o a uma congregação chamada Irmãos Unidos, que estava ansiosa para ouvir a mensagem do evangelho. Posteriormente, ele registrou em seu diário o que fez, sem contar com a ajuda de ninguém em 7 de março de 1840: "Passei a maior parte do ( . . . ) dia limpando um pequeno lago e preparando-o para o batismo, pois vi que muitos receberiam a ordenança. Pouco depois, batizei seiscentas pessoas naquele local".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#4#4><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>4</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  O Salvador ensinou-nos que todos os homens e mulheres devem nascer de novo. Nicodemos, príncipe dos judeus, foi secretamente falar com o Salvador à noite e disse: "Rabi, bem sabemos que és Mestre, vindo de Deus; porque ninguém pode fazer estes sinais que tu fazes, se Deus não for com ele.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Jesus respondeu, e disse-lhe: Na verdade, na verdade te digo que aquele que não nascer de novo, não pode ver o reino de Deus".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#5#5><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>5</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Nicodemos ficou confuso e indagou: "Como pode um homem nascer, sendo velho? Pode, porventura, tornar a entrar no ventre de sua mãe, e nascer?"
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Jesus explicou que estava falando sobre nascer espiritualmente, e disse:
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  "Na verdade, na verdade te digo que aquele que não nascer da água e do Espírito, não pode entrar no reino de Deus.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  O que é nascido da carne é carne, o que é nascido do Espírito é espírito.<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#6#6><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>6</u></sup></span></span></a>"
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Todos nós precisamos nascer espiritualmente, tenhamos 8 ou 80 anos, ou mesmo 90. Quando a irmã Luise Wulff, da República Democrática Alemã, foi batizada em 1989, ela exclamou: "Com noventa e quatro anos, nasci de novo!"<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#7#7><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>7</u></sup></span></span></a> Nosso primeiro nascimento ocorre quando nascemos na mortalidade. O segundo nascimento começa quando somos batizados na água por alguém que possua o sacerdócio de Deus e completa-se quando somos confirmados e "[recebemos], então, a remissão de [nossos] pecados pelo fogo e pelo Espírito Santo".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#8#8><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>8</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Há&nbsp; alguns anos, Albert Peters contou uma experiência que ele e seu companheiro tiveram com um homem que nasceu de novo. Um dia, foram à cabana de Atiati, na vila de Sasina, na Samoa. Lá encontraram um homem barbado, sujo e inválido deitado numa cama. Ele pediu que entrassem e se apresentassem. Ficou contente em saber que eram missionários e quis ouvir sua mensagem. Eles deram a primeira palestra, prestaram testemunho e foram embora. Enquanto caminhavam, conversaram sobre a situação de Atiati. Ele tivera poliomielite 22 anos antes, o que o deixara incapaz de usar os braços e as pernas. Assim, como poderia ser batizado se era completamente inválido?
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Quando visitaram o novo amigo no dia seguinte, ficaram surpresos ao verem a mudança em Atiati. Ele estava feliz, limpo e barbeado; até a cama estava feita. "Hoje", disse ele, "começo a viver novamente porque ontem minhas orações foram atendidas e vocês vieram até mim. ( . . . ) Espero há mais de vinte anos que alguém me diga possuir o evangelho verdadeiro de Cristo."
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Durante várias semanas, os dois missionários ensinaram a esse homem sincero e inteligente os princípios do evangelho, e ele recebeu um grande testemunho da verdade e da necessidade do batismo. Ele pediu que jejuassem com ele para que tivesse forças para entrar na água e ser batizado. A pia batismal mais próxima ficava a 13 quilômetros. Eles colocaram-no num carro, levaram-no até a capela e sentaram-no num banco. O líder do distrito iniciou a reunião, prestando um vigoroso testemunho a respeito da sagrada ordenança do batismo. Depois, o élder Peters e seu companheiro pegaram Atiati e carregaram-no até a pia batismal. Ao fazerem isso, Atiati pediu: "Por favor, ponham-me no chão". Eles hesitaram, e Atiati disse novamente: "Coloquem-me no chão".
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Enquanto estavam ali, confusos, Atiati sorriu e exclamou: "Este é&nbsp; o evento mais importante de minha vida. Sei, sem dúvida alguma, que este é o único caminho para a salvação eterna. <span class=Normal_0020_0028Web_0029__Char><i>Não serei carregado para a minha salvação</i></span>!" Os missionários colocaram Atiati no chão. Depois de um grande esforço, ele tentou levantar-se. O homem que estivera confinado a uma cama por mais de 20 anos sem se mover, agora estava de pé. Vagarosamente, um passo vacilante de cada vez, Atiati entrou na água, onde o missionário, perplexo, estendeu-lhe a mão e batizou-o. Depois, Atiati pediu que o carregassem da pia batismal até a capela onde ele foi confirmado membro da Igreja.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Atiati continuou a progredir até que desenvolveu a capacidade de caminhar amparado por uma bengala. Ele disse ao élder Peters que sabia que seria capaz de andar na manhã de seu batismo. "Como a fé&nbsp; consegue remover uma montanha obstinada", disse ele, "nunca tive dúvidas de que poderia consertar minhas pernas e meus braços".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#9#9><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>9</u></sup></span></span></a> Acho que podemos dizer que Atiati realmente nasceu de novo!
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Como Atiati, quando somos batizados, nascemos espiritualmente de Deus e somos dignos de receber Sua imagem em nosso semblante.<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#10#10><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>10</u></sup></span></span></a> Devemos passar por uma vigorosa mudança de coração<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#11#11><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>11</u></sup></span></span></a> para que nos tornemos "novas criaturas"<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#12#12><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>12</u></sup></span></span></a> e exerçamos fé na redenção de nosso Senhor e Salvador, Jesus Cristo, a fim de manter nosso padrão de dignidade. Os padrões de dignidade pessoal exigidos para o batismo na Igreja são claros:
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  "Todos aqueles que se humilharem perante Deus e desejarem ser batizados e se apresentarem com o coração quebrantado e o espírito contrito; e testificarem à igreja que verdadeiramente se arrependeram de todos os seus pecados e estão dispostos a tomar sobre si o nome de Jesus Cristo, tendo o firme propósito de servi-lo até o fim; e realmente manifestarem por suas obras que receberam o Espírito de Cristo para a remissão de seus pecados, serão recebidos pelo batismo na sua igreja."<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#13#13><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>13</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  O batismo por imersão na água é "a ordenança introdutória do evangelho e deve ser seguido pelo batismo do Espírito para ser completo".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#14#14><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>14</u></sup></span></span></a> Como disse o Profeta Joseph Smith certa vez: "Tanto faz batizar um saco de areia ou um homem, se seu batismo não tem por finalidade a remissão dos pecados e o recebimento do Espírito Santo. O batismo na água não é senão meio batismo, e nada vale sem a outra metade, ou seja, o batismo do Espírito Santo".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#15#15><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>15</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Os benefícios completos do perdão dos pecados por intermédio da Expiação do Salvador começam com o arrependimento e depois se expandem até&nbsp; o recebimento do Espírito Santo. Como disse Néfi, o batismo é a porta "e recebereis, então, a remissão de vossos pecados pelo fogo e pelo Espírito Santo".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#16#16><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>16</u></sup></span></span></a> A porta do batismo abre o caminho para outros convênios e bênçãos por meio do sacerdócio e das bênçãos do templo.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  O extraordinário dom do Espírito Santo, bem como a condição de membro d'A Igreja de Jesus Cristo dos Santos dos Últimos Dias, é concedido pela confirmação por imposição das mãos por quem possua autoridade. Paulo deixou isso claro para os Efésios quando perguntou: "Recebestes vós já o Espírito Santo quando crestes? E eles disseram-lhe: Nós nem ainda ouvimos que haja Espírito Santo.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Perguntou-lhes, então: Em que sois batizados então? E eles disseram: No batismo de João.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Mas Paulo disse: Certamente João batizou com o batismo do arrependimento, dizendo ao povo que cresse no que após ele havia de vir, isto é, em Jesus Cristo.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  E os que ouviram foram batizados em nome do Senhor Jesus.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  <span class=Normal_0020_0028Web_0029__Char style=" TEXT-DECORATION:none">E, impondo-lhes Paulo as mãos, veio sobre eles o Espírito Santo ( . . . )".</span><a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#17#17><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>17</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Se forem dignos, os que possuem esse dom espiritual poderão usufruir de mais compreensão, luz e orientação em tudo o que fizerem na vida, tanto material como espiritualmente. O Espírito Santo presta testemunho da verdade e grava em nossa alma um testemunho da realidade de Deus, o Pai, e de Seu Filho, Jesus Cristo, de maneira tão inequívoca que nenhum poder ou autoridade terrena pode tirar-nos tal conhecimento.<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#18#18><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>18</u></sup></span></span></a> Na verdade, não ter o Espírito Santo é como ter um corpo sem um sistema imunológico.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Cremos que todos os homens e mulheres recebem o Espírito de Cristo.<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#19#19><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>19</u></sup></span></span></a> Não é a mesma coisa que o dom do Espírito Santo.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  O Profeta Joseph Smith ensinou que "existe uma diferença entre o Espírito Santo e o dom do Espírito Santo".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#20#20><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>20</u></sup></span></span></a> Muitas pessoas fora da Igreja receberam revelação pelo poder do Espírito Santo, convencendo-os da veracidade do evangelho. Por intermédio desse poder, pesquisadores sinceros adquirem um testemunho do Livro de Mórmon e dos princípios do evangelho antes do batismo. Entretanto, as manifestações do Espírito Santo são limitadas sem o dom do Espírito Santo.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Aqueles que recebem o dom do Espírito Santo após o batismo e são confirmados podem receber mais luz e testemunho. Isso ocorre porque o dom do Espírito Santo é "uma testemunha permanente e um dom espiritual maior do que a simples manifestação do Espírito Santo".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#21#21><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>21</u></sup></span></span></a> É um dom espiritual maior porque o dom do Espírito Santo pode agir como um "agente purificador" que limpa e santifica a pessoa de todo o pecado".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#22#22><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>22</u></sup></span></span></a>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Como o batismo pela água e o batismo do espírito são essenciais para a salvação completa, na natureza eterna das coisas todos os filhos de Deus precisam ter essa oportunidade, inclusive aqueles que viveram há séculos. A doutrina do batismo dos vivos pelos mortos realizado no templo era compreendida e praticada na igreja cristã primitiva. Paulo, em seu grande debate a respeito da Ressurreição, apresentou o seguinte raciocínio: "Doutra maneira, que farão os que se batizam pelos mortos, se absolutamente os mortos não ressuscitam? Por que se batizam eles então pelos mortos?"<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#23#23><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>23</u></sup></span></span></a> Fazer algo tão vital por aqueles que não podem ser batizados por si mesmos é mostra de verdadeiro cristianismo. Ao dar Sua vida para expiar os pecados da humanidade, Jesus fez por nós o que não poderíamos fazer por nós mesmos. O profeta Malaquias referiu-se a esse conceito quando falou acerca da vinda do profeta Elias, que "[converteria] o coração dos pais aos filhos, e o coração dos filhos a seus pais; para que [o Senhor] não [viesse] e [ferisse] a terra com maldição".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#24#24><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>24</u></sup></span></span></a> Isso se cumpre em larga escala por intermédio do trabalho vicário.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Nenhuma outra organização no mundo cumpre melhor a promessa de Malaquias do que a Igreja. À custa de grandes despesas e esforço, a Igreja é guardiã do maior tesouro de registros de família do mundo. A Igreja hoje possui 660 milhões de nomes no <span class=Normal_0020_0028Web_0029__Char><i>site</i></span> FamilySearch na Internet.<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#25#25><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>25</u></sup></span></span></a> Esses registros estão à inteira disposição de qualquer pessoa que deseje pesquisá-los.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Como já vivi muitos anos desde meu batismo na água, tenho valorizado os dons espirituais do Espírito Santo provenientes do batismo do Espírito. Fui confirmado há 72 anos por uma pessoa que possuía autoridade, Joseph A. F. Everett, amigo íntimo dos meus pais e um homem muito distinto.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  Oro humildemente para que o Espírito do Senhor confirme a importância das coisas sobre as quais falei. Testifico que não podemos ser completamente convertidos até que "andemos em novidade de vida"<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#26#26><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>26</u></sup></span></span></a> e nos transformemos interiormente numa nova pessoa, "[purificados] dos [nossos] antigos pecados".<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#27#27><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>27</u></sup></span></span></a> Isso só ocorre quando nascemos de novo da água e do Espírito pelo batismo e recebemos o dom do Espírito Santo. Dessa forma, recebemos o perdão divino por intermédio do qual podemos saber em nosso coração que recebemos a remissão de nossos pecados.<a href=http://www.lds.org/conference/talk/display/0,5232,89-2-187-22,00.html#28#28><span class=Hyperlink__Char><span class=Hyperlink__Char><sup><u>28</u></sup></span></span></a> Sei que isso é verdade e assim testifico. Em nome de Jesus Cristo. Amém.
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  <span class=Normal_0020_0028Web_0029__Char><b>NOTAS</b></span>
+</p>
+<p class=Normal_0020_0028Web_0029 style=" TEXT-ALIGN:justify">
+  <a name=1></a><span class=Normal_0020_0028Web_0029__Char style=" TEXT-DECORATION:none">1. Bible Dictionary, "Baptism," p. 618; ver também Mat. 3:16; Atos 8:37–39; Rom. 6:1–6; Col. 2:12; D&amp;C 20:72–74; 128:12–13.&nbsp;<br>
+  <a name=2></a>2. Mat. 3:16.&nbsp;<br>
+  <a name=3></a>3. Ver D&amp;C 20:73.&nbsp;<br>
+  <a name=4></a>4. Matthias F. Cowley, conforme citado em </span><span class=Normal_0020_0028Web_0029__Char><i>Wilford Woodruff: History of His Life and Labors</i></span> (1964), p. 117. &nbsp;<br>
+  <a name=5></a>5. João 3:2–3.&nbsp;<br>
+  <a name=6></a>6. João 3:4–6.&nbsp;<br>
+  <a name=7></a>7. "Nasci de Novo aos 94 Anos", <span class=Normal_0020_0028Web_0029__Char><i>A Liahona</i></span>, junho de 1994, p. 24.&nbsp;<br>
+  <a name=8></a>8. 2 Né. 31:17.&nbsp;<br>
+  <a name=9></a>9. Ver Albert Peters, "Um Passo Vacilante de Cada Vez", <span class=Normal_0020_0028Web_0029__Char><i>A Liahona, </i></span>junho de 1995, p. 30.&nbsp;<br>
+  <a name=10></a>10. Ver Alma 5:14.&nbsp;<br>
+  <a name=11></a>11. Ver Alma 5:14.&nbsp;<br>
+  <a name=12></a>12. Mosias 27:26.&nbsp;<br>
+  <a name=13></a>13. D&amp;C 20:37.&nbsp;<br>
+  <a name=14></a>14. Bible Dicitionary, "Baptism," p. 618.&nbsp;<br>
+  <a name=15></a>15. <span class=Normal_0020_0028Web_0029__Char><i>Ensinamentos do Profeta Joseph Smith</i></span>, seleções de Joseph Fielding Smith (1976), p. 306.&nbsp;<br>
+  <a name=16></a>16. 2 Né. 31:17; ver também D&amp;C 19:31.&nbsp;<br>
+  <a name=17></a>17. Atos 19:2–6.&nbsp;<br>
+  <a name=18></a>18. Ver 2 Né. 31:18.&nbsp;<br>
+  <a name=19></a>19. Ver D&amp;C 93:2.&nbsp;<br>
+  <a name=20></a>20. <span class=Normal_0020_0028Web_0029__Char><i>Ensinamentos do Profeta Joseph Smith, </i></span>p. 199.&nbsp;<br>
+  <a name=21></a>21. James R. Clark, compilação, <span class=Normal_0020_0028Web_0029__Char><i>Messages of the First Presidency of The Church of Jesus Christ of Latter-day Saints, </i></span>6 volumes (1965–1975), 5:4.&nbsp;<br>
+  <a name=22></a>22. Bible Dictionary, "Holy Ghost", p. 704.&nbsp;<br>
+  <a name=23></a>23. I Cor. 15:29.&nbsp;<br>
+  <a name=24></a>24. Mal. 4:6; ver também D&amp;C 138:47; JS -- H 1:39.&nbsp;<br>
+  <a name=25></a>25. Ver www.familysearch.org.&nbsp;<br>
+  <a name=26></a>26. Rom. 6:4.&nbsp;<br>
+  <a name=27></a>27. II Ped. 1:9.&nbsp;<br>
+  <a name=28></a>28. Ver Mosias 4:3.
+</p>
+<br></body>
+</html>

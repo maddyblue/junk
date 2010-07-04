@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-07-29</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'; TEXT-DECORATION:none"><b>Rio de Janeiro 29 de julho de 2009</b></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Estimado Elderes e Sisteres</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Estamos próximos de um grande acontecimento a história da Missão Brasil Rio de Janeiro. Como todos já devem saber, dia 1º&nbsp; de julho teremos a junção da Missão Rio de Janeiro Norte com a nossa missão. Receberemos 57 missionários e as áreas de 3 estacas e 1 distrito.(Niterói com 13 áreas, Andaraí com 9 áreas, Teresópolis com 7 áreas e Macaé com 6 áreas.) Total de 35 áreas vindo da missão Rio Norte. Com 68 áreas de nossa missão, teremos a partir do dia 1º de julho, 103 áreas para trabalharmos. Teremos a partir do dia primeiro, 15 milhões de pessoas para batizar.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Amados e estimados missionários gostaria de agradecer os que se esforçaram e fizeram tudo, mas tudo mesmo. Agradecer aos que oraram com fé&nbsp; e com muito desejo de batizar os filhos do Pai Celestial que estão perdidos nesse mundo iníquo e perverso. Gostaria de agradecer todos os cumprem com as regras desta&nbsp; missão. Muitos missionários ainda vivem a triste ilusão de achar que na última hora aparecerá alguém e dirá: “quero ser batizado”, não é assim que funciona, muito embora pode acontecer se você tiver feito a sua parte com todo o vigor de um coração convertido. Parece que todos querem batizar, isso muito me alegra, mas parece também que muitos não fazem por onde batizar. Acaba esquecendo que para batizar é preciso encontrar e para encontrar é preciso fazer os contatos, trabalhar com os membros, buscar no livro de área e nas referências de mídia. Esquecem que para batizar é preciso ensinar e o que se espera é que o missionário ensine acima de 20 lições a cada semana, não só isso, pois para batizar é preciso ensinar bem e com o Espírito. É bem importante lembrar o que o Senhor: “Eu, o Senhor, estou obrigado quando fazeis o que eu digo; mas quando não o fazeis, não tendes promessa alguma.(D&amp;C 82:10). Talvez algum missionário seja tentado a dizer: “Bem eu não faço todas essas coisas e ainda batizo” Quero dizer para esse missionário, que se fizesse todas as coisas batizaria muito mais e se tornaria um Amon em nosso dias. A racionalização é uma arma poderosa de satanás. Gostaria de relembrar algumas coisas que você como missionário não deve deixar de fazer, para que consiga batizar semanalmente.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">1 - 10 Contatos diáriamente(Abra a boca) Veja os benefícios e as promessas&nbsp; se abrir a boca: “Abri vossa boca e ela encher-se-á e tornar-vos-eis como Néfi de outrora, que viajou de Jerusalém pelo deserto. Sim, abri vossa boca e não vos caleis; e haverá muitos feixes sobre vossas costas, pois eis que estou convosco. Sim, abri vossa boca e ela encher-se-á, dizendo: Arrependei-vos, arrependei-vos e preparai o caminho do Senhor e endireitai suas veredas; pois o reino do céu está próximo; Sim, arrependei-vos e sede batizados, cada um de vós, para a remissão de vossos pecados; sim, sede batizados com água e então virá o batismo do fogo e do Espírito Santo.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">(D&amp;C 33:8 - 11). Será que vale apena fazer os contatos?, pedimos apenas 10, e certamente você tem condições de falar com muito mais pessoas durante o dia. Sabe quem quer que fiquemos com a boca fechada? Veja essa escritura: Depois de me haver retirado para o lugar que previamente escolhera, tendo olhado ao redor e encontrando-me só, ajoelhei-me e comecei a oferecer a Deus os desejos de meu coração. Apenas iniciara, imediatamente se apoderou de mim uma força que me dominou por completo; e tão assombrosa foi sua influência que se me travou a língua, de modo que eu não podia falar. (JS-História 1:15). Quando estamos falando com as pessoas nas ruas, estamos oferecendo o desejo de nosso coração a Deus e é exatamente nessa hora que satanás usa o seu poder para desanimá-lo, pois dessa forma ele consegue fazer com que se cale e não tenha desejo de falar. Ele lhe trava a língua. É nessa hora que deve pedir forças a Deus e continuar ainda com mais força.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">2- Orar com fervor</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">3- Guardar as regras da missão(todas)</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">4- Interiorizar a seção 4 de Doutrina e Convênios. Escrevê-la nas tábuas de carne de seu coração. Entregar a Deus o CORAÇÃO, MENTE A FORÇA E O PODER DO SACERDÓCIO QUE ESTARÁ COM VOCÊ.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'"> O milagre só acontece depois que colocamos os nossos pés sobre as águas. Você nunca verá milagres antes de desejá-los e eles nunca acontecerão em sua missão, até que esteja disposto a&nbsp; fazer sua parte e oferecer o melhor que tem a Deus e o melhor que você tem para oferecer está escrito em Doutrina e Convênios seção 4.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">TIVEMOS UMA MARAVILHOSA CONFERÊNCIA DE ZONA. Pergunto-vos: colocaram em prática o que foi ensinado? Você pelo menos se lembra do que foi ensinado? Vou relembrá-los:</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Ter formalidade ao ensinar. Tirar os vícios de linguagem do seu ensino. Não tornar o ensino informal com gestos ou palavras que não combinam com o sentido sagrado da mensagem, nem com um representante de Jesus Cristo.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Trabalhar com os membros. Você fez após almoçar as praticar que ensinamos na conferência? Ou continua dando pensamentos que não levam a nada? Está aproveitando o tempo durante e após o almoço para ajudar os membros a fazerem a obra missionária, da forma que foi ensinado na conferência? </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">A minha mensagem foi: Deus é grandioso. Ele não quer pouco e não fica satisfeito com o servo indolente e que é Deus que quer resultado, muito resultado. Foi aconselhado que trabalhasse ao ponto de chegar em casa exausto e feliz por ter dado ao Senhor o seu melhor naquele dia.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Escrever uma carta para as famílias que dão os almoços.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'"> Os que fizeram e estão fazendo ainda, esses além de estarem agradando a Deus estão tendo a recompensa de seu trabalho. O missionário que vai para uma conferência de zona e após a conferencia não coloca em prática o que foi ensinado e não mudou nada em seu ensino, no mínimo está sendo desobediente e desatencioso para com o que vem de inspiração para missão. </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Eu espero que cada líder de distrito e de zona, estejam acompanhando seus missionários para que essas coisas sejam colocada em prática. Após 5 dias da conferência liguei para um líder de zona para saber como estava o trabalho, tive uma grande surpresa, ele me perguntou: “presidente você tem alguma idéia de como posso melhorar para ter resultado em nossa zona?” Eu respondi: “Tudo o que eu tinha foi passado na conferência, coloque em prática e verá os resultados. Após apenas poucos dias já se havia esquecido o que fora ensinado.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Confio que você esteja atendo ao que vem de revelação para sua missão.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Com essas mudanças muitos missionários estão deixando de trabalhar, esperando mais uma transferência. Que falta de maturidade! Que falta de visão! Que falta de personalidade! Que caráter fraco. Fico assustado com esse tipo de atitude. Vamos trabalhar Elderes e Sisteres, pois nem só de transferência vivo o missionário. Se o missionário estiver trabalhando como está escrito em Doutrina e Convênios seção, ele não se lembraria de transferência ou de qualquer outro assunto.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">“Portanto, irmãos, não tenteis dar conselhos ao Senhor, mas, sim, recebei conselhos de sua mão.”Jacó 4:10).</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Que o Senhor na sua infinita misericórdia e bondade, os abençoe, para que cresçam&nbsp; como Cristo cresceu. Linha sobre linha, preceito sobre preceito, para vos torneis como Ele.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Vamos receber os nossos irmãos da missão norte, com um coração alegre, espero que não deixe de trabalhar pensando em mudanças. Queremos batizar a cada semana mais e mais, estamos congelados com um média de 32 semanais, é preciso mudar, é preciso crescer a cada semana, temos potencial para batizarmos uma média de 50 batismos por semana e com o acréscimo de missionários e áreas, podemos batizar 70 cada semana. Só assim, A Igreja aqui no Rio de Janeiro crescerá. Beba batismos, como batismos, acorde batismos. Sua missão é batizar e confirmar eleitos.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Seremos uma missão de 190 missionários. Uma potência! Peço que evitem mexericos e curiosidades de como era a outra missão. Seja maduro, receba bem todos os missionários e após dia 1º de julho, não haverá missionários da missão Rio Norte e missionários da missão Rio de Janeiro, teremos apenas missionários da nova Missão Brasil Rio de Janeiro. Todos com um só objetivo. Encontrar, Ensinar, Batizar e Confirmar os filhos de Deus que moram em nossa missão. Não fique esmiuçando procurando, buscando saber, coisas que não ajudam no crescimento desta obra. Seja homem e mulher de Deus, cheios de maturidade e visão. Apenas trabalhe com os olhos fitos na glória de Deus.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">E daí, se for haver transferência? Qual é o problema? O que isso lhe atinge? Sua missão só terminará após os 18 ou 24 mêses, vamos lá! Vamos trabalhar, vamos batizar! Essa semana deve ser a melhor semana de sua missão e a semana que vem ainda melhor e assim por diante. Cada dia na missão deve ser melhor do que o ontem. Concentre o trabalho esqueça transferência. Prometo que lhe avisarei caso seja transferido, prometo que ninguém será transferido sem ser avisado que foi. CONFIO EM TODOS VOCÊS. Sei o quanto ama essa obra e a Deus, você são tudo de bom que Deus possui nesse mundo e acredito que não exista nessa terra um grupo melhor do que o grupo de missionários. Eu vos amo e sei o quanto se esforça pra serem puros e limpos e para darem o melhor para o senhor. Posso ver a luz que brilha em seus rostos. Sister Bezerra e eu amamos cada um individualmente. Ontem liguei para um missionário, para comunicá-lo a morte de seu pai. Perguntei-lhe: Você pode voltar ou continuar a sua missão. Ele respondeu: “Vou continuar presidente” É com esse tipo de jovem que trabalho. Verdadeiros discípulos de Cristo. Vocês são exemplos para o mundo e para a Igreja.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Uma boa semana, lembrando apenas de BATISMOS!!!</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Com amor</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Presidente Bezerra</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial';  TEXT-DECORATION:none">“Qualquer desculpa, ainda que seja válida,Sempre enfraquece o caráter ”&nbsp; (Anônimo)</span>
+</p>
+<br></body>
+</html>

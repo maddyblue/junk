@@ -1,0 +1,672 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-09-07-doutrina-do-batismo</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal>
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=3>Rio de Janeiro 07</font></b></span><span class=Normal__Char><b><font size=3> de setembro de 2009</font></b></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Estimados Elderes e Sisteres</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Batizamos 45 essa semana. Isso é passado, foi apenas uma preparação para semana que se inicia hoje. Vamos lá, somos um. É possível mantermos a missão batizando acima de 70 por semana.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Gostaria de tratar de algumas preocupações.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Durante todos esses anos como membro da Igreja e por ter vivido várias experiências de liderança neste período, tenho visto muitas coisas boas e algumas não tão boas. Gostaria de compartilhar algumas delas com vocês.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Quando era um membro novo, observei que alguns missionários retornados se envolveram com coisas que não desejo e nem espero que aconteça com nenhum dos meus missionários: Eu tinha apenas alguns meses de membro, meu chamado era conselheiro no quorum de elderes em um ramo da Igreja em Fortaleza. Recebemos no ramo um missionário retornado, lembro-me que os membros apostaram muito nele, esperaram muito, afinal se tratava de um missionário retornado, naquela época existiam poucos missionários. Vi o ar de arrogância daquele missionário, vi que ele se sentia muito superior aos humildes membros do ramo. Lembro-me até de uma ocasião que o mesmo discordou do presidente do ramo. Triste foi saber alguns anos depois que o mesmo havia sido preso por assalto e que estava em um presídio público para criminosos.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Lembro-me de mais um caso triste: Quando servi como presidente de estaca recebi um missionário, que aparentemente havia feito uma excelente missão. Para minha grande surpresa, após uma semana ele estava no mundo da iniqüidade, tivemos que fazer uma ação disciplinar para o mesmo.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Infelizmente tenho várias experiências que não vale apena compartilhar, mas gostaria de relatar mais uma: Após concluir uma missão aparentemente honrosa esse missionário retornado começou a namorar uma moça não membro e logo o vi sendo excomungado da Igreja.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Bem, basta, foram muitas experiências ruins mas felizmente as boas estão entre a maioria. Conheci um jovem bem pobre que morava em uma casa de madeira a beira de uma avenida. Esse jovem foi batizado na Igreja COM APENAS 14 ANOS e ficou firme, fez uma missão honrosa ao retornar para sua casa encontrou o mesmo ambiente de antes: Drogas, bebidas , cigarro e muita bagunça por parte de seus irmãos. Após 2 meses após sua missão, ele me pediu ajuda. consegui uma quitinete pata ele morar 2 meses, e disse para ele que o terceiro mês ele deveria pagar o aluguel com o seu próprio dinheiro. Ele arranjou um emprego e assim o fez. Com um ano após a missão ele casou, continuou seus estudos, entrou na faculdade e hoje serve como bispo já a dois anos em sua ala. Ele recentemente se tornou pai. Ele tem o seu próprio lar, é auto-suficiente, faz faculdade, é pai e bispo.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Conheci outro jovem que chegou de missão e no dia seguinte foi atrás de emprego, como sabia falar inglês logo conseguiu numa escola de idioma, ele juntou dinheiro por 1 ano e meio e hoje estuda e trabalha nos EUA. Ele fez missão Rio de Janeiro, está namorando e acredito que logo vai casar. </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>São muitas as histórias de sucesso e algumas de insuces</font></span><span class=Normal__Char><font size=3>sos. Por que? Eles não foram bons missionários? Ou não fizeram uma missão honrosa? Não sei responder, mas de uma coisa eu sei e vou responder usando uma escritura: </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>“Animai-vos, portanto, e lembrai-vos de que sois </font><span class=Normal__Char><b><font size=3>livres para agir por vós mesmos</font></b></span><font size=3>—para escolher o caminho da morte eterna ou o caminho da vida eterna.(2 Néfi 10:23). A missão é uma oportunidade valiosa para aprendermos a fazer escolher certas. Diariamente nos deparamos com a situação de fazer escolha, que aparentemente são pequenas, mas que tem um efeito enorme sobre o nosso sucesso ou insucesso. Um efeito poderoso ou devastador sobre os resultados de nosso trabalho. Na realidade nós não deveríamos ter nenhum dúvida sobre todas essas escolhas e nem deveríamos está duvidosos a respeito de fazer o certo ou não. Por que? Porque já decidimos isso, já fizemos a escolha desde do primeiro momento que fomos batizados. “ (...) e agora, sendo que desejais entrar no rebanho de Deus e ser chamados seu povo; e sendo que estais dispostos a carregar os fardos uns dos outros, para que fiquem leves; Sim, e estais dispostos a chorar com os que choram; sim, e consolar os que necessitam de consolo </font><span class=Normal__Char><b><font size=3>e servir de testemunhas de Deus em todos os momentos e em todas as coisas e em todos os lugares em que vos encontreis, mesmo até a morte;</font></b></span><font size=3> para que sejais redimidos por Deus e contados com os da primeira ressurreição, para que tenhais a vida eterna”(Mosias 18:8 - 9). Além desse convênio que fizemos no batismo, nós assinamos o nosso chamado missionário e nos comprometemos em viver de acordo com as normas, regras e diretrizes da missão. Ao recebermos o chamado missionário, fomos ao Templo do Senhor e lá fizemos outros convênios ainda maiores. Especialmente de consagrarmos a nós mesmos. Já fizemos convênios sagrados com Deus de fazer o que é certo. Esses convênios devem permanecer bem aceso em nossa mente, essa lembrança deve permanecer firme em nossa mente e coração para que após uma missão honrosa, continuarmos no caminho. E assim como o jovem que morava a beira de uma avenida em uma casa de madeira e papelão, e que ao permanecer firme e escolhendo o bem, possamos ter dias melhores. “Eis que o Senhor considera toda carne igualmente; aquele que é </font><span class=Normal__Char><b><font size=3>justo é favorecido por Deus</font></b></span><font size=3>”.(1 Néfi 17:35).</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Tenho visto muitos missionários morrendo pelo caminho, faltando tanto tempo ainda para concluir a sua missão. Uma missão honrosa, não é simplesmente o fato de não ter transgredido e ter concluído os 24 meses. Uma missão honrosa é muito mais que isso. É dedicação, é suor, é trabalho árduo, é consagração plena.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><b><font size=3>“A submissão da vontade de alguém é a única coisa pessoal que temos para colocar no Altar de Deus. As muitas outras coisas que “damos”, irmãos e irmãs, são de fato&nbsp; as coisas, que Ele já nos deu ou emprestou. Contudo, quando você e eu finalmente nos submetemos, permitindo que nossas vontades individuais sejam absorvidas pela vontade do Pai, então estamos realmente dando algo a Ele! É a única posse que verdadeiramente é nossa para dar! Consagração,&nbsp; portanto, é a única renúncia incondicional que é também uma vitória total!</font></b></span><span class=Normal__Char><font size=3> (Elder Maxwell, Ensign, november) 1995, 24).</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Após essa citação, nem sei se preciso falar mais alguma coisa. Ela diz tudo. Sim, ela diz tudo, mas será que ela penetrou em nossos corações? é isso mesmo que estamos fazendo aqui na missão? Ou achamos que apenas pelo fato de está no campo missionário já é o suficiente? Só o fato de passar os 24 meses já valeu apena? É preciso muito mais que isso. É preciso sair a cada dia de casa e dar tudo, retornar para casa com a certeza de ter colocado uma oferta no altar de Deus, digna de um Pai Celeste e de uma Salvador do mundo. A certeza de ter proporcionado alegria a&nbsp; Jesus Cristo. </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Ter a coragem de dizer: Pai recebe a minha oferta, dei tudo o que tinha neste dia? Pai recebe a minha oferta, dei tudo o que tinha nestes 24 meses. </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>“Digo-vos: Podeis imaginar ouvir a voz do Senhor dizendo-vos naquele dia: Vinde a mim, benditos, pois eis que vossas obras foram obras de retidão na missão?</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Pergunto-vos: Podereis naquele dia olhar para Deus com um coração puro e mãos limpas? Pergunto-vos: Podereis levantar os olhos, tendo a imagem de Deus gravada em vosso semblante?(Alma 5:16 - 19).</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Infelizmente vejo alguns missionários que enganam a si mesmos e acreditam que receberão a benção.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>” Eu mando, e os homens não obedecem; revogo, e eles não recebem a bênção”.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>(D&amp;C 58:32). Eu, o Senhor, estou obrigado quando fazeis o que eu digo; mas quando não o fazeis, não tendes promessa alguma.(D&amp;C 82:10).” Porque o que de ti sair, a ti retornará. (Alma 41:15).</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Já falei várias vezes que o missionário precisa dar tudo na missão e nos últimos meses ou dias, dar mais ainda, para que possa concluir sua missão com força, com ânimo, e sentir a alegria do dever cumprido. Se o missionário se arrasta pela missão quando chegar os últimos meses se arrastará ainda mais. É esse o espírito que levará da missão, retornando um fraco, pronto para cair nas garras do adversário, que estará lá só o esperando para tentá-lo. É aqui e agora o momento de recarregar as baterias espirituais, aqui é o melhor lugar para conhecer o Mestre, aqui é o melhor lugar para se ter experiências espirituais dia após dia, em grande escala. É aqui no campo o melhor lugar para se mostrar digno de confiança, pois Deus nos entregou seus filhos. O Bispo o presidente de estaca o presidente de missão, setentas e autoridades gerais e os missionários autorizados, são os servos que tem o poder para entrevistar sobre dignidade, e ninguém mais. O que acha disso Elder? É muita confiança é muito privilégio. Você está valorizando essa confiança? É aqui que você vai provar pra Deus que é digno dela. </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Tudo o que fazemos aqui é visto por Deus. Não conseguimos enganar a Deus. Ele tanto nos abençoa como retira as bênçãos, só depende de cada um.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>"Bem-aventurado és tu, Néfi, pelas coisa</font></span><span class=Normal__Char><font size=3>s que tens feito; pois </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><u><font size=3>observei</font></u></span></span> <span class=Normal__Char><font size=3>que foste infatigável em pregar a este povo as palavras que te dei.(Helamã 10:4) "Eis que </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><u><font size=3>tenho visto</font></u></span></span><span class=Normal__Char><font size=3> teus sacrifícios e perdoarei todos os teus pecados;"(D&amp;C 132:50), mais uma escritura: " Vai, e dize a Ezequias: Assim diz o Senhor, o Deus de Davi teu pai: Ouvi a tua oração e </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><font size=3>vi tuas lágrimas</font></span></span><span class=Normal__Char><font size=3>(...)" (Isaías 38:1-4). Vejam o Senhor falando sobre Joseph Smith: "Pois assim diz o Senhor Deus: Inspirei-o a promover a causa de Sião com grande poder voltado para o bem; e </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><font size=3>conheço sua diligência</font></span></span><span class=Normal__Char><font size=3> e ouvi suas orações. Sim, </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><font size=3>vi seu pranto por Sião</font></span></span><span class=Normal__Char><font size=3> e farei com que já não se lamente por ela; pois chegados são os dias de seu regozijo pela remissão de seus pecados e pelas manifestações de minhas bênçãos sobre suas obras (Seção 21:7 - 8) vejam mais uma escritura sobre o assunto. "E por seu amor ele será grande, pois será meu se isso fizer, diz o Senhor. </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><font size=3>Vi a obra que ele fez(...)</font></span></span><span class=Normal__Char><font size=3>(Seção 124:17). "Os olhos do SENHOR estão </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><font size=3>em todo lugar</font></span></span><span class=Normal__Char><font size=3>, contemplando os maus e os bons".(Provérbios 15:3). </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Todos os missionários que precisam falar comigo sobre algum assunto que esteja atrapalhando sua sintonia com o Espírito de Deus, pudessem ter a coragem e o desejo de limpar o vaso interior para que a missão não seja um instrumento de condenação pessoal, mas uma benção para a vida e a eternidade. Estarei pronto para ouvir e procurar ajudar. O servir não é o suficiente, é preciso servir em retidão. "Pois assim diz o Senhor: Eu, o Senhor, sou misericordioso e benigno para com aqueles que me temem e deleito-me em honrar aqueles que </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><font size=3>me servem em retidão</font></span></span><span class=Normal__Char><font size=3> e em verdade </font><span class=Normal__Char><b><u><font size=3>até o fim</font></u></b></span><font size=3>". (D&amp;C 76:5). </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>Como presidente de estaca recebi muitos missionários retornados fracos na fé e sem vida nos olhos, apenas a carcaça, vazios e infelizes, pronto para se tornar um fracassado, um membro&nbsp;</font></span><span class=Normal__Char><font size=3>semi ativo ou inativo na Igreja. Todos esses sentimentos são causados pelo peso do pecado, pois jamais nos sentiríamos assim, se fazendo as coisas certas. Claro que recebi muitos missionários poderosos, que hoje são líderes na Igreja e estão progredindo a cada dia como já comentei nessa carta.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Não gostaria de ver nossos missionários saindo da missão com um ar de fracassado ou pesado de culpa. Esse é o tempo de limpar totalmente o vaso interior, é o tempo de viver voltado para as coisas da missão 24 horas, é o tempo viver experiências nunca antes vividas. A edificação e o crescimento espiritual só acontecem através de experiências&nbsp; com o Espírito Santo. Veja o que disse o presidente Ezra Taft Benson</font><span class=Normal__Char><i><font size=3>: </font></i></span></span><span class=Normal__Char style=" COLOR:#231f20"><i><font size=3>“Eu já disse várias vezes que um dos maiores segredos do trabalho missionário é o trabalho! Se o missionário trabalhar, ele terá o Espírito; se tiver o Espírito, ensinará pelo Espírito; e se ensinar pelo Espírito, tocará o coração das pessoas e </font></i></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial';  COLOR:#231f20"><i><font size=3>será feliz</font></i></span></span><span class=Normal__Char style=" COLOR:#231f20"><i><font size=3>. Não haverá saudades de casa ou preocupações com a família, porque todo o seu tempo, talentos e interesses estarão concentrados no trabalho do ministério. Trabalho, trabalho, trabalho. Não há substituto satisfatório para o trabalho, especialmente no trabalho missionário.” – PRESIDENTE EZRA TAFT BENSONTHE TEACHINGS OF EZRA TAFT BENSON, 1988, P. 200. PME P.128.&nbsp;</font></i></span>
+</p>
+<p class=Normal_0020_0028Web_0029>
+  <span class=Normal_0020_0028Web_0029__Char style=" TEXT-DECORATION:none"><font size=3>A missão de tempo integral para jovem é tão especial que só existe uma oportunidade na vida. Aproveite cada momento de sua missão, pois o tempo passa rápido. Veja o que diz o hino:&nbsp; "ve-loz nos fo-ge o tem-po&nbsp;</font></span><span class=Normal_0020_0028Web_0029__Char><font size=3> Não&nbsp; há co-mo o reter E-terno em seu a-vanço Quem o fará vol-ver? Se a-ler-tas não es-ta-mos Nos-sa vez se per-de-rá; A vi-da lo-go pas-sa Um di-a só se-rá". &nbsp;Portanto, ó vós que embarcais no serviço de Deus, vede que o sirvais de todo o coração, poder, mente e força(...)".(D&amp;C 4:2).</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>Veja as palav</font></span><span class=Normal__Char><font size=3>ras de Jacó: "(...) o tempo passou para nós e nossa&nbsp;</font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><font size=3>missão</font></span></span><span class=Normal__Char><font size=3> também passou como se fosse um sonho.(Jacó 7:26) (Grifo nosso) Podemos aplicar essa escritura na missão. Deus jamais deixará de recompensar por todas as obras boas que fizermos, em retidão. Veja o que diz em Alma 34:33 "(...)se não fizermos melhor uso de nosso tempo nesta </font></span><span class=Forte__Char><span class=Forte__Char style=" FONT-FAMILY:'Arial'"><i><font size=3>missão</font></i></span></span><span class=Normal__Char><font size=3>, virá a noite tenebrosa, durante a qual nenhum labor poderá ser executado.&nbsp; (Alma 34:33), grifo nosso). Não precisamos deixar para fim.&nbsp;</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>As promessa e bênçãos serão maiores do que os nossos sacrifícios. Veja:&nbsp; "(...)Vi a obra que ele fez, a qual aceito se ele continuar; e coroá-lo-ei com bênçãos e grande glória". (D&amp;C 124:17).</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  <span class=Normal__Char><b><font size=3>Batismos</font></b></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Eu não acredito que ainda existe missionário nessa missão que tem dúvidas sobre batizar conversos. Não acredito que ainda exista missionário que não queira batizar os filhos do Pai Celestial.</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=3>BATIZAR </font></b></span><span class=Normal__Char><b><font size=3>CONVERSOS</font></b></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Esse é o propósito e objetivo de todos os missionários da missão Brasil Rio de Janeiro. Tenho ouvido comentários negativos a respeito de batismos. Alguns missionários infelizmente não conhecem essa escritura: D&amp;C 20:37</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><i><font size=3>"E também, à guisa de mandamento à&nbsp; igreja com respeito ao modo de batizar:</font></i></span><span class=Normal__Char><font size=3> Todos aqueles que se </font><span class=Normal__Char><b><font size=3>humilharem</font></b></span><font size=3> perante Deus e </font><span class=Normal__Char><b><font size=3>desejarem </font></b></span><font size=3>ser batizados e se </font><span class=Normal__Char><b><font size=3>apresentarem com o coração quebrantado e o espírito contrito</font></b></span><font size=3>; e testificarem à igreja que </font><span class=Normal__Char><b><font size=3>verdadeiramente se arrependeram</font></b></span> <span class=Normal__Char><b><font size=3>de todos os seus pecados</font></b></span><font size=3> e estão </font><span class=Normal__Char><b><font size=3>dispostos a tomar sobre si o nome de Jesus Cristo</font></b></span><font size=3>, tendo o firme propósito de servi-lo até o fim; e realmente manifestarem por suas obras que </font><span class=Normal__Char><b><font size=3>receberam o Espírito de Cristo</font></b></span><font size=3> para a remissão de seus pecados, serão recebidos pelo batismo na sua igreja."(Doutrina e Convênios | Seção 20:37)</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Será que uma pessoa que nunca lhe viu, que você encontrou através de um contato na rua ou de outra forma e que aceita sua mensagem não está demonstrando </font><span class=Normal__Char><b><font size=3>desejo</font></b></span><font size=3> de mudar?</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Será que ela quando aceita ir a Igreja, não está demonstrando </font><span class=Normal__Char><b><font size=3>humildade?</font></b></span><font size=3>(Deixando todos os seus outros interesses para ir a uma Igreja que ela talvez nunca nem ouviu falar?).</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Será que ela ao aceitar o compromisso de ouvir as mensagens e depois aceitar ser entrevistada por um outro missionário que nunca o viu e na entrevista falar de assuntos mais íntimos de sua alma, ela não estará demonstrando que está com um </font><span class=Normal__Char><b><font size=3>coração quebrantado e um espírito contrito?</font></b></span></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Será que ela ao ter deixado alguns vícios e declarar que está&nbsp; disposta a não fazer mais, não está&nbsp;</font><span class=Normal__Char><b><font size=3>demonstrando frutos de arrependimento</font></b></span><font size=3>?</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Será que ao declarar que aceita ser batizado(a) na Igreja e que está disposto a pagar dízimos e ofertas e servir voluntariamente na Igreja e sabendo que perderá uma grande parte de seus amigos, fazendo isso ela não estará demonstrando que quer </font><span class=Normal__Char><b><font size=3>tomar sobre si o nome de Cristo</font></b></span><font size=3>?</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Será que ao aceitar todas essas coisas não é uma demonstração de que </font><span class=Normal__Char><b><font size=3>sentiram o Espírito Santo</font></b></span><font size=3> através de suas mensagens?</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Depois de tudo isso o que mais precisa para alguém ser batizada? Vejam o que já escutei:</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>"EU não conheço o pesquisador ainda. Preciso preparar mais"&nbsp;<br>
+  "Não quero batizar alguém que irá se afastar da Igreja depois"&nbsp;<br>
+  "Estou aqui para estabelecer a Igreja e não para aumentar o número de menos ativos da ala e aumentar o trabalho da ala"&nbsp;<br>
+  "Já vi essa situação antes e não vou batizá-lo pois irá acontecer a mesma situação e ele irá se batizar e se afastar da Igreja"&nbsp;<br>
+  Esses pensamentos não vêm de Deus.&nbsp;<br>
+  A minha resposta para esses tipos de pensamento ou visão está em Alma 33:2, Leiam&nbsp;</font><span class=Normal__Char><b><font size=3>"...errais muito e deveríeis examinar as escrituras; se supondes que é isso que elas vos ensinaram, não as compreendeis.(Alma 33:2).</font></b></span></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><b><font size=3>Já pensou se o missionário que nos ensinou tivesse tido essa visão? Nós não estaríamos aqui hoje e certamente ele seria condenado pelo Senhor no último dia, por ter feito um julgamento que jamais deveria ter feito. Nós jamais teremos a capacidade de saber se alguém vai ficar firme ou não na Igreja após o batismo. Você e eu decidimos ficar, em que somos melhores do que eles?Achar que ela vai se afastar ou dar trabalho ao bispo é uma grande falta de visão, maturidade ou mesmo uma grande maldade. Vejam essa seção:</font></b></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>"EIS que em verdade vos digo que o coração de meu servo James Covill era </font><span class=Normal__Char><b><font size=3>reto</font></b></span><font size=3> diante de mim, pois </font><span class=Normal__Char><b><font size=3>fizera comigo convênio</font></b></span><font size=3> de que obedeceria a minha palavra.E ele recebeu a palavra </font><span class=Normal__Char><b><font size=3>com alegria</font></b></span><font size=3>, mas imediatamente Satanás o tentou; e o temor da perseguição e os cuidados do mundo fizeram-no rejeitar a palavra. Portanto </font><span class=Normal__Char><b><font size=3>quebrou meu convênio</font></b></span><font size=3> e </font><span class=Normal__Char><b><u><font size=3>cabe a mim fazer com ele o que me parecer melhor</font></u></b></span><font size=3>. Amém."(D&amp;C 40:1 - 3) Que acharam?&nbsp; James Covill estava pronto para ser batizado era reto e foi batizado. Ele fez convênio com Deus, mas logo caiu. Cabe a quem o julgamento? Cabe somente ao Senhor e a ninguém mais. </font><span class=Normal__Char><b><u><font size=3>Nem você nem eu nem ninguém cabe julgar essa situação</font></u></b></span><font size=3>. Nós estamos aqui para amar, ensinar da maneira correta, ajudar os filhos de nosso Pai Celestial a conhecerem a verdade, batizá-los, fortalecê-los após o batismo e cuidar deles enquanto estivermos responsabilidade sobre ele, ou seja: enquanto estivermos na área. Podemos ainda escrevê-los para fortalecê-los quando não estivermos mais presentes.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>Ouvimos muito sobre a inatividade após o batismo. Já ouviram isso? Muitos dizem: “Vai batizar só por número” outro diz: “Vai batizar e logo vai ficar inativo. Acredito que todos já ouviram. Esse tipo de julgamento não passa de falta de c</font></span><span class=Normal__Char><font size=3>aridade de visão e falta de perspectiva eterna. Em primeiro lugar, Deus não pensa assim, pois tudo o que é bom vem de Deus. “Porque vos digo que tudo que é bom vem de Deus e tudo que é mau vem do diabo”.(Alma 5:40)”Pois eis que nesse dia ele se enfurecerá no coração dos filhos dos homens e incitá-los-á a irarem-se contra o que é bom”. (2 Néfi 28:20).&nbsp; Batizar alguém que tem um forte desejo de fazer convenio com Deus e mudar de vida é bom ou ruim? Pensar que alguém será inativo logo após ao batismo é no mínimo falta de caridade. “E a caridade é sofredora e é benigna e não é invejosa e não se ensoberbece; não busca seus interesses, não se irrita facilmente, </font><span class=Normal__Char><b><u><font size=3>não suspeita mal</font></u></b></span><font size=3> e não se regozija com a iniqüidade, mas regozija-se com a verdade; tudo sofre, tudo crê, tudo espera, tudo suporta.(Morôni 7:45). Achar que uma pessoa que teve o desejo ser batizada e com o batismo irá fazer convênio com Deus e receberá o Espírito Santo por meio do batismo de fogo, mas que irá se afastar após o batismo, é pensar mal e pensar mal é falta de caridade e sabe o que o Senhor disse para os que tem falta de caridade? “Sem isso sua fé e esperança são vãs, porque ninguém é aceitável perante Deus, a não ser os humildes e brandos de coração; e se um homem é humilde e brando de coração e confessa, pelo poder do Espírito Santo, que Jesus é o Cristo, ele precisa ter caridade; pois se não tem caridade, nada é; portanto ele precisa ter caridade”.(Morôni 7:44).</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><b><font size=3>Deus fez sua Igreja perfeita, de modo que atenderia todos os níveis de pessoas de todas as idades. </font></b></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>Pois nenhuma destas iniqüidades vem do Senhor, porque ele faz o que é bom para os filhos dos homens; e não faz coisa alguma que não seja clara para os filhos dos homens; e convida todos a virem a ele e a participarem de sua bondade; e não&nbsp;</font></span><span class=Normal__Char><font size=3>repudia quem quer que o procure, negro e branco, escravo e livre, homem e mulher; e lembra-se dos pagãos; e todos são iguais perante Deus, tanto judeus como gentios.(2 Néfi 26:33)</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>E a todos os que desejavam ouvir suas palavras eles pregavam a palavra de Deus continuamente, sem qualquer acepção de pessoas.(Alma 16:14)</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Porque não faço acepção de pessoas e desejo que todos os homens saibam que o dia rapidamente se aproxima; ainda não é chegada a hora, mas está perto, em que a paz será tirada da Terra e o diabo terá poder sobre seu próprio domínio.(D&amp;C 1:35)</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>E para vossa salvação dou-vos um mandamento, pois ouvi vossas orações; e os pobres têm-se queixado perante mim e os ricos fiz eu; e toda carne é minha e não faço acepção de pessoas.(D&amp;C 38:16)</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Eis que o Senhor considera toda carne igualmente; </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>(Néfi 17:35)</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Não apreciareis uma carne mais que outra, ou seja, nenhum homem se considerará melhor que outro; (Mosias 23:7).</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<ol>
+  <li class=Normal style="    MARGIN-LEFT:0pt">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>GRUPO DE SUMOS SACERDOTES </font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>–</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> Para os mais experientes</font></span>
+  </li>
+  <li class=Normal style="    MARGIN-LEFT:0pt">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>QUORUM DE ELDERES </font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>–</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> Jovens adultos Solte</font></span><span class=Normal__Char><font size=3>iros e casados de 18 anos acima</font></span>
+  </li>
+  <li class=Normal style="    MARGIN-LEFT:0pt">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ORGANIZA</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ç</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>O DOS RAPAZES </font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>–</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> Jovens de 12 a 17 anos</font></span>
+  </li>
+  <li class=Normal style="    MARGIN-LEFT:0pt">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>SOCIEDADE DE SOCORRO </font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>–</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> Para mulheres acima de 18 anos </font></span>
+  </li>
+  <li class=Normal style="    MARGIN-LEFT:0pt">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ORGANIZA</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ç</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>O DAS MO</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ç</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>A</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>S </font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>–</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> Para mo</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ç</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>a</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>s de 12 a 17 anos</font></span>
+  </li>
+  <li class=Normal style="    MARGIN-LEFT:0pt">
+    <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>PRIM</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Á</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>R</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>IA </font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>–</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> Para crian</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ç</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>a</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> de 18 meses a 11 anos</font></span>
+  </li>
+</ol>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>Porque todos os homens</font></span><span class=Normal__Char><font size=3> devem arrepender-se e ser batizados; e não só homens, mas mulheres e crianças que tiverem alcançado a idade da responsabilidade.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>(D&amp;C 18:42). </font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style="  TEXT-DECORATION:none"><font size=3>Que o Pai Celestial vos abençoe</font></span><span class=Normal__Char><font size=3> durante essa nova semana que começa. Desejo a todos uma semana bem produtiva, com muitas experiências espirituais e muito sucesso no encontrar no ensinar e no batizar. Nessa cidade maravilhosa de um povo hospitaleiro, aberto, Tem milhões de eleitos.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Eu amo e confio em vocês. Sei do potencial de cada um e espero que saibam de seu potencial e acredite nele e na ajuda que o Pai Celestial vos prometeu:&nbsp; "</font><span class=Normal__Char><b><font size=3>E quem vos receber, lá estarei também, pois irei adiante de vós. Estarei a vossa direita e a vossa esquerda e meu Espírito estará em vosso coração e meus anjos ao vosso redor para vos suster</font></b></span><font size=3>."(Doutrina e Convênios | Seção 84:88). Hoje começa mais uma semana. Vamos pra frente!!! O passado já não nos pertence.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Sei que vocês são verdadeiros discípulos de Cristo. Caso precisem fazer mudanças, esse é o tempo. Pois fazendo isso cresceremos como indivíduos e como missão.</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=3>Com amor e confiança</font></b></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=3>Presidente Bezerra</font></b></span>
+</p>
+<br></body>
+</html>

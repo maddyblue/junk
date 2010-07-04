@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-06-05</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<div>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><b><font size=3>Rio de Janeiro 5 de junho de 2009</font></b></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>De: Presidente Bezerra</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Para: Todos os missionários da Missão Brasil Rio de Janeiro.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Estimados Missionários</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E eis que tu és (___________)e és chamado para ajudar; se fizeres isso e fores fiel, serás abençoado tanto espiritual como materialmente e grande será teu galardão. Amém.(Doutrina e Convênios | Seção 14:11). Coloque seu nome entre os parenteses.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Chegou o dia dos milagres em nossa missão. Durante muitos meses trabalhamos muito com a nossa própria força, mais do que a força de Deus. Claro que Deus tem nos abençoado e nos ajudado muito nesse tempo e é obvio que tudo o que aconteceu até agora foi com Sua permissão e bênção. Chegou o momento de invocarmos fervorosamente</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>os poderes do céu mais do que temos feito até agora. "</font></span><span style=FONT-FAMILY:Arial><b><font size=3>Mas eis que ele os libertou, </font></b></span><span style=FONT-FAMILY:Arial><b><u><font size=3>porque se humilharam perante ele; e porque o invocaram fervorosamente</font></u></b></span><span style=FONT-FAMILY:Arial><b><font size=3>, libertou-os do cativeiro; e deste modo age o Senhor com seu poder em todos os casos entre os filhos dos homens, estendendo o braço de misericórdia aos que nele confiam. (Mosias 29:20)</font></b></span><span style=FONT-FAMILY:Arial><font size=3> Chegou o momento de fazer tudo o que pudermos. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Pois trabalhamos diligentemente</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>&nbsp;</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>(...)pois sabemos que é pela graça que somos salvos, depois de tudo o que pudermos fazer".(2 Néfi 25:23)</font></b></span><span style=FONT-FAMILY:Arial><font size=3> e depois</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>deixar que Deus cumpra a promessa que fez em D&amp;C 82:10. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>Eu, o Senhor, estou obrigado quando fazeis o que eu digo; mas quando não o fazeis, não tendes promessa alguma".</font></b></span><span style=FONT-FAMILY:Arial><font size=3> Chegou o momento de limpar o vaso interior completamente. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Sim, vinde a Cristo, sede aperfeiçoados nele e negai-vos a toda iniqüidade; e se vos negardes a toda iniqüidade e amardes a Deus com todo o vosso poder, mente e força, então sua graça vos será suficiente; e por sua graça podeis ser perfeitos em Cristo; e se pela graça de Deus fordes perfeitos em Cristo, não podereis, de modo algum, negar o poder de Deus.(Morôni 10:32)</font></b></span><span style=FONT-FAMILY:Arial><font size=3> Chegou o momento de exercer fé. Chegou o momento</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>de </font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>vermos a mão do Todo Poderoso agindo em nossa missão. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Porque eis que eu sou Deus; e sou um </font></b></span><span style=FONT-FAMILY:Arial><b><u><font size=3>Deus de milagres;</font></u></b></span><span style=FONT-FAMILY:Arial><b><font size=3> e mostrarei ao mundo que sou o mesmo ontem, hoje e para sempre; e não trabalho com os filhos dos homens a não ser </font></b></span><span style=FONT-FAMILY:Arial><b><u><font size=3>de acordo com sua fé</font></u></b></span><span style=FONT-FAMILY:Arial><b><font size=3>.(2 Néfi 27:23).</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>&nbsp;</font></b></span><span style=FONT-FAMILY:Arial><font size=3>Precisamos fortalecer nossa fé para que tenhamos esse grande benefício ao nosso favor</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>nos ajudando dia após dia, para encontrar e batizar seus filhos aqui na terra. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Assim, Deus providenciou um meio para que o homem, pela fé, pudesse operar grandes milagres; portanto ele se torna um grande benefício para seus semelhantes. (Mosias 8:18)".</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>&nbsp;</font></b></span><span style=FONT-FAMILY:Arial><font size=3>Chegou a hora de passar horas ajoelhados suplicando a ajuda de Deus. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"E eu disse-lhes que lhes seria concedido de acordo com a fé expressa em suas orações; E também te ordeno que ores em voz alta, assim como em teu coração; sim, perante o mundo, como também em segredo; em público, assim como </font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>em particular. Ora</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3> sempre e derramarei meu Espírito sobre ti e grande será tua bênção—sim, até maior do que se obtivesses tesouros da Terra e corruptibilidade na mesma medida. Pois todas as coisas na igreja devem ser feitas em ordem e de comum acordo e pela oração da fé.Orando sempre para não desfalecerem; e se assim fizerem, estarei com eles até o fim. Ora sempre, para que saias vencedor; sim, para que venças Satanás e escapes das mãos dos servos de Satanás, que apóiam o trabalho dele)(D&amp;C10:47 ;19:28,38; 28:13;75:11;10:5).</font></b></span><span style=FONT-FAMILY:Arial><font size=3> Chegou a hora de jejuar com fé. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Não obstante, foi ordenado aos filhos de Deus que se reunissem freqüentemente e que se unissem em jejum e fervorosa oração pelo </font></b></span><span style=FONT-FAMILY:Arial><b><u><font size=3>bem-estar da alma dos que não conheciam a Deus</font></u></b></span><span style=FONT-FAMILY:Arial><b><font size=3>".</font></b></span><span style=FONT-FAMILY:Arial><font size=3> (Alma 6:6).</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Precisamos trabalhar com todo o coração, poder, mente e força.</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Só veremos milagres se</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3> suplicarmos a Deus por milagres. A guerra está mais e mais acirrada e perigosa.</font></span><span style=FONT-FAMILY:Arial><b><font size=3> "E enquanto ainda estávamos no Espírito, o Senhor ordenou-nos que escrevêssemos a visão; pois vimos Satanás, aquela antiga serpente, sim, o diabo, que se rebelou contra Deus e procurou tomar o reino de nosso Deus e seu Cristo—Portanto ele faz guerra aos santos de Deus e cerca-os".</font></b></span><span style=FONT-FAMILY:Arial><font size=3>(D&amp;C 76:28 - 29) Chegou a hora de estudarmos com reverência e dedicação a palavra de Deus. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Não procures pregar minha palavra, mas primeiro procura obter minha palavra e então tua língua será desatada; e então, se o desejares, terás meu Espírito e minha palavra, sim, o poder de Deus para convencer os homens".</font></b></span><span style=FONT-FAMILY:Arial><font size=3> (D&amp;C 11:21) Chegou a hora de esquecermos os nosso interesses pessoais e ter a</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>nossa mente no foco da missão e nas coisas celestiais, nós não somos do mundo.</font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Que tuas entranhas também sejam cheias de caridade para com todos os homens e para com a família da fé; e que a virtude adorne teus </font></b></span><span style=FONT-FAMILY:Arial><b><u><font size=3>pensamentos incessantemente</font></u></b></span><span style=FONT-FAMILY:Arial><b><font size=3>; então tua confiança se fortalecerá na presença de Deus; e a doutrina do sacerdócio destilar-se-á sobre tua alma como o orvalho do céu.(D&amp;C 121:45). </font></b></span><span style=FONT-FAMILY:Arial><font size=3>Chegou a hora de amar nossos companheiros com um amor sincero. Chegou a hora de pararmos de perder tempo e aproveitarmos cada minuto de nossa missão, ela é única e não voltará</font></span><span style=FONT-FAMILY:Arial><b><font size=3>."Pois eis que esta vida(missão)é o tempo para os homens prepararem-se para encontrar Deus; sim, eis que o dia desta vida é o dia para os homens executarem os seus labores"</font></b></span><span style=FONT-FAMILY:Arial><font size=3>.(Alma 34:32) Chegou a hora de pararmos de agir como menino, pois não somos mais meninos. Chegou a hora de pararmos</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>de reclamar e colocarmos todas as força</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>na obra de salvação de almas. Não existe espaço para </font></span><span style=FONT-FAMILY:Arial><font size=3>iniqüidade</font></span><span style=FONT-FAMILY:Arial><font size=3> em nossa missão, não podemos servir a Deus e ao diabo ou a Deus e a vontade da carne. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Portanto, reconciliai-vos, meus amados irmãos, </font></b></span><span style=FONT-FAMILY:Arial><b><u><font size=3>com a vontade de Deus</font></u></b></span><span style=FONT-FAMILY:Arial><b><font size=3> e não com a vontade do diabo e da </font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>carne... </font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>(2 Néfi 10:24).</font></b></span><span style=FONT-FAMILY:Arial><font size=3> Não podemos servir a Deus e ao mundo. Chegou a hora de total </font></span><span style=FONT-FAMILY:Arial><font size=3>obediência</font></span><span style=FONT-FAMILY:Arial><font size=3> as regras e mandamentos</font></span><span style=FONT-FAMILY:Arial><font size=3> da missão</font></span><span style=FONT-FAMILY:Arial><font size=3>. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>"Não sabeis que ele era santo? Mas, embora sendo santo, mostra aos filhos dos homens que, segundo a carne, se humilha ante o Pai e testifica-lhe que lhe será obediente na observância de seus mandamentos"</font></b></span> <span style=FONT-FAMILY:Arial><b><font size=3>."Sim, desse modo será conduzido, crucificado e morto, a carne sujeitando-se à morte, a vontade do Filho sendo absorvida pela vontade do Pai"</font></b></span><span style=FONT-FAMILY:Arial><font size=3>.(2 Néfi 31:7; Mosias 15:5) "</font></span><span style="COLOR:#000000; FONT-FAMILY:Arial"><font size=3>Parece que a dificuldade maior para os santos dos últimos dias é escolher obedecer à vontade de Deus e não conhecer Sua vontade. Essa obediência ou, em outras palavras, alinhar nossa vontade a Sua, em todas as coisas, é o âmago de nossa provação mortal. Trata-se do foco de nossa vontade em cumprir os mandamentos e nossos convênios. </font></span><span style="COLOR:#000000; FONT-FAMILY:Arial"><b><font size=3>Abrange nossos pensamentos, desejos, palavras e atos."(Élder Paul V. Johnson. </font></b></span><span style="COLOR:#000000; FONT-FAMILY:Arial"><font size=3>Discurso Transmitido Via Satélite – 08 de Agosto 2006" </font></span><span style=FONT-FAMILY:Arial><font size=3>Chegou a hora de olharmos para frente</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>com os olhos fitos na glória de Deus. Chegou a hora de batizarmos 50, 60, 70 80, ou até mesmo 100 </font></span><span style=FONT-FAMILY:Arial><font size=3>eleitos do Pai Celestial </font></span><span style=FONT-FAMILY:Arial><font size=3>por semana em nossa missão. Aqui moram mais de 15 milhões de pessoas, não podemos nos contentar com a mediocridade, com o mínimo. Nosso Pai Celestial não se agrada com o pouco, Ele quer </font></span><span style=FONT-FAMILY:Arial><font size=3>o </font></span><span style=FONT-FAMILY:Arial><font size=3>nosso 100% Ele deu tudo para nós. Não é de se esperar que ele peça pouco. O homem que guardou o talento, recebeu de Deus a ira e nada mais. Em João 15 falando da oliveira, Ele mandou jogar fora</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>o ramo que não dar frutos. Onde estamos?</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Somos aqueles que pegaram os talentos e multiplicaram?</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Estamos esperando o que? que o tempo passe e nossa missão acabe e como se tendo cauterizado a consciência achamos que fizemos tudo?</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>E que</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Deus está satisfeito com o nosso mínimo?</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Espero que</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>os missionários de nossa missão não esteja pensando que dando apenas 20% ou 50% de toda a sua força, energia, capacidade e fé, pensem que irão receber 100% de Deus. Cada um de nós receberá a mesma porção que deu, pois somos abençoados pela </font></span><span style=FONT-FAMILY:Arial><font size=3>misericórdia</font></span><span style=FONT-FAMILY:Arial><font size=3> e pela</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>justiça divina, que certamente nos dará o que merecemos</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>e sem dúvidas, não nos dará o que não nos pertence. Falando a respeito de David o Senhor disse: "(...)</font></span><span style=FONT-FAMILY:Arial><b><font size=3>portanto, caiu de sua exaltação e recebeu sua porção; e não as herdará fora do mundo, porque as </font></b></span><span style=FONT-FAMILY:Arial><b><u><font size=3>dei a outro</font></u></b></span><span style=FONT-FAMILY:Arial><b><font size=3>, diz o Senhor".(</font></b></span><span style=FONT-FAMILY:Arial><font size=3>D&amp;C 132:39). O senhor disse que deu a outro o que era para ser dele caso tivesse sido fiel até o fim.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Estive observando os números da missão e vi algo que me deixou pensativo. </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>PS- Pesquisadores na Sacramental</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3>. Nossa missão levou nas últimas 5 semanas 930 pessoas aproximadamente para assistir as reuniões da Igreja, desses foram batizados 170. Mesmo que alguns se repetem devido a </font></span><span style=FONT-FAMILY:Arial><font size=3>freqüência</font></span><span style=FONT-FAMILY:Arial><font size=3> a dois domingos. Mas, mesmo assim é um número considerável. Tirando os repetidos ainda ficariam em torno de 670 pessoas. Batizamos 170. E os 500 que não foram batizados onde estão? o que aconteceu com eles? </font></span><span style=FONT-FAMILY:Arial><font size=3>T</font></span><span style=FONT-FAMILY:Arial><font size=3>ivemos uma zona que levou 106 pessoas durante o mês de maio e batizou 18. Onde estão os que foram a Igreja e não foram batizados?</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Queremos nos concentrar nessas pessoas. Precisamos visitar todos eles e desafiá-los para o batismo. Sexta-feira, hoje das 21:30 às 22:00h estaremos todos ajoelhados orando para que o Senhor toque o coração desses irmãos e para que abençoe a missão.</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Orar para que o</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>povo seja abençoados</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>com uma porção dobrada do Espírito Santos. Precisamos orar para que nossa missão ultrapasse os 50 batismos essa semana e que muitos dos irmãos que já foram a Igreja possam ser batizados. É preciso que cada missionário, individualmente ore pelos seus pesquisadores e por aqueles que já foram a Igreja e que</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>serão visitados e desafiados a serem batizados nesse final de semana e nos próximos.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>No sábado depois do almoço nossa missão estará de jejum e encerraremos no domingo após o almoço, com o propósito de invocar a Deus os milagres</font></span><span style=FONT-FAMILY:Arial><b><font size=3>."Ora, se o Senhor possui tão grande poder e fez tantos milagres entre os filhos dos homens, por que não pode nos abençoar com muitos batismos?</font></b></span><span style=FONT-FAMILY:Arial><font size=3>(Grifo nosso)</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(1 Néfi 17:51).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Sei que</font></span> <span style=FONT-FAMILY:Arial><font size=3>vocês</font></span><span style=FONT-FAMILY:Arial><font size=3> são representantes de Jesus Cristo e que através do Sacerdócio e do Espírito Santo, poderão </font></span><span style=FONT-FAMILY:Arial><font size=3>realizar grandes</font></span><span style=FONT-FAMILY:Arial><font size=3> milagres</font></span><span style=FONT-FAMILY:Arial><font size=3> aqui e agora</font></span><span style=FONT-FAMILY:Arial><font size=3>. Que possamos ter a alegria de assim como Néfi dizer: </font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>"Porque eis que Néfi </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>estava batizando</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3> e profetizando e pregando, proclamando arrependimento ao povo; mostrando sinais e maravilhas, </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>fazendo milagres entre o povo</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3>, para que soubessem que o Cristo viria em breve—(Helamã 16:4). Morôni escreveu para as pessoas de nossa dispensação: "Mas eis que eu vos mostrarei um Deus de milagres, ( .</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>.</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>. ) e é o mesmo Deus que criou os céus e a Terra e todas as coisas que neles há". (Mórm. 9:11) Morôni proclamou que Jesus Cristo fez muitos milagres extraordinários, que muitos milagres extraordinários foram realizados pelas mãos dos Apóstolos e que Deus, que é o mesmo ontem, hoje e para sempre, </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>tem de ser um Deus de milagres hoje</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3>. (Ver Mórm. 9:18; 9:9).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Meus amados missionários. Vocês são verdadeiros gigantes. Vejam o </font></span><span style=FONT-FAMILY:Arial><font size=3>que </font></span><span style=FONT-FAMILY:Arial><font size=3>disse o presidente Gordon B Hinckley: "As pessoas têm enorme dificuldade para compreender como milhares de rapazes e moças inteligentes e capazes privam-se de vida social, interrompem os estudos e abnegadamente vão a qualquer lugar para onde forem mandados pregar o evangelho. Eles vão pelo poder da fé e ensinam com esse poder, plantando uma semente de fé aqui, outra ali, que germina e cresce, resultando em conversos fiéis e capazes" </font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style="FONT-FAMILY:Arial; FONT-WEIGHT:normal"><font size=3>Não tenho dúvida, sei que vocês são os anjos</font></span><span style="FONT-FAMILY:Arial; FONT-WEIGHT:normal"><font size=3> de Deus aqui na terra</font></span><span style="FONT-FAMILY:Arial; FONT-WEIGHT:normal"><font size=3>. Vejam a </font></span><span style="FONT-FAMILY:Arial; FONT-WEIGHT:normal"><font size=3>escritura: </font></span><span style="FONT-FAMILY:Arial; FONT-WEIGHT:normal"><font size=3>"</font></span><span style=FONT-FAMILY:Arial><b><font size=3>Ireis no poder do meu Espírito, pregando meu evangelho, de dois em dois, em meu nome, elevando vossas vozes como com o som de uma trombeta, declarando minha palavra </font></b></span><span style=FONT-FAMILY:Arial><b><u><font size=3>como anjos de Deus</font></u></b></span><span style=FONT-FAMILY:Arial><b><font size=3>.(D&amp;C 42:6). Chegou a hora de agirmos como anjos. Chegou a hora</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>. Não temos mais tempo. É hoje, agora. Não importa onde você estiver.</font></b></span> <span style=FONT-FAMILY:Arial><b><font size=3>“E quem vos receber, lá estarei também, pois irei adiante de vós. Estarei a vossa direita e a vossa esquerda e meu Espírito estará em vosso coração e meus anjos ao vosso redor para vos suster. Quem vos recebe, a mim me recebe (...)”.(D&amp;C 84:88 - 89).</font></b></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><b><font size=3>Com amor</font></b></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><b><font size=3>Presidente Bezerra</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3> - </font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>Missão Brasil Rio de Janeiro</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>, </font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>A Maravilhosa</font></b></span><span style=FONT-FAMILY:Arial><b><font size=3>!</font></b></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+</div>
+<br></body>
+</html>

@@ -1,0 +1,940 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2008-12-29-cuidado-com-a-critica</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=3>CUIDADO COM A CRÍTICA</font></b></span><span class=Normal__Char><font size=3> – </font><span class=Normal__Char><b><font size=3>29 de dezembro de 2008.</font></b></span></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Kaulle M. Bezerra-Presidente da Missão Brasil Rio de Janeiro-2008/2011.</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>O SENHOR ADVERTIU-NOS CONTRA CERTOS TIPOS DE LINGUAGEM:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>E certificar-se que não haja iniqüidade na igreja nem aspereza entre uns e outros nem mentiras, </font><span class=Normal__Char><u><font size=3>maledicências</font></u></span><font size=3> ou </font><span class=Normal__Char><u><font size=3>calúnias;</font></u></span><font size=3>(Doutrina e Convênios | Seção 20:54)</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>Calúnia</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Pode ser qualquer declaração que crie problemas para outra pessoa, espalhe falsidade a seu respeito ou </font><span class=Normal__Char><u><font size=3>fira-a.</font></u></span></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>Maledicência</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>È atacar o caráter ou reputação de uma pessoa que não está presente.</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>O Apóstolo Paulo advertia aos antigos cristãos:</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Não saia da vossa boca nenhuma palavra torpe, mas só a que for boa para promover a edificação, para que dê graças aos que a ouvem. E não entristeçais o Espírito Santo de Deus, no qual estais selados para o dia da redenção. Toda a amargura, e ira, e cólera, e gritaria, e blasfêmias e toda a malícia seja tirada de entre vós. Antes sede uns para com os outros benignos, misericordiosos, perdoando-vos uns aos outros, como também Deus vos perdoou em Cristo.” (Efésios 4:29-32)(D&amp;C88:124)...cessai de ser impuros; cessai de achar faltas uns nos outros...</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>O que os profetas falam a respeito da crítica?</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Presidente Hinckley menciona várias conseqüências:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Criticar, encontrar erros, falar mal, esses são os sentimentos de nossa época. Dizem-nos que em nenhum lugar existe um homem íntegro exercendo cargo político. Os homens de negócio, dizem muitos, são trapaceiros. Afirma-se que as empresas públicas tencionam roubar-nos com custos exagerados. Em toda a parte, ouvem-se observações insultuosas, comentários sarcásticos, ataques verbais à reputação de outras pessoas. Infelizmente, essas coisas são freqüentemente a base de nossa conversa. Nos lares, a esposa chora e as crianças se abatem emocionalmente sob os ataques dos maridos e pais. A crítica é a semente do divórcio, e provoca rebelião na juventude. Às vezes, chega a destruir a auto - valorização do indivíduo. Na Igreja, espalha a semente da inatividade e, por fim a </font><span class=Normal__Char><u><font size=3>apostasia</font></u></span><font size=3>”. (A Liahona, fev. De 1986, p. 9.)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>A Crítica feita aos líderes</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Elder Oaks declarou:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“O conselho a respeito de críticas e calúnias contra outras pessoas aplica-se especialmente às críticas feitas aos líderes da Igreja. Isto, porém, </font><span class=Normal__Char><u><font size=3>é não para benefício dos líderes</font></u></span><font size=3>, mas sim para salvaguardar o bem-estar espiritual dos homens que se sentem inclinados a murmurar e procurar faltas... </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Os servos (do senhor) não são perfeitos, o que é outra conseqüência da mortalidade. Se porém, nos envolvermos em criticas ou murmurações contra eles, estaremos trabalhando contra o Senhor e sua causa, e logo ficaremos sem a companhia do seu Espírito.” (Discurso proferido num serão no Tabernáculo de Lago Salgado, 4 de maio de 1986.)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>Elder Nelson disse:</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Os líderes da Igreja costumam ser atacados pelos que instigam a discórdia. Isto acontece apesar de nenhum deles ter-se escolhido a si próprio para um posto de responsabilidade.(5ª Regra de Fé.) </font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“O Presidente Brigham Young advertiu:</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Quando um homem começa a procurar imperfeição” nos líderes e ensinamentos da Igreja, “podemos saber que tal pessoa tem em maior ou menor grau o espírito de apostasia”. (DBY, p. 83)</font></span> <span class=Normal__Char><font size=3>“Um dos primeiros passos da apostasia é procurar imperfeições em seu bispo. Quando tal acontece, a menos que a pessoa se arrependa, logo é dado o segundo passo. Não demora para que a pessoa se afaste da Igreja, e esse é seu fim. Vocês, por acaso, estarão entre os que procuram imperfeições em seu bispo?</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>(DBY, p. 86.)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>Como ocorre a apostasia individual?</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>Ela ocorre de muitas formas.</font></u></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>O Presidente Joseph Fielding Smith identificou algumas delas: a apostasia resulta da:</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<ul>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> NEGLIG</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ê</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>N</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>CIA DO DEVER</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> DE N</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>O</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> MANTER NOSSA ALMA EM ESP</font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>Í</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>R</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ITO DE ORA</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ç</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>O NA OBEDI</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ê</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>N</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>CIA&nbsp; AOS PRINC</font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>Í</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>P</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>IOS DO EVANGELHO.</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> DA FALHA EM PAGAR HONESTAMENTE O D</font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>Í</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Z</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>IMO</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> A FALTA DE N</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>O</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> GUARDAR A PALAVRA </font></span><span class=Normal__Char><font size=3>DE SABEDORIA</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> DA FALTA </font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>À</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>S</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> REUNI</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Õ</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>E</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>S SACRAMENTAIS</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> POR PECADOS DE OMISS</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>O</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> ASSIM COMO POR PECADO DE COMISS</font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>Ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>O</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>.</font></span>
+  </li>
+</ul>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“Existem vários graus de apostasia individual, há os que mudam completamente da luz para as trevas; e também aqueles que são culpados de atos isola</font></span><span class=Normal__Char><font size=3>dos de desobediência. às vezes, nós nos desculpamos por uma desobediência que julgamos insignificante, racionalizando que tal indiscrição não são graves. podemos pensar que pequenos afastamentos da retidão não são importantes; mas </font><span class=Normal__Char><u><font size=3>é de pequenos atos que surgem pecados mais sérios</font></u></span><font size=3>.”(guia da sociedade de socorro 4 segui-me p.14 ano 1992).</font></span>
+</p>
+<div>
+  <p class=Normal style=" TEXT-ALIGN:justify">
+    <a name=graphic03></a> <img alt=image class=gen197366 height=120 src="images/dfzh62h7_174z8xz32cr_b.gif" width=576>
+  </p>
+</div>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Mas existe também a possibilidade de que um homem caia da graça e aparte-se do Deus vivo;</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Portanto, que a igreja esteja atenta e ore sempre para não cair em tentação;</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Sim,</font></span><span class=Normal__Char><font size=3> até os santificados estejam também atentos.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><font size=3>(D&amp;C 20:32 - 34)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>O que significa perder a graça?(D&amp;C 20:32-34</font></u></span><span class=Normal__Char><font size=3>)</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>O Elder Theodore M. Burton afirmou entender que esta escritura nos ensina que “Jesus Cristo é amável e misericordioso para conosco, quando o servi</font></span><span class=Normal__Char><font size=3>mos de todo o coração; todavia, pessoa alguma pode amparar-se na retidão ou serviços que prestou. Isso significa, também, que existe a possibilidade de qualquer um de nós cair em pecado, até mesmo os que já alcançaram certo grau de retidão. Assim, precisamos estar em constante vigilância para que não venhamos a adquirir o hábito de sermos negligentes na fé, nas orações, ou nas diferentes atividades ou obrigações que desempenhamos na&nbsp; Igreja. É por este motivo que estou tomando constantemente a resolução de viver mais perto de Deus a cada dia, e de seguir seus profetas e apóstolos escolhidos com maior diligência do que fiz no passado.”</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>II PEDRO 2:10</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“Mas principalmente aqueles que segundo a carne andam em concupiscências de imundícia, e desprezam as autori</font></span><span class=Normal__Char><font size=3>dades; atrevidos, obstinados, não receando blasfemar das dignidades.”</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>Thomas B. Marsh, após dezenove anos inativo por apostasia, declarou:</font></u></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Se houver alguém deste povo que um dia queira apostatar e fazer como eu fiz, prepare as costas para umas boas chicotadas, se estiver entre os que o Senhor ama. Se quiser aceitar meu conselho entretanto fique ao lado das autoridades.”(Journal of Discourses, 5:206;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><span class=Normal__Char><u><font size=3>Thomas B. Marsh disse:</font></u></span></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Muitos me disseram: Como pode apostatar um homem como voce, que sabia tanto sobre as revelações de Deus registradas no Livro de Doutrina e Convênios?’ Eu respondia que não se sentissem demasiadamente seguros, mas cuidassem em não apostatarem também; pois eu jamais imaginei sequer a possibilidade de um homem(na minha posição) apostatar.” (A Liahona julho de 1984.)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>Quem foi Oliver Cowdery? (1806-1850)</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Quando Oliver chegou a Harmony, em 5 de abril, um domingo, Joseph reconheceu-o como o ajudante que o Senhor lhe prometera. Oliver era a mais alta autoridad</font></span><span class=Normal__Char><font size=3>e da Igreja depois de Joseph. </font></span>
+</p>
+<ul>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> 15 de maio de 1829 Recebe o Sacerd</font></span><span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>ó</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>c</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>io Aar</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ô</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>n</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ico pelas m</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>o</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>s de Jo</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ã</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>o</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> Batista.</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> 25 de maio de 1829 Foi Batizado por Joseph.</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>1829 Recebe o Sacerd</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ó</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>c</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>io de Melquisedeque</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>Foi uma das tr</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ê</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>s</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3> testemunha das placas de ouro.</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> 6 de abril o</font></span><span class=Normal__Char><font size=3>rganizou a Igreja com Joseph</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> Foi ordenado o 2</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>º</font></span> <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Elder e presidente assistente da Igreja</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> 11 de abril proferiu o 1</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>º</font></span> <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>discurso p</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>ú</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>b</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>lico da Igreja</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> 3 de abril de 1836, recebeu juntamente com Joseph, no Templo de Kirtland: Mois</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>é</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>s</font></span><span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>, Elias e outros.</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>12 de abril de </font></span><span class=Normal__Char><font size=3>1838 </font></span><span class=Normal__Char><font size=3>–</font></span> <span class=Normal__Char><u><font size=3>EXCOMUNGADO DA IGREJA</font></u></span><span class=Normal__Char><font size=3>.</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3> Humilhou-se e foi </font></span><span class=Normal__Char><u><font size=3>batizado</font></u></span><span class=Normal__Char><font size=3> novamente em outubro de 1848.</font></span>
+  </li>
+  <li class=Normal style=" MARGIN-LEFT:0pt; TEXT-ALIGN:justify">
+    <span class=Normal__Char style="    TEXT-DECORATION:none"><font size=3>Morreu em 1850.</font></span>
+  </li>
+</ul>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Em abril de 1838, diversos Elderes preeminentes foram excomungados da Igreja. O Presidente George Q. Cannon disse o seguinte, sobre os eventos dos prime</font></span><span class=Normal__Char><font size=3>iros meses daquele ano:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Quando o Profeta estava viajando ao Missouri, após haver escapado da turba em Kirtland, em janeiro de 1838, foi realizada uma assembléia geral dos santos em Far West, no dia 5 de fevereiro, na qual David Whintmer, John Whintmer e William W. Phelps foram rejeitados como Presidência local; e alguns dias depois, </font><span class=Normal__Char><u><font size=3>Thomas B. Marsh</font></u></span><font size=3> e </font><span class=Normal__Char><u><font size=3>David W. Patten,</font></u></span><font size=3> do Quorum dos Doze, foram escolhidos para agir naquela ocasião até que o Profeta chegasse. Também Oliver Cowdery foi suspenso de suas funções. Persistindo em sua conduta anticristã, W.W. Phelps e John Whintmer haviam sido excomungados pelo sumo conselho de Far West, quatro dias antes da chegado de Joseph. “Este foi o triste quadro que o Profeta deparou no lugar de habitação dos santos no Missouri...“No dia 12 de abril de 1838, Oliver Cowdery foi considerado culpado de graves transgressões, das quais ele não se arrependera, sendo excomungado pelo sumo conselho em Far West. </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cont...</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>No dia seguinte, David Whintmer foi acusado, perante este mesmo conselho, de pertinaz desobediência a Palavra de Sabedoria e de manter um procedimento anticristão, sendo excomungado. O mesmo aconteceu a </font><span class=Normal__Char><u><font size=3>Luke Johnson,</font></u></span> <span class=Normal__Char><u><font size=3>Lyman E. Johnson</font></u></span><font size=3> e </font><span class=Normal__Char><u><font size=3>John F. Boynton,</font></u></span><font size=3> e menos de um mês depois, </font><span class=Normal__Char><u><font size=3>William E. McLellin</font></u></span><font size=3> teve idêntico destino (todos membros do Quorum dos Doze). “Foi um pesaroso dia para Joseph, aquele em que foi privado da companhia destes homens, que estiveram com ele em muitos momentos difíceis e que haviam participado com ele do glorioso estabelecimento das coisas celestiais. Mas eles haviam-se transformado em ramos mortos, prejudiciais ao crescimento da árvore sendo necessário que o podador da vinha os cortasse.”(Life of Joseph Smith, pp. 237-238.) “Pois em verdade assim diz o Senhor: Visto que há entre vós alguns que negam meu nome, outros serão postos em seu lugar...”.(D&amp;C 114:2).</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>POR QUE ELES CAÍRAM?</font></u></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><u><font size=3>ORGULHO</font></u></span><span class=Normal__Char><font size=3>“Os orgulhosos fazem de todos os homens seus adversários, lançando seu intelecto, opiniões, obras, posses, talentos ou qualquer outro mecanismo de medida contra seus semelhantes(...)o orgulho afeta negativamente todas as nossas relações-nossas relações com Deus e seus servos. Nosso grau de orgulho determina como tratamos nosso Deus e nossos irmãos. Os orgulhosos não aceitam facilmente conselho ou repreensão, se nega a perdoar afim de manter o outro em débito e justificar sua mágoa(...)é o pecado que vemos facilmente nos outros, mas raramente reconhecemos em nós mesmos.” (Presidente Benson, A Liahona julho de 1989, p. 4-5.)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“Meus amados irmãos e irmãs, ao limparmos o vaso interior, haverá mudanças em nossa própria vida, na de nossos familiares e na Igreja. </font></span><span class=Normal__Char><u><font size=3>Os orgulhosos não mudam para melhor</font></u></span><span class=Normal__Char><font size=3>, mas defendem sua posição, racionalizando-a Arrependimento significa mudança, e mudar requer que a pessoa seja humilde. Mas </font><span class=Normal__Char><u><font size=3>nós podemos mudar</font></u></span><font size=3>.”(Presidente Benson. (A Liahona julho de 1986.)</font></span>
+</p>
+<div>
+  <p class=Normal style=" TEXT-ALIGN:justify">
+    <a name=graphic04></a> <img alt=image class=gen198239 height=96 src="images/dfzh62h7_175cccvpgg6_b.gif" width=584>
+  </p>
+</div>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>E se meu povo der ouvidos a minha voz e à voz de meus servos que designei para guiar meu povo, eis que em verdade vos digo que não serão removidos de seu lugar.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Mas se não derem ouvidos a minha voz nem à&nbsp; voz desses homens que designei, não serão abençoados...(D&amp;C 124:45 - 46)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>O Presidente Tanner disse:</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“Um </font></span><span class=Normal__Char><u><font size=3>elogio sincero,</font></u></span><span class=Normal__Char><font size=3> honesto, ajuda a </font><span class=Normal__Char><u><font size=3>edificar o caráter</font></u></span><font size=3>; a </font><span class=Normal__Char><u><font size=3>crítica o destrói</font></u></span><font size=3>. Arrasar a reputação ou o caráter alheio jamais edifica ou melhora o nosso. Expressar nossa admiração pelas realizações ou dotes de outra pessoa eleva o nosso caráter, bem como o de quem falamos.”</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Se achar que seu bispo, presidente da estaca ou outro oficial é fraco, isso será sinal de que ele mais necessita de ajuda, e se fortalecerá, se for apoiado e prestigiado, em lugar de ter suas supostas falhas apontadas aos outros.”(A Liahona, outubro de 1973, p. 5.)</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>Qual atitude devemos ter? Josué 1:16-17</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“Há muitas pessoas, muitas mesmo, que procuram conselho junto a indivíduos errados, há muitos que prefeririam dar conselhos a recebê-los. Lembra-vos de que outros podem relatar-vos suas experiências, ou alargar </font></span><span class=Normal__Char><font size=3>vosso conhecimento de um determinado assunto, mas se quiserdes receber revelação concernente a vossa mordomia, ela deve vir ao Senhor. Ela poderá advir-vos diretamente, através de comunicação com Ele, ou por revelação a vós, através de vosso líder do sacerdócio, superior a vós .” (Elder Gene R Cook. A Liahona outubro de 1978, p. 112.)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>TER A VISÃO DIFERENTE DA SUA, NÃO SIGNIFICA QUE ELES ESTÃO ERRADOS.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Lembrai-vos que as vezes os vossos líderes locais do sacerdócio poderão, na verdade, ver as coisas de maneira diferente de vós. Os desacordos parecem acontecer a respeito de pormenores e métodos de se realizar determinadas tarefas, mas quase nunca se baseiam em diferenças quanto a princípios do evangelho. Vosso líder tem direito de agir mediante sua </font><span class=Normal__Char><b><font size=3>personalidade pessoal</font></b></span><font size=3> e </font><span class=Normal__Char><b><font size=3>experiência adquirida</font></b></span><font size=3>, e em algum pormenor poderá fazê-lo de maneira diferente do modo exato como vós o faríeis. Não obstante, o conselho de um líder do sacerdócio no espírito adequado, provem do Senhor, e deve se seguido.” (Elder Gene R Cook. A Liahona outubro de 1978, p. 112.)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Crer nas palavras de vossos líderes do sacerdócio é um dom do Espírito.” </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>(Elder Gene R Cook.) </font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>O Presidente Hinckley Segundo Conselheiro na Primeira Presidência , em 1984 disse:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Embora o Presidente Kimball não esteja em condições de nos dirigir a palavra desse púlpito, nós, de vez em quando, conversamos com ele, e ele deu sua autorização para o que foi feito. Não faríamos nada sem sua permissão”</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>.(A Liahona julho de 1984, p. 148.) </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>O que aconteceu com MIRIÃ?</font></u></span><span class=Normal__Char><font size=3>“</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Por </font></span><span class=Normal__Char><font size=3>ventura falou o Senhor somente a Moisés?...O Senhor ouviu(...)A ira do Senhor se ascendeu contra eles, e Ele se retirou. Quando a nuvem se afastou de sobre a tenda, Miriam se achou leprosa... Moisés clamou ao Senhor: Ó Deus, rogo-te que a cures.(Números 12:1-16).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>Elder Faust disse:</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“A liderança da Igreja continuará orando pelos críticos...” </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>(A Liahona janeiro de 1986, p. 8.)</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>Que tipo de tratamento Davi deu a Saul?</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><font size=3>I Samuel 20:1-6</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Então fugiu Davi de Naiote, em Rama ; e veio e disse a Jonatas: Que fiz eu? </font></span><span class=Normal__Char><font size=3>Qual é o meu crime? E qual é o meu pecado diante de teu pai, que procura tirar-me a vida?</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>I Samuel 24:4-6 </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Então os homens de Davi lhe disseram: Eis aqui o dia, do qual o SENHOR te diz: Eis que te dou o teu inimigo nas tuas mãos, e far-lhe-ás como te parecer bem aos teus olhos. E levantou-se Davi, e mansamente cortou a orla do manto de Saul.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>&nbsp; Sucedeu, porém, que depois o coração doeu a Davi, por ter cortado a orla do manto de Saul.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>&nbsp; E disse aos seus homens: O SENHOR me guarde de que eu faça tal coisa ao meu senhor, ao ungido do SENHOR, estendendo eu a minha mão contra ele; pois é o ungido do SENHOR.</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><b><u><font size=3>O Elder Oaks</font></u></b></span><span class=Normal__Char><b><font size=3> sugeriu cinco itens de conduta aplicáveis as eventuais diferenças com os lideres da Igreja. Essa mesma conduta pode ser utilizada ao enfrentarmos divergências ou sentimentos críticos com relação a qualquer pessoa:</font></b></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>1. “O procedimento mais benéfico ao se lidar com uma divergência é ignora-lá. O Presidente Brigham Young descreve como aplicou esse método, quando sentiu o que descreveu como “falta de confiança” na “administração financeira” de Joseph Smith. Após acolher tais pensamentos por curto espaço de tempo, Brigham Young percebeu que ela o faria perder a confiança no profeta e, finalmente, questionar até mesmo Deus. Sua conclusão foi: “Embora eu admitisse e soubesse todo o tempo que Joseph era um ser humano, portanto sujeito a cometer erros, ainda assim eu não tinha o direito de procurar suas faltas... Ele fora chamado por Deus; Deus lhe dera autoridade e, se ele podia deixá -lo por sua própria conta, livre para cometer erros, eu não tinha que me intrometer no assunto...Ele era servo de Deus, e não meu.”(Journal of discourses, 4:297.)</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>2. O segundo procedimento é reservar o julgamento e postergar qualquer reação. Em muitos casos, nossas críticas podem ter a ver com assuntos confidenciais que impedem o (a) líder de explicar suas atitudes publicamente. Nesses casos, é prudente usarmos como estratégia a paciência e confiança”</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>&nbsp; Nós&nbsp; as vezes, fazemos julgamentos baseados em informações errôneas e falsas suposições. O Senhor nos aconselhou: “Não admitirás&nbsp; falso boato, e não porás a tua mão com o ímpio, para seres testemunha falsa. (Êxodo 23:1).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>3. Mateus 18:15 </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>4. Mas se ele ou ela não confessar, ele ou ela será&nbsp; por ti entregue à igreja, não aos membros, mas aos élderes. E isso será feito numa reunião e não perante o mundo.(Seção 42:89)</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>5 . Orar pela solução do problema</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>Elder Nelson declarou</font></u></span><span class=Normal__Char><font size=3>:</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“O ungido, não obstante, ora misericordiosamente pelos que o atacam, por conhecer o triste fim que os espera.” ( D</font></span><span class=Normal__Char><font size=3>&amp;C 121:16 - 22)</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>16&nbsp; Amaldiçoados são todos os que levantarem o calcanhar contra meus ungidos, diz o Senhor; e proclamarem terem eles pecado quando não pecaram perante mim, diz o Senhor, mas fizeram o que era agradável a meus olhos e que eu lhes ordenara.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>17&nbsp; Mas os que clamam transgressão, fazem-no porque são, eles mesmos, servos do pecado e filhos da desobediência.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>18&nbsp; E os que juram falsamente contra meus servos, para levá-los à escravidão e à morte—</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>19&nbsp; Ai deles; porque ofenderam meus pequeninos serão separados das ordenanças de minha casa.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>20&nbsp; Suas cestas não se encherão, suas casas e seus celeiros perecerão e eles próprios serão desprezados por aqueles que os lisonjeavam.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>21&nbsp; Eles não terão direito ao sacerdócio nem sua posteridade depois deles, de geração em geração.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>22&nbsp; Melhor lhes fora que uma pedra de moinho lhes tivesse sido amarrada ao pescoço, afogando-os no fundo do mar.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>Elder Nelson disse ainda:</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; “A dor causada pelo causticante cancro da discórdia será extirpada da alma pelo amor a Deu</font></span><span class=Normal__Char><font size=3>s. Essa cura principia com um voto pessoal: “</font><span class=Normal__Char><u><font size=3>Haja paz na terra, a começar em mim.”</font></u></span><font size=3>E aconteceu que não havia contendas na terra, em virtude do amor a Deus que existia no coração do povo.</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>(O Livro de Mórmon | 4 Néfi 1:15;1:2)</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>Elder Nelson falou novamente dizendo:</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“... procuraremos decididamente imitar Jesus. Ele </font></span><span class=Normal__Char><u><font size=3>curava</font></u></span><span class=Normal__Char><font size=3>. Ele </font><span class=Normal__Char><u><font size=3>consolava</font></u></span><font size=3>. Ele ensinava: “Bem - aventurados os pacificadores, porque eles serão chamados filhos de Deus.”</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char><u><font size=3>Elder Marvin J. Ashton declarou:</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“QUEM PRATICA A RELIGIÃO PURA LOGO DESCOBRE QUE É</font></span><span class=Normal__Char><font size=3> MAIS GRATIFICANTE ELEVAR ALGUÉM DO QUE ARRASÁ-LA. </font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>(A Liahona janeiro de 1983. P, 111.) </font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><u><font size=3>Elder Marvin J. Ashton declarou:</font></u></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“As pessoas de bom ânimo amenizam o sofrimento alheio, bem como os pesares que recaem sobre elas...se conseguirmos recordar a promessa do Senhor de que estará conosco. Encontraremos forças para ter bom ânimo, em lugar de nos tornarmos recalcados, críticos ou derrotistas...Que satisfação é ver alguém de bom ânimo que, enquanto outros vivem em ressentido silencio ou reclamando desgostosos devido a algum contratempo, enfrenta a situação com alegre paciência e bom - humor.”(A Liahona julho de 1986.</font> <font size=3>Elder Marvin J. Ashton)</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Presidente Hinckley: “Enfatizar os erros e esconder o bem &nbsp;&nbsp;maior é dar uma visão distorcida das coisas...Na terra só vi</font></span><span class=Normal__Char><font size=3>veu um homem perfeito. O Senhor tem usado pessoas imperfeitas no processo de formação de sua sociedade perfeita...Menciono essas coisas na esperança de que adquiramos a atitude de procurar elementos positivos que levem ao crescimento e entusiasmo.” (A Liahona fev/mar. De 1986, p.10.).</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>“Enfatizar os erros e esconder o bem &nbsp;&nbsp;maior é dar uma visão distorcida das coisas...Na terra só viveu um homem perfeito. O Senhor tem usado pessoas imperfeitas no processo de formação de sua sociedade perfeita...Menciono essas coisas na esperança de que adquiramos a atitude de procurar elementos positivos que levem ao crescimento e entusiasmo.” (Presidente Hinckley . A Liahona fev/mar. De 1986, p.10.).</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>“Estou pedindo que paremos de procurar as tempestades e os problemas da v</font></span><span class=Normal__Char><font size=3>ida, e apreciemos melhor a luz do sol. Estou&nbsp; sugerindo que, ao passarmos pela vida, nos concentremos no positivo. Estou pedindo que nos empenhemos um pouco mais na busca das coisas boas, que silenciemos os insultos e sarcasmo, que elogiemos mais generosamente a virtude e esforço. O que estou sugerindo é que todos nos afastemos do negativismo que campeia na sociedade e procuremos aquilo que for notadamente bom naqueles com quem convivemos, que falemos mais das virtudes uns dos outros do que falamos das falhas alheias, que o otimismo substitua o pessimismo, que a fé exceda os receios.”(A Liahona fevereiro de 1986.) Presidente Hinckley </font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>Os pessimistas não contribuem, os descrentes não criam, os que duvidam não alcançam.”(Pai do Presidente Hinckley.Citado por Gordon B. Hinckley A Liahona, fev/mar. de 1986, p.9.)</font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char><font size=3>“Em vão fala de felicidade quem jamais subjugou um impulso em obediência a um princípio.”(Horace Mann).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:center">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><b><font size=3>“Ter bom ânimo nos possibilita transformar todos nossos poentes em alvoradas.”</font></b></span><span class=Normal__Char><font size=3> (Marvin J. Ashton).</font></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Espero que todos estejam atendo e lembrem-se sempre em suas orações dos bispos e presidentes de estacas aonde servem na missão e também do bispo de sua ala. </font></span>
+</p>
+<p class=Normal>
+  &nbsp;
+</p>
+<p class=Normal>
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Que o Senhor nos abençoe de tal maneira que não tenhamos disposição para crítica, mas sim dispo</font></span><span class=Normal__Char><font size=3>sição para elogiar, reconhecer, edificar, enaltecer, fortalecer, alegrar e amar a todos os nossos irmãos e em especial nossos líderes no Sacerdócio. Eu amo meus líderes e os apoios incondicionalmente. Eles são homens de Deus, mesmo com suas imperfeições. Eu amo vocês também incondicionalmente. Vocês são como jóias preciosas do Senhor. (3 Néfi 24:17).</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Com amor</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char><font size=3>Kaulle M Bezerra</font></span>
+</p>
+<p class=Normal>
+  <span class=Normal__Char style=" TEXT-DECORATION:none"><font size=3>Presidente da Missão Rio de Janeiro</font></span>
+</p>
+<br></body>
+</html>

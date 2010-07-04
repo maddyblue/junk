@@ -23,6 +23,9 @@ handlers:
 - url: /missionaries
   static_dir: static/missionaries
 
+- url: /discursos-files/
+  static_dir: static/discursos
+
 - url: /remote_api
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin

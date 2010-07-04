@@ -1,0 +1,634 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-12-07</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<div>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><b><font size=3>Rio de Janeiro 07 de dezembro de 2009</font></b></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Estimados Missionários</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Até que ponto estamos dispostos a fazer&nbsp; a vontade de Deus? Quais são os benefício de se fazer a vontade de Deus? Por que Deus nos pede sacrifício e obediência?</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Gostaria de compartilhar com vocês os meus sentimentos a respeito dessas perguntas</font></span><span style=FONT-FAMILY:Arial><font size=3>:</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Por que</font></span> <span style=FONT-FAMILY:Arial><font size=3>desejei falar sobre esse assunto?</font></span><span style=FONT-FAMILY:Arial><font size=3> Vejo </font></span><span style=FONT-FAMILY:Arial><font size=3>missionários murmurando, reclamando, chorando por ter sido transferido para um lugar que não desejaria. Vejo outros preocupados com o seu bem-estar</font></span><span style=FONT-FAMILY:Arial><font size=3>.</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp; </font></span><span style=FONT-FAMILY:Arial><font size=3>Acredito que se comportam assim </font></span><span style=FONT-FAMILY:Arial><font size=3>por n</font></span><span style=FONT-FAMILY:Arial><font size=3>ão entenderem os desígnios de um Deus justo, misericordioso e verdadeiro. Vou usar as escrituras para ensinar esse princípio.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Até que ponto estamos </font></span><span style=FONT-FAMILY:Arial><font size=3>disposto</font></span><span style=FONT-FAMILY:Arial><font size=3> a fazer a vontade de Deus?&nbsp; A história nos revela que sempre existiu, existe e </font></span><span style=FONT-FAMILY:Arial><font size=3>existirão</font></span><span style=FONT-FAMILY:Arial><font size=3> pessoas que usando o seu arbítrio moral fizeram suas escolhas de maneira equivocadas, achando talvez que não acarretaria </font></span><span style=FONT-FAMILY:Arial><font size=3>em </font></span><span style=FONT-FAMILY:Arial><font size=3>nenhum prejuízo, ou simplesmente por rebeldia aberta para com Deus.</font></span> <span style=FONT-FAMILY:Arial><font size=3>Vejam o exemplo na família do profeta Lei. </font></span><span style=FONT-FAMILY:Arial><font size=3>Minha intenção é provocar uma reflexão em suas mentes ao ponto de observarem que as más escolhas sempre desencadeiam&nbsp; conseqüências </font></span><span style=FONT-FAMILY:Arial><font size=3>desastrosas.</font></span> <span style=FONT-FAMILY:Arial><font size=3>M</font></span><span style=FONT-FAMILY:Arial><font size=3>uitas delas para o resto da vida. Por exemplo:</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Lamã e Lemuel. “Ora, isto ele disse por causa da obstinação de Lamã e Lemuel; porque eis que murmuravam a respeito de muitas coisas contra seu pai, que ele era um visionário e os havia tirado da terra de Jerusalém, fazendo-os deixar a terra de sua herança e seu ouro e sua prata e suas coisas preciosas, para morrerem no deserto. E diziam que ele havia feito isso por causa das loucas fantasias de seu coração.(1 Néfi 2:11).</font></span><span style=FONT-FAMILY:Arial><font size=3> Quando murmuramos perdemos o Espírito e passamos a fazer coisas piores e piores. É como se fosse uma bola de neve do mal. Vai crescendo, crescendo ao ponto de não mais raciocinar, os sentimentos s</font></span><span style=FONT-FAMILY:Arial><font size=3>ão confusos e diante desse quadro perdemos o bom senso e até mesmo a luz de Cristo e não conseguimos enxergar uma partícula de sequer do que é bom do que é luz. Agindo nessa crescente onda de sentimentos maus, passando </font></span><span style=FONT-FAMILY:Arial><font size=3>de um nível de ações aparentemente inofensivas para outro nível mais agressivo</font></span><span style=FONT-FAMILY:Arial><font size=3> ao ponto de querer tirar a vida do próprio pai.Vejam: “E Lamã disse a Lemuel e também aos filhos de Ismael: Matemos nosso pai e também nosso irmão Néfi, que se arvorou em nosso chefe e mestre, apesar de sermos seus irmãos mais velhos”.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(1 Néfi 16:37)</font></span><span style=FONT-FAMILY:Arial><font size=3>. Perceberam? Antes era só murmuradores e depois assassinos.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Não vou entrar no mérito dos motivos pelos quais agiam assim</font></span><span style=FONT-FAMILY:Arial><font size=3>. Mas quero ressaltar os efeitos das conseqüências por agir com esse espírito. Vejam</font></span><span style=FONT-FAMILY:Arial><font size=3> as </font></span><span style=FONT-FAMILY:Arial><font size=3>conseqüências</font></span><span style=FONT-FAMILY:Arial><font size=3>:</font></span><span style=FONT-FAMILY:Arial><font size=3>” E Lamã e Lemuel não comeram do fruto, disse meu pai”.(1 Néfi 8:35).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Existiam dois caminhos</font></span><span style=FONT-FAMILY:Arial><font size=3>. Lamã e Lemuel escolheram o caminho que não tem retorno. Mas não esqueça que eles primeiro escolheram murmurar, reclamar, ter atos de rebeldia e depois assassinar o próprio pai. Tudo começa com pequenos atos, algumas palavras e uma atitude desobediente para depois perder o equilíbrio das ações e herdar o amargo das conseqüências. Sempre existirão dois caminhos. Qual caminho você está trilhando na missão? </font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>“E aconteceu que eu, Néfi, disse a meu pai: Eu irei e cumprirei as ordens do Senhor, porque sei que o Senhor nunca dá ordens aos filhos dos homens sem antes preparar um caminho pelo qual suas ordens possam ser cumpridas.(1 Néfi 3:7).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Todos estavam na mesma família. </font></span><span style=FONT-FAMILY:Arial><font size=3>Receberam</font></span><span style=FONT-FAMILY:Arial><font size=3> os mesmos ensinamentos. Todos </font></span><span style=FONT-FAMILY:Arial><font size=3>estavam</font></span><span style=FONT-FAMILY:Arial><font size=3> no mesmo deserto. Todos estavam no mesmo barco, mas as atitudes eram bem diferentes para com as ordens de Deus. Vimos anteriormente o triste fim daqueles que murmuram, reclamam e se perdem pelo Caminho devido a atitudes rebeldes. Agora vejam o que acontece com os que embora sofrendo </font></span><span style=FONT-FAMILY:Arial><font size=3>perseguições</font></span><span style=FONT-FAMILY:Arial><font size=3> e todo o tipo de sofrimento</font></span><span style=FONT-FAMILY:Arial><font size=3>. “E permanecemos no deserto pelo espaço de muitos anos, sim, oito anos no deserto. E chegamos à terra a que demos o nome de Abundância, por causa das muitas frutas e também do mel silvestre; e todas essas coisas foram preparadas pelo Senhor, a fim de que não perecêssemos. E vimos o mar, ao qual demos o nome de Irreântum, que significa muitas águas.E aconteceu que armamos nossas tendas perto da costa e, </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>apesar de havermos sofrido muitas aflições e dificuldades, sim, tantas que não podemos escrevê-las todas,</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3> ficamos imensamente contentes quando chegamos à costa; e demos ao lugar o nome de Abundância, devido a suas muitas frutas.E aconteceu que depois de estar eu, Néfi, pelo espaço de muitos dias na terra de Abundância, ouvi a voz do Senhor, dizendo: Levanta-te e vai à montanha. E aconteceu que me levantei e subi à montanha e clamei ao Senhor!.( 1 Néfi 17:4 - 7). Depois das aflições chegaram </font></span><span style=FONT-FAMILY:Arial><font size=3>em abundância. Frutas</font></span><span style=FONT-FAMILY:Arial><font size=3>, mel etc. Deus chama Néfi e diz: “Tu construirás um navio”. </font></span><span style=FONT-FAMILY:Arial><font size=3>Bênçãos</font></span><span style=FONT-FAMILY:Arial><font size=3>, provações, </font></span><span style=FONT-FAMILY:Arial><font size=3>bênçãos</font></span><span style=FONT-FAMILY:Arial><font size=3> novamente e depois provações. Já percebera que é assim que acontece? Se não murmurais, claro. “E então, se as suportares bem, Deus te exaltará no alto; triunfarás sobre todos os teus inimigos.(D&amp;C 121:8).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Vejamos agora algumas experiências e </font></span><span style=FONT-FAMILY:Arial><font size=3>bênçãos</font></span><span style=FONT-FAMILY:Arial><font size=3> que Néfi recebeu:</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E aconteceu que vi os céus se abrirem; </font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(O Livro de Mórmon | 1 Néfi 11:14)</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E eu olhei e tornei a ver a virgem carregando uma criança nos braços.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(O Livro de Mórmon | 1 Néfi 11:20)</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E olhando, vi o Filho de Deus caminhando entre os filhos dos homens;</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(O Livro de Mórmon | 1 Néfi 11:24)</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E eu olhei e vi o Redentor do mundo, de quem meu pai falara; e vi também o profeta que prepararia o caminho diante dele.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(O Livro de Mórmon | 1 Néfi 11:27)</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E também vi doze outros seguindo-o.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(O Livro de Mórmon | 1 Néfi 11:29)</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E olhei e vi o Cordeiro de Deus caminhando entre os filhos dos homens</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(O Livro de Mórmon | 1 Néfi 11:31)</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E olhei e vi o Cordeiro de Deus ser levado pelo povo; sim, o Filho do Deus Eterno foi julgado pelo mundo; e vi e testifico.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>(O Livro de Mórmon | 1 Néfi 11:32)</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E vi os céus abrirem-se e o Cordeiro de Deus descendo do céu; e desceu e mostrou-se a eles.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Quando Lei ordenou a Néfi que fosse pegar as placas falou algo que teria um efeito para o resto de sua vida. Néfi por ser um jovem inteligente, pegou aquela frase e certamente aplicou em toda sua vida: “Vai, portanto, meu filho, e serás abençoado pelo Senhor, porque não murmuraste.(1 Néfi 3:6). Perceberam? Néfi sabia que se ele não murmurasse sob qualquer condição, Deus o abençoaria. Afinal essas palavras saíram da boca de um profeta de Deus e Néfi sabia disso. É tanto que na viagem vários murmuraram, menos Néfi. Percebe? E aconteceu que meu pai ouviu a voz do Senhor; e ele foi realmente repreendido por ter murmurado contra o Senhor, de tal forma que mergulhou em profundo pesar.(1 Néfi 16:25). Mas Néfi se mantinha firme apesar dos grandes </font></span><span style=FONT-FAMILY:Arial><font size=3>sofrimentos</font></span><span style=FONT-FAMILY:Arial><font size=3>. Vejam a dignidade de Néfi</font></span><span style=FONT-FAMILY:Arial><font size=3>: E aconteceu que Lamã e Lemuel e os filhos de Ismael começaram </font></span><span style=FONT-FAMILY:Arial><b><font size=3>a murmurar</font></b></span><span style=FONT-FAMILY:Arial><font size=3> muito por causa de seus sofrimentos e aflições no deserto; e meu pai também começou a </font></span><span style=FONT-FAMILY:Arial><b><font size=3>murmurar</font></b></span><span style=FONT-FAMILY:Arial><font size=3> contra o Senhor seu Deus; sim, e estavam todos extremamente aflitos, a ponto de </font></span><span style=FONT-FAMILY:Arial><b><font size=3>murmurarem</font></b></span><span style=FONT-FAMILY:Arial><font size=3> contra o Senhor.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style="COLOR:#0080ff; FONT-FAMILY:Arial"><font size=3>21</font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp; Ora, aconteceu que </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>eu, Néfi, fiquei aflito</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3>, juntamente com meus irmãos, pela perda de meu arco; e tendo os seus arcos perdido a elasticidade, as coisas tornaram-se muito difíceis, sim, tanto que não podíamos conseguir alimento.(1 Néfi 16:20 - 21). Embora aflito, não murmurou contra Deus.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Deus mandou Néfi ir para o deserto.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E aconteceu que o Senhor ordenou a meu pai, num sonho, que partisse com a família para o deserto.(1 Néfi 2:2).</font></span><span style=FONT-FAMILY:Arial><font size=3> Néfi tinha como mentor(mestre) o sei pai Lei.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>E aconteceu que ele foi obediente à palavra do Senhor; fez, portanto, o que o Senhor lhe ordenara.(1 Néfi 2:3)</font></span><span style=FONT-FAMILY:Arial><font size=3>. Ele aprendeu desde cedo a ouvir a voz dos profetas.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Por fim. Por que Deus nos pede sacrifício e obediência?</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>“E assim os provaremos para ver se farão todas as coisas que o Senhor seu Deus lhes ordenar; E os que guardarem seu primeiro estado receberão um acréscimo; e os que não guardarem seu primeiro estado não terão glória no mesmo reino que aqueles que guardarem seu primeiro estado; e os que guardarem seu segundo estado terão um acréscimo de glória sobre sua cabeça para todo o sempre.(Abraão 3:25 - 26).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Eu, o Senhor, estou obrigado quando fazeis o que eu digo; mas quando não o fazeis, não tendes promessa alguma.(D&amp;C 82:10).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Oferecerás um sacrifício ao Senhor teu Deus em retidão, sim, um coração quebrantado e um espírito contrito.(D&amp;C 59:8).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Eis que o Senhor requer o coração e uma mente solícita; e os que são solícitos e obedientes comerão do bem da terra de Sião nestes últimos dias.(D&amp;C 64:34).</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Estamos vivendo essa história em nossa missão. Deus tem nos pedido alhumas coisas e nós temos obedecido sem murmurar. Por exemplo: </font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Deixamos de assistir filmes</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Ir ao shopping</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Deixamos as bebidas a base de cola</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Deixamos de ouvir as músicas do mundo</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Diminuímos os passeios nos pontos turísticos</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Elevamos o nosso nível de pureza, compromisso e sacrifico</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Lemos o livro de mórmon em trinta dias</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Jejuamos mais</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Nossas orações se tornaram mais significativas</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Trabalhamos semanalmente para batizar</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Vejamos agora o resultado</font></span><span style=FONT-FAMILY:Arial><font size=3>:</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:center">
+    <img alt="" height=384 src="images/dfzh62h7_217cgv6dbdb_b.png" style=BORDER:none width=576></img>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:center">
+    <img alt="" height=381 src="images/dfzh62h7_218fkctgrcm_b.png" style=BORDER:none width=548></img>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Continuemos sendo obedientes e sacrificando a Deus, e grandes milagres ainda estão por vir.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Poderia escrever muito sobre esse assunto. Mas basta por hoje.</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Amamos vocês</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Presidente e Sister Bezerra</font></span>
+  </p>
+  <p style=" MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Missão Brasil Rio de Janeiro</font></span>
+  </p>
+</div>
+<br></body>
+</html>

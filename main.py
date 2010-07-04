@@ -436,6 +436,10 @@ class ArquivosPage(webapp.RequestHandler):
 	def get(self):
 		render(self, 'arquivos.html', 'Arquivos')
 
+class DiscursosPage(webapp.RequestHandler):
+	def get(self):
+		render(self, 'discursos.html', 'Discursos do Presidente')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/batismos/', BatismosPage),
@@ -445,6 +449,7 @@ application = webapp.WSGIApplication([
 	('/mandar/', MandarPage),
 	('/galeria/', GaleriaPage),
 	('/arquivos/', ArquivosPage),
+	('/discursos/', DiscursosPage),
 	('/viewimage/(.*)', ViewImagePage),
 
 	('/js/main.js', MainJS),

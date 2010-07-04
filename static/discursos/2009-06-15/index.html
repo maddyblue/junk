@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-06-15</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'; TEXT-DECORATION:none"><b>Rio de Janeiro 15 de junho de 2009</b></span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">&nbsp;</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Estimados Elderes e Sisteres</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'"> "Quão formosos são sobre os montes os pés daqueles que anunciam alegres novas de coisas boas e que dizem a Sião: Eis que teu Deus reina! Como o orvalho de Carmelo, assim descerá sobre eles o conhecimento de Deus!".&nbsp; (D&amp;C 128:19)</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Agradeço o esforço de todos vocês para participar das conferências de zonas. Esses foram dias inolvidáveis. Em todas as conferências sentimos o doce Espírito penetrar em nossos corações com muito poder e brandura, testificando as verdades ensinadas durante aquele tempo que tivemos juntos. Gostaria de relembrar alguns pontos importantes:</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Sister Bezerra - Fé. (Pregar Meu Evangelho p. 131-132). A Liahona de Maio p.41 "Viver o evangelho (…) significa que estaremos preparadospara enfrentar e suportar a adversidade com mais confiança". “Este é o momento de mostrar lealdade a Deus, de reconhecer que dependemos Dele, que precisamos obedecer a Sua vontade e que Lhe somos sujeitos.&nbsp; A fé e o medo não podem coexistir. Um dá lugar ao outro. </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">“Seis Ds Destrutivos”.&nbsp; dúvida. A dúvida leva ao desânimo. O desânimo leva à distração. A distração leva à falta de diligência: Se não for revertido, esse caminho acabará levando à desobediência, que corrói a própria base da fé. Muito frequentemente o resultado é a descrença, isto é, a recusa consciente ou inconsciente em acreditar". "Esses Seis Ds Destrutivos —dúvida, desânimo, distração, falta de diligência, desobediência e descrença— todos eles corroem e destroem nossa fé. Temos a escolha de evitá-los e vencê-los".</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Presidente Queiroz - Em Campo Grande ensinou sobre a união. Usou o exemplo dos palitos. "Um só palito é muito fácil quebrar, mas vários palitos juntos é impossível quebrar. Quando nós estamos unidos, é bem mais fácil vencermos o inimigo. É preciso entender que estamos aqui para trabalhar em união, batizando e dobrando os batismos."</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Presidente Galhano - Em Juíz de Fora, ensinou sobre&nbsp; a importância da obra que fazemos. " Nenhum de vocês sabem a grandeza da obra que fazem" Ele relatou sobre sua missão, que serviu a 31 anos atrás. Falou da importância de termos fé e de fazermos a nossa parte. Ele falou que já teve com vários profetas e apóstolos o que muito lhe fortaleceu, mas nada lhe fortaleceu mais do que quando ouviu de uma família que ensinava prestando o testemunho sobre Joseph Smith a Igreja e o Livro de Mórmon. Lhe encheu a alma de alegria e fortaleceu o seu testemunho.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Assistentes - Trabalhar com os membros. Aproveitar a hora do almoço para praticar com os membros. Realizar noite familiar. Convidar os membros a levarem seus amigos para Igreja. Designações do presidente: Fazer um almoço dia 22 de junho(todas as duplas) Escrever uma carta para cada família que dar almoços. Prática do presidente: Tirar os vícios de linguagem:&nbsp; TIPO, REALMENTE, NÉ, SABE, ENTÃO. Durante a entrevista ainda vi muitos falando essas coisas demasiadamente. Cuidado!!!. Postura ao ensinar e manter a formalidade da mensagem.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Missionários - O batismos de fogo.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Presidente Bezerra - Em todas as seções. A grandiosidade de Jeus Cristo. (Moisés 7:30;1:4-27-28; Mateus 25:25-28; João 15:1-2). Estamos aqui para dar resultado e fazer a diferença. Deus não se agrada de coisa pouca, ele é grandioso, somos seus filhos. O homem que escondeu o talento, ganhou de Deus a sua ira e a vara que não dá frutos o Senhor mandou tirá-la. Temos que ser homens de resultado, a vida exige isso de você e de mim. Batizamos 686 pessoa em 5 mêses, talvez alguns caia na tentação de achar que são muitos. Não devemos deixar de agradecer a Deus pelos mialgres e pelo crescimento, mas não podemos achar que está bom e deixar de crescer como missão e como missionários. Temos o desafio de dobrar esse número nos próximos 5 mêses e para isso teremos que batizar 70 por semana. Não é impossível. Podemos se exercermos nossa fé e fazermos nossa parte. Quando um missionário deixa de trabalhar como deveria, ele não só diminue sua capacidade em todos os sentidos da vida, como se torna um peso para missão. Portanto meus amados missionários, aqueles que se arrastam esperando o tempo passar: </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">"(...)levantai-vos do pó, meus filhos, e sede homens e determinados em um só pensamento e um só coração,(...), para não cairdes em cativeiro;(...)para não incorrerdes no desagrado de um Deus justo,(...). Despertai, meus filhos, cingi a armadura da retidão. Sacudi as correntes com que estais amarrados e saí da obscuridade e levantai-vos do pó.(2 Néfi 1:21 - 23)</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Nossa missão pode fazer muito mais, você pode fazer&nbsp; dez vezes mais do que está fazendo. Não trabalhe confiando no braço da carne. Confie no braço de Deus. A obra é Dêle, passe mais tempo de joelhos e ore o dia todo em pensamentos. Ore pelo seu companheiro, ore pelo bispo e o lma, ore pela liderança da ala, ore para encontrar eleitos, ore por cada pessoa que estiver ensinando, ore quando estiver fazendo contatos, ore pelas família da ala para que ganhem o espírito da obra, ore pelos seus líderes na missão, ore pelo presidente da estaca onde serve, ore para qoe o Senhor derrame seu espírito sem medida na área onde serve, ore ao Senhor pedindo os atributos de Cristo: Humildade, fé, obediência, submissão, caridade, coragem. mansidão, visão, poder no sacerdócio, dignidade, retidão, controle emocional, amor por todos os homens, diligência, persuasão, longanimidade, sinceridade. Peça a Senhor os dons do Éspírito: O dom da fé, do arrependimento o dom do discernimento e o dom de ensinar pelo Espírito. Ore sempre para escapar das garras do inimigo. Ore e na oração entregue seu coração a Deus e sirva-o com todas as fibras de seu coração. Trabalhe com todas as energias de seu corpo, não economize força. Depois que concluir a sua jornada como missionário, verás que valeu a pena, sentirá uma paz que só é sentida por aqueles que são penitentes: </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">"E agora, meus irmãos, que homem natural existe que conheça essas coisas? Digo-vos que não existe quem conheça essas coisas, a não ser o penitente.Sim, aquele que se arrepende e exercita a fé e faz boas obras e ora continuamente sem cessar—a esse é permitido conhecer os mistérios de Deus; sim, e a esse será permitido revelar coisas nunca antes reveladas; sim, a esse será permitido levar milhares de almas ao arrependimento, assim como a nós nos foi permitido levar estes nossos irmãos ao arrependimento.(Alma 26:21 - 22).</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Que o Senhor na sua infinita bondade possa abrir seus olhos, para que possa exergar com uma visão mais ampliada e ver quão grandiosa é sua missão e quão precisoso é esse tempo. Tão preciso que se você soubesse literalmente, não perderia um só minuto do seu dia com coisas que não esteja relacionada com a salvação das alamas daqueles que você se comprometeu a salvar, ainda bem antes de nascer aqui nesta terra.</span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Confio e amo vocês. Boa semana, com centenas e milhares de batismos. </span>
+</p>
+<p class=Normal style=" TEXT-ALIGN:justify">
+  <span class=Normal__Char style=" FONT-FAMILY:'Arial'">Presidente Bezerra</span>
+</p>
+<br></body>
+</html>

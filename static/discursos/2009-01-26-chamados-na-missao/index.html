@@ -1,0 +1,532 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<base target="_top">
+<style type="text/css">
+  
+
+/* default css */
+
+table {
+  font-size: 1em;
+  line-height: inherit;
+  border-collapse: collapse;
+}
+
+
+tr {
+  
+  text-align: left;
+  
+}
+
+
+div, address, ol, ul, li, option, select {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+
+pre {
+  font-family: Courier New;
+  white-space: pre-wrap;
+  margin:0;
+}
+
+body {
+  margin: 6px;
+  padding: 0px;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+  background-color: #ffffff;
+  color: #000;
+}
+
+
+img {
+  -moz-force-broken-image-icon: 1;
+}
+
+@media screen {
+  html.pageview {
+    background-color: #f3f3f3 !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  
+
+  body {
+    min-height: 1100px;
+    
+    counter-reset: __goog_page__;
+  }
+  
+  * html body {
+    height: 1100px;
+  }
+  /* Prevent repaint errors when scrolling in Safari. This "Star-7" css hack
+     targets Safari 3.1, but not WebKit nightlies and presumably Safari 4.
+     That's OK because this bug is fixed in WebKit nightlies/Safari 4 :-). */
+  html*#wys_frame::before {
+    content: '\A0';
+    position: fixed;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+  
+  .pageview body {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 2px solid #bbb;
+    border-bottom: 2px solid #bbb;
+    width: 648px !important;
+    margin: 15px auto 25px;
+    padding: 40px 50px;
+  }
+  /* IE6 */
+  * html {
+    overflow-y: scroll;
+  }
+  * html.pageview body {
+    overflow-x: auto;
+  }
+  
+
+  
+    
+    .writely-callout-data {
+      display: none;
+    }
+    
+
+    .writely-footnote-marker {
+      background-image: url('MISSING');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      width: 7px;
+      overflow: hidden;
+      height: 16px;
+      vertical-align: top;
+
+      
+      -moz-user-select: none;
+    }
+    .editor .writely-footnote-marker {
+      cursor: move;
+    }
+    .writely-footnote-marker-highlight {
+      background-position: -15px 0;
+      -moz-user-select: text;
+    }
+    .writely-footnote-hide-selection ::-moz-selection, .writely-footnote-hide-selection::-moz-selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection ::selection, .writely-footnote-hide-selection::selection {
+      background: transparent;
+    }
+    .writely-footnote-hide-selection {
+      cursor: move;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+
+  
+
+
+  
+  .br_fix span+br:not(:-moz-last-node) {
+    
+    position:relative;
+    
+    left: -1ex
+    
+  }
+
+  
+  #cb-p-tgt {
+    font-size: 8pt;
+    padding: .4em;
+    background-color: #ddd;
+    color: #333;
+  }
+  #cb-p-tgt-can {
+    text-decoration: underline;
+    color: #36c;
+    font-weight: bold;
+    margin-left: 2em;
+  }
+  #cb-p-tgt .spin {
+    width: 16px;
+    height: 16px;
+    background: url(//ssl.gstatic.com/docs/clipboard/spin_16o.gif) no-repeat;
+  }
+}
+
+h6 { font-size: 8pt }
+h5 { font-size: 8pt }
+h4 { font-size: 10pt }
+h3 { font-size: 12pt }
+h2 { font-size: 14pt }
+h1 { font-size: 18pt }
+
+blockquote {padding: 10px; border: 1px #DDD dashed }
+
+.webkit-indent-blockquote { border: none; }
+
+a img {border: 0}
+
+.pb {
+  border-width: 0;
+  page-break-after: always;
+  /* We don't want this to be resizeable, so enforce a width and height
+     using !important */
+  height: 1px !important;
+  width: 100% !important;
+}
+
+.editor .pb {
+  border-top: 1px dashed #C0C0C0;
+  border-bottom: 1px dashed #C0C0C0;
+}
+
+div.google_header, div.google_footer {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+
+/* Table of contents */
+.editor div.writely-toc {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+}
+.writely-toc > ol {
+  padding-left: 3em;
+  font-weight: bold;
+}
+ol.writely-toc-subheading {
+  padding-left: 1em;
+  font-weight: normal;
+}
+/* IE6 only */
+* html writely-toc ol {
+  list-style-position: inside;
+}
+.writely-toc-none {
+  list-style-type: none;
+}
+.writely-toc-decimal {
+  list-style-type: decimal;
+}
+.writely-toc-upper-alpha {
+  list-style-type: upper-alpha;
+}
+.writely-toc-lower-alpha {
+  list-style-type: lower-alpha;
+}
+.writely-toc-upper-roman {
+  list-style-type: upper-roman;
+}
+.writely-toc-lower-roman {
+  list-style-type: lower-roman;
+}
+.writely-toc-disc {
+  list-style-type: disc;
+}
+
+/* Ordered lists converted to numbered lists can preserve ordered types, and
+   vice versa. This is confusing, so disallow it */
+ul[type="i"], ul[type="I"], ul[type="1"], ul[type="a"], ul[type="A"] {
+  list-style-type: disc;
+}
+
+ol[type="disc"], ol[type="circle"], ol[type="square"] {
+  list-style-type: decimal;
+}
+
+/* end default css */
+
+
+  /* default print css */
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    div.google_header, div.google_footer {
+      display: block;
+      min-height: 0;
+      border: none;
+    }
+
+    div.google_header {
+      flow: static(header);
+    }
+
+    /* used to insert page numbers */
+    div.google_header::before, div.google_footer::before {
+      position: absolute;
+      top: 0;
+    }
+
+    div.google_footer {
+      flow: static(footer);
+    }
+
+    /* always consider this element at the start of the doc */
+    div#google_footer {
+      flow: static(footer, start);
+    }
+
+    span.google_pagenumber {
+      content: counter(page);
+    }
+
+    span.google_pagecount {
+      content: counter(pages);
+    }
+
+    .endnotes {
+      page: endnote;
+    }
+
+    /* MLA specifies that endnotes title should be 1" margin from the top of the page. */
+    @page endnote {
+      margin-top: 1in;
+    }
+
+    callout.google_footnote {
+      
+      display: prince-footnote;
+      footnote-style-position: inside;
+      /* These styles keep the footnote from taking on the style of the text
+         surrounding the footnote marker. They can be overridden in the
+         document CSS. */
+      color: #000;
+      font-family: Times New Roman;
+      font-size: 12.0pt;
+      font-weight: normal;
+    }
+
+    /* Table of contents */
+    #WritelyTableOfContents a::after {
+      content: leader('.') target-counter(attr(href), page);
+    }
+
+    #WritelyTableOfContents a {
+      text-decoration: none;
+      color: black;
+    }
+
+    /* Comments */
+    .writely-comment-yellow {
+      background-color: #ffffd7;
+    }
+    .writely-comment-orange {
+      background-color: #ffe3c0;
+    }
+    .writely-comment-pink {
+      background-color: #ffd7ff;
+    }
+    .writely-comment-green {
+      background-color: #d7ffd7;
+    }
+    .writely-comment-blue {
+      background-color: #d7ffff;
+    }
+    .writely-comment-purple {
+      background-color: #eed7ff;
+    }
+  }
+
+  @page {
+    @top {
+      content: flow(header);
+    }
+    @bottom {
+      content: flow(footer);
+    }
+    @footnotes {
+      border-top: solid black thin;
+      padding-top: 8pt;
+    }
+  }
+  /* end default print css */
+
+
+/* custom css */
+
+
+/* end custom css */
+
+/* ui edited css */
+
+body {
+  font-family: Times New Roman;
+  
+  font-size: 12.0pt;
+  line-height: normal;
+  background-color: #ffffff;
+}
+/* end ui edited css */
+
+
+/* editor CSS */
+.editor a:visited {color: #551A8B}
+.editor table.zeroBorder {border: 1px dotted gray}
+.editor table.zeroBorder td {border: 1px dotted gray}
+.editor table.zeroBorder th {border: 1px dotted gray}
+
+
+.editor div.google_header, .editor div.google_footer {
+  border: 2px #DDDDDD dashed;
+  position: static;
+  width: 100%;
+  min-height: 2em;
+}
+
+.editor .misspell {background-color: yellow}
+
+.editor .writely-comment {
+  font-size: 9pt;
+  line-height: 1.4;
+  padding: 1px;
+  border: 1px dashed #C0C0C0
+}
+
+
+/* end editor CSS */
+
+</style>
+
+  
+  <title>2009-01-26-chamados-na-missao</title>
+
+</head>
+
+<body 
+    
+    >
+    
+    
+    
+<div>
+  <p style="MARGIN:6pt 0pt">
+    <span style=FONT-FAMILY:Arial><b><font size=3>Rio de Janeiro, 26 de janeiro de 2009</font></b></span>
+  </p>
+  <p style="MARGIN:6pt 0pt">
+    <span style=FONT-FAMILY:Arial><b><font size=3>&nbsp;</font></b></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Elderes e Sisteres</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Falo para vocês neste dia um assunto que acho de grande importância. </font></span><span style=FONT-FAMILY:Arial><b><font size=3>Trata-se de chamados na missão</font></b></span><span style=FONT-FAMILY:Arial><font size=3>, posições de liderança. </font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Alguns ficam inquietos por ainda não terem um chamado de lider na missão. Na Igreja só existe um chamado que nós podemos nos oferecer e esse vocês estão exercendo hoje, que é ser um missionário de tempo integral. Qualquer outro chamado precisamos esperar a vontade do Senhor, no seu tempo e de sua maneira.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>“Portanto santificai-vos, para que vossa mente concentre-se em Deus; e dias virão em que o vereis, porque ele vos desvendará sua face; e será em </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>seu próprio tempo</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3> e a seu </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>próprio modo</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3> e de acordo </font></span><span style=FONT-FAMILY:Arial><b><u><font size=3>com sua própria vontade</font></u></b></span><span style=FONT-FAMILY:Arial><font size=3>.(Doutrina e Convênios | Seção 88:68).</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Desejar servir é algo muito especial. Aspirar posições é algo muito perigoso. Na história da Igreja muitos caíram devido a esse sentimento.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Sentimento perigoso de alguém que aspira posições: Primeiro eles acham que o líder não foi inspirado porque não o chamou, mas chamou outro que talvez para ele não estava preparado ou mesmo estava fazendo coisas erradas e ainda assim foi chamado.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Pergunto: Jesus Cristo não estava inspirado quando chamou Judas? Então? É dessa forma que funciona, alguns são chamados pois as vezes é a única forma de saber de seu caráter, seus erros ou falhas, e que talvez de outra forma nunca seria revelado. É assim que funciona as vezes. Claro que o Senhor nos chama para nos abençoar com o chamado e não para descobrir nossos erros, mas as vezes é preciso subir um degrau para se arrepender ou para cair de vez.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Gosto </font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>da atitude das Sisteres, elas nunca desejam posições, só trabalham felizes, sem se importar com chamados de liderança.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Os que tem chamados de liderança dentro da missão devem ficar atentos para não estarem em situação delicada, vejam a escritura: </font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Que eles nos podem ser conferidos, é verdade; mas quando nos propomos a encobrir nossos pecados ou satisfazer nosso orgulho, nossa vã ambição ou exercer controle ou domínio ou coação sobre a alma dos filhos dos homens, em qualquer grau de iniqüidade, eis que os céus se afastam; o Espírito do Senhor se magoa e, quando se afasta, amém para o sacerdócio ou a autoridade desse homem.(Doutrina e Convênios | Seção 121:37).</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Vejam em MATEUS 23:11”O MAIOR DENTRE VÓS SERÁ VOSSO SERVO”</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Lucas 22:27 “POIS QUAL É O MAIOR: QUEM ESTÁ À MESA OU QUEM SERVE? PORVENTURA NÃO É QUEM ESTÁ À MESA? EU, PORÉM, ENTRE VÓS SOU COMO AQUELE QUE SERVE.”</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>“Ser chamado significa ser um mebros da Igreja e reino de Deus na terra; é ser contado entre os santos; é aceitar o evangelho e receber o eterno convênio; é fazer parte da Sião terrena(...) Dentro deste panorama geral, existem chamados individuais a cargos de confiança e responsabilidade, porém eles são apenas designações de trabalho na obra do Senhor, em determinados lugares, durante um período e estação. O chamado em sí é a causa do evangelho; não se restringe aos apóstolos e profetas, ou aos grandes e poderosos em Israel, mas é destinado a todos os membros do reino.” (Elder Bruce R. McConkie, Testament Commentary, vol. 3 p. 326.).</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Todos nessa missão tem igual valor, isso independe de chamados. Todos fomos chamados antes da fundação desse mundo. O junior não é menos importante que o Líder zona. São 150 missionários e apenas 18 Líderes de Zona , 24 líderes de distrito e dois assistentes. Existem mais missonários preparados para serem líderes de distritos, zonas e assistentes do que vagas existentes. Portanto vamos em frente e dar o melhor de nós, se somos juniores ou líderes. O importante não é onde estamos, mas </font></span><span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>como estamos.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Espero que tenham confiança nas inspirações de seu presidente e não se precipite em julgar ou duvidar de uma inspiração, isso é muito perigoso e acaba com a fé, levando os homens a caminhos desertos e de muito sofrimento.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Que o Senhor vos abençoe com os melhores sentimentos após ter lido essa carta semanal de seu presidente. Eu amo vocês. Você é o que é de maior valor para o Senhor em sua Igreja.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Essa semana foi maravilhosa! Batizamos 30 filhos do Pai Celestial. Parabéns!!! Precisamos manter o rítimo a missão precisa crescrer, na realidade o reino de Deus na terra precisa crescer e somente através do batismo e da retenção isso irá acontecer.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Vejo que existe hoje uma boa disposição para batizar e que a visão correta comça a se abrir na mente e no coração de nossos missionários.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>&nbsp;</font></span><span style=FONT-FAMILY:Arial><font size=3>Somos os instrumentos para realizar as obras de Deus aqui no Rio de Janeiro. Sinto-me completamente prestiguiado e abençoado por fazer parte dessa grande obra, que pertence ao Deus de Israel, nosso Pai Eterno e a Seu Filho Jesus Cristo.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Grandes serão as recompensas e eternas serão as bênçãos.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Boa semana com muitos batismos.</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Com amor e confiança</font></span>
+  </p>
+  <p style="MARGIN:6pt 0pt; TEXT-ALIGN:justify">
+    <span style=FONT-FAMILY:Arial><font size=3>Presidente Bezerra</font></span>
+  </p>
+  <p style=" MARGIN:0pt 0pt 10pt">
+    <span style=FONT-FAMILY:Calibri><font size=3>&nbsp;</font></span>
+  </p>
+</div>
+<br></body>
+</html>
