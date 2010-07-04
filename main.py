@@ -432,6 +432,10 @@ class CheckPage(webapp.RequestHandler):
 			self.response.out.write('approved: %s<br/>' %f.key())
 		db.put(fotos)
 
+class ArquivosPage(webapp.RequestHandler):
+	def get(self):
+		render(self, 'arquivos.html', 'Arquivos')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/batismos/', BatismosPage),
@@ -440,6 +444,7 @@ application = webapp.WSGIApplication([
 	('/numeros/', NumerosPage),
 	('/mandar/', MandarPage),
 	('/galeria/', GaleriaPage),
+	('/arquivos/', ArquivosPage),
 	('/viewimage/(.*)', ViewImagePage),
 
 	('/js/main.js', MainJS),
