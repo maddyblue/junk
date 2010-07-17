@@ -20,12 +20,6 @@ handlers:
 - url: /files
   static_dir: static/files
 
-- url: /missionaries
-  static_dir: static/missionaries
-
-- url: /discursos-files/
-  static_dir: static/discursos
-
 - url: /remote_api
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin
@@ -55,8 +49,6 @@ handlers:
 
 admin_console:
   pages:
-  - name: Check Photos
-    url: /_ah/missao-rio/check/
   - name: Dump
     url: /_ah/missao-rio/dump/
   - name: Sync Areas
@@ -70,15 +62,3 @@ admin_console:
 
 derived_file_type:
 - python_precompiled
-
-skip_files:
-- ^(.*/)?app\.yaml
-- ^(.*/)?app\.yml
-- ^(.*/)?index\.yaml
-- ^(.*/)?index\.yml
-- ^(.*/)?#.*#
-- ^(.*/)?.*~
-- ^(.*/)?.*\.py[co]
-- ^(.*/)?\..*
-- ^discursos/
-- ^mk_disc.py

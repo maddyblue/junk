@@ -473,21 +473,3 @@ class IndicatorConfirmation(DerefModel):
 	week = db.ReferenceProperty(Week)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)
-
-class PhotoImage(db.Model):
-	data = db.BlobProperty(required=True)
-
-class PhotoThumbnail(db.Model):
-	data = db.BlobProperty(required=True)
-
-class Photo(DerefModel):
-	missionary = db.ReferenceProperty(Missionary)
-	missionary_name = db.StringProperty()
-	ward = db.ReferenceProperty(Ward)
-	ward_name = db.StringProperty()
-	comment = db.TextProperty()
-	date = db.DateProperty()
-	submitted = db.DateTimeProperty(required=True, auto_now_add=True)
-	image = db.ReferenceProperty(PhotoImage)
-	thumbnail = db.ReferenceProperty(PhotoThumbnail)
-	checked = db.BooleanProperty()

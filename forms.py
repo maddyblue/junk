@@ -21,8 +21,3 @@ class BaptismForm(djangoforms.ModelForm):
 class ConfirmationForm(djangoforms.ModelForm):
 	class Meta:
 		model = IndicatorConfirmation
-
-class PhotoForm(djangoforms.ModelForm):
-	class Meta:
-		model = Photo
-		exclude = ['submitted']

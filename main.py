@@ -101,16 +101,6 @@ class MainPage(webapp.RequestHandler):
 	def get(self):
 		render(self, 'carta.html', 'Carta do Presidente')
 
-class BatismosPage(webapp.RequestHandler):
-	@basicAuth
-	def get(self):
-		render(self, 'batismos.html', 'Batismos')
-
-class BatizadoresPage(webapp.RequestHandler):
-	@basicAuth
-	def get(self):
-		render(self, 'batizadores.html', 'Batizadores')
-
 class RelatorioPage(webapp.RequestHandler):
 	@basicAuth
 	def get(self):
@@ -360,97 +350,6 @@ class SendNumbers(webapp.RequestHandler):
 
 		self.response.out.write('Enviado com sucesso.')
 
-class MandarPage(webapp.RequestHandler):
-	def render(self, d={}):
-		m = '<option value=""></option><optgroup label="NO CAMPO">'
-		m += get_mopts(False)
-		m += '</optgroup><optgroup label="DESOBRIGADO">'
-		m += get_mopts(True)
-		m += '</optgroup>'
-
-		w = '<option value=""></option>'
-		w += get_wopts()
-
-		d['m'] = m
-		d['w'] = w
-
-		rendert(self, 'mandar.html', d)
-
-	def get(self):
-		self.render()
-
-	def post(self):
-		d = {}
-
-		# dates in Portuguese are d/m/Y, not m/d/Y: deal with it
-		d['date'] = self.request.POST['date']
-		date = self.request.POST['date'].split('/')
-		self.request.POST['date'] = '%s/%s/%s' %(date[1], date[0], date[2])
-
-		f = PhotoForm(data=self.request.POST)
-		if f.is_valid():
-			p = f.save(commit=False)
-
-			try:
-				im = images.resize(self.request.get('photo'), 600)
-				tn = images.resize(self.request.get('photo'), 100)
-			except:
-				d['bad'] = True
-			else:
-				pim = PhotoImage(data=im)
-				ptn = PhotoThumbnail(data=tn)
-				db.put([pim, ptn])
-				p.image = pim
-				p.thumbnail = ptn
-
-				if p.missionary: p.missionary_name = unicode(p.missionary)
-				if p.ward: p.ward_name = unicode(p.ward)
-
-				db.put(p)
-
-				d['done'] = True
-				f = PhotoForm()
-				d['date'] = ''
-
-		d['f'] = f
-		self.render(d)
-
-class GaleriaPage(webapp.RequestHandler):
-	def get(self):
-		fotos = [(i.key(), i.get_key('thumbnail')) for i in Photo.gql('where checked = :1 order by submitted', True).fetch(50)]
-		render(self, 'galeria.html', 'Galeria de Fotos', {'fotos': fotos})
-
-class Image(webapp.RequestHandler):
-	def get(self, key):
-		i = db.get(key)
-		self.response.headers['Content-Type'] = 'image/png'
-		self.response.out.write(i.data)
-
-class ViewImagePage(webapp.RequestHandler):
-	def get(self, key):
-		p = db.get(key)
-		render(self, 'viewimage.html', 'Foto', {'p': p, 'i': p.get_key('image')})
-
-class CheckPage(webapp.RequestHandler):
-	def get(self):
-		fotos = [(i.key(), i.get_key('image')) for i in Photo.gql('where checked = :1 order by submitted', False).fetch(1000)]
-		rendert(self, 'check.html', {'fotos': fotos})
-
-	def post(self):
-		fotos = db.get(self.request.POST.getall('check'))
-		for f in fotos:
-			f.checked = True
-			self.response.out.write('approved: %s<br/>' %f.key())
-		db.put(fotos)
-
-class ArquivosPage(webapp.RequestHandler):
-	def get(self):
-		render(self, 'arquivos.html', 'Arquivos')
-
-class DiscursosPage(webapp.RequestHandler):
-	def get(self):
-		render(self, 'discursos.html', 'Discursos do Presidente')
-
 class NamesPage(webapp.RequestHandler):
 	def get(self):
 		sep = "\r\n"
@@ -512,15 +411,8 @@ class NamesPage(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
-	('/batismos/', BatismosPage),
-	('/batizadores/', BatizadoresPage),
 	('/relatorio/', RelatorioPage),
 	('/numeros/', NumerosPage),
-	('/mandar/', MandarPage),
-	('/galeria/', GaleriaPage),
-	('/arquivos/', ArquivosPage),
-	('/discursos/', DiscursosPage),
-	('/viewimage/(.*)', ViewImagePage),
 
 	('/js/main.js', MainJS),
 
@@ -530,12 +422,9 @@ application = webapp.WSGIApplication([
 
 	('/names/', NamesPage),
 
-	('/image/(.*)', Image),
-
 	# _ah
 	('/_ah/missao-rio/dump/', DumpPage),
 	('/_ah/missao-rio/sync-areas/', SyncAreasPage),
-	('/_ah/missao-rio/check/', CheckPage),
 
 	], debug=True)
 
