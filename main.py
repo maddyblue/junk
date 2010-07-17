@@ -299,10 +299,18 @@ class SendNumbers(webapp.RequestHandler):
 	def post(self):
 		zone = Zone.get(self.request.POST['zona'])
 		inds = []
+
+		areas = {}
+		for a in db.get(self.request.POST.getall('area')):
+			areas[str(a.key())] = a
+
 		for a in self.request.POST.getall('area'):
 			f = IndicatorForm(data=self.request.POST, prefix=a)
 			if f.is_valid():
-				inds.append(f.save(commit=False))
+				i = f.save(commit=False)
+				i.area_name = areas[a].name
+				i.zone_name = areas[a].zone_name
+				inds.append(i)
 			else:
 				self.response.out.write('Faltando dados.')
 				return
@@ -322,6 +330,7 @@ class SendNumbers(webapp.RequestHandler):
 				f = BaptismForm(data=d, prefix=p)
 				if f.is_valid():
 					o = f.save(commit=False)
+					o.week = i.week
 					ords.append(o)
 
 					if o.age >= 18 and o.sex == BAPTISM_SEX_M:
@@ -340,7 +349,9 @@ class SendNumbers(webapp.RequestHandler):
 
 				f = ConfirmationForm(data=d, prefix=p)
 				if f.is_valid():
-					ords.append(f.save(commit=False))
+					o = f.save(commit=False)
+					o.week = i.week
+					ords.append(o)
 				else:
 					self.response.out.write('Faltando dados.')
 					return
@@ -440,6 +451,65 @@ class DiscursosPage(webapp.RequestHandler):
 	def get(self):
 		render(self, 'discursos.html', 'Discursos do Presidente')
 
+class NamesPage(webapp.RequestHandler):
+	def get(self):
+		sep = "\r\n"
+
+		week = get_week()
+
+		inds = Indicator.gql('where week = :1 order by zone_name, area_name', week).fetch(1000)
+		idict = {}
+		for i in inds:
+			idict[i.key()] = i
+
+		bs = {}
+		for b in IndicatorBaptism.gql('where week = :1', week).fetch(1000):
+			bk = b.key()
+			ik = b.get_key('indicator')
+
+			if ik not in bs:
+				bs[ik] = []
+
+			bs[ik].append(b)
+
+		cs = {}
+		for c in IndicatorConfirmation.gql('where week = :1', week).fetch(1000):
+			ck = c.key()
+			ik = c.get_key('indicator')
+
+			if ik not in cs:
+				cs[ik] = []
+
+			cs[ik].append(c)
+
+		r = ''
+		nb = 0
+		nc = 0
+
+		for i in inds:
+			ik = i.key()
+
+			if ik in bs:
+				for b in bs[ik]:
+					nb += 1
+
+					if b.sex == BAPTISM_SEX_M: s = 'M'
+					else: s = 'F'
+
+					m = []
+					m.extend(Missionary.objects.filter(id__in=week.snapshot.snaps.filter(area=i.area).values('missionary')))
+					a = week.snapshot.areas.filter(reports_with=i.area.area)
+					m.extend(Missionary.objects.filter(id__in=week.snapshot.snaps.filter(area__in=a).values('missionary')))
+					m = ", ".join([unicode(a) for a in m])
+					r += "\t".join([unicode(a) for a in [i.area.zone.name, b.name.title(), b.date, b.age, s, i.area.area.ward.name, i.area.area.ward.stake, m]]) + sep
+
+		for i in inds:
+			for c in i.confirmations.all():
+				nc += 1
+				r += "\t".join([unicode(a) for a in [i.area.zone.name, i.area.area.name, c.name.title(), c.date]]) + sep
+
+		return HttpResponse('%i%s%i%s%s' %(nb, sep, nc, sep, r), mimetype='text/plain')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/batismos/', BatismosPage),
@@ -457,6 +527,8 @@ application = webapp.WSGIApplication([
 	('/send-relatorio/', SendRelatorio),
 	('/send-numbers/', SendNumbers),
 	('/load-zone/', LoadZone),
+
+	('/names/', NamesPage),
 
 	('/image/(.*)', Image),
 

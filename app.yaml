@@ -70,3 +70,15 @@ admin_console:
 
 derived_file_type:
 - python_precompiled
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?\..*
+- ^discursos/
+- ^mk_disc.py

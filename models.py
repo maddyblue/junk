@@ -418,10 +418,12 @@ class Report(db.Model):
 class Indicator(DerefModel):
 	week = db.ReferenceProperty(Week, required=True)
 	submitted = db.DateTimeProperty(auto_now_add=True, required=True)
-	used = db.BooleanProperty()
+	missionaries = db.StringProperty()
 #	FIX forms.py, IndicatorForm to ignore this column, when enabled
 #	area = db.ReferenceProperty(AreaSnap)
 	area = db.ReferenceProperty(Area, required=True)
+	area_name = db.StringProperty()
+	zone_name = db.StringProperty()
 	PB    = db.IntegerProperty(required=True)
 	PC    = db.IntegerProperty(required=True)
 	PBM   = db.IntegerProperty(required=True)
@@ -458,15 +460,17 @@ BAPTISM_SEX_F = 'Feminino'
 
 BAPTISM_SEX_CHOICES = set([BAPTISM_SEX_M, BAPTISM_SEX_F])
 
-class IndicatorBaptism(db.Model):
+class IndicatorBaptism(DerefModel):
 	indicator = db.ReferenceProperty(Indicator, required=True)
+	week = db.ReferenceProperty(Week)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)
 	age = db.IntegerProperty(required=True)
 	sex = db.StringProperty(choices=BAPTISM_SEX_CHOICES, required=True)
 
-class IndicatorConfirmation(db.Model):
+class IndicatorConfirmation(DerefModel):
 	indicator = db.ReferenceProperty(Indicator, required=True)
+	week = db.ReferenceProperty(Week)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)
 
