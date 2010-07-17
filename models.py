@@ -175,7 +175,8 @@ def is_sunday(d):
 	return d
 
 class Week(db.Model):
-#	snapshot = db.ReferenceKey(Snapshot)
+	#TODO: add snapshots
+	#snapshot = db.ReferenceKey(Snapshot)
 	date = db.DateProperty(validator=is_sunday)
 	question = db.StringProperty()
 	question_for_both = db.BooleanProperty()
@@ -415,15 +416,18 @@ class Report(db.Model):
 	confirmation_10_name = db.StringProperty()
 	confirmation_10_date = db.StringProperty()
 
-class Indicator(DerefModel):
+class IndicatorSubmission(db.Model):
 	week = db.ReferenceProperty(Week, required=True)
 	submitted = db.DateTimeProperty(auto_now_add=True, required=True)
-	missionaries = db.StringProperty()
+	used = db.BooleanProperty(required=True)
+	zone = db.ReferenceProperty(Zone, required=True)
+
+class Indicator(DerefModel):
+	submission = db.ReferenceProperty(IndicatorSubmission, required=True)
 #	FIX forms.py, IndicatorForm to ignore this column, when enabled
 #	area = db.ReferenceProperty(AreaSnap)
 	area = db.ReferenceProperty(Area, required=True)
 	area_name = db.StringProperty()
-	zone_name = db.StringProperty()
 	PB    = db.IntegerProperty(required=True)
 	PC    = db.IntegerProperty(required=True)
 	PBM   = db.IntegerProperty(required=True)
@@ -461,15 +465,15 @@ BAPTISM_SEX_F = 'Feminino'
 BAPTISM_SEX_CHOICES = set([BAPTISM_SEX_M, BAPTISM_SEX_F])
 
 class IndicatorBaptism(DerefModel):
+	submission = db.ReferenceProperty(IndicatorSubmission, required=True)
 	indicator = db.ReferenceProperty(Indicator, required=True)
-	week = db.ReferenceProperty(Week)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)
 	age = db.IntegerProperty(required=True)
 	sex = db.StringProperty(choices=BAPTISM_SEX_CHOICES, required=True)
 
 class IndicatorConfirmation(DerefModel):
+	submission = db.ReferenceProperty(IndicatorSubmission, required=True)
 	indicator = db.ReferenceProperty(Indicator, required=True)
-	week = db.ReferenceProperty(Week)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)

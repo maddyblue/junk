@@ -124,7 +124,7 @@ class MainJS(webapp.RequestHandler):
 
 		for i in range(7):
 			dt = week.date - timedelta(i)
-			dopt += '<option value="%s">%s %s</option>' %(dt, dt, wdays[i])
+			dopt += '<option value="%s">%s %s</option>' %(dt.strftime('%Y-%m-%d'), dt.strftime('%d/%m/%Y'), wdays[i])
 
 		rendert(self, 'main.js', {'dopt': dopt})
 
@@ -255,6 +255,7 @@ class LoadZone(webapp.RequestHandler):
 
 		formstr = '<form id="sendform" onsubmit="return false;">'
 		formstr += '<input type="hidden" name="zona" value="%s" />' %zone.key()
+		formstr += '<input type="hidden" name="week" value="%s" />' %w.key()
 		formstr += '<table class="relatorio">'
 		formstr += '<tr><td colspan="15"><h1>%s</h1></td></tr><tr><td</td><td></td>' %zone.name
 		formstr += ''.join(['<td>%s</td>' %i for i in fields])
@@ -263,8 +264,6 @@ class LoadZone(webapp.RequestHandler):
 		for a in areas:
 			formstr += '<tr><td rowspan="2">%s</td><td>Metas: </td>' %a.name
 			formstr += '<input type="hidden" name="area" value="%s" />' %a.key()
-			formstr += '<input type="hidden" name="%s-area" value="%s" />' %(a.key(), a.key())
-			formstr += '<input type="hidden" name="%s-week" value="%s" />' %(a.key(), w.key())
 			for i in fields:
 				formstr += '<td><input name="%s-%s_meta" class="textmetas" type="text" onchange="numeroChange(this);" value="0" /></td>' %(a.key(), i)
 
@@ -285,16 +284,34 @@ class LoadZone(webapp.RequestHandler):
 		self.response.out.write(formstr)
 
 class SendNumbers(webapp.RequestHandler):
-	@basicAuth
+	def fail(self, s, inds=[]):
+		a = [s]
+		a.extend(inds)
+		db.delete(a)
+
 	def post(self):
+		if self.request.POST['senha'] != 'joao35':
+			self.response.out.write('Senha errada.')
+			return
+
 		zone = Zone.get(self.request.POST['zona'])
-		inds = []
+		week = Week.get(self.request.POST['week'])
+		wk = week.key()
+
+		s = IndicatorSubmission(week=week, zone=zone, used=False)
+		s.put()
+		sk = s.key()
 
 		areas = {}
 		for a in db.get(self.request.POST.getall('area')):
 			areas[str(a.key())] = a
 
+		inds = []
 		for a in self.request.POST.getall('area'):
+			ak = areas[a].key()
+			self.request.POST['%s-submission' %ak] = sk
+			self.request.POST['%s-area' %ak] = ak
+			self.request.POST['%s-week' %ak] = wk
 			f = IndicatorForm(data=self.request.POST, prefix=a)
 			if f.is_valid():
 				i = f.save(commit=False)
@@ -303,6 +320,7 @@ class SendNumbers(webapp.RequestHandler):
 				inds.append(i)
 			else:
 				self.response.out.write('Faltando dados.')
+				self.fail(s)
 				return
 
 		db.put(inds)
@@ -310,17 +328,18 @@ class SendNumbers(webapp.RequestHandler):
 		ords = []
 		for i in inds:
 			a = i.get_key('area')
+			ik = i.key()
 
 			bn = 'b_%s-PB' %a
 			for b in self.request.POST.getall(bn):
 				p = '%s-%s' %(bn, b)
-				d = self.request.POST
-				d['%s-indicator' %p] = i.key()
+				self.request.POST['%s-indicator' %p] = ik
+				self.request.POST['%s-submission' %p] = sk
+				self.request.POST['%s-date' %p] = self.request.POST['%s-date' %p].partition(' ')[0]
 
-				f = BaptismForm(data=d, prefix=p)
+				f = BaptismForm(data=self.request.POST, prefix=p)
 				if f.is_valid():
 					o = f.save(commit=False)
-					o.week = i.week
 					ords.append(o)
 
 					if o.age >= 18 and o.sex == BAPTISM_SEX_M:
@@ -328,22 +347,24 @@ class SendNumbers(webapp.RequestHandler):
 						if i not in ords:
 							ords.append(i)
 				else:
-					self.response.out.write('Faltando dados.')
+					self.response.out.write('Faltando batismo dados.')
+					self.fail(s, inds)
 					return
 
 			cn = 'c_%s-PC' %a
 			for c in self.request.POST.getall(cn):
 				p = '%s-%s' %(cn, c)
-				d = self.request.POST
-				d['%s-indicator' %p] = i.key()
+				self.request.POST['%s-indicator' %p] = ik
+				self.request.POST['%s-submission' %p] = sk
+				self.request.POST['%s-date' %p] = self.request.POST['%s-date' %p].partition(' ')[0]
 
-				f = ConfirmationForm(data=d, prefix=p)
+				f = ConfirmationForm(data=self.request.POST, prefix=p)
 				if f.is_valid():
 					o = f.save(commit=False)
-					o.week = i.week
 					ords.append(o)
 				else:
-					self.response.out.write('Faltando dados.')
+					self.response.out.write('Faltando confirmação dados.')
+					self.fail(s, inds)
 					return
 
 		db.put(ords)
@@ -409,6 +430,10 @@ class NamesPage(webapp.RequestHandler):
 
 		return HttpResponse('%i%s%i%s%s' %(nb, sep, nc, sep, r), mimetype='text/plain')
 
+class IndicatorCheckPage(webapp.RequestHandler):
+	def get(self):
+		w = get_week()
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -425,6 +450,7 @@ application = webapp.WSGIApplication([
 	# _ah
 	('/_ah/missao-rio/dump/', DumpPage),
 	('/_ah/missao-rio/sync-areas/', SyncAreasPage),
+	('/_ah/missao-rio/ind-check/', IndicatorCheckPage),
 
 	], debug=True)
 
