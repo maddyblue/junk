@@ -12,7 +12,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from models import *
 from forms import *
-from dump import dump
+from dump import *
 
 # returns True if authenticated
 def basicAuth(func):
@@ -131,6 +131,7 @@ class MainJS(webapp.RequestHandler):
 class DumpPage(webapp.RequestHandler):
 	def get(self):
 		memcache.flush_all()
+		delete()
 		dump()
 		self.response.out.write('done')
 

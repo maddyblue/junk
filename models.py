@@ -169,15 +169,40 @@ class Missionary(DerefModel):
 			s = re.findall(p, self.email_parents)
 			self.email_parents = '; '.join(s)
 
+class SnapArea(db.Model):
+	area = db.ReferenceProperty(Area, required=True)
+	zone = db.ReferenceProperty(Zone, required=True)
+	reports_with = db.ReferenceProperty(Area, collection_name='snaparea_rw')
+	does_not_report = db.BooleanProperty(default=False)
+	district = db.ReferenceProperty(Area, collection_name='snaparea_district')
+	phone = db.StringProperty()
+
+class SnapMissionary(db.Model):
+	missionary = db.ReferenceProperty(Missionary, required=True)
+	is_senior = db.BooleanProperty(required=True)
+	calling = db.StringProperty(required=True, choices=MISSIONARY_CALLING_CHOICES)
+	snaparea = db.ReferenceProperty(SnapArea, required=True)
+
+class Snapshot(db.Model):
+	date = db.DateTimeProperty(required=True)
+	name = db.StringProperty()
+
+class SnapshotArea(db.Model):
+	snapshot = db.ReferenceProperty(Snapshot, required=True)
+	snaparea = db.ReferenceProperty(SnapArea, required=True)
+
+class SnapshotMissionary(db.Model):
+	snapshot = db.ReferenceProperty(Snapshot, required=True)
+	snapmissionary = db.ReferenceProperty(SnapMissionary, required=True)
+
 def is_sunday(d):
 	if d.weekday() != 6: # Sunday
 		raise db.BadValueError('date is not Sunday')
 	return d
 
 class Week(db.Model):
-	#TODO: add snapshots
-	#snapshot = db.ReferenceKey(Snapshot)
-	date = db.DateProperty(validator=is_sunday)
+	snapshot = db.ReferenceProperty(Snapshot, required=True)
+	date = db.DateProperty(required=True, validator=is_sunday)
 	question = db.StringProperty()
 	question_for_both = db.BooleanProperty()
 
