@@ -28,20 +28,12 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
   login: admin
 
-- url: /_ah/queue/deferred
-  script: $PYTHON_LIB/google/appengine/ext/deferred/handler.py
-  login: admin
-
-- url: /_ah/bulkupdate/admin/.*
-  script: bulkupdate/handler.py
-  login: admin
-
-- url: /_ah/nuke/.*
-  script: nuke/nuke.py
-  login: admin
-
 - url: /_ah/missao-rio/.*
   script: main.py
+  login: admin
+
+- url: /mapreduce(/.*)?
+  script: mapreduce/main.py
   login: admin
 
 - url: /.*
@@ -49,16 +41,14 @@ handlers:
 
 admin_console:
   pages:
-  - name: Dump
-    url: /_ah/missao-rio/dump/
+  - name: MapReduce
+    url: /mapreduce/
+
+  - name: Map Control
+    url: /_ah/missao-rio/map-control/
+
   - name: Sync Areas
     url: /_ah/missao-rio/sync-areas/
-
-  - name: Bulk Update Jobs
-    url: /_ah/bulkupdate/admin/
-
-  - name: Nuke
-    url: /_ah/nuke/
 
 derived_file_type:
 - python_precompiled

@@ -7,12 +7,21 @@ from datetime import timedelta
 from google.appengine.api import images
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
+from google.appengine.ext.db import stats
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 from models import *
 from forms import *
-from dump import *
+from mapreduce import control, model
+
+def prefetch_refprops(entities, *props):
+	fields = [(entity, prop) for entity in entities for prop in props]
+	ref_keys = [prop.get_value_for_datastore(x) for x, prop in fields]
+	ref_entities = dict((x.key(), x) for x in db.get(set(ref_keys)))
+	for (entity, prop), ref_key in zip(fields, ref_keys):
+		prop.__set__(entity, ref_entities[ref_key])
+	return entities
 
 # returns True if authenticated
 def basicAuth(func):
@@ -62,7 +71,7 @@ def get_mopts(released=False):
 	mopts = memcache.get(n)
 	if mopts is None:
 		mopts = render_mopts(released)
-		memcache.add(n, mopts)
+		memcache.add(n, mopts, 3600)
 
 	return mopts
 
@@ -75,7 +84,7 @@ def get_aopts():
 	aopts = memcache.get(n)
 	if aopts is None:
 		aopts = render_aopts()
-		memcache.add(n, aopts)
+		memcache.add(n, aopts, 3600)
 
 	return aopts
 
@@ -88,7 +97,7 @@ def get_wopts():
 	wopts = memcache.get(n)
 	if wopts is None:
 		wopts = render_wopts()
-		memcache.add(n, wopts)
+		memcache.add(n, wopts, 3600)
 
 	return wopts
 
@@ -127,13 +136,6 @@ class MainJS(webapp.RequestHandler):
 			dopt += '<option value="%s">%s %s</option>' %(dt.strftime('%Y-%m-%d'), dt.strftime('%d/%m/%Y'), wdays[i])
 
 		rendert(self, 'main.js', {'dopt': dopt})
-
-class DumpPage(webapp.RequestHandler):
-	def get(self):
-		memcache.flush_all()
-		delete()
-		dump()
-		self.response.out.write('done')
 
 class SyncAreasPage(webapp.RequestHandler):
 	def get(self):
@@ -226,7 +228,7 @@ def get_zopts():
 	zopts = memcache.get(n)
 	if zopts is None:
 		zopts = render_zopts()
-		memcache.add(n, zopts)
+		memcache.add(n, zopts, 3600)
 
 	return zopts
 
@@ -251,6 +253,7 @@ class LoadZone(webapp.RequestHandler):
 		w = get_week()
 		# TODO: use snapshot data from the Week instead of live data
 		areas = Area.gql('where is_open = :1 and zone = :2 order by name', True, zone).fetch(1000)
+		areas = SnapshotArea.gql('where snapshot = :1', w.get_key('week'))
 
 		fields = ['PB', 'PC', 'PBM', 'PS', 'LM', 'OL', 'PP', 'RR', 'RC', 'NP', 'LMARC', 'Con', 'NFM']
 
@@ -435,6 +438,35 @@ class IndicatorCheckPage(webapp.RequestHandler):
 	def get(self):
 		w = get_week()
 
+class MapControlPage(webapp.RequestHandler):
+	def get(self):
+		rendert(self, 'map-control.html')
+
+	def post(self):
+		p = self.request.POST['submit']
+
+		if p == 'Delete All Kinds':
+			handler_spec = 'map_procs.delete'
+			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
+
+			import models
+			m = []
+			for i in dir(models):
+				c = getattr(models, i)
+				if str(type(c)) == "<class 'google.appengine.ext.db.PropertiedClass'>":
+					m.append(str(c).partition('.')[2].partition("'")[0])
+			kind_set = set(m)
+
+			for i in kind_set:
+				q = db.GqlQuery('select __key__ from %s' %i)
+				if q.get() is not None:
+					r = control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
+					self.response.out.write('delete %s, job id %s<br/>' %(i, r))
+			return
+		else:
+			self.response.out.write('error')
+			return
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -449,9 +481,9 @@ application = webapp.WSGIApplication([
 	('/names/', NamesPage),
 
 	# _ah
-	('/_ah/missao-rio/dump/', DumpPage),
 	('/_ah/missao-rio/sync-areas/', SyncAreasPage),
 	('/_ah/missao-rio/ind-check/', IndicatorCheckPage),
+	('/_ah/missao-rio/map-control/', MapControlPage),
 
 	], debug=True)
 

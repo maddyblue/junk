@@ -12,6 +12,11 @@ indexes:
 
 - kind: Area
   properties:
+  - name: __key__
+    direction: desc
+
+- kind: Area
+  properties:
   - name: is_open
   - name: zone
   - name: name
@@ -22,16 +27,91 @@ indexes:
   - name: zone_name
   - name: name
 
+- kind: Area
+  properties:
+  - name: zone_name
+  - name: name
+
+- kind: Indicator
+  properties:
+  - name: __key__
+    direction: desc
+
 - kind: Indicator
   properties:
   - name: week
   - name: zone_name
   - name: area_name
 
+- kind: IndicatorBaptism
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: IndicatorConfirmation
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: IndicatorSubmission
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: Missionary
+  properties:
+  - name: __key__
+    direction: desc
+
 - kind: Missionary
   properties:
   - name: is_released
   - name: mission_name
+
+- kind: Missionary
+  properties:
+  - name: mission_name
+  - name: sex
+
+- kind: RPM
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: Report
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: SnapArea
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: Snapshot
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: Stake
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: Ward
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: Week
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: Zone
+  properties:
+  - name: __key__
+    direction: desc
 
 - kind: Zone
   properties:

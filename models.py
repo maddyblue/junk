@@ -200,7 +200,7 @@ def is_sunday(d):
 		raise db.BadValueError('date is not Sunday')
 	return d
 
-class Week(db.Model):
+class Week(DerefModel):
 	snapshot = db.ReferenceProperty(Snapshot, required=True)
 	date = db.DateProperty(required=True, validator=is_sunday)
 	question = db.StringProperty()
@@ -215,12 +215,13 @@ ROUTINE_CHOICES = set(range(8))
 
 class Report(db.Model):
 	submitted = db.DateTimeProperty(required=True, auto_now_add=True)
-	used = db.BooleanProperty()
+	used = db.BooleanProperty(required=True)
 	week = db.ReferenceProperty(Week, required=True)
 
 	senior = db.ReferenceProperty(Missionary, required=True, collection_name='report_senior')
 	junior = db.ReferenceProperty(Missionary, required=True, collection_name='report_junior')
 	area = db.ReferenceProperty(Area, required=True)
+
 	attendance = db.IntegerProperty()
 	weekly_planning = db.BooleanProperty()
 
@@ -449,9 +450,7 @@ class IndicatorSubmission(db.Model):
 
 class Indicator(DerefModel):
 	submission = db.ReferenceProperty(IndicatorSubmission, required=True)
-#	FIX forms.py, IndicatorForm to ignore this column, when enabled
-#	area = db.ReferenceProperty(AreaSnap)
-	area = db.ReferenceProperty(Area, required=True)
+	area = db.ReferenceProperty(SnapArea, required=True)
 	area_name = db.StringProperty()
 	PB    = db.IntegerProperty(required=True)
 	PC    = db.IntegerProperty(required=True)
@@ -502,3 +501,11 @@ class IndicatorConfirmation(DerefModel):
 	indicator = db.ReferenceProperty(Indicator, required=True)
 	name = db.StringProperty(required=True)
 	date = db.DateProperty(required=True)
+
+class RPM(db.Model):
+	area = db.ReferenceProperty(SnapArea, required=True)
+	week = db.ReferenceProperty(Week, required=True)
+	bap = db.IntegerProperty(default=0, required=True)
+	conf = db.IntegerProperty(default=0, required=True)
+	men_bap = db.IntegerProperty(default=0, required=True)
+	men_conf = db.IntegerProperty(default=0, required=True)

@@ -1,0 +1,7 @@
+mapreduce:
+- name: Delete Kind
+  mapper:
+    input_reader: mapreduce.input_readers.DatastoreKeyInputReader
+    handler: map_procs.delete
+    params:
+    - name: entity_kind
