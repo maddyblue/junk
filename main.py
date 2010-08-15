@@ -151,17 +151,28 @@ class SendRelatorio(webapp.RequestHandler):
 				self.response.out.write('%s: %s\n' %(k, v.as_text()))
 
 def get_zopts():
-	n = 'zopts'
+	w = get_week()
+	n = 'zopts-%s' %w.key()
 	zopts = memcache.get(n)
 	if zopts is None:
-		zopts = render_zopts()
-		memcache.add(n, zopts, 3600)
+		zopts = render_zopts(w)
+		memcache.add(n, zopts)
 
 	return zopts
 
-def render_zopts():
-	zones = Zone.gql('where is_open = :1 order by name', True).fetch(1000)
-	return ''.join(['<option value="%s">%s</option>' %(z.key(), unicode(z)) for z in zones])
+def render_zopts(week):
+	snapareas = get_snapareas(week)
+	zones = {}
+	for i in snapareas:
+		k = i.get_key('zone')
+		n = k.name()
+		if n not in zones:
+			zones[n] = k
+
+	zlist = zones.keys()
+	zlist.sort()
+
+	return ''.join(['<option value="%s">%s</option>' %(zones[z], z) for z in zlist])
 
 class NumerosPage(webapp.RequestHandler):
 	@basicAuth
@@ -172,15 +183,34 @@ class NumerosPage(webapp.RequestHandler):
 
 		rendert(self, 'numeros.html', d)
 
+def get_snapareas(week):
+	n = 'snapareas-%s' %week.key()
+	data = memcache.get(n)
+	if data is None:
+		data = SnapshotArea.gql('where snapshot = :1', week.get_key('snapshot')).fetch(1000)
+		prefetch_refprops(data, SnapshotArea.snaparea)
+		data = [a.snaparea for a in data]
+		memcache.add(n, data)
+
+	return data
+
+def get_snapareas_byzone(week, zkey):
+	n = 'snapareas-%s-%s' %(week.key(), zkey)
+	data = memcache.get(n)
+	if data is None:
+		snapareas = get_snapareas(week)
+		data = [a for a in snapareas if a.get_key('zone') == zkey]
+		memcache.add(n, data)
+
+	return data
+
 class LoadZone(webapp.RequestHandler):
 	@basicAuth
 	def post(self):
 		z = self.request.POST['zona']
 		zone = Zone.get(z)
 		w = get_week()
-		snapshotareas = SnapshotArea.gql('where snapshot = :1', w.get_key('snapshot')).fetch(1000)
-		prefetch_refprops(snapshotareas, SnapshotArea.snaparea)
-		areas = filter(lambda x: x.snaparea.get_key('zone') == zone.key(), snapshotareas)
+		snapareas = get_snapareas_byzone(w, zone.key())
 
 		fields = ['PB', 'PC', 'PBM', 'PS', 'LM', 'OL', 'PP', 'RR', 'RC', 'NP', 'LMARC', 'Con', 'NFM']
 
@@ -192,10 +222,9 @@ class LoadZone(webapp.RequestHandler):
 		formstr += ''.join(['<td>%s</td>' %i for i in fields])
 		formstr += '</tr>'
 
-		for a in areas:
-			sa = a.snaparea
-			ak = str(sa.key())
-			name = sa.get_key('area').name()
+		for a in snapareas:
+			ak = str(a.key())
+			name = a.get_key('area').name()
 			formstr += '<tr><td rowspan="2">%s</td><td>Metas: </td>' %name
 			formstr += '<input type="hidden" name="area" value="%s" />' %ak
 			for i in fields:
@@ -210,8 +239,8 @@ class LoadZone(webapp.RequestHandler):
 				formstr += '<td><input onchange="%s" name="%s-%s" class="textrealizadas" type="text" value="0" /></td>' %(changestr, ak, i)
 
 		formstr += '</tr></table>'
-		formstr += ''.join(['<div id="b_%s-PB" class="baptism"></div>' %a.snaparea.key() for a in areas])
-		formstr += ''.join(['<div id="c_%s-PC" class="confirmation"></div>' %a.snaparea.key() for a in areas])
+		formstr += ''.join(['<div id="b_%s-PB" class="baptism"></div>' %a.key() for a in snapareas])
+		formstr += ''.join(['<div id="c_%s-PC" class="confirmation"></div>' %a.key() for a in snapareas])
 
 		formstr += '<div class="td3">Senha: <input name="senha" class="textbox" type="password" /><br /><input id="enviarbutton" type="button" value="Enviar" onclick="this.disabled=false; enviarNumeros();" /></div><div class="space-line"></div></form>'
 
