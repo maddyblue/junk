@@ -110,8 +110,6 @@ class Missionary(DerefModel):
 	calling = db.StringProperty(required=True, choices=MISSIONARY_CALLING_CHOICES)
 	sex = db.StringProperty(required=True, choices=MISSIONARY_SEX_CHOICES)
 	area = db.ReferenceProperty(Area)
-	area_name = db.StringProperty()
-	zone_name = db.StringProperty()
 	is_senior = db.BooleanProperty(required=True)
 
 	email = db.StringProperty()
@@ -134,9 +132,6 @@ class Missionary(DerefModel):
 	email_parents = db.TextProperty()
 	address_parents = db.TextProperty()
 
-	is_dl = db.BooleanProperty()
-	is_released = db.BooleanProperty()
-
 	# calling letters
 	cl_tr = db.BooleanProperty()
 	cl_sn = db.BooleanProperty()
@@ -148,6 +143,8 @@ class Missionary(DerefModel):
 	zone = db.ReferenceProperty(Zone)
 	zone_name = db.StringProperty()
 	area_name = db.StringProperty()
+	is_dl = db.BooleanProperty()
+	is_released = db.BooleanProperty()
 
 	def display(self):
 		if self.sex == MISSIONARY_SEX_ELDER:
@@ -159,7 +156,7 @@ class Missionary(DerefModel):
 			s += ' - ' + self.calling
 		return s
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.sex + ' ' + self.mission_name
 
 	def save(self, **kwargs):
@@ -169,7 +166,7 @@ class Missionary(DerefModel):
 			s = re.findall(p, self.email_parents)
 			self.email_parents = '; '.join(s)
 
-class SnapArea(db.Model):
+class SnapArea(DerefModel):
 	area = db.ReferenceProperty(Area, required=True)
 	zone = db.ReferenceProperty(Zone, required=True)
 	reports_with = db.ReferenceProperty(Area, collection_name='snaparea_rw')
@@ -215,7 +212,7 @@ ROUTINE_CHOICES = set(range(8))
 
 class Report(db.Model):
 	submitted = db.DateTimeProperty(required=True, auto_now_add=True)
-	used = db.BooleanProperty(required=True)
+	used = db.BooleanProperty(default=False, required=True)
 	week = db.ReferenceProperty(Week, required=True)
 
 	senior = db.ReferenceProperty(Missionary, required=True, collection_name='report_senior')

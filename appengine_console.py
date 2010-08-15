@@ -16,14 +16,7 @@ setup_environ(settings)
 from riodejaneiro.mission import models as djm
 from google.appengine.ext.remote_api import remote_api_stub
 from google.appengine.ext import db
-from mapper import *
 import models as aem
-
-def delete():
-	for i in [aem.Stake, aem.Ward, aem.Zone, aem.Area, aem.Missionary, aem.Week, aem.Snapshot, aem.SnapArea, aem.SnapMissionary, aem.SnapshotArea, aem.SnapshotMissionary]:
-		print i
-		b = BulkDeleter(i)
-		b.run()
 
 def mput(p):
 	print '  put', len(p)

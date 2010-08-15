@@ -14,6 +14,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from models import *
 from forms import *
 from mapreduce import control, model
+import map_procs
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -137,80 +138,6 @@ class MainJS(webapp.RequestHandler):
 
 		rendert(self, 'main.js', {'dopt': dopt})
 
-class SyncAreasPage(webapp.RequestHandler):
-	def get(self):
-		plist = []
-
-		zones = {}
-		zset = set()
-		for z in Zone.all():
-			zones[z.key()] = z
-			zset.add(z)
-
-		areas = {}
-		aset = set()
-		for a in Area.all():
-			zn = zones[a.get_key('zone')].name
-			if a.zone_name != zn:
-				a.zone_name = zn
-				plist.append(a)
-			areas[a.key()] = a
-			aset.add(a)
-
-		areas_opened = set()
-		zones_opened = set()
-		for m in Missionary.all():
-			ak = m.get_key('area')
-
-			if ak is None:
-				z = None
-				an = None
-				zn = None
-				zk = None
-			else:
-				a = areas[ak]
-				an = a.name
-				zk = a.get_key('zone')
-				z = zones[zk]
-				zn = z.name
-
-				areas_opened.add(a)
-				zones_opened.add(z)
-
-			mzk = m.get_key('zone')
-			mir = m.calling == MISSIONARY_CALLING_REL and ak == None
-
-			if \
-				m.area_name != an or \
-				m.zone_name != zn or \
-				mzk != zk or \
-				m.is_released != mir:
-
-				m.area_name = an
-				m.zone_name = zn
-				m.zone = z
-				m.is_released = mir
-
-				plist.append(m)
-
-		for a in aset:
-			ao = a in areas_opened
-			if a.is_open != ao:
-				a.is_open = ao
-				if a not in plist:
-					plist.append(a)
-
-		for z in zset:
-			zo = z in zones_opened
-			if z.is_open != zo:
-				z.is_open = zo
-				if z not in plist:
-					plist.append(z)
-
-		db.put(plist)
-
-		rendert(self, 'sync-areas.html', {'plist': [unicode(i) for i in plist]})
-
 class SendRelatorio(webapp.RequestHandler):
 	@basicAuth
 	def post(self):
@@ -251,9 +178,9 @@ class LoadZone(webapp.RequestHandler):
 		z = self.request.POST['zona']
 		zone = Zone.get(z)
 		w = get_week()
-		# TODO: use snapshot data from the Week instead of live data
-		areas = Area.gql('where is_open = :1 and zone = :2 order by name', True, zone).fetch(1000)
-		areas = SnapshotArea.gql('where snapshot = :1', w.get_key('week'))
+		snapshotareas = SnapshotArea.gql('where snapshot = :1', w.get_key('snapshot')).fetch(1000)
+		prefetch_refprops(snapshotareas, SnapshotArea.snaparea)
+		areas = filter(lambda x: x.snaparea.get_key('zone') == zone.key(), snapshotareas)
 
 		fields = ['PB', 'PC', 'PBM', 'PS', 'LM', 'OL', 'PP', 'RR', 'RC', 'NP', 'LMARC', 'Con', 'NFM']
 
@@ -266,22 +193,25 @@ class LoadZone(webapp.RequestHandler):
 		formstr += '</tr>'
 
 		for a in areas:
-			formstr += '<tr><td rowspan="2">%s</td><td>Metas: </td>' %a.name
-			formstr += '<input type="hidden" name="area" value="%s" />' %a.key()
+			sa = a.snaparea
+			ak = str(sa.key())
+			name = sa.get_key('area').name()
+			formstr += '<tr><td rowspan="2">%s</td><td>Metas: </td>' %name
+			formstr += '<input type="hidden" name="area" value="%s" />' %ak
 			for i in fields:
-				formstr += '<td><input name="%s-%s_meta" class="textmetas" type="text" onchange="numeroChange(this);" value="0" /></td>' %(a.key(), i)
+				formstr += '<td><input name="%s-%s_meta" class="textmetas" type="text" onchange="numeroChange(this);" value="0" /></td>' %(ak, i)
 
 			formstr += '</tr><tr><td>Realizadas: </td>'
 			for i in fields:
-				if i == 'PB': changestr = 'batismoChange(this, \'%s\');' %a.name
-				elif i == 'PC': changestr = 'confirmChange(this, \'%s\');' %a.name
+				if i == 'PB': changestr = 'batismoChange(this, \'%s\');' %name
+				elif i == 'PC': changestr = 'confirmChange(this, \'%s\');' %name
 				else: changestr = 'numeroChange(this);'
 
-				formstr += '<td><input onchange="%s" name="%s-%s" class="textrealizadas" type="text" value="0" /></td>' %(changestr, a.key(), i)
+				formstr += '<td><input onchange="%s" name="%s-%s" class="textrealizadas" type="text" value="0" /></td>' %(changestr, ak, i)
 
 		formstr += '</tr></table>'
-		formstr += ''.join(['<div id="b_%s-PB" class="baptism"></div>' %a.key() for a in areas])
-		formstr += ''.join(['<div id="c_%s-PC" class="confirmation"></div>' %a.key() for a in areas])
+		formstr += ''.join(['<div id="b_%s-PB" class="baptism"></div>' %a.snaparea.key() for a in areas])
+		formstr += ''.join(['<div id="c_%s-PC" class="confirmation"></div>' %a.snaparea.key() for a in areas])
 
 		formstr += '<div class="td3">Senha: <input name="senha" class="textbox" type="password" /><br /><input id="enviarbutton" type="button" value="Enviar" onclick="this.disabled=false; enviarNumeros();" /></div><div class="space-line"></div></form>'
 
@@ -319,8 +249,8 @@ class SendNumbers(webapp.RequestHandler):
 			f = IndicatorForm(data=self.request.POST, prefix=a)
 			if f.is_valid():
 				i = f.save(commit=False)
-				i.area_name = areas[a].name
-				i.zone_name = areas[a].zone_name
+				i.area_name = areas[a].get_key('area').name()
+				i.zone_name = areas[a].get_key('zone').name()
 				inds.append(i)
 			else:
 				self.response.out.write('Faltando dados.')
@@ -463,9 +393,51 @@ class MapControlPage(webapp.RequestHandler):
 					r = control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
 					self.response.out.write('delete %s, job id %s<br/>' %(i, r))
 			return
+		elif p == 'Sync Phase 1':
+			# pre-memcache
+			memcache.flush_all()
+			map_procs.get_zones()
+			map_procs.get_open_areas()
+
+			i = control.start_map('Sync Areas', 'map_procs.sync_area', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
+			self.response.out.write('sync areas: %s<br>' %i)
+		elif p == 'Sync Phase 2':
+			# pre-memcache
+			memcache.flush_all()
+			map_procs.get_open_zones()
+			map_procs.get_areas()
+
+			i = control.start_map('Sync Zones', 'map_procs.sync_zone', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
+			self.response.out.write('sync zones: %s<br>' %i)
+
+			i = control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, model._DEFAULT_SHARD_COUNT)
+			self.response.out.write('sync missionaries: %s<br>' %i)
 		else:
 			self.response.out.write('error')
 			return
+
+class MissionStatusPage(webapp.RequestHandler):
+	def get(self):
+		ms = Missionary.all().filter('is_released', False).order('zone_name').order('area_name').order('-is_senior').fetch(500)
+		prefetch_refprops(ms, Missionary.area)
+
+		zones = []
+		z = None
+		a = None
+
+		for m in ms:
+			ak = m.get_key('area')
+			zk = m.get_key('zone')
+
+			if z != zk:
+				zones.append([])
+				z = zk
+			if a != ak:
+				zones[-1].append([])
+				a = ak
+			zones[-1][-1].append(m)
+
+		rendert(self, 'mission-status.html', {'zones': zones})
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -481,9 +453,9 @@ application = webapp.WSGIApplication([
 	('/names/', NamesPage),
 
 	# _ah
-	('/_ah/missao-rio/sync-areas/', SyncAreasPage),
 	('/_ah/missao-rio/ind-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/map-control/', MapControlPage),
+	('/_ah/missao-rio/status/', MissionStatusPage),
 
 	], debug=True)
 

@@ -41,14 +41,14 @@ handlers:
 
 admin_console:
   pages:
+  - name: Mission Status
+    url: /_ah/missao-rio/status/
+
   - name: MapReduce
     url: /mapreduce/
 
   - name: Map Control
     url: /_ah/missao-rio/map-control/
-
-  - name: Sync Areas
-    url: /_ah/missao-rio/sync-areas/
 
 derived_file_type:
 - python_precompiled
