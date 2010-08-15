@@ -399,28 +399,34 @@ class IndicatorCheckPage(webapp.RequestHandler):
 
 class MapControlPage(webapp.RequestHandler):
 	def get(self):
-		rendert(self, 'map-control.html')
+		import models
+		m = []
+		for i in dir(models):
+			c = getattr(models, i)
+			if str(type(c)) == "<class 'google.appengine.ext.db.PropertiedClass'>":
+				m.append(str(c).partition('.')[2].partition("'")[0])
+		kind_set = set(m)
+
+		kinds = []
+		for i in kind_set:
+			q = db.GqlQuery('select __key__ from %s' %i)
+			if q.get() is not None:
+				kinds.append(i)
+
+		kinds.sort()
+
+		rendert(self, 'map-control.html', {'kinds': kinds})
 
 	def post(self):
 		p = self.request.POST['submit']
 
-		if p == 'Delete All Kinds':
+		if p == 'Delete Kinds':
 			handler_spec = 'map_procs.delete'
 			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
 
-			import models
-			m = []
-			for i in dir(models):
-				c = getattr(models, i)
-				if str(type(c)) == "<class 'google.appengine.ext.db.PropertiedClass'>":
-					m.append(str(c).partition('.')[2].partition("'")[0])
-			kind_set = set(m)
-
-			for i in kind_set:
-				q = db.GqlQuery('select __key__ from %s' %i)
-				if q.get() is not None:
-					r = control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
-					self.response.out.write('delete %s, job id %s<br/>' %(i, r))
+			for i in self.request.POST.getall('kind'):
+				r = control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
+				self.response.out.write('delete %s, job id %s<br/>' %(i, r))
 			return
 		elif p == 'Sync Phase 1':
 			# pre-memcache

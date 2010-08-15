@@ -1,5 +1,18 @@
 <form method="POST">
-<input type="submit" name="submit" value="Delete All Kinds"/><br>
 <input type="submit" name="submit" value="Sync Phase 1"/> Areas<br>
 <input type="submit" name="submit" value="Sync Phase 2"/> Missionaries, Zones<br>
+</form>
+<hr>
+<form method="POST">
+<input type="submit" name="submit" value="Delete Kinds"/><br>
+{% for i in kinds %}
+<input type="checkbox" name="kind" value="{{ i }}"/> {{ i }}<br>
+{% endfor %}
+</form>
+<hr>
+<form method="POST">
+<input type="submit" name="submit" value="Delete Kinds"/><br>
+{% for i in kinds %}
+<input type="checkbox" name="kind" value="{{ i }}" checked/> {{ i }}<br>
+{% endfor %}
 </form>
