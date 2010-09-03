@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import base64
+import logging
 import os
 
-from datetime import timedelta
+from datetime import timedelta, date
 from google.appengine.api import images
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
@@ -15,6 +16,14 @@ from models import *
 from forms import *
 from mapreduce import control, model
 import map_procs
+
+import sys
+# use reportlab patched from http://ruudhelderman.appspot.com/testpdf
+sys.path.insert(0, 'reportlab.zip')
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib import units
+from reportlab.lib.colors import red, black
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -153,6 +162,7 @@ class SendRelatorio(webapp.RequestHandler):
 def get_zopts():
 	w = get_week()
 	n = 'zopts-%s' %w.key()
+	print n
 	zopts = memcache.get(n)
 	if zopts is None:
 		zopts = render_zopts(w)
@@ -391,7 +401,7 @@ class NamesPage(webapp.RequestHandler):
 				nc += 1
 				r += "\t".join([unicode(a) for a in [i.area.zone.name, i.area.area.name, c.name.title(), c.date]]) + sep
 
-		return HttpResponse('%i%s%i%s%s' %(nb, sep, nc, sep, r), mimetype='text/plain')
+		self.response.out.write('%i%s%i%s%s' %(nb, sep, nc, sep, r))
 
 class IndicatorCheckPage(webapp.RequestHandler):
 	def get(self):
@@ -454,7 +464,7 @@ class MapControlPage(webapp.RequestHandler):
 class MissionStatusPage(webapp.RequestHandler):
 	def get(self):
 		ms = Missionary.all().filter('is_released', False).order('zone_name').order('area_name').order('-is_senior').fetch(500)
-		prefetch_refprops(ms, Missionary.area)
+		prefetch_refprops(ms, Missionary.area, Missionary.profile)
 
 		zones = []
 		z = None
@@ -474,6 +484,263 @@ class MissionStatusPage(webapp.RequestHandler):
 
 		rendert(self, 'mission-status.html', {'zones': zones})
 
+def drawZone(c, missionaries, name, x, y):
+	W = c.W
+	H = c.H
+	F = c.F
+	S = c.S
+	cols = c.cols
+
+	c.line(x, y, x+W*cols, y)
+	c.line(x, y+H, x+W*cols, y+H)
+	c.line(x, y, x, y+H)
+	c.line(x+W*cols, y, x+W*cols, y+H)
+	c.setFillColor(red)
+	c.drawCentredString(x+W*cols/2.0, y+H-F, name)
+	y += H
+	c.setFillColor(black)
+
+	zone = missionaries[name]
+	zl = zone['_zl']
+
+	y = drawArea(c, x, y, zone, zl.area)
+	y = drawDistrict(c, x, y, zone, zl.area.district)
+
+	for d in zone['_d']:
+		if d.key() == zl.area.district.key():
+			continue
+
+		y = drawDistrict(c, x, y, zone, d)
+
+	return y
+
+def drawDistrict(c, x, y, zone, district):
+	W = c.W
+	H = c.H
+	F = c.F
+	S = c.S
+	cols = c.cols
+
+	try:
+		dl = zone['dl_' + district.name]
+		y = drawArea(c, x, y, zone, district)
+	except:
+		dl = None
+
+	for area in zone['d_' + district.name]:
+		m = zone['a_' + area.name][0]
+
+		if m == zone['_zl'] or m == dl:
+			continue
+		y = drawArea(c, x, y, zone, m.area)
+	c.line(x, y, x+W*cols, y)
+
+	return y
+
+def drawArea(c, x, y, zone, area):
+	a = zone['a_' + area.name]
+
+	if not a[0].is_senior:
+		sen = None
+		sname = 'NO SENIOR'
+		juns = a
+	else:
+		sen = a[0]
+		sname = sen.display()
+		juns = a[1:]
+
+	if len(juns) == 0:
+		if not sen:
+			return y
+		elif sen.calling == MISSIONARY_CALLING_TR or \
+			sen.calling == MISSIONARY_CALLING_LDTR or \
+			sen.sex == MISSIONARY_SEX_SISTER:
+			j = ''
+		else:
+			j = 'NO JUNIOR'
+	else:
+		j = juns[0].display()
+
+	l = [area.name, sname, j]
+
+	if c.phone:
+		l.insert(1, area.phone)
+
+	drawLine(c, x, y, l)
+	for j in juns[1:]:
+		y += c.H
+		lst = ['', '', j.display()]
+		if c.phone:
+			lst.insert(0, '')
+		drawLine(c, x, y, lst)
+
+	return y + c.H
+
+def drawLine(c, x, y, strs):
+	c.line(x, y, x, y+c.H)
+
+	for s in strs:
+		c.drawString(x+2, y+c.H-c.F, s)
+		x += c.W
+		c.line(x, y, x, y + c.H)
+
+def get_missionaries():
+	n = 'missionaries'
+	data = memcache.get(n)
+	if data is not None:
+		return data
+	else:
+			data = render_missionaries()
+			memcache.add(n, data)
+			return data
+
+def render_missionaries():
+	zones = {}
+
+	ms = Missionary.all().filter('is_released', False).order('area_name').fetch(500)
+	prefetch_refprops(ms, Missionary.area)
+	areas = [m.area for m in ms]
+	prefetch_refprops(areas, Area.district)
+
+	for m in ms:
+		if m.zone_name not in zones:
+			zones[m.zone_name] = {'_d': []}
+		z = zones[m.zone_name]
+
+		n = 'a_' + m.area_name
+		if n not in z:
+			z[n] = []
+
+		if m.is_senior:
+			z[n].insert(0, m)
+		else:
+			z[n].append(m)
+
+		a = m.area
+		d = a.district
+		n = 'd_' + d.name
+		if n not in z:
+			z[n] = [a]
+		elif a not in z[n]:
+			z[n].append(a)
+
+		if m.calling == MISSIONARY_CALLING_LZL:
+			z['_zl'] = m
+		elif m.is_dl:
+			z['dl_' + m.area.name] = m
+			z['_d'].append(m.area)
+
+	return zones
+
+class Quadro(webapp.RequestHandler):
+	def get(self):
+		# don't use the cache yet
+		missionaries = render_missionaries()
+
+		self.response.headers['Content-Type'] = 'application/pdf'
+		self.response.headers['Content-Disposition'] = 'attachment; filename=quadro.pdf'
+		c = canvas.Canvas(self.response.out, bottomup=0)
+
+		big = 'big' in self.request.GET
+		phone = 'phone' in self.request.GET
+
+		if big:
+			c.W = 90
+			c.H = 9
+			c.F = 2 # oFfset
+			c.S = 8 # text font Size
+		else:
+			c.W = 45
+			c.H = 5.2
+			c.F = 1.3 # oFfset
+			c.S = 4.5 # text font Size
+
+		if phone:
+			c.phone = True
+			c.cols = 4
+		else:
+			c.phone = False
+			c.cols = 3
+
+		c.setPageSize(landscape(A4))
+		c.translate(units.cm, units.cm)
+		c.setFontSize(c.S)
+		c.setLineWidth(.5)
+
+		x = 0
+
+		if big: num = 1
+		else: num = 2
+
+		for quadnum in range(num):
+			y = 0
+			y = drawZone(c, missionaries, u'Jacarepaguá', x, y)
+			y = drawZone(c, missionaries, u'Andaraí', x, y)
+			y = drawZone(c, missionaries, u'Madureira', x, y)
+			y = drawZone(c, missionaries, u'Rio de Janeiro', x, y)
+			y = drawZone(c, missionaries, u'Nova Iguaçu', x, y)
+			y = drawZone(c, missionaries, u'Itaguaí', x, y)
+
+			numbers = []
+			#numbers.extend(settings.PHONE_NUMBERS)
+			#numbers.extend(settings.PHONE_NUMBERS_FIX)
+
+			if len(numbers) % 2:
+				numbers.append(('', ''))
+
+			y += c.H
+
+			c.line(x, y, x+c.W*c.cols, y)
+			c.line(x, y, x, y+c.H)
+			c.line(x+c.W*c.cols, y, x+c.W*c.cols, y+c.H)
+			y += c.H
+			c.line(x, y, x+c.W*c.cols, y)
+			c.drawCentredString(x+c.W*c.cols/2.0, y-c.F, 'Outras')
+
+			if not c.phone:
+				c.cols = 4
+				c.W = c.W * 3.0 / 4.0
+
+			i = 0
+			while True:
+				n = numbers[i:i + 2]
+				i += 2
+				if len(n) == 0:
+					break
+
+				l = [n[0][0], n[0][1]]
+
+				if len(n) > 1:
+					l.append(n[1][0])
+					l.append(n[1][1])
+
+				drawLine(c, x, y, l)
+				y += c.H
+
+			c.line(x, y, x+c.W*c.cols, y)
+
+			if not c.phone:
+				c.cols = 3
+				c.W = c.W * 4.0 / 3.0
+
+			x += c.W * c.cols + c.H
+			y = 0
+			y = drawZone(c, missionaries, u'Campo Grande', x, y)
+			y = drawZone(c, missionaries, u'Itaboraí', x, y)
+			y = drawZone(c, missionaries, u'Volta Redonda', x, y)
+			y = drawZone(c, missionaries, u'Petrópolis', x, y)
+			y = drawZone(c, missionaries, u'Teresópolis', x, y)
+			y = drawZone(c, missionaries, u'Juiz de Fora', x, y)
+			y = drawZone(c, missionaries, u'Macaé', x, y)
+			y = drawZone(c, missionaries, u'Cabo Frio', x, y)
+
+			c.drawCentredString(x + c.W * c.cols / 2.0, y + 2 * c.H - c.F, date.today().strftime('%d/%m/%Y'))
+
+			x += c.W * c.cols + c.H * 2
+
+		c.showPage()
+		c.save()
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -491,6 +758,8 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/ind-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/map-control/', MapControlPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
+
+	('/quadro/', Quadro),
 
 	], debug=True)
 

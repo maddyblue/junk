@@ -1,21 +1,21 @@
 {% for areas in zones %}
 	<p/><b>{{ areas.0.0.zone_name }}</b> - {{ areas|length }} areas
 	{% for ms in areas %}
-		<br/>{{ ms.0.area_name }}</a>{% if ms.0.area.phone %} ({{ ms.0.area.phone }}){% endif %},
+		<br/>{{ ms.0.area.name }}</a>{% if ms.0.area.phone %} ({{ ms.0.area.phone }}){% endif %},
 		{% comment %}district: {{ ms.0.area.district.name }}{% endcomment %}
 		{% if ms.0.area.reports_with %} <b>reports with {{ ms.0.area.reports_with.name }}</b>{% endif %}
 		{% if ms.0.area.does_not_report %} <b>does not report</b>{% endif %}
 		{% for m in ms %}
-			<br/>&nbsp;&nbsp;{{ m }} <a href="/_ah/admin/datastore/edit?key={{ m.key }}">-</a> {{ m.calling }} - {{ m.email }} - {{ m.full_name }} - {{ m.email_parents }}
+			<br/>&nbsp;&nbsp;{{ m }} <a href="/_ah/admin/datastore/edit?key={{ m.key }}">-</a> {{ m.calling }} - {{ m.profile.email }} - {{ m.profile.full_name }} - {{ m.profile.email_parents }}
 			<font color="red"><b>
-			{% if not m.full_name %}name{% endif %}
+			{% if not m.profile.full_name %}name{% endif %}
 			{% if not m.start %}start{% endif %}
 			{% if not m.release %}release{% endif %}
-			{% if not m.birth %}birth{% endif %}
-			{% if not m.mission_id %}id{% endif %}
-			{% if not m.email %}email{% endif %}
-			{% if not m.email_parents and not m.address_parents %}parents{% endif %}
-			{% if not m.box %}mailbox{% endif %}
+			{% if not m.profile.birth %}birth{% endif %}
+			{% if not m.profile.mission_id %}id{% endif %}
+			{% if not m.profile.email %}email{% endif %}
+			{% if not m.profile.email_parents and not m.profile.address_parents %}parents{% endif %}
+			{% if not m.profile.box %}mailbox{% endif %}
 			</b></font>
 		{% endfor %}
 	{% endfor %}

@@ -3,10 +3,13 @@ import getpass
 import sys
 import time
 from datetime import datetime
+import base64
 
 sys.path.append("/home/mjibson")
 sys.path.append("/home/mjibson/sdk/google_appengine")
+sys.path.append("/home/mjibson/sdk/google_appengine/lib/webob")
 sys.path.append("/home/mjibson/sdk/google_appengine/lib/yaml/lib")
+sys.path.append("/home/mjibson/sdk/google_appengine/lib/fancy_urllib")
 
 from django.core.management import setup_environ
 from riodejaneiro import settings
@@ -90,22 +93,67 @@ def dump():
 			areas[i.name].ward = wards[i.ward.name]
 	mput(p)
 
-	print 'Missionary'
+	print 'MissionaryProfiles'
 	p = []
 	obs = djm.Missionary.objects.all().select_related()
+	profiles = {}
+	for i in obs:
+		if i.photo:
+			photo = photo=base64.b64decode(i.photo)
+		else:
+			photo = None
+
+		p.append(aem.MissionaryProfile(
+			full_name=i.full_name,
+			box=i.box,
+			mtc=i.mtc,
+			birth=i.birth,
+			bloodtype=i.bloodtype,
+			roster_name=i.roster_name,
+			roster_full=i.roster_full,
+			mission_id=i.mission_id,
+
+			it_flight_num=str(i.it_flight_num),
+			it_flight_comp=i.it_flight_comp,
+			it_flight_arrive=i.it_flight_arrive,
+			it_destination=i.it_destination,
+			it_ward=i.it_ward,
+			it_stake=i.it_stake,
+
+			email=i.email,
+			email_parents=i.email_parents,
+			address_parents=i.address_parents,
+
+			cl_tr=i.cl_tr,
+			cl_sn=i.cl_sn,
+			cl_ld=i.cl_ld,
+			cl_lz=i.cl_lz,
+			cl_ap=i.cl_ap,
+
+			hist_data=i.hist_data,
+			hist_last_update=i.hist_last_update,
+			hometown=i.hometown,
+			photo=photo
+			))
+		profiles[i.id] = p[-1]
+	mput(p)
+
+	print 'Missionary'
+	p = []
 	missionaries = {}
 	for i in obs:
-		o = aem.Missionary(mission_name=i.mission_name, calling=i.get_calling_display(), sex=i.get_sex_display(), is_senior=i.is_senior, is_released=i.is_released)
+		o = aem.Missionary(mission_name=i.mission_name, calling=i.get_calling_display(), sex=i.get_sex_display(), is_senior=i.is_senior, is_released=i.is_released, start=i.start, release=i.release, profile=profiles[i.id])
 
 		if i.area:
 			o.area = areas[i.area.name]
-			o.area_name = i.area.name
-			o.zone = zones[i.area.zone.name]
-			o.zone_name = i.area.zone.name
 
 		missionaries[i.id] = o
 		p.append(o)
 	mput(p)
+
+	if True:
+#		return
+		pass
 
 	print 'Snapshot'
 	p = []
@@ -116,6 +164,14 @@ def dump():
 		p.append(aem.Snapshot(key_name=str(d), date=d))
 		snapshots[i.id] = p[-1]
 	mput(p)
+
+	print 'Week'
+	p = []
+	obs = djm.Week.objects.all().select_related()
+	for i in obs:
+		p.append(aem.Week(key_name=str(i.date), date=i.date, question=i.question, question_for_both=i.question_for_both, snapshot=snapshots[i.snapshot.id]))
+	mput(p)
+	weeks = dict((i.key().id_or_name(), i) for i in p)
 
 	print 'SnapArea'
 	p = []
@@ -157,14 +213,6 @@ def dump():
 		o.name = '%s - %i missionaries' %(o.date, i.snaps.all().count())
 		p.append(o)
 	mput(p)
-
-	print 'Week'
-	p = []
-	obs = djm.Week.objects.all().select_related()
-	for i in obs:
-		p.append(aem.Week(key_name=str(i.date), date=i.date, question=i.question, question_for_both=i.question_for_both, snapshot=snapshots[i.snapshot.id]))
-	mput(p)
-	weeks = dict((i.key().id_or_name(), i) for i in p)
 
 	print 'RPM'
 	p = []
@@ -215,7 +263,7 @@ def dump():
 	print 'Report'
 	p = []
 	obs = djm.Report.objects.all().select_related()
-	for i in obs:
+	for i in obs[:10]:
 		try:
 			p.append(aem.Report(
 				week=weeks[str(i.week.date)],
@@ -443,8 +491,8 @@ def dump():
 				confirmation_9_name=i.confirmation_9_name,
 				confirmation_9_date=i.confirmation_9_date,
 				confirmation_10_name=i.confirmation_10_name,
-				confirmation_10_date=i.confirmation_10_date
-				))
+			confirmation_10_date=i.confirmation_10_date
+			))
 		except:
 			pass
 
