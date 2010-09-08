@@ -20,7 +20,7 @@ class Stake(db.Model):
 	def __unicode__(self):
 		return self.name
 
-class Ward(db.Model):
+class Ward(DerefModel):
 	name = db.StringProperty(required=True)
 	stake = db.ReferenceProperty(Stake, required=True)
 	stake_name = db.StringProperty(required=True)
@@ -180,7 +180,7 @@ class SnapArea(DerefModel):
 	district = db.ReferenceProperty(Area, collection_name='snaparea_district')
 	phone = db.StringProperty()
 
-class SnapMissionary(db.Model):
+class SnapMissionary(DerefModel):
 	missionary = db.ReferenceProperty(Missionary, required=True)
 	is_senior = db.BooleanProperty(required=True)
 	calling = db.StringProperty(required=True, choices=MISSIONARY_CALLING_CHOICES)
@@ -445,7 +445,7 @@ class Report(db.Model):
 	confirmation_10_name = db.StringProperty(indexed=False)
 	confirmation_10_date = db.StringProperty(indexed=False)
 
-class IndicatorSubmission(db.Model):
+class IndicatorSubmission(DerefModel):
 	week = db.ReferenceProperty(Week, required=True)
 	submitted = db.DateTimeProperty(auto_now_add=True, required=True)
 	used = db.BooleanProperty(required=True)

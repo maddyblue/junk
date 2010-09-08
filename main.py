@@ -16,6 +16,7 @@ from models import *
 from forms import *
 from mapreduce import control, model
 import map_procs
+import config
 
 import sys
 # use reportlab patched from http://ruudhelderman.appspot.com/testpdf
@@ -193,6 +194,18 @@ class NumerosPage(webapp.RequestHandler):
 
 		rendert(self, 'numeros.html', d)
 
+def get_snapmissionaries(week):
+	n = 'snapmissionaries-%s' %week.key()
+	data = memcache.get(n)
+	if data is None:
+		data = SnapshotMissionary.all().filter('snapshot', week.snapshot).fetch(1000)
+		prefetch_refprops(data, SnapshotMissionary.snapmissionary)
+		data = [a.snapmissionary for a in data]
+		prefetch_refprops(data, SnapMissionary.missionary)
+		memcache.add(n, data)
+
+	return data
+
 def get_snapareas(week):
 	n = 'snapareas-%s' %week.key()
 	data = memcache.get(n)
@@ -344,64 +357,114 @@ class SendNumbers(webapp.RequestHandler):
 
 		self.response.out.write('Enviado com sucesso.')
 
+# Area/Ward/Stake
+def get_aws():
+	n = 'aws'
+	data = memcache.get(n)
+	if data is not None:
+		return data
+	else:
+			stakes = dict([(i.key(), i) for i in Stake.all().fetch(100)])
+			wards = dict([(i.key(), i) for i in Ward.all().fetch(500)])
+			areas = Area.all().fetch(500)
+
+			for i in wards.values():
+				i.stake = stakes[i.get_key('stake')]
+
+			for i in areas:
+				if i.get_key('ward'):
+					i.ward = wards[i.get_key('ward')]
+
+			data = dict([(i.key(), i) for i in areas])
+			memcache.add(n, data)
+			return data
+
+def get_ibc(week):
+	n = 'ibc-%s' %(week.key())
+	data = memcache.get(n)
+	if data is None:
+		data = {}
+
+		for sub in IndicatorSubmission.all().filter('week', week).filter('used', True).fetch(100):
+			inds = Indicator.all().filter('submission', sub).fetch(100)
+			bs = IndicatorBaptism.all().filter('submission', sub).fetch(100)
+			cs = IndicatorConfirmation.all().filter('submission', sub).fetch(100)
+
+			data[sub.key()] = (sub, inds, bs, cs)
+
+		memcache.add(n, data)
+
+	return data
+
 class NamesPage(webapp.RequestHandler):
 	def get(self):
+		self.response.headers['Content-Type'] = 'text/plain'
 		sep = "\r\n"
 
 		week = get_week()
+		aws = get_aws()
 
-		inds = Indicator.gql('where week = :1 order by zone_name, area_name', week).fetch(1000)
-		idict = {}
-		for i in inds:
-			idict[i.key()] = i
+		# hash the snaparea keys
+		areas = dict([(i.key(), i) for i in get_snapareas(week)])
 
-		bs = {}
-		for b in IndicatorBaptism.gql('where week = :1', week).fetch(1000):
-			bk = b.key()
-			ik = b.get_key('indicator')
+		# hash the area keys also (for reports_with)
+		for v in areas.values():
+			areas[v.get_key('area')] = v
 
-			if ik not in bs:
-				bs[ik] = []
+		missionaries = dict([(i.key(), i) for i in get_snapmissionaries(week)])
 
-			bs[ik].append(b)
+		# keys of snaparea map to missionaries in that area
+		m_by_area = {}
 
-		cs = {}
-		for c in IndicatorConfirmation.gql('where week = :1', week).fetch(1000):
-			ck = c.key()
-			ik = c.get_key('indicator')
+		for k, v in missionaries.iteritems():
+			a = areas[v.get_key('snaparea')]
+			if a.does_not_report:
+				continue
+			elif a.get_key('reports_with'):
+				a = a.get_key('reports_with')
+			else:
+				a = areas[v.get_key('snaparea')].get_key('area')
 
-			if ik not in cs:
-				cs[ik] = []
+			if a not in m_by_area:
+				m_by_area[a] = []
 
-			cs[ik].append(c)
+			if v.is_senior:
+				m_by_area[a].insert(0, v)
+			else:
+				m_by_area[a].append(v)
 
-		r = ''
+		rb = ''
+		rc = ''
 		nb = 0
 		nc = 0
 
-		for i in inds:
-			ik = i.key()
+		ibc = get_ibc(week)
 
-			if ik in bs:
-				for b in bs[ik]:
-					nb += 1
+		for k in ibc.keys():
+			sub, inds, bs, cs = ibc[k]
 
-					if b.sex == BAPTISM_SEX_M: s = 'M'
-					else: s = 'F'
+			for i in inds:
+				ik = i.key()
+				area = aws[areas[i.get_key('area')].get_key('area')]
+				zn = area.get_key('zone').name()
 
-					m = []
-					m.extend(Missionary.objects.filter(id__in=week.snapshot.snaps.filter(area=i.area).values('missionary')))
-					a = week.snapshot.areas.filter(reports_with=i.area.area)
-					m.extend(Missionary.objects.filter(id__in=week.snapshot.snaps.filter(area__in=a).values('missionary')))
-					m = ", ".join([unicode(a) for a in m])
-					r += "\t".join([unicode(a) for a in [i.area.zone.name, b.name.title(), b.date, b.age, s, i.area.area.ward.name, i.area.area.ward.stake, m]]) + sep
+				for b in bs:
+					if b.get_key('indicator') == ik:
+						nb += 1
 
-		for i in inds:
-			for c in i.confirmations.all():
-				nc += 1
-				r += "\t".join([unicode(a) for a in [i.area.zone.name, i.area.area.name, c.name.title(), c.date]]) + sep
+						if b.sex == BAPTISM_SEX_M: s = 'M'
+						else: s = 'F'
 
-		self.response.out.write('%i%s%i%s%s' %(nb, sep, nc, sep, r))
+						m = m_by_area[areas[i.get_key('area')].get_key('area')]
+						m = ", ".join([unicode(a.missionary) for a in m])
+						rb += "\t".join([unicode(a) for a in [zn, b.name.title(), b.date, b.age, s, area.ward.name, area.ward.stake, m]]) + sep
+
+				for c in cs:
+					if c.get_key('indicator') == ik:
+						nc += 1
+						rc += "\t".join([unicode(a) for a in [zn, area.name, c.name.title(), c.date]]) + sep
+
+		self.response.out.write('%i%s%i%s%s%s' %(nb, sep, nc, sep, rb, rc))
 
 class IndicatorCheckPage(webapp.RequestHandler):
 	def get(self):
@@ -682,8 +745,7 @@ class Quadro(webapp.RequestHandler):
 			y = drawZone(c, missionaries, u'Itaguaí', x, y)
 
 			numbers = []
-			#numbers.extend(settings.PHONE_NUMBERS)
-			#numbers.extend(settings.PHONE_NUMBERS_FIX)
+			numbers.extend(config.PHONE_NUMBERS)
 
 			if len(numbers) % 2:
 				numbers.append(('', ''))
