@@ -12,27 +12,20 @@ from google.appengine.ext.db import stats
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from models import *
+from cache import *
 from forms import *
 from mapreduce import control, model
-import map_procs
+from models import *
 import config
+import map_procs
 
 import sys
 # use reportlab patched from http://ruudhelderman.appspot.com/testpdf
 sys.path.insert(0, 'reportlab.zip')
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib import units
 from reportlab.lib.colors import red, black
-
-def prefetch_refprops(entities, *props):
-	fields = [(entity, prop) for entity in entities for prop in props]
-	ref_keys = [prop.get_value_for_datastore(x) for x, prop in fields]
-	ref_entities = dict((x.key(), x) for x in db.get(set(ref_keys)))
-	for (entity, prop), ref_key in zip(fields, ref_keys):
-		prop.__set__(entity, ref_entities[ref_key])
-	return entities
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.pdfgen import canvas
 
 # returns True if authenticated
 def basicAuth(func):
@@ -67,54 +60,6 @@ def render(s, p, t, d={}):
 def rendert(s, t, d={}):
 	path = os.path.join(os.path.dirname(__file__), 'templates', t)
 	s.response.out.write(template.render(path, d))
-
-def get_week():
-	n = 'week'
-	w = memcache.get(n)
-	if w is None:
-		w = Week.all().order('-date').get()
-		memcache.add(n, w, 3600) # cache the week for an hour
-
-	return w
-
-def get_mopts(released=False):
-	n = '%s-mopts' %released
-	mopts = memcache.get(n)
-	if mopts is None:
-		mopts = render_mopts(released)
-		memcache.add(n, mopts, 3600)
-
-	return mopts
-
-def render_mopts(released):
-	missionary = Missionary.gql('where is_released = :1 order by mission_name', released).fetch(1000)
-	return ''.join(['<option value="%s">%s</option>' %(m.key(), unicode(m)) for m in missionary])
-
-def get_aopts():
-	n = 'aopts'
-	aopts = memcache.get(n)
-	if aopts is None:
-		aopts = render_aopts()
-		memcache.add(n, aopts, 3600)
-
-	return aopts
-
-def render_aopts():
-	area = Area.gql('where is_open = :1 order by zone_name, name', True).fetch(1000)
-	return ''.join(['<option value="%s">%s</option>' %(a.key(), unicode(a)) for a in area])
-
-def get_wopts():
-	n = 'wopts'
-	wopts = memcache.get(n)
-	if wopts is None:
-		wopts = render_wopts()
-		memcache.add(n, wopts, 3600)
-
-	return wopts
-
-def render_wopts():
-	ward = Ward.gql('order by stake_name, name')
-	return ''.join(['<option value="%s">%s</option>' %(w.key(), unicode(w)) for w in ward])
 
 class MainPage(webapp.RequestHandler):
 	@basicAuth
@@ -160,31 +105,6 @@ class SendRelatorio(webapp.RequestHandler):
 			for k, v in f.errors.items():
 				self.response.out.write('%s: %s\n' %(k, v.as_text()))
 
-def get_zopts():
-	w = get_week()
-	n = 'zopts-%s' %w.key()
-	print n
-	zopts = memcache.get(n)
-	if zopts is None:
-		zopts = render_zopts(w)
-		memcache.add(n, zopts)
-
-	return zopts
-
-def render_zopts(week):
-	snapareas = get_snapareas(week)
-	zones = {}
-	for i in snapareas:
-		k = i.get_key('zone')
-		n = k.name()
-		if n not in zones:
-			zones[n] = k
-
-	zlist = zones.keys()
-	zlist.sort()
-
-	return ''.join(['<option value="%s">%s</option>' %(zones[z], z) for z in zlist])
-
 class NumerosPage(webapp.RequestHandler):
 	@basicAuth
 	def get(self):
@@ -193,39 +113,6 @@ class NumerosPage(webapp.RequestHandler):
 		}
 
 		rendert(self, 'numeros.html', d)
-
-def get_snapmissionaries(week):
-	n = 'snapmissionaries-%s' %week.key()
-	data = memcache.get(n)
-	if data is None:
-		data = SnapshotMissionary.all().filter('snapshot', week.snapshot).fetch(1000)
-		prefetch_refprops(data, SnapshotMissionary.snapmissionary)
-		data = [a.snapmissionary for a in data]
-		prefetch_refprops(data, SnapMissionary.missionary)
-		memcache.add(n, data)
-
-	return data
-
-def get_snapareas(week):
-	n = 'snapareas-%s' %week.key()
-	data = memcache.get(n)
-	if data is None:
-		data = SnapshotArea.gql('where snapshot = :1', week.get_key('snapshot')).fetch(1000)
-		prefetch_refprops(data, SnapshotArea.snaparea)
-		data = [a.snaparea for a in data]
-		memcache.add(n, data)
-
-	return data
-
-def get_snapareas_byzone(week, zkey):
-	n = 'snapareas-%s-%s' %(week.key(), zkey)
-	data = memcache.get(n)
-	if data is None:
-		snapareas = get_snapareas(week)
-		data = [a for a in snapareas if a.get_key('zone') == zkey]
-		memcache.add(n, data)
-
-	return data
 
 class LoadZone(webapp.RequestHandler):
 	@basicAuth
@@ -283,6 +170,8 @@ class SendNumbers(webapp.RequestHandler):
 		zone = Zone.get(self.request.POST['zona'])
 		week = Week.get(self.request.POST['week'])
 		wk = week.key()
+
+		memcache.delete(C_IBC %week.key())
 
 		s = IndicatorSubmission(week=week, zone=zone, used=False)
 		s.put()
@@ -356,45 +245,6 @@ class SendNumbers(webapp.RequestHandler):
 		db.put(ords)
 
 		self.response.out.write('Enviado com sucesso.')
-
-# Area/Ward/Stake
-def get_aws():
-	n = 'aws'
-	data = memcache.get(n)
-	if data is not None:
-		return data
-	else:
-			stakes = dict([(i.key(), i) for i in Stake.all().fetch(100)])
-			wards = dict([(i.key(), i) for i in Ward.all().fetch(500)])
-			areas = Area.all().fetch(500)
-
-			for i in wards.values():
-				i.stake = stakes[i.get_key('stake')]
-
-			for i in areas:
-				if i.get_key('ward'):
-					i.ward = wards[i.get_key('ward')]
-
-			data = dict([(i.key(), i) for i in areas])
-			memcache.add(n, data)
-			return data
-
-def get_ibc(week):
-	n = 'ibc-%s' %(week.key())
-	data = memcache.get(n)
-	if data is None:
-		data = {}
-
-		for sub in IndicatorSubmission.all().filter('week', week).filter('used', True).fetch(100):
-			inds = Indicator.all().filter('submission', sub).fetch(100)
-			bs = IndicatorBaptism.all().filter('submission', sub).fetch(100)
-			cs = IndicatorConfirmation.all().filter('submission', sub).fetch(100)
-
-			data[sub.key()] = (sub, inds, bs, cs)
-
-		memcache.add(n, data)
-
-	return data
 
 class NamesPage(webapp.RequestHandler):
 	def get(self):
@@ -646,54 +496,6 @@ def drawLine(c, x, y, strs):
 		c.drawString(x+2, y+c.H-c.F, s)
 		x += c.W
 		c.line(x, y, x, y + c.H)
-
-def get_missionaries():
-	n = 'missionaries'
-	data = memcache.get(n)
-	if data is not None:
-		return data
-	else:
-			data = render_missionaries()
-			memcache.add(n, data)
-			return data
-
-def render_missionaries():
-	zones = {}
-
-	ms = Missionary.all().filter('is_released', False).order('area_name').fetch(500)
-	prefetch_refprops(ms, Missionary.area)
-	areas = [m.area for m in ms]
-	prefetch_refprops(areas, Area.district)
-
-	for m in ms:
-		if m.zone_name not in zones:
-			zones[m.zone_name] = {'_d': []}
-		z = zones[m.zone_name]
-
-		n = 'a_' + m.area_name
-		if n not in z:
-			z[n] = []
-
-		if m.is_senior:
-			z[n].insert(0, m)
-		else:
-			z[n].append(m)
-
-		a = m.area
-		d = a.district
-		n = 'd_' + d.name
-		if n not in z:
-			z[n] = [a]
-		elif a not in z[n]:
-			z[n].append(a)
-
-		if m.calling == MISSIONARY_CALLING_LZL:
-			z['_zl'] = m
-		elif m.is_dl:
-			z['dl_' + m.area.name] = m
-			z['_d'].append(m.area)
-
-	return zones
 
 class Quadro(webapp.RequestHandler):
 	def get(self):
