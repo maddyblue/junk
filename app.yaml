@@ -41,6 +41,9 @@ handlers:
 
 admin_console:
   pages:
+  - name: Appstats
+    url: /stats/
+
   - name: Mission Status
     url: /_ah/missao-rio/status/
 
