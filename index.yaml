@@ -77,6 +77,11 @@ indexes:
   - name: is_senior
     direction: desc
 
+- kind: MissionaryProfile
+  properties:
+  - name: __key__
+    direction: desc
+
 - kind: RPM
   properties:
   - name: __key__

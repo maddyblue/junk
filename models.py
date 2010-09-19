@@ -106,17 +106,6 @@ MISSIONARY_CALLING_CHOICES = set([
 ])
 
 class MissionaryProfile(db.Model):
-	full_name = db.StringProperty(indexed=False)
-	box = db.IntegerProperty(indexed=False)
-	email = db.StringProperty(indexed=False)
-	mtc = db.DateProperty(indexed=False)
-	birth = db.DateProperty(indexed=False)
-	bloodtype = db.StringProperty(indexed=False)
-
-	roster_name = db.StringProperty(indexed=False)
-	roster_full = db.StringProperty(indexed=False)
-	mission_id = db.IntegerProperty(indexed=False)
-
 	# itenary data
 	it_flight_num = db.StringProperty(indexed=False)
 	it_flight_comp = db.StringProperty(indexed=False)
@@ -124,16 +113,6 @@ class MissionaryProfile(db.Model):
 	it_destination = db.StringProperty(indexed=False)
 	it_ward = db.TextProperty(indexed=False)
 	it_stake = db.TextProperty(indexed=False)
-
-	email_parents = db.TextProperty(indexed=False)
-	address_parents = db.TextProperty(indexed=False)
-
-	# calling letters
-	cl_tr = db.BooleanProperty(indexed=False)
-	cl_sn = db.BooleanProperty(indexed=False)
-	cl_ld = db.BooleanProperty(indexed=False)
-	cl_lz = db.BooleanProperty(indexed=False)
-	cl_ap = db.BooleanProperty(indexed=False)
 
 	# history
 	hist_data = db.TextProperty(indexed=False)
@@ -149,6 +128,27 @@ class Missionary(DerefModel):
 	area = db.ReferenceProperty(Area)
 	start = db.DateProperty()
 	release = db.DateProperty()
+	mtc = db.DateProperty(indexed=False)
+
+	full_name = db.StringProperty(indexed=False)
+	box = db.IntegerProperty(indexed=False)
+	email = db.StringProperty(indexed=False)
+	email_parents = db.TextProperty(indexed=False)
+	address_parents = db.TextProperty(indexed=False)
+
+	birth = db.DateProperty(indexed=False)
+	bloodtype = db.StringProperty(indexed=False)
+
+	roster_name = db.StringProperty(indexed=False)
+	roster_full = db.StringProperty(indexed=False)
+	mission_id = db.IntegerProperty(indexed=False)
+
+	# calling letters
+	cl_tr = db.BooleanProperty(indexed=False)
+	cl_sn = db.BooleanProperty(indexed=False)
+	cl_ld = db.BooleanProperty(indexed=False)
+	cl_lz = db.BooleanProperty(indexed=False)
+	cl_ap = db.BooleanProperty(indexed=False)
 
 	profile = db.ReferenceProperty(MissionaryProfile, required=True, indexed=False)
 

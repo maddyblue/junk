@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from google.appengine.api import memcache
+from google.appengine.datastore import entity_pb
+from google.appengine.ext import db
 
 from models import *
 
@@ -15,6 +17,7 @@ C_SNAPAREAS_BYZONE = 'snapareas-%%s-%%s'
 C_SNAPMISSIONARIES = 'snapmissionaries-%%s'
 C_WEEK = 'week'
 C_WOPTS = 'wopts'
+C_ZONES = 'zones'
 C_ZOPTS = 'zopts-%%s'
 
 def prefetch_refprops(entities, *props):
@@ -25,13 +28,38 @@ def prefetch_refprops(entities, *props):
 		prop.__set__(entity, ref_entities[ref_key])
 	return entities
 
+def pack(models):
+	if models is None:
+		return None
+	elif isinstance(models, db.Model):
+	# Just one instance
+		return db.model_to_protobuf(models).Encode()
+	else:
+	# A list
+		return [db.model_to_protobuf(x).Encode() for x in models]
+
+def unpack(data):
+	if data is None:
+		return None
+	elif isinstance(data, str):
+	# Just one instance
+		return db.model_from_protobuf(entity_pb.EntityProto(data))
+	else:
+		return [db.model_from_protobuf(entity_pb.EntityProto(x)) for x in data]
+
 # most recent week
 def get_week():
 	n = C_WEEK
-	w = memcache.get(n)
-	if w is None:
-		w = Week.all().order('-date').get()
-		memcache.add(n, w, 3600) # cache the week for an hour
+
+	try:
+		w = get_week._WEEK
+	except:
+		w = unpack(memcache.get(n))
+		if w is None:
+			w = Week.all().order('-date').get()
+			memcache.add(n, pack(w))
+
+		get_week._WEEK = w
 
 	return w
 
@@ -131,11 +159,11 @@ def get_snapareas(week):
 # list of open areas as SnapArea in a given zone and week
 def get_snapareas_byzone(week, zkey):
 	n = C_SNAPAREAS_BYZONE %(week.key(), zkey)
-	data = memcache.get(n)
+	data = unpack(memcache.get(n))
 	if data is None:
 		snapareas = get_snapareas(week)
 		data = [a for a in snapareas if a.get_key('zone') == zkey]
-		memcache.add(n, data)
+		memcache.add(n, pack(data))
 
 	return data
 
@@ -163,7 +191,7 @@ def get_aws():
 			return data
 
 # Indicator/Baptisms/Confirmations
-# dictionary with key IndicatorSubmission.key() (thus sorted by zone), and
+# dictionary with key IndicatorSubmission.key() (thus grouped by zone), and
 # value the tuple (IndicatorSubmission, [Indicator], [IndicatorBaptism], [IndicatorConfirmation])
 # for the given week
 def get_ibc(week):
@@ -185,17 +213,17 @@ def get_ibc(week):
 
 # dictionary with keys as names of open zones
 # values is dictionaries with multiple keys
-def get_missionaries():
-	n = C_MISSIONARIES
+def get_zones():
+	n = C_ZONES
 	data = memcache.get(n)
 	if data is not None:
 		return data
 	else:
-			data = render_missionaries()
+			data = render_zones()
 			memcache.add(n, data)
 			return data
 
-def render_missionaries():
+def render_zones():
 	zones = {}
 
 	ms = Missionary.all().filter('is_released', False).order('area_name').fetch(500)
@@ -232,3 +260,19 @@ def render_missionaries():
 			z['_d'].append(m.area)
 
 	return zones
+
+# list of active missionaries as Missionary (with area and profile) ordered by zone, area, senior
+def get_missionaries():
+	n = C_MISSIONARIES + '_'
+	ms = memcache.get(n + 'missionary')
+	ar = memcache.get(n + 'area')
+	if all([ms, ar]):
+		for i in range(len(ms)):
+			ms[i].area = ar[i]
+		return ms
+	else:
+		data = Missionary.all().filter('is_released', False).order('zone_name').order('area_name').order('-is_senior').fetch(500)
+		prefetch_refprops(data, Missionary.area)
+		memcache.add(n + 'area', pack([m.area for m in data]))
+		memcache.add(n + 'missionary', pack(data))
+		return data

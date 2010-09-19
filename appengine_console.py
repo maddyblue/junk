@@ -104,31 +104,12 @@ def dump():
 			photo = None
 
 		p.append(aem.MissionaryProfile(
-			full_name=i.full_name,
-			box=i.box,
-			mtc=i.mtc,
-			birth=i.birth,
-			bloodtype=i.bloodtype,
-			roster_name=i.roster_name,
-			roster_full=i.roster_full,
-			mission_id=i.mission_id,
-
 			it_flight_num=str(i.it_flight_num),
 			it_flight_comp=i.it_flight_comp,
 			it_flight_arrive=i.it_flight_arrive,
 			it_destination=i.it_destination,
 			it_ward=i.it_ward,
 			it_stake=i.it_stake,
-
-			email=i.email,
-			email_parents=i.email_parents,
-			address_parents=i.address_parents,
-
-			cl_tr=i.cl_tr,
-			cl_sn=i.cl_sn,
-			cl_ld=i.cl_ld,
-			cl_lz=i.cl_lz,
-			cl_ap=i.cl_ap,
 
 			hist_data=i.hist_data,
 			hist_last_update=i.hist_last_update,
@@ -142,7 +123,37 @@ def dump():
 	p = []
 	missionaries = {}
 	for i in obs:
-		o = aem.Missionary(mission_name=i.mission_name, calling=i.get_calling_display(), sex=i.get_sex_display(), is_senior=i.is_senior, is_released=i.is_released, start=i.start, release=i.release, profile=profiles[i.id])
+		o = aem.Missionary(
+			mission_name=i.mission_name,
+			calling=i.get_calling_display(),
+			sex=i.get_sex_display(),
+			is_senior=i.is_senior,
+			is_released=i.is_released,
+			start=i.start,
+			release=i.release,
+
+			bloodtype=i.bloodtype,
+			roster_name=i.roster_name,
+			roster_full=i.roster_full,
+			mission_id=i.mission_id,
+
+			full_name=i.full_name,
+			box=i.box,
+			mtc=i.mtc,
+			birth=i.birth,
+
+			email=i.email,
+			email_parents=i.email_parents,
+			address_parents=i.address_parents,
+
+			cl_tr=i.cl_tr,
+			cl_sn=i.cl_sn,
+			cl_ld=i.cl_ld,
+			cl_lz=i.cl_lz,
+			cl_ap=i.cl_ap,
+
+			profile=profiles[i.id]
+		)
 
 		if i.area:
 			o.area = areas[i.area.name]
@@ -150,10 +161,6 @@ def dump():
 		missionaries[i.id] = o
 		p.append(o)
 	mput(p)
-
-	if True:
-#		return
-		pass
 
 	print 'Snapshot'
 	p = []
@@ -263,7 +270,7 @@ def dump():
 	print 'Report'
 	p = []
 	obs = djm.Report.objects.all().select_related()
-	for i in obs[:10]:
+	for i in obs:
 		try:
 			p.append(aem.Report(
 				week=weeks[str(i.week.date)],

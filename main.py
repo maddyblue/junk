@@ -316,9 +316,30 @@ class NamesPage(webapp.RequestHandler):
 
 		self.response.out.write('%i%s%i%s%s%s' %(nb, sep, nc, sep, rb, rc))
 
-class IndicatorCheckPage(webapp.RequestHandler):
+class KeyIndicatorsPage(webapp.RequestHandler):
 	def get(self):
-		w = get_week()
+		self.response.headers['Content-Type'] = 'text/plain'
+		sep = "\r\n"
+
+		week = get_week()
+		od = week.date + timedelta(7)
+
+		# hash the snaparea keys
+		areas = dict([(i.key(), i) for i in get_snapareas(week)])
+		ibc = get_ibc(week).values()
+
+		r = "%i/%i\r\n%i/%i\r\n" %(week.date.day, week.date.month, od.day, od.month)
+		zones = [i[0].get_key('zone').name() for i in ibc]
+		r += "\t".join(zones) + sep
+		a = ""
+
+		for sub, inds, b, c in ibc:
+			r += "\t".join([areas[i.get_key('area')].get_key('area').name() for i in inds]) + sep
+
+			for i in inds:
+				a += "\t".join([str(d) for d in [i.PB_meta, i.PC_meta, i.PBM_meta, i.PS_meta, i.LM_meta, i.OL_meta, i.PP_meta, i.RR_meta, i.RC_meta, i.NP_meta, i.LMARC_meta, i.Con_meta, i.NFM_meta, i.PB, i.PC, i.PBM, i.PS, i.LM, i.OL, i.PP, i.RR, i.RC, i.NP, i.LMARC, i.Con, i.NFM, i.BM]]) + sep
+
+		self.response.out.write(r + a)
 
 class MapControlPage(webapp.RequestHandler):
 	def get(self):
@@ -376,8 +397,7 @@ class MapControlPage(webapp.RequestHandler):
 
 class MissionStatusPage(webapp.RequestHandler):
 	def get(self):
-		ms = Missionary.all().filter('is_released', False).order('zone_name').order('area_name').order('-is_senior').fetch(500)
-		prefetch_refprops(ms, Missionary.area, Missionary.profile)
+		ms = get_missionaries()
 
 		zones = []
 		z = None
@@ -500,7 +520,7 @@ def drawLine(c, x, y, strs):
 class Quadro(webapp.RequestHandler):
 	def get(self):
 		# don't use the cache yet
-		missionaries = render_missionaries()
+		missionaries = render_zones()
 
 		self.response.headers['Content-Type'] = 'application/pdf'
 		self.response.headers['Content-Disposition'] = 'attachment; filename=quadro.pdf'
@@ -617,9 +637,9 @@ application = webapp.WSGIApplication([
 	('/load-zone/', LoadZone),
 
 	('/names/', NamesPage),
+	('/keyindicators/', KeyIndicatorsPage),
 
 	# _ah
-	('/_ah/missao-rio/ind-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/map-control/', MapControlPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
 
