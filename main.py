@@ -120,7 +120,7 @@ class LoadZone(webapp.RequestHandler):
 		z = self.request.POST['zona']
 		zone = Zone.get(z)
 		w = get_week()
-		snapareas = get_snapareas_byzone(w, zone.key())
+		snapareas = [i for i in get_snapareas_byzone(w, zone.key()) if not i.does_not_report and not i.reports_with]
 
 		fields = ['PB', 'PC', 'PBM', 'PS', 'LM', 'OL', 'PP', 'RR', 'RC', 'NP', 'LMARC', 'Con', 'NFM']
 
@@ -187,11 +187,10 @@ class SendNumbers(webapp.RequestHandler):
 			self.request.POST['%s-submission' %ak] = sk
 			self.request.POST['%s-area' %ak] = ak
 			self.request.POST['%s-week' %ak] = wk
+
 			f = IndicatorForm(data=self.request.POST, prefix=a)
 			if f.is_valid():
 				i = f.save(commit=False)
-				i.area_name = areas[a].get_key('area').name()
-				i.zone_name = areas[a].get_key('zone').name()
 				inds.append(i)
 			else:
 				self.response.out.write('Faltando dados.')
@@ -371,7 +370,6 @@ class MapControlPage(webapp.RequestHandler):
 			for i in self.request.POST.getall('kind'):
 				r = control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
 				self.response.out.write('delete %s, job id %s<br/>' %(i, r))
-			return
 		elif p == 'Sync Phase 1':
 			# pre-memcache
 			memcache.flush_all()
@@ -391,9 +389,15 @@ class MapControlPage(webapp.RequestHandler):
 
 			i = control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync missionaries: %s<br>' %i)
+		elif p == 'Make Index':
+			handler_spec = 'map_procs.null'
+			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
+
+			for i in self.request.POST.getall('kind'):
+				r = control.start_map('Make Index ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
+				self.response.out.write('make index %s, job id %s<br/>' %(i, r))
 		else:
 			self.response.out.write('error')
-			return
 
 class MissionStatusPage(webapp.RequestHandler):
 	def get(self):
@@ -625,6 +629,85 @@ class Quadro(webapp.RequestHandler):
 		c.showPage()
 		c.save()
 
+class IndicatorCheckPage(webapp.RequestHandler):
+	def get(self):
+		week = get_week()
+
+		r = str(week.date)
+
+		subs = IndicatorSubmission.all().filter('week =', week).fetch(100)
+		zones = {}
+		for i in subs:
+			z = i.get_key('zone')
+
+			if z not in zones:
+				zones[z] = [i]
+			else:
+				zones[z].append(i)
+
+		for k, v in zones.iteritems():
+			z = k.name()
+			if len(v) == 1:
+				r += '<br>single: %s' %z
+				v[0].used = True
+			else:
+				r += '<br>multiple for zone %s: ' %z
+				r += ', '.join([str(i.key()) for i in v])
+				for i in v:
+					i.used = False
+
+		db.put(subs)
+		memcache.delete(C_IBC %week.key())
+
+		r += '<hr>'
+		totbap = 0
+
+		ibc = get_ibc(week)
+# dictionary with key IndicatorSubmission.key() (thus grouped by zone), and
+# value the tuple (IndicatorSubmission, [Indicator], [IndicatorBaptism], [IndicatorConfirmation])
+		for k in ibc.keys():
+			sub, inds, ibs, ics = ibc[k]
+
+			r += '<p><b>' + sub.get_key('zone').name() + '</b>: ' + str(len(ibs))
+			totbap += len(ibs)
+
+			for i in ibs:
+				r += '<br>&nbsp;&nbsp;' + i.name
+
+		r += '<p>tot bap: ' + str(totbap)
+
+		self.response.out.write(r)
+
+class MakeNewPage(webapp.RequestHandler):
+	forms = {
+		'week': WeekForm,
+	}
+
+	def get_f(self):
+		return dict([(k, v()) for k, v in self.forms.iteritems()])
+
+	def get(self):
+		rendert(self, 'make-new.html', self.get_f())
+
+	def post(self):
+		s = self.request.POST['submit']
+		f = self.forms[s](data=self.request.POST)
+
+		if f.is_valid():
+			d = self.get_f()
+
+			if s == 'week':
+				wf = f.save(commit=False)
+				if Week.all().filter('date', wf.date).count(1):
+					raise db.BadValueError('db already has this date')
+				w = Week(key_name=str(wf.date), date=wf.date, snapshot=wf.snapshot, question=wf.question, question_for_both=wf.question_for_both)
+				w.put()
+				d['done'] = '%s - %s' %(s, w)
+		else:
+			d = {s: f}
+
+		rendert(self, 'make-new.html', d)
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -640,8 +723,10 @@ application = webapp.WSGIApplication([
 	('/keyindicators/', KeyIndicatorsPage),
 
 	# _ah
+	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/map-control/', MapControlPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
+	('/_ah/missao-rio/make-new/', MakeNewPage),
 
 	('/quadro/', Quadro),
 

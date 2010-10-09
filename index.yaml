@@ -26,12 +26,6 @@ indexes:
   - name: __key__
     direction: desc
 
-- kind: Indicator
-  properties:
-  - name: week
-  - name: zone_name
-  - name: area_name
-
 - kind: IndicatorBaptism
   properties:
   - name: __key__
@@ -55,19 +49,7 @@ indexes:
 - kind: Missionary
   properties:
   - name: is_released
-  - name: area_name
-
-- kind: Missionary
-  properties:
-  - name: is_released
   - name: mission_name
-
-- kind: Missionary
-  properties:
-  - name: is_released
-  - name: zone_name
-  - name: area_name
-  - name: is_senior
 
 - kind: Missionary
   properties:
@@ -107,12 +89,7 @@ indexes:
   - name: __key__
     direction: desc
 
-- kind: SnapshotArea
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: SnapshotMissionary
+- kind: SnapshotIndex
   properties:
   - name: __key__
     direction: desc
@@ -136,8 +113,3 @@ indexes:
   properties:
   - name: __key__
     direction: desc
-
-- kind: Zone
-  properties:
-  - name: is_open
-  - name: name

@@ -47,11 +47,17 @@ admin_console:
   - name: Mission Status
     url: /_ah/missao-rio/status/
 
+  - name: Make New
+    url: /_ah/missao-rio/make-new/
+
   - name: MapReduce
     url: /mapreduce/
 
   - name: Map Control
     url: /_ah/missao-rio/map-control/
+
+  - name: Indicator Check
+    url: /_ah/missao-rio/indicator-check/
 
 derived_file_type:
 - python_precompiled

@@ -2,6 +2,9 @@ from mapreduce import operation as op
 from google.appengine.api import memcache
 from models import *
 
+def null(entity):
+	pass
+
 def delete(entity):
 	yield op.db.Delete(entity)
 

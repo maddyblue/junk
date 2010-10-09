@@ -21,3 +21,7 @@ class BaptismForm(djangoforms.ModelForm):
 class ConfirmationForm(djangoforms.ModelForm):
 	class Meta:
 		model = IndicatorConfirmation
+
+class WeekForm(djangoforms.ModelForm):
+	class Meta:
+		model = Week

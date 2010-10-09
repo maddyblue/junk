@@ -11,14 +11,15 @@ C_AOPTS = 'aopts'
 C_AWS = 'aws'
 C_IBC = 'ibc-%%s'
 C_MISSIONARIES = 'missionaries'
-C_MOPTS = '%%s-mopts'
-C_SNAPAREAS = 'snapareas-%%s'
-C_SNAPAREAS_BYZONE = 'snapareas-%%s-%%s'
-C_SNAPMISSIONARIES = 'snapmissionaries-%%s'
+C_MOPTS = 'mopts-%s'
+C_SNAPSHOT = 'snapshot-%s'
+C_SNAPAREAS = 'snapareas-%s'
+C_SNAPAREAS_BYZONE = 'snapareas-%s-%s'
+C_SNAPMISSIONARIES = 'snapmissionaries-%s'
 C_WEEK = 'week'
 C_WOPTS = 'wopts'
 C_ZONES = 'zones'
-C_ZOPTS = 'zopts-%%s'
+C_ZOPTS = 'zopts-%s'
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -62,6 +63,16 @@ def get_week():
 		get_week._WEEK = w
 
 	return w
+
+# snapshot with given key
+def get_snapshot(key):
+	n = C_SNAPSHOT %key
+	data = unpack(memcache.get(n))
+	if data is None:
+		data = Snapshot.get(key)
+		memcache.add(n, pack(data))
+
+	return data
 
 # list of missionaries as html options: for weekly reports
 def get_mopts(released=False):
@@ -109,7 +120,6 @@ def render_wopts():
 def get_zopts():
 	w = get_week()
 	n = C_ZOPTS %w.key()
-	print n
 	zopts = memcache.get(n)
 	if zopts is None:
 		zopts = render_zopts(w)
@@ -134,25 +144,23 @@ def render_zopts(week):
 # list of missionaries as SnapMissionary who were active during the given week
 def get_snapmissionaries(week):
 	n = C_SNAPMISSIONARIES %week.key()
-	data = memcache.get(n)
+	data = unpack(memcache.get(n))
 	if data is None:
-		data = SnapshotMissionary.all().filter('snapshot', week.snapshot).fetch(1000)
-		prefetch_refprops(data, SnapshotMissionary.snapmissionary)
-		data = [a.snapmissionary for a in data]
-		prefetch_refprops(data, SnapMissionary.missionary)
-		memcache.add(n, data)
+		i = SnapshotIndex.all().ancestor(week.get_key('snapshot')).get()
+		data = db.get(i.snapmissionaries)
+		memcache.add(n, pack(data))
 
 	return data
 
 # list of areas as SnapArea that were open during the given week
 def get_snapareas(week):
 	n = C_SNAPAREAS %week.key()
-	data = memcache.get(n)
+	data = unpack(memcache.get(n))
 	if data is None:
-		data = SnapshotArea.gql('where snapshot = :1', week.get_key('snapshot')).fetch(1000)
-		prefetch_refprops(data, SnapshotArea.snaparea)
-		data = [a.snaparea for a in data]
-		memcache.add(n, data)
+		s = get_snapshot(week.get_key('snapshot'))
+		d = SnapshotIndex.all().ancestor(s).get()
+		data = db.get(d.snapareas)
+		memcache.add(n, pack(data))
 
 	return data
 
@@ -264,8 +272,8 @@ def render_zones():
 # list of active missionaries as Missionary (with area and profile) ordered by zone, area, senior
 def get_missionaries():
 	n = C_MISSIONARIES + '_'
-	ms = memcache.get(n + 'missionary')
-	ar = memcache.get(n + 'area')
+	ms = unpack(memcache.get(n + 'missionary'))
+	ar = unpack(memcache.get(n + 'area'))
 	if all([ms, ar]):
 		for i in range(len(ms)):
 			ms[i].area = ar[i]

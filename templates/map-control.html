@@ -16,3 +16,10 @@
 <input type="checkbox" name="kind" value="{{ i }}" checked/> {{ i }}<br>
 {% endfor %}
 </form>
+<hr>
+<form method="POST">
+<input type="submit" name="submit" value="Make Index"/><br>
+{% for i in kinds %}
+<input type="checkbox" name="kind" value="{{ i }}" checked/> {{ i }}<br>
+{% endfor %}
+</form>

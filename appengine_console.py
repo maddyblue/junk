@@ -21,9 +21,8 @@ from google.appengine.ext.remote_api import remote_api_stub
 from google.appengine.ext import db
 import models as aem
 
-def mput(p):
+def mput(p, c=100):
 	print '  put', len(p)
-	c = 100
 	for i in range(0, len(p), c):
 		if i > 0:
 			print '  batch', i
@@ -114,7 +113,12 @@ def dump():
 			hist_data=i.hist_data,
 			hist_last_update=i.hist_last_update,
 			hometown=i.hometown,
-			photo=photo
+			photo=photo,
+
+			stake=i.stake,
+			spres=i.spres,
+			stele=i.stele,
+			conf_date=i.conf_date,
 			))
 		profiles[i.id] = p[-1]
 	mput(p)
@@ -162,24 +166,6 @@ def dump():
 		p.append(o)
 	mput(p)
 
-	print 'Snapshot'
-	p = []
-	obs = djm.Snapshot.objects.all().select_related()
-	snapshots = {}
-	for i in obs:
-		d = datetime(i.date.year, i.date.month, i.date.day, i.date.hour, i.date.minute, i.date.second)
-		p.append(aem.Snapshot(key_name=str(d), date=d))
-		snapshots[i.id] = p[-1]
-	mput(p)
-
-	print 'Week'
-	p = []
-	obs = djm.Week.objects.all().select_related()
-	for i in obs:
-		p.append(aem.Week(key_name=str(i.date), date=i.date, question=i.question, question_for_both=i.question_for_both, snapshot=snapshots[i.snapshot.id]))
-	mput(p)
-	weeks = dict((i.key().id_or_name(), i) for i in p)
-
 	print 'SnapArea'
 	p = []
 	obs = djm.AreaSnap.objects.all().select_related()
@@ -208,18 +194,26 @@ def dump():
 		snapmissionaries[i.id] = p[-1]
 	mput(p)
 
-	print 'SnapshotArea, SnapshotMissionary'
+	print 'Snapshot'
 	p = []
 	obs = djm.Snapshot.objects.all().select_related()
+	snapshots = {}
 	for i in obs:
-		for a in i.areas.all():
-			p.append(aem.SnapshotArea(snapshot=snapshots[i.id], snaparea=snapareas[a.id]))
-		for m in i.snaps.all():
-			p.append(aem.SnapshotMissionary(snapshot=snapshots[i.id], snapmissionary=snapmissionaries[m.id]))
-		o = snapshots[i.id]
-		o.name = '%s - %i missionaries' %(o.date, i.snaps.all().count())
-		p.append(o)
+		d = datetime(i.date.year, i.date.month, i.date.day, i.date.hour, i.date.minute, i.date.second)
+		sms = [str(snapmissionaries[m.id].key()) for m in i.snaps.all()]
+		sas = [str(snapareas[a.id].key()) for a in i.areas.all()]
+		p.append(aem.Snapshot(key_name=str(d), date=d, name='%s - %i missionaries' %(d.strftime('%d %b %Y %H:%M'), len(sms))))
+		snapshots[i.id] = p[-1]
+		p.append(aem.SnapshotIndex(parent=p[-1], snapmissionaries=sms, snapareas=sas))
+	mput(p, 20)
+
+	print 'Week'
+	p = []
+	obs = djm.Week.objects.all().select_related()
+	for i in obs:
+		p.append(aem.Week(key_name=str(i.date), date=i.date, question=i.question, question_for_both=i.question_for_both, snapshot=snapshots[i.snapshot.id]))
 	mput(p)
+	weeks = dict((i.key().id_or_name(), i) for i in p)
 
 	print 'RPM'
 	p = []
@@ -262,9 +256,9 @@ def dump():
 		for b in i.baptisms.all():
 			if b.sex: sex = aem.BAPTISM_SEX_M
 			else: sex = aem.BAPTISM_SEX_F
-			p.append(aem.IndicatorBaptism(submission=sub, indicator=ind, name=b.name, date=b.date, age=b.age, sex=sex))
+			p.append(aem.IndicatorBaptism(indicator=ind, submission=sub, name=b.name, date=b.date, age=b.age, sex=sex))
 		for c in i.confirmations.all():
-			p.append(aem.IndicatorConfirmation(submission=sub, indicator=ind, name=c.name, date=c.date))
+			p.append(aem.IndicatorConfirmation(indicator=ind, submission=sub, name=c.name, date=c.date))
 	mput(p)
 
 	print 'Report'
@@ -522,6 +516,6 @@ if __name__ == '__main__':
 
 	remote_api_stub.ConfigureRemoteDatastore(app_id, '/remote_api', auth_func, host)
 
-	dump()
+	#dump()
 
 	code.interact('App Engine interactive console for %s' % (app_id,), None, locals())

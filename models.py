@@ -120,6 +120,11 @@ class MissionaryProfile(db.Model):
 	hometown = db.StringProperty(indexed=False)
 	photo = db.BlobProperty(indexed=False)
 
+	stake = db.StringProperty(indexed=False)
+	spres = db.StringProperty(indexed=False)
+	stele = db.StringProperty(indexed=False)
+	conf_date = db.DateProperty(indexed=False)
+
 class Missionary(DerefModel):
 	mission_name = db.StringProperty(required=True)
 	calling = db.StringProperty(required=True, choices=MISSIONARY_CALLING_CHOICES)
@@ -190,22 +195,21 @@ class Snapshot(db.Model):
 	date = db.DateTimeProperty(required=True)
 	name = db.StringProperty()
 
-class SnapshotArea(db.Model):
-	snapshot = db.ReferenceProperty(Snapshot, required=True)
-	snaparea = db.ReferenceProperty(SnapArea, required=True)
+	def __unicode__(self):
+		return self.name
 
-class SnapshotMissionary(db.Model):
-	snapshot = db.ReferenceProperty(Snapshot, required=True)
-	snapmissionary = db.ReferenceProperty(SnapMissionary, required=True)
+class SnapshotIndex(db.Model):
+	snapmissionaries = db.StringListProperty()
+	snapareas = db.StringListProperty()
 
-def is_sunday(d):
+def date_check(d):
 	if d.weekday() != 6: # Sunday
 		raise db.BadValueError('date is not Sunday')
 	return d
 
 class Week(DerefModel):
 	snapshot = db.ReferenceProperty(Snapshot, required=True)
-	date = db.DateProperty(required=True, validator=is_sunday)
+	date = db.DateProperty(required=True, validator=date_check)
 	question = db.StringProperty(indexed=False)
 	question_for_both = db.BooleanProperty(indexed=False)
 
@@ -454,7 +458,6 @@ class IndicatorSubmission(DerefModel):
 class Indicator(DerefModel):
 	submission = db.ReferenceProperty(IndicatorSubmission, required=True)
 	area = db.ReferenceProperty(SnapArea, required=True)
-	area_name = db.StringProperty()
 	PB    = db.IntegerProperty(required=True)
 	PC    = db.IntegerProperty(required=True)
 	PBM   = db.IntegerProperty(required=True, indexed=False)
