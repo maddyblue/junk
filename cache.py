@@ -116,7 +116,7 @@ def render_wopts():
 	ward = Ward.gql('order by stake_name, name')
 	return ''.join(['<option value="%s">%s</option>' %(w.key(), unicode(w)) for w in ward])
 
-# list of zones in the snapshot of the most recent week is html options: for weekly reports
+# list of zones in the snapshot of the most recent week as html options: for weekly reports
 def get_zopts():
 	w = get_week()
 	n = C_ZOPTS %w.key()
