@@ -41,11 +41,12 @@ def basicAuth(func):
 			user_arg = user_pass_parts[0]
 			pass_arg = user_pass_parts[1]
 
-			if user_arg != 'user' or pass_arg != 'pass':
-				webappRequest.response.set_status(401, message='Authorization Required')
-				webappRequest.response.headers['WWW-Authenticate'] = 'Basic realm="Protected"'
-			else:
-				return func(webappRequest, *args, **kwargs)
+			for u, p in config.PASSWORDS:
+				if user_arg == u and pass_arg == p:
+					return func(webappRequest, *args, **kwargs)
+
+			webappRequest.response.set_status(401, message='Authorization Required')
+			webappRequest.response.headers['WWW-Authenticate'] = 'Basic realm="Protected"'
 
 	return callf
 
@@ -563,12 +564,8 @@ class Quadro(webapp.RequestHandler):
 
 		for quadnum in range(num):
 			y = 0
-			y = drawZone(c, missionaries, u'Jacarepaguá', x, y)
-			y = drawZone(c, missionaries, u'Andaraí', x, y)
-			y = drawZone(c, missionaries, u'Madureira', x, y)
-			y = drawZone(c, missionaries, u'Rio de Janeiro', x, y)
-			y = drawZone(c, missionaries, u'Nova Iguaçu', x, y)
-			y = drawZone(c, missionaries, u'Itaguaí', x, y)
+			for i in config.QUADRO[0]:
+				y = drawZone(c, missionaries, i, x, y)
 
 			numbers = []
 			numbers.extend(config.PHONE_NUMBERS)
@@ -613,14 +610,9 @@ class Quadro(webapp.RequestHandler):
 
 			x += c.W * c.cols + c.H
 			y = 0
-			y = drawZone(c, missionaries, u'Campo Grande', x, y)
-			y = drawZone(c, missionaries, u'Itaboraí', x, y)
-			y = drawZone(c, missionaries, u'Volta Redonda', x, y)
-			y = drawZone(c, missionaries, u'Petrópolis', x, y)
-			y = drawZone(c, missionaries, u'Teresópolis', x, y)
-			y = drawZone(c, missionaries, u'Juiz de Fora', x, y)
-			y = drawZone(c, missionaries, u'Macaé', x, y)
-			y = drawZone(c, missionaries, u'Cabo Frio', x, y)
+
+			for i in config.QUADRO[1]:
+				y = drawZone(c, missionaries, i, x, y)
 
 			c.drawCentredString(x + c.W * c.cols / 2.0, y + 2 * c.H - c.F, date.today().strftime('%d/%m/%Y'))
 
