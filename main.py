@@ -8,7 +8,7 @@ from datetime import timedelta, date
 from google.appengine.api import images
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
-from google.appengine.ext.db import stats
+from google.appengine.ext.db import stats, Key
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
@@ -261,27 +261,7 @@ class NamesPage(webapp.RequestHandler):
 		for v in areas.values():
 			areas[v.get_key('area')] = v
 
-		missionaries = dict([(i.key(), i) for i in get_snapmissionaries(week)])
-
-		# keys of snaparea map to missionaries in that area
-		m_by_area = {}
-
-		for k, v in missionaries.iteritems():
-			a = areas[v.get_key('snaparea')]
-			if a.does_not_report:
-				continue
-			elif a.get_key('reports_with'):
-				a = a.get_key('reports_with')
-			else:
-				a = areas[v.get_key('snaparea')].get_key('area')
-
-			if a not in m_by_area:
-				m_by_area[a] = []
-
-			if v.is_senior:
-				m_by_area[a].insert(0, v)
-			else:
-				m_by_area[a].append(v)
+		m_by_area = get_m_by_area(week)
 
 		rb = ''
 		rc = ''
@@ -700,6 +680,75 @@ class MakeNewPage(webapp.RequestHandler):
 
 		rendert(self, 'make-new.html', d)
 
+class EnterRPMPage(webapp.RequestHandler):
+	def get(self):
+			w = get_week()
+			a = [i for i in get_snapareas(w) if not i.does_not_report and not i.reports_with]
+			prefetch_refprops(a, SnapArea.area)
+			a.sort(cmp=lambda x,y: cmp(x.area.name, y.area.name))
+			z = list(set([i.get_key('zone').name() for i in a]))
+			z.sort()
+
+			m_by_area = get_m_by_area(w)
+
+			rpms = dict([(i.get_key('area'), i) for i in RPM.all().filter('week', w).fetch(500)])
+
+			zones = []
+			for zone in z:
+				areas = []
+				for area in a:
+					ak = area.key()
+					if area.get_key('zone').name() != zone:
+						continue
+
+					if ak in rpms:
+						r = rpms[ak]
+						b = r.bap
+						c = r.conf
+						m = r.men_bap
+						h = r.men_conf
+					else:
+						b = 0
+						c = 0
+						m = 0
+						h = 0
+					areas.append((m_by_area[area.get_key('area')], b, c, m, h, zone, area))
+				zones.append(areas)
+
+			return rendert(self, 'rpm.html', {'zones': zones, 'week': w})
+
+	def post(self):
+		w = Week.get(self.request.POST['week'])
+
+		db.delete(RPM.all(keys_only=True).filter('week', w).fetch(500))
+
+		rpms = {}
+
+		for k, v in self.request.POST.iteritems():
+			if not v or k == 'week':
+				continue
+
+			v = int(v)
+			ak = k.partition('_')[2]
+			if k[0] == 'b' or k[0] == 'c' or k[0] == 'm' or k[0] == 'h':
+
+				if ak not in rpms:
+					rpms[ak] = RPM(area=Key(ak), week=w, bap=0, conf=0, men_bap=0, men_conf=0)
+				r = rpms[ak]
+
+				if k[0] == 'b':
+					r.bap = v
+				elif k[0] == 'c':
+					r.conf = v
+				elif k[0] == 'm':
+					r.men_bap = v
+				elif k[0] == 'h':
+					r.men_conf = v
+
+		db.put(rpms.values())
+
+		self.response.out.write('Done.')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -719,6 +768,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/map-control/', MapControlPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/make-new/', MakeNewPage),
+	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 
 	('/quadro/', Quadro),
 

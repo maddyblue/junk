@@ -20,6 +20,7 @@ C_WEEK = 'week'
 C_WOPTS = 'wopts'
 C_ZONES = 'zones'
 C_ZOPTS = 'zopts-%s'
+C_M_BY_AREA = 'mbyarea-%s'
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -283,4 +284,50 @@ def get_missionaries():
 		prefetch_refprops(data, Missionary.area)
 		memcache.add(n + 'area', pack([m.area for m in data]))
 		memcache.add(n + 'missionary', pack(data))
+		return data
+
+# dictionary with keys as Area.key() and values as SnapMissionaries in the areas
+def get_m_by_area(week):
+	n = C_M_BY_AREA %(week.key())
+
+	sm = get_snapmissionaries(week)
+	missionaries = dict([(i.key(), i) for i in sm])
+	prefetch_refprops(sm, SnapMissionary.missionary)
+
+	data = memcache.get(n)
+	if data is None:
+		# hash the snaparea keys
+		areas = dict([(i.key(), i) for i in get_snapareas(week)])
+
+		# hash the area keys also (for reports_with)
+		for v in areas.values():
+			areas[v.get_key('area')] = v
+
+		# keys of snaparea map to missionaries in that area
+		m_by_area = {}
+
+		for k, v in missionaries.iteritems():
+			a = areas[v.get_key('snaparea')]
+			if a.does_not_report:
+				continue
+			elif a.get_key('reports_with'):
+				a = a.get_key('reports_with')
+			else:
+				a = areas[v.get_key('snaparea')].get_key('area')
+
+			if a not in m_by_area:
+				m_by_area[a] = []
+
+			if v.is_senior:
+				m_by_area[a].insert(0, v)
+			else:
+				m_by_area[a].append(v)
+
+		memcache.add(n, m_by_area)
+		return m_by_area
+	else:
+		for v in data.values():
+			for i in v:
+				i.missionary = missionaries[i.key()].missionary
+
 		return data

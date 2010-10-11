@@ -59,5 +59,8 @@ admin_console:
   - name: Indicator Check
     url: /_ah/missao-rio/indicator-check/
 
+  - name: Enter RPM
+    url: /_ah/missao-rio/enter-rpm/
+
 derived_file_type:
 - python_precompiled

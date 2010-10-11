@@ -508,7 +508,7 @@ class IndicatorConfirmation(DerefModel):
 	name = db.StringProperty(required=True, indexed=False)
 	date = db.DateProperty(required=True, indexed=False)
 
-class RPM(db.Model):
+class RPM(DerefModel):
 	area = db.ReferenceProperty(SnapArea, required=True)
 	week = db.ReferenceProperty(Week, required=True)
 	bap = db.IntegerProperty(default=0, required=True, indexed=False)
