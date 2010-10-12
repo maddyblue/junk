@@ -21,6 +21,7 @@ C_WOPTS = 'wopts'
 C_ZONES = 'zones'
 C_ZOPTS = 'zopts-%s'
 C_M_BY_AREA = 'mbyarea-%s'
+C_M_PHOTO = 'm-photo-%s'
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -326,3 +327,15 @@ def get_m_by_area(week):
 				i.missionary = missionaries[i.key()].missionary
 
 		return data
+
+# returns the binary data of a missionary's photo with given key
+def get_m_photo(mk):
+	n = C_M_PHOTO %mk
+	data = memcache.get(n)
+
+	if not data:
+		m = Missionary.get(mk)
+		data = m.profile.photo
+		memcache.add(n, data)
+
+	return data

@@ -675,6 +675,7 @@ class MakeNewPage(webapp.RequestHandler):
 					raise db.BadValueError('db already has this date')
 				w = Week(key_name=str(wf.date), date=wf.date, snapshot=wf.snapshot, question=wf.question, question_for_both=wf.question_for_both)
 				w.put()
+				Configuration.set(CONFIG_WEEK, str(w.key()))
 				d['done'] = '%s - %s' %(s, w)
 		else:
 			d = {s: f}
@@ -907,6 +908,11 @@ class ChooseWeekPage(webapp.RequestHandler):
 			if cw == str(w.key()):
 				self.response.out.write(' ***')
 
+class PhotoHandler(webapp.RequestHandler):
+	def get(self, mk):
+		self.response.out.write(get_m_photo(mk))
+		self.response.headers['Content-Type'] = 'image/jpeg'
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -914,6 +920,7 @@ application = webapp.WSGIApplication([
 	('/batismos/', BatismosPage),
 
 	('/js/main.js', MainJS),
+	('/photo/(.*)', PhotoHandler),
 
 	('/send-relatorio/', SendRelatorio),
 	('/send-numbers/', SendNumbers),
