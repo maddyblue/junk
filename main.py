@@ -749,10 +749,153 @@ class EnterRPMPage(webapp.RequestHandler):
 
 		self.response.out.write('Done.')
 
+class MakeBatismosPage(webapp.RequestHandler):
+	def get(self):
+		w = get_week()
+		areas = [i for i in get_snapareas(w) if not i.does_not_report and not i.reports_with]
+		prefetch_refprops(areas, SnapArea.area)
+		areas.sort(cmp=lambda x,y: cmp(x.area.name, y.area.name))
+		zones = list(set([i.get_key('zone').name() for i in areas]))
+		zones.sort()
+		m_by_area = get_m_by_area(w)
+		rpms = dict([(i.get_key('area'), i) for i in RPM.all().filter('week', w).fetch(500)])
+
+		nb = 0
+		nc = 0
+		nm = 0
+		nh = 0
+		ad = {} # area data
+		zd = {} # zone data
+		bla = {} # baptisms by zone
+		cla = {} # confirmations by zone
+		mla = {} # men baptized by zone
+		hla = {} # men confirmed by zone
+
+		for z in zones:
+			bz = 0
+			cz = 0
+			mz = 0
+			hz = 0
+			ct = 0
+			lb = []
+			lc = []
+			lm = []
+			lh = []
+
+			for a in areas:
+				ak = a.key()
+				if a.get_key('zone').name() != z:
+					continue
+
+				ct += 1
+
+				try:
+					ra = rpms[ak]
+				except:
+					continue
+
+				rb = ra.bap
+				rc = ra.conf
+				rm = ra.men_bap
+				rh = ra.men_conf
+				bz += rb
+				cz += rc
+				mz += rm
+				hz += rh
+
+				m = m_by_area[a.get_key('area')]
+				an = a.area.name + ' - ' + ', '.join([unicode(i.missionary) for i in m])
+
+				ad[a] = (rb, rc, rm, rh, an)
+				if rb:
+					lb.append((rb, a))
+				if rc:
+					lc.append((rc, a))
+				if rm:
+					lm.append((rm, a))
+				if rh:
+					lh.append((rh, a))
+			nb += bz
+			nc += cz
+			nm += mz
+			nh += hz
+			zd[z] = (bz, cz, mz, hz, ct)
+
+			lb.sort(cmp=lambda x,y: cmp(y[0], x[0]))
+			bla[z] = lb
+			lc.sort(cmp=lambda x,y: cmp(y[0], x[0]))
+			cla[z] = lc
+			lm.sort(cmp=lambda x,y: cmp(y[0], x[0]))
+			mla[z] = lm
+			lh.sort(cmp=lambda x,y: cmp(y[0], x[0]))
+			hla[z] = lh
+
+		lb = zd.keys() # list of baptisms by zone
+		lc = zd.keys() # list of confirmations by zone
+		lm = zd.keys() # list of men baptized by zone
+		lh = zd.keys() # list of men confirmed by zone
+
+		lb.sort(cmp=lambda x,y: cmp(zd[y][0] * 1. / zd[y][-1], zd[x][0] * 1. / zd[x][-1]))
+		lc.sort(cmp=lambda x,y: cmp(zd[y][1] * 1. / zd[y][-1], zd[x][1] * 1. / zd[x][-1]))
+		lm.sort(cmp=lambda x,y: cmp(zd[y][2] * 1. / zd[y][-1], zd[x][2] * 1. / zd[x][-1]))
+		lh.sort(cmp=lambda x,y: cmp(zd[y][3] * 1. / zd[y][-1], zd[x][3] * 1. / zd[x][-1]))
+
+		r = u'<b>MISSÃO BRASIL RIO DE JANEIRO - %s</b>\n' %w.date
+
+		r += u'<br /><br /><b>TOTAL DE BATISMOS = %i</b>\n' %nb
+		for z in lb:
+			if not zd[z][0]:
+				continue
+
+			r += u'<br /><br /><b>%s = %i, %.2f por dupla</b>\n' %(z, zd[z][0], zd[z][0] * 1. / zd[z][-1])
+			for a in bla[z]:
+				r += u'<br />%s = %i\n' %(ad[a[1]][-1], a[0])
+
+		r += u'<br /><br /><b>TOTAL DE CONFIRMAÇÕES = %i</b>\n' %nc
+		for z in lc:
+			if not zd[z][1]:
+				continue
+
+			r += u'<br /><br /><b>%s = %i, %.2f por dupla</b>\n' %(z, zd[z][1], zd[z][1] * 1. / zd[z][-1])
+			for a in cla[z]:
+				r += u'<br />%s = %i\n' %(ad[a[1]][-1], a[0])
+
+		if nm == 0: h = 0
+		else: h = 100.0 * nm / nb
+		r += u'<br /><br /><b>TOTAL DE HOMENS BATIZADOS = %i (%i%%)</b>\n' %(nm, h)
+		for z in lm:
+			if not zd[z][2]:
+				continue
+
+			r += u'<br /><br /><b>%s = %i (%i%%), %.2f por dupla</b>\n' %(z, zd[z][2], 100.0 * zd[z][2] / zd[z][0], zd[z][2] * 1. / zd[z][-1])
+			for a in mla[z]:
+				r += u'<br />%s = %i (%i%%)\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][0])
+
+		if nh == 0: h = 0
+		else: h = 100.0 * nh / nc
+		r += u'<br /><br /><b>TOTAL DE HOMENS CONFIRMADOS = %i (%i%%)</b>\n' %(nh, h)
+		for z in lh:
+			if not zd[z][3]:
+				continue
+
+			r += u'<br /><br /><b>%s = %i (%i%%), %.2f por dupla</b>\n' %(z, zd[z][3], 100.0 * zd[z][3] / zd[z][1], zd[z][3] * 1. / zd[z][-1])
+			for a in hla[z]:
+				r += u'<br />%s = %i (%i%%)\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][1])
+
+		FlatPage.make(FLATPAGE_BAPTISMS, r, w)
+
+		self.response.out.write(r)
+
+class BatismosPage(webapp.RequestHandler):
+	def get(self):
+		d = FlatPage.get_page(FLATPAGE_BAPTISMS)
+		render(self, '', 'Batismos', {'page_data': d})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
 	('/numeros/', NumerosPage),
+	('/batismos/', BatismosPage),
 
 	('/js/main.js', MainJS),
 
@@ -769,6 +912,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/make-new/', MakeNewPage),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
+	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
 
 	('/quadro/', Quadro),
 

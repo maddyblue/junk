@@ -62,5 +62,8 @@ admin_console:
   - name: Enter RPM
     url: /_ah/missao-rio/enter-rpm/
 
+  - name: Make Batismos
+    url: /_ah/missao-rio/make-batismos/
+
 derived_file_type:
 - python_precompiled

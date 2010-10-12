@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from google.appengine.ext import db
+import cache
 
 class DerefModel(db.Model):
 	def get_key(self, prop_name):
@@ -515,3 +516,32 @@ class RPM(DerefModel):
 	conf = db.IntegerProperty(default=0, required=True, indexed=False)
 	men_bap = db.IntegerProperty(default=0, required=True, indexed=False)
 	men_conf = db.IntegerProperty(default=0, required=True, indexed=False)
+
+FLATPAGE_BAPTISMS = 'baptisms'
+
+class FlatPage(db.Model):
+	week = db.ReferenceProperty(Week, required=True)
+	name = db.StringProperty(required=True)
+	data = db.TextProperty()
+
+	@staticmethod
+	def key_name(name, week):
+		return '%s-%s' %(week.key(), name)
+
+	@staticmethod
+	def make(name, data='', week=None):
+		if not week:
+			week = cache.get_week()
+
+		kn = FlatPage.key_name(name, week)
+		f = FlatPage.get_or_insert(kn, week=week, name=name, data=data)
+		return f
+
+	@staticmethod
+	def get_page(name, week=None):
+		if not week:
+			week = cache.get_week()
+
+		kn = FlatPage.key_name(name, week)
+		f = FlatPage.get_by_key_name(kn)
+		return f.data
