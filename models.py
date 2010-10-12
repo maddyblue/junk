@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from google.appengine.api import memcache
 from google.appengine.ext import db
 import cache
 
@@ -517,7 +518,9 @@ class RPM(DerefModel):
 	men_bap = db.IntegerProperty(default=0, required=True, indexed=False)
 	men_conf = db.IntegerProperty(default=0, required=True, indexed=False)
 
-FLATPAGE_BAPTISMS = 'baptisms'
+FLATPAGE_CARTA = 'carta'
+FLATPAGE_BATISMOS = 'batismos'
+FLATPAGE_BATIZADORES = 'batizadores'
 
 class FlatPage(db.Model):
 	week = db.ReferenceProperty(Week, required=True)
@@ -534,7 +537,9 @@ class FlatPage(db.Model):
 			week = cache.get_week()
 
 		kn = FlatPage.key_name(name, week)
-		f = FlatPage.get_or_insert(kn, week=week, name=name, data=data)
+		f = FlatPage(key_name=kn, week=week, name=name, data=data)
+		f.save()
+		memcache.delete(cache.C_FLATPAGE %name)
 		return f
 
 	@staticmethod
@@ -544,6 +549,10 @@ class FlatPage(db.Model):
 
 		kn = FlatPage.key_name(name, week)
 		f = FlatPage.get_by_key_name(kn)
+
+		if not f or not f.data:
+			return ''
+
 		return f.data
 
 CONFIG_WEEK = 'week'

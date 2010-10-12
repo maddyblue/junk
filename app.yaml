@@ -68,5 +68,8 @@ admin_console:
   - name: Make Batismos
     url: /_ah/missao-rio/make-batismos/
 
+  - name: Edit Pages
+    url: /_ah/missao-rio/edit-pages/
+
 derived_file_type:
 - python_precompiled

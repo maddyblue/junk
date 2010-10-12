@@ -50,6 +50,7 @@ def basicAuth(func):
 
 	return callf
 
+@basicAuth
 def render(s, p, t, d={}):
 	d['page'] = p
 	d['t1'] = t
@@ -58,17 +59,27 @@ def render(s, p, t, d={}):
 
 	s.response.out.write(template.render(path, d))
 
+@basicAuth
 def rendert(s, t, d={}):
 	path = os.path.join(os.path.dirname(__file__), 'templates', t)
 	s.response.out.write(template.render(path, d))
 
 class MainPage(webapp.RequestHandler):
-	@basicAuth
 	def get(self):
-		render(self, 'carta.html', 'Carta do Presidente')
+		d = get_flatpage(FLATPAGE_CARTA)
+		render(self, '', 'Carta do Presidente', {'page_data': d})
+
+class BatismosPage(webapp.RequestHandler):
+	def get(self):
+		d = get_flatpage(FLATPAGE_BATISMOS)
+		render(self, '', 'Batismos', {'page_data': d})
+
+class BatizadoresPage(webapp.RequestHandler):
+	def get(self):
+		d = get_flatpage(FLATPAGE_BATIZADORES)
+		render(self, '', 'Batizadores', {'page_data': d})
 
 class RelatorioPage(webapp.RequestHandler):
-	@basicAuth
 	def get(self):
 		contatos = ''.join(['<option value="%s">%s</option>' %(i, i) for i in range(101)])
 
@@ -107,7 +118,6 @@ class SendRelatorio(webapp.RequestHandler):
 				self.response.out.write('%s: %s\n' %(k, v.as_text()))
 
 class NumerosPage(webapp.RequestHandler):
-	@basicAuth
 	def get(self):
 		d = {
 			'zones': get_zopts(),
@@ -163,6 +173,7 @@ class SendNumbers(webapp.RequestHandler):
 		a.extend(inds)
 		db.delete(a)
 
+	@basicAuth
 	def post(self):
 		if self.request.POST['senha'] != 'joao35':
 			self.response.out.write('Senha errada.')
@@ -884,14 +895,9 @@ class MakeBatismosPage(webapp.RequestHandler):
 			for a in hla[z]:
 				r += u'<br />%s = %i (%i%%)\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][1])
 
-		FlatPage.make(FLATPAGE_BAPTISMS, r, w)
+		FlatPage.make(FLATPAGE_BATISMOS, r, w)
 
 		self.response.out.write(r)
-
-class BatismosPage(webapp.RequestHandler):
-	def get(self):
-		d = FlatPage.get_page(FLATPAGE_BAPTISMS)
-		render(self, '', 'Batismos', {'page_data': d})
 
 class ChooseWeekPage(webapp.RequestHandler):
 	def get(self):
@@ -913,11 +919,39 @@ class PhotoHandler(webapp.RequestHandler):
 		self.response.out.write(get_m_photo(mk))
 		self.response.headers['Content-Type'] = 'image/jpeg'
 
+class EditPages(webapp.RequestHandler):
+	def display(self):
+		w = get_week()
+		self.response.out.write('Week: %s' %w.date)
+		self.response.out.write('<form method="POST">')
+		for p in [FLATPAGE_CARTA, FLATPAGE_BATISMOS, FLATPAGE_BATIZADORES]:
+			d = FlatPage.get_page(p, w)
+			self.response.out.write('<p/>%s<p/><textarea cols="70" rows="20" name="%s">%s</textarea>' %(p, p, d))
+		self.response.out.write('<p/><input type="submit"/></form>')
+
+	def get(self):
+		self.display()
+
+	def post(self):
+		w = get_week()
+		for p in [FLATPAGE_CARTA, FLATPAGE_BATISMOS, FLATPAGE_BATIZADORES]:
+			d = self.request.POST[p]
+
+			# set it to something so the datastore and memcache register a value
+			# to return (this actually helps performance)
+			if not d:
+				d = ' '
+
+			FlatPage.make(p, d, w)
+
+		self.display()
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
 	('/numeros/', NumerosPage),
 	('/batismos/', BatismosPage),
+	('/batizadores/', BatizadoresPage),
 
 	('/js/main.js', MainJS),
 	('/photo/(.*)', PhotoHandler),
@@ -937,6 +971,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
+	('/_ah/missao-rio/edit-pages/', EditPages),
 
 	('/quadro/', Quadro),
 

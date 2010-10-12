@@ -22,6 +22,7 @@ C_ZONES = 'zones'
 C_ZOPTS = 'zopts-%s'
 C_M_BY_AREA = 'mbyarea-%s'
 C_M_PHOTO = 'm-photo-%s'
+C_FLATPAGE = 'flatpage-%s'
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -344,6 +345,16 @@ def get_m_photo(mk):
 	if not data:
 		m = Missionary.get(mk)
 		data = m.profile.photo
+		memcache.add(n, data)
+
+	return data
+
+def get_flatpage(d):
+	n = C_FLATPAGE %d
+	data = memcache.get(n)
+
+	if not data:
+		data = FlatPage.get_page(d)
 		memcache.add(n, data)
 
 	return data
