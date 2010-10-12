@@ -53,15 +53,10 @@ def unpack(data):
 def get_week():
 	n = C_WEEK
 
-	try:
-		w = get_week._WEEK
-	except:
-		w = unpack(memcache.get(n))
-		if w is None:
-			w = Week.all().order('-date').get()
-			memcache.add(n, pack(w))
-
-		get_week._WEEK = w
+	w = unpack(memcache.get(n))
+	if w is None:
+		w = Week.get(Configuration.fetch(CONFIG_WEEK))
+		memcache.add(n, pack(w))
 
 	return w
 

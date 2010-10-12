@@ -545,3 +545,27 @@ class FlatPage(db.Model):
 		kn = FlatPage.key_name(name, week)
 		f = FlatPage.get_by_key_name(kn)
 		return f.data
+
+CONFIG_WEEK = 'week'
+
+class Configuration(db.Model):
+	value = db.TextProperty()
+
+	@staticmethod
+	def set(name, value):
+		c = Configuration.get_by_key_name(name)
+
+		if not c:
+			c = Configuration(key_name=name, value=value)
+		else:
+			c.value = value
+
+		c.save()
+
+	@staticmethod
+	def fetch(name):
+		c = Configuration.get_by_key_name(name)
+		if not c:
+			return None
+		else:
+			return c.value

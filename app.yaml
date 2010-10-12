@@ -47,6 +47,9 @@ admin_console:
   - name: Mission Status
     url: /_ah/missao-rio/status/
 
+  - name: Choose Week
+    url: /_ah/missao-rio/choose-week/
+
   - name: Make New
     url: /_ah/missao-rio/make-new/
 

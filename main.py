@@ -666,6 +666,7 @@ class MakeNewPage(webapp.RequestHandler):
 		f = self.forms[s](data=self.request.POST)
 
 		if f.is_valid():
+			memcache.flush_all()
 			d = self.get_f()
 
 			if s == 'week':
@@ -891,6 +892,21 @@ class BatismosPage(webapp.RequestHandler):
 		d = FlatPage.get_page(FLATPAGE_BAPTISMS)
 		render(self, '', 'Batismos', {'page_data': d})
 
+class ChooseWeekPage(webapp.RequestHandler):
+	def get(self):
+		if 'set' in self.request.GET:
+			Configuration.set(CONFIG_WEEK, self.request.GET['set'])
+			memcache.flush_all()
+			self.response.out.write('<p/>Set new week: %s<hr>' %self.request.GET['set'])
+
+		cw = Configuration.fetch(CONFIG_WEEK)
+
+		for w in Week.all().order('-date').fetch(50):
+			self.response.out.write('<p/><a href="?set=%s">%s</a>' %(w.key(), w.date))
+
+			if cw == str(w.key()):
+				self.response.out.write(' ***')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -913,6 +929,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/make-new/', MakeNewPage),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
+	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 
 	('/quadro/', Quadro),
 
