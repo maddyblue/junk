@@ -56,7 +56,15 @@ def get_week():
 
 	w = unpack(memcache.get(n))
 	if w is None:
-		w = Week.get(Configuration.fetch(CONFIG_WEEK))
+		c = Configuration.fetch(CONFIG_WEEK)
+
+		# make the current week the most recent if there isn't one
+		if not c:
+			w = Week.all().order('-date').get()
+			Configuration.set(CONFIG_WEEK, str(w.key()))
+		else:
+			w = Week.get(c)
+
 		memcache.add(n, pack(w))
 
 	return w
