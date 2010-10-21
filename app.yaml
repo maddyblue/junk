@@ -3,6 +3,11 @@ version: 1
 runtime: python
 api_version: 1
 
+builtins:
+- remote_api: on
+- appstats: on
+- datastore_admin: on
+
 handlers:
 - url: /favicon.ico
   static_files: static/favicon.ico
@@ -20,14 +25,6 @@ handlers:
 - url: /files
   static_dir: static/files
 
-- url: /remote_api
-  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
-  login: admin
-
-- url: /stats.*
-  script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
-  login: admin
-
 - url: /_ah/missao-rio/.*
   script: main.py
   login: admin
@@ -42,7 +39,7 @@ handlers:
 admin_console:
   pages:
   - name: Appstats
-    url: /stats/
+    url: /_ah/stats/
 
   - name: Mission Status
     url: /_ah/missao-rio/status/
@@ -70,6 +67,3 @@ admin_console:
 
   - name: Edit Pages
     url: /_ah/missao-rio/edit-pages/
-
-derived_file_type:
-- python_precompiled
