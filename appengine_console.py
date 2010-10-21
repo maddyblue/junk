@@ -20,6 +20,8 @@ from riodejaneiro.mission import models as djm
 from google.appengine.ext.remote_api import remote_api_stub
 from google.appengine.ext import db
 import models as aem
+from main import askey, amkey
+import cache
 
 def mput(p, c=100):
 	print '  put', len(p)
@@ -38,17 +40,6 @@ def mput(p, c=100):
 					sys.exit()
 			else:
 				break
-
-def askey(i):
-	if i.reports_with: rw = i.reports_with.name
-	else: rw = None
-	if i.district: district = i.district.name
-
-	else: district = None
-	return u'%s-%s-%s-%s-%s-%s' %(i.zone.name, i.area.name, i.does_not_report, i.phone, district, rw)
-
-def amkey(i, missionaries, ak):
-	return u'%s-%s-%s-%s' %(missionaries[i.missionary.id].key().id_or_name(), i.is_senior, i.calling, ak)
 
 def dump():
 	print 'Stake'

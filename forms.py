@@ -1,27 +1,25 @@
-from google.appengine.ext.webapp import template
-
 from google.appengine.ext.db import djangoforms
 
-from models import *
+import models
 
 class ReportForm(djangoforms.ModelForm):
 	class Meta:
-		model = Report
+		model = models.Report
 		exclude = ['used']
 
 class IndicatorForm(djangoforms.ModelForm):
 	class Meta:
-		model = Indicator
+		model = models.Indicator
 		exclude = ['BM']
 
 class BaptismForm(djangoforms.ModelForm):
 	class Meta:
-		model = IndicatorBaptism
+		model = models.IndicatorBaptism
 
 class ConfirmationForm(djangoforms.ModelForm):
 	class Meta:
-		model = IndicatorConfirmation
+		model = models.IndicatorConfirmation
 
 class WeekForm(djangoforms.ModelForm):
 	class Meta:
-		model = Week
+		model = models.Week

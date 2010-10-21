@@ -4,7 +4,8 @@ from google.appengine.api import memcache
 from google.appengine.datastore import entity_pb
 from google.appengine.ext import db
 
-from models import *
+import main
+import models
 
 # cache names
 C_AOPTS = 'aopts'
@@ -22,7 +23,7 @@ C_ZONES = 'zones'
 C_ZOPTS = 'zopts-%s'
 C_M_BY_AREA = 'mbyarea-%s'
 C_M_PHOTO = 'm-photo-%s'
-C_FLATPAGE = 'flatpage-%s'
+C_RELATORIO_PAGE = 'relatorio'
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -57,14 +58,14 @@ def get_week():
 
 	w = unpack(memcache.get(n))
 	if w is None:
-		c = Configuration.fetch(CONFIG_WEEK)
+		c = models.Configuration.fetch(models.CONFIG_WEEK)
 
 		# make the current week the most recent if there isn't one
 		if not c:
-			w = Week.all().order('-date').get()
-			Configuration.set(CONFIG_WEEK, str(w.key()))
+			w = models.Week.all().order('-date').get()
+			models.Configuration.set(models.CONFIG_WEEK, str(w.key()))
 		else:
-			w = Week.get(c)
+			w = models.Week.get(c)
 
 		memcache.add(n, pack(w))
 
@@ -75,7 +76,7 @@ def get_snapshot(key):
 	n = C_SNAPSHOT %key
 	data = unpack(memcache.get(n))
 	if data is None:
-		data = Snapshot.get(key)
+		data = models.Snapshot.get(key)
 		memcache.add(n, pack(data))
 
 	return data
@@ -91,7 +92,7 @@ def get_mopts(released=False):
 	return mopts
 
 def render_mopts(released):
-	missionary = Missionary.gql('where is_released = :1 order by mission_name', released).fetch(1000)
+	missionary = models.Missionary.gql('where is_released = :1 order by mission_name', released).fetch(1000)
 	return ''.join(['<option value="%s">%s</option>' %(m.key(), unicode(m)) for m in missionary])
 
 # list of areas as html options: for weekly reports
@@ -105,7 +106,7 @@ def get_aopts():
 	return aopts
 
 def render_aopts():
-	area = Area.gql('where is_open = :1 order by zone_name, name', True).fetch(1000)
+	area = models.Area.gql('where is_open = :1 order by zone_name, name', True).fetch(1000)
 	return ''.join(['<option value="%s">%s</option>' %(a.key(), unicode(a)) for a in area])
 
 # list of wards as html options: for photo gallery
@@ -119,7 +120,7 @@ def get_wopts():
 	return wopts
 
 def render_wopts():
-	ward = Ward.gql('order by stake_name, name')
+	ward = models.Ward.gql('order by stake_name, name')
 	return ''.join(['<option value="%s">%s</option>' %(w.key(), unicode(w)) for w in ward])
 
 # list of zones in the snapshot of the most recent week as html options: for weekly reports
@@ -152,7 +153,7 @@ def get_snapmissionaries(week):
 	n = C_SNAPMISSIONARIES %week.key()
 	data = unpack(memcache.get(n))
 	if data is None:
-		i = SnapshotIndex.all().ancestor(week.get_key('snapshot')).get()
+		i = models.SnapshotIndex.all().ancestor(week.get_key('snapshot')).get()
 		data = db.get(i.snapmissionaries)
 		memcache.add(n, pack(data))
 
@@ -164,7 +165,7 @@ def get_snapareas(week):
 	data = unpack(memcache.get(n))
 	if data is None:
 		s = get_snapshot(week.get_key('snapshot'))
-		d = SnapshotIndex.all().ancestor(s).get()
+		d = models.SnapshotIndex.all().ancestor(s).get()
 		data = db.get(d.snapareas)
 		memcache.add(n, pack(data))
 
@@ -189,9 +190,9 @@ def get_aws():
 	if data is not None:
 		return data
 	else:
-			stakes = dict([(i.key(), i) for i in Stake.all().fetch(100)])
-			wards = dict([(i.key(), i) for i in Ward.all().fetch(500)])
-			areas = Area.all().fetch(500)
+			stakes = dict([(i.key(), i) for i in models.Stake.all().fetch(100)])
+			wards = dict([(i.key(), i) for i in models.Ward.all().fetch(500)])
+			areas = models.Area.all().fetch(500)
 
 			for i in wards.values():
 				i.stake = stakes[i.get_key('stake')]
@@ -214,10 +215,10 @@ def get_ibc(week):
 	if data is None:
 		data = {}
 
-		for sub in IndicatorSubmission.all().filter('week', week).filter('used', True).fetch(100):
-			inds = Indicator.all().filter('submission', sub).fetch(100)
-			bs = IndicatorBaptism.all().filter('submission', sub).fetch(100)
-			cs = IndicatorConfirmation.all().filter('submission', sub).fetch(100)
+		for sub in models.IndicatorSubmission.all().filter('week', week).filter('used', True).fetch(100):
+			inds = models.Indicator.all().filter('submission', sub).fetch(100)
+			bs = models.IndicatorBaptism.all().filter('submission', sub).fetch(100)
+			cs = models.IndicatorConfirmation.all().filter('submission', sub).fetch(100)
 
 			data[sub.key()] = (sub, inds, bs, cs)
 
@@ -240,7 +241,7 @@ def get_zones():
 def render_zones():
 	zones = {}
 
-	ms = Missionary.all().filter('is_released', False).order('area_name').fetch(500)
+	ms = models.Missionary.all().filter('is_released', False).order('area_name').fetch(500)
 	prefetch_refprops(ms, Missionary.area)
 	areas = [m.area for m in ms]
 	prefetch_refprops(areas, Area.district)
@@ -275,7 +276,7 @@ def render_zones():
 
 	return zones
 
-# list of active missionaries as Missionary (with area and profile) ordered by zone, area, senior
+# list of active missionaries as Missionary (with area) ordered by zone, area, senior
 def get_missionaries():
 	n = C_MISSIONARIES + '_'
 	ms = unpack(memcache.get(n + 'missionary'))
@@ -285,7 +286,7 @@ def get_missionaries():
 			ms[i].area = ar[i]
 		return ms
 	else:
-		data = Missionary.all().filter('is_released', False).order('zone_name').order('area_name').order('-is_senior').fetch(500)
+		data = models.Missionary.all().filter('is_released', False).order('zone_name').order('area_name').order('-is_senior').fetch(500)
 		prefetch_refprops(data, Missionary.area)
 		memcache.add(n + 'area', pack([m.area for m in data]))
 		memcache.add(n + 'missionary', pack(data))
@@ -343,18 +344,27 @@ def get_m_photo(mk):
 	data = memcache.get(n)
 
 	if not data:
-		m = Missionary.get(mk)
+		m = models.Missionary.get(mk)
 		data = m.profile.photo
 		memcache.add(n, data)
 
 	return data
 
-def get_flatpage(d):
-	n = C_FLATPAGE %d
+def get_relatorio_page():
+	n = C_RELATORIO_PAGE
 	data = memcache.get(n)
 
 	if not data:
-		data = FlatPage.get_page(d)
+		contatos = ''.join(['<option value="%s">%s</option>' %(i, i) for i in range(101)])
+
+		d = {
+			'week': get_week(),
+			'missionary': get_mopts(),
+			'area': get_aopts(),
+			'contatos': contatos,
+		}
+
+		data = main.render_temp('relatorio.html', d)
 		memcache.add(n, data)
 
 	return data

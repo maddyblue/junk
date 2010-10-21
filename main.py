@@ -4,7 +4,7 @@ import base64
 import logging
 import os
 
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from google.appengine.api import images
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
@@ -12,12 +12,13 @@ from google.appengine.ext.db import stats, Key
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from cache import *
-from forms import *
-from mapreduce import control, model
 from models import *
+import models
+import cache
 import config
+import forms
 import map_procs
+import mapreduce
 
 import sys
 # use reportlab patched from http://ruudhelderman.appspot.com/testpdf
@@ -50,51 +51,45 @@ def basicAuth(func):
 
 	return callf
 
+def render_temp(tname, d={}):
+	path = os.path.join(os.path.dirname(__file__), 'templates', tname)
+
+	return template.render(path, d)
+
 @basicAuth
 def render(s, p, t, d={}):
 	d['page'] = p
 	d['t1'] = t
 	d['t2'] = t
-	path = os.path.join(os.path.dirname(__file__), 'templates', 'index.html')
-
-	s.response.out.write(template.render(path, d))
+	s.response.out.write(render_temp('index.html', d))
 
 @basicAuth
 def rendert(s, t, d={}):
-	path = os.path.join(os.path.dirname(__file__), 'templates', t)
-	s.response.out.write(template.render(path, d))
+	s.response.out.write(render_temp(t, d))
 
 class MainPage(webapp.RequestHandler):
 	def get(self):
-		d = get_flatpage(FLATPAGE_CARTA)
+		d = FlatPage.get_flatpage(FLATPAGE_CARTA)
 		render(self, '', 'Carta do Presidente', {'page_data': d})
 
 class BatismosPage(webapp.RequestHandler):
 	def get(self):
-		d = get_flatpage(FLATPAGE_BATISMOS)
+		d = FlatPage.get_flatpage(FLATPAGE_BATISMOS)
 		render(self, '', 'Batismos', {'page_data': d})
 
 class BatizadoresPage(webapp.RequestHandler):
 	def get(self):
-		d = get_flatpage(FLATPAGE_BATIZADORES)
+		d = FlatPage.get_flatpage(FLATPAGE_BATIZADORES)
 		render(self, '', 'Batizadores', {'page_data': d})
 
 class RelatorioPage(webapp.RequestHandler):
 	def get(self):
-		contatos = ''.join(['<option value="%s">%s</option>' %(i, i) for i in range(101)])
-
-		d = {
-			'week': get_week(),
-			'missionary': get_mopts(),
-			'area': get_aopts(),
-			'contatos': contatos,
-		}
-
-		rendert(self, 'relatorio.html', d)
+		d = cache.get_relatorio_page()
+		self.response.out.write(d)
 
 class MainJS(webapp.RequestHandler):
 	def get(self):
-		week = get_week()
+		week = cache.get_week()
 
 		dopt = '<option value=""></option>'
 		wdays = ['domingo', 'sábado', 'sexta', 'quinta', 'quarta', 'terça', 'segunda']
@@ -108,7 +103,7 @@ class MainJS(webapp.RequestHandler):
 class SendRelatorio(webapp.RequestHandler):
 	@basicAuth
 	def post(self):
-		f = ReportForm(data=self.request.POST)
+		f = forms.ReportForm(data=self.request.POST)
 		if f.is_valid():
 			e = f.save()
 			self.response.out.write('Enviado com sucesso.')
@@ -120,7 +115,7 @@ class SendRelatorio(webapp.RequestHandler):
 class NumerosPage(webapp.RequestHandler):
 	def get(self):
 		d = {
-			'zones': get_zopts(),
+			'zones': cache.get_zopts(),
 		}
 
 		rendert(self, 'numeros.html', d)
@@ -130,8 +125,8 @@ class LoadZone(webapp.RequestHandler):
 	def post(self):
 		z = self.request.POST['zona']
 		zone = Zone.get(z)
-		w = get_week()
-		snapareas = [i for i in get_snapareas_byzone(w, zone.key()) if not i.does_not_report and not i.reports_with]
+		w = cache.get_week()
+		snapareas = [i for i in cache.get_snapareas_byzone(w, zone.key()) if not i.does_not_report and not i.reports_with]
 
 		fields = ['PB', 'PC', 'PBM', 'PS', 'LM', 'OL', 'PP', 'RR', 'RC', 'NP', 'LMARC', 'Con', 'NFM']
 
@@ -200,7 +195,7 @@ class SendNumbers(webapp.RequestHandler):
 			self.request.POST['%s-area' %ak] = ak
 			self.request.POST['%s-week' %ak] = wk
 
-			f = IndicatorForm(data=self.request.POST, prefix=a)
+			f = forms.IndicatorForm(data=self.request.POST, prefix=a)
 			if f.is_valid():
 				i = f.save(commit=False)
 				inds.append(i)
@@ -223,7 +218,7 @@ class SendNumbers(webapp.RequestHandler):
 				self.request.POST['%s-submission' %p] = sk
 				self.request.POST['%s-date' %p] = self.request.POST['%s-date' %p].partition(' ')[0]
 
-				f = BaptismForm(data=self.request.POST, prefix=p)
+				f = forms.BaptismForm(data=self.request.POST, prefix=p)
 				if f.is_valid():
 					o = f.save(commit=False)
 					ords.append(o)
@@ -244,7 +239,7 @@ class SendNumbers(webapp.RequestHandler):
 				self.request.POST['%s-submission' %p] = sk
 				self.request.POST['%s-date' %p] = self.request.POST['%s-date' %p].partition(' ')[0]
 
-				f = ConfirmationForm(data=self.request.POST, prefix=p)
+				f = forms.ConfirmationForm(data=self.request.POST, prefix=p)
 				if f.is_valid():
 					o = f.save(commit=False)
 					ords.append(o)
@@ -262,24 +257,24 @@ class NamesPage(webapp.RequestHandler):
 		self.response.headers['Content-Type'] = 'text/plain'
 		sep = "\r\n"
 
-		week = get_week()
-		aws = get_aws()
+		week = cache.get_week()
+		aws = cache.get_aws()
 
 		# hash the snaparea keys
-		areas = dict([(i.key(), i) for i in get_snapareas(week)])
+		areas = dict([(i.key(), i) for i in cache.get_snapareas(week)])
 
 		# hash the area keys also (for reports_with)
 		for v in areas.values():
 			areas[v.get_key('area')] = v
 
-		m_by_area = get_m_by_area(week)
+		m_by_area = cache.get_m_by_area(week)
 
 		rb = ''
 		rc = ''
 		nb = 0
 		nc = 0
 
-		ibc = get_ibc(week)
+		ibc = cache.get_ibc(week)
 
 		for k in ibc.keys():
 			sub, inds, bs, cs = ibc[k]
@@ -312,12 +307,12 @@ class KeyIndicatorsPage(webapp.RequestHandler):
 		self.response.headers['Content-Type'] = 'text/plain'
 		sep = "\r\n"
 
-		week = get_week()
+		week = cache.get_week()
 		od = week.date + timedelta(7)
 
 		# hash the snaparea keys
-		areas = dict([(i.key(), i) for i in get_snapareas(week)])
-		ibc = get_ibc(week).values()
+		areas = dict([(i.key(), i) for i in cache.get_snapareas(week)])
+		ibc = cache.get_ibc(week).values()
 
 		r = "%i/%i\r\n%i/%i\r\n" %(week.date.day, week.date.month, od.day, od.month)
 		zones = [i[0].get_key('zone').name() for i in ibc]
@@ -360,7 +355,7 @@ class MapControlPage(webapp.RequestHandler):
 			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
 
 			for i in self.request.POST.getall('kind'):
-				r = control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
+				r = mapreduce.control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, mapreduce.model._DEFAULT_SHARD_COUNT)
 				self.response.out.write('delete %s, job id %s<br/>' %(i, r))
 		elif p == 'Sync Phase 1':
 			# pre-memcache
@@ -368,7 +363,7 @@ class MapControlPage(webapp.RequestHandler):
 			map_procs.get_zones()
 			map_procs.get_open_areas()
 
-			i = control.start_map('Sync Areas', 'map_procs.sync_area', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
+			i = mapreduce.control.start_map('Sync Areas', 'map_procs.sync_area', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Area'}, mapreduce.model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync areas: %s<br>' %i)
 		elif p == 'Sync Phase 2':
 			# pre-memcache
@@ -376,24 +371,24 @@ class MapControlPage(webapp.RequestHandler):
 			map_procs.get_open_zones()
 			map_procs.get_areas()
 
-			i = control.start_map('Sync Zones', 'map_procs.sync_zone', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
+			i = mapreduce.control.start_map('Sync Zones', 'map_procs.sync_zone', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Zone'}, mapreduce.model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync zones: %s<br>' %i)
 
-			i = control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, model._DEFAULT_SHARD_COUNT)
+			i = mapreduce.control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, mapreduce.model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync missionaries: %s<br>' %i)
 		elif p == 'Make Index':
 			handler_spec = 'map_procs.null'
 			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
 
 			for i in self.request.POST.getall('kind'):
-				r = control.start_map('Make Index ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
+				r = mapreduce.control.start_map('Make Index ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, mapreduce.model._DEFAULT_SHARD_COUNT)
 				self.response.out.write('make index %s, job id %s<br/>' %(i, r))
 		else:
 			self.response.out.write('error')
 
 class MissionStatusPage(webapp.RequestHandler):
 	def get(self):
-		ms = get_missionaries()
+		ms = cache.get_missionaries()
 
 		zones = []
 		z = None
@@ -614,7 +609,7 @@ class Quadro(webapp.RequestHandler):
 
 class IndicatorCheckPage(webapp.RequestHandler):
 	def get(self):
-		week = get_week()
+		week = cache.get_week()
 
 		r = str(week.date)
 
@@ -645,7 +640,7 @@ class IndicatorCheckPage(webapp.RequestHandler):
 		r += '<hr>'
 		totbap = 0
 
-		ibc = get_ibc(week)
+		ibc = cache.get_ibc(week)
 # dictionary with key IndicatorSubmission.key() (thus grouped by zone), and
 # value the tuple (IndicatorSubmission, [Indicator], [IndicatorBaptism], [IndicatorConfirmation])
 		for k in ibc.keys():
@@ -663,7 +658,7 @@ class IndicatorCheckPage(webapp.RequestHandler):
 
 class MakeNewPage(webapp.RequestHandler):
 	forms = {
-		'week': WeekForm,
+		'week': forms.WeekForm,
 	}
 
 	def get_f(self):
@@ -686,7 +681,7 @@ class MakeNewPage(webapp.RequestHandler):
 					raise db.BadValueError('db already has this date')
 				w = Week(key_name=str(wf.date), date=wf.date, snapshot=wf.snapshot, question=wf.question, question_for_both=wf.question_for_both)
 				w.put()
-				Configuration.set(CONFIG_WEEK, str(w.key()))
+				Configuration.set(models.CONFIG_WEEK, str(w.key()))
 				d['done'] = '%s - %s' %(s, w)
 		else:
 			d = {s: f}
@@ -695,14 +690,14 @@ class MakeNewPage(webapp.RequestHandler):
 
 class EnterRPMPage(webapp.RequestHandler):
 	def get(self):
-			w = get_week()
-			a = [i for i in get_snapareas(w) if not i.does_not_report and not i.reports_with]
+			w = cache.get_week()
+			a = [i for i in cache.get_snapareas(w) if not i.does_not_report and not i.reports_with]
 			prefetch_refprops(a, SnapArea.area)
 			a.sort(cmp=lambda x,y: cmp(x.area.name, y.area.name))
 			z = list(set([i.get_key('zone').name() for i in a]))
 			z.sort()
 
-			m_by_area = get_m_by_area(w)
+			m_by_area = cache.get_m_by_area(w)
 
 			rpms = dict([(i.get_key('area'), i) for i in RPM.all().filter('week', w).fetch(500)])
 
@@ -764,13 +759,13 @@ class EnterRPMPage(webapp.RequestHandler):
 
 class MakeBatismosPage(webapp.RequestHandler):
 	def get(self):
-		w = get_week()
-		areas = [i for i in get_snapareas(w) if not i.does_not_report and not i.reports_with]
+		w = cache.get_week()
+		areas = [i for i in cache.get_snapareas(w) if not i.does_not_report and not i.reports_with]
 		prefetch_refprops(areas, SnapArea.area)
 		areas.sort(cmp=lambda x,y: cmp(x.area.name, y.area.name))
 		zones = list(set([i.get_key('zone').name() for i in areas]))
 		zones.sort()
-		m_by_area = get_m_by_area(w)
+		m_by_area = cache.get_m_by_area(w)
 		rpms = dict([(i.get_key('area'), i) for i in RPM.all().filter('week', w).fetch(500)])
 
 		nb = 0
@@ -902,11 +897,11 @@ class MakeBatismosPage(webapp.RequestHandler):
 class ChooseWeekPage(webapp.RequestHandler):
 	def get(self):
 		if 'set' in self.request.GET:
-			Configuration.set(CONFIG_WEEK, self.request.GET['set'])
+			Configuration.set(models.CONFIG_WEEK, self.request.GET['set'])
 			memcache.flush_all()
 			self.response.out.write('<p/>Set new week: %s<hr>' %self.request.GET['set'])
 
-		cw = Configuration.fetch(CONFIG_WEEK)
+		cw = Configuration.fetch(models.CONFIG_WEEK)
 
 		for w in Week.all().order('-date').fetch(50):
 			self.response.out.write('<p/><a href="?set=%s">%s</a>' %(w.key(), w.date))
@@ -916,12 +911,12 @@ class ChooseWeekPage(webapp.RequestHandler):
 
 class PhotoHandler(webapp.RequestHandler):
 	def get(self, mk):
-		self.response.out.write(get_m_photo(mk))
+		self.response.out.write(cache.get_m_photo(mk))
 		self.response.headers['Content-Type'] = 'image/jpeg'
 
 class EditPages(webapp.RequestHandler):
 	def display(self):
-		w = get_week()
+		w = cache.get_week()
 		self.response.out.write('Week: %s' %w.date)
 		self.response.out.write('<form method="POST">')
 		for p in [FLATPAGE_CARTA, FLATPAGE_BATISMOS, FLATPAGE_BATIZADORES]:
@@ -933,7 +928,7 @@ class EditPages(webapp.RequestHandler):
 		self.display()
 
 	def post(self):
-		w = get_week()
+		w = cache.get_week()
 		for p in [FLATPAGE_CARTA, FLATPAGE_BATISMOS, FLATPAGE_BATIZADORES]:
 			d = self.request.POST[p]
 
@@ -945,6 +940,331 @@ class EditPages(webapp.RequestHandler):
 			FlatPage.make(p, d, w)
 
 		self.display()
+
+def askey(i):
+	if i.get_key('reports_with'): rw = i.get_key('reports_with').name()
+	else: rw = None
+	if i.get_key('district'): district = i.get_key('district').name()
+
+	else: district = None
+	return u'%s-%s-%s-%s-%s-%s' %(i.get_key('zone').name(), i.name, i.does_not_report, i.phone, district, rw)
+
+def amkey(i, ak):
+	return u'%s-%s-%s-%s' %(i.key().id_or_name(), i.is_senior, i.calling, ak)
+
+class MakeSnapshot(webapp.RequestHandler):
+	def get(request):
+		d = datetime.now()
+		s = Snapshot(key_name=str(d), date=d)
+		s.save()
+		si = SnapshotIndex(parent=s)
+
+		p = []
+
+		for m in cache.get_missionaries():
+			ak = askey(m.area)
+			mk = amkey(m, ak)
+
+			if m.area.get_key('reports_with'): rw = m.area.get_key('reports_with')
+			else: rw = None
+
+			if m.area.get_key('district'): district = m.area.get_key('district')
+			else: district = None
+
+			sa = SnapArea(key_name=ak, area=m.get_key('area'), zone=m.get_key('zone'), does_not_report=m.area.does_not_report, phone=m.area.phone, district=district, reports_with=rw)
+			sm = SnapMissionary(key_name=mk, missionary=m, is_senior=m.is_senior, calling=m.calling, snaparea=sa)
+
+			p.append(sa)
+			p.append(sm)
+
+			si.snapmissionaries.append(str(sm.key()))
+			sak = str(sa.key())
+			if sak not in si.snapareas:
+				si.snapareas.append(sak)
+
+		s.name = '%s - %i missionaries' %(d.strftime('%d %b %Y %H:%M'), len(si.snapmissionaries))
+
+		p.append(s)
+		p.append(si)
+
+		db.put(p)
+
+		request.response.out.write('Done: %s' %s)
+
+def report_field(f):
+	if f is None:
+		return ''
+	return unicode(f)
+
+class GetRelatoriosPage(webapp.RequestHandler):
+	def get(self):
+		w = cache.get_week()
+		si = SnapshotIndex.all().ancestor(w.get_key('snapshot')).get()
+		aws = cache.get_aws()
+		snapareas = cache.get_snapareas(w)
+		areas = [i for i in snapareas if not i.does_not_report and not i.reports_with]
+		areas.sort(cmp=lambda x,y: cmp(x.get_key('area'), y.get_key('area')))
+
+		reps = Report.all().filter('week', w).fetch(200) #.filter('used', True)
+		cache.prefetch_refprops(reps, Report.senior, Report.junior)
+
+		reports = dict([(i.get_key('area'), i) for i in reps])
+		sep = "\r\n"
+		res = str(w.date) + sep
+		res += w.question + sep
+
+		wards = set()
+		for i in areas:
+			ward = aws[i.get_key('area')].ward
+
+			if ward:
+				wards.add(ward.name)
+
+		numwards = len(Ward.all(keys_only=True).fetch(500))
+
+		res += str(numwards - len(wards)) + sep
+		res += str(len(Stake.all(keys_only=True).fetch(100))) + sep
+		res += str(numwards) + sep
+		res += str(len(si.snapmissionaries)) + sep
+		res += str(0) + sep # men baptized this year
+
+		res += '0%s0%s0%s0%s' %(sep, sep, sep, sep) # bap week, conf week, bap year, conf year
+
+		zones = []
+
+		for a in areas:
+			zone = a.get_key('zone').name()
+			if zone not in zones:
+				zones.append(zone)
+
+		zones.sort()
+		res += "\t".join(zones)
+		bottom = ''
+		phones = ''
+
+		for z in zones:
+			res += sep
+			phones += sep
+			comma = False
+			for a in [i for i in areas if i.get_key('zone').name() == z]:
+				area = aws[a.get_key('area')]
+				if comma:
+					res += "\t"
+					phones += "\t"
+				else:
+					comma = True
+				res += a.get_key('area').name()
+				phones += a.phone
+				bottom += sep
+
+				if area.key() in reports:
+					r = reports[area.key()]
+					bottom += "\t".join([report_field(f) for f in
+						r.senior,
+						r.junior,
+						z,
+						a.get_key('area').name(),
+						r.attendance,
+						r.weekly_planning,
+						r.question_sen,
+						r.question_jun,
+						r.goal_baptisms,
+						r.goal_confirmations,
+						r.goal_date_marked,
+						r.goal_sacrament,
+						r.goal_with_member,
+						r.goal_others,
+						r.goal_progressing,
+						r.goal_received,
+						r.goal_contacted,
+						r.goal_new,
+						r.goal_recent_menos,
+						r.goal_nfm,
+						r.realized_baptisms,
+						r.realized_confirmations,
+						r.realized_date_marked,
+						r.realized_sacrament,
+						r.realized_with_member,
+						r.realized_others,
+						r.realized_progressing,
+						r.realized_received,
+						r.realized_contacted,
+						r.realized_new,
+						r.realized_recent_menos,
+						r.realized_nfm,
+						r.routine_sen_wakeup,
+						r.routine_sen_breakfast,
+						r.routine_sen_study_pers,
+						r.routine_sen_study_comp,
+						r.routine_sen_proselyte,
+						r.routine_sen_return,
+						r.routine_sen_sleep,
+						r.routine_sen_contacts,
+						r.routine_jun_wakeup,
+						r.routine_jun_breakfast,
+						r.routine_jun_study_pers,
+						r.routine_jun_study_comp,
+						r.routine_jun_proselyte,
+						r.routine_jun_return,
+						r.routine_jun_sleep,
+						r.routine_jun_contacts,
+						r.baptism_w1_1,
+						r.baptism_w1_2,
+						r.baptism_w1_3,
+						r.baptism_w1_4,
+						r.baptism_w1_5,
+						r.baptism_w2_1,
+						r.baptism_w2_2,
+						r.baptism_w2_3,
+						r.baptism_w2_4,
+						r.baptism_w2_5,
+						r.baptism_w3_1,
+						r.baptism_w3_2,
+						r.baptism_w3_3,
+						r.baptism_w3_4,
+						r.baptism_w3_5,
+						r.reactivate_1_name,
+						r.reactivate_1_activity_1,
+						r.reactivate_1_activity_2,
+						r.reactivate_2_name,
+						r.reactivate_2_activity_1,
+						r.reactivate_2_activity_2,
+						r.reactivate_3_name,
+						r.reactivate_3_activity_1,
+						r.reactivate_3_activity_2,
+						r.reactivate_4_name,
+						r.reactivate_4_activity_1,
+						r.reactivate_4_activity_2,
+						r.reactivate_5_name,
+						r.reactivate_5_activity_1,
+						r.reactivate_5_activity_2,
+						r.retain_1_name,
+						r.retain_1_activity_1,
+						r.retain_1_activity_2,
+						r.retain_2_name,
+						r.retain_2_activity_1,
+						r.retain_2_activity_2,
+						r.retain_3_name,
+						r.retain_3_activity_1,
+						r.retain_3_activity_2,
+						r.retain_4_name,
+						r.retain_4_activity_1,
+						r.retain_4_activity_2,
+						r.retain_5_name,
+						r.retain_5_activity_1,
+						r.retain_5_activity_2,
+						r.establish_sacrament_1,
+						r.establish_sacrament_2,
+						r.establish_principles_1,
+						r.establish_principles_2,
+						r.establish_priesthood_1,
+						r.establish_priesthood_2,
+						r.establish_bishopric_1,
+						r.establish_bishopric_2,
+						r.establish_executive_1,
+						r.establish_executive_2,
+						r.establish_counsel_1,
+						r.establish_counsel_2,
+						r.establish_integration_1,
+						r.establish_integration_2,
+						r.establish_correlation_1,
+						r.establish_correlation_2,
+						r.establish_other_1,
+						r.establish_other_2,
+						r.baptism_1_name,
+						r.baptism_1_source,
+						r.baptism_1_sex,
+						r.baptism_1_age,
+						r.baptism_1_date,
+						r.baptism_1_address,
+						r.baptism_1_cep,
+						r.baptism_2_name,
+						r.baptism_2_source,
+						r.baptism_2_sex,
+						r.baptism_2_age,
+						r.baptism_2_date,
+						r.baptism_2_address,
+						r.baptism_2_cep,
+						r.baptism_3_name,
+						r.baptism_3_source,
+						r.baptism_3_sex,
+						r.baptism_3_age,
+						r.baptism_3_date,
+						r.baptism_3_address,
+						r.baptism_3_cep,
+						r.baptism_4_name,
+						r.baptism_4_source,
+						r.baptism_4_sex,
+						r.baptism_4_age,
+						r.baptism_4_date,
+						r.baptism_4_address,
+						r.baptism_4_cep,
+						r.baptism_5_name,
+						r.baptism_5_source,
+						r.baptism_5_sex,
+						r.baptism_5_age,
+						r.baptism_5_date,
+						r.baptism_5_address,
+						r.baptism_5_cep,
+						r.baptism_6_name,
+						r.baptism_6_source,
+						r.baptism_6_sex,
+						r.baptism_6_age,
+						r.baptism_6_date,
+						r.baptism_6_address,
+						r.baptism_6_cep,
+						r.baptism_7_name,
+						r.baptism_7_source,
+						r.baptism_7_sex,
+						r.baptism_7_age,
+						r.baptism_7_date,
+						r.baptism_7_address,
+						r.baptism_7_cep,
+						r.baptism_8_name,
+						r.baptism_8_source,
+						r.baptism_8_sex,
+						r.baptism_8_age,
+						r.baptism_8_date,
+						r.baptism_8_address,
+						r.baptism_8_cep,
+						r.baptism_9_name,
+						r.baptism_9_source,
+						r.baptism_9_sex,
+						r.baptism_9_age,
+						r.baptism_9_date,
+						r.baptism_9_address,
+						r.baptism_9_cep,
+						r.baptism_10_name,
+						r.baptism_10_source,
+						r.baptism_10_sex,
+						r.baptism_10_age,
+						r.baptism_10_date,
+						r.baptism_10_address,
+						r.baptism_10_cep,
+						r.confirmation_1_name,
+						r.confirmation_1_date,
+						r.confirmation_2_name,
+						r.confirmation_2_date,
+						r.confirmation_3_name,
+						r.confirmation_3_date,
+						r.confirmation_4_name,
+						r.confirmation_4_date,
+						r.confirmation_5_name,
+						r.confirmation_5_date,
+						r.confirmation_6_name,
+						r.confirmation_6_date,
+						r.confirmation_7_name,
+						r.confirmation_7_date,
+						r.confirmation_8_name,
+						r.confirmation_8_date,
+						r.confirmation_9_name,
+						r.confirmation_9_date,
+						r.confirmation_10_name,
+						r.confirmation_10_date,
+					])
+
+		self.response.headers['Content-Type'] = 'text/plain'
+		self.response.out.write("%s%s%s" %(res, phones, bottom))
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -962,6 +1282,7 @@ application = webapp.WSGIApplication([
 
 	('/names/', NamesPage),
 	('/keyindicators/', KeyIndicatorsPage),
+	('/reports/', GetRelatoriosPage),
 
 	# _ah
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
@@ -972,6 +1293,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
+	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
 
 	('/quadro/', Quadro),
 

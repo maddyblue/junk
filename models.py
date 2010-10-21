@@ -2,7 +2,6 @@
 
 from google.appengine.api import memcache
 from google.appengine.ext import db
-import cache
 
 class DerefModel(db.Model):
 	def get_key(self, prop_name):
@@ -197,6 +196,9 @@ class Snapshot(db.Model):
 	date = db.DateTimeProperty(required=True)
 	name = db.StringProperty()
 
+	def __str__(self):
+		return self.__unicode__()
+
 	def __unicode__(self):
 		return self.name
 
@@ -222,7 +224,7 @@ SEX_CHOICES = set(['M', 'F'])
 SOURCE_CHOICES = set(['RM', 'MR', 'NF', 'TM'])
 ROUTINE_CHOICES = set(range(8))
 
-class Report(db.Model):
+class Report(DerefModel):
 	submitted = db.DateTimeProperty(required=True, auto_now_add=True)
 	used = db.BooleanProperty(default=False, required=True)
 	week = db.ReferenceProperty(Week, required=True)
@@ -527,6 +529,8 @@ class FlatPage(db.Model):
 	name = db.StringProperty(required=True)
 	data = db.TextProperty()
 
+	C_FLATPAGE = 'flatpage-%s'
+
 	@staticmethod
 	def key_name(name, week):
 		return '%s-%s' %(week.key(), name)
@@ -554,6 +558,17 @@ class FlatPage(db.Model):
 			return ''
 
 		return f.data
+
+	@staticmethod
+	def get_flatpage(d):
+		n = C_FLATPAGE %d
+		data = memcache.get(n)
+
+		if not data:
+			data = FlatPage.get_page(d)
+			memcache.add(n, data)
+
+		return data
 
 CONFIG_WEEK = 'week'
 

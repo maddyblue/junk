@@ -1,6 +1,7 @@
 from mapreduce import operation as op
 from google.appengine.api import memcache
-from models import *
+
+import models
 
 def null(entity):
 	pass
@@ -13,7 +14,7 @@ def get_areas():
 	if data is not None:
 		return data
 	else:
-		data = dict([(a.key(), a) for a in Area.all().fetch(500)])
+		data = dict([(a.key(), a) for a in models.Area.all().fetch(500)])
 		memcache.add('sync-areas', data)
 		return data
 
@@ -22,7 +23,7 @@ def get_zones():
 	if data is not None:
 		return data
 	else:
-		data = dict([(z.key(), z) for z in Zone.all().fetch(100)])
+		data = dict([(z.key(), z) for z in models.Zone.all().fetch(100)])
 		memcache.add('sync-zones', data)
 		return data
 
@@ -31,7 +32,7 @@ def get_open_areas():
 	if data is not None:
 		return data
 	else:
-		data = set([m.get_key('area') for m in Missionary.all().filter('area >', '').fetch(500)])
+		data = set([m.get_key('area') for m in models.Missionary.all().filter('area >', '').fetch(500)])
 		memcache.add('sync-open-areas', data)
 		return data
 
@@ -40,7 +41,7 @@ def get_open_zones():
 	if data is not None:
 		return data
 	else:
-		data = set([a.get_key('zone') for a in Area.all().filter('is_open', True).fetch(500)])
+		data = set([a.get_key('zone') for a in models.Area.all().filter('is_open', True).fetch(500)])
 		memcache.add('sync-open-zone', data)
 		return data
 
