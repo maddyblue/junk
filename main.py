@@ -1275,7 +1275,7 @@ class BaptismsPerWard(webapp.RequestHandler):
 		for i in cache.get_inds(w):
 
 			a = areas[i.get_key('area')].get_key('area')
-			ward = aws[a].ward.name
+			ward = aws[a].ward.key()
 
 			if ward not in inds:
 				inds[ward] = 0
@@ -1283,15 +1283,50 @@ class BaptismsPerWard(webapp.RequestHandler):
 			inds[ward] += i.PB
 
 		d = []
-		for w in Ward.all().fetch(500):
-			if w.name in inds:
-				b = inds[w.name]
+		for w in Ward.all(keys_only=True).fetch(500):
+			if w in inds:
+				b = inds[w]
 				if not b:
 					b = ''
 			else:
 				b = ''
 
-			d.append((w.name, b))
+			d.append((w.name(), b))
+
+		rendert(self, 'bap-per.html', {'d': d})
+
+class BaptismsPerMissionary(webapp.RequestHandler):
+	def get(self):
+		w = cache.get_week()
+		areas = dict([(i.key(), i) for i in cache.get_snapareas(w)])
+		missionaries = cache.get_snapmissionaries(w)
+		cache.prefetch_refprops(missionaries, SnapMissionary.missionary)
+		baps = {}
+		d = []
+
+		for i in cache.get_inds(w):
+			a = areas[i.get_key('area')]
+			if a.reports_with:
+				a = a.reports_with
+
+			baps[a.key()] = i.PB
+
+		for m in missionaries:
+			a = areas[m.get_key('snaparea')]
+			if a.does_not_report:
+				b = ''
+			else:
+				if a.reports_with:
+					a = a.reports_with
+
+				try:
+					b = baps[a.key()]
+					if not b:
+						b = ''
+				except KeyError:
+					b = 'faltando indicator'
+
+			d.append((m.missionary, b))
 
 		rendert(self, 'bap-per.html', {'d': d})
 
@@ -1313,6 +1348,7 @@ application = webapp.WSGIApplication([
 	('/keyindicators/', KeyIndicatorsPage),
 	('/reports/', GetRelatoriosPage),
 	('/bap-per-ward/', BaptismsPerWard),
+	('/bap-per-missionary/', BaptismsPerMissionary),
 
 	# _ah
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
