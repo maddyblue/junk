@@ -536,32 +536,37 @@ class FlatPage(db.Model):
 		return '%s-%s' %(week.key(), name)
 
 	@staticmethod
+	def get_week():
+		c = Configuration.fetch(CONFIG_WEEK)
+		return Week.get(c)
+
+	@staticmethod
 	def make(name, data='', week=None):
 		if not week:
-			week = cache.get_week()
+			week = FlatPage.get_week()
 
 		kn = FlatPage.key_name(name, week)
 		f = FlatPage(key_name=kn, week=week, name=name, data=data)
 		f.save()
-		memcache.delete(cache.C_FLATPAGE %name)
+		memcache.delete(FlatPage.C_FLATPAGE %name)
 		return f
 
 	@staticmethod
 	def get_page(name, week=None):
 		if not week:
-			week = cache.get_week()
+			week = FlatPage.get_week()
 
 		kn = FlatPage.key_name(name, week)
 		f = FlatPage.get_by_key_name(kn)
 
 		if not f or not f.data:
-			return ''
+			return ' ' # cache something so memcache.get doesn't return empty
 
 		return f.data
 
 	@staticmethod
 	def get_flatpage(d):
-		n = C_FLATPAGE %d
+		n = FlatPage.C_FLATPAGE %d
 		data = memcache.get(n)
 
 		if not data:
