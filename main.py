@@ -1266,6 +1266,35 @@ class GetRelatoriosPage(webapp.RequestHandler):
 		self.response.headers['Content-Type'] = 'text/plain'
 		self.response.out.write("%s%s%s" %(res, phones, bottom))
 
+class BaptismsPerWard(webapp.RequestHandler):
+	def get(self):
+		w = cache.get_week()
+		aws = cache.get_aws()
+		areas = dict([(i.key(), i) for i in cache.get_snapareas(w)])
+		inds = {}
+		for i in cache.get_inds(w):
+
+			a = areas[i.get_key('area')].get_key('area')
+			ward = aws[a].ward.name
+
+			if ward not in inds:
+				inds[ward] = 0
+
+			inds[ward] += i.PB
+
+		d = []
+		for w in Ward.all().fetch(500):
+			if w.name in inds:
+				b = inds[w.name]
+				if not b:
+					b = ''
+			else:
+				b = ''
+
+			d.append((w.name, b))
+
+		rendert(self, 'bap-per.html', {'d': d})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -1283,6 +1312,7 @@ application = webapp.WSGIApplication([
 	('/names/', NamesPage),
 	('/keyindicators/', KeyIndicatorsPage),
 	('/reports/', GetRelatoriosPage),
+	('/bap-per-ward/', BaptismsPerWard),
 
 	# _ah
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),

@@ -10,20 +10,21 @@ import models
 # cache names
 C_AOPTS = 'aopts'
 C_AWS = 'aws'
-C_IBC = 'ibc-%%s'
+C_IBC = 'ibc-%s'
+C_INDS = 'inds-%s'
 C_MISSIONARIES = 'missionaries'
 C_MOPTS = 'mopts-%s'
-C_SNAPSHOT = 'snapshot-%s'
+C_M_BY_AREA = 'mbyarea-%s'
+C_M_PHOTO = 'm-photo-%s'
+C_RELATORIO_PAGE = 'relatorio'
 C_SNAPAREAS = 'snapareas-%s'
 C_SNAPAREAS_BYZONE = 'snapareas-%s-%s'
 C_SNAPMISSIONARIES = 'snapmissionaries-%s'
+C_SNAPSHOT = 'snapshot-%s'
 C_WEEK = 'week'
 C_WOPTS = 'wopts'
 C_ZONES = 'zones'
 C_ZOPTS = 'zopts-%s'
-C_M_BY_AREA = 'mbyarea-%s'
-C_M_PHOTO = 'm-photo-%s'
-C_RELATORIO_PAGE = 'relatorio'
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -223,6 +224,20 @@ def get_ibc(week):
 			data[sub.key()] = (sub, inds, bs, cs)
 
 		memcache.add(n, data)
+
+	return data
+
+# list of used indicators for the given week
+def get_inds(week):
+	n = C_INDS %(week.key())
+	data = unpack(memcache.get(n))
+	if data is None:
+		data = []
+
+		for sub in models.IndicatorSubmission.all().filter('week', week).filter('used', True).fetch(100):
+			data.extend(models.Indicator.all().filter('submission', sub).fetch(100))
+
+		memcache.add(n, pack(data))
 
 	return data
 
