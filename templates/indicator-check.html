@@ -1,0 +1,29 @@
+<html>
+<body>
+
+<form method="POST">
+
+<table>
+{% for i in zones.iteritems %}
+	<tr><td>{{ i.0.name }}</td><td>
+	{% if i.1|length_is:1 %}{% else %}
+		multiple
+	{% endif %}
+	<select name="{{ i.0 }}">
+		{% for opt in i.1 %}
+			<option value="{{ opt.key }}" {% if opt.used %}selected{% endif %}>{{ opt.submitted }}</option>
+		{% endfor %}
+		<option value=""></option>
+	</select>
+		{% for opt in i.1 %}
+			<br/>{{ opt.submitted }}, used: {{ opt.used }}, notes: {{ opt.notes }}
+		{% endfor %}
+	</td></tr>
+{% endfor %}
+</table>
+
+<p/><input type="submit"/>
+</form>
+
+</body>
+</html>

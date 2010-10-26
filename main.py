@@ -3,6 +3,7 @@
 import base64
 import logging
 import os
+import pickle
 
 from datetime import timedelta, date, datetime
 from google.appengine.api import images
@@ -82,6 +83,16 @@ class BatizadoresPage(webapp.RequestHandler):
 		d = FlatPage.get_flatpage(FLATPAGE_BATIZADORES)
 		render(self, '', 'Batizadores', {'page_data': d})
 
+class MilagrePage(webapp.RequestHandler):
+	def get(self):
+		d = FlatPage.get_flatpage(FLATPAGE_MILAGRE)
+		render(self, '', 'Milagre da Semana', {'page_data': d})
+
+class NoticiasPage(webapp.RequestHandler):
+	def get(self):
+		d = FlatPage.get_flatpage(FLATPAGE_NOTICIAS)
+		render(self, '', 'Notícias do Campo', {'page_data': d})
+
 class RelatorioPage(webapp.RequestHandler):
 	def get(self):
 		d = cache.get_relatorio_page()
@@ -89,16 +100,9 @@ class RelatorioPage(webapp.RequestHandler):
 
 class MainJS(webapp.RequestHandler):
 	def get(self):
-		week = cache.get_week()
-
-		dopt = '<option value=""></option>'
-		wdays = ['domingo', 'sábado', 'sexta', 'quinta', 'quarta', 'terça', 'segunda']
-
-		for i in range(7):
-			dt = week.date - timedelta(i)
-			dopt += '<option value="%s">%s %s</option>' %(dt.strftime('%Y-%m-%d'), dt.strftime('%d/%m/%Y'), wdays[i])
-
-		rendert(self, 'main.js', {'dopt': dopt})
+		d = cache.get_main_js()
+		self.response.headers['Content-Type'] = 'text/javascript'
+		self.response.out.write(d)
 
 class SendRelatorio(webapp.RequestHandler):
 	@basicAuth
@@ -163,11 +167,6 @@ class LoadZone(webapp.RequestHandler):
 		self.response.out.write(formstr)
 
 class SendNumbers(webapp.RequestHandler):
-	def fail(self, s, inds=[]):
-		a = [s]
-		a.extend(inds)
-		db.delete(a)
-
 	@basicAuth
 	def post(self):
 		if self.request.POST['senha'] != 'joao35':
@@ -178,79 +177,15 @@ class SendNumbers(webapp.RequestHandler):
 		week = Week.get(self.request.POST['week'])
 		wk = week.key()
 
-		memcache.delete(C_IBC %week.key())
-
-		s = IndicatorSubmission(week=week, zone=zone, used=False)
+		s = IndicatorSubmission(week=week, zone=zone, data=pickle.dumps(self.request.POST))
 		s.put()
-		sk = s.key()
+		d = s.process(False)
 
-		areas = {}
-		for a in db.get(self.request.POST.getall('area')):
-			areas[str(a.key())] = a
-
-		inds = []
-		for a in self.request.POST.getall('area'):
-			ak = areas[a].key()
-			self.request.POST['%s-submission' %ak] = sk
-			self.request.POST['%s-area' %ak] = ak
-			self.request.POST['%s-week' %ak] = wk
-
-			f = forms.IndicatorForm(data=self.request.POST, prefix=a)
-			if f.is_valid():
-				i = f.save(commit=False)
-				inds.append(i)
-			else:
-				self.response.out.write('Faltando dados.')
-				self.fail(s)
-				return
-
-		db.put(inds)
-
-		ords = []
-		for i in inds:
-			a = i.get_key('area')
-			ik = i.key()
-
-			bn = 'b_%s-PB' %a
-			for b in self.request.POST.getall(bn):
-				p = '%s-%s' %(bn, b)
-				self.request.POST['%s-indicator' %p] = ik
-				self.request.POST['%s-submission' %p] = sk
-				self.request.POST['%s-date' %p] = self.request.POST['%s-date' %p].partition(' ')[0]
-
-				f = forms.BaptismForm(data=self.request.POST, prefix=p)
-				if f.is_valid():
-					o = f.save(commit=False)
-					ords.append(o)
-
-					if o.age >= 18 and o.sex == BAPTISM_SEX_M:
-						i.BM += 1
-						if i not in ords:
-							ords.append(i)
-				else:
-					self.response.out.write('Faltando batismo dados.')
-					self.fail(s, inds)
-					return
-
-			cn = 'c_%s-PC' %a
-			for c in self.request.POST.getall(cn):
-				p = '%s-%s' %(cn, c)
-				self.request.POST['%s-indicator' %p] = ik
-				self.request.POST['%s-submission' %p] = sk
-				self.request.POST['%s-date' %p] = self.request.POST['%s-date' %p].partition(' ')[0]
-
-				f = forms.ConfirmationForm(data=self.request.POST, prefix=p)
-				if f.is_valid():
-					o = f.save(commit=False)
-					ords.append(o)
-				else:
-					self.response.out.write('Faltando confirmação dados.')
-					self.fail(s, inds)
-					return
-
-		db.put(ords)
-
-		self.response.out.write('Enviado com sucesso.')
+		if not d:
+			self.response.out.write('Enviado com sucesso.')
+		else:
+			self.response.out.write(d)
+			s.delete()
 
 class NamesPage(webapp.RequestHandler):
 	def get(self):
@@ -611,9 +546,7 @@ class IndicatorCheckPage(webapp.RequestHandler):
 	def get(self):
 		week = cache.get_week()
 
-		r = str(week.date)
-
-		subs = IndicatorSubmission.all().filter('week =', week).fetch(100)
+		subs = IndicatorSubmission.all().filter('week', week).order('zone').order('-submitted').fetch(100)
 		zones = {}
 		for i in subs:
 			z = i.get_key('zone')
@@ -623,38 +556,17 @@ class IndicatorCheckPage(webapp.RequestHandler):
 			else:
 				zones[z].append(i)
 
-		for k, v in zones.iteritems():
-			z = k.name()
-			if len(v) == 1:
-				r += '<br>single: %s' %z
-				v[0].used = True
+		return rendert(self, 'indicator-check.html', {'zones': zones})
+
+	def post(self):
+		for s in IndicatorSubmission.get([i for i in self.request.POST.values() if i]):
+			r = s.commit()
+
+			self.response.out.write('<br/>' + str(s.key()) + ': ')
+			if not r:
+				self.response.out.write('success')
 			else:
-				r += '<br>multiple for zone %s: ' %z
-				r += ', '.join([str(i.key()) for i in v])
-				for i in v:
-					i.used = False
-
-		db.put(subs)
-		memcache.delete(C_IBC %week.key())
-
-		r += '<hr>'
-		totbap = 0
-
-		ibc = cache.get_ibc(week)
-# dictionary with key IndicatorSubmission.key() (thus grouped by zone), and
-# value the tuple (IndicatorSubmission, [Indicator], [IndicatorBaptism], [IndicatorConfirmation])
-		for k in ibc.keys():
-			sub, inds, ibs, ics = ibc[k]
-
-			r += '<p><b>' + sub.get_key('zone').name() + '</b>: ' + str(len(ibs))
-			totbap += len(ibs)
-
-			for i in ibs:
-				r += '<br>&nbsp;&nbsp;' + i.name
-
-		r += '<p>tot bap: ' + str(totbap)
-
-		self.response.out.write(r)
+				self.response.out.write(r)
 
 class MakeNewPage(webapp.RequestHandler):
 	forms = {
@@ -915,11 +827,13 @@ class PhotoHandler(webapp.RequestHandler):
 		self.response.headers['Content-Type'] = 'image/jpeg'
 
 class EditPages(webapp.RequestHandler):
+	pages = [FLATPAGE_CARTA, FLATPAGE_BATISMOS, FLATPAGE_BATIZADORES, FLATPAGE_MILAGRE, FLATPAGE_NOTICIAS]
+
 	def display(self):
 		w = cache.get_week()
 		self.response.out.write('Week: %s' %w.date)
 		self.response.out.write('<form method="POST">')
-		for p in [FLATPAGE_CARTA, FLATPAGE_BATISMOS, FLATPAGE_BATIZADORES]:
+		for p in self.pages:
 			d = FlatPage.get_page(p, w)
 			self.response.out.write('<p/>%s<p/><textarea cols="70" rows="20" name="%s">%s</textarea>' %(p, p, d))
 		self.response.out.write('<p/><input type="submit"/></form>')
@@ -929,7 +843,7 @@ class EditPages(webapp.RequestHandler):
 
 	def post(self):
 		w = cache.get_week()
-		for p in [FLATPAGE_CARTA, FLATPAGE_BATISMOS, FLATPAGE_BATIZADORES]:
+		for p in self.pages:
 			d = self.request.POST[p]
 
 			# set it to something so the datastore and memcache register a value
@@ -1336,6 +1250,8 @@ application = webapp.WSGIApplication([
 	('/numeros/', NumerosPage),
 	('/batismos/', BatismosPage),
 	('/batizadores/', BatizadoresPage),
+	('/milagre/', MilagrePage),
+	('/noticias/', NoticiasPage),
 
 	('/js/main.js', MainJS),
 	('/photo/(.*)', PhotoHandler),
@@ -1349,6 +1265,8 @@ application = webapp.WSGIApplication([
 	('/reports/', GetRelatoriosPage),
 	('/bap-per-ward/', BaptismsPerWard),
 	('/bap-per-missionary/', BaptismsPerMissionary),
+
+	#('/area/(.*)', AreaPage),
 
 	# _ah
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),

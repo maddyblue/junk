@@ -3,6 +3,8 @@
 from google.appengine.api import memcache
 from google.appengine.ext import db
 
+import pickle
+
 class DerefModel(db.Model):
 	def get_key(self, prop_name):
 		return getattr(self.__class__, prop_name).get_value_for_datastore(self)
@@ -456,12 +458,129 @@ class Report(DerefModel):
 class IndicatorSubmission(DerefModel):
 	week = db.ReferenceProperty(Week, required=True)
 	submitted = db.DateTimeProperty(auto_now_add=True, required=True)
-	used = db.BooleanProperty(required=True)
 	zone = db.ReferenceProperty(Zone, required=True)
+	data = db.BlobProperty(required=True)
+	used = db.BooleanProperty()
+	notes = db.TextProperty()
+
+	def commit(self):
+		inds = []
+		inds.extend(Indicator.all(keys_only=True).filter('week', self.week).filter('zone', self.zone).fetch(500))
+		inds.extend(IndicatorBaptism.all(keys_only=True).filter('week', self.week).filter('zone', self.zone).fetch(500))
+		inds.extend(IndicatorConfirmation.all(keys_only=True).filter('week', self.week).filter('zone', self.zone).fetch(500))
+
+		db.delete(inds)
+
+		subs = IndicatorSubmission.all().filter('week', self.week).filter('zone', self.zone).fetch(500)
+
+		for i in subs:
+			if i.key() == self.key():
+				i.used = True
+			else:
+				i.used = False
+
+		db.put(subs)
+
+		return self.process(True)
+
+	# returns False on success, else an error message
+	# if send is False, will not write anything to datastore: use to do sanity check
+	def process(self, send):
+		import forms
+
+		POST = pickle.loads(self.data)
+		sk = str(self.key())
+		wk = str(self.get_key('week'))
+
+		inds = []
+		for a in SnapArea.get(POST.getall('area')):
+			ak = str(a.key())
+			areak = a.get_key('area')
+			zonek = a.get_key('zone')
+			POST['%s-submission' %ak] = sk
+			POST['%s-snaparea' %ak] = ak
+			POST['%s-area' %ak] = areak
+			POST['%s-zone' %ak] = zonek
+			POST['%s-week' %ak] = wk
+
+			f = forms.IndicatorForm(data=POST, prefix=ak)
+			if f.is_valid():
+				i = f.save(commit=False)
+				inds.append(i)
+			else:
+				return 'Faltando dados.'
+
+		if send:
+			db.put(inds)
+
+		ords = []
+		for i in inds:
+			areak = i.get_key('area')
+			zonek = i.get_key('zone')
+			snapk = i.get_key('snaparea')
+
+			if send:
+				ik = str(i.key())
+				fb = forms.BaptismForm
+				fc = forms.ConfirmationForm
+			else:
+				ik = ''
+				fb = forms.BaptismProcessForm
+				fc = forms.ConfirmationProcessForm
+
+			bn = 'b_%s-PB' %snapk
+			for b in range(int(POST.get('%s-PB' %snapk))):
+				p = '%s-%s' %(bn, b)
+
+				POST['%s-indicator' %p] = ik
+				POST['%s-submission' %p] = sk
+				POST['%s-snaparea' %p] = snapk
+				POST['%s-area' %p] = areak
+				POST['%s-zone' %p] = zonek
+				POST['%s-week' %p] = wk
+				POST['%s-date' %p] = POST['%s-date' %p].partition(' ')[0]
+
+				f = fb(data=POST, prefix=p)
+				if f.is_valid():
+					if send: # don't even try to save these since we don't have indicator
+						o = f.save(commit=False)
+						ords.append(o)
+
+						if o.age >= 18 and o.sex == BAPTISM_SEX_M:
+							i.BM += 1
+							if i not in ords:
+								ords.append(i)
+				else:
+					return 'Faltando batismo dados.'
+
+			cn = 'c_%s-PC' %snapk
+			for c in POST.getall(cn):
+				p = '%s-%s' %(cn, c)
+				POST['%s-indicator' %p] = ik
+				POST['%s-submission' %p] = sk
+				POST['%s-snaparea' %p] = snapk
+				POST['%s-area' %p] = areak
+				POST['%s-zone' %p] = zonek
+				POST['%s-week' %p] = wk
+				POST['%s-date' %p] = POST['%s-date' %p].partition(' ')[0]
+
+				f = fc(data=POST, prefix=p)
+				if f.is_valid():
+					if send: # don't even try to save these since we don't have indicator
+						o = f.save(commit=False)
+						ords.append(o)
+				else:
+					return 'Faltando confirmação dados.'
+
+		if send:
+			db.put(ords)
 
 class Indicator(DerefModel):
 	submission = db.ReferenceProperty(IndicatorSubmission, required=True)
-	area = db.ReferenceProperty(SnapArea, required=True)
+	area = db.ReferenceProperty(Area, required=True)
+	snaparea = db.ReferenceProperty(SnapArea, required=True)
+	zone = db.ReferenceProperty(Zone, required=True)
+	week = db.ReferenceProperty(Week, required=True)
 	PB    = db.IntegerProperty(required=True)
 	PC    = db.IntegerProperty(required=True)
 	PBM   = db.IntegerProperty(required=True, indexed=False)
@@ -501,6 +620,11 @@ BAPTISM_SEX_CHOICES = set([BAPTISM_SEX_M, BAPTISM_SEX_F])
 class IndicatorBaptism(DerefModel):
 	submission = db.ReferenceProperty(IndicatorSubmission, required=True)
 	indicator = db.ReferenceProperty(Indicator, required=True)
+	snaparea = db.ReferenceProperty(SnapArea, required=True)
+	area = db.ReferenceProperty(Area, required=True)
+	zone = db.ReferenceProperty(Zone, required=True)
+	week = db.ReferenceProperty(Week, required=True)
+
 	name = db.StringProperty(required=True, indexed=False)
 	date = db.DateProperty(required=True, indexed=False)
 	age = db.IntegerProperty(required=True, indexed=False)
@@ -509,6 +633,11 @@ class IndicatorBaptism(DerefModel):
 class IndicatorConfirmation(DerefModel):
 	submission = db.ReferenceProperty(IndicatorSubmission, required=True)
 	indicator = db.ReferenceProperty(Indicator, required=True)
+	snaparea = db.ReferenceProperty(SnapArea, required=True)
+	area = db.ReferenceProperty(Area, required=True)
+	zone = db.ReferenceProperty(Zone, required=True)
+	week = db.ReferenceProperty(Week, required=True)
+
 	name = db.StringProperty(required=True, indexed=False)
 	date = db.DateProperty(required=True, indexed=False)
 
@@ -523,6 +652,8 @@ class RPM(DerefModel):
 FLATPAGE_CARTA = 'carta'
 FLATPAGE_BATISMOS = 'batismos'
 FLATPAGE_BATIZADORES = 'batizadores'
+FLATPAGE_MILAGRE = 'milagre'
+FLATPAGE_NOTICIAS = 'noticias'
 
 class FlatPage(db.Model):
 	week = db.ReferenceProperty(Week, required=True)

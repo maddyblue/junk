@@ -41,6 +41,19 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: IndicatorSubmission
+  properties:
+  - name: week
+  - name: zone
+  - name: submitted
+
+- kind: IndicatorSubmission
+  properties:
+  - name: week
+  - name: zone
+  - name: submitted
+    direction: desc
+
 - kind: Missionary
   properties:
   - name: __key__

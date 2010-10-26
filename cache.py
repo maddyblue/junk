@@ -6,12 +6,14 @@ from google.appengine.ext import db
 
 import main
 import models
+import datetime
 
 # cache names
 C_AOPTS = 'aopts'
 C_AWS = 'aws'
 C_IBC = 'ibc-%s'
 C_INDS = 'inds-%s'
+C_MAIN_JS = 'main-js'
 C_MISSIONARIES = 'missionaries'
 C_MOPTS = 'mopts-%s'
 C_M_BY_AREA = 'mbyarea-%s'
@@ -380,6 +382,27 @@ def get_relatorio_page():
 		}
 
 		data = main.render_temp('relatorio.html', d)
+		memcache.add(n, data)
+
+	return data
+
+def get_main_js():
+	n = C_MAIN_JS
+	#data = memcache.get(n)
+	data = None
+
+	if not data:
+		week = get_week()
+
+		dopt = '<option value=""></option>'
+		wdays = ['domingo', 'sábado', 'sexta', 'quinta', 'quarta', 'terça', 'segunda']
+
+		for i in range(7):
+			dt = week.date - datetime.timedelta(i)
+			dopt += '<option value="%s">%s %s</option>' %(dt.strftime('%Y-%m-%d'), dt.strftime('%d/%m/%Y'), wdays[i])
+
+		data = main.render_temp('main.js', {'dopt': dopt})
+
 		memcache.add(n, data)
 
 	return data

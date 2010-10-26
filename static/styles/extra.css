@@ -64,16 +64,6 @@ DIV.td1 {
 	text-align: center;
 }
 
-#batizadores div img {
-	width: 150px;
-	height: 200px;
-}
-
-#batizadores div.miniphotos img {
-	width: 75px;
-	height: 100px;
-}
-
 #batizadores div {
 	display: inline-block;
 	width: 500px;

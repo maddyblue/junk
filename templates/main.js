@@ -68,7 +68,7 @@ function batismoChange(obj, cid)
 	diff = obj.value - $GLOBALS[oname];
 	$GLOBALS[oname] = obj.value;
 
-	if (diff >= 0)
+	if (diff > 0)
 	{
 		for(i = tmpval; i < (tmpval+diff); i++)
 		{
@@ -76,9 +76,9 @@ function batismoChange(obj, cid)
 			$(star).append('<input type="hidden" name="' + oname + '" value="' + i + '" /><div class="tr1"><div class="td1"><b>' + cid + '<br />Batismo #'+ (i + 1) + '</b></div><table><tr><td align="right">Nome Completo:</td><td align="left"><input size="35" name="' + oi + 'name" type="text" /></td></tr><tr><td align="right">Idade:</td><td align="left"><input name="' + oi + 'age" size="4" type="text" onchange="numeroChange(this);" /></td></tr><tr><td align="right">Data do Batismo:</td><td align="left"><select name="' + oi + 'date">{{ dopt }}</select></td></tr><tr><td align="right">Sexo:</td><td align="left"><select name="' + oi + 'sex"><option></option><option value="Masculino">Masculino</option><option value="Feminino">Feminino</option></select></td></tr></table><div class="space-line"></div></div>').find("div.tr1:last").hide().slideDown("slow");
 		}
 	}
-	else
+	else if (diff < 0)
 	{
-		$(star + " div.tr1:gt(" + (obj.value - 1) + ")").slideUp("slow", function(){ $(this).remove(); });
+		$(star + " div.tr1").slice(obj.value, tmpval).slideUp("slow", function(){ $(this).remove(); });
 	}
 }
 
