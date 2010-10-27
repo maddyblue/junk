@@ -4,6 +4,7 @@ import base64
 import logging
 import os
 import pickle
+import urllib
 
 from datetime import timedelta, date, datetime
 from google.appengine.api import images
@@ -177,7 +178,7 @@ class SendNumbers(webapp.RequestHandler):
 		week = Week.get(self.request.POST['week'])
 		wk = week.key()
 
-		s = IndicatorSubmission(week=week, zone=zone, data=pickle.dumps(self.request.POST))
+		s = IndicatorSubmission(week=week, weekdate=week.date, zone=zone, data=pickle.dumps(self.request.POST))
 		s.put()
 		d = s.process(False)
 
@@ -1244,6 +1245,93 @@ class BaptismsPerMissionary(webapp.RequestHandler):
 
 		rendert(self, 'bap-per.html', {'d': d})
 
+def make_chart(inds, disp, other={}):
+	d = {}
+
+	data = dict([inds[i] for i in disp])
+	dps = '|'.join([','.join([str(j) for j in i]) for i in data.values()])
+	d['chd'] = 't:' + dps
+	d['chdl'] = '|'.join([urllib.quote_plus(i) for i in data.keys()])
+
+	datas = []
+	for i in data.values():
+		datas.extend(i)
+
+	dmin = 0 # min(datas)
+	dmax = max(datas)
+	d['chds'] = '%i,%i' %(dmin, dmax)
+
+	for k, v in other.iteritems():
+		d[k] = v
+
+	defs = {
+		'chs': '450x250',
+		'cht': 'lc',
+		'chxtc': '0,-200',
+		'chco': '0000FF,FF0000',
+		'chxt': 'x,y',
+		'chxr': '1,%i,%i,%i' %(dmin, dmax, (dmax - dmin) / 5),
+		'chdlp': 'b'
+	}
+
+	for k, v in defs.iteritems():
+		if k not in d:
+			d[k] = v
+
+	for i in ['chtt']:
+		if i in d:
+			d[i] = urllib.quote_plus(d[i])
+	if 'chxl' not in d:
+		d['chxl'] = inds['chxl']
+	if 'chm' not in d:
+		d['chm'] = '|'.join(['o,000000,%i,-1,4' %i for i in range(len(inds))])
+
+	return chart_url(d)
+
+def chart_url(data):
+	url = '<img src="http://chart.apis.google.com/chart?'
+
+	url += ('&amp;'.join([k + '=' + data[k] for k in data.keys()])).replace(' ', '+')
+	url += '"/>'
+
+	return url
+
+class AreaPage(webapp.RequestHandler):
+	def get(self, akey):
+		if not akey:
+			areas = [i for i in Area.all().order('zone').order('name').fetch(500) if i.get_key('ward')]
+
+			zones = []
+			for a in areas:
+				z = a.get_key('zone')
+				if not zones or zones[-1][-1][-1].get_key('zone') != z:
+					zones.append((z, []))
+				zones[-1][-1].append(a)
+
+			rendert(self, 'area-list.html', {'zones': zones})
+		else:
+			area = Area.get(akey)
+			data = cache.get_area_inds(akey)
+
+			charts = []
+			charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}))
+			charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas'}))
+			charts.append(make_chart(data, ['NP', 'PS'], {'chtt': 'Pesquisadores'}))
+
+			render(self, 'area.html', unicode(area), {'area': area, 'charts': charts})
+
+class ZonePage(webapp.RequestHandler):
+	def get(self, zkey):
+		zone = Zone.get(zkey)
+		data = cache.get_zone_inds(zkey)
+
+		charts = []
+		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}))
+		charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas'}))
+		charts.append(make_chart(data, ['NP', 'PS'], {'chtt': 'Pesquisadores'}))
+
+		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/relatorio/', RelatorioPage),
@@ -1266,7 +1354,8 @@ application = webapp.WSGIApplication([
 	('/bap-per-ward/', BaptismsPerWard),
 	('/bap-per-missionary/', BaptismsPerMissionary),
 
-	#('/area/(.*)', AreaPage),
+	('/area/(.*)', AreaPage),
+	('/zone/(.*)', ZonePage),
 
 	# _ah
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),

@@ -13,7 +13,7 @@ body {
 
 /* Set the page width */
 #wrapper-menu-top, #header, #wrapper-content, #wrapper-footer {
-	width: 85%;
+	width: 95%;
 	margin: 0 auto;
 	text-align: left;
 }

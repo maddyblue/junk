@@ -20,7 +20,6 @@ from riodejaneiro.mission import models as djm
 from google.appengine.ext.remote_api import remote_api_stub
 from google.appengine.ext import db
 import models as aem
-from main import askey, amkey
 import cache
 
 def mput(p, c=100):
@@ -40,6 +39,18 @@ def mput(p, c=100):
 					sys.exit()
 			else:
 				break
+
+def askey(i):
+	if i.reports_with: rw = i.reports_with.name
+	else: rw = None
+
+	if i.district: district = i.district.name
+	else: district = None
+
+	return u'%s-%s-%s-%s-%s-%s' %(i.zone.name, i.area.name, i.does_not_report, i.phone, district, rw)
+
+def amkey(i, missionaries, ak):
+	return u'%s-%s-%s-%s' %(missionaries[i.missionary.id].key().id_or_name(), i.is_senior, i.calling, ak)
 
 def dump():
 	print 'Stake'
@@ -220,7 +231,7 @@ def dump():
 	for i in obs:
 		subkey = '%s-%s' %(i.week, i.area.zone.name)
 		if subkey not in submissions:
-			p.append(aem.IndicatorSubmission(week=weeks[str(i.week.date)], used=True, zone=zones[i.area.zone.name]))
+			p.append(aem.IndicatorSubmission(week=weeks[str(i.week.date)], weekdate=i.week.date, used=True, zone=zones[i.area.zone.name], notes='from django data, do not change'))
 			submissions[subkey] = p[-1]
 	mput(p)
 
@@ -231,7 +242,7 @@ def dump():
 	for i in obs:
 		sub = submissions['%s-%s' %(i.week, i.area.zone.name)]
 
-		p.append(aem.Indicator(week=weeks[str(i.week.date)], area=snapareas[i.area.id], submission=sub,
+		p.append(aem.Indicator(week=weeks[str(i.week.date)], weekdate=i.week.date, snaparea=snapareas[i.area.id], area=areas[i.area.area.name], zone=zones[i.area.zone.name], submission=sub,
 			PB=i.PB, PC=i.PC, PBM=i.PBM, PS=i.PS, LM=i.LM, OL=i.OL, PP=i.PP, RR=i.RR, RC=i.RC, NP=i.NP, LMARC=i.LMARC, Con=i.Con, NFM=i.NFM, BM=i.Homen,
 			PB_meta=i.PB_meta, PC_meta=i.PC_meta, PBM_meta=i.PBM_meta, PS_meta=i.PS_meta, LM_meta=i.LM_meta, OL_meta=i.OL_meta, PP_meta=i.PP_meta, RR_meta=i.RR_meta, RC_meta=i.RC_meta, NP_meta=i.NP_meta, LMARC_meta=i.LMARC_meta, Con_meta=i.Con_meta, NFM_meta=i.NFM_meta
 			))
@@ -247,9 +258,9 @@ def dump():
 		for b in i.baptisms.all():
 			if b.sex: sex = aem.BAPTISM_SEX_M
 			else: sex = aem.BAPTISM_SEX_F
-			p.append(aem.IndicatorBaptism(indicator=ind, submission=sub, name=b.name, date=b.date, age=b.age, sex=sex))
+			p.append(aem.IndicatorBaptism(indicator=ind, submission=sub, week=weeks[str(i.week.date)], weekdate=i.week.date, snaparea=snapareas[i.area.id], area=areas[i.area.area.name], zone=zones[i.area.zone.name], name=b.name, date=b.date, age=b.age, sex=sex))
 		for c in i.confirmations.all():
-			p.append(aem.IndicatorConfirmation(indicator=ind, submission=sub, name=c.name, date=c.date))
+			p.append(aem.IndicatorConfirmation(indicator=ind, submission=sub, week=weeks[str(i.week.date)], weekdate=i.week.date, snaparea=snapareas[i.area.id], area=areas[i.area.area.name], zone=zones[i.area.zone.name], name=c.name, date=c.date))
 	mput(p)
 
 	print 'Report'
@@ -505,7 +516,7 @@ if __name__ == '__main__':
 	else:
 		host = '%s.appspot.com' % app_id
 
-	remote_api_stub.ConfigureRemoteDatastore(app_id, '/remote_api', auth_func, host)
+	remote_api_stub.ConfigureRemoteDatastore(app_id, '/_ah/remote_api', auth_func, host)
 
 	#dump()
 

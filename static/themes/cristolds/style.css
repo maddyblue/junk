@@ -1,0 +1,36 @@
+/* Css originally by mejobloggs  Design by Aran @ stuio7designs.com  Please email me if you use this, as I would love to see how it is being used, also you can join my linkshare to help you with your google ranking */
+
+body {
+	color: #25456c;
+}
+
+#wrapper-header {
+	background: transparent url('images/cristolds-blue.png') top center repeat-x;
+}
+
+#header {
+	background: #eee url('images/cristolds.jpg') no-repeat center top;
+}
+
+#wrapper-header2 {
+	background: transparent url('images/cristolds-blueshadowleft.png') top left no-repeat;
+}
+
+#wrapper-header3 {
+	height:250px;
+	background: transparent url('images/cristolds-blueshadowright.png') top right no-repeat;
+}
+
+#header h1 {
+	color: #CEE3F6;
+}
+
+#menu-page h3 {
+	text-transform: uppercase;
+	color: #25456c;
+}
+
+#menu-page a:hover { color: #25456c; }
+
+a:link, a:visited { color: #5b8fbe; }
+a:hover { color: #666; }

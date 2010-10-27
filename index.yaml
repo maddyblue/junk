@@ -18,12 +18,40 @@ indexes:
 - kind: Area
   properties:
   - name: is_open
+  - name: zone
+  - name: name
+
+- kind: Area
+  properties:
+  - name: is_open
   - name: zone_name
+  - name: name
+
+- kind: Area
+  properties:
+  - name: zone
   - name: name
 
 - kind: Indicator
   properties:
   - name: __key__
+    direction: desc
+
+- kind: Indicator
+  properties:
+  - name: area
+  - name: weekdate
+
+- kind: Indicator
+  properties:
+  - name: area
+  - name: weekdate
+    direction: desc
+
+- kind: Indicator
+  properties:
+  - name: zone
+  - name: weekdate
     direction: desc
 
 - kind: IndicatorBaptism

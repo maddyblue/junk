@@ -457,9 +457,10 @@ class Report(DerefModel):
 
 class IndicatorSubmission(DerefModel):
 	week = db.ReferenceProperty(Week, required=True)
+	weekdate = db.DateProperty(required=True)
 	submitted = db.DateTimeProperty(auto_now_add=True, required=True)
 	zone = db.ReferenceProperty(Zone, required=True)
-	data = db.BlobProperty(required=True)
+	data = db.BlobProperty()
 	used = db.BooleanProperty()
 	notes = db.TextProperty()
 
@@ -490,7 +491,8 @@ class IndicatorSubmission(DerefModel):
 
 		POST = pickle.loads(self.data)
 		sk = str(self.key())
-		wk = str(self.get_key('week'))
+		wk = str(self.week.key())
+		dk = str(self.week.date)
 
 		inds = []
 		for a in SnapArea.get(POST.getall('area')):
@@ -502,6 +504,7 @@ class IndicatorSubmission(DerefModel):
 			POST['%s-area' %ak] = areak
 			POST['%s-zone' %ak] = zonek
 			POST['%s-week' %ak] = wk
+			POST['%s-weekdate' %ak] = dk
 
 			f = forms.IndicatorForm(data=POST, prefix=ak)
 			if f.is_valid():
@@ -538,6 +541,7 @@ class IndicatorSubmission(DerefModel):
 				POST['%s-area' %p] = areak
 				POST['%s-zone' %p] = zonek
 				POST['%s-week' %p] = wk
+				POST['%s-weekdate' %p] = dk
 				POST['%s-date' %p] = POST['%s-date' %p].partition(' ')[0]
 
 				f = fb(data=POST, prefix=p)
@@ -562,6 +566,7 @@ class IndicatorSubmission(DerefModel):
 				POST['%s-area' %p] = areak
 				POST['%s-zone' %p] = zonek
 				POST['%s-week' %p] = wk
+				POST['%s-weekdate' %p] = dk
 				POST['%s-date' %p] = POST['%s-date' %p].partition(' ')[0]
 
 				f = fc(data=POST, prefix=p)
@@ -581,6 +586,7 @@ class Indicator(DerefModel):
 	snaparea = db.ReferenceProperty(SnapArea, required=True)
 	zone = db.ReferenceProperty(Zone, required=True)
 	week = db.ReferenceProperty(Week, required=True)
+	weekdate = db.DateProperty(required=True)
 	PB    = db.IntegerProperty(required=True)
 	PC    = db.IntegerProperty(required=True)
 	PBM   = db.IntegerProperty(required=True, indexed=False)
@@ -624,6 +630,7 @@ class IndicatorBaptism(DerefModel):
 	area = db.ReferenceProperty(Area, required=True)
 	zone = db.ReferenceProperty(Zone, required=True)
 	week = db.ReferenceProperty(Week, required=True)
+	weekdate = db.DateProperty(required=True)
 
 	name = db.StringProperty(required=True, indexed=False)
 	date = db.DateProperty(required=True, indexed=False)
@@ -637,6 +644,7 @@ class IndicatorConfirmation(DerefModel):
 	area = db.ReferenceProperty(Area, required=True)
 	zone = db.ReferenceProperty(Zone, required=True)
 	week = db.ReferenceProperty(Week, required=True)
+	weekdate = db.DateProperty(required=True)
 
 	name = db.StringProperty(required=True, indexed=False)
 	date = db.DateProperty(required=True, indexed=False)

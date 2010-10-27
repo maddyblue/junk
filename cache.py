@@ -10,6 +10,7 @@ import datetime
 
 # cache names
 C_AOPTS = 'aopts'
+C_AREA_INDS = 'area-%s'
 C_AWS = 'aws'
 C_IBC = 'ibc-%s'
 C_INDS = 'inds-%s'
@@ -26,6 +27,7 @@ C_SNAPSHOT = 'snapshot-%s'
 C_WEEK = 'week'
 C_WOPTS = 'wopts'
 C_ZONES = 'zones'
+C_ZONE_INDS = 'zone-%s'
 C_ZOPTS = 'zopts-%s'
 
 def prefetch_refprops(entities, *props):
@@ -402,6 +404,60 @@ def get_main_js():
 			dopt += '<option value="%s">%s %s</option>' %(dt.strftime('%Y-%m-%d'), dt.strftime('%d/%m/%Y'), wdays[i])
 
 		data = main.render_temp('main.js', {'dopt': dopt})
+
+		memcache.add(n, data)
+
+	return data
+
+def get_area_inds(ak):
+	n = C_AREA_INDS %ak
+	data = memcache.get(n)
+
+	if not data:
+		inds = models.Indicator.all().filter('area', db.Key(ak)).order('-weekdate').fetch(12)
+		inds.reverse()
+
+		data = {
+			'chxl': '0:|' +'|'.join(['%i/%i' %(i.weekdate.day, i.weekdate.month) for i in inds]),
+		}
+
+		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições')]:
+			d = [getattr(i, k) for i in inds]
+			data[k] = (v, d)
+
+		memcache.add(n, data)
+
+	return data
+
+def get_zone_inds(zk):
+	n = C_ZONE_INDS %zk
+	data = memcache.get(n)
+	date = datetime.date.today() - datetime.timedelta(7 * 10)
+
+	if not data:
+		inds = models.Indicator.all().filter('zone', db.Key(zk)).filter('weekdate >=', date).order('-weekdate').fetch(500)
+		inds.reverse()
+
+		sums = []
+		dates = []
+		last = datetime.date(1, 1, 1)
+		grab = ['PB', 'PC', 'PS', 'NP', 'OL', 'LM']
+		for i in inds:
+			if last != i.weekdate:
+				dates.append(i.weekdate)
+				sums.append(dict([(g, 0) for g in grab]))
+				last = i.weekdate
+
+			for g in grab:
+				sums[-1][g] += getattr(i, g)
+
+		data = {
+			'chxl': '0:|' +'|'.join(['%i/%i' %(i.day, i.month) for i in dates]),
+		}
+
+		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições')]:
+			d = [i[k] for i in sums]
+			data[k] = (v, d)
 
 		memcache.add(n, data)
 

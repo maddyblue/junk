@@ -1,0 +1,25 @@
+{% extends "index.html" %}
+
+{% block head %}
+
+<script type="text/javascript" src="/js-static/jquery.collapsor.min.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+{% for areas in zones %}
+<div><a href="/zone/{{ areas.0 }}">{{ areas.0.name }}</a> <a href="#" class="collapse">+</a>
+<ul>
+{% for a in areas.1 %}
+<li><a href="/area/{{ a.key }}">{{ a.name }}</a></li>
+{% endfor %}
+</ul>
+</div>
+{% endfor %}
+
+<script type="text/javascript">
+	$(".collapse").collapsor();
+</script>
+
+{% endblock %}

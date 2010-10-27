@@ -19,7 +19,7 @@ class BaptismForm(djangoforms.ModelForm):
 class BaptismProcessForm(djangoforms.ModelForm):
 	class Meta:
 		model = models.IndicatorBaptism
-		exclude = ['indicator', 'snaparea', 'area', 'zone', 'week']
+		exclude = ['indicator', 'snaparea', 'area', 'zone', 'week', 'weekdate']
 
 class ConfirmationForm(djangoforms.ModelForm):
 	class Meta:
@@ -28,7 +28,7 @@ class ConfirmationForm(djangoforms.ModelForm):
 class ConfirmationProcessForm(djangoforms.ModelForm):
 	class Meta:
 		model = models.IndicatorConfirmation
-		exclude = ['indicator', 'snaparea', 'area', 'zone', 'week']
+		exclude = ['indicator', 'snaparea', 'area', 'zone', 'week', 'weekdate']
 
 class WeekForm(djangoforms.ModelForm):
 	class Meta:
