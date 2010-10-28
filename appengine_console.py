@@ -142,6 +142,7 @@ def dump():
 			roster_name=i.roster_name,
 			roster_full=i.roster_full,
 			mission_id=i.mission_id,
+			password=str(mission_id)[-4:],
 
 			full_name=i.full_name,
 			box=i.box,
@@ -503,6 +504,19 @@ def dump():
 			mput(p)
 			p = []
 	mput(p)
+
+def syncpassword():
+	print 'get'
+	ms = aem.Missionary.all().filter('is_released', False).fetch(500)
+
+	print 'set'
+	for m in ms:
+		m.password = str(m.mission_id)[-4:]
+
+	print 'put'
+	db.put(ms)
+
+	print 'done'
 
 def auth_func():
 	return raw_input('Username:'), getpass.getpass('Password:')

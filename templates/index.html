@@ -38,7 +38,7 @@ function theme(t)
 
 	setCookie('theme', t);
 
-	if(t == 'Guerreiros') name = 'guerreiros';
+	if(t == 'Nefitas') name = 'nefitas';
 	else if(t == 'Pedra') name = 'pedra';
 	else if(t == 'Cristo - LDS') name = 'cristolds';
 	else if(t == 'Cristo - Rio') name = 'cristorio';
@@ -101,6 +101,17 @@ theme(getCookie('theme'));
 <div id="wrapper-content">
 <div id="wrapper-menu-page">
 	<div id="menu-page">
+
+	{% if session.user %}
+	<h3>{{ session.user }}</h3>
+	<ul>
+		<li>{{ session.user.calling }}</li>
+		<li>Zona {{ session.user.zone_name }}</li>
+		<li>Área <a href="/area/{{ session.user|getkey:"area" }}">{{ session.user.area_name }}</a></li>
+		<li><a href="/logout/">Sair</li>
+	</ul>
+	{% endif %}
+
 	<h3>Navegação</h3>
 	<ul>
 		<li><a href="/">Carta do Presidente</a></li>
@@ -134,7 +145,7 @@ theme(getCookie('theme'));
 	<h3>Tema</h3>
 	<ul id="theme">
 		<li>Botafogo</li>
-		<li>Guerreiros</li>
+		<li>Nefitas</li>
 		<li>Pedra</li>
 		<li>Cristo - LDS</li>
 		<li>Cristo - Rio</li>

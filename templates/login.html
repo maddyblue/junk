@@ -1,0 +1,11 @@
+{% if fail %}
+<p/>{{ fail }}
+{% endif %}
+
+<form method="POST">
+<table>
+<tr><td>Nome</td><td><select name="m">{{ mopts }}</select></td></tr>
+<tr><td>Senha</td><td><input type="password" name="p" /></td></tr>
+</table>
+<input type="submit" value="Login"/>
+</form>

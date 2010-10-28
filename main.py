@@ -15,12 +15,12 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 from models import *
+from appengine_utilities.sessions import Session
 import models
 import cache
 import config
 import forms
 import map_procs
-import mapreduce
 
 import sys
 # use reportlab patched from http://ruudhelderman.appspot.com/testpdf
@@ -33,23 +33,13 @@ from reportlab.pdfgen import canvas
 # returns True if authenticated
 def basicAuth(func):
 	def callf(webappRequest, *args, **kwargs):
-		auth_header = webappRequest.request.headers.get('Authorization')
+		s = Session()
+		webappRequest.session = s
 
-		if auth_header == None:
-			webappRequest.response.set_status(401, message='Authorization Required')
-			webappRequest.response.headers['WWW-Authenticate'] = 'Basic realm="Protected"'
+		if 'user' not in s:
+			webappRequest.redirect('/login/')
 		else:
-			auth_parts = auth_header.split(' ')
-			user_pass_parts = base64.b64decode(auth_parts[1]).split(':')
-			user_arg = user_pass_parts[0]
-			pass_arg = user_pass_parts[1]
-
-			for u, p in config.PASSWORDS:
-				if user_arg == u and pass_arg == p:
-					return func(webappRequest, *args, **kwargs)
-
-			webappRequest.response.set_status(401, message='Authorization Required')
-			webappRequest.response.headers['WWW-Authenticate'] = 'Basic realm="Protected"'
+			return func(webappRequest, *args, **kwargs)
 
 	return callf
 
@@ -63,10 +53,18 @@ def render(s, p, t, d={}):
 	d['page'] = p
 	d['t1'] = t
 	d['t2'] = t
+	d['session'] = s.session
+	s.response.out.write(render_temp('index.html', d))
+
+def render_noauth(s, p, t, d={}):
+	d['page'] = p
+	d['t1'] = t
+	d['t2'] = t
 	s.response.out.write(render_temp('index.html', d))
 
 @basicAuth
 def rendert(s, t, d={}):
+	d['session'] = s.session
 	s.response.out.write(render_temp(t, d))
 
 class MainPage(webapp.RequestHandler):
@@ -284,6 +282,7 @@ class MapControlPage(webapp.RequestHandler):
 		rendert(self, 'map-control.html', {'kinds': kinds})
 
 	def post(self):
+		from mapreduce import control, model
 		p = self.request.POST['submit']
 
 		if p == 'Delete Kinds':
@@ -291,7 +290,7 @@ class MapControlPage(webapp.RequestHandler):
 			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
 
 			for i in self.request.POST.getall('kind'):
-				r = mapreduce.control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, mapreduce.model._DEFAULT_SHARD_COUNT)
+				r = control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
 				self.response.out.write('delete %s, job id %s<br/>' %(i, r))
 		elif p == 'Sync Phase 1':
 			# pre-memcache
@@ -299,7 +298,7 @@ class MapControlPage(webapp.RequestHandler):
 			map_procs.get_zones()
 			map_procs.get_open_areas()
 
-			i = mapreduce.control.start_map('Sync Areas', 'map_procs.sync_area', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Area'}, mapreduce.model._DEFAULT_SHARD_COUNT)
+			i = control.start_map('Sync Areas', 'map_procs.sync_area', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync areas: %s<br>' %i)
 		elif p == 'Sync Phase 2':
 			# pre-memcache
@@ -307,17 +306,17 @@ class MapControlPage(webapp.RequestHandler):
 			map_procs.get_open_zones()
 			map_procs.get_areas()
 
-			i = mapreduce.control.start_map('Sync Zones', 'map_procs.sync_zone', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Zone'}, mapreduce.model._DEFAULT_SHARD_COUNT)
+			i = control.start_map('Sync Zones', 'map_procs.sync_zone', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync zones: %s<br>' %i)
 
-			i = mapreduce.control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, mapreduce.model._DEFAULT_SHARD_COUNT)
+			i = control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync missionaries: %s<br>' %i)
 		elif p == 'Make Index':
 			handler_spec = 'map_procs.null'
 			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
 
 			for i in self.request.POST.getall('kind'):
-				r = mapreduce.control.start_map('Make Index ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, mapreduce.model._DEFAULT_SHARD_COUNT)
+				r = control.start_map('Make Index ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
 				self.response.out.write('make index %s, job id %s<br/>' %(i, r))
 		else:
 			self.response.out.write('error')
@@ -1265,13 +1264,15 @@ def make_chart(inds, disp, other={}):
 		d[k] = v
 
 	defs = {
-		'chs': '450x250',
+		'chs': '470x250',
 		'cht': 'lc',
-		'chxtc': '0,-200',
+
 		'chco': '0000FF,FF0000',
-		'chxt': 'x,y',
+		'chdlp': 'b', # chart legend on bottom
 		'chxr': '1,%i,%i,%i' %(dmin, dmax, (dmax - dmin) / 5),
-		'chdlp': 'b'
+		'chxs': '0,,12', # make the date labels larger
+		'chxt': 'x,y',
+		'chxtc': '0,-200', # vertical tick marks across the graph
 	}
 
 	for k, v in defs.iteritems():
@@ -1332,8 +1333,32 @@ class ZonePage(webapp.RequestHandler):
 
 		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts})
 
+class LoginPage(webapp.RequestHandler):
+	def get(self):
+		render_noauth(self, 'login.html', 'Login', {'mopts': cache.get_mopts()})
+
+	def post(self):
+		m = Missionary.get(self.request.POST['m'])
+		if m.password == self.request.POST['p']:
+			self.session = Session()
+			self.session['user'] = m
+			self.redirect('/')
+			return
+
+		render_noauth(self, 'login.html', 'Fazer Login', {'fail': 'O nome de usuário e senha digitados são incorretos.', 'mopts': cache.get_mopts()})
+
+class LogoutPage(webapp.RequestHandler):
+	def get(self):
+		self.session = Session()
+		if 'user' in self.session:
+			del self.session['user']
+
+		render_noauth(self, 'logout.html', 'Sair')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
+	('/login/', LoginPage),
+	('/logout/', LogoutPage),
 	('/relatorio/', RelatorioPage),
 	('/numeros/', NumerosPage),
 	('/batismos/', BatismosPage),
@@ -1371,6 +1396,9 @@ application = webapp.WSGIApplication([
 	('/quadro/', Quadro),
 
 	], debug=True)
+
+import templatefilters.filters
+webapp.template.register_template_library('templatefilters.filters')
 
 def main():
 	run_wsgi_app(application)

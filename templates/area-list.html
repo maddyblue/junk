@@ -9,7 +9,7 @@
 {% block content %}
 
 {% for areas in zones %}
-<div><a href="/zone/{{ areas.0 }}">{{ areas.0.name }}</a> <a href="#" class="collapse">+</a>
+<div><a href="/zone/{{ areas.0 }}">{{ areas.0.name }}</a> <a href="" class="collapse">+</a>
 <ul>
 {% for a in areas.1 %}
 <li><a href="/area/{{ a.key }}">{{ a.name }}</a></li>

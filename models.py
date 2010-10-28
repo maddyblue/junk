@@ -150,6 +150,7 @@ class Missionary(DerefModel):
 	roster_name = db.StringProperty(indexed=False)
 	roster_full = db.StringProperty(indexed=False)
 	mission_id = db.IntegerProperty(indexed=False)
+	password = db.StringProperty()
 
 	# calling letters
 	cl_tr = db.BooleanProperty(indexed=False)

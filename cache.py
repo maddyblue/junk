@@ -409,16 +409,19 @@ def get_main_js():
 
 	return data
 
+short_months = ['', 'jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
+
 def get_area_inds(ak):
 	n = C_AREA_INDS %ak
 	data = memcache.get(n)
 
 	if not data:
-		inds = models.Indicator.all().filter('area', db.Key(ak)).order('-weekdate').fetch(12)
+		date = datetime.date.today() - datetime.timedelta(7 * 10)
+		inds = models.Indicator.all().filter('area', db.Key(ak)).filter('weekdate >=', date).order('-weekdate').fetch(500)
 		inds.reverse()
 
 		data = {
-			'chxl': '0:|' +'|'.join(['%i/%i' %(i.weekdate.day, i.weekdate.month) for i in inds]),
+			'chxl': '0:|' +'|'.join(['%i/%s' %(i.weekdate.day, short_months[i.weekdate.month]) for i in inds]),
 		}
 
 		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições')]:
@@ -432,9 +435,9 @@ def get_area_inds(ak):
 def get_zone_inds(zk):
 	n = C_ZONE_INDS %zk
 	data = memcache.get(n)
-	date = datetime.date.today() - datetime.timedelta(7 * 10)
 
 	if not data:
+		date = datetime.date.today() - datetime.timedelta(7 * 10)
 		inds = models.Indicator.all().filter('zone', db.Key(zk)).filter('weekdate >=', date).order('-weekdate').fetch(500)
 		inds.reverse()
 

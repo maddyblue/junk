@@ -77,6 +77,6 @@ def sync_missionary(entity):
 		entity.zone = a.get_key('zone')
 		entity.is_released = False
 
-	entity.is_dl = entity.calling in [MISSIONARY_CALLING_LD, MISSIONARY_CALLING_LDTR, MISSIONARY_CALLING_SELD]
+	entity.is_dl = entity.calling in [models.MISSIONARY_CALLING_LD, models.MISSIONARY_CALLING_LDTR, models.MISSIONARY_CALLING_SELD]
 
 	yield op.db.Put(entity)
