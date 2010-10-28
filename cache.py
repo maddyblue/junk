@@ -455,7 +455,7 @@ def get_zone_inds(zk):
 				sums[-1][g] += getattr(i, g)
 
 		data = {
-			'chxl': '0:|' +'|'.join(['%i/%i' %(i.day, i.month) for i in dates]),
+			'chxl': '0:|' +'|'.join(['%i/%s' %(i.day, short_months[i.month]) for i in dates]),
 		}
 
 		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições')]:
