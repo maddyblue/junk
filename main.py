@@ -9,6 +9,7 @@ import urllib
 from datetime import timedelta, date, datetime
 from google.appengine.api import images
 from google.appengine.api import memcache
+from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.db import stats, Key
 from google.appengine.ext.webapp import template
@@ -16,11 +17,11 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from models import *
 from appengine_utilities.sessions import Session
-import models
 import cache
 import config
 import forms
 import map_procs
+import models
 
 import sys
 # use reportlab patched from http://ruudhelderman.appspot.com/testpdf
@@ -36,7 +37,7 @@ def basicAuth(func):
 		s = Session()
 		webappRequest.session = s
 
-		if 'user' not in s:
+		if 'user' not in s and not users.is_current_user_admin():
 			webappRequest.redirect('/login/')
 		else:
 			return func(webappRequest, *args, **kwargs)
@@ -48,12 +49,21 @@ def render_temp(tname, d={}):
 
 	return template.render(path, d)
 
+def get_user():
+	if users.is_current_user_admin():
+		return users.get_current_user()
+	else:
+		return None
+
 @basicAuth
 def render(s, p, t, d={}):
 	d['page'] = p
 	d['t1'] = t
 	d['t2'] = t
 	d['session'] = s.session
+	d['admin'] = get_user()
+	d['admin_logout'] = users.create_logout_url('/')
+
 	s.response.out.write(render_temp('index.html', d))
 
 def render_noauth(s, p, t, d={}):
@@ -65,6 +75,11 @@ def render_noauth(s, p, t, d={}):
 @basicAuth
 def rendert(s, t, d={}):
 	d['session'] = s.session
+	d['admin'] = get_user()
+	d['admin_logout'] = users.create_logout_url('/')
+	s.response.out.write(render_temp(t, d))
+
+def rendert_noauth(s, t, d={}):
 	s.response.out.write(render_temp(t, d))
 
 class MainPage(webapp.RequestHandler):
@@ -279,7 +294,7 @@ class MapControlPage(webapp.RequestHandler):
 
 		kinds.sort()
 
-		rendert(self, 'map-control.html', {'kinds': kinds})
+		rendert_noauth(self, 'map-control.html', {'kinds': kinds})
 
 	def post(self):
 		from mapreduce import control, model
@@ -1297,29 +1312,30 @@ def chart_url(data):
 
 	return url
 
+class AreaListPage(webapp.RequestHandler):
+	def get(self):
+		areas = [i for i in Area.all().order('zone').order('name').fetch(500) if i.get_key('ward')]
+
+		zones = []
+		for a in areas:
+			z = a.get_key('zone')
+			if not zones or zones[-1][-1][-1].get_key('zone') != z:
+				zones.append((z, []))
+			zones[-1][-1].append(a)
+
+		rendert(self, 'area-list.html', {'zones': zones})
+
 class AreaPage(webapp.RequestHandler):
 	def get(self, akey):
-		if not akey:
-			areas = [i for i in Area.all().order('zone').order('name').fetch(500) if i.get_key('ward')]
+		area = Area.get(akey)
+		data = cache.get_area_inds(akey)
 
-			zones = []
-			for a in areas:
-				z = a.get_key('zone')
-				if not zones or zones[-1][-1][-1].get_key('zone') != z:
-					zones.append((z, []))
-				zones[-1][-1].append(a)
+		charts = []
+		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}))
+		charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas'}))
+		charts.append(make_chart(data, ['NP', 'PS'], {'chtt': 'Pesquisadores'}))
 
-			rendert(self, 'area-list.html', {'zones': zones})
-		else:
-			area = Area.get(akey)
-			data = cache.get_area_inds(akey)
-
-			charts = []
-			charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}))
-			charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas'}))
-			charts.append(make_chart(data, ['NP', 'PS'], {'chtt': 'Pesquisadores'}))
-
-			render(self, 'area.html', unicode(area), {'area': area, 'charts': charts})
+		render(self, 'area.html', unicode(area), {'area': area, 'charts': charts})
 
 class ZonePage(webapp.RequestHandler):
 	def get(self, zkey):
@@ -1335,7 +1351,7 @@ class ZonePage(webapp.RequestHandler):
 
 class LoginPage(webapp.RequestHandler):
 	def get(self):
-		render_noauth(self, 'login.html', 'Login', {'mopts': cache.get_mopts()})
+		render_noauth(self, 'login.html', 'Login', {'mopts': cache.get_mopts(), 'url': users.create_login_url('/')})
 
 	def post(self):
 		m = Missionary.get(self.request.POST['m'])
@@ -1379,6 +1395,7 @@ application = webapp.WSGIApplication([
 	('/bap-per-ward/', BaptismsPerWard),
 	('/bap-per-missionary/', BaptismsPerMissionary),
 
+	('/_ah/missao-rio/area/', AreaListPage),
 	('/area/(.*)', AreaPage),
 	('/zone/(.*)', ZonePage),
 

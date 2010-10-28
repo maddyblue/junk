@@ -112,6 +112,15 @@ theme(getCookie('theme'));
 	</ul>
 	{% endif %}
 
+	{% if admin %}
+	<h3>Administração</h3>
+	<ul>
+		<li>{{ admin.email }}</li>
+		<li><a href="/_ah/missao-rio/area/">Números da Missão</a></li>
+		<li><a href="{{ admin_logout }}">Sair</a></li>
+	</ul>
+	{% endif %}
+
 	<h3>Navegação</h3>
 	<ul>
 		<li><a href="/">Carta do Presidente</a></li>
@@ -121,7 +130,6 @@ theme(getCookie('theme'));
 		<li><a href="/batizadores/">Batizadores</a></li>
 		<li><a href="/milagre/">Milagre da Semana</a></li>
 		<li><a href="/noticias/">Notícias do Campo</a></li>
-		<li><a href="/area/">Números da Missão</a></li>
 	</ul>
 
 	<style type="text/css">
