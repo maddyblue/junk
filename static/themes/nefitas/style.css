@@ -1,5 +1,6 @@
 body {
-	color: #ADA96E;
+	color: #000000;
+	font-family:"Lucida Grande","Lucida Sans Unicode",arial,sans-serif;
 }
 
 #wrapper-header {
@@ -23,6 +24,7 @@ body {
 #header h1 {
 	color: #34282C;
 	text-shadow: 0px 0px 2px #000000;
+	font-family:"Lucida Grande","Lucida Sans Unicode",arial,sans-serif;
 }
 
 #menu-page h3 {
