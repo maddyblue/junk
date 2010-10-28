@@ -1,7 +1,7 @@
 /* Css originally by mejobloggs  Design by Aran @ stuio7designs.com  Please email me if you use this, as I would love to see how it is being used, also you can join my linkshare to help you with your google ranking */
 
 body {
-	color: #25456c;
+	color: #000000;
 }
 
 #wrapper-header {
@@ -23,6 +23,7 @@ body {
 
 #header h1 {
 	color: #CEE3F6;
+	font-family:"Lucida Grande","Lucida Sans Unicode",arial,sans-serif;
 }
 
 #menu-page h3 {
