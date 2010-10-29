@@ -1,25 +1,36 @@
 {% extends "index.html" %}
 
-{% block head %}
-
-<script type="text/javascript" src="/js-static/jquery.collapsor.min.js"></script>
-
-{% endblock %}
-
 {% block content %}
 
 {% for areas in zones %}
-<div><a href="/zone/{{ areas.0 }}">{{ areas.0.name }}</a> <a href="" class="collapse">+</a>
-<ul>
-{% for a in areas.1 %}
-<li><a href="/area/{{ a.key }}">{{ a.name }}</a></li>
-{% endfor %}
-</ul>
-</div>
+	<div>
+	<img src="/imgs/plus.gif" alt="+" class="showr" id="{{ areas.0 }}"/>
+
+	<a href="/zone/{{ areas.0 }}">{{ areas.0.name }}</a>
+
+	<ul id="a_{{ areas.0 }}" style="display: none">
+	{% for a in areas.1 %}
+		<li><a href="/area/{{ a.key }}">{{ a.name }}</a></li>
+	{% endfor %}
+	</ul>
+	</div>
 {% endfor %}
 
-<script type="text/javascript">
-	$(".collapse").collapsor();
+<script>
+$(".showr").click(function() {
+	if(this.alt == "+")
+	{
+		$("#a_" + this.id).show("slow");
+		this.alt = "-";
+		this.src="/imgs/minus.gif";
+	}
+	else
+	{
+		$("#a_" + this.id).hide("slow");
+		this.alt = "+";
+		this.src="/imgs/plus.gif";
+	}
+});
 </script>
 
 {% endblock %}

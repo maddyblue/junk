@@ -10,6 +10,7 @@ import datetime
 
 # cache names
 C_AOPTS = 'aopts'
+C_AREAS = 'areas'
 C_AREA_INDS = 'area-%s'
 C_AWS = 'aws'
 C_IBC = 'ibc-%s'
@@ -463,5 +464,16 @@ def get_zone_inds(zk):
 			data[k] = (v, d)
 
 		memcache.add(n, data)
+
+	return data
+
+# returns a list of open areas sorted by zone and name
+def get_areas():
+	n = C_AREAS
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Area.all().filter('is_open', True).order('zone').order('name').fetch(500)
+		memcache.add(n, pack(data))
 
 	return data

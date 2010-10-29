@@ -107,6 +107,10 @@ class NoticiasPage(webapp.RequestHandler):
 		d = FlatPage.get_flatpage(FLATPAGE_NOTICIAS)
 		render(self, '', 'Notícias do Campo', {'page_data': d})
 
+class ClimaPage(webapp.RequestHandler):
+	def get(self):
+		render(self, 'clima.html', 'Clima da Semana')
+
 class RelatorioPage(webapp.RequestHandler):
 	def get(self):
 		d = cache.get_relatorio_page()
@@ -1314,7 +1318,7 @@ def chart_url(data):
 
 class AreaListPage(webapp.RequestHandler):
 	def get(self):
-		areas = [i for i in Area.all().order('zone').order('name').fetch(500) if i.get_key('ward')]
+		areas = [i for i in cache.get_areas() if i.get_key('ward')]
 
 		zones = []
 		for a in areas:
@@ -1381,6 +1385,7 @@ application = webapp.WSGIApplication([
 	('/batizadores/', BatizadoresPage),
 	('/milagre/', MilagrePage),
 	('/noticias/', NoticiasPage),
+	('/clima/', ClimaPage),
 
 	('/js/main.js', MainJS),
 	('/photo/(.*)', PhotoHandler),
