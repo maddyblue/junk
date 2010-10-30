@@ -37,7 +37,10 @@ def basicAuth(func):
 		s = Session()
 		webappRequest.session = s
 
-		if 'user' not in s and not users.is_current_user_admin():
+		if 'user' not in s and ('is_admin' not in s or not s['is_admin']):
+			s['is_admin'] = users.is_current_user_admin()
+
+		if 'user' not in s and not s['is_admin']:
 			webappRequest.redirect('/login/')
 		else:
 			return func(webappRequest, *args, **kwargs)
@@ -49,20 +52,12 @@ def render_temp(tname, d={}):
 
 	return template.render(path, d)
 
-def get_user():
-	if users.is_current_user_admin():
-		return users.get_current_user()
-	else:
-		return None
-
 @basicAuth
 def render(s, p, t, d={}):
 	d['page'] = p
 	d['t1'] = t
 	d['t2'] = t
 	d['session'] = s.session
-	d['admin'] = get_user()
-	d['admin_logout'] = users.create_logout_url('/')
 
 	s.response.out.write(render_temp('index.html', d))
 
@@ -75,8 +70,6 @@ def render_noauth(s, p, t, d={}):
 @basicAuth
 def rendert(s, t, d={}):
 	d['session'] = s.session
-	d['admin'] = get_user()
-	d['admin_logout'] = users.create_logout_url('/')
 	s.response.out.write(render_temp(t, d))
 
 def rendert_noauth(s, t, d={}):
@@ -787,10 +780,10 @@ class MakeBatismosPage(webapp.RequestHandler):
 				continue
 
 			zid = 'b_%s' %zd[z][-2]
-			r += u'<br /><br /><img class="showr" id="%s"/> <b>%s = %i, %.2f por dupla</b><div id="obj_%s">\n' %(zid, z.name(), zd[z][0], zd[z][0] * 1. / zd[z][-1], zid)
+			r += u'<div><img class="showr" id="%s"/> <b>%s = %i, %.2f por dupla</b></div><dl id="obj_%s">\n' %(zid, z.name(), zd[z][0], zd[z][0] * 1. / zd[z][-1], zid)
 			for a in bla[z]:
-				r += u'<br />%s = %i\n' %(ad[a[1]][-1], a[0])
-			r += '</div>'
+				r += u'<dt>%s = %i</dt>\n' %(ad[a[1]][-1], a[0])
+			r += '</dl>'
 
 		r += u'<br /><br /><b>TOTAL DE CONFIRMAÇÕES = %i</b>\n' %nc
 		for z in lc:
@@ -798,10 +791,10 @@ class MakeBatismosPage(webapp.RequestHandler):
 				continue
 
 			zid = 'c_%s' %zd[z][-2]
-			r += u'<br /><br /><img class="showr" id="%s"/> <b>%s = %i, %.2f por dupla</b><div id="obj_%s">\n' %(zid, z.name(), zd[z][1], zd[z][1] * 1. / zd[z][-1], zid)
+			r += u'<div><img class="showr" id="%s"/> <b>%s = %i, %.2f por dupla</b></div><dl id="obj_%s">\n' %(zid, z.name(), zd[z][1], zd[z][1] * 1. / zd[z][-1], zid)
 			for a in cla[z]:
-				r += u'<br />%s = %i\n' %(ad[a[1]][-1], a[0])
-			r += '</div>'
+				r += u'<dt>%s = %i</dt>\n' %(ad[a[1]][-1], a[0])
+			r += '</dl>'
 
 		if nm == 0: h = 0
 		else: h = 100.0 * nm / nb
@@ -811,10 +804,10 @@ class MakeBatismosPage(webapp.RequestHandler):
 				continue
 
 			zid = 'mb_%s' %zd[z][-2]
-			r += u'<br /><br /><img class="showr" id="%s"/> <b>%s = %i (%i%%), %.2f por dupla</b><div id="obj_%s">\n' %(zid, z.name(), zd[z][2], 100.0 * zd[z][2] / zd[z][0], zd[z][2] * 1. / zd[z][-1], zid)
+			r += u'<div><img class="showr" id="%s"/> <b>%s = %i (%i%%), %.2f por dupla</b></div><dl id="obj_%s">\n' %(zid, z.name(), zd[z][2], 100.0 * zd[z][2] / zd[z][0], zd[z][2] * 1. / zd[z][-1], zid)
 			for a in mla[z]:
-				r += u'<br />%s = %i (%i%%)\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][0])
-			r += '</div>'
+				r += u'<dt>%s = %i (%i%%)</dt>\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][0])
+			r += '</dl>'
 
 		if nh == 0: h = 0
 		else: h = 100.0 * nh / nc
@@ -824,12 +817,11 @@ class MakeBatismosPage(webapp.RequestHandler):
 				continue
 
 			zid = 'mc_%s' %zd[z][-2]
-			r += u'<br /><br /><img class="showr" id="%s"/> <b>%s = %i (%i%%), %.2f por dupla</b><div id="obj_%s">\n' %(zid, z.name(), zd[z][3], 100.0 * zd[z][3] / zd[z][1], zd[z][3] * 1. / zd[z][-1], zid)
+			r += u'<div><img class="showr" id="%s"/> <b>%s = %i (%i%%), %.2f por dupla</b></div><dl id="obj_%s">\n' %(zid, z.name(), zd[z][3], 100.0 * zd[z][3] / zd[z][1], zd[z][3] * 1. / zd[z][-1], zid)
 			for a in hla[z]:
-				r += u'<br />%s = %i (%i%%)\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][1])
-			r += '</div>'
+				r += u'<dt>%s = %i (%i%%)</dt>\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][1])
+			r += '</dl>'
 
-		r += '<script type="text/javascript" src="/js-static/jquery-1.4.3.min.js"></script>'
 		r += '<script type="text/javascript" src="/js-static/showr.js"></script>'
 
 		FlatPage.make(FLATPAGE_BATISMOS, r, w)
@@ -1389,8 +1381,13 @@ class LoginPage(webapp.RequestHandler):
 class LogoutPage(webapp.RequestHandler):
 	def get(self):
 		self.session = Session()
-		if 'user' in self.session:
-			del self.session['user']
+		for i in self.session.keys():
+			if i in self.session:
+				del self.session[i]
+
+		if users.is_current_user_admin():
+			self.redirect(users.create_logout_url('/logout/'))
+			return
 
 		render_noauth(self, 'logout.html', 'Sair')
 

@@ -112,12 +112,11 @@ theme(getCookie('theme'));
 	</ul>
 	{% endif %}
 
-	{% if admin %}
+	{% if session.is_admin %}
 	<h3>Administração</h3>
 	<ul>
-		<li>{{ admin.email }}</li>
 		<li><a href="/_ah/missao-rio/area/">Números da Missão</a></li>
-		<li><a href="{{ admin_logout }}">Sair</a></li>
+		<li><a href="/logout/">Sair</a></li>
 	</ul>
 	{% endif %}
 
