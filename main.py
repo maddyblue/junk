@@ -35,12 +35,16 @@ from reportlab.pdfgen import canvas
 def basicAuth(func):
 	def callf(webappRequest, *args, **kwargs):
 		s = Session()
+		sd = s.items()
 		webappRequest.session = s
+		webappRequest.sdict = sd
 
-		if 'user' not in s and ('is_admin' not in s or not s['is_admin']):
-			s['is_admin'] = users.is_current_user_admin()
+		if 'user' not in sd and ('is_admin' not in sd or not sd['is_admin']):
+			a = users.is_current_user_admin()
+			s['is_admin'] = a
+			sd['is_admin'] = a
 
-		if 'user' not in s and not s['is_admin']:
+		if 'user' not in sd and not sd['is_admin']:
 			webappRequest.redirect('/login/')
 		else:
 			return func(webappRequest, *args, **kwargs)
@@ -57,7 +61,7 @@ def render(s, p, t, d={}):
 	d['page'] = p
 	d['t1'] = t
 	d['t2'] = t
-	d['session'] = s.session
+	d['session'] = s.sdict
 
 	s.response.out.write(render_temp('index.html', d))
 
@@ -69,7 +73,7 @@ def render_noauth(s, p, t, d={}):
 
 @basicAuth
 def rendert(s, t, d={}):
-	d['session'] = s.session
+	d['session'] = s.sdict
 	s.response.out.write(render_temp(t, d))
 
 def rendert_noauth(s, t, d={}):
@@ -1412,9 +1416,12 @@ def mk_checkbox(name, opt):
 	return r
 
 class TransferPage(webapp.RequestHandler):
-	def get(self):
+	def get_missionaries(self):
 		#ms = get_missionaries() # the get_missionaries() call is very expensive on the devel server, so just use this below, since order doesn't really matter
-		ms = models.Missionary.all().filter('is_released', False).fetch(200)
+		return models.Missionary.all().filter('is_released', False).fetch(500)
+
+	def get(self):
+		ms = self.get_missionaries()
 		areas = models.Area.all().order('zone_name').order('name').fetch(500)
 		areas = [(str(a.key()), unicode(a)) for a in areas]
 		callings = [(i, i) for i in models.MISSIONARY_CALLING_CHOICES]
@@ -1425,6 +1432,27 @@ class TransferPage(webapp.RequestHandler):
 			mfs.append((m, mk_select(mk + '_area', areas, str(m.get_key('area'))), mk_select(mk + '_calling', callings, m.calling), mk_checkbox(mk + '_senior', m.is_senior)))
 
 		render(self, 'transfer.html', 'Transfer', {'mfs': mfs})
+
+	def post(self):
+		ms = self.get_missionaries()
+
+		for m in ms:
+			mkey = str(m.key())
+			m.area = db.Key(self.request.POST[mkey + '_area'])
+			m.calling = self.request.POST[mkey + '_calling']
+			m.is_senior = (mkey + '_senior') in self.request.POST and self.request.POST[mkey + '_senior'] == 'on'
+
+		db.put(ms)
+
+		render(self, '', 'Transfer', {'page_data': 'Done. Remember to run Sync Phase 2.'})
+
+class AdminRedirect(webapp.RequestHandler):
+	def get(self):
+		self.redirect('/_ah/missao-rio/')
+
+class AdminPage(webapp.RequestHandler):
+	def get(self):
+		render(self, 'admin.html', 'Admin')
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -1450,11 +1478,12 @@ application = webapp.WSGIApplication([
 	('/bap-per-ward/', BaptismsPerWard),
 	('/bap-per-missionary/', BaptismsPerMissionary),
 
-	('/_ah/missao-rio/area/', AreaListPage),
 	('/area/(.*)', AreaPage),
 	('/zone/(.*)', ZonePage),
 
 	# _ah
+	('/admin/', AdminRedirect),
+	('/_ah/missao-rio/', AdminPage),
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/map-control/', MapControlPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
@@ -1465,6 +1494,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
 	('/_ah/missao-rio/transfer/', TransferPage),
+	('/_ah/missao-rio/area/', AreaListPage),
 
 	('/quadro/', Quadro),
 

@@ -73,3 +73,6 @@ admin_console:
 
   - name: Edit Pages
     url: /_ah/missao-rio/edit-pages/
+
+  - name: Transfer
+    url: /_ah/missao-rio/transfer/
