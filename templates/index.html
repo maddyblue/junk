@@ -102,16 +102,6 @@ theme(getCookie('theme'));
 <div id="wrapper-menu-page">
 	<div id="menu-page">
 
-	{% if session.user %}
-	<h3>{{ session.user }}</h3>
-	<ul>
-		<li>{{ session.user.calling }}</li>
-		<li>Zona: {{ session.user.zone_name }}</li>
-		<li>Área: <a href="/area/{{ session.user|getkey:"area" }}">{{ session.user.area_name }}</a></li>
-		<li><a href="/logout/">Sair</li>
-	</ul>
-	{% endif %}
-
 	{% if session.is_admin %}
 	<h3>Administração</h3>
 	<ul>
@@ -120,6 +110,17 @@ theme(getCookie('theme'));
 	</ul>
 	{% endif %}
 
+	{% if session.user %}
+	<h3>{{ session.user }}</h3>
+	<ul>
+		<li>{{ session.user.calling }}</li>
+		<li>Zona: {{ session.user.zone_name }}</li>
+		<li>Área: <a href="/area/{{ session.user|getkey:"area" }}">{{ session.user.area_name }}</a></li>
+		<li><a href="/logout/">Sair</a></li>
+	</ul>
+	{% endif %}
+
+	{% if session.user or session.is_admin %}
 	<h3>Navegação</h3>
 	<ul>
 		<li><a href="/">Carta do Presidente</a></li>
@@ -133,6 +134,15 @@ theme(getCookie('theme'));
 		<li><a href="/noticias/">Notícias do Campo</a></li>
 		<li><a href="/clima/">Clima da Semana</a></li>
 	</ul>
+
+	{% else %}
+
+	<h3>Navegação</h3>
+	<ul>
+		<li><a href="/login/">Fazer login</a></li>
+	</ul>
+
+	{% endif %}
 
 	<style type="text/css">
 		#theme .ui-selecting {
