@@ -694,7 +694,7 @@ class MakeBatismosPage(webapp.RequestHandler):
 		areas = [i for i in cache.get_snapareas(w) if not i.does_not_report and not i.reports_with]
 		cache.prefetch_refprops(areas, SnapArea.area)
 		areas.sort(cmp=lambda x,y: cmp(x.area.name, y.area.name))
-		zones = list(set([i.get_key('zone').name() for i in areas]))
+		zones = list(set([i.get_key('zone') for i in areas]))
 		zones.sort()
 		m_by_area = cache.get_m_by_area(w)
 		rpms = dict([(i.get_key('area'), i) for i in RPM.all().filter('week', w).fetch(500)])
@@ -723,7 +723,7 @@ class MakeBatismosPage(webapp.RequestHandler):
 
 			for a in areas:
 				ak = a.key()
-				if a.get_key('zone').name() != z:
+				if a.get_key('zone') != z:
 					continue
 
 				ct += 1
@@ -758,7 +758,7 @@ class MakeBatismosPage(webapp.RequestHandler):
 			nc += cz
 			nm += mz
 			nh += hz
-			zd[z] = (bz, cz, mz, hz, ct)
+			zd[z] = (bz, cz, mz, hz, z, ct)
 
 			lb.sort(cmp=lambda x,y: cmp(y[0], x[0]))
 			bla[z] = lb
@@ -786,18 +786,22 @@ class MakeBatismosPage(webapp.RequestHandler):
 			if not zd[z][0]:
 				continue
 
-			r += u'<br /><br /><b>%s = %i, %.2f por dupla</b>\n' %(z, zd[z][0], zd[z][0] * 1. / zd[z][-1])
+			zid = 'b_%s' %zd[z][-2]
+			r += u'<br /><br /><img class="showr" id="%s"/> <b>%s = %i, %.2f por dupla</b><div id="obj_%s">\n' %(zid, z.name(), zd[z][0], zd[z][0] * 1. / zd[z][-1], zid)
 			for a in bla[z]:
 				r += u'<br />%s = %i\n' %(ad[a[1]][-1], a[0])
+			r += '</div>'
 
 		r += u'<br /><br /><b>TOTAL DE CONFIRMAÇÕES = %i</b>\n' %nc
 		for z in lc:
 			if not zd[z][1]:
 				continue
 
-			r += u'<br /><br /><b>%s = %i, %.2f por dupla</b>\n' %(z, zd[z][1], zd[z][1] * 1. / zd[z][-1])
+			zid = 'c_%s' %zd[z][-2]
+			r += u'<br /><br /><img class="showr" id="%s"/> <b>%s = %i, %.2f por dupla</b><div id="obj_%s">\n' %(zid, z.name(), zd[z][1], zd[z][1] * 1. / zd[z][-1], zid)
 			for a in cla[z]:
 				r += u'<br />%s = %i\n' %(ad[a[1]][-1], a[0])
+			r += '</div>'
 
 		if nm == 0: h = 0
 		else: h = 100.0 * nm / nb
@@ -806,9 +810,11 @@ class MakeBatismosPage(webapp.RequestHandler):
 			if not zd[z][2]:
 				continue
 
-			r += u'<br /><br /><b>%s = %i (%i%%), %.2f por dupla</b>\n' %(z, zd[z][2], 100.0 * zd[z][2] / zd[z][0], zd[z][2] * 1. / zd[z][-1])
+			zid = 'mb_%s' %zd[z][-2]
+			r += u'<br /><br /><img class="showr" id="%s"/> <b>%s = %i (%i%%), %.2f por dupla</b><div id="obj_%s">\n' %(zid, z.name(), zd[z][2], 100.0 * zd[z][2] / zd[z][0], zd[z][2] * 1. / zd[z][-1], zid)
 			for a in mla[z]:
 				r += u'<br />%s = %i (%i%%)\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][0])
+			r += '</div>'
 
 		if nh == 0: h = 0
 		else: h = 100.0 * nh / nc
@@ -817,9 +823,14 @@ class MakeBatismosPage(webapp.RequestHandler):
 			if not zd[z][3]:
 				continue
 
-			r += u'<br /><br /><b>%s = %i (%i%%), %.2f por dupla</b>\n' %(z, zd[z][3], 100.0 * zd[z][3] / zd[z][1], zd[z][3] * 1. / zd[z][-1])
+			zid = 'mc_%s' %zd[z][-2]
+			r += u'<br /><br /><img class="showr" id="%s"/> <b>%s = %i (%i%%), %.2f por dupla</b><div id="obj_%s">\n' %(zid, z.name(), zd[z][3], 100.0 * zd[z][3] / zd[z][1], zd[z][3] * 1. / zd[z][-1], zid)
 			for a in hla[z]:
 				r += u'<br />%s = %i (%i%%)\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][1])
+			r += '</div>'
+
+		r += '<script type="text/javascript" src="/js-static/jquery-1.4.3.min.js"></script>'
+		r += '<script type="text/javascript" src="/js-static/showr.js"></script>'
 
 		FlatPage.make(FLATPAGE_BATISMOS, r, w)
 
@@ -1263,7 +1274,7 @@ class BaptismsPerMissionary(webapp.RequestHandler):
 
 		rendert(self, 'bap-per.html', {'d': d})
 
-def make_chart(inds, disp, other={}):
+def make_chart(inds, disp, other={}, rmax=0):
 	d = {}
 
 	data = dict([inds[i] for i in disp])
@@ -1275,8 +1286,16 @@ def make_chart(inds, disp, other={}):
 	for i in data.values():
 		datas.extend(i)
 
-	dmin = 0 # min(datas)
+	dmin = 0
 	dmax = max(datas)
+
+	if not rmax:
+		step = (dmax - dmin) / 5
+	else:
+		if dmax < rmax:
+			dmax = rmax
+		step = 2
+
 	d['chds'] = '%i,%i' %(dmin, dmax)
 
 	for k, v in other.iteritems():
@@ -1288,7 +1307,7 @@ def make_chart(inds, disp, other={}):
 
 		'chco': '0000FF,FF0000',
 		'chdlp': 'b', # chart legend on bottom
-		'chxr': '1,%i,%i,%i' %(dmin, dmax, (dmax - dmin) / 5),
+		'chxr': '1,%i,%i,%i' %(dmin, dmax, step),
 		'chxs': '0,,12', # make the date labels larger
 		'chxt': 'x,y',
 		'chxtc': '0,-200', # vertical tick marks across the graph
@@ -1335,9 +1354,9 @@ class AreaPage(webapp.RequestHandler):
 		data = cache.get_area_inds(akey)
 
 		charts = []
-		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}))
-		charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas'}))
-		charts.append(make_chart(data, ['NP', 'PS'], {'chtt': 'Pesquisadores'}))
+		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}, 8))
+		charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas'}, 25))
+		charts.append(make_chart(data, ['NP', 'PS'], {'chtt': 'Pesquisadores'}, 20))
 
 		render(self, 'area.html', unicode(area), {'area': area, 'charts': charts})
 
