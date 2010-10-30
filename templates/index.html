@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" title="theme" href="/styles/style.css" />
 	<script type="text/javascript" src="/js-static/jquery-1.4.3.min.js"></script>
 	<script type="text/javascript" src="/js-static/jquery-ui-1.8.5.min.js"></script>
-	{% block head %}{% endblock %}
+	{% block head %}{{ headstuff }}{% endblock %}
 
 <script type="text/javascript">
 function setCookie(c_name, value)
@@ -123,8 +123,10 @@ theme(getCookie('theme'));
 	<h3>Navegação</h3>
 	<ul>
 		<li><a href="/">Carta do Presidente</a></li>
-		<!--li><a href="/relatorio/">Fazer Relatório</a></li>
-		<li><a href="/numeros/">Passar Números</a></li-->
+		<li><a href="/relatorio/">Fazer Relatório</a></li>
+		{% if session.user|is_zl %}
+		<li><a href="/numeros/">Passar Números</a></li>
+		{% endif %}
 		<li><a href="/batismos/">Batismos</a></li>
 		<li><a href="/batizadores/">Batizadores</a></li>
 		<li><a href="/milagre/">Milagre da Semana</a></li>

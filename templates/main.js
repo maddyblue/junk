@@ -5,16 +5,6 @@ function isNumeric(str){
 	return str.match(numericExpression);
 }
 
-function loadZona() {
-	for (var v in $GLOBALS) $GLOBALS[v] = 0;
-	$('#mainform').slideUp('slow');
-	$.post('/load-zone/', {zona: escape(document.getElementById('zonaselect').value)},
-		function(data,textStatus){$('#mainform').attr('innerHTML',data); $('#mainform').slideDown('slow',
-			function(){$('#zonabutton').attr('disabled',false);}
-		);}
-	);
-}
-
 function checkRelatorio(){
 	var sArr = $('#relatorioForm').serialize().split('&');
 	for (var i = 1; i < 4; i++)
@@ -29,9 +19,9 @@ function enviarNumeros() {
 	$.post('/send-numbers/', $('#sendform').serialize(),
 		function(data,textStatus){
 			alert(data);
-			if(data.indexOf('Enviado com') != -1){
-				$('#enviarbutton').attr('value','JÁ ENVIADO, OBRIGADO!');}
-				else{$('#enviarbutton').attr('disabled',false);}
+			if(data.indexOf('Enviado com') != -1)
+				$('#enviarbutton').attr('value', 'JÁ ENVIADO, OBRIGADO!');
+			$('#enviarbutton').attr('disabled', false);
 		},
 	'html');
 }

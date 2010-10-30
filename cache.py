@@ -212,23 +212,23 @@ def get_aws():
 			return data
 
 # Indicator/Baptisms/Confirmations
-# dictionary with key IndicatorSubmission.key() (thus grouped by zone), and
-# value the tuple (IndicatorSubmission, [Indicator], [IndicatorBaptism], [IndicatorConfirmation])
+# returns the tuple ([IndicatorSubmission], [Indicator], [IndicatorBaptism], [IndicatorConfirmation])
 # for the given week
 def get_ibc(week):
 	n = C_IBC %(week.key())
 	data = memcache.get(n)
+
 	if data is None:
-		data = {}
+		subs = models.IndicatorSubmission.all().filter('week', week).filter('used', True).fetch(100)
+		inds = models.Indicator.all().filter('week', week).fetch(500)
+		bs = models.IndicatorBaptism.all().filter('week', week).fetch(500)
+		cs = models.IndicatorConfirmation.all().filter('week', week).fetch(500)
 
-		for sub in models.IndicatorSubmission.all().filter('week', week).filter('used', True).fetch(100):
-			inds = models.Indicator.all().filter('submission', sub).fetch(100)
-			bs = models.IndicatorBaptism.all().filter('submission', sub).fetch(100)
-			cs = models.IndicatorConfirmation.all().filter('submission', sub).fetch(100)
+		data = (subs, inds, bs, cs)
 
-			data[sub.key()] = (sub, inds, bs, cs)
-
-		memcache.add(n, data)
+		memcache.add(n, [pack(i) for i in data])
+	else:
+		data = tuple([unpack(i) for i in data])
 
 	return data
 

@@ -107,7 +107,7 @@ class ClimaPage(webapp.RequestHandler):
 class RelatorioPage(webapp.RequestHandler):
 	def get(self):
 		d = cache.get_relatorio_page()
-		self.response.out.write(d)
+		render(self, '', 'Relatório Semanal', {'page_data': d, 'headstuff': '<script type="text/javascript" src="/js/main.js"></script>'})
 
 class MainJS(webapp.RequestHandler):
 	def get(self):
@@ -129,16 +129,8 @@ class SendRelatorio(webapp.RequestHandler):
 
 class NumerosPage(webapp.RequestHandler):
 	def get(self):
-		d = {
-			'zones': cache.get_zopts(),
-		}
-
-		rendert(self, 'numeros.html', d)
-
-class LoadZone(webapp.RequestHandler):
-	@basicAuth
-	def post(self):
-		z = self.request.POST['zona']
+		self.session = Session()
+		z = self.session['user'].get_key('zone')
 		zone = Zone.get(z)
 		w = cache.get_week()
 		snapareas = [i for i in cache.get_snapareas_byzone(w, zone.key()) if not i.does_not_report and not i.reports_with]
@@ -173,19 +165,23 @@ class LoadZone(webapp.RequestHandler):
 		formstr += ''.join(['<div id="b_%s-PB" class="baptism"></div>' %a.key() for a in snapareas])
 		formstr += ''.join(['<div id="c_%s-PC" class="confirmation"></div>' %a.key() for a in snapareas])
 
-		formstr += '<div class="td3">Senha: <input name="senha" class="textbox" type="password" /><br /><input id="enviarbutton" type="button" value="Enviar" onclick="this.disabled=false; enviarNumeros();" /></div><div class="space-line"></div></form>'
+		formstr += '<br /><input id="enviarbutton" type="button" value="Enviar" onclick="this.disabled=true; enviarNumeros();" /></div><div class="space-line"></div></form>'
 
-		self.response.out.write(formstr)
+		render(self, '', 'Passar Números', {'page_data': formstr, 'headstuff': '<script type="text/javascript" src="/js/main.js"></script>'})
 
 class SendNumbers(webapp.RequestHandler):
 	@basicAuth
 	def post(self):
-		if self.request.POST['senha'] != 'joao35':
-			self.response.out.write('Senha errada.')
-			return
-
 		zone = Zone.get(self.request.POST['zona'])
 		week = Week.get(self.request.POST['week'])
+
+		user_zone = Session()['user'].get_key('zone')
+		user_week = cache.get_week().key()
+
+		if zone.key() != user_zone or week.key() != user_week:
+			self.response.out.write('Erro.')
+			return
+
 		wk = week.key()
 
 		s = IndicatorSubmission(week=week, weekdate=week.date, zone=zone, data=pickle.dumps(self.request.POST))
@@ -222,29 +218,28 @@ class NamesPage(webapp.RequestHandler):
 
 		ibc = cache.get_ibc(week)
 
-		for k in ibc.keys():
-			sub, inds, bs, cs = ibc[k]
+		sub, inds, bs, cs = ibc
 
-			for i in inds:
-				ik = i.key()
-				area = aws[areas[i.get_key('area')].get_key('area')]
-				zn = area.get_key('zone').name()
+		for i in inds:
+			ik = i.key()
+			area = aws[areas[i.get_key('area')].get_key('area')]
+			zn = area.get_key('zone').name()
 
-				for b in bs:
-					if b.get_key('indicator') == ik:
-						nb += 1
+			for b in bs:
+				if b.get_key('indicator') == ik:
+					nb += 1
 
-						if b.sex == BAPTISM_SEX_M: s = 'M'
-						else: s = 'F'
+					if b.sex == BAPTISM_SEX_M: s = 'M'
+					else: s = 'F'
 
-						m = m_by_area[areas[i.get_key('area')].get_key('area')]
-						m = ", ".join([unicode(a.missionary) for a in m])
-						rb += "\t".join([unicode(a) for a in [zn, b.name.title(), b.date, b.age, s, area.ward.name, area.ward.stake, m]]) + sep
+					m = m_by_area[areas[i.get_key('area')].get_key('area')]
+					m = ", ".join([unicode(a.missionary) for a in m])
+					rb += "\t".join([unicode(a) for a in [zn, b.name.title(), b.date, b.age, s, area.ward.name, area.ward.stake, m]]) + sep
 
-				for c in cs:
-					if c.get_key('indicator') == ik:
-						nc += 1
-						rc += "\t".join([unicode(a) for a in [zn, area.name, c.name.title(), c.date]]) + sep
+			for c in cs:
+				if c.get_key('indicator') == ik:
+					nc += 1
+					rc += "\t".join([unicode(a) for a in [zn, area.name, c.name.title(), c.date]]) + sep
 
 		self.response.out.write('%i%s%i%s%s%s' %(nb, sep, nc, sep, rb, rc))
 
@@ -258,18 +253,19 @@ class KeyIndicatorsPage(webapp.RequestHandler):
 
 		# hash the snaparea keys
 		areas = dict([(i.key(), i) for i in cache.get_snapareas(week)])
-		ibc = cache.get_ibc(week).values()
+		ibc = cache.get_ibc(week)
 
 		r = "%i/%i\r\n%i/%i\r\n" %(week.date.day, week.date.month, od.day, od.month)
-		zones = [i[0].get_key('zone').name() for i in ibc]
+		zones = [i.get_key('zone').name() for i in ibc[0]]
 		r += "\t".join(zones) + sep
 		a = ""
 
-		for sub, inds, b, c in ibc:
-			r += "\t".join([areas[i.get_key('area')].get_key('area').name() for i in inds]) + sep
+		subs, inds, b, c = ibc
 
-			for i in inds:
-				a += "\t".join([str(d) for d in [i.PB_meta, i.PC_meta, i.PBM_meta, i.PS_meta, i.LM_meta, i.OL_meta, i.PP_meta, i.RR_meta, i.RC_meta, i.NP_meta, i.LMARC_meta, i.Con_meta, i.NFM_meta, i.PB, i.PC, i.PBM, i.PS, i.LM, i.OL, i.PP, i.RR, i.RC, i.NP, i.LMARC, i.Con, i.NFM, i.BM]]) + sep
+		r += "\t".join([i.get_key('area').name() for i in inds]) + sep
+
+		for i in inds:
+			a += "\t".join([str(d) for d in [i.PB_meta, i.PC_meta, i.PBM_meta, i.PS_meta, i.LM_meta, i.OL_meta, i.PP_meta, i.RR_meta, i.RC_meta, i.NP_meta, i.LMARC_meta, i.Con_meta, i.NFM_meta, i.PB, i.PC, i.PBM, i.PS, i.LM, i.OL, i.PP, i.RR, i.RC, i.NP, i.LMARC, i.Con, i.NFM, i.BM]]) + sep
 
 		self.response.out.write(r + a)
 
@@ -947,7 +943,7 @@ class GetRelatoriosPage(webapp.RequestHandler):
 		reports = dict([(i.get_key('area'), i) for i in reps])
 		sep = "\r\n"
 		res = str(w.date) + sep
-		res += w.question + sep
+		res += report_field(w.question) + sep
 
 		wards = set()
 		for i in areas:
@@ -1408,7 +1404,6 @@ application = webapp.WSGIApplication([
 
 	('/send-relatorio/', SendRelatorio),
 	('/send-numbers/', SendNumbers),
-	('/load-zone/', LoadZone),
 
 	('/names/', NamesPage),
 	('/keyindicators/', KeyIndicatorsPage),
