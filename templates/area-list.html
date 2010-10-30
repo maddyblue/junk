@@ -4,11 +4,11 @@
 
 {% for areas in zones %}
 	<div>
-	<img src="/imgs/plus.gif" alt="+" class="showr" id="{{ areas.0 }}"/>
+	<img class="showr" id="{{ areas.0 }}"/>
 
 	<a href="/zone/{{ areas.0 }}">{{ areas.0.name }}</a>
 
-	<ul id="a_{{ areas.0 }}" style="display: none">
+	<ul id="obj_{{ areas.0 }}">
 	{% for a in areas.1 %}
 		<li><a href="/area/{{ a.key }}">{{ a.name }}</a></li>
 	{% endfor %}
@@ -16,21 +16,6 @@
 	</div>
 {% endfor %}
 
-<script>
-$(".showr").click(function() {
-	if(this.alt == "+")
-	{
-		$("#a_" + this.id).show("slow");
-		this.alt = "-";
-		this.src="/imgs/minus.gif";
-	}
-	else
-	{
-		$("#a_" + this.id).hide("slow");
-		this.alt = "+";
-		this.src="/imgs/plus.gif";
-	}
-});
-</script>
+<script type="text/javascript" src="/js-static/showr.js"></script>
 
 {% endblock %}

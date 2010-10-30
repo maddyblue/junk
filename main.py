@@ -692,7 +692,7 @@ class MakeBatismosPage(webapp.RequestHandler):
 	def get(self):
 		w = cache.get_week()
 		areas = [i for i in cache.get_snapareas(w) if not i.does_not_report and not i.reports_with]
-		prefetch_refprops(areas, SnapArea.area)
+		cache.prefetch_refprops(areas, SnapArea.area)
 		areas.sort(cmp=lambda x,y: cmp(x.area.name, y.area.name))
 		zones = list(set([i.get_key('zone').name() for i in areas]))
 		zones.sort()

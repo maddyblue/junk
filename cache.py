@@ -318,7 +318,7 @@ def get_m_by_area(week):
 
 	sm = get_snapmissionaries(week)
 	missionaries = dict([(i.key(), i) for i in sm])
-	prefetch_refprops(sm, SnapMissionary.missionary)
+	prefetch_refprops(sm, models.SnapMissionary.missionary)
 
 	data = memcache.get(n)
 	if data is None:
