@@ -1387,6 +1387,45 @@ class LogoutPage(webapp.RequestHandler):
 
 		render_noauth(self, 'logout.html', 'Sair')
 
+def mk_select(name, data, opt):
+	r = '<select name="%s">' %name
+
+	for k, v in data:
+		if k == opt:
+			s = ' selected'
+		else:
+			s = ''
+		r += '<option value="%s"%s>%s</option>' %(k, s, v)
+
+	r += '</select>'
+
+	return r
+
+def mk_checkbox(name, opt):
+	if opt:
+		s = ' checked'
+	else:
+		s = ''
+
+	r = '<input type="checkbox" name="%s"%s/>' %(name, s)
+
+	return r
+
+class TransferPage(webapp.RequestHandler):
+	def get(self):
+		#ms = get_missionaries() # the get_missionaries() call is very expensive on the devel server, so just use this below, since order doesn't really matter
+		ms = models.Missionary.all().filter('is_released', False).fetch(200)
+		areas = models.Area.all().order('zone_name').order('name').fetch(500)
+		areas = [(str(a.key()), unicode(a)) for a in areas]
+		callings = [(i, i) for i in models.MISSIONARY_CALLING_CHOICES]
+
+		mfs = []
+		for m in ms:
+			mk = str(m.key())
+			mfs.append((m, mk_select(mk + '_area', areas, str(m.get_key('area'))), mk_select(mk + '_calling', callings, m.calling), mk_checkbox(mk + '_senior', m.is_senior)))
+
+		render(self, 'transfer.html', 'Transfer', {'mfs': mfs})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/login/', LoginPage),
@@ -1425,6 +1464,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
+	('/_ah/missao-rio/transfer/', TransferPage),
 
 	('/quadro/', Quadro),
 

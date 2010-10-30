@@ -32,6 +32,11 @@ indexes:
   - name: zone
   - name: name
 
+- kind: Area
+  properties:
+  - name: zone_name
+  - name: name
+
 - kind: Indicator
   properties:
   - name: __key__
