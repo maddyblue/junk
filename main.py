@@ -93,6 +93,8 @@ class BatismosPage(webapp.RequestHandler):
 class BatizadoresPage(webapp.RequestHandler):
 	def get(self):
 		d = FlatPage.get_flatpage(FLATPAGE_BATIZADORES)
+		d += '<script type="text/javascript" src="/js-static/jquery.easing.1.3.js"></script>'
+		d += '<script type="text/javascript" src="/js-static/bouncr.js"></script>'
 		render(self, '', 'Batizadores', {'page_data': d})
 
 class MilagrePage(webapp.RequestHandler):
