@@ -1474,6 +1474,52 @@ class MakePasswordsPage(webapp.RequestHandler):
 
 		db.put(ms)
 
+class SyncPage(webapp.RequestHandler):
+	def get(self):
+		memcache.flush_all()
+
+		areas = Area.all().fetch(1000)
+		open_areas = map_procs.get_open_areas()
+		open_zones = map_procs.get_open_zones()
+
+		for a in areas:
+			a.zone_name = a.get_key('zone').name()
+			a.name = a.key().name() # just to make sure
+			a.is_open = a.key() in open_areas
+
+		db.put(areas)
+
+		zones = Zone.all().fetch(100)
+		for z in zones:
+			z.name = z.key().name() # just to make sure
+			z.is_open = z.key() in open_zones
+
+		db.put(zones)
+
+		adict = dict([(a.key(), a) for a in areas])
+
+		missionaries = Missionary.all().fetch(1000)
+		for m in missionaries:
+			ak = m.get_key('area')
+
+			if ak is None:
+				m.zone = None
+				m.zone_name = None
+				m.area_name = None
+				m.is_released = True
+			else:
+				a = adict[ak]
+				m.area_name = a.name
+				m.zone_name = a.zone_name
+				m.zone = a.get_key('zone')
+				m.is_released = False
+
+			m.is_dl = m.calling in [MISSIONARY_CALLING_LD, MISSIONARY_CALLING_LDTR, MISSIONARY_CALLING_SELD]
+
+		db.put(missionaries)
+
+		self.response.out.write('done')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/login/', LoginPage),
@@ -1516,6 +1562,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/transfer/', TransferPage),
 	('/_ah/missao-rio/area/', AreaListPage),
 	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
+	('/_ah/missao-rio/sync/', SyncPage),
 
 	('/quadro/', Quadro),
 
