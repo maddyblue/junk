@@ -121,6 +121,17 @@ def dump():
 			spres=i.spres,
 			stele=i.stele,
 			conf_date=i.conf_date,
+
+			father=i.father,
+			mother=i.mother,
+			birth_city=i.birth_city,
+			passport=i.passport,
+			entrance=i.entrance,
+			visa_num=i.visa_num,
+			issue_date=i.issue_date,
+			issued_by=i.issued_by,
+			entrance_place=i.entrance_place,
+			entrance_state=i.entrance_state,
 			))
 		profiles[i.id] = p[-1]
 	mput(p)
@@ -142,7 +153,7 @@ def dump():
 			roster_name=i.roster_name,
 			roster_full=i.roster_full,
 			mission_id=i.mission_id,
-			password=str(mission_id)[-4:],
+			password=str(i.mission_id)[-4:],
 
 			full_name=i.full_name,
 			box=i.box,
@@ -520,6 +531,25 @@ def syncpassword():
 
 def auth_func():
 	return raw_input('Username:'), getpass.getpass('Password:')
+
+def delete(kinds):
+	sz = 200
+
+	for k in kinds:
+		print 'delete ' + k
+		i = 0
+		while True:
+			print '  fetch %i to %i' %(i, i + sz)
+			keys = db.GqlQuery('select __key__ from ' + k).fetch(sz)
+
+			print '  delete %i to %i' %(i, i + sz)
+			db.delete(keys)
+
+			if len(keys) < sz:
+				print '  done'
+				break
+
+			i += sz
 
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
