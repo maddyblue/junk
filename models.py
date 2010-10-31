@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from google.appengine.api import mail
 from google.appengine.api import memcache
 from google.appengine.ext import db
 
@@ -128,6 +129,18 @@ class MissionaryProfile(db.Model):
 	stele = db.StringProperty(indexed=False)
 	conf_date = db.DateProperty(indexed=False)
 
+	# policia federal
+	father = db.StringProperty(indexed=False)
+	mother = db.StringProperty(indexed=False)
+	birth_city = db.StringProperty(indexed=False)
+	passport = db.StringProperty(indexed=False)
+	entrance = db.DateProperty(indexed=False)
+	visa_num = db.StringProperty(indexed=False)
+	issue_date = db.DateProperty(indexed=False)
+	issued_by = db.StringProperty(indexed=False)
+	entrance_place = db.StringProperty(indexed=False)
+	entrance_state = db.StringProperty(indexed=False)
+
 class Missionary(DerefModel):
 	mission_name = db.StringProperty(required=True)
 	calling = db.StringProperty(required=True, choices=MISSIONARY_CALLING_CHOICES)
@@ -180,6 +193,16 @@ class Missionary(DerefModel):
 
 	def __str__(self):
 		return self.sex + ' ' + self.mission_name
+
+	def email_password(self):
+		if not mail.is_email_valid(self.email):
+			return
+
+		sender_address = 'Missão Brasil Rio de Janeiro <noreply@missao-rio.appspotmail.com>'
+		subject = 'Senha da website'
+		body = u'Sua senha: %s\nNovo website: http://missao-rio.appspot.com/' %self.password
+
+		mail.send_mail(sender_address, self.email, subject, body)
 
 class SnapArea(DerefModel):
 	area = db.ReferenceProperty(Area, required=True)

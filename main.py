@@ -22,6 +22,7 @@ import config
 import forms
 import map_procs
 import models
+import templatefilters.filters
 
 import sys
 # use reportlab patched from http://ruudhelderman.appspot.com/testpdf
@@ -134,6 +135,10 @@ class SendRelatorio(webapp.RequestHandler):
 class NumerosPage(webapp.RequestHandler):
 	def get(self):
 		self.session = Session()
+
+		if not templatefilters.filters.is_zl(self.session['user']):
+			return
+
 		z = self.session['user'].get_key('zone')
 		zone = Zone.get(z)
 		w = cache.get_week()
@@ -1454,6 +1459,21 @@ class AdminPage(webapp.RequestHandler):
 	def get(self):
 		render(self, 'admin.html', 'Admin')
 
+class MakePasswordsPage(webapp.RequestHandler):
+	def get(self):
+		import random
+		ms = Missionary.all().filter('password', '').fetch(1000)
+
+		for m in ms:
+			if m.mission_id:
+				m.password = str(m.mission_id)[-4:]
+			else:
+				m.password = str(random.randint(1000, 9999))
+				m.email_password()
+			self.response.out.write('<br/>%s password set to %s' %(m, m.password))
+
+		db.put(ms)
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/login/', LoginPage),
@@ -1495,6 +1515,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
 	('/_ah/missao-rio/transfer/', TransferPage),
 	('/_ah/missao-rio/area/', AreaListPage),
+	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
 
 	('/quadro/', Quadro),
 

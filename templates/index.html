@@ -172,7 +172,10 @@ theme(getCookie('theme'));
 	</ul>
 
 	<p><img src="/imgs/logo_tn.jpg" border="0" alt="" /></p>
-	<p><a href="/admin/">Admin</a></p>
+
+	{% if session.is_admin %}
+	<div><a href="/admin/">Admin</a></div>
+	{% endif %}
 </div><!--menu-page-->
 </div>
 <div id="content">
