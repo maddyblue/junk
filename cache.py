@@ -307,7 +307,7 @@ def get_missionaries():
 		return ms
 	else:
 		data = models.Missionary.all().filter('is_released', False).order('zone_name').order('area_name').order('-is_senior').fetch(500)
-		prefetch_refprops(data, Missionary.area)
+		prefetch_refprops(data, models.Missionary.area)
 		memcache.add(n + 'area', pack([m.area for m in data]))
 		memcache.add(n + 'missionary', pack(data))
 		return data
