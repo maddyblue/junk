@@ -1,4 +1,5 @@
 from google.appengine.ext import webapp
+import models
 
 register = webapp.template.create_template_register()
 
@@ -11,6 +12,6 @@ def is_zl(value):
 	if not value:
 		return False
 
-	return value.calling in ['LZL', 'LZ']
+	return value.calling in [models.MISSIONARY_CALLING_SE, models.MISSIONARY_CALLING_SELD, models.MISSIONARY_CALLING_LZL, models.MISSIONARY_CALLING_LZ]
 
 register.filter(is_zl)

@@ -176,6 +176,10 @@ def dump():
 		if i.area:
 			o.area = areas[i.area.name]
 
+		# to prevent the string 'None' as being the password
+		if not i.mission_id:
+			i.password = ''
+
 		missionaries[i.id] = o
 		p.append(o)
 	mput(p)

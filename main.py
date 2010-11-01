@@ -1464,7 +1464,7 @@ class AdminPage(webapp.RequestHandler):
 class MakePasswordsPage(webapp.RequestHandler):
 	def get(self):
 		import random
-		ms = Missionary.all().filter('password', '').fetch(1000)
+		ms = Missionary.all().filter('is_released', False).filter('password', '').fetch(1000)
 
 		for m in ms:
 			if m.mission_id:
@@ -1522,6 +1522,11 @@ class SyncPage(webapp.RequestHandler):
 
 		self.response.out.write('done')
 
+class FlushPage(webapp.RequestHandler):
+	def get(self):
+		memcache.flush_all()
+		self.response.out.write('memcache flushed')
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/login/', LoginPage),
@@ -1565,6 +1570,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/area/', AreaListPage),
 	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
 	('/_ah/missao-rio/sync/', SyncPage),
+	('/_ah/missao-rio/flush/', FlushPage),
 
 	('/quadro/', Quadro),
 
