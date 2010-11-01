@@ -1376,12 +1376,16 @@ class LoginPage(webapp.RequestHandler):
 		render_noauth(self, 'login.html', 'Login', {'mopts': cache.get_mopts(), 'url': users.create_login_url('/')})
 
 	def post(self):
-		m = Missionary.get(self.request.POST['m'])
-		if m.password == self.request.POST['p']:
-			self.session = Session()
-			self.session['user'] = m
-			self.redirect('/')
-			return
+		try:
+			k = Key(self.request.POST['m'])
+			m = Missionary.get(k)
+			if m.password == self.request.POST['p']:
+				self.session = Session()
+				self.session['user'] = m
+				self.redirect('/')
+				return
+		except:
+			pass
 
 		render_noauth(self, 'login.html', 'Fazer Login', {'fail': 'O nome de usuário e senha digitados são incorretos.', 'mopts': cache.get_mopts()})
 
