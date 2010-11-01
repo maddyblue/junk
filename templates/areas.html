@@ -1,0 +1,9 @@
+<form method="POST" action="">
+<table>
+<tr><th>Area</th><th>District</th><th>Zone</th><th>Phone</th></tr>
+{% for a in areas %}
+<tr><td>{{ a.0.name }}</td><td>{{ a.1 }}</td><td>{{ a.2 }}</td><td><input type="text" name="{{ a.0.key }}_phone" value="{{ a.0.phone }}"/></td><td>{% if not a.0.is_open %}**{% endif %}{{ a.0.name }}</td></tr>
+{% endfor %}
+</table>
+<p/><input type="submit" />
+</form>

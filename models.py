@@ -489,6 +489,9 @@ class IndicatorSubmission(DerefModel):
 	notes = db.TextProperty()
 
 	def commit(self):
+		if not self.data:
+			return 'no data, not changed'
+
 		inds = []
 		inds.extend(Indicator.all(keys_only=True).filter('week', self.week).filter('zone', self.zone).fetch(500))
 		inds.extend(IndicatorBaptism.all(keys_only=True).filter('week', self.week).filter('zone', self.zone).fetch(500))
@@ -499,10 +502,7 @@ class IndicatorSubmission(DerefModel):
 		subs = IndicatorSubmission.all().filter('week', self.week).filter('zone', self.zone).fetch(500)
 
 		for i in subs:
-			if i.key() == self.key():
-				i.used = True
-			else:
-				i.used = False
+			i.used = i.key() == self.key()
 
 		db.put(subs)
 
@@ -582,7 +582,7 @@ class IndicatorSubmission(DerefModel):
 					return 'Faltando batismo dados.'
 
 			cn = 'c_%s-PC' %snapk
-			for c in POST.getall(cn):
+			for c in range(int(POST.get('%s-PC' %snapk))):
 				p = '%s-%s' %(cn, c)
 				POST['%s-indicator' %p] = ik
 				POST['%s-submission' %p] = sk

@@ -1,11 +1,18 @@
 <html>
 <body>
 
+Falting zones ({{ falting|length }}):
+{% for i in falting %}
+<br/>{{ i.name }}
+{% endfor %}
+
+<hr>
+
 <form method="POST">
 
 <table>
 {% for i in zones.iteritems %}
-	<tr><td>{{ i.0.name }}</td><td>
+	<tr><td valign="top">{{ i.0.name }}</td><td>
 	{% if i.1|length_is:1 %}{% else %}
 		multiple
 	{% endif %}
@@ -24,6 +31,38 @@
 
 <p/><input type="submit"/>
 </form>
+
+<hr>
+
+<table>
+{% for i in zones.iteritems %}
+	<tr><td valign="top">{{ i.0.name }}</td><td>
+		{% for opt in i.1 %}
+			<br/>key: {{ opt.key }}, submitted: {{ opt.submitted }}, used: {{ opt.used }}, notes: {{ opt.notes }}
+		{% endfor %}
+	</td></tr>
+{% endfor %}
+</table>
+
+<hr>
+
+<table>
+{% for i in zdata.iteritems %}
+	<tr><td valign="top">{{ i.0.name }}</td><td>
+		{% for opt in i.1 %}
+			<br/>key: {{ opt.0.key }}, submitted: {{ opt.0.submitted }}, used: {{ opt.0.used }}, notes: {{ opt.0.notes }}
+
+			<table>
+			{% for j in opt.1 %}
+				<tr><td align="right">{{ j.0 }}</td><td>{{ j.1 }}</td></tr>
+			{% endfor %}
+			</table>
+
+			<hr>
+		{% endfor %}
+	</td></tr>
+{% endfor %}
+</table>
 
 </body>
 </html>

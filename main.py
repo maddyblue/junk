@@ -561,21 +561,36 @@ class Quadro(webapp.RequestHandler):
 		c.showPage()
 		c.save()
 
+def get_ind_dict(i):
+	import pickle
+
+	data = pickle.loads(i.data)
+	d = {}
+
+	return data.items()
+
 class IndicatorCheckPage(webapp.RequestHandler):
 	def get(self):
 		week = cache.get_week()
-
+		si = SnapshotIndex.all().ancestor(week.get_key('snapshot')).get()
+		snapareas = db.get(si.snapareas)
+		falting_zones = set([a.get_key('zone') for a in snapareas])
 		subs = IndicatorSubmission.all().filter('week', week).order('zone').order('-submitted').fetch(100)
+
 		zones = {}
+		zdata = {}
 		for i in subs:
 			z = i.get_key('zone')
+			falting_zones.discard(z)
 
 			if z not in zones:
 				zones[z] = [i]
+				zdata[z] = [(i, get_ind_dict(i))]
 			else:
 				zones[z].append(i)
+				zdata[z].append((i, get_ind_dict(i)))
 
-		return rendert(self, 'indicator-check.html', {'zones': zones})
+		return rendert(self, 'indicator-check.html', {'zones': zones, 'falting': falting_zones, 'zdata': zdata})
 
 	def post(self):
 		for s in IndicatorSubmission.get([i for i in self.request.POST.values() if i]):
@@ -1531,6 +1546,39 @@ class FlushPage(webapp.RequestHandler):
 		memcache.flush_all()
 		self.response.out.write('memcache flushed')
 
+class AreaDistrictPage(webapp.RequestHandler):
+	def get(self):
+		areas = models.Area.all().order('zone_name').order('name').fetch(500)
+		anames = [(str(a.key()), unicode(a)) for a in areas]
+		anames.insert(0, ('', '')) # allow no district
+		zones = models.Zone.all().order('name').fetch(100)
+		zones = [(str(z.key()), unicode(z)) for z in zones]
+		afs = []
+		for a in areas:
+			ak = str(a.key())
+			afs.append((a, mk_select(ak + '_district', anames, str(a.get_key('district'))), mk_select(ak + '_zone', zones, str(a.get_key('zone')))))
+
+		render(self, 'areas.html', 'Areas and Districts', {'areas': afs})
+
+	def post(self):
+		areas = models.Area.all().order('zone_name').order('name').fetch(500)
+
+		for a in areas:
+			akey = str(a.key())
+
+			try:
+				district = db.Key(self.request.POST[akey + '_district'])
+			except:
+				district = None
+			a.district = district
+
+			a.zone = db.Key(self.request.POST[akey + '_zone'])
+			a.phone = self.request.POST[akey + '_phone']
+
+		db.put(areas)
+
+		render(self, '', 'Areas and Districts', {'page_data': 'Done. Remember to run <a href="/_ah/missao-rio/sync/">sync</a>.'})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/login/', LoginPage),
@@ -1561,20 +1609,21 @@ application = webapp.WSGIApplication([
 	# _ah
 	('/admin/', AdminRedirect),
 	('/_ah/missao-rio/', AdminPage),
-	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
-	('/_ah/missao-rio/map-control/', MapControlPage),
-	('/_ah/missao-rio/status/', MissionStatusPage),
-	('/_ah/missao-rio/make-new/', MakeNewPage),
-	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
-	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
+	('/_ah/missao-rio/area/', AreaListPage),
+	('/_ah/missao-rio/areas/', AreaDistrictPage),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
-	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
-	('/_ah/missao-rio/transfer/', TransferPage),
-	('/_ah/missao-rio/area/', AreaListPage),
-	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
-	('/_ah/missao-rio/sync/', SyncPage),
+	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 	('/_ah/missao-rio/flush/', FlushPage),
+	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
+	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
+	('/_ah/missao-rio/make-new/', MakeNewPage),
+	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
+	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
+	('/_ah/missao-rio/map-control/', MapControlPage),
+	('/_ah/missao-rio/status/', MissionStatusPage),
+	('/_ah/missao-rio/sync/', SyncPage),
+	('/_ah/missao-rio/transfer/', TransferPage),
 
 	('/quadro/', Quadro),
 
