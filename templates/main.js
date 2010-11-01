@@ -96,7 +96,7 @@ function confirmChange(obj,cid)
 	}
 	else
 	{
-		$(star + " div.tr1:gt(" + (obj.value - 1) + ")").slideUp("slow", function(){ $(this).remove(); });
+		$(star + " div.tr1").slice(obj.value, tmpval).slideUp("slow", function(){ $(this).remove(); });
 	}
 }
 
