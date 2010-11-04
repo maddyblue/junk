@@ -15,6 +15,13 @@ Good: {{ done }}
 </form>
 {% endif %}
 
+{% if area %}
+<form method="POST">
+{{ area.as_table }}
+<tr><td><input type="submit" name="submit" value="area"/></td></tr>
+</form>
+{% endif %}
+
 </table>
 
 </body>

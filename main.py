@@ -458,14 +458,35 @@ def drawLine(c, x, y, strs):
 	c.line(x, y, x, y+c.H)
 
 	for s in strs:
-		c.drawString(x+2, y+c.H-c.F, s)
+		draw_width_string_left(c, x+c.F, y+c.H-c.F, s, c.W - c.F)
 		x += c.W
 		c.line(x, y, x, y + c.H)
+
+def draw_width_string_left(c, x, y, s, width, defheight=0, fontname='Helvetica'):
+	if defheight == 0:
+		defheight = c.S
+
+	height = defheight
+	while c.stringWidth(s, fontname, height) > width and height > 1:
+		height *= 0.9
+
+	c.setFont(fontname, height)
+	c.drawString(x, y, s)
 
 class Quadro(webapp.RequestHandler):
 	def get(self):
 		# don't use the cache yet
-		missionaries = render_zones()
+		missionaries = cache.render_zones()
+
+		if 'debug' in self.request.GET:
+			for z, areas in missionaries.iteritems():
+				self.response.out.write('%s:\n' %z)
+
+				for k, v in areas.iteritems():
+					self.response.out.write('  %s: %s\n' %(k, v))
+
+				self.response.out.write('\n\n')
+			return
 
 		self.response.headers['Content-Type'] = 'application/pdf'
 		self.response.headers['Content-Disposition'] = 'attachment; filename=quadro.pdf'
@@ -479,11 +500,13 @@ class Quadro(webapp.RequestHandler):
 			c.H = 9
 			c.F = 2 # oFfset
 			c.S = 8 # text font Size
+			c.setLineWidth(0.5)
 		else:
 			c.W = 45
 			c.H = 5.2
 			c.F = 1.3 # oFfset
 			c.S = 4.5 # text font Size
+			c.setLineWidth(0.2)
 
 		if phone:
 			c.phone = True
@@ -495,7 +518,6 @@ class Quadro(webapp.RequestHandler):
 		c.setPageSize(landscape(A4))
 		c.translate(units.cm, units.cm)
 		c.setFontSize(c.S)
-		c.setLineWidth(.5)
 
 		x = 0
 
@@ -585,10 +607,12 @@ class IndicatorCheckPage(webapp.RequestHandler):
 
 			if z not in zones:
 				zones[z] = [i]
-				zdata[z] = [(i, get_ind_dict(i))]
+				if i.data:
+					zdata[z] = [(i, get_ind_dict(i))]
 			else:
 				zones[z].append(i)
-				zdata[z].append((i, get_ind_dict(i)))
+				if i.data:
+					zdata[z].append((i, get_ind_dict(i)))
 
 		return rendert(self, 'indicator-check.html', {'zones': zones, 'falting': falting_zones, 'zdata': zdata})
 
@@ -605,6 +629,7 @@ class IndicatorCheckPage(webapp.RequestHandler):
 class MakeNewPage(webapp.RequestHandler):
 	forms = {
 		'week': forms.WeekForm,
+		'area': forms.AreaForm,
 	}
 
 	def get_f(self):
@@ -629,6 +654,11 @@ class MakeNewPage(webapp.RequestHandler):
 				w.put()
 				Configuration.set(models.CONFIG_WEEK, str(w.key()))
 				d['done'] = '%s - %s' %(s, w)
+			elif s == 'area':
+				af = f.save(commit=False)
+				a = Area(key_name=af.name, name=af.name, zone=af.zone, district=af.district, ward=af.ward, phone=af.phone, zone_name=af.zone.name)
+				a.put()
+				d['done'] = a.name
 		else:
 			d = {s: f}
 
@@ -1288,7 +1318,7 @@ class BaptismsPerMissionary(webapp.RequestHandler):
 
 		rendert(self, 'bap-per.html', {'d': d})
 
-def make_chart(inds, disp, other={}, rmax=0):
+def make_chart(inds, disp, other={}, rmax=0, step=2):
 	d = {}
 
 	data = dict([inds[i] for i in disp])
@@ -1308,7 +1338,6 @@ def make_chart(inds, disp, other={}, rmax=0):
 	else:
 		if dmax < rmax:
 			dmax = rmax
-		step = 2
 
 	d['chds'] = '%i,%i' %(dmin, dmax)
 
@@ -1319,7 +1348,7 @@ def make_chart(inds, disp, other={}, rmax=0):
 		'chs': '470x250',
 		'cht': 'lc',
 
-		'chco': '0000FF,FF0000',
+		'chco': '0000FF,FF0000,00FF00',
 		'chdlp': 'b', # chart legend on bottom
 		'chxr': '1,%i,%i,%i' %(dmin, dmax, step),
 		'chxs': '0,,12', # make the date labels larger
@@ -1369,8 +1398,9 @@ class AreaPage(webapp.RequestHandler):
 
 		charts = []
 		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}, 8))
-		charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas'}, 25))
-		charts.append(make_chart(data, ['NP', 'PS'], {'chtt': 'Pesquisadores'}, 20))
+		charts.append(make_chart(data, ['LM', 'OL', 'TL'], {'chtt': 'Doutrinas Ensinadas'}, 25, 4))
+		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores'}, 20, 3))
+		charts.append(make_chart(data, ['Con'], {'chtt': 'Contatos'}, 100, 10))
 
 		render(self, 'area.html', unicode(area), {'area': area, 'charts': charts})
 
@@ -1381,8 +1411,9 @@ class ZonePage(webapp.RequestHandler):
 
 		charts = []
 		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}))
-		charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas'}))
-		charts.append(make_chart(data, ['NP', 'PS'], {'chtt': 'Pesquisadores'}))
+		charts.append(make_chart(data, ['LM', 'OL', 'TL'], {'chtt': 'Doutrinas Ensinadas'}))
+		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores'}))
+		charts.append(make_chart(data, ['Con'], {'chtt': 'Contatos'}))
 
 		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts})
 
@@ -1450,6 +1481,7 @@ class TransferPage(webapp.RequestHandler):
 		ms = self.get_missionaries()
 		areas = models.Area.all().order('zone_name').order('name').fetch(500)
 		areas = [(str(a.key()), unicode(a)) for a in areas]
+		areas.insert(0, ('', '')) # allow no area
 		callings = [(i, i) for i in models.MISSIONARY_CALLING_CHOICES]
 
 		mfs = []
@@ -1464,13 +1496,18 @@ class TransferPage(webapp.RequestHandler):
 
 		for m in ms:
 			mkey = str(m.key())
-			m.area = db.Key(self.request.POST[mkey + '_area'])
+
+			try:
+				m.area = db.Key(self.request.POST[mkey + '_area'])
+			except:
+				m.area = None
+
 			m.calling = self.request.POST[mkey + '_calling']
 			m.is_senior = (mkey + '_senior') in self.request.POST and self.request.POST[mkey + '_senior'] == 'on'
 
 		db.put(ms)
 
-		render(self, '', 'Transfer', {'page_data': 'Done. Remember to run Sync Phase 2.'})
+		render(self, '', 'Transfer', {'page_data': 'Done. Remember to run <a href="/_ah/missao-rio/sync/">sync</a>.'})
 
 class AdminRedirect(webapp.RequestHandler):
 	def get(self):
@@ -1508,38 +1545,44 @@ class SyncPage(webapp.RequestHandler):
 			a.name = a.key().name() # just to make sure
 			a.is_open = a.key() in open_areas
 
-		db.put(areas)
+		if self.request.get('a'):
+			self.response.out.write('areas')
+			db.put(areas)
 
 		zones = Zone.all().fetch(100)
 		for z in zones:
 			z.name = z.key().name() # just to make sure
 			z.is_open = z.key() in open_zones
 
-		db.put(zones)
+		if self.request.get('z'):
+			self.response.out.write(',zones')
+			db.put(zones)
 
 		adict = dict([(a.key(), a) for a in areas])
 
-		missionaries = Missionary.all().fetch(1000)
-		for m in missionaries:
-			ak = m.get_key('area')
+		if self.request.get('m'):
+			missionaries = Missionary.all().fetch(1000)
+			for m in missionaries:
+				ak = m.get_key('area')
 
-			if ak is None:
-				m.zone = None
-				m.zone_name = None
-				m.area_name = None
-				m.is_released = True
-			else:
-				a = adict[ak]
-				m.area_name = a.name
-				m.zone_name = a.zone_name
-				m.zone = a.get_key('zone')
-				m.is_released = False
+				if ak is None:
+					m.zone = None
+					m.zone_name = None
+					m.area_name = None
+					m.is_released = True
+				else:
+					a = adict[ak]
+					m.area_name = a.name
+					m.zone_name = a.zone_name
+					m.zone = a.get_key('zone')
+					m.is_released = False
 
-			m.is_dl = m.calling in [MISSIONARY_CALLING_LD, MISSIONARY_CALLING_LDTR, MISSIONARY_CALLING_SELD]
+				m.is_dl = m.calling in [MISSIONARY_CALLING_LD, MISSIONARY_CALLING_LDTR, MISSIONARY_CALLING_SELD]
 
-		db.put(missionaries)
+			self.response.out.write(',missionaries')
+			db.put(missionaries)
 
-		self.response.out.write('done')
+		self.response.out.write('. done')
 
 class FlushPage(webapp.RequestHandler):
 	def get(self):
@@ -1579,6 +1622,94 @@ class AreaDistrictPage(webapp.RequestHandler):
 
 		render(self, '', 'Areas and Districts', {'page_data': 'Done. Remember to run <a href="/_ah/missao-rio/sync/">sync</a>.'})
 
+class ProcIndHandler(webapp.RequestHandler):
+	def post(self):
+		ak = self.request.get('snapareakey')
+		sk = self.request.get('isubkey')
+		a = SnapArea.get(ak)
+		isub = IndicatorSubmission.get(sk)
+
+		import forms
+
+		POST = pickle.loads(isub.data)
+		wk = str(isub.get_key('week'))
+		dk = str(isub.weekdate)
+
+		areak = a.get_key('area')
+		zonek = a.get_key('zone')
+		POST['%s-submission' %ak] = sk
+		POST['%s-snaparea' %ak] = ak
+		POST['%s-area' %ak] = areak
+		POST['%s-zone' %ak] = zonek
+		POST['%s-week' %ak] = wk
+		POST['%s-weekdate' %ak] = dk
+
+		f = forms.IndicatorForm(data=POST, prefix=ak)
+		if f.is_valid():
+			i = f.save(commit=True)
+		else:
+			return 'Faltando dados.'
+
+		ords = []
+		snapk = ak
+
+		ik = str(i.key())
+		fb = forms.BaptismForm
+		fc = forms.ConfirmationForm
+
+		bn = 'b_%s-PB' %snapk
+		for b in range(int(POST.get('%s-PB' %snapk))):
+			p = '%s-%s' %(bn, b)
+
+			POST['%s-indicator' %p] = ik
+			POST['%s-submission' %p] = sk
+			POST['%s-snaparea' %p] = snapk
+			POST['%s-area' %p] = areak
+			POST['%s-zone' %p] = zonek
+			POST['%s-week' %p] = wk
+			POST['%s-weekdate' %p] = dk
+			POST['%s-date' %p] = POST['%s-date' %p].partition(' ')[0]
+
+			f = fb(data=POST, prefix=p)
+			if f.is_valid():
+				o = f.save(commit=False)
+				ords.append(o)
+
+				if o.age >= 18 and o.sex == BAPTISM_SEX_M:
+					i.BM += 1
+					if i not in ords:
+						ords.append(i)
+			else:
+				return 'Faltando batismo dados.'
+
+		cn = 'c_%s-PC' %snapk
+		for c in range(int(POST.get('%s-PC' %snapk))):
+			p = '%s-%s' %(cn, c)
+			POST['%s-indicator' %p] = ik
+			POST['%s-submission' %p] = sk
+			POST['%s-snaparea' %p] = snapk
+			POST['%s-area' %p] = areak
+			POST['%s-zone' %p] = zonek
+			POST['%s-week' %p] = wk
+			POST['%s-weekdate' %p] = dk
+			POST['%s-date' %p] = POST['%s-date' %p].partition(' ')[0]
+
+			f = fc(data=POST, prefix=p)
+			if f.is_valid():
+				o = f.save(commit=False)
+				ords.append(o)
+			else:
+				return 'Faltando confirmação dados.'
+
+		db.put(ords)
+
+class EmailPage(webapp.RequestHandler):
+	def get(self):
+		ms = Missionary.all().filter('is_released', False).fetch(500)
+		emails = [m.email for m in ms if m.calling in [MISSIONARY_CALLING_AP, MISSIONARY_CALLING_LZ, MISSIONARY_CALLING_LZL]]
+
+		self.response.out.write('; '.join(emails))
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/login/', LoginPage),
@@ -1606,6 +1737,9 @@ application = webapp.WSGIApplication([
 	('/area/(.*)', AreaPage),
 	('/zone/(.*)', ZonePage),
 
+	# task queue
+	('/_ah/tasks/indicator', ProcIndHandler),
+
 	# _ah
 	('/admin/', AdminRedirect),
 	('/_ah/missao-rio/', AdminPage),
@@ -1613,6 +1747,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
+	('/_ah/missao-rio/email-zl/', EmailPage),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 	('/_ah/missao-rio/flush/', FlushPage),
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
@@ -1625,7 +1760,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/sync/', SyncPage),
 	('/_ah/missao-rio/transfer/', TransferPage),
 
-	('/quadro/', Quadro),
+	('/_ah/missao-rio/quadro/', Quadro),
 
 	], debug=True)
 

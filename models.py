@@ -2,6 +2,7 @@
 
 from google.appengine.api import mail
 from google.appengine.api import memcache
+from google.appengine.api.labs import taskqueue
 from google.appengine.ext import db
 
 import pickle
@@ -492,12 +493,12 @@ class IndicatorSubmission(DerefModel):
 		if not self.data:
 			return 'no data, not changed'
 
-		inds = []
-		inds.extend(Indicator.all(keys_only=True).filter('week', self.week).filter('zone', self.zone).fetch(500))
-		inds.extend(IndicatorBaptism.all(keys_only=True).filter('week', self.week).filter('zone', self.zone).fetch(500))
-		inds.extend(IndicatorConfirmation.all(keys_only=True).filter('week', self.week).filter('zone', self.zone).fetch(500))
+		wk = self.get_key('week')
+		zk = self.get_key('zone')
 
-		db.delete(inds)
+		db.delete(Indicator.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
+		db.delete(IndicatorBaptism.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
+		db.delete(IndicatorConfirmation.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
 
 		subs = IndicatorSubmission.all().filter('week', self.week).filter('zone', self.zone).fetch(500)
 
@@ -521,39 +522,37 @@ class IndicatorSubmission(DerefModel):
 		inds = []
 		for a in SnapArea.get(POST.getall('area')):
 			ak = str(a.key())
-			areak = a.get_key('area')
-			zonek = a.get_key('zone')
-			POST['%s-submission' %ak] = sk
-			POST['%s-snaparea' %ak] = ak
-			POST['%s-area' %ak] = areak
-			POST['%s-zone' %ak] = zonek
-			POST['%s-week' %ak] = wk
-			POST['%s-weekdate' %ak] = dk
 
-			f = forms.IndicatorForm(data=POST, prefix=ak)
-			if f.is_valid():
-				i = f.save(commit=False)
-				inds.append(i)
+			if send:
+				taskqueue.add(url='/_ah/tasks/indicator', params={'isubkey': sk, 'snapareakey': ak})
 			else:
-				return 'Faltando dados.'
+				areak = a.get_key('area')
+				zonek = a.get_key('zone')
+				POST['%s-submission' %ak] = sk
+				POST['%s-snaparea' %ak] = ak
+				POST['%s-area' %ak] = areak
+				POST['%s-zone' %ak] = zonek
+				POST['%s-week' %ak] = wk
+				POST['%s-weekdate' %ak] = dk
+
+				f = forms.IndicatorForm(data=POST, prefix=ak)
+				if f.is_valid():
+					i = f.save(commit=False)
+					inds.append(i)
+				else:
+					return 'Faltando dados.'
 
 		if send:
-			db.put(inds)
+			return False
 
-		ords = []
 		for i in inds:
 			areak = i.get_key('area')
 			zonek = i.get_key('zone')
 			snapk = i.get_key('snaparea')
 
-			if send:
-				ik = str(i.key())
-				fb = forms.BaptismForm
-				fc = forms.ConfirmationForm
-			else:
-				ik = ''
-				fb = forms.BaptismProcessForm
-				fc = forms.ConfirmationProcessForm
+			ik = ''
+			fb = forms.BaptismProcessForm
+			fc = forms.ConfirmationProcessForm
 
 			bn = 'b_%s-PB' %snapk
 			for b in range(int(POST.get('%s-PB' %snapk))):
@@ -569,16 +568,7 @@ class IndicatorSubmission(DerefModel):
 				POST['%s-date' %p] = POST['%s-date' %p].partition(' ')[0]
 
 				f = fb(data=POST, prefix=p)
-				if f.is_valid():
-					if send: # don't even try to save these since we don't have indicator
-						o = f.save(commit=False)
-						ords.append(o)
-
-						if o.age >= 18 and o.sex == BAPTISM_SEX_M:
-							i.BM += 1
-							if i not in ords:
-								ords.append(i)
-				else:
+				if not f.is_valid():
 					return 'Faltando batismo dados.'
 
 			cn = 'c_%s-PC' %snapk
@@ -594,15 +584,10 @@ class IndicatorSubmission(DerefModel):
 				POST['%s-date' %p] = POST['%s-date' %p].partition(' ')[0]
 
 				f = fc(data=POST, prefix=p)
-				if f.is_valid():
-					if send: # don't even try to save these since we don't have indicator
-						o = f.save(commit=False)
-						ords.append(o)
-				else:
+				if not f.is_valid():
 					return 'Faltando confirmação dados.'
 
-		if send:
-			db.put(ords)
+		return False # success
 
 class Indicator(DerefModel):
 	submission = db.ReferenceProperty(IndicatorSubmission, required=True)

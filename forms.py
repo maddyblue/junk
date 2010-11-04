@@ -33,3 +33,8 @@ class ConfirmationProcessForm(djangoforms.ModelForm):
 class WeekForm(djangoforms.ModelForm):
 	class Meta:
 		model = models.Week
+
+class AreaForm(djangoforms.ModelForm):
+	class Meta:
+		model = models.Area
+		exclude = ['does_not_report', 'is_open', 'zone_name', 'reports_with']

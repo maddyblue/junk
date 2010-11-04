@@ -4,6 +4,7 @@ from google.appengine.api import memcache
 from google.appengine.datastore import entity_pb
 from google.appengine.ext import db
 
+import logging
 import main
 import models
 import datetime
@@ -262,9 +263,9 @@ def render_zones():
 	zones = {}
 
 	ms = models.Missionary.all().filter('is_released', False).order('area_name').fetch(500)
-	prefetch_refprops(ms, Missionary.area)
+	prefetch_refprops(ms, models.Missionary.area)
 	areas = [m.area for m in ms]
-	prefetch_refprops(areas, Area.district)
+	prefetch_refprops(areas, models.Area.district)
 
 	for m in ms:
 		if m.zone_name not in zones:
@@ -288,11 +289,13 @@ def render_zones():
 		elif a not in z[n]:
 			z[n].append(a)
 
-		if m.calling == MISSIONARY_CALLING_LZL:
+		if m.calling == models.MISSIONARY_CALLING_LZL:
 			z['_zl'] = m
-		elif m.is_dl:
+		elif m.is_dl and a.district.key() == a.key():
 			z['dl_' + m.area.name] = m
 			z['_d'].append(m.area)
+		elif m.is_dl: # dl incorrectly marked?
+			logging.error('%s in %s incorrectly marked as LD' %(m, a))
 
 	return zones
 
@@ -425,8 +428,11 @@ def get_area_inds(ak):
 			'chxl': '0:|' +'|'.join(['%i/%s' %(i.weekdate.day, short_months[i.weekdate.month]) for i in inds]),
 		}
 
-		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições')]:
-			d = [getattr(i, k) for i in inds]
+		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições'), ('Con', 'Contatos'), ('PBM', 'Data Marcada'), ('TL', 'Total Lições')]:
+			if k == 'TL':
+				d = [i.OL + i.LM + i.LMARC for i in inds]
+			else:
+				d = [getattr(i, k) for i in inds]
 			data[k] = (v, d)
 
 		memcache.add(n, data)
@@ -445,7 +451,7 @@ def get_zone_inds(zk):
 		sums = []
 		dates = []
 		last = datetime.date(1, 1, 1)
-		grab = ['PB', 'PC', 'PS', 'NP', 'OL', 'LM']
+		grab = ['PB', 'PC', 'PS', 'NP', 'OL', 'LM', 'PBM', 'Con', 'LMARC']
 		for i in inds:
 			if last != i.weekdate:
 				dates.append(i.weekdate)
@@ -459,8 +465,11 @@ def get_zone_inds(zk):
 			'chxl': '0:|' +'|'.join(['%i/%s' %(i.day, short_months[i.month]) for i in dates]),
 		}
 
-		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições')]:
-			d = [i[k] for i in sums]
+		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições'), ('Con', 'Contatos'), ('PBM', 'Data Marcada'), ('TL', 'Total Lições')]:
+			if k == 'TL':
+				d = [i['OL'] + i['LM'] + i['LMARC'] for i in sums]
+			else:
+				d = [i[k] for i in sums]
 			data[k] = (v, d)
 
 		memcache.add(n, data)

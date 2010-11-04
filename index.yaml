@@ -95,6 +95,11 @@ indexes:
 - kind: Missionary
   properties:
   - name: is_released
+  - name: area_name
+
+- kind: Missionary
+  properties:
+  - name: is_released
   - name: mission_name
 
 - kind: Missionary
