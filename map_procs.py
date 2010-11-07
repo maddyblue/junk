@@ -1,7 +1,10 @@
-from mapreduce import operation as op
 from google.appengine.api import memcache
+from google.appengine.ext import db
+from mapreduce import context
+from mapreduce import operation as op
 
 import models
+from datetime import date
 
 def null(entity):
 	pass
@@ -80,3 +83,56 @@ def sync_missionary(entity):
 	entity.is_dl = entity.calling in [models.MISSIONARY_CALLING_LD, models.MISSIONARY_CALLING_LDTR, models.MISSIONARY_CALLING_SELD]
 
 	yield op.db.Put(entity)
+
+def best_area(entity):
+	inds = ['PB', 'PS']
+	kind = 'area'
+
+	records = {}
+	indicators = models.Indicator.all().filter(kind, entity).order('weekdate').fetch(500)
+
+	for ind in indicators:
+		for i in inds:
+			v = getattr(ind, i)
+			if i not in records or v > records[i][0]:
+				records[i] = [v, ind.weekdate]
+
+	r = []
+	for k, v in records.iteritems():
+		ek = str(entity.key())
+		r.append(models.Best(key_name='%s-%s-%s' %(kind, ek, k), reference=ek, ind=k, value=v[0], date=v[1]))
+
+	db.put(r)
+
+def best_zone(entity):
+	inds = ['PB', 'PS']
+	kind = 'zone'
+
+	records = {}
+	sums = {}
+	indicators = models.Indicator.all().filter(kind, entity).order('weekdate').fetch(500)
+
+	for ind in indicators:
+		for i in inds:
+			v = getattr(ind, i)
+			k = '%s-%i-%i' %(i, ind.weekdate.month, ind.weekdate.year)
+
+			if k not in sums:
+				sums[k] = v
+			else:
+				sums[k] += v
+
+	for k, v in sums.iteritems():
+		s = k.split('-')
+		i = s[0]
+
+		if i not in records or v > records[i][0]:
+			records[i] = (v, s[1], s[2])
+
+	r = []
+	for k, v in records.iteritems():
+		d = date(int(v[2]), int(v[1]), 1)
+		ek = str(entity.key())
+		r.append(models.Best(key_name='%s-%s-%s' %(kind, ek, k), reference=ek, ind=k, value=v[0], date=d))
+
+	db.put(r)

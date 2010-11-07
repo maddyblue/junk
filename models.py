@@ -142,10 +142,38 @@ class MissionaryProfile(db.Model):
 	entrance_place = db.StringProperty(indexed=False)
 	entrance_state = db.StringProperty(indexed=False)
 
+def deuni(s):
+	l = [
+		(u'á', "a"),
+		(u'â', "a"),
+		(u'ã', "a"),
+		(u'é', "e"),
+		(u'ê', "e"),
+		(u'í', "i"),
+		(u'ó', "o"),
+		(u'ú', "u"),
+		(u'ç', "c"),
+		(u'ñ', "n"),
+	]
+
+	for i in l:
+		s = s.replace(i[0], i[1])
+
+	return str(s)
+
+def photo_file(s):
+	s = deuni(s.lower())
+
+	s = s.replace("'", '')
+	s = s.replace(".", '')
+	s = s.replace(' ', '_')
+
+	return s
+
 class Missionary(DerefModel):
 	mission_name = db.StringProperty(required=True)
 	calling = db.StringProperty(required=True, choices=MISSIONARY_CALLING_CHOICES)
-	is_senior = db.BooleanProperty(required=True)
+	is_senior = db.BooleanProperty(required=True, default=False)
 	sex = db.StringProperty(required=True, choices=MISSIONARY_SEX_CHOICES)
 	area = db.ReferenceProperty(Area)
 	start = db.DateProperty()
@@ -181,6 +209,15 @@ class Missionary(DerefModel):
 	area_name = db.StringProperty()
 	is_dl = db.BooleanProperty()
 	is_released = db.BooleanProperty()
+
+	@property
+	def photo_file(self):
+		s = photo_file(self.mission_name)
+
+		if self.sex == MISSIONARY_SEX_SISTER:
+			s = 'sis_' + s
+
+		return s
 
 	def display(self):
 		if self.sex == MISSIONARY_SEX_ELDER:
@@ -746,3 +783,9 @@ class Configuration(db.Model):
 			return None
 		else:
 			return c.value
+
+class Best(db.Model):
+	reference = db.StringProperty(required=True)
+	ind = db.StringProperty(required=True)
+	value = db.IntegerProperty(required=True)
+	date = db.DateProperty(required=True)

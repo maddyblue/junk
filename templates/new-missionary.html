@@ -1,0 +1,22 @@
+<html>
+<body>
+
+{% if done %}
+Good: {{ done }}
+<br/><br/>
+{% endif %}
+
+{% if missionary %}
+
+<form method="POST">
+<table>
+{{ missionary.as_table }}
+{{ missionaryprofile.as_table }}
+</table>
+<input type="submit" name="submit" value="missionary"/>
+</form>
+
+{% endif %}
+
+</body>
+</html

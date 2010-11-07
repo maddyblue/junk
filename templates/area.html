@@ -1,3 +1,10 @@
+<a href="/area-letter/{{ area.key }}">Carta da Dupla</a> - escreve cartas para seu Bispo e os líderes da sua unidade
+
+<p/>Recordes da área:
+{% for b in best %}
+<br/><b>{{ b.ind|ind_name }}</b>: {{ b.value }} na data {{ b.date }}
+{% endfor %}
+
 {% for chart in charts %}
 <br/>{{ chart }}
 {% endfor %}

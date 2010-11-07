@@ -1,0 +1,11 @@
+{% if done %}
+Set photo: {{ done }}
+<br/><img src="/photo/{{ done.key }}"/>
+<p/>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+<select name="missionary">{{ ms }}</select>
+<input type="file" name="photo"/>
+<input type="submit"/>
+</form>

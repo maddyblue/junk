@@ -1,3 +1,12 @@
+Recordes da zona por mês:
+{% for b in best %}
+<br/><b>{{ b.ind|ind_name }}</b>: {{ b.value }} na data {{ b.date }}
+{% endfor %}
+
+{% for a in areas %}
+<br/><a href="/area/{{ a.key }}">{{ a.name }}</a>
+{% endfor %}
+
 {% for chart in charts %}
 <br/>{{ chart }}
 {% endfor %}

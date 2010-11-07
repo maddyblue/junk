@@ -12,13 +12,16 @@ import datetime
 # cache names
 C_AOPTS = 'aopts'
 C_AREAS = 'areas'
-C_AREA_INDS = 'area-%s'
+C_AREAS_IN_ZONE = 'areas-in-zone-%s'
+C_AREA_INDS = 'area-%s-%s'
 C_AWS = 'aws'
+C_BEST = 'best-%s'
 C_IBC = 'ibc-%s'
 C_INDS = 'inds-%s'
 C_MAIN_JS = 'main-js'
 C_MISSIONARIES = 'missionaries'
 C_MOPTS = 'mopts-%s'
+C_MS = 'ms'
 C_M_BY_AREA = 'mbyarea-%s'
 C_M_PHOTO = 'm-photo-%s'
 C_RELATORIO_PAGE = 'relatorio'
@@ -29,7 +32,7 @@ C_SNAPSHOT = 'snapshot-%s'
 C_WEEK = 'week'
 C_WOPTS = 'wopts'
 C_ZONES = 'zones'
-C_ZONE_INDS = 'zone-%s'
+C_ZONE_INDS = 'zone-%s-%s'
 C_ZOPTS = 'zopts-%s'
 
 def prefetch_refprops(entities, *props):
@@ -88,13 +91,13 @@ def get_snapshot(key):
 
 	return data
 
-# list of missionaries as html options: for weekly reports
+# list of missionaries as html options
 def get_mopts(released=False):
 	n = C_MOPTS %released
 	mopts = memcache.get(n)
 	if mopts is None:
 		mopts = render_mopts(released)
-		memcache.add(n, mopts, 3600)
+		memcache.add(n, mopts)
 
 	return mopts
 
@@ -108,7 +111,7 @@ def get_aopts():
 	aopts = memcache.get(n)
 	if aopts is None:
 		aopts = render_aopts()
-		memcache.add(n, aopts, 3600)
+		memcache.add(n, aopts)
 
 	return aopts
 
@@ -237,12 +240,10 @@ def get_ibc(week):
 def get_inds(week):
 	n = C_INDS %(week.key())
 	data = unpack(memcache.get(n))
+	data = None
+
 	if data is None:
-		data = []
-
-		for sub in models.IndicatorSubmission.all().filter('week', week).filter('used', True).fetch(100):
-			data.extend(models.Indicator.all().filter('submission', sub).fetch(100))
-
+		data = models.Indicator.all().filter('week', week).fetch(500)
 		memcache.add(n, pack(data))
 
 	return data
@@ -314,6 +315,17 @@ def get_missionaries():
 		memcache.add(n + 'area', pack([m.area for m in data]))
 		memcache.add(n + 'missionary', pack(data))
 		return data
+
+# list of active missionaries sorted by mission_name
+def get_ms():
+	n = C_MS
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Missionary.all().filter('is_released', False).order('mission_name').fetch(500)
+		memcache.add(n, pack(data))
+
+	return data
 
 # dictionary with keys as Area.key() and values as SnapMissionaries in the areas
 def get_m_by_area(week):
@@ -415,12 +427,12 @@ def get_main_js():
 
 short_months = ['', 'jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
 
-def get_area_inds(ak):
-	n = C_AREA_INDS %ak
+def get_area_inds(ak, weeks=12):
+	n = C_AREA_INDS %(ak, weeks)
 	data = memcache.get(n)
 
 	if not data:
-		date = datetime.date.today() - datetime.timedelta(7 * 10)
+		date = datetime.date.today() - datetime.timedelta(7 * weeks)
 		inds = models.Indicator.all().filter('area', db.Key(ak)).filter('weekdate >=', date).order('-weekdate').fetch(500)
 		inds.reverse()
 
@@ -439,12 +451,13 @@ def get_area_inds(ak):
 
 	return data
 
-def get_zone_inds(zk):
-	n = C_ZONE_INDS %zk
+def get_zone_inds(zk, weeks=12):
+	n = C_ZONE_INDS %(zk, weeks)
 	data = memcache.get(n)
+	data = None
 
 	if not data:
-		date = datetime.date.today() - datetime.timedelta(7 * 10)
+		date = datetime.date.today() - datetime.timedelta(7 * weeks)
 		inds = models.Indicator.all().filter('zone', db.Key(zk)).filter('weekdate >=', date).order('-weekdate').fetch(500)
 		inds.reverse()
 
@@ -461,8 +474,13 @@ def get_zone_inds(zk):
 			for g in grab:
 				sums[-1][g] += getattr(i, g)
 
+		if weeks <= 12:
+			dates = ['%i/%s' %(i.day, short_months[i.month]) for i in dates]
+		else:
+			dates = ['%i/%s' %(i.day, short_months[i.month][0].upper()) for i in dates]
+
 		data = {
-			'chxl': '0:|' +'|'.join(['%i/%s' %(i.day, short_months[i.month]) for i in dates]),
+			'chxl': '0:|' +'|'.join(dates),
 		}
 
 		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('OL', 'Outras Lições'), ('Con', 'Contatos'), ('PBM', 'Data Marcada'), ('TL', 'Total Lições')]:
@@ -483,6 +501,29 @@ def get_areas():
 
 	if not data:
 		data = models.Area.all().filter('is_open', True).order('zone').order('name').fetch(500)
+		memcache.add(n, pack(data))
+
+	return data
+
+# returns a list of open areas that report alone within the zone
+def get_areas_in_zone(zone):
+	n = C_AREAS_IN_ZONE %zone.key()
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Area.all().filter('is_open', True).filter('zone', zone).order('name').fetch(500)
+		data = [i for i in data if not i.does_not_report and i.get_key('reports_with') is None]
+
+		memcache.add(n, pack(data))
+
+	return data
+
+def get_best(key):
+	n = C_BEST %key
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Best.all().filter('reference', key).fetch(100)
 		memcache.add(n, pack(data))
 
 	return data

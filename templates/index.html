@@ -114,7 +114,11 @@ theme(getCookie('theme'));
 	<h3>{{ session.user }}</h3>
 	<ul>
 		<li>{{ session.user.calling }}</li>
+		{% if session.user|is_zl %}
+		<li>Zona: <a href="/zone/{{ session.user|getkey:"zone" }}">{{ session.user.zone_name }}</a></li>
+		{% else %}
 		<li>Zona: {{ session.user.zone_name }}</li>
+		{% endif %}
 		<li>Área: <a href="/area/{{ session.user|getkey:"area" }}">{{ session.user.area_name }}</a></li>
 		<li><a href="/logout/">Sair</a></li>
 	</ul>
@@ -133,6 +137,7 @@ theme(getCookie('theme'));
 		<li><a href="/milagre/">Milagre da Semana</a></li>
 		<li><a href="/noticias/">Notícias do Campo</a></li>
 		<li><a href="/clima/">Clima da Semana</a></li>
+		<li><a href="/quadro/">Quadro da Missão</a></li>
 	</ul>
 
 	{% else %}

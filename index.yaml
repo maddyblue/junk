@@ -39,6 +39,16 @@ indexes:
 
 - kind: Indicator
   properties:
+  - name: Area
+  - name: weekdate
+
+- kind: Indicator
+  properties:
+  - name: Zone
+  - name: weekdate
+
+- kind: Indicator
+  properties:
   - name: __key__
     direction: desc
 
@@ -52,6 +62,11 @@ indexes:
   - name: area
   - name: weekdate
     direction: desc
+
+- kind: Indicator
+  properties:
+  - name: zone
+  - name: weekdate
 
 - kind: Indicator
   properties:

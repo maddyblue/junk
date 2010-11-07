@@ -1,0 +1,17 @@
+{% for areas in zones %}
+	<table border="1">
+	<tr><th>Zona {{ areas.0.0.zone_name }}</th></tr>
+	{% for ms in areas %}
+		<tr><td align="center"><b>{{ ms.0.area.name }}</b><br/>
+		{% for m in ms %}
+			<img src="/missionaries/{{ m.photo_file }}.jpg" width="50" />
+		{% endfor %}
+		<br/>
+		{% for m in ms %}
+			{{ m.display }}{% if not forloop.last %},{% endif %}
+		{% endfor %}
+		<br/></td></tr>
+	{% endfor %}
+	</table>
+<br/><br/>
+{% endfor %}

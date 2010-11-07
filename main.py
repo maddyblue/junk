@@ -28,9 +28,11 @@ import sys
 # use reportlab patched from http://ruudhelderman.appspot.com/testpdf
 sys.path.insert(0, 'reportlab.zip')
 from reportlab.lib import units
+from reportlab.lib.utils import ImageReader
 from reportlab.lib.colors import red, black
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
+import StringIO
 
 # returns True if authenticated
 def basicAuth(func):
@@ -337,6 +339,15 @@ class MapControlPage(webapp.RequestHandler):
 			for i in self.request.POST.getall('kind'):
 				r = control.start_map('Make Index ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
 				self.response.out.write('make index %s, job id %s<br/>' %(i, r))
+		elif p == 'Compute Best':
+			handler_spec = 'map_procs.best_'
+			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
+
+			r = control.start_map('Compute Best Area', handler_spec + 'area', reader_spec, {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
+			self.response.out.write('compute best area, job id %s<br/>' %r)
+
+			r = control.start_map('Compute Best Zone', handler_spec + 'zone', reader_spec, {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
+			self.response.out.write('compute best zone, job id %s<br/>' %r)
 		else:
 			self.response.out.write('error')
 
@@ -663,6 +674,38 @@ class MakeNewPage(webapp.RequestHandler):
 			d = {s: f}
 
 		rendert(self, 'make-new.html', d)
+
+class NewMissionaryPage(webapp.RequestHandler):
+	forms = {
+		'missionary': forms.MissionaryForm,
+		'missionaryprofile': forms.MissionaryProfileForm,
+	}
+
+	def get_f(self):
+		return dict([(k, v()) for k, v in self.forms.iteritems()])
+
+	def get(self):
+		render(self, 'new-missionary.html', 'New Missionary', self.get_f())
+
+	def post(self):
+		POST = self.request.POST
+		pf = forms.MissionaryProfileForm(data=POST)
+		mf = forms.MissionaryForm(data=POST)
+		done = None
+
+		if pf.is_valid():
+			p = pf.save(commit=True)
+			POST['profile'] = str(p.key())
+			mf = forms.MissionaryForm(data=POST)
+			if mf.is_valid():
+				m = mf.save(commit=True)
+				done = m
+				mf = self.forms['missionary']()
+				pf = self.forms['missionaryprofile']()
+			else:
+				p.delete()
+
+		render(self, 'new-missionary.html', 'New Missionary', {'done': done, 'missionary': mf, 'missionaryprofile': pf})
 
 class EnterRPMPage(webapp.RequestHandler):
 	def get(self):
@@ -1258,12 +1301,9 @@ class BaptismsPerWard(webapp.RequestHandler):
 	def get(self):
 		w = cache.get_week()
 		aws = cache.get_aws()
-		areas = dict([(i.key(), i) for i in cache.get_snapareas(w)])
 		inds = {}
 		for i in cache.get_inds(w):
-
-			a = areas[i.get_key('area')].get_key('area')
-			ward = aws[a].ward.key()
+			ward = aws[i.get_key('area')].ward.key()
 
 			if ward not in inds:
 				inds[ward] = 0
@@ -1287,20 +1327,21 @@ class BaptismsPerMissionary(webapp.RequestHandler):
 	def get(self):
 		w = cache.get_week()
 		areas = dict([(i.key(), i) for i in cache.get_snapareas(w)])
+		aws = cache.get_aws()
 		missionaries = cache.get_snapmissionaries(w)
 		cache.prefetch_refprops(missionaries, SnapMissionary.missionary)
 		baps = {}
 		d = []
 
 		for i in cache.get_inds(w):
-			a = areas[i.get_key('area')]
+			a = aws[i.get_key('area')]
 			if a.reports_with:
 				a = a.reports_with
 
 			baps[a.key()] = i.PB
 
 		for m in missionaries:
-			a = areas[m.get_key('snaparea')]
+			a = aws[areas[m.get_key('snaparea')].get_key('area')]
 			if a.does_not_report:
 				b = ''
 			else:
@@ -1397,25 +1438,35 @@ class AreaPage(webapp.RequestHandler):
 		data = cache.get_area_inds(akey)
 
 		charts = []
-		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}, 8))
-		charts.append(make_chart(data, ['LM', 'OL', 'TL'], {'chtt': 'Doutrinas Ensinadas'}, 25, 4))
-		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores'}, 20, 3))
-		charts.append(make_chart(data, ['Con'], {'chtt': 'Contatos'}, 100, 10))
+		if data['PB'][1]:
+			charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}, 8))
+			charts.append(make_chart(data, ['LM', 'OL', 'TL'], {'chtt': 'Doutrinas Ensinadas'}, 25, 4))
+			charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores'}, 20, 3))
+			charts.append(make_chart(data, ['Con'], {'chtt': 'Contatos'}, 100, 10))
 
-		render(self, 'area.html', unicode(area), {'area': area, 'charts': charts})
+		best = cache.get_best(akey)
+
+		render(self, 'area.html', unicode(area), {'area': area, 'charts': charts, 'best': best})
 
 class ZonePage(webapp.RequestHandler):
 	def get(self, zkey):
 		zone = Zone.get(zkey)
-		data = cache.get_zone_inds(zkey)
+		data = cache.get_zone_inds(zkey, 12)
+		time = '12 semanas'
 
 		charts = []
-		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}))
-		charts.append(make_chart(data, ['LM', 'OL', 'TL'], {'chtt': 'Doutrinas Ensinadas'}))
-		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores'}))
-		charts.append(make_chart(data, ['Con'], {'chtt': 'Contatos'}))
+		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
+		charts.append(make_chart(data, ['LM', 'OL', 'TL'], {'chtt': 'Doutrinas Ensinadas - ' + time}))
+		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores - ' + time}))
+		charts.append(make_chart(data, ['Con'], {'chtt': 'Contatos - ' + time}))
 
-		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts})
+		data = cache.get_zone_inds(zkey, 18) # four months
+		time = '4 meses'
+		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
+
+		areas = cache.get_areas_in_zone(zone)
+
+		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas})
 
 class LoginPage(webapp.RequestHandler):
 	def get(self):
@@ -1474,8 +1525,7 @@ def mk_checkbox(name, opt):
 
 class TransferPage(webapp.RequestHandler):
 	def get_missionaries(self):
-		#ms = get_missionaries() # the get_missionaries() call is very expensive on the devel server, so just use this below, since order doesn't really matter
-		return models.Missionary.all().filter('is_released', False).fetch(500)
+		return cache.get_ms()
 
 	def get(self):
 		ms = self.get_missionaries()
@@ -1705,10 +1755,86 @@ class ProcIndHandler(webapp.RequestHandler):
 
 class EmailPage(webapp.RequestHandler):
 	def get(self):
-		ms = Missionary.all().filter('is_released', False).fetch(500)
+		ms = cache.get_ms()
 		emails = [m.email for m in ms if m.calling in [MISSIONARY_CALLING_AP, MISSIONARY_CALLING_LZ, MISSIONARY_CALLING_LZL]]
 
 		self.response.out.write('; '.join(emails))
+
+class QuadroPhotoPage(webapp.RequestHandler):
+	def get(self):
+		ms = cache.get_missionaries()
+
+		zones = []
+		z = None
+		a = None
+
+		for m in ms:
+			ak = m.get_key('area')
+			zk = m.get_key('zone')
+
+			if z != zk:
+				zones.append([])
+				z = zk
+			if a != ak:
+				zones[-1].append([])
+				a = ak
+			zones[-1][-1].append(m)
+
+		render(self, 'quadro.html', 'Quadro', {'zones': zones})
+
+class SetPhotoPage(webapp.RequestHandler):
+	def get(self):
+		ms = cache.get_mopts()
+		render(self, 'set-photo.html', 'Set Photo', {'ms': ms})
+
+	def post(self):
+		m = Missionary.get(self.request.POST['missionary'])
+		p = m.profile
+		photo = images.Image(image_data=self.request.get('photo'))
+		width = 300
+		if photo.width > width:
+			photo.resize(width=width)
+		photo.im_feeling_lucky()
+		p.photo = db.Blob(photo.execute_transforms())
+		p.save()
+		memcache.delete(cache.C_M_PHOTO %m.key())
+
+		render(self, 'set-photo.html', 'Set Photo', {'ms': cache.get_mopts(), 'done': m})
+
+class AreaLetterPage(webapp.RequestHandler):
+	def get(self, akey):
+		self.session = Session()
+
+		c = canvas.Canvas(self.response.out, bottomup=0)
+		c.setPageSize(A4)
+		c.width = 90
+		c.height = 9
+		c.translate(units.cm, units.cm)
+		c.setLineWidth(0.5)
+		c.setFontSize(8)
+
+		ms = Missionary.all().filter('area', db.Key(akey)).fetch(10)
+		ms.sort(cmp=lambda x,y: cmp(y.is_senior, x.is_senior))
+		cache.prefetch_refprops(ms, Missionary.profile)
+
+		x = 0
+		width = 100
+
+		for m in ms:
+			img = canvas.ImageReader(StringIO.StringIO(images.rotate(m.profile.photo, 180, images.JPEG)))
+			c.drawImage(img, x, 0, width=width, height=150, preserveAspectRatio=True)
+			x += width + 10
+
+		i = 785
+
+		while i > 160:
+			c.line(0, i, 540, i)
+			i -= 20
+
+		self.response.headers['Content-Type'] = 'application/pdf'
+		self.response.headers['Content-Disposition'] = 'attachment; filename=area-carta.pdf'
+
+		c.save()
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -1721,6 +1847,7 @@ application = webapp.WSGIApplication([
 	('/milagre/', MilagrePage),
 	('/noticias/', NoticiasPage),
 	('/clima/', ClimaPage),
+	('/quadro/', QuadroPhotoPage),
 
 	('/js/main.js', MainJS),
 	('/photo/(.*)', PhotoHandler),
@@ -1735,6 +1862,7 @@ application = webapp.WSGIApplication([
 	('/bap-per-missionary/', BaptismsPerMissionary),
 
 	('/area/(.*)', AreaPage),
+	('/area-letter/(.*)', AreaLetterPage),
 	('/zone/(.*)', ZonePage),
 
 	# task queue
@@ -1756,6 +1884,8 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
 	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
 	('/_ah/missao-rio/map-control/', MapControlPage),
+	('/_ah/missao-rio/new-missionary/', NewMissionaryPage),
+	('/_ah/missao-rio/set-photo/', SetPhotoPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/sync/', SyncPage),
 	('/_ah/missao-rio/transfer/', TransferPage),
