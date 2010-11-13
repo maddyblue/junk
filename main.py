@@ -154,31 +154,32 @@ class NumerosPage(webapp.RequestHandler):
 		formstr += '<input type="hidden" name="zona" value="%s" />' %zone.key()
 		formstr += '<input type="hidden" name="week" value="%s" />' %w.key()
 		formstr += '<table class="relatorio">'
-		formstr += '<tr><td colspan="15"><h1>%s</h1></td></tr><tr><td</td><td></td>' %zone.name
+		formstr += '<tr><td colspan="15"><h1>%s</h1></td></tr><tr><td></td><td></td>' %zone.name
 		formstr += ''.join(['<td>%s</td>' %i for i in fields])
 		formstr += '</tr>'
 
 		for a in snapareas:
 			ak = str(a.key())
 			name = a.get_key('area').name()
-			formstr += '<tr><td rowspan="2">%s</td><td>Metas: </td>' %name
-			formstr += '<input type="hidden" name="area" value="%s" />' %ak
+			formstr += '<tr><td rowspan="2">%s</td><td>Metas:' %name
+			formstr += '<input type="hidden" name="area" value="%s" /></td>' %ak
 			for i in fields:
 				formstr += '<td><input name="%s-%s_meta" class="textmetas" type="text" onchange="numeroChange(this);" value="0" /></td>' %(ak, i)
 
-			formstr += '</tr><tr><td>Realizadas: </td>'
+			formstr += '</tr><tr><td>Realizadas:</td>'
 			for i in fields:
 				if i == 'PB': changestr = 'batismoChange(this, \'%s\');' %name
 				elif i == 'PC': changestr = 'confirmChange(this, \'%s\');' %name
 				else: changestr = 'numeroChange(this);'
 
 				formstr += '<td><input onchange="%s" name="%s-%s" class="textrealizadas" type="text" value="0" /></td>' %(changestr, ak, i)
+			formstr += '</tr>'
 
-		formstr += '</tr></table>'
+		formstr += '</table>'
 		formstr += ''.join(['<div id="b_%s-PB" class="baptism"></div>' %a.key() for a in snapareas])
 		formstr += ''.join(['<div id="c_%s-PC" class="confirmation"></div>' %a.key() for a in snapareas])
 
-		formstr += '<br /><input id="enviarbutton" type="button" value="Enviar" onclick="this.disabled=true; enviarNumeros();" /></div><div class="space-line"></div></form>'
+		formstr += '<br /><input id="enviarbutton" type="button" value="Enviar" onclick="this.disabled=true; enviarNumeros();" /><div class="space-line"></div></form>'
 
 		render(self, '', 'Passar Números', {'page_data': formstr, 'headstuff': '<script type="text/javascript" src="/js/main.js"></script>'})
 
@@ -348,6 +349,15 @@ class MapControlPage(webapp.RequestHandler):
 
 			r = control.start_map('Compute Best Zone', handler_spec + 'zone', reader_spec, {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('compute best zone, job id %s<br/>' %r)
+		elif p == 'Compute Sums':
+			handler_spec = 'map_procs.sums_'
+			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
+
+			control.start_map('Compute Sums: Area', handler_spec + 'area', reader_spec, {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
+			control.start_map('Compute Sums: Zone', handler_spec + 'zone', reader_spec, {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
+
+			self.response.out.write('done')
+
 		else:
 			self.response.out.write('error')
 
@@ -374,6 +384,10 @@ class MissionStatusPage(webapp.RequestHandler):
 		rendert(self, 'mission-status.html', {'zones': zones})
 
 def drawZone(c, missionaries, name, x, y):
+	if name not in missionaries:
+		logging.error('%s not an open zone' %name)
+		return y
+
 	W = c.W
 	H = c.H
 	F = c.F
@@ -390,6 +404,11 @@ def drawZone(c, missionaries, name, x, y):
 	c.setFillColor(black)
 
 	zone = missionaries[name]
+
+	if '_zl' not in zone:
+		logging.warn('%s does not have a ZL' %name)
+		return y
+
 	zl = zone['_zl']
 
 	y = drawArea(c, x, y, zone, zl.area)
@@ -1465,8 +1484,9 @@ class ZonePage(webapp.RequestHandler):
 		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
 
 		areas = cache.get_areas_in_zone(zone)
+		best = cache.get_best(zkey)
 
-		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas})
+		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas, 'best': best})
 
 class LoginPage(webapp.RequestHandler):
 	def get(self):
@@ -1649,7 +1669,9 @@ class AreaDistrictPage(webapp.RequestHandler):
 		afs = []
 		for a in areas:
 			ak = str(a.key())
-			afs.append((a, mk_select(ak + '_district', anames, str(a.get_key('district'))), mk_select(ak + '_zone', zones, str(a.get_key('zone')))))
+			if a.does_not_report: c = 'checked'
+			else: c = ''
+			afs.append((a, mk_select(ak + '_district', anames, str(a.get_key('district'))), mk_select(ak + '_zone', zones, str(a.get_key('zone'))), mk_select(ak + '_reports_with', anames, str(a.get_key('reports_with'))), c))
 
 		render(self, 'areas.html', 'Areas and Districts', {'areas': afs})
 
@@ -1667,10 +1689,18 @@ class AreaDistrictPage(webapp.RequestHandler):
 
 			a.zone = db.Key(self.request.POST[akey + '_zone'])
 			a.phone = self.request.POST[akey + '_phone']
+			
+			try:
+				reports_with = db.Key(self.request.POST[akey + '_reports_with'])
+			except:
+				reports_with = None
+			a.reports_with = reports_with
+
+			a.does_not_report = (akey + '_does_not_report') in self.request.POST
 
 		db.put(areas)
 
-		render(self, '', 'Areas and Districts', {'page_data': 'Done. Remember to run <a href="/_ah/missao-rio/sync/">sync</a>.'})
+		render(self, '', 'Areas and Districts', {'page_data': 'Done. Remember to run <a href="/_ah/missao-rio/sync/?a=1&z=1">sync</a>.'})
 
 class ProcIndHandler(webapp.RequestHandler):
 	def post(self):
@@ -1836,6 +1866,52 @@ class AreaLetterPage(webapp.RequestHandler):
 
 		c.save()
 
+def get_empties():
+	mailboxes = 212
+	msboxes = [m.box for m in cache.get_ms() if m.box]
+	empties = set(range(1, mailboxes + 1)) - set(msboxes)
+	empties = list(empties)
+	empties.sort()
+
+	return empties
+
+class AssignMailboxesPage(webapp.RequestHandler):
+	def get(self):
+		e = get_empties()
+
+		ms = [m for m in cache.get_ms() if not m.box]
+		for m in ms:
+			m.box = e.pop(0)
+			self.response.out.write('<br/>%s: %s' %(m, m.box))
+
+		db.put(ms)
+		memcache.flush_all()
+
+class MailboxesPage(webapp.RequestHandler):
+	def get(self, t):
+		ms = cache.get_ms()
+
+		if t == 'zone':
+			ms.sort(cmp=lambda x,y: cmp(x.box, y.box))
+			ms.sort(cmp=lambda x,y: cmp(x.zone_name, y.zone_name))
+
+		rendert(self, 'mailboxes.html', {'ms': ms})
+
+class SumsPage(webapp.RequestHandler):
+	def get(self, ekind, span, dt):
+		dt = dt.split('-')
+
+		if span == models.SUM_WEEK:
+			df = 'Y-m-d'
+			dt = date(int(dt[0]), int(dt[1]), int(dt[2]))
+		elif span == models.SUM_MONTH:
+			df = 'Y-m'
+			dt = date(int(dt[0]), int(dt[1]), 1)
+
+		sums = cache.get_sums(ekind, span, dt)
+
+		render(self, 'sums.html', 'Totais', {'sums': sums, 'dfilter': df})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/login/', LoginPage),
@@ -1864,6 +1940,7 @@ application = webapp.WSGIApplication([
 	('/area/(.*)', AreaPage),
 	('/area-letter/(.*)', AreaLetterPage),
 	('/zone/(.*)', ZonePage),
+	('/sums/(.*)/(.*)/(.*)', SumsPage),
 
 	# task queue
 	('/_ah/tasks/indicator', ProcIndHandler),
@@ -1873,6 +1950,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/', AdminPage),
 	('/_ah/missao-rio/area/', AreaListPage),
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
+	('/_ah/missao-rio/assign-mailboxes/', AssignMailboxesPage),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/email-zl/', EmailPage),
@@ -1881,6 +1959,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
 	('/_ah/missao-rio/make-new/', MakeNewPage),
+	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
 	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
 	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
 	('/_ah/missao-rio/map-control/', MapControlPage),

@@ -18,6 +18,7 @@ C_AWS = 'aws'
 C_BEST = 'best-%s'
 C_IBC = 'ibc-%s'
 C_INDS = 'inds-%s'
+C_INDS_AREA = 'inds-area-%s'
 C_MAIN_JS = 'main-js'
 C_MISSIONARIES = 'missionaries'
 C_MOPTS = 'mopts-%s'
@@ -29,6 +30,7 @@ C_SNAPAREAS = 'snapareas-%s'
 C_SNAPAREAS_BYZONE = 'snapareas-%s-%s'
 C_SNAPMISSIONARIES = 'snapmissionaries-%s'
 C_SNAPSHOT = 'snapshot-%s'
+C_SUMS = 'sums-%s-%s-%s'
 C_WEEK = 'week'
 C_WOPTS = 'wopts'
 C_ZONES = 'zones'
@@ -37,10 +39,12 @@ C_ZOPTS = 'zopts-%s'
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
-	ref_keys = [prop.get_value_for_datastore(x) for x, prop in fields]
+	ref_keys_with_none = [prop.get_value_for_datastore(x) for x, prop in fields]
+	ref_keys = filter(None, ref_keys_with_none)
 	ref_entities = dict((x.key(), x) for x in db.get(set(ref_keys)))
-	for (entity, prop), ref_key in zip(fields, ref_keys):
-		prop.__set__(entity, ref_entities[ref_key])
+	for (entity, prop), ref_key in zip(fields, ref_keys_with_none):
+		if ref_key is not None:
+			prop.__set__(entity, ref_entities[ref_key])
 	return entities
 
 def pack(models):
@@ -284,11 +288,15 @@ def render_zones():
 
 		a = m.area
 		d = a.district
-		n = 'd_' + d.name
-		if n not in z:
-			z[n] = [a]
-		elif a not in z[n]:
-			z[n].append(a)
+		if d:
+			n = 'd_' + d.name
+			if n not in z:
+				z[n] = [a]
+			elif a not in z[n]:
+				z[n].append(a)
+		else:
+			logging.warn('for missionary %s, area %s has no district' %(m, a.name))
+			continue
 
 		if m.calling == models.MISSIONARY_CALLING_LZL:
 			z['_zl'] = m
@@ -520,10 +528,34 @@ def get_areas_in_zone(zone):
 
 def get_best(key):
 	n = C_BEST %key
+	data = memcache.get(n)
+
+	if not data:
+		data = []
+		for i in models.Sum.inds:
+			for d in models.Sum.all().filter('ref', db.Key(key)).filter('best', i).fetch(100):
+				data.append((i, d.span, d.date, getattr(d, i)))
+
+		memcache.add(n, data)
+
+	return data
+
+def get_sums(ekind, span, date):
+	n = C_SUMS %(ekind, span, date)
 	data = unpack(memcache.get(n))
 
 	if not data:
-		data = models.Best.all().filter('reference', key).fetch(100)
+		data = models.Sum.all().filter('ekind', ekind).filter('span', span).filter('date', date).order('ref').fetch(500)
+		memcache.add(n, pack(data))
+
+	return data
+
+def get_inds_area(area):
+	n = C_INDS_AREA %area
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Indicator.all().filter('area', area).fetch(500)
 		memcache.add(n, pack(data))
 
 	return data

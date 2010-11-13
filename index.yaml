@@ -165,6 +165,18 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: Sum
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: Sum
+  properties:
+  - name: date
+  - name: ekind
+  - name: span
+  - name: ref
+
 - kind: Ward
   properties:
   - name: __key__

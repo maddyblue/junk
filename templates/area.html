@@ -2,7 +2,7 @@
 
 <p/>Recordes da área:
 {% for b in best %}
-<br/><b>{{ b.ind|ind_name }}</b>: {{ b.value }} na data {{ b.date }}
+<br/><b>{{ b.0|ind_name }}</b>: {{ b.3 }} {{ b|span_disp }}
 {% endfor %}
 
 {% for chart in charts %}

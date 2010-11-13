@@ -3,6 +3,8 @@ from google.appengine.ext import db
 from mapreduce import context
 from mapreduce import operation as op
 
+import cache
+import logging
 import models
 from datetime import date
 
@@ -84,55 +86,63 @@ def sync_missionary(entity):
 
 	yield op.db.Put(entity)
 
-def best_area(entity):
-	inds = ['PB', 'PS']
-	kind = 'area'
+def sums(entity, inds):
+	k = entity.kind()
+	key = str(entity.key())
+	puts = []
 
-	records = {}
-	indicators = models.Indicator.all().filter(kind, entity).order('weekdate').fetch(500)
-
-	for ind in indicators:
+	for span in models.SUM_SPAN_CHOICES:
+		p = {}
 		for i in inds:
-			v = getattr(ind, i)
-			if i not in records or v > records[i][0]:
-				records[i] = [v, ind.weekdate]
-
-	r = []
-	for k, v in records.iteritems():
-		ek = str(entity.key())
-		r.append(models.Best(key_name='%s-%s-%s' %(kind, ek, k), reference=ek, ind=k, value=v[0], date=v[1]))
-
-	db.put(r)
-
-def best_zone(entity):
-	inds = ['PB', 'PS']
-	kind = 'zone'
-
-	records = {}
-	sums = {}
-	indicators = models.Indicator.all().filter(kind, entity).order('weekdate').fetch(500)
-
-	for ind in indicators:
-		for i in inds:
-			v = getattr(ind, i)
-			k = '%s-%i-%i' %(i, ind.weekdate.month, ind.weekdate.year)
-
-			if k not in sums:
-				sums[k] = v
+			if span == models.SUM_MONTH:
+				wd = date(i.weekdate.year, i.weekdate.month, 1)
+			elif span == models.SUM_WEEK:
+				wd = date(i.weekdate.year, i.weekdate.month, i.weekdate.day)
 			else:
-				sums[k] += v
+				logging.error('invalid span type %s', span)
+				break
 
-	for k, v in sums.iteritems():
-		s = k.split('-')
-		i = s[0]
+			kn = models.Sum.keyname(key, span, wd)
 
-		if i not in records or v > records[i][0]:
-			records[i] = (v, s[1], s[2])
+			if kn not in p:
+				p[kn] = models.Sum(
+					key_name=kn,
+					ref=entity,
+					ekind=k,
+					span=span,
+					date=wd,
+				)
 
-	r = []
-	for k, v in records.iteritems():
-		d = date(int(v[2]), int(v[1]), 1)
-		ek = str(entity.key())
-		r.append(models.Best(key_name='%s-%s-%s' %(kind, ek, k), reference=ek, ind=k, value=v[0], date=d))
+				for ind in models.Sum.inds:
+					setattr(p[kn], ind, getattr(i, ind))
+			else:
+				for ind in models.Sum.inds:
+					setattr(p[kn], ind, getattr(i, ind) + getattr(p[kn], ind))
 
-	db.put(r)
+		best = dict([(i, (0, None)) for i in models.Sum.inds])
+
+		for i in p.values():
+			for ind in models.Sum.inds:
+				v = getattr(i, ind)
+				if v > best[ind][0]:
+					best[ind] = (v, i)
+
+		for ind, v in best.iteritems():
+			if v[1]:
+				v[1].best.append(ind)
+
+		puts.extend(p.values())
+
+	db.put(puts)
+
+def sums_area(entity):
+	sums(entity, cache.get_inds_area(entity))
+
+def sums_zone(entity):
+	inds = []
+	# get all areas in the zone, including closed areas, since they may have been open in the past
+	# this means that closed areas have to have the correct zone
+	for area in models.Area.all().filter('zone', entity).fetch(100):
+		inds.extend(models.Indicator.all().filter('area', area).fetch(500))
+
+	sums(entity, inds)

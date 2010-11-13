@@ -11,6 +11,10 @@ class DerefModel(db.Model):
 	def get_key(self, prop_name):
 		return getattr(self.__class__, prop_name).get_value_for_datastore(self)
 
+class DerefExpando(db.Expando):
+	def get_key(self, prop_name):
+		return getattr(self.__class__, prop_name).get_value_for_datastore(self)
+
 class Stake(db.Model):
 	name = db.StringProperty(required=True)
 	is_district = db.BooleanProperty(required=True)
@@ -784,8 +788,32 @@ class Configuration(db.Model):
 		else:
 			return c.value
 
-class Best(db.Model):
-	reference = db.StringProperty(required=True)
-	ind = db.StringProperty(required=True)
-	value = db.IntegerProperty(required=True)
-	date = db.DateProperty(required=True)
+SUM_WEEK = 'week'
+SUM_MONTH = 'month'
+SUM_SPAN_CHOICES = (SUM_WEEK, SUM_MONTH)
+
+SUM_AREA = 'Area'
+SUM_ZONE = 'Zone'
+SUM_KIND_CHOICES = (SUM_AREA, SUM_ZONE)
+
+class Sum(DerefExpando):
+	ref = db.ReferenceProperty() # key of ekind below
+	ekind = db.StringProperty(required=True, choices=SUM_KIND_CHOICES)
+	span = db.StringProperty(required=True, choices=SUM_SPAN_CHOICES)
+	date = db.DateProperty(required=True) # date.day is 1 if span == SUM_MONTH
+	best = db.StringListProperty()
+
+	inds = ['PB', 'PS']
+
+	@staticmethod
+	def keyname(key, span, date):
+		if span not in SUM_SPAN_CHOICES:
+			raise
+		elif span == SUM_MONTH:
+			date = '%i-%i' %(date.year, date.month)
+		elif span == SUM_WEEK:
+			date = '%i-%i-%i' %(date.year, date.month, date.day)
+		else:
+			raise
+
+		return '%s-%s' %(key, date)
