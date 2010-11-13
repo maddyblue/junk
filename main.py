@@ -1921,18 +1921,159 @@ class SumsPage(webapp.RequestHandler):
 
 		render(self, 'sums.html', 'Totais', {'sums': sums, 'dfilter': df})
 
+class MissionaryPage(webapp.RequestHandler):
+	def get(self, mkey):
+		m = Missionary.get(mkey)
+		render(self, 'missionary.html', 'Missionário', {'m': m})
+
+def pf_date(d):
+	return '%02i/%02i/%04i' %(d.day, d.month, d.year)
+
+class PFPage(webapp.RequestHandler):
+	PF_MUDANCA  = 0
+	PF_REGISTRO = 1
+	PF_VISTO = 2
+	PF_STRINGS = ['MUDANÇA DE ENDEREÇO', 'REGISTRO COM EXPEDIÇÃO DA CIET', 'REGISTRO DE PRORROGAÇÃO TEMPORÁRIO']
+
+	def get(self, t, mkey):
+		m = Missionary.get(mkey)
+		t = int(t)
+		f = [forms.MudancaForm, forms.RegistroForm, forms.VistoForm][t]
+		form = forms.PFMissionaryForm(instance=m)
+		pform = f(instance=m.profile)
+
+		render(self, 'form.html', 'Polícia Federal', {'form': form, 'pform': pform, 'title': self.PF_STRINGS[t]})
+
+	def post(self, t, mkey):
+		m = Missionary.get(mkey)
+		t = int(t)
+		f = [forms.MudancaForm, forms.RegistroForm, forms.VistoForm][t]
+
+		form = forms.PFMissionaryForm(self.request.POST, instance=m)
+		pform = f(self.request.POST, instance=m.profile)
+
+		if form.is_valid() and pform.is_valid():
+			m = form.save(commit=False)
+			p = pform.save(commit=False)
+			db.put([m, p])
+
+			# the paper size is actually 8.5x13in, but just tell our PDF that it's A4 so that it doesn't try to resize the document to fit
+			c = canvas.Canvas(self.response.out, bottomup=0, pagesize=A4)
+
+			c.drawString(220, 37, m.full_name)
+			c.drawString(184, 90, 'EUA')
+			c.drawString(184, 111, self.PF_STRINGS[t])
+			c.drawString(37, 201, m.full_name)
+			c.drawString(321, 162, 'X') # autalizacao de dados
+
+			if m.sex == MISSIONARY_SEX_ELDER:
+				c.drawString(480, 115, 'X')
+				c.drawString(455, 269, 'X')
+			elif m.sex == MISSIONARY_SEX_SISTER:
+				c.drawString(536, 115, 'X')
+				c.drawString(455, 294, 'X')
+			else:
+				raise
+
+			c.drawString(525, 283, pf_date(m.birth))
+			c.drawString(391, 323, p.birth_city)
+			c.drawString(40, 318, 'X') # solteiro
+
+			c.drawString(37, 371, 'EUA')
+			c.drawString(264, 371, '2038')
+			c.drawString(340, 371, 'EUA')
+			c.drawString(550, 371, '2038')
+
+			c.drawString(37, 415, 'Missionário')
+			c.drawString(340, 415, '086')
+
+			if t in [self.PF_REGISTRO, self.PF_VISTO]:
+				c.drawString(184, 37, 'Nome:')
+				c.drawString(184, 51, 'Pai:')
+				c.drawString(184, 66, 'Mãe:')
+				c.drawString(220, 51, p.father)
+				c.drawString(220, 66, p.mother)
+				c.drawString(37, 270, p.father)
+				c.drawString(37, 294, p.mother)
+
+				c.drawString(179, 774, 'EUA')
+				c.drawString(312, 774, 'EUA')
+				c.drawString(25, 750, m.full_name)
+				c.drawString(25, 775, pf_date(m.birth))
+
+			c.showPage()
+
+			c.drawString(184, 36, 'Passaporte ' + p.passport)
+
+			c.drawString(28, 161, p.entrance_place)
+			c.drawString(232, 161, p.entrance_state)
+			c.drawString(255, 161, pf_date(p.entrance))
+			c.drawString(392, 162, 'X')
+			c.drawString(530, 161, p.visa_num)
+
+			c.drawString(15, 187, pf_date(p.issue_date))
+			c.drawString(99, 187, p.issued_by)
+			c.drawString(340, 187, 'EUA')
+			c.drawString(540, 187, '2038')
+
+			c.drawString(28, 215, p.passport)
+			c.drawString(198, 215, 'EUA')
+			c.drawString(540, 215, '2038')
+
+			c.drawString(24, 257, 'X')
+			c.drawString(88, 294, 'X')
+
+			c.drawString(28, 362, 'ESTRADA DA GAVEA 681 BL. 1 APT° 602')
+			c.drawString(439, 362, '21-3322-0209')
+
+			c.drawString(28, 396, 'SÃO CONRADO')
+			c.drawString(184, 396, 'RIO DE JANEIRO')
+			c.drawString(480, 396, '22610-070')
+			c.drawString(556, 396, 'RJ')
+
+			c.drawString(28, 432, 'MISSÃO BRASIL RIO DE JANEIRO')
+			c.drawString(311, 432, 'AV. DAS AMÉRICAS, 1155, SALAS 502/503')
+
+			c.drawString(28, 468, 'BARRA DA TIJUCA')
+			c.drawString(170, 468, 'RIO DE JANEIRO')
+			c.drawString(448, 468, 'RJ')
+			c.drawString(481, 468, '21-2111-9243')
+
+			c.drawString(86, 496, 'X')
+			c.drawString(153, 496, '22631-000')
+
+			c.drawCentredString(90, 593, 'Rio de Janeiro')
+
+			if t in [self.PF_REGISTRO]:
+				c.drawString(28,70, '180 DIAS')
+				c.drawString(104, 641, '124,23 / 64,58')
+			elif t in [self.PF_MUDANCA]:
+				c.drawString(311, 255, 'Art. 102 da Lei 6.815/80')
+				c.drawString(104, 641, 'S/TAXA')
+			elif t in [self.PF_VISTO]:
+				c.drawString(311, 255, '32 - Prazo: %s' %pf_date(p.dou_prazo))
+				c.drawString(311, 300, 'D.O.U.: %s' %pf_date(p.dou_date))
+				c.drawString(104, 641, '124,23')
+
+			self.response.headers['Content-Type'] = 'application/pdf'
+			self.response.headers['Content-Disposition'] = 'attachment; filename=pf.pdf'
+			c.save()
+			return
+
+		render(self, 'form.html', 'Polícia Federal', {'form': form, 'pform': pform, 'title': self.PF_STRINGS[t]})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
-	('/login/', LoginPage),
-	('/logout/', LogoutPage),
-	('/relatorio/', RelatorioPage),
-	('/numeros/', NumerosPage),
 	('/batismos/', BatismosPage),
 	('/batizadores/', BatizadoresPage),
+	('/clima/', ClimaPage),
+	('/login/', LoginPage),
+	('/logout/', LogoutPage),
 	('/milagre/', MilagrePage),
 	('/noticias/', NoticiasPage),
-	('/clima/', ClimaPage),
+	('/numeros/', NumerosPage),
 	('/quadro/', QuadroPhotoPage),
+	('/relatorio/', RelatorioPage),
 
 	('/js/main.js', MainJS),
 	('/photo/(.*)', PhotoHandler),
@@ -1946,16 +2087,15 @@ application = webapp.WSGIApplication([
 	('/bap-per-ward/', BaptismsPerWard),
 	('/bap-per-missionary/', BaptismsPerMissionary),
 
-	('/area/(.*)', AreaPage),
 	('/area-letter/(.*)', AreaLetterPage),
-	('/zone/(.*)', ZonePage),
+	('/area/(.*)', AreaPage),
 	('/sums/(.*)/(.*)/(.*)', SumsPage),
+	('/zone/(.*)', ZonePage),
 
 	# task queue
 	('/_ah/tasks/indicator', ProcIndHandler),
 
 	# _ah
-	('/admin/', AdminRedirect),
 	('/_ah/missao-rio/', AdminPage),
 	('/_ah/missao-rio/area/', AreaListPage),
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
@@ -1966,20 +2106,21 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 	('/_ah/missao-rio/flush/', FlushPage),
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
+	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
 	('/_ah/missao-rio/make-new/', MakeNewPage),
-	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
 	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
 	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
 	('/_ah/missao-rio/map-control/', MapControlPage),
+	('/_ah/missao-rio/missionary/(.*)', MissionaryPage),
 	('/_ah/missao-rio/new-missionary/', NewMissionaryPage),
+	('/_ah/missao-rio/pf/(.*)/(.*)', PFPage),
+	('/_ah/missao-rio/quadro/', Quadro),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/sync/', SyncPage),
 	('/_ah/missao-rio/transfer/', TransferPage),
-
-	('/_ah/missao-rio/quadro/', Quadro),
-
+	('/admin/', AdminRedirect),
 	], debug=True)
 
 import templatefilters.filters

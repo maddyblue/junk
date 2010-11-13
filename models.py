@@ -135,16 +135,18 @@ class MissionaryProfile(db.Model):
 	conf_date = db.DateProperty(indexed=False)
 
 	# policia federal
-	father = db.StringProperty(indexed=False)
-	mother = db.StringProperty(indexed=False)
-	birth_city = db.StringProperty(indexed=False)
-	passport = db.StringProperty(indexed=False)
-	entrance = db.DateProperty(indexed=False)
-	visa_num = db.StringProperty(indexed=False)
-	issue_date = db.DateProperty(indexed=False)
-	issued_by = db.StringProperty(indexed=False)
-	entrance_place = db.StringProperty(indexed=False)
-	entrance_state = db.StringProperty(indexed=False)
+	father = db.StringProperty(verbose_name="Father's name", indexed=False)
+	mother = db.StringProperty(verbose_name="Mother's name", indexed=False)
+	birth_city = db.StringProperty(verbose_name="City of birth", indexed=False)
+	passport = db.StringProperty(verbose_name="Passport number", indexed=False)
+	entrance = db.DateProperty(verbose_name="Entrance date", indexed=False)
+	visa_num = db.StringProperty(verbose_name="Visa number: on glued-in paper in passport", indexed=False)
+	issue_date = db.DateProperty(verbose_name="Issue date: on glued-in paper in passport", indexed=False)
+	issued_by = db.StringProperty(verbose_name="Repartição expedida, probably Los Angeles or San Francisco", indexed=False)
+	entrance_place = db.StringProperty(verbose_name="Place of entrance: probably Guarulhos or Rio de Janeiro", indexed=False)
+	entrance_state = db.StringProperty(verbose_name="State of entrance: probably SP or RJ", indexed=False)
+	dou_prazo = db.DateProperty(verbose_name="Prazo do DOU: date after the missionary's name on the DOU sheet", indexed=False)
+	dou_date = db.DateProperty(verbose_name="Data do DOU: date at the top of the DOU sheet", indexed=False)
 
 def deuni(s):
 	l = [

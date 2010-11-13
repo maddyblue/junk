@@ -6,7 +6,7 @@
 		{% if ms.0.area.reports_with %} <b>reports with {{ ms.0.area.reports_with.name }}</b>{% endif %}
 		{% if ms.0.area.does_not_report %} <b>does not report</b>{% endif %}
 		{% for m in ms %}
-			<br/>&nbsp;&nbsp;{{ m }} <a href="/_ah/admin/datastore/edit?key={{ m.key }}">-</a> {{ m.calling }} - {{ m.email }} - {{ m.full_name }} - {{ m.email_parents }}
+			<br/>&nbsp;&nbsp;<a href="/_ah/missao-rio/missionary/{{ m.key }}">{{ m }}</a> <a href="/_ah/admin/datastore/edit?key={{ m.key }}">-</a> {{ m.calling }} - {{ m.email }} - {{ m.full_name }} - {{ m.email_parents }}
 			<font color="red"><b>
 			{% if not m.full_name %}name{% endif %}
 			{% if not m.start %}start{% endif %}
