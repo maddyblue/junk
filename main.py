@@ -42,15 +42,18 @@ def basicAuth(func):
 		webappRequest.session = s
 		webappRequest.sdict = sd
 
-		if 'user' not in sd and ('is_admin' not in sd or not sd['is_admin']):
+		if 'user' in sd or 'visitor' in sd:
+			return func(webappRequest, *args, **kwargs)
+
+		if 'is_admin' not in sd or not sd['is_admin']:
 			a = users.is_current_user_admin()
 			s['is_admin'] = a
 			sd['is_admin'] = a
 
-		if 'user' not in sd and not sd['is_admin']:
-			webappRequest.redirect('/login/')
-		else:
+		if s['is_admin']:
 			return func(webappRequest, *args, **kwargs)
+
+		webappRequest.redirect('/login/')
 
 	return callf
 
@@ -1493,6 +1496,12 @@ class LoginPage(webapp.RequestHandler):
 		render_noauth(self, 'login.html', 'Login', {'mopts': cache.get_mopts(), 'url': users.create_login_url('/')})
 
 	def post(self):
+		logging.info(self.request.POST.items())
+		if self.request.POST['m'] == 'visitante' and self.request.POST['p'].lower() == config.VISITOR_PASSWORD:
+			self.session = Session()
+			self.session['visitor'] = True
+			self.redirect('/')
+
 		try:
 			k = Key(self.request.POST['m'])
 			m = Missionary.get(k)

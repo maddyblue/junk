@@ -106,6 +106,7 @@ theme(getCookie('theme'));
 	<h3>Administração</h3>
 	<ul>
 		<li><a href="/_ah/missao-rio/area/">Números da Missão</a></li>
+		<li><a href="/_ah/missao-rio/status/">Mission Status</a></li>
 		<li><a href="/logout/">Sair</a></li>
 	</ul>
 	{% endif %}
@@ -124,11 +125,20 @@ theme(getCookie('theme'));
 	</ul>
 	{% endif %}
 
-	{% if session.user or session.is_admin %}
+	{% if session.visitor %}
+	<h3>Bem Vindos</h3>
+	<ul>
+		<li><a href="/logout/">Sair</a></li>
+	</ul>
+	{% endif %}
+
+	{% if session.user or session.is_admin or session.visitor %}
 	<h3>Navegação</h3>
 	<ul>
 		<li><a href="/">Carta do Presidente</a></li>
+		{% if session.user %}
 		<li><a href="/relatorio/">Fazer Relatório</a></li>
+		{% endif %}
 		{% if session.user|is_zl %}
 		<li><a href="/numeros/">Passar Números</a></li>
 		{% endif %}
