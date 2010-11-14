@@ -1,0 +1,6 @@
+<table border="1">
+<tr><th>Date</th><th>Duplas</th><th>PB</th><th>PC</th><th>PBM</th><th>PS</th><th>LM</th><th>NP</th></tr>
+{% for w in ws %}
+<tr><td>{{ w.weekdate }}</td><td>{{ w.duplas }}</td><td>{{ w.PB }}</td><td>{{ w.PC }}</td><td>{{ w.PBM }}</td><td>{{ w.PS }}</td><td>{{ w.LM }}</td><td>{{ w.NP }}</td></tr>
+{% endfor %}
+</table>

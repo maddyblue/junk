@@ -88,7 +88,21 @@ def rendert_noauth(s, t, d={}):
 class MainPage(webapp.RequestHandler):
 	def get(self):
 		d = FlatPage.get_flatpage(FLATPAGE_CARTA)
-		render(self, '', 'Carta do Presidente', {'page_data': d})
+		self.session = Session()
+
+		sr = False
+
+		if 'show-record' in self.session:
+			del self.session['show-record']
+
+			if 'user' in self.session:
+				best = cache.get_best(str(self.session['user'].get_key('area')))
+				if best:
+					sr = u'Você pode superar na área de %s<br/>' %self.session['user'].area_name
+					for b in best:
+						sr += u'<br/><b>%s</b>: %s %s' %(templatefilters.filters.ind_name(b[0]), b[3], templatefilters.filters.span_disp(b))
+
+		render(self, '', 'Carta do Presidente', {'page_data': d, 'show': sr, 'show_title': 'Superação!'})
 
 class BatismosPage(webapp.RequestHandler):
 	def get(self):
@@ -1509,6 +1523,7 @@ class LoginPage(webapp.RequestHandler):
 			if m.password == self.request.POST['p']:
 				self.session = Session()
 				self.session['user'] = m
+				self.session['show-record'] = True
 				self.redirect('/')
 				return
 		except:
@@ -1835,7 +1850,7 @@ class SetPhotoPage(webapp.RequestHandler):
 		if photo.width > width:
 			photo.resize(width=width)
 		photo.im_feeling_lucky()
-		p.photo = db.Blob(photo.execute_transforms())
+		p.photo = db.Blob(photo.execute_transforms(output_encoding=images.JPEG))
 		p.save()
 		memcache.delete(cache.C_M_PHOTO %m.key())
 
@@ -2076,7 +2091,7 @@ class UploadImage(webapp.RequestHandler):
 		try:
 			picture = images.Image(image_data=self.request.get('image'))
 			picture.resize(width=int(self.request.POST['width']))
-			picture = picture.execute_transforms(images.JPEG)
+			picture = picture.execute_transforms(output_encoding=images.JPEG)
 		except:
 			picture = image_data=self.request.get('image')
 
@@ -2098,6 +2113,11 @@ class ImagesPage(webapp.RequestHandler):
 	def get(self):
 		ims = Image.all(keys_only=True).order('-uploaded').fetch(50)
 		render(self, 'images.html', 'Images', {'ims': ims})
+
+class WeekSumsPage(webapp.RequestHandler):
+	def get(self):
+		ws = WeekSum.all().order('-weekdate').fetch(50)
+		render(self, 'week-sums.html', 'Week Sums', {'ws': ws})
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -2129,6 +2149,7 @@ application = webapp.WSGIApplication([
 	('/area-letter/(.*)', AreaLetterPage),
 	('/area/(.*)', AreaPage),
 	('/sums/(.*)/(.*)/(.*)', SumsPage),
+	('/weeks/', WeekSumsPage),
 	('/zone/(.*)', ZonePage),
 
 	# task queue

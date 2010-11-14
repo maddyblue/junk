@@ -5,6 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="/styles/style.css" />
 	<link rel="stylesheet" type="text/css" href="/styles/extra.css" />
+	<link rel="stylesheet" type="text/css" href="/styles/jquery-ui-1.8.6.css" />
 	<link rel="stylesheet" type="text/css" title="theme" href="/styles/style.css" />
 	<script type="text/javascript" src="/js-static/jquery-1.4.3.min.js"></script>
 	<script type="text/javascript" src="/js-static/jquery-ui-1.8.5.min.js"></script>
@@ -80,6 +81,16 @@ theme(getCookie('theme'));
   })();
 
 </script>
+
+{% if show %}
+<script>
+	$(document).ready(function() {
+		$("#dialog").dialog({width: 600, resizable: false});
+	});
+</script>
+
+<div id="dialog" title="{{ show_title }}" style="font-size: 135%">{{ show }}</div>
+{% endif %}
 
 <div id="wrapper-menu-top">
 <div id="menu-top">

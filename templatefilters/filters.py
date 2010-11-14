@@ -43,6 +43,6 @@ def span_disp(value):
 	if value[1] == models.SUM_WEEK:
 		return 'na semana de %s' %(value[2])
 	elif value[1] == models.SUM_MONTH:
-		return 'no mês de %s de %i' %(months[value[2].month], value[2].year)
+		return u'no mês de %s de %i' %(months[value[2].month], value[2].year)
 
 register.filter(span_disp)

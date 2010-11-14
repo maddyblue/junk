@@ -149,7 +149,7 @@ def sums_zone(entity):
 
 def sums_week(entity):
 	si = models.SnapshotIndex.all().ancestor(entity.get_key('snapshot')).get()
-	ws = models.WeekSum(key_name=entity.key().name(), duplas=len(si.snapareas),
+	ws = models.WeekSum(key_name=entity.key().name(), week=entity, weekdate=entity.date, duplas=len(si.snapareas),
 		PB=0,
 		PC=0,
 		PBM=0,

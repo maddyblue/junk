@@ -822,6 +822,7 @@ class Sum(DerefExpando):
 
 class WeekSum(DerefModel):
 	week = db.ReferenceProperty(Week, required=True)
+	weekdate = db.DateProperty(required=True)
 	duplas = db.IntegerProperty(required=True)
 
 	PB = db.IntegerProperty(required=True)
