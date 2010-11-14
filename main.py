@@ -358,6 +358,7 @@ class MapControlPage(webapp.RequestHandler):
 
 			control.start_map('Compute Sums: Area', handler_spec + 'area', reader_spec, {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
 			control.start_map('Compute Sums: Zone', handler_spec + 'zone', reader_spec, {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
+			control.start_map('Compute Sums: Week', handler_spec + 'week', reader_spec, {'entity_kind': 'models.Week'}, model._DEFAULT_SHARD_COUNT)
 
 			self.response.out.write('done')
 
@@ -1697,7 +1698,7 @@ class AreaDistrictPage(webapp.RequestHandler):
 			a.district = district
 
 			a.zone = db.Key(self.request.POST[akey + '_zone'])
-			a.phone = self.request.POST[akey + '_phone']
+			a.phone = self.request.POST[akey + '_phone'].strip()
 			
 			try:
 				reports_with = db.Key(self.request.POST[akey + '_reports_with'])
@@ -2062,6 +2063,42 @@ class PFPage(webapp.RequestHandler):
 
 		render(self, 'form.html', 'Polícia Federal', {'form': form, 'pform': pform, 'title': self.PF_STRINGS[t]})
 
+class UploadImage(webapp.RequestHandler):
+	def get(self):
+		render(self, 'upload-image.html', 'Upload Image')
+
+	def post(self):
+		img = Image()
+
+		if 'notes' in self.request.POST:
+			img.notes = self.request.POST['notes']
+
+		try:
+			picture = images.Image(image_data=self.request.get('image'))
+			picture.resize(width=int(self.request.POST['width']))
+			picture = picture.execute_transforms(images.JPEG)
+		except:
+			picture = image_data=self.request.get('image')
+
+		img.image = db.Blob(picture)
+		img.put()
+		self.response.out.write('<img src="/image/%s" />' %img.key().id())
+
+class ImageHandler(webapp.RequestHandler):
+	def get(self, id):
+		self.response.out.write(cache.get_image(id))
+		self.response.headers['Content-Type'] = 'image/jpeg'
+
+class ImageDetailPage(webapp.RequestHandler):
+	def get(self, id):
+		i = Image.get_by_id(long(id))
+		render(self, 'imaged.html', 'Image Detail', {'i': i})
+
+class ImagesPage(webapp.RequestHandler):
+	def get(self):
+		ims = Image.all(keys_only=True).order('-uploaded').fetch(50)
+		render(self, 'images.html', 'Images', {'ims': ims})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/batismos/', BatismosPage),
@@ -2077,6 +2114,8 @@ application = webapp.WSGIApplication([
 
 	('/js/main.js', MainJS),
 	('/photo/(.*)', PhotoHandler),
+	('/image/(.*)', ImageHandler),
+	('/imaged/(.*)', ImageDetailPage),
 
 	('/send-relatorio/', SendRelatorio),
 	('/send-numbers/', SendNumbers),
@@ -2120,6 +2159,8 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/sync/', SyncPage),
 	('/_ah/missao-rio/transfer/', TransferPage),
+	('/_ah/missao-rio/upload-image/', UploadImage),
+	('/_ah/missao-rio/images/', ImagesPage),
 	('/admin/', AdminRedirect),
 	], debug=True)
 

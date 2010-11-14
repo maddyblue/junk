@@ -819,3 +819,19 @@ class Sum(DerefExpando):
 			raise
 
 		return '%s-%s' %(key, date)
+
+class WeekSum(DerefModel):
+	week = db.ReferenceProperty(Week, required=True)
+	duplas = db.IntegerProperty(required=True)
+
+	PB = db.IntegerProperty(required=True)
+	PC = db.IntegerProperty(required=True)
+	PBM = db.IntegerProperty(required=True)
+	PS = db.IntegerProperty(required=True)
+	LM = db.IntegerProperty(required=True)
+	NP = db.IntegerProperty(required=True)
+
+class Image(db.Model):
+	image = db.BlobProperty()
+	notes = db.TextProperty()
+	uploaded = db.DateTimeProperty(auto_now_add=True)

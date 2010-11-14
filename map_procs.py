@@ -146,3 +146,24 @@ def sums_zone(entity):
 		inds.extend(models.Indicator.all().filter('area', area).fetch(500))
 
 	sums(entity, inds)
+
+def sums_week(entity):
+	si = models.SnapshotIndex.all().ancestor(entity.get_key('snapshot')).get()
+	ws = models.WeekSum(key_name=entity.key().name(), duplas=len(si.snapareas),
+		PB=0,
+		PC=0,
+		PBM=0,
+		PS=0,
+		LM=0,
+		NP=0
+	)
+
+	for i in models.Indicator.all().filter('week', entity).fetch(500):
+		ws.PB += i.PB
+		ws.PC += i.PC
+		ws.PBM += i.PBM
+		ws.PS += i.PS
+		ws.LM += i.LM
+		ws.NP += i.NP
+
+	yield op.db.Put(ws)

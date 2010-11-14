@@ -17,6 +17,7 @@ C_AREA_INDS = 'area-%s-%s'
 C_AWS = 'aws'
 C_BEST = 'best-%s'
 C_IBC = 'ibc-%s'
+C_IMAGE = 'image-%s'
 C_INDS = 'inds-%s'
 C_INDS_AREA = 'inds-area-%s'
 C_MAIN_JS = 'main-js'
@@ -557,5 +558,15 @@ def get_inds_area(area):
 	if not data:
 		data = models.Indicator.all().filter('area', area).fetch(500)
 		memcache.add(n, pack(data))
+
+	return data
+
+def get_image(id):
+	n = C_IMAGE %id
+	data = memcache.get(n)
+
+	if not data:
+		data = models.Image.get_by_id(long(id)).image
+		memcache.add(n, data)
 
 	return data
