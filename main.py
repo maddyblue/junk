@@ -16,7 +16,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 from models import *
-from appengine_utilities.sessions import Session
+from gaesessions import get_current_session
 import cache
 import config
 import forms
@@ -37,18 +37,14 @@ import StringIO
 # returns True if authenticated
 def basicAuth(func):
 	def callf(webappRequest, *args, **kwargs):
-		s = Session()
-		sd = s.items()
+		s = get_current_session()
 		webappRequest.session = s
-		webappRequest.sdict = sd
 
-		if 'user' in sd or 'visitor' in sd:
+		if 'user' in s or 'visitor' in s:
 			return func(webappRequest, *args, **kwargs)
 
-		if 'is_admin' not in sd or not sd['is_admin']:
-			a = users.is_current_user_admin()
-			s['is_admin'] = a
-			sd['is_admin'] = a
+		if 'is_admin' not in s or not s['is_admin']:
+			s['is_admin'] = users.is_current_user_admin()
 
 		if s['is_admin']:
 			return func(webappRequest, *args, **kwargs)
@@ -67,7 +63,7 @@ def render(s, p, t, d={}):
 	d['page'] = p
 	d['t1'] = t
 	d['t2'] = t
-	d['session'] = s.sdict
+	d['session'] = s.session
 
 	s.response.out.write(render_temp('index.html', d))
 
@@ -79,7 +75,7 @@ def render_noauth(s, p, t, d={}):
 
 @basicAuth
 def rendert(s, t, d={}):
-	d['session'] = s.sdict
+	d['session'] = s.session
 	s.response.out.write(render_temp(t, d))
 
 def rendert_noauth(s, t, d={}):
@@ -88,19 +84,19 @@ def rendert_noauth(s, t, d={}):
 class MainPage(webapp.RequestHandler):
 	def get(self):
 		d = FlatPage.get_flatpage(FLATPAGE_CARTA)
-		self.session = Session()
+		self.session = get_current_session()
 
-		sr = False
+		sr = self.session.pop('show-record')
 
-		if 'show-record' in self.session:
-			del self.session['show-record']
-
+		if sr:
 			if 'user' in self.session:
 				best = cache.get_best(str(self.session['user'].get_key('area')))
 				if best:
 					sr = u'Você pode superar na área de %s<br/>' %self.session['user'].area_name
 					for b in best:
 						sr += u'<br/><b>%s</b>: %s %s' %(templatefilters.filters.ind_name(b[0]), b[3], templatefilters.filters.span_disp(b))
+				else:
+					sr = False
 
 		render(self, '', 'Carta do Presidente', {'page_data': d, 'show': sr, 'show_title': 'Superação!'})
 
@@ -155,7 +151,7 @@ class SendRelatorio(webapp.RequestHandler):
 
 class NumerosPage(webapp.RequestHandler):
 	def get(self):
-		self.session = Session()
+		self.session = get_current_session()
 
 		if not templatefilters.filters.is_zl(self.session['user']):
 			return
@@ -206,7 +202,7 @@ class SendNumbers(webapp.RequestHandler):
 		zone = Zone.get(self.request.POST['zona'])
 		week = Week.get(self.request.POST['week'])
 
-		user_zone = Session()['user'].get_key('zone')
+		user_zone = get_current_session()['user'].get_key('zone')
 		user_week = cache.get_week().key()
 
 		if zone.key() != user_zone or week.key() != user_week:
@@ -1513,7 +1509,8 @@ class LoginPage(webapp.RequestHandler):
 	def post(self):
 		logging.info(self.request.POST.items())
 		if self.request.POST['m'] == 'visitante' and self.request.POST['p'].lower() == config.VISITOR_PASSWORD:
-			self.session = Session()
+			self.session = get_current_session()
+			self.session.regenerate_id()
 			self.session['visitor'] = True
 			self.redirect('/')
 
@@ -1521,7 +1518,8 @@ class LoginPage(webapp.RequestHandler):
 			k = Key(self.request.POST['m'])
 			m = Missionary.get(k)
 			if m.password == self.request.POST['p']:
-				self.session = Session()
+				self.session = get_current_session()
+				self.session.regenerate_id()
 				self.session['user'] = m
 				self.session['show-record'] = True
 				self.redirect('/')
@@ -1533,10 +1531,9 @@ class LoginPage(webapp.RequestHandler):
 
 class LogoutPage(webapp.RequestHandler):
 	def get(self):
-		self.session = Session()
-		for i in self.session.keys():
-			if i in self.session:
-				del self.session[i]
+		self.session = get_current_session()
+		self.session.terminate()
+		del self.session
 
 		if users.is_current_user_admin():
 			self.redirect(users.create_logout_url('/logout/'))
@@ -1858,8 +1855,6 @@ class SetPhotoPage(webapp.RequestHandler):
 
 class AreaLetterPage(webapp.RequestHandler):
 	def get(self, akey):
-		self.session = Session()
-
 		c = canvas.Canvas(self.response.out, bottomup=0)
 		c.setPageSize(A4)
 		c.width = 90
@@ -2165,6 +2160,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/email-zl/', EmailPage),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 	('/_ah/missao-rio/flush/', FlushPage),
+	('/_ah/missao-rio/images/', ImagesPage),
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
@@ -2181,7 +2177,6 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/sync/', SyncPage),
 	('/_ah/missao-rio/transfer/', TransferPage),
 	('/_ah/missao-rio/upload-image/', UploadImage),
-	('/_ah/missao-rio/images/', ImagesPage),
 	('/admin/', AdminRedirect),
 	], debug=True)
 
