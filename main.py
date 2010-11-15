@@ -1612,7 +1612,7 @@ class AdminPage(webapp.RequestHandler):
 class MakePasswordsPage(webapp.RequestHandler):
 	def get(self):
 		import random
-		ms = Missionary.all().filter('is_released', False).filter('password', '').fetch(1000)
+		ms = [m for m in cache.get_ms() if not m.password]
 
 		for m in ms:
 			if m.mission_id:
@@ -1623,6 +1623,7 @@ class MakePasswordsPage(webapp.RequestHandler):
 			self.response.out.write('<br/>%s password set to %s' %(m, m.password))
 
 		db.put(ms)
+		memcache.flush_all()
 
 class SyncPage(webapp.RequestHandler):
 	def get(self):
