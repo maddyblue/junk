@@ -49,35 +49,5 @@ handlers:
 
 admin_console:
   pages:
-  - name: Appstats
-    url: /_ah/stats/
-
-  - name: Mission Status
-    url: /_ah/missao-rio/status/
-
-  - name: Choose Week
-    url: /_ah/missao-rio/choose-week/
-
-  - name: Make New
-    url: /_ah/missao-rio/make-new/
-
-  - name: MapReduce
-    url: /mapreduce/
-
-  - name: Map Control
-    url: /_ah/missao-rio/map-control/
-
-  - name: Indicator Check
-    url: /_ah/missao-rio/indicator-check/
-
-  - name: Enter RPM
-    url: /_ah/missao-rio/enter-rpm/
-
-  - name: Make Batismos
-    url: /_ah/missao-rio/make-batismos/
-
-  - name: Edit Pages
-    url: /_ah/missao-rio/edit-pages/
-
-  - name: Transfer
-    url: /_ah/missao-rio/transfer/
+  - name: Flush Memcache
+    url: /_ah/missao-rio/flush/
