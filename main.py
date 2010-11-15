@@ -1979,6 +1979,7 @@ class PFPage(webapp.RequestHandler):
 
 			# the paper size is actually 8.5x13in, but just tell our PDF that it's A4 so that it doesn't try to resize the document to fit
 			c = canvas.Canvas(self.response.out, bottomup=0, pagesize=A4)
+			c.setFont('Helvetica', 12)
 
 			c.drawString(220, 37, m.full_name)
 			c.drawString(184, 90, 'EUA')
@@ -2029,7 +2030,10 @@ class PFPage(webapp.RequestHandler):
 			c.drawString(232, 161, p.entrance_state)
 			c.drawString(255, 161, pf_date(p.entrance))
 			c.drawString(392, 162, 'X')
+
+			c.setFont('Helvetica', 9)
 			c.drawString(530, 161, p.visa_num)
+			c.setFont('Helvetica', 12)
 
 			c.drawString(15, 187, pf_date(p.issue_date))
 			c.drawString(99, 187, p.issued_by)
