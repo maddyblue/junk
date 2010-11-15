@@ -1806,9 +1806,17 @@ class ProcIndHandler(webapp.RequestHandler):
 		db.put(ords)
 
 class EmailPage(webapp.RequestHandler):
-	def get(self):
+	def get(self, t):
 		ms = cache.get_ms()
-		emails = [m.email for m in ms if m.calling in [MISSIONARY_CALLING_AP, MISSIONARY_CALLING_LZ, MISSIONARY_CALLING_LZL]]
+
+		if t == 'zl':
+			callings = [MISSIONARY_CALLING_AP, MISSIONARY_CALLING_LZ, MISSIONARY_CALLING_LZL]
+		elif t == 'ap':
+			callings = [MISSIONARY_CALLING_AP]
+		else:
+			callings = MISSIONARY_CALLING_CHOICES
+
+		emails = [m.email for m in ms if m.email and m.calling in callings]
 
 		self.response.out.write('; '.join(emails))
 
@@ -2133,19 +2141,20 @@ application = webapp.WSGIApplication([
 	('/quadro/', QuadroPhotoPage),
 	('/relatorio/', RelatorioPage),
 
-	('/js/main.js', MainJS),
-	('/photo/(.*)', PhotoHandler),
 	('/image/(.*)', ImageHandler),
 	('/imaged/(.*)', ImageDetailPage),
+	('/js/main.js', MainJS),
+	('/photo/(.*)', PhotoHandler),
 
 	('/send-relatorio/', SendRelatorio),
 	('/send-numbers/', SendNumbers),
 
-	('/names/', NamesPage),
-	('/keyindicators/', KeyIndicatorsPage),
-	('/reports/', GetRelatoriosPage),
-	('/bap-per-ward/', BaptismsPerWard),
 	('/bap-per-missionary/', BaptismsPerMissionary),
+	('/bap-per-ward/', BaptismsPerWard),
+	('/email/(.*)', EmailPage),
+	('/keyindicators/', KeyIndicatorsPage),
+	('/names/', NamesPage),
+	('/reports/', GetRelatoriosPage),
 
 	('/area-letter/(.*)', AreaLetterPage),
 	('/area/(.*)', AreaPage),
@@ -2163,7 +2172,6 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/assign-mailboxes/', AssignMailboxesPage),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
-	('/_ah/missao-rio/email-zl/', EmailPage),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 	('/_ah/missao-rio/flush/', FlushPage),
 	('/_ah/missao-rio/images/', ImagesPage),
