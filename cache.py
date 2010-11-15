@@ -31,6 +31,7 @@ C_SNAPAREAS = 'snapareas-%s'
 C_SNAPAREAS_BYZONE = 'snapareas-%s-%s'
 C_SNAPMISSIONARIES = 'snapmissionaries-%s'
 C_SNAPSHOT = 'snapshot-%s'
+C_STAKES = 'stakes'
 C_SUMS = 'sums-%s-%s-%s'
 C_WEEK = 'week'
 C_WOPTS = 'wopts'
@@ -567,6 +568,29 @@ def get_image(id):
 
 	if not data:
 		data = models.Image.get_by_id(long(id)).image
+		memcache.add(n, data)
+
+	return data
+
+def get_stakes():
+	n = C_STAKES
+	data = memcache.get(n)
+
+	if not data:
+		wards = models.Ward.all().order('stake').order('name').fetch(500)
+		stakes = models.Stake.all().fetch(50)
+		sd = dict([(i.key(), i) for i in stakes])
+
+		data = []
+		for w in wards:
+			sk = w.get_key('stake')
+			w.stake = sd[sk]
+
+			if not data or data[-1][0].stake != w.stake:
+				data.append([])
+
+			data[-1].append(w)
+
 		memcache.add(n, data)
 
 	return data

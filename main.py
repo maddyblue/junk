@@ -131,6 +131,14 @@ class RelatorioPage(webapp.RequestHandler):
 		d = cache.get_relatorio_page()
 		render(self, '', 'Relatório Semanal', {'page_data': d, 'headstuff': '<script type="text/javascript" src="/js/main.js"></script>'})
 
+class ArquivosPage(webapp.RequestHandler):
+	def get(self):
+		render(self, 'files.html', 'Arquivos')
+
+class UnidadesPage(webapp.RequestHandler):
+	def get(self):
+		render(self, 'unidades.html', 'Números das Unidades', {'stakes': cache.get_stakes()})
+
 class MainJS(webapp.RequestHandler):
 	def get(self):
 		d = cache.get_main_js()
@@ -2135,6 +2143,7 @@ class CleanupSessions(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
+	('/arquivos/', ArquivosPage),
 	('/batismos/', BatismosPage),
 	('/batizadores/', BatizadoresPage),
 	('/clima/', ClimaPage),
@@ -2145,6 +2154,7 @@ application = webapp.WSGIApplication([
 	('/numeros/', NumerosPage),
 	('/quadro/', QuadroPhotoPage),
 	('/relatorio/', RelatorioPage),
+	('/unidades/', UnidadesPage),
 
 	('/image/(.*)', ImageHandler),
 	('/imaged/(.*)', ImageDetailPage),

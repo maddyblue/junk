@@ -182,6 +182,11 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: Ward
+  properties:
+  - name: stake
+  - name: name
+
 - kind: Week
   properties:
   - name: __key__
