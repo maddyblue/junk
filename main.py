@@ -2114,6 +2114,12 @@ class WeekSumsPage(webapp.RequestHandler):
 		ws = WeekSum.all().order('-weekdate').fetch(50)
 		render(self, 'week-sums.html', 'Week Sums', {'ws': ws})
 
+class CleanupSessions(webapp.RequestHandler):
+	def get(self):
+		from gaesessions import delete_expired_sessions
+		while not delete_expired_sessions():
+			pass
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/batismos/', BatismosPage),
@@ -2178,6 +2184,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/transfer/', TransferPage),
 	('/_ah/missao-rio/upload-image/', UploadImage),
 	('/admin/', AdminRedirect),
+	('/cleanup_sessions', CleanupSessions),
 	], debug=True)
 
 import templatefilters.filters
