@@ -555,6 +555,32 @@ def delete(kinds):
 
 			i += sz
 
+def sync_photos():
+	ms = cache.get_ms()
+	o = 0
+	n = 25
+
+	while o < len(ms):
+		d = ms[o:n + o]
+		print '\nfetch %i' %o
+		cache.prefetch_refprops(d, aem.Missionary.profile)
+		o += n
+		print 'process %i' %len(d)
+		p = []
+
+		for m in d:
+			try:
+				f = open('/home/mjibson/mpn/%s.jpg' %m.photo_file)
+				m.profile.photo = f.read()
+				p.append(m.profile)
+				f.close()
+				print 'success', m.photo_file
+			except:
+				print 'fail', m.photo_file
+
+		print 'put'
+		db.put(p)
+
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
 		print "Usage: %s app_id [host]" % (sys.argv[0],)
