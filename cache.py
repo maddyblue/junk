@@ -34,6 +34,7 @@ C_SNAPSHOT = 'snapshot-%s'
 C_STAKES = 'stakes'
 C_SUMS = 'sums-%s-%s-%s'
 C_WEEK = 'week'
+C_WEEK_INDS = 'week-%s'
 C_WOPTS = 'wopts'
 C_ZONES = 'zones'
 C_ZONE_INDS = 'zone-%s-%s'
@@ -246,7 +247,6 @@ def get_ibc(week):
 def get_inds(week):
 	n = C_INDS %(week.key())
 	data = unpack(memcache.get(n))
-	data = None
 
 	if data is None:
 		data = models.Indicator.all().filter('week', week).fetch(500)
@@ -416,8 +416,7 @@ def get_relatorio_page():
 
 def get_main_js():
 	n = C_MAIN_JS
-	#data = memcache.get(n)
-	data = None
+	data = memcache.get(n)
 
 	if not data:
 		week = get_week()
@@ -464,7 +463,6 @@ def get_area_inds(ak, weeks=12):
 def get_zone_inds(zk, weeks=12):
 	n = C_ZONE_INDS %(zk, weeks)
 	data = memcache.get(n)
-	data = None
 
 	if not data:
 		date = datetime.date.today() - datetime.timedelta(7 * weeks)
@@ -498,6 +496,44 @@ def get_zone_inds(zk, weeks=12):
 				d = [i['OL'] + i['LM'] + i['LMARC'] for i in sums]
 			else:
 				d = [i[k] for i in sums]
+			data[k] = (v, d)
+
+		memcache.add(n, data)
+
+	return data
+
+def get_week_inds(weeks=12):
+	n = C_WEEK_INDS %(weeks)
+	data = memcache.get(n)
+
+	if not data:
+		date = datetime.date.today() - datetime.timedelta(7 * weeks)
+		inds = models.WeekSum.all().filter('weekdate >=', date).order('-weekdate').fetch(500)
+		inds.reverse()
+
+		sums = []
+		dates = []
+		last = datetime.date(1, 1, 1)
+		grab = ['PB', 'PC', 'PS', 'NP', 'LM', 'PBM']
+		for i in inds:
+			if last != i.weekdate:
+				dates.append(i.weekdate)
+				sums.append(dict([(g, 0) for g in grab]))
+				last = i.weekdate
+
+			for g in grab:
+				sums[-1][g] += getattr(i, g)
+
+		dates = ['%i/%s' %(i.day, short_months[i.month]) for i in dates]
+		while len(dates) > 13:
+			del dates[1:-1:2]
+
+		data = {
+			'chxl': '0:|' +'|'.join(dates),
+		}
+
+		for k, v in [('PB', 'Batismos'), ('PC', 'Confirmações'), ('NP', 'Novos'), ('PS', 'Sacramental'), ('LM', 'Lições c/ Membro'), ('PBM', 'Data Marcada')]:
+			d = [i[k] for i in sums]
 			data[k] = (v, d)
 
 		memcache.add(n, data)

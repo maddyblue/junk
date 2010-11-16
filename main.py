@@ -2142,7 +2142,22 @@ class ImagesPage(webapp.RequestHandler):
 class WeekSumsPage(webapp.RequestHandler):
 	def get(self):
 		ws = WeekSum.all().order('-weekdate').fetch(50)
-		render(self, 'week-sums.html', 'Week Sums', {'ws': ws})
+		n = 12
+		data = cache.get_week_inds(n)
+		time = '%i semanas' %n
+		charts = []
+		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
+		charts.append(make_chart(data, ['LM'], {'chtt': 'Doutrinas Ensinadas - ' + time}))
+		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores - ' + time}))
+
+		n = 40
+		data = cache.get_week_inds(n)
+		time = '%i semanas' %n
+		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
+		charts.append(make_chart(data, ['LM'], {'chtt': 'Doutrinas Ensinadas - ' + time}))
+		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores - ' + time}))
+
+		render(self, 'week-sums.html', 'Week Sums', {'ws': ws, 'charts': charts})
 
 class CleanupSessions(webapp.RequestHandler):
 	def get(self):
