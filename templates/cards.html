@@ -1,0 +1,10 @@
+<form method="POST">
+
+<table>
+{% for m in ms %}
+	<tr><td>{{ m }}</td><td>{{ m.calling }}</td><td>{{ m.area_name }}</td><td><input type="text" name="m{{ m.key }}" size="3"/></td><td>{{ m }}</td></tr>
+{% endfor %}
+</table>
+
+<input type="submit" name="submit" value="cardfronts"/>
+</form>

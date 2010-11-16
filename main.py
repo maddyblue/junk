@@ -2299,14 +2299,16 @@ def cardfronts(self, color, ms=None):
 	yellow = [] # middle 3rd
 	blue = [] # first 3rd
 
-	if 'd' in request.GET:
-		s = request.GET['d'].split('-')
+	if 'd' in self.request.GET:
+		s = self.request.GET['d'].split('-')
 		d = date(int(s[0]), int(s[1]), int(s[2]))
 	else:
 		d = date.today()
 
 	if not ms:
-		for m in Missionary.objects.filter(is_released=False).filter(release__gt=d).order_by('release'):
+		ms = [m for m in cache.get_ms() if m.release > d]
+		ms.sort(cmp=lambda x,y: cmp(x.release, y.release))
+		for m in ms:
 			if m.sex == MISSIONARY_SEX_ELDER: t = 8
 			else: t = 6
 			whited = t * 30
@@ -2352,9 +2354,7 @@ def cardfronts(self, color, ms=None):
 
 		i += 1
 
-	c.showPage()
 	c.save()
-	return response
 
 class Cardfront(webapp.RequestHandler):
 	def get(self, mkey):
@@ -2375,6 +2375,24 @@ class MissionariesPage(webapp.RequestHandler):
 	def get(self):
 		ms = cache.get_ms()
 		render(self, 'missionaries.html', 'Missionaries', {'ms': ms})
+
+class Cards(webapp.RequestHandler):
+	def get(self):
+		ms = cache.get_ms(False)
+		render(self, 'cards.html', 'Missionaries', {'ms': ms})
+
+	def post(self):
+		ms = []
+		for k, v in self.request.POST.iteritems():
+			if v and k[0] == 'm':
+				for i in range(int(v)):
+					ms.append(k[1:])
+
+		ms = Missionary.get(ms)
+		cache.prefetch_refprops(ms, Missionary.profile)
+
+		if self.request.POST['submit'] == 'cardfronts':
+			return cardfronts(self, '', ms)
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -2421,6 +2439,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
 	('/_ah/missao-rio/assign-mailboxes/', AssignMailboxesPage),
 	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
+	('/_ah/missao-rio/cards/', Cards),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),

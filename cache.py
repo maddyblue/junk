@@ -23,7 +23,7 @@ C_INDS_AREA = 'inds-area-%s'
 C_MAIN_JS = 'main-js'
 C_MISSIONARIES = 'missionaries'
 C_MOPTS = 'mopts-%s'
-C_MS = 'ms'
+C_MS = 'ms-%s'
 C_M_BY_AREA = 'mbyarea-%s'
 C_M_PHOTO = 'm-photo-%s'
 C_RELATORIO_PAGE = 'relatorio'
@@ -327,12 +327,25 @@ def get_missionaries():
 		return data
 
 # list of active missionaries sorted by mission_name
-def get_ms():
-	n = C_MS
+# if active, will return only active missionaries
+# else, will return all
+def get_ms(active=True):
+	if active:
+		active = True
+	else:
+		active = False
+
+	n = C_MS %active
 	data = unpack(memcache.get(n))
 
 	if not data:
-		data = models.Missionary.all().filter('is_released', False).order('mission_name').fetch(500)
+		data = models.Missionary.all()
+
+		if active:
+			data = data.filter('is_released', False)
+
+		# after time, the 1000 limit won't be enough if active == False
+		data = data.order('mission_name').fetch(1000)
 		memcache.add(n, pack(data))
 
 	return data
