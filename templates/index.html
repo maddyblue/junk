@@ -119,6 +119,7 @@ theme(getCookie('theme'));
 	<ul>
 		<li><a href="/_ah/missao-rio/area/">Números da Missão</a></li>
 		<li><a href="/_ah/missao-rio/status/">Mission Status</a></li>
+		<li><a href="/_ah/missao-rio/missionaries/">Missionaries</a></li>
 		<li><a href="/logout/">Sair</a></li>
 	</ul>
 	{% endif %}
@@ -156,7 +157,7 @@ theme(getCookie('theme'));
 		{% endif %}
 		<li><a href="/batismos/">Batismos</a></li>
 		<li><a href="/batizadores/">Batizadores</a></li>
-		<li><a href="/milagre/">Superação e Milagre da Semana</a></li>
+		<li><a href="/super/">Superação</a></li>
 		<li><a href="/noticias/">Notícias do Campo</a></li>
 		<li><a href="/clima/">Clima da Semana</a></li>
 		<li><a href="/quadro/">Quadro da Missão</a></li>
@@ -213,7 +214,9 @@ theme(getCookie('theme'));
 </div>
 <div id="content">
 
+{% if t2 %}
 <h2>{% block t2 %}{{ t2 }}{% endblock %}</h2>
+{% endif %}
 
 {% block content %}
 

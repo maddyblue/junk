@@ -92,9 +92,10 @@ class MainPage(webapp.RequestHandler):
 			if 'user' in self.session:
 				best = cache.get_best(str(self.session['user'].get_key('area')))
 				if best:
-					sr = u'Você pode superar na área de %s<br/>' %self.session['user'].area_name
+					sr = u'%s, isto é o que um missionário já fez no passado em sua área.' %self.session['user']
 					for b in best:
 						sr += u'<br/><b>%s</b>: %s %s' %(templatefilters.filters.ind_name(b[0]), b[3], templatefilters.filters.span_disp(b))
+					sr += u'<br/><br/>Nós o desafiamos a superar!'
 				else:
 					sr = False
 
@@ -115,7 +116,7 @@ class BatizadoresPage(webapp.RequestHandler):
 class MilagrePage(webapp.RequestHandler):
 	def get(self):
 		d = FlatPage.get_flatpage(FLATPAGE_MILAGRE)
-		render(self, '', 'Milagre da Semana', {'page_data': d})
+		rendert(self, 'superacao.html', {'page_data': d, 't1': 'Superação'})
 
 class NoticiasPage(webapp.RequestHandler):
 	def get(self):
@@ -2141,6 +2142,217 @@ class CleanupSessions(webapp.RequestHandler):
 		while not delete_expired_sessions():
 			pass
 
+# imgd is a string of image data
+# returns a string of image data cropped on the sides and bottom to aspect ratio wr/hr
+def photo_crop(imgd, wr, hr=1.0):
+	p = images.Image(image_data=imgd)
+	ar = float(wr) / float(hr)
+	nh = p.width / ar
+	nw = p.height * ar
+
+	if nh > p.height:
+		pixels = p.width - nw
+		pp = float(pixels) / float(p.width) #pixel ratio
+		tocrop = pp / 2.0 #crop from each side
+		p.crop(tocrop, 0.0, 1.0 - tocrop, 1.0)
+	else:
+		pixels = p.height - nh
+		pp = float(pixels) / float(p.height)
+		p.crop(0.0, 1.0, 1.0, pp)
+
+	return p.execute_transforms(images.JPEG)
+
+def make_port_date(d):
+	months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
+	return '%02i-%s-%02i' %(d.day, months[d.month - 1], d.year % 100)
+
+def draw_width_string(c, x, y, s, fontname, defheight, width):
+	height = defheight
+	while c.stringWidth(s, fontname, height) > width and height > 1:
+		height -= 1
+
+	c.setFont(fontname, height)
+	c.drawCentredString(x, y, s)
+
+def draw_cardfront(c, m, x, y):
+	W = c.W
+	H = c.H
+	F = c.F
+	S = c.S
+	W2 = W / 2.0
+	W4 = W / 4.0
+	W78 = W * 7.0 / 8.0
+	W90 = W * 0.90
+	H65 = H * 0.65
+	H1 = H65 / 4.
+	H2 = H65 / 2.
+	H3 = H1 * 3.
+	H85 = H * 0.85
+	H90 = H * 0.90
+	H95 = H * 0.95
+	c.setLineWidth(0.5)
+	boldfont = c.boldfont
+	deffont = c.deffont
+
+	if m.profile.photo:
+		im = canvas.ImageReader(StringIO.StringIO(images.rotate(photo_crop(m.profile.photo, W2, H65), 180, images.JPEG)))
+		logging.info('%i, %i' %(y, H65))
+		c.drawImage(im, x + W4, y, width=W2, height=H65, preserveAspectRatio=True)
+
+	c.line(x, y, x+W, y)
+	c.line(x, y, x, y+H)
+	c.line(x, y+H, x+W, y+H)
+	c.line(x+W, y, x+W, y+H)
+	c.line(x, y+H65, x+W, y+H65)
+	c.line(x+W4, y, x+W4, y+H65)
+	c.line(x+W4+W2, y, x+W4+W2, y+H65)
+	c.line(x, y+H85, x+W, y+H85)
+	c.line(x, y+H90, x+W, y+H90)
+	c.line(x, y+H95, x+W, y+H95)
+
+	c.line(x, y+H1, x+W4, y+H1)
+	c.line(x, y+H2, x+W4, y+H2)
+	c.line(x, y+H3, x+W4, y+H3)
+
+	c.line(x+W4+W2, y+H1, x+W, y+H1)
+	c.line(x+W4+W2, y+H2, x+W, y+H2)
+	c.line(x+W4+W2, y+H3, x+W, y+H3)
+
+	c.line(x+W2, y+H90, x+W2, y+H)
+	c.line(x+W90, y+H85, x+W90, y+H90)
+
+	draw_width_string(c, x + W2, y + H * 0.79, m.short(), boldfont, H * 0.14, W)
+
+	defheight = 10
+	draw_width_string(c, x + W * 0.45, y+H90-F, m.full_name, deffont, defheight, W90)
+	draw_width_string(c, x + W4, y+H95-F, m.profile.stake.strip(), deffont, defheight, W2)
+	draw_width_string(c, x + W4, y+H-F, m.profile.spres, deffont, defheight, W2)
+	draw_width_string(c, x + W4 + W2, y+H95-F, m.profile.hometown, deffont, defheight, W2)
+	draw_width_string(c, x + W4 + W2, y+H-F, m.profile.stele, deffont, defheight, W2)
+	draw_width_string(c, x + W * 0.95, y+H90-F, m.bloodtype, deffont, defheight, W * 0.1)
+
+	F1 = H1 * 0.15
+	F2 = H1 * 0.6
+	defheight = 14
+
+	draw_width_string(c, x + W78, y+H1-F1, make_port_date(m.release), boldfont, defheight, W4)
+	draw_width_string(c, x + W78, y+H1-F2, 'SAÍDA', boldfont, defheight, W4)
+	draw_width_string(c, x + W78, y+H2-F1, make_port_date(m.mtc), deffont, defheight, W4)
+	draw_width_string(c, x + W78, y+H2-F2, 'CHEGADA', deffont, defheight, W4)
+	if m.birth:
+		draw_width_string(c, x + W78, y+H3-F1, make_port_date(m.birth), deffont, defheight, W4)
+		draw_width_string(c, x + W78, y+H3-F2, 'NASCIMENTO', deffont, defheight, W4)
+	if m.profile.conf_date:
+		draw_width_string(c, x + W78, y+H65-F1, make_port_date(m.profile.conf_date), deffont, defheight, W4)
+		draw_width_string(c, x + W78, y+H65-F2, 'CONFIRMAÇÃO', deffont, defheight, W4)
+
+def get_cardfront_canvas(response):
+	c = canvas.Canvas(response, bottomup=0)
+
+	c.W = 240
+	c.H = 270
+	c.F = 3 # oFfset
+	c.S = 8 # text font Size
+
+	from reportlab.pdfbase import pdfmetrics
+	from reportlab.pdfbase.ttfonts import TTFont
+	c.deffont = 'VeraSe'
+	c.boldfont = 'VeraSeBd'
+	pdfmetrics.registerFont(TTFont(c.deffont, 'VeraSe.ttf'))
+	pdfmetrics.registerFont(TTFont(c.boldfont, 'VeraSeBd.ttf'))
+
+	c.setPageSize(landscape(A4))
+
+	return c
+
+def cardfronts(self, color, ms=None):
+	c = get_cardfront_canvas(self.response.out)
+	self.response.headers['Content-Type'] = 'application/pdf'
+	self.response.headers['Content-Disposition'] = 'attachment; filename=cardfronts-%s.pdf' %color
+
+	i = 0
+
+	white = [] # last 3rd
+	yellow = [] # middle 3rd
+	blue = [] # first 3rd
+
+	if 'd' in request.GET:
+		s = request.GET['d'].split('-')
+		d = date(int(s[0]), int(s[1]), int(s[2]))
+	else:
+		d = date.today()
+
+	if not ms:
+		for m in Missionary.objects.filter(is_released=False).filter(release__gt=d).order_by('release'):
+			if m.sex == MISSIONARY_SEX_ELDER: t = 8
+			else: t = 6
+			whited = t * 30
+			yellowd = t * 60
+			diff = (m.release - d).days
+
+			if (d - m.start).days < 4 * 30:
+				blue.append(m)
+			elif diff < whited:
+				white.append(m)
+			elif diff < yellowd:
+				yellow.append(m)
+			else:
+				blue.append(m)
+
+		if color == 'white':
+			use = white
+		elif color == 'yellow':
+			use = yellow
+		elif color == 'blue':
+			use = blue
+		else:
+			return
+	else:
+		use = ms
+
+	yt = 20
+
+	for m in use:
+		if i % 6 == 0:
+			if i > 0:
+				c.showPage()
+
+			x = 40
+			y = yt
+		elif i % 2 == 0:
+			x += c.W + 1
+			y = yt
+		else:
+			y += 271
+
+		draw_cardfront(c, m, x, y)
+
+		i += 1
+
+	c.showPage()
+	c.save()
+	return response
+
+class Cardfront(webapp.RequestHandler):
+	def get(self, mkey):
+		m = Missionary.get(mkey)
+
+		self.response.headers['Content-Type'] = 'application/pdf'
+		self.response.headers['Content-Disposition'] = 'attachment; filename=cardfront.pdf'
+		c = get_cardfront_canvas(self.response.out)
+
+		x = 25
+		y = 25
+
+		draw_cardfront(c, m, x, y)
+
+		c.save()
+
+class MissionariesPage(webapp.RequestHandler):
+	def get(self):
+		ms = cache.get_ms()
+		render(self, 'missionaries.html', 'Missionaries', {'ms': ms})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -2149,11 +2361,11 @@ application = webapp.WSGIApplication([
 	('/clima/', ClimaPage),
 	('/login/', LoginPage),
 	('/logout/', LogoutPage),
-	('/milagre/', MilagrePage),
 	('/noticias/', NoticiasPage),
 	('/numeros/', NumerosPage),
 	('/quadro/', QuadroPhotoPage),
 	('/relatorio/', RelatorioPage),
+	('/super/', MilagrePage),
 	('/unidades/', UnidadesPage),
 
 	('/image/(.*)', ImageHandler),
@@ -2185,6 +2397,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/area/', AreaListPage),
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
 	('/_ah/missao-rio/assign-mailboxes/', AssignMailboxesPage),
+	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
@@ -2197,6 +2410,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
 	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),
 	('/_ah/missao-rio/map-control/', MapControlPage),
+	('/_ah/missao-rio/missionaries/', MissionariesPage),
 	('/_ah/missao-rio/missionary/(.*)', MissionaryPage),
 	('/_ah/missao-rio/new-missionary/', NewMissionaryPage),
 	('/_ah/missao-rio/pf/(.*)/(.*)', PFPage),

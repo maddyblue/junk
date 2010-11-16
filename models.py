@@ -225,6 +225,15 @@ class Missionary(DerefModel):
 
 		return s
 
+	def short(self):
+		if self.sex == MISSIONARY_SEX_ELDER:
+			s = 'E'
+		else:
+			s = 'S'
+		s += '. ' + self.mission_name
+
+		return s
+
 	def display(self):
 		if self.sex == MISSIONARY_SEX_ELDER:
 			s = 'E'
