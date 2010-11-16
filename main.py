@@ -683,6 +683,7 @@ class MakeNewPage(webapp.RequestHandler):
 	forms = {
 		'week': forms.WeekForm,
 		'area': forms.AreaForm,
+		'ward': forms.WardForm,
 	}
 
 	def get_f(self):
@@ -694,6 +695,10 @@ class MakeNewPage(webapp.RequestHandler):
 	def post(self):
 		s = self.request.POST['submit']
 		f = self.forms[s](data=self.request.POST)
+
+		if s == 'ward':
+			if 'is_branch' not in self.request.POST:
+				self.request.POST['is_branch'] = 'off'
 
 		if f.is_valid():
 			memcache.flush_all()
@@ -712,6 +717,12 @@ class MakeNewPage(webapp.RequestHandler):
 				a = Area(key_name=af.name, name=af.name, zone=af.zone, district=af.district, ward=af.ward, phone=af.phone, zone_name=af.zone.name)
 				a.put()
 				d['done'] = a.name
+			elif s == 'ward':
+				p = self.request.POST
+				s = Key(p['stake'])
+				w = Ward(key_name=p['name'], name=p['name'], stake=s, stake_name=s.name(), uid=int(p['uid']), is_branch=(p['is_branch'] == 'on'))
+				w.put()
+				d['done'] = w.name
 		else:
 			d = {s: f}
 

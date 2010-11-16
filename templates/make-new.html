@@ -22,6 +22,13 @@ Good: {{ done }}
 </form>
 {% endif %}
 
+{% if ward %}
+<form method="POST">
+{{ ward.as_table }}
+<tr><td><input type="submit" name="submit" value="ward"/></td></tr>
+</form>
+{% endif %}
+
 </table>
 
 </body>

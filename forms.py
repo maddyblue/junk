@@ -40,6 +40,11 @@ class AreaForm(djangoforms.ModelForm):
 		model = models.Area
 		exclude = ['does_not_report', 'is_open', 'zone_name', 'reports_with']
 
+class WardForm(djangoforms.ModelForm):
+	class Meta:
+		model = models.Ward
+		exclude = ['stake_name']
+
 class MissionaryForm(djangoforms.ModelForm):
 	class Meta:
 		model = models.Missionary
