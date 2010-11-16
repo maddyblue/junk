@@ -87,19 +87,16 @@ class MainPage(webapp.RequestHandler):
 		self.session = get_current_session()
 
 		sr = self.session.pop('show-record')
+		best = None
 
 		if sr:
 			if 'user' in self.session:
 				best = cache.get_best(str(self.session['user'].get_key('area')))
-				if best:
-					sr = u'%s, isto é o que um missionário já fez no passado em sua área.' %self.session['user']
-					for b in best:
-						sr += u'<br/><b>%s</b>: %s %s' %(templatefilters.filters.ind_name(b[0]), b[3], templatefilters.filters.span_disp(b))
-					sr += u'<br/><br/>Nós o desafiamos a superar!'
-				else:
+				if not best:
 					sr = False
 
-		render(self, '', 'Carta do Presidente', {'page_data': d, 'show': sr, 'show_title': 'Superação!'})
+		t = 'Carta do Presidente'
+		rendert(self, 'carta.html', {'t1': t, 't2': t, 'page_data': d, 'show': sr, 'show_title': 'Superação!', 'best': best})
 
 class BatismosPage(webapp.RequestHandler):
 	def get(self):

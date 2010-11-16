@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block show %}
+
+{{ session.user }}, isto é o que um missionário já fez no passado em sua área:
+<br/>
+{% for b in best %}
+<br/><b>{{ b.0|ind_name }}</b>: {{ b.3 }} {{ b|span_disp }}
+{% endfor %}
+<br/><br/>Nós o desafiamos a superar!
+
+{% endblock %}
