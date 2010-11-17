@@ -1524,7 +1524,6 @@ class LoginPage(webapp.RequestHandler):
 		render_noauth(self, 'login.html', 'Login', {'mopts': cache.get_mopts(), 'url': users.create_login_url('/')})
 
 	def post(self):
-		logging.info(self.request.POST.items())
 		if self.request.POST['m'] == 'visitante' and self.request.POST['p'].lower() == config.VISITOR_PASSWORD:
 			self.session = get_current_session()
 			self.session.regenerate_id()
@@ -1827,10 +1826,12 @@ class EmailPage(webapp.RequestHandler):
 	def get(self, t):
 		ms = cache.get_ms()
 
-		if t == 'zl':
+		if t == 'lz':
 			callings = [MISSIONARY_CALLING_AP, MISSIONARY_CALLING_LZ, MISSIONARY_CALLING_LZL]
 		elif t == 'ap':
 			callings = [MISSIONARY_CALLING_AP]
+		elif t == 'lz-ld-tr':
+			callings = [MISSIONARY_CALLING_AP, MISSIONARY_CALLING_LZ, MISSIONARY_CALLING_LZL, MISSIONARY_CALLING_LD, MISSIONARY_CALLING_LDTR, MISSIONARY_CALLING_TR]
 		else:
 			callings = MISSIONARY_CALLING_CHOICES
 
@@ -2167,7 +2168,7 @@ class CleanupSessions(webapp.RequestHandler):
 
 # imgd is a string of image data
 # returns a string of image data cropped on the sides and bottom to aspect ratio wr/hr
-def photo_crop(imgd, wr, hr=1.0):
+def photo_crop(imgd, wr, hr=1):
 	p = images.Image(image_data=imgd)
 	ar = float(wr) / float(hr)
 	nh = p.width / ar
@@ -2181,7 +2182,7 @@ def photo_crop(imgd, wr, hr=1.0):
 	else:
 		pixels = p.height - nh
 		pp = float(pixels) / float(p.height)
-		p.crop(0.0, 1.0, 1.0, pp)
+		p.crop(0.0, 0.0, 1.0, 1.0 - pp)
 
 	return p.execute_transforms(images.JPEG)
 
@@ -2219,7 +2220,6 @@ def draw_cardfront(c, m, x, y):
 
 	if m.profile.photo:
 		im = canvas.ImageReader(StringIO.StringIO(images.rotate(photo_crop(m.profile.photo, W2, H65), 180, images.JPEG)))
-		logging.info('%i, %i' %(y, H65))
 		c.drawImage(im, x + W4, y, width=W2, height=H65, preserveAspectRatio=True)
 
 	c.line(x, y, x+W, y)
@@ -2393,6 +2393,143 @@ class Cards(webapp.RequestHandler):
 
 		if self.request.POST['submit'] == 'cardfronts':
 			return cardfronts(self, '', ms)
+		if self.request.POST['submit'] == 'cardbacks':
+			return cardbacks(self, ms)
+
+def draw_cardback(c, m, x, y):
+	W = c.W
+	H = c.H
+	F = c.F
+	S = c.S
+	PW = H * 4 # Picture Width
+	c.setFontSize(c.S)
+	c.setLineWidth(0.5)
+
+	if m.profile.photo:
+		im = canvas.ImageReader(StringIO.StringIO(images.rotate(photo_crop(m.profile.photo, 1), 180, images.JPEG)))
+		c.drawImage(im, x, y, width=PW, height=PW, preserveAspectRatio=True)
+
+	c.line(x, y, x+W, y)
+	c.line(x+PW, y+H, x+W, y+H)
+	c.line(x, y, x, y+PW)
+	c.line(x+PW, y, x+PW, y+PW)
+	c.line(x+W, y, x+W, y+PW)
+
+	c.drawCentredString(x + PW + (W - PW)/2, y+H-F, str(m))
+	y += H
+
+	c.line(x+PW, y+H, x+W, y+H)
+	c.drawCentredString(x + PW + (W - PW)/2, y+H-F, m.full_name)
+	y += H
+
+	c.line(x+PW, y+H, x+W, y+H)
+	c.drawCentredString(x + PW + (W - PW)/2, y+H-F, m.profile.hometown)
+	y += H
+
+	c.line(x, y+H, x+W, y+H)
+	c.line(x + PW + (W - PW)/2, y, x + PW + (W - PW)/2, y+H)
+	c.drawCentredString(x + PW + (W - PW)/4, y+H-F, make_port_date(m.start))
+	c.drawCentredString(x + PW + (W - PW)*3/4, y+H-F, make_port_date(m.release))
+	y += H
+
+	if m.sex == MISSIONARY_SEX_ELDER: cstr = 'Companheiro'
+	else: cstr = 'Companheira'
+	hlist = [['Data', 'Área', 'Chamado', cstr]]
+	hlen = 20
+
+	if m.profile.hist_data:
+		hlist.extend([i.split(' | ') for i in m.profile.hist_data.replace('\r', '').split('\n')])
+
+	if len(hlist) > hlen:
+		logging.warn('long cardback: %s' %m)
+
+	hlist.extend([['', '', '', ''] for i in range(hlen - len(hlist))])
+
+	cham_width = (W-PW) * 0.39
+	xarea = x + PW
+	xcham = xarea + cham_width
+	xcomp = x + W - cham_width
+	c.setFontSize(c.S - 1)
+
+	for i in hlist:
+		if len(i) < 4:
+			continue
+
+		c.line(x, y+H, x+W, y+H)
+		c.line(x, y, x, y+H)
+		c.line(x+W, y, x+W, y+H)
+		c.line(x+PW, y, x+PW, y+H)
+		c.line(xarea, y, xarea, y+H)
+		c.line(xcham, y, xcham, y+H)
+		c.line(xcomp, y, xcomp, y+H)
+
+		c.drawCentredString((x + xarea)/2, y+H-F, i[0])
+		c.drawCentredString((xarea + xcham)/2, y+H-F, i[1])
+		c.drawCentredString((xcham + xcomp)/2, y+H-F, i[2])
+		c.setFontSize(c.S - 2)
+		c.drawCentredString((xcomp + x + W)/2, y+H-F, i[3])
+		c.setFontSize(c.S - 1)
+
+		y += H
+
+	return y + c.H
+
+def get_cardback_canvas(response):
+	c = canvas.Canvas(response, bottomup=0)
+
+	c.W = 230
+	c.H = 9
+	c.F = 2 # oFfset
+	c.S = 8 # text font Size
+
+	c.setPageSize(landscape(A4))
+
+	return c
+
+def cardbacks(self, ms=None):
+	c = get_cardback_canvas(self.response.out)
+	self.response.headers['Content-Type'] = 'application/pdf'
+	self.response.headers['Content-Disposition'] = 'attachment; filename=cardback.pdf'
+
+	i = 0
+
+	if not ms:
+		ms = cache.get_ms()
+		ms.sort(cmp=lambda x,y: cmp(x.zone_name, y.zone_name))
+
+	for m in ms:
+		if i % 6 == 0:
+			if i > 0:
+				c.showPage()
+
+			x = 25
+			y = 25
+		elif i % 2 == 0:
+			x += c.W + 2
+			y = 25
+		else:
+			y = 290
+
+		draw_cardback(c, m, x, y)
+
+		i += 1
+
+	c.save()
+
+class Cardback(webapp.RequestHandler):
+	def get(self, mkey):
+		m = Missionary.get(mkey)
+
+		self.response.headers['Content-Type'] = 'application/pdf'
+		self.response.headers['Content-Disposition'] = 'attachment; filename=cardback.pdf'
+		c = get_cardback_canvas(self.response.out)
+
+		x = 25
+		y = 25
+
+		draw_cardback(c, m, x, y)
+
+		c.save()
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -2439,6 +2576,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
 	('/_ah/missao-rio/assign-mailboxes/', AssignMailboxesPage),
 	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
+	('/_ah/missao-rio/cardback/(.*)', Cardback),
 	('/_ah/missao-rio/cards/', Cards),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
