@@ -87,24 +87,6 @@ indexes:
   - name: __key__
     direction: desc
 
-- kind: Missionary
-  properties:
-  - name: is_released
-  - name: area_name
-
-- kind: Missionary
-  properties:
-  - name: is_released
-  - name: mission_name
-
-- kind: Missionary
-  properties:
-  - name: is_released
-  - name: zone_name
-  - name: area_name
-  - name: is_senior
-    direction: desc
-
 - kind: Sum
   properties:
   - name: date

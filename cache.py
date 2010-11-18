@@ -109,8 +109,8 @@ def get_mopts(released=False):
 	return mopts
 
 def render_mopts(released):
-	missionary = models.Missionary.gql('where is_released = :1 order by mission_name', released).fetch(1000)
-	return ''.join(['<option value="%s">%s</option>' %(m.key(), unicode(m)) for m in missionary])
+	ms = get_ms(not released)
+	return ''.join(['<option value="%s">%s</option>' %(m.key(), unicode(m)) for m in ms])
 
 # list of areas as html options: for weekly reports
 def get_aopts():
@@ -269,7 +269,8 @@ def get_zones():
 def render_zones():
 	zones = {}
 
-	ms = models.Missionary.all().filter('is_released', False).order('area_name').fetch(500)
+	ms = get_missionaries()
+
 	prefetch_refprops(ms, models.Missionary.area)
 	areas = [m.area for m in ms]
 	prefetch_refprops(areas, models.Area.district)
@@ -320,7 +321,12 @@ def get_missionaries():
 			ms[i].area = ar[i]
 		return ms
 	else:
-		data = models.Missionary.all().filter('is_released', False).order('zone_name').order('area_name').order('-is_senior').fetch(500)
+		data = get_ms()
+
+		data.sort(cmp=lambda y,x: cmp(x.is_senior, y.is_senior))
+		data.sort(cmp=lambda x,y: cmp(x.area_name, y.area_name))
+		data.sort(cmp=lambda x,y: cmp(x.zone_name, y.zone_name))
+
 		prefetch_refprops(data, models.Missionary.area)
 		memcache.add(n + 'area', pack([m.area for m in data]))
 		memcache.add(n + 'missionary', pack(data))
@@ -345,7 +351,9 @@ def get_ms(active=True):
 			data = data.filter('is_released', False)
 
 		# after time, the 1000 limit won't be enough if active == False
-		data = data.order('mission_name').fetch(1000)
+		data = data.fetch(1000)
+
+		data.sort(cmp=lambda x,y: cmp(x.mission_name, y.mission_name))
 		memcache.add(n, pack(data))
 
 	return data
