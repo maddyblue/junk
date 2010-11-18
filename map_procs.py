@@ -8,12 +8,6 @@ import logging
 import models
 from datetime import date
 
-def null(entity):
-	pass
-
-def delete(entity):
-	yield op.db.Delete(entity)
-
 def get_areas():
 	data = memcache.get('sync-areas')
 	if data is not None:

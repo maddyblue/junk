@@ -49,11 +49,6 @@ indexes:
 
 - kind: Indicator
   properties:
-  - name: __key__
-    direction: desc
-
-- kind: Indicator
-  properties:
   - name: area
   - name: weekdate
 
@@ -72,21 +67,6 @@ indexes:
   properties:
   - name: zone
   - name: weekdate
-    direction: desc
-
-- kind: IndicatorBaptism
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: IndicatorConfirmation
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: IndicatorSubmission
-  properties:
-  - name: __key__
     direction: desc
 
 - kind: IndicatorSubmission
@@ -125,62 +105,12 @@ indexes:
   - name: is_senior
     direction: desc
 
-- kind: MissionaryProfile
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: RPM
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: Report
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: SnapArea
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: SnapMissionary
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: Snapshot
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: SnapshotIndex
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: Stake
-  properties:
-  - name: __key__
-    direction: desc
-
-- kind: Sum
-  properties:
-  - name: __key__
-    direction: desc
-
 - kind: Sum
   properties:
   - name: date
   - name: ekind
   - name: span
   - name: ref
-
-- kind: Ward
-  properties:
-  - name: __key__
-    direction: desc
 
 - kind: Ward
   properties:
