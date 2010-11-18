@@ -1437,14 +1437,15 @@ def make_chart(inds, disp, other={}, rmax=0, step=2):
 
 	defs = {
 		'chs': '470x250',
-		'cht': 'lc',
+		'cht': 'bvg',
+		'chbh': 'r,0.2,1',
 
-		'chco': '0000FF,FF0000,00FF00',
+		'chco': ','.join(['0000FF', 'FF0000', '00FF00'][:len(disp)]),
 		'chdlp': 'b', # chart legend on bottom
 		'chxr': '1,%i,%i,%i' %(dmin, dmax, step),
 		'chxs': '0,,12', # make the date labels larger
 		'chxt': 'x,y',
-		'chxtc': '0,-200', # vertical tick marks across the graph
+		'chxtc': '1,-600', # horizontal tick marks across the graph
 	}
 
 	for k, v in defs.iteritems():
@@ -1457,7 +1458,7 @@ def make_chart(inds, disp, other={}, rmax=0, step=2):
 	if 'chxl' not in d:
 		d['chxl'] = inds['chxl']
 	if 'chm' not in d:
-		d['chm'] = '|'.join(['o,000000,%i,-1,4' %i for i in range(len(inds))])
+		d['chm'] = '|'.join(['N,000000,%i,,12,,be' %i for i in range(len(disp))])
 
 	return chart_url(d)
 
@@ -1490,7 +1491,7 @@ class AreaPage(webapp.RequestHandler):
 		charts = []
 		if data['PB'][1]:
 			charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}, 8))
-			charts.append(make_chart(data, ['LM', 'OL', 'TL'], {'chtt': 'Doutrinas Ensinadas'}, 25, 4))
+			charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas', 'cht': 'bvs'}, 25, 4))
 			charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores'}, 20, 3))
 			charts.append(make_chart(data, ['Con'], {'chtt': 'Contatos'}, 100, 10))
 
@@ -1506,7 +1507,7 @@ class ZonePage(webapp.RequestHandler):
 
 		charts = []
 		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
-		charts.append(make_chart(data, ['LM', 'OL', 'TL'], {'chtt': 'Doutrinas Ensinadas - ' + time}))
+		charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas - ' + time, 'cht': 'bvs'}, 70, 10))
 		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores - ' + time}))
 		charts.append(make_chart(data, ['Con'], {'chtt': 'Contatos - ' + time}))
 
@@ -1557,7 +1558,7 @@ class LogoutPage(webapp.RequestHandler):
 
 		render_noauth(self, 'logout.html', 'Sair')
 
-def mk_select(name, data, opt):
+def mk_select(name, data, opt=None):
 	r = '<select name="%s">' %name
 
 	for k, v in data:
@@ -2148,14 +2149,14 @@ class WeekSumsPage(webapp.RequestHandler):
 		time = '%i semanas' %n
 		charts = []
 		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
-		charts.append(make_chart(data, ['LM'], {'chtt': 'Doutrinas Ensinadas - ' + time}))
+		charts.append(make_chart(data, ['LM'], {'chtt': 'Doutrinas Ensinadas - ' + time, 'cht': 'bvs'}))
 		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores - ' + time}))
 
 		n = 40
 		data = cache.get_week_inds(n)
 		time = '%i semanas' %n
 		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
-		charts.append(make_chart(data, ['LM'], {'chtt': 'Doutrinas Ensinadas - ' + time}))
+		charts.append(make_chart(data, ['LM'], {'chtt': 'Doutrinas Ensinadas - ' + time, 'cht': 'bvs'}))
 		charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores - ' + time}))
 
 		render(self, 'week-sums.html', 'Week Sums', {'ws': ws, 'charts': charts})
@@ -2395,6 +2396,8 @@ class Cards(webapp.RequestHandler):
 			return cardfronts(self, '', ms)
 		if self.request.POST['submit'] == 'cardbacks':
 			return cardbacks(self, ms)
+		if self.request.POST['submit'] == 'photos':
+			return photos(self, float(self.request.POST['width']), float(self.request.POST['height']), ms)
 
 def draw_cardback(c, m, x, y):
 	W = c.W
@@ -2531,6 +2534,94 @@ class Cardback(webapp.RequestHandler):
 
 		c.save()
 
+def photos(self, width, height, ms):
+	ar = float(width) / float(height)
+
+	#REPORTLAB STUFF
+	p = .0352777778 #cm
+	px = width / p #photo widt (points)
+	py = height / p #photo height (points)
+	margin = 1.1 / p
+	margp = .8
+	pagew = 595 #page width in points
+	pageh = 840 #page height in points
+	xpos = 0
+	ypos = 0
+
+	c = canvas.Canvas(self.response.out)
+	c.setPageSize(A4)
+	c.setLineWidth(.5)
+
+	c.line(margin + xpos, 0, margin + xpos, margin * margp)
+	c.line(margin + xpos, pageh, margin + xpos, pageh - margin * margp)
+	c.line(0, margin + ypos - 1, margin * margp, margin + ypos - 1)
+	c.line(pagew - margin * margp, margin + ypos - 1, pagew, margin + ypos - 1)
+
+	for m in ms:
+		if not m.profile.photo:
+			raise ValueError, 'missing photo: %s' %m
+
+		# crop the image (if needed) so you don't have weird aspect ratios
+		picture = images.Image(image_data=m.profile.photo)
+
+		newheight = picture.width / ar
+		newwidth = picture.height * ar
+
+		# move to the next row / page if needed
+		if xpos + px > pagew - margin * 2:
+			c.line(0, margin + ypos + py + 1, margin * margp, margin + ypos + py + 1)
+			c.line(pagew, margin + ypos + py + 1, pagew - margin * margp, margin + ypos + py + 1)
+			if ypos + py * 2 > pageh - margin * 2:
+				c.showPage()
+				xpos = 0
+				ypos = 0
+				c.line(margin + xpos, 0, margin + xpos, margin * margp)
+				c.line(margin + xpos, pageh, margin + xpos, pageh - margin * margp)
+				c.line(0, margin + ypos - 1, margin * margp, margin + ypos - 1)
+				c.line(pagew - margin * margp, margin + ypos - 1, pagew, margin + ypos - 1)
+
+			else:
+				ypos = ypos + py
+				xpos = 0
+
+		# print photo
+		im = canvas.ImageReader(StringIO.StringIO(photo_crop(m.profile.photo, ar)))
+		c.drawImage(im, margin + xpos, margin + ypos, width=px, height=py, preserveAspectRatio=True)
+
+		# draw vertical lines, but only once
+		if ypos == 0:
+			c.line(margin + xpos + px+.5,0,margin + xpos + px+.5, margin * margp)
+			c.line(margin + xpos + px+.5,pageh - margin * margp,margin + xpos + px+.5, pageh)
+		xpos = xpos + px
+
+	c.line(0,margin + ypos + py + 1,margin * margp,margin + ypos + py + 1)
+	c.line(pagew - margin * margp,margin + ypos + py + 1,pagew,margin + ypos + py + 1)
+
+	self.response.headers['Content-Type'] = 'application/pdf'
+	self.response.headers['Content-Disposition'] = 'attachment; filename=photos.pdf'
+
+	c.save()
+
+class Indicators(webapp.RequestHandler):
+	def get(self):
+		weeks = Week.all().order('-date').fetch(50)
+		ws = mk_select('week', [(i.key(), i.date) for i in weeks])
+		render(self, 'inds-select.html', 'Indicators', {'weeks': ws})
+
+	def post(self):
+		w = Week.get(self.request.POST['week'])
+		inds = cache.get_inds(w)
+
+		if 'lz' in self.request.POST:
+			ms = cache.get_snapmissionaries(w)
+			lzareas = [m.get_key('snaparea') for m in ms if m.calling == MISSIONARY_CALLING_LZL]
+			inds = [i for i in inds if i.get_key('snaparea') in lzareas]
+
+		inds.sort(cmp=lambda x,y: cmp(x.get_key('area').name(), y.get_key('area').name()))
+		inds.sort(cmp=lambda x,y: cmp(x.get_key('zone').name(), y.get_key('zone').name()))
+
+		render(self, 'inds.html', 'Indicators', {'inds': inds})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -2575,8 +2666,8 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/area/', AreaListPage),
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
 	('/_ah/missao-rio/assign-mailboxes/', AssignMailboxesPage),
-	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
 	('/_ah/missao-rio/cardback/(.*)', Cardback),
+	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
 	('/_ah/missao-rio/cards/', Cards),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
@@ -2584,6 +2675,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/flush/', FlushPage),
 	('/_ah/missao-rio/images/', ImagesPage),
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
+	('/_ah/missao-rio/indicators/', Indicators),
 	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
 	('/_ah/missao-rio/make-new/', MakeNewPage),
