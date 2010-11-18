@@ -2620,7 +2620,66 @@ class Indicators(webapp.RequestHandler):
 		inds.sort(cmp=lambda x,y: cmp(x.get_key('area').name(), y.get_key('area').name()))
 		inds.sort(cmp=lambda x,y: cmp(x.get_key('zone').name(), y.get_key('zone').name()))
 
-		render(self, 'inds.html', 'Indicators', {'inds': inds})
+		ni = []
+		for i in inds:
+			pts = 0
+			if i.PB == 0: pts += 1
+			if i.PBM < 2: pts += 1
+			if i.PS < 5: pts += 1
+			if (i.OL + i.LM) < 15: pts += 1
+			if i.Con < 50: pts += 1
+			if i.PS < 15: pts += 1
+			ni.append((i, pts))
+
+		render(self, 'inds.html', 'Indicators', {'inds': ni})
+
+class EntranceDates(webapp.RequestHandler):
+	def get(self):
+		ms = cache.get_ms()
+		cache.prefetch_refprops(ms, Missionary.profile)
+		msf = [m for m in ms if m.profile.entrance]
+		msf.sort(cmp=lambda x,y: cmp(x.profile.entrance, y.profile.entrance))
+		msf.extend([m for m in ms if not m.profile.entrance])
+		render(self, 'entrance-dates.html', 'Entrance Dates', {'ms': msf})
+
+	def post(self):
+		mp = []
+		for k, v in self.request.POST.iteritems():
+			if k[0] == 'm':
+				if not v:
+					v = ''
+
+				mp.append('%s|%s' %(k[1:], v))
+
+		n = 20
+		while mp:
+			d = mp[:n]
+			del mp[:n]
+			taskqueue.add(url='/_ah/tasks/entrance-dates', params={'mp': d})
+
+		render(self, '', 'Entrance Dates', {'page_data': 'Dates changed.'})
+
+class EntranceHandler(webapp.RequestHandler):
+	def post(self):
+		ps = []
+		vs = []
+		for i in self.request.get_all('mp'):
+			v = i.partition('|')
+			ps.append(v[0])
+			vs.append(v[2])
+
+		ps = MissionaryProfile.get(ps)
+
+		for i in range(len(ps)):
+			try:
+				v = vs[i].split('-')
+				vs[i] = date(int(v[0]), int(v[1]), int(v[2]))
+			except:
+				vs[i] = None
+
+			ps[i].entrance = vs[i]
+
+		db.put(ps)
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -2660,6 +2719,7 @@ application = webapp.WSGIApplication([
 
 	# task queue
 	('/_ah/tasks/indicator', ProcIndHandler),
+	('/_ah/tasks/entrance-dates', EntranceHandler),
 
 	# _ah
 	('/_ah/missao-rio/', AdminPage),
@@ -2672,6 +2732,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
+	('/_ah/missao-rio/entrance-dates/', EntranceDates),
 	('/_ah/missao-rio/flush/', FlushPage),
 	('/_ah/missao-rio/images/', ImagesPage),
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),

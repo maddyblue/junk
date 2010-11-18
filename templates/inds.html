@@ -1,0 +1,8 @@
+Week of: {{ inds.0.0.weekdate }}
+
+<table border="1">
+<tr><th>Zone</th><th>Area</th><th>PB</th><th>PC</th><th>PBM</th><th>PS</th><th>LM</th><th>OL</th><th>PP</th><th>NP</th><th>Con</th><th>Dead Points</th></tr>
+{% for i in inds %}
+<tr><td>{{ i.0|getkey_name:"zone" }}</td><td>{{ i.0|getkey_name:"area" }}</td><td>{{ i.0.PB }}</td><td>{{ i.0.PC }}</td><td>{{ i.0.PBM }}</td><td>{{ i.0.PS }}</td><td>{{ i.0.LM }}</td><td>{{ i.0.OL }}</td><td>{{ i.0.PP }}</td><td>{{ i.0.NP }}</td><td>{{ i.0.Con }}</td><td>{{ i.1 }}</td></tr>
+{% endfor %}
+</table>
