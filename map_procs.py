@@ -107,16 +107,20 @@ def sums(entity, inds):
 					date=wd,
 				)
 
+				p[kn].reports = 1
+
 				for ind in models.Sum.inds:
 					setattr(p[kn], ind, getattr(i, ind))
 			else:
 				for ind in models.Sum.inds:
 					setattr(p[kn], ind, getattr(i, ind) + getattr(p[kn], ind))
 
+				p[kn].reports += 1
+
 		best = dict([(i, (0, None)) for i in models.Sum.inds])
 
 		for i in p.values():
-			for ind in models.Sum.inds:
+			for ind in models.Sum.best_inds:
 				v = getattr(i, ind)
 				if v > best[ind][0]:
 					best[ind] = (v, i)
@@ -161,3 +165,20 @@ def sums_week(entity):
 		ws.NP += i.NP
 
 	yield op.db.Put(ws)
+
+def life_points(entity):
+	if entity.ekind != models.SUM_AREA or entity.span != models.SUM_WEEK:
+		return
+
+	ctx = context.get()
+
+	s = ctx.mapreduce_spec.params['s'].split('-')
+	entity.life = 0
+
+	for i in range(len(models.Sum.inds)):
+		v = models.Sum.inds[i]
+
+		if v in ['PB', 'PBM', 'PS', 'NP', 'OL', 'LM', 'Con'] and getattr(entity, v) >= float(s[i]):
+			entity.life += 1
+
+	yield op.db.Put(entity)

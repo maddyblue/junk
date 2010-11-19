@@ -814,7 +814,8 @@ class Sum(DerefExpando):
 	date = db.DateProperty(required=True) # date.day is 1 if span == SUM_MONTH
 	best = db.StringListProperty()
 
-	inds = ['PB', 'PS']
+	inds = ['PB', 'PC', 'PBM', 'PS', 'OL', 'LM', 'NP', 'Con', 'BM']
+	best_inds = ['PB', 'PS']
 
 	@staticmethod
 	def keyname(key, span, date):

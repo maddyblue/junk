@@ -15,53 +15,11 @@ indexes:
   - name: __key__
     direction: desc
 
-- kind: Area
-  properties:
-  - name: is_open
-  - name: zone
-  - name: name
-
-- kind: Area
-  properties:
-  - name: is_open
-  - name: zone_name
-  - name: name
-
-- kind: Area
-  properties:
-  - name: zone
-  - name: name
-
-- kind: Area
-  properties:
-  - name: zone_name
-  - name: name
-
-- kind: Indicator
-  properties:
-  - name: Area
-  - name: weekdate
-
-- kind: Indicator
-  properties:
-  - name: Zone
-  - name: weekdate
-
-- kind: Indicator
-  properties:
-  - name: area
-  - name: weekdate
-
 - kind: Indicator
   properties:
   - name: area
   - name: weekdate
     direction: desc
-
-- kind: Indicator
-  properties:
-  - name: zone
-  - name: weekdate
 
 - kind: Indicator
   properties:
@@ -74,30 +32,26 @@ indexes:
   - name: week
   - name: zone
   - name: submitted
-
-- kind: IndicatorSubmission
-  properties:
-  - name: week
-  - name: zone
-  - name: submitted
     direction: desc
 
-- kind: Missionary
+- kind: Sum
   properties:
   - name: __key__
     direction: desc
 
 - kind: Sum
   properties:
+  - name: ekind
+  - name: ref
+  - name: span
   - name: date
+    direction: desc
+
+- kind: Sum
+  properties:
   - name: ekind
   - name: span
-  - name: ref
-
-- kind: Ward
-  properties:
-  - name: stake
-  - name: name
+  - name: date
 
 - kind: Week
   properties:

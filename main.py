@@ -326,14 +326,7 @@ class MapControlPage(webapp.RequestHandler):
 		from mapreduce import control, model
 		p = self.request.POST['submit']
 
-		if p == 'Delete Kinds':
-			handler_spec = 'map_procs.delete'
-			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
-
-			for i in self.request.POST.getall('kind'):
-				r = control.start_map('Delete ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
-				self.response.out.write('delete %s, job id %s<br/>' %(i, r))
-		elif p == 'Sync Phase 1':
+		if p == 'Sync Phase 1':
 			# pre-memcache
 			memcache.flush_all()
 			map_procs.get_zones()
@@ -352,22 +345,6 @@ class MapControlPage(webapp.RequestHandler):
 
 			i = control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync missionaries: %s<br>' %i)
-		elif p == 'Make Index':
-			handler_spec = 'map_procs.null'
-			reader_spec = 'mapreduce.input_readers.DatastoreKeyInputReader'
-
-			for i in self.request.POST.getall('kind'):
-				r = control.start_map('Make Index ' + i, handler_spec, reader_spec, {'entity_kind': 'models.' + i}, model._DEFAULT_SHARD_COUNT)
-				self.response.out.write('make index %s, job id %s<br/>' %(i, r))
-		elif p == 'Compute Best':
-			handler_spec = 'map_procs.best_'
-			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
-
-			r = control.start_map('Compute Best Area', handler_spec + 'area', reader_spec, {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
-			self.response.out.write('compute best area, job id %s<br/>' %r)
-
-			r = control.start_map('Compute Best Zone', handler_spec + 'zone', reader_spec, {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
-			self.response.out.write('compute best zone, job id %s<br/>' %r)
 		elif p == 'Compute Sums':
 			handler_spec = 'map_procs.sums_'
 			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
@@ -375,6 +352,23 @@ class MapControlPage(webapp.RequestHandler):
 			control.start_map('Compute Sums: Area', handler_spec + 'area', reader_spec, {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
 			control.start_map('Compute Sums: Zone', handler_spec + 'zone', reader_spec, {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
 			control.start_map('Compute Sums: Week', handler_spec + 'week', reader_spec, {'entity_kind': 'models.Week'}, model._DEFAULT_SHARD_COUNT)
+		elif p == 'Compute Life Points':
+			handler_spec = 'map_procs.life_points'
+			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
+
+			d = date.today() - timedelta(30 * 6) # six months
+			sums = dict([(i, 0) for i in Sum.inds])
+			for s in Sum.all().filter('date >=', d).filter('ekind', SUM_ZONE).filter('span', SUM_MONTH).fetch(500):
+				for i in Sum.inds:
+					sums[i] += getattr(s, i)
+
+			b = float(sums['PB'])
+			for k in sums.keys():
+				sums[k] /= b
+
+			s = '-'.join(['%.1f' %sums[k] for k in Sum.inds])
+
+			control.start_map('Life Points', handler_spec, reader_spec, {'entity_kind': 'models.Sum'}, shard_count=model._DEFAULT_SHARD_COUNT, mapreduce_parameters={'s': s})
 
 			self.response.out.write('done')
 
@@ -1490,6 +1484,11 @@ class AreaPage(webapp.RequestHandler):
 
 		charts = []
 		if data['PB'][1]:
+			self.session = get_current_session()
+
+			if 'is_admin' in self.session and self.session['is_admin']:
+				charts.append(make_chart(data, ['life'], {'chtt': 'Life Chart'}, 7, 1))
+
 			charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}, 8))
 			charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas', 'cht': 'bvs'}, 25, 4))
 			charts.append(make_chart(data, ['NP', 'PS', 'PBM'], {'chtt': 'Pesquisadores'}, 20, 3))
@@ -1588,7 +1587,7 @@ class TransferPage(webapp.RequestHandler):
 
 	def get(self):
 		ms = self.get_missionaries()
-		areas = models.Area.all().order('zone_name').order('name').fetch(500)
+		areas = cache.get_areas(True)
 		areas = [(str(a.key()), unicode(a)) for a in areas]
 		areas.insert(0, ('', '')) # allow no area
 		callings = [(i, i) for i in models.MISSIONARY_CALLING_CHOICES]
@@ -1701,7 +1700,7 @@ class FlushPage(webapp.RequestHandler):
 
 class AreaDistrictPage(webapp.RequestHandler):
 	def get(self):
-		areas = models.Area.all().order('zone_name').order('name').fetch(500)
+		areas = cache.get_areas(True)
 		anames = [(str(a.key()), unicode(a)) for a in areas]
 		anames.insert(0, ('', '')) # allow no district
 		zones = models.Zone.all().order('name').fetch(100)
@@ -2015,7 +2014,7 @@ class PFPage(webapp.RequestHandler):
 			else:
 				raise
 
-			c.drawString(525, 283, pf_date(m.birth))
+			c.drawString(520, 283, pf_date(m.birth))
 			c.drawString(391, 323, p.birth_city)
 			c.drawString(40, 318, 'X') # solteiro
 
@@ -2681,6 +2680,154 @@ class EntranceHandler(webapp.RequestHandler):
 
 		db.put(ps)
 
+##### RAIOX
+
+class RaioX(webapp.RequestHandler):
+	def get(self):
+		zones = [z for z in Zone.all().order('name').fetch(100) if z.is_open]
+		zd = [('mission', 'Missão Completa')]
+		zd.extend([(i.key(), i.name.encode('utf8')) for i in zones])
+		zs = mk_select('zone', zd)
+
+		render(self, 'raiox.html', 'Raio-X', {'zs': zs})
+
+	def post(self):
+		month = int(self.request.get('month'))
+		year = int(self.request.get('year'))
+		d = date(year, month, 1)
+
+		wks = [w for w in Week.all().filter('date >=', d).fetch(500) if w.date.year == year and w.date.month == month]
+		logging.info('weeks: %i' %len(wks))
+
+		sums = cache.get_sums(SUM_ZONE, SUM_MONTH, d)
+		zk = self.request.get('zone')
+
+		if zk != 'mission':
+			zkey = Key(zk)
+			sums = [i for i in sums if i.get_key('ref') == zkey]
+
+		logging.info('%s' %sums)
+
+def proc_raiox2(s):
+	r = {}
+	ws = inds.distinct('week').values('week')
+
+	if len(ws) == 0:
+		return r
+
+	md = len(inds) / float(len(ws)) # avg. number of duplas
+
+	a = inds.aggregate(Sum('PB'), Sum('PC'), Sum('Homen'), Sum('PS'), Sum('LM'), Sum('OL'), Sum('LMARC'), Sum('NP'), Sum('Con'))
+	r['pb'] = a['PB__sum']
+	r['pc'] = a['PC__sum']
+	r['ps'] = a['PS__sum']
+	r['li'] = a['LM__sum'] + a['OL__sum'] + a['LMARC__sum']
+	r['np'] = a['NP__sum']
+	r['con'] = a['Con__sum']
+
+	for k, v in list(r.iteritems()):
+		r['pd_' + k] = v / md / len(ws)
+
+	r['crianca'] = inds.filter(baptisms__age__lt=12).count()
+	r['moca'] = inds.filter(baptisms__age__gte=12, baptisms__age__lt=18, baptisms__sex=False).count()
+	r['rapaz'] = inds.filter(baptisms__age__gte=12, baptisms__age__lt=18, baptisms__sex=True).count()
+	r['mulher'] = inds.filter(baptisms__age__gte=18, baptisms__sex=False).count()
+	r['homem'] = inds.filter(baptisms__age__gte=18, baptisms__sex=True).count()
+
+	r['wks'] = len(ws)
+	r['md'] = md
+
+	return r
+
+def raio_x(request, year, month):
+	year = int(year)
+	month = int(month)
+
+	lmonth = month - 1
+	lyear = year
+	if lmonth == 0:
+		lmonth = 12
+		lyear -= 1
+
+	weeks = Week.objects.filter(date__year=year, date__month=month)
+	lweeks = Week.objects.filter(date__year=lyear, date__month=lmonth)
+
+	areas = []
+	snapshots = Snapshot.objects.filter(id__in=weeks.values('snapshot'))
+	for s in snapshots:
+		areas.extend(s.areas.all().values_list('area', flat=True))
+	areas = list(set(areas))
+	areas = Area.objects.filter(id__in=areas)
+	zones = Zone.objects.filter(id__in=areas.values('zone')).order_by('name')
+
+	frames = []
+	for z in zones:
+		w1 = proc_zone2(weeks, z)
+
+		if len(w1) == 0:
+			continue
+
+		w2 = proc_zone2(lweeks, z)
+
+		w1['p_li'] = 100 * w1['ps'] / w1['np']
+		w1['p_pb'] = 100 * w1['pb'] / w1['ps']
+		if w1['pb']: w1['p_pc'] = 100 * w1['pc'] / w1['pb']
+		if w1['pb']: w1['p_hb'] = 100 * w1['homem'] / w1['pb']
+
+		if len(w2) > 0:
+			for i in ['np', 'li', 'ps', 'pb', 'pc']:
+				if w2['pd_' + i] == 0: w1['m_' + i] = 'inf';
+				else: w1['m_' + i] = 100 * w1['pd_'+ i]  / w2['pd_' + i] - 100
+				if w1['m_' + i] >= 0: w1['c_' + i] = 'green'
+				else: w1['c_' + i] = 'red'
+
+		rc('font', size=20)
+		pyplot.subplots_adjust(.05, 0, .85, 1)
+
+		figure(1, figsize=(8, 8))
+
+		labels = [u'Crianças', u'Moças', 'Rapazes', 'Mulheres', 'Homens']
+		explode = [0, 0, 0, 0, .05]
+		colors = ['#FFA500', '#FF33CC', '#3399FF', '#CCFF00', '#FF0000']
+		fracs = [w1['crianca'], w1['moca'], w1['rapaz'], w1['mulher'], w1['homem']]
+
+		while 0 in fracs:
+			i = fracs.index(0)
+			labels.pop(i)
+			fracs.pop(i)
+			explode.pop(i)
+			colors.pop(i)
+
+		pie(fracs, colors=colors, labeldistance=1.05, explode=explode, labels=labels, autopct='%i%%')
+		savefig('pdfs/pizza-%i-%i-%i.pdf' %(year, month, z.id))
+		clf()
+
+		d = {
+			'z': z,
+		}
+
+		for k, v in list(w1.iteritems()):
+			if isinstance(v, float):
+				v = ('%.2f' %v).replace('.', ',')
+
+			d[k] = v
+
+		frames.append(d)
+
+		# also generate this per zone
+		fname = 'raio-x-%i-%i-%s' %(year, month, z.name)
+		t = loader.get_template('raio-x-zone.tex')
+		c = Context({'f': d, 'month': months[month - 1], 'mid': month, 'year': year})
+		pdf(t, c, fname)
+
+	fname = 'raio-x-%i-%i' %(year, month)
+	t = loader.get_template('raio-x.tex')
+	c = Context({'frames': frames, 'month': months[month - 1], 'mid': month, 'year': year})
+
+	return pdf(t, c, fname)
+
+#######
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -2716,6 +2863,7 @@ application = webapp.WSGIApplication([
 	('/sums/(.*)/(.*)/(.*)', SumsPage),
 	('/weeks/', WeekSumsPage),
 	('/zone/(.*)', ZonePage),
+	('/raiox/', RaioX),
 
 	# task queue
 	('/_ah/tasks/indicator', ProcIndHandler),

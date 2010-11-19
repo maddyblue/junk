@@ -11,7 +11,7 @@ import datetime
 
 # cache names
 C_AOPTS = 'aopts'
-C_AREAS = 'areas'
+C_AREAS = 'areas-%s'
 C_AREAS_IN_ZONE = 'areas-in-zone-%s'
 C_AREA_INDS = 'area-%s-%s'
 C_AWS = 'aws'
@@ -20,6 +20,7 @@ C_IBC = 'ibc-%s'
 C_IMAGE = 'image-%s'
 C_INDS = 'inds-%s'
 C_INDS_AREA = 'inds-area-%s'
+C_LIFE = 'life-%s-%s'
 C_MAIN_JS = 'main-js'
 C_MISSIONARIES = 'missionaries'
 C_MOPTS = 'mopts-%s'
@@ -113,18 +114,18 @@ def render_mopts(released):
 	return ''.join(['<option value="%s">%s</option>' %(m.key(), unicode(m)) for m in ms])
 
 # list of areas as html options: for weekly reports
-def get_aopts():
+# assumes week is current week
+def get_aopts(week):
 	n = C_AOPTS
 	aopts = memcache.get(n)
 	if aopts is None:
-		aopts = render_aopts()
+		aopts = render_aopts(week)
 		memcache.add(n, aopts)
 
 	return aopts
 
-def render_aopts():
-	area = models.Area.gql('where is_open = :1 order by zone_name, name', True).fetch(1000)
-	return ''.join(['<option value="%s">%s</option>' %(a.key(), unicode(a)) for a in area])
+def render_aopts(week):
+	return ''.join(['<option value="%s">%s - %s</option>' %(a.get_key('area'), a.get_key('zone').name(), a.get_key('area').name()) for a in get_snapareas(week)])
 
 # list of wards as html options: for photo gallery
 def get_wopts():
@@ -184,6 +185,8 @@ def get_snapareas(week):
 		s = get_snapshot(week.get_key('snapshot'))
 		d = models.SnapshotIndex.all().ancestor(s).get()
 		data = db.get(d.snapareas)
+		data.sort(cmp=lambda x,y: cmp(x.get_key('area'), y.get_key('area')))
+		data.sort(cmp=lambda x,y: cmp(x.get_key('zone'), y.get_key('zone')))
 		memcache.add(n, pack(data))
 
 	return data
@@ -422,11 +425,12 @@ def get_relatorio_page():
 
 	if not data:
 		contatos = ''.join(['<option value="%s">%s</option>' %(i, i) for i in range(101)])
+		w = get_week()
 
 		d = {
-			'week': get_week(),
+			'week': w,
 			'missionary': get_mopts(),
-			'area': get_aopts(),
+			'area': get_aopts(w),
 			'contatos': contatos,
 		}
 
@@ -457,6 +461,22 @@ def get_main_js():
 
 short_months = ['', 'jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
 
+# returns a list of life points for the given area key for the last weeks sorted by most recent week last
+def get_life(key, weeks):
+	n = C_LIFE %(key, weeks)
+	data = memcache.get(n)
+
+	if not data:
+		data = []
+		d = datetime.date.today() - datetime.timedelta(7 * weeks)
+		for s in models.Sum.all().filter('date >=', d).filter('ekind', models.SUM_AREA).filter('span', models.SUM_WEEK).filter('ref', db.Key(key)).order('-date').fetch(weeks):
+			data.append(s.life)
+
+		data.reverse()
+		memcache.add(n, data)
+
+	return data
+
 def get_area_inds(ak, weeks=12):
 	n = C_AREA_INDS %(ak, weeks)
 	data = memcache.get(n)
@@ -476,6 +496,8 @@ def get_area_inds(ak, weeks=12):
 			else:
 				d = [getattr(i, k) for i in inds]
 			data[k] = (v, d)
+
+		data['life'] = ('Life Points', get_life(ak, weeks))
 
 		memcache.add(n, data)
 
@@ -561,13 +583,20 @@ def get_week_inds(weeks=12):
 
 	return data
 
-# returns a list of open areas sorted by zone and name
-def get_areas():
-	n = C_AREAS
+# returns a list of areas sorted by zone and name
+def get_areas(w_closed=False):
+	n = C_AREAS %w_closed
 	data = unpack(memcache.get(n))
 
 	if not data:
-		data = models.Area.all().filter('is_open', True).order('zone').order('name').fetch(500)
+		data = models.Area.all()
+		if not w_closed:
+			data = data.filter('is_open', True)
+		data = data.fetch(500)
+
+		data.sort(cmp=lambda x,y: cmp(x.name, y.name))
+		data.sort(cmp=lambda x,y: cmp(x.zone_name, y.zone_name))
+
 		memcache.add(n, pack(data))
 
 	return data
@@ -578,7 +607,7 @@ def get_areas_in_zone(zone):
 	data = unpack(memcache.get(n))
 
 	if not data:
-		data = models.Area.all().filter('is_open', True).filter('zone', zone).order('name').fetch(500)
+		data = [i for i in get_areas() if i.get_key('zone') == zone.key()]
 		data = [i for i in data if not i.does_not_report and i.get_key('reports_with') is None]
 
 		memcache.add(n, pack(data))
@@ -634,7 +663,11 @@ def get_stakes():
 	data = memcache.get(n)
 
 	if not data:
-		wards = models.Ward.all().order('stake').order('name').fetch(500)
+		wards = models.Ward.all().fetch(500)
+
+		wards.sort(cmp=lambda x,y: cmp(x.name, y.name))
+		wards.sort(cmp=lambda x,y: cmp(x.stake_name, y.stake_name))
+
 		stakes = models.Stake.all().fetch(50)
 		sd = dict([(i.key(), i) for i in stakes])
 
