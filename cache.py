@@ -23,6 +23,8 @@ C_INDS_AREA = 'inds-area-%s'
 C_LIFE = 'life-%s-%s'
 C_MAIN_JS = 'main-js'
 C_MISSIONARIES = 'missionaries'
+C_MISSIONARY_AREAS = 'missionary-areas-%s-%s'
+C_MISSIONARY_LIFE = 'missionary-life-%s-%s'
 C_MOPTS = 'mopts-%s'
 C_MS = 'ms-%s'
 C_M_BY_AREA = 'mbyarea-%s'
@@ -35,6 +37,7 @@ C_SNAPSHOT = 'snapshot-%s'
 C_STAKES = 'stakes'
 C_SUMS = 'sums-%s-%s-%s'
 C_WEEK = 'week'
+C_WEEKS = 'weeks-%s'
 C_WEEK_INDS = 'week-%s'
 C_WOPTS = 'wopts'
 C_ZONES = 'zones'
@@ -680,6 +683,69 @@ def get_stakes():
 				data.append([])
 
 			data[-1].append(w)
+
+		memcache.add(n, data)
+
+	return data
+
+# returns a list of the last weeks sorted by most recent first
+def get_weeks(weeks=12):
+	n = C_WEEKS %weeks
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Week.all().order('-date').fetch(weeks)
+		memcache.add(n, pack(data))
+
+	return data
+
+# return a list of (date, snaparea key) tuples where the missionary with key mkey was over the last weeks, one per week sorted by most recent first
+# if the missionary was not active for a week, no more weeks are processed
+def get_missionary_areas(mkey, weeks=12):
+	n = C_MISSIONARY_AREAS %(mkey, weeks)
+	data = memcache.get(n)
+
+	if not data:
+		data = []
+
+		for w in get_weeks(weeks):
+			k = None
+			for sm in get_snapmissionaries(w):
+				if sm.get_key('missionary') == mkey:
+					k = sm.get_key('snaparea')
+					break
+
+			if not k:
+				break
+
+			data.append((w.date, k))
+
+		memcache.add(n, data)
+
+	return data
+
+# return a list of (date, life points) tuples from missionary with key mkey over the last weeks sorted by most recent week last
+def get_missionary_life(mkey, weeks=12):
+	n = C_MISSIONARY_LIFE %(mkey, weeks)
+	data = memcache.get(n)
+
+	if not data:
+		areas = get_missionary_areas(mkey, weeks)
+		sas = models.SnapArea.get([i[1] for i in areas])
+		keys = []
+		for i in range(len(areas)):
+			keys.append(models.Sum.keyname(sas[i].get_key('area'), models.SUM_WEEK, areas[i][0]))
+
+		sums = models.Sum.get_by_key_name(keys)
+		data = []
+
+		for i in range(len(sums)):
+			if sums[i]:
+				data.append((sums[i].date, sums[i].life))
+			else:
+				data.append((areas[i][0], 0))
+
+		data.reverse()
 
 		memcache.add(n, data)
 

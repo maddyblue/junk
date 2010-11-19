@@ -1962,7 +1962,19 @@ class SumsPage(webapp.RequestHandler):
 class MissionaryPage(webapp.RequestHandler):
 	def get(self, mkey):
 		m = Missionary.get(mkey)
-		render(self, 'missionary.html', 'Missionário', {'m': m})
+
+		life = cache.get_missionary_life(m.key())
+
+		data = {
+			'chxl': '0:|' +'|'.join(['%i/%s' %(i[0].day, cache.short_months[i[0].month]) for i in life]),
+		}
+
+		data['life'] = ('Life Points', [i[1] for i in life])
+
+		charts = []
+		charts.append(make_chart(data, ['life'], {'chtt': 'Life Chart'}, 7, 1))
+
+		render(self, 'missionary.html', 'Missionário', {'m': m, 'charts': charts})
 
 def pf_date(d):
 	return '%02i/%02i/%04i' %(d.day, d.month, d.year)
