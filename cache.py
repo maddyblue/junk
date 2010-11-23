@@ -20,7 +20,9 @@ C_IBC = 'ibc-%s'
 C_IMAGE = 'image-%s'
 C_INDS = 'inds-%s'
 C_INDS_AREA = 'inds-area-%s'
+C_IND_BAPTYPES = 'inds-baptypes-%s'
 C_LIFE = 'life-%s-%s'
+C_LIFEPOINTS = 'lifepoints'
 C_MAIN_JS = 'main-js'
 C_MISSIONARIES = 'missionaries'
 C_MISSIONARY_AREAS = 'missionary-areas-%s-%s'
@@ -40,6 +42,7 @@ C_WEEK = 'week'
 C_WEEKS = 'weeks-%s'
 C_WEEK_INDS = 'week-%s'
 C_WOPTS = 'wopts'
+C_WEEKOPTS = 'weekopts'
 C_ZONES = 'zones'
 C_ZONE_INDS = 'zone-%s-%s'
 C_ZOPTS = 'zopts-%s'
@@ -746,6 +749,60 @@ def get_missionary_life(mkey, weeks=12):
 				data.append((areas[i][0], 0))
 
 		data.reverse()
+
+		memcache.add(n, data)
+
+	return data
+
+# returns dict with keys as strings as types of baptisms (child, man, etc.) and values numbers for the given indicator key
+def get_ind_baptypes(ikey):
+	n = C_IND_BAPTYPES %ikey
+	data = memcache.get(n)
+
+	if not data:
+		data = {'child': 0, 'ym': 0, 'yw': 0, 'woman': 0, 'man': 0}
+		for i in models.IndicatorBaptism.all().filter('indicator', ikey).fetch(100):
+			if i.age <= 12: k = 'child'
+			elif i.age <= 17:
+				if i.sex == models.BAPTISM_SEX_M: k = 'ym'
+				else: k = 'yw'
+			elif i.sex == models.BAPTISM_SEX_M: k = 'man'
+			else: k = 'woman'
+
+			data[k] += 1
+
+		memcache.add(n, data)
+
+	return data
+
+def get_lifepoints():
+	n = C_LIFEPOINTS
+	data = memcache.get(n)
+
+	if not data:
+		d = datetime.date.today() - datetime.timedelta(30 * 6) # six months
+		sums = dict([(i, 0) for i in models.Sum.life_inds])
+		for s in models.WeekSum.all().filter('weekdate >=', d).fetch(500):
+			for i in models.Sum.life_inds:
+				sums[i] += getattr(s, i)
+
+		b = float(sums['PB'])
+		for k in sums.keys():
+			sums[k] /= b
+
+		data = '-'.join(['%.1f' %sums[k] for k in models.Sum.life_inds])
+		memcache.add(n, data)
+
+	return data
+
+# list of missionaries as html options
+def get_weekopts():
+	n = C_WEEKOPTS
+	data = memcache.get(n)
+
+	if data is None:
+		wks = get_weeks(52)
+		data = ''.join(['<option value="%s">%s</option>' %(w.key(), w.date) for w in wks])
 
 		memcache.add(n, data)
 

@@ -776,10 +776,9 @@ class FlatPage(db.Model):
 		return data
 
 CONFIG_WEEK = 'week'
+CONFIG_LIFE = 'life'
 
-class Configuration(db.Model):
-	value = db.TextProperty()
-
+class Configuration(db.Expando):
 	@staticmethod
 	def set(name, value):
 		c = Configuration.get_by_key_name(name)
@@ -816,6 +815,7 @@ class Sum(DerefExpando):
 
 	inds = ['PB', 'PC', 'PBM', 'PS', 'OL', 'LM', 'NP', 'Con', 'BM']
 	best_inds = ['PB', 'PS']
+	life_inds = ['PB', 'PBM', 'PS', 'NP', 'OL', 'LM', 'Con']
 
 	@staticmethod
 	def keyname(key, span, date):
@@ -839,8 +839,10 @@ class WeekSum(DerefModel):
 	PC = db.IntegerProperty(required=True)
 	PBM = db.IntegerProperty(required=True)
 	PS = db.IntegerProperty(required=True)
+	OL = db.IntegerProperty(required=True)
 	LM = db.IntegerProperty(required=True)
 	NP = db.IntegerProperty(required=True)
+	Con = db.IntegerProperty(required=True)
 
 class Image(db.Model):
 	image = db.BlobProperty()

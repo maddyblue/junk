@@ -90,7 +90,7 @@ theme(getCookie('theme'));
 	});
 </script>
 
-<div id="dialog" title="{{ show_title }}" style="font-size: 135%">{% block show %}{{ show }}{% endblock %}</div>
+<div id="dialog" title="{% block showtitle %}Superação!{% endblock %}" style="font-size: 135%">{% block show %}{{ show }}{% endblock %}</div>
 {% endif %}
 
 <div id="wrapper-menu-top">

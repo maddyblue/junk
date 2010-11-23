@@ -24,9 +24,6 @@ import map_procs
 import models
 import templatefilters.filters
 
-import sys
-# use reportlab patched from http://ruudhelderman.appspot.com/testpdf
-sys.path.insert(0, 'reportlab.zip')
 from reportlab.lib import units
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.colors import red, black
@@ -96,7 +93,7 @@ class MainPage(webapp.RequestHandler):
 					sr = False
 
 		t = 'Carta do Presidente'
-		rendert(self, 'carta.html', {'t1': t, 't2': t, 'page_data': d, 'show': sr, 'show_title': 'Superação!', 'best': best})
+		rendert(self, 'carta.html', {'t1': t, 't2': t, 'page_data': d, 'show': sr, 'best': best})
 
 class BatismosPage(webapp.RequestHandler):
 	def get(self):
@@ -345,30 +342,23 @@ class MapControlPage(webapp.RequestHandler):
 
 			i = control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, model._DEFAULT_SHARD_COUNT)
 			self.response.out.write('sync missionaries: %s<br>' %i)
-		elif p == 'Compute Sums':
+		elif p == 'Compute Area Sums':
 			handler_spec = 'map_procs.sums_'
 			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
-
-			control.start_map('Compute Sums: Area', handler_spec + 'area', reader_spec, {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
+			control.start_map('Compute Sums: Area', handler_spec + 'area', reader_spec, {'entity_kind': 'models.Area'}, shard_count=model._DEFAULT_SHARD_COUNT, mapreduce_parameters={'s': cache.get_lifepoints()})
+		elif p == 'Compute Zone Sums':
+			handler_spec = 'map_procs.sums_'
+			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
 			control.start_map('Compute Sums: Zone', handler_spec + 'zone', reader_spec, {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
+		elif p == 'Compute Week Sums':
+			handler_spec = 'map_procs.sums_'
+			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
 			control.start_map('Compute Sums: Week', handler_spec + 'week', reader_spec, {'entity_kind': 'models.Week'}, model._DEFAULT_SHARD_COUNT)
 		elif p == 'Compute Life Points':
 			handler_spec = 'map_procs.life_points'
 			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
 
-			d = date.today() - timedelta(30 * 6) # six months
-			sums = dict([(i, 0) for i in Sum.inds])
-			for s in Sum.all().filter('date >=', d).filter('ekind', SUM_ZONE).filter('span', SUM_MONTH).fetch(500):
-				for i in Sum.inds:
-					sums[i] += getattr(s, i)
-
-			b = float(sums['PB'])
-			for k in sums.keys():
-				sums[k] /= b
-
-			s = '-'.join(['%.1f' %sums[k] for k in Sum.inds])
-
-			control.start_map('Life Points', handler_spec, reader_spec, {'entity_kind': 'models.Sum'}, shard_count=model._DEFAULT_SHARD_COUNT, mapreduce_parameters={'s': s})
+			control.start_map('Life Points', handler_spec, reader_spec, {'entity_kind': 'models.Sum'}, shard_count=model._DEFAULT_SHARD_COUNT, mapreduce_parameters={'s': cache.get_lifepoints()})
 
 			self.response.out.write('done')
 
@@ -1341,9 +1331,16 @@ class GetRelatoriosPage(webapp.RequestHandler):
 		self.response.headers['Content-Type'] = 'text/plain'
 		self.response.out.write("%s%s%s" %(res, phones, bottom))
 
-class BaptismsPerWard(webapp.RequestHandler):
-	def get(self):
-		w = cache.get_week()
+class PerWard(webapp.RequestHandler):
+	def get(self, ind):
+		if ind not in Sum.inds:
+			return
+
+		if 'w' in self.request.GET:
+			w = Week.get(self.request.GET['w'])
+		else:
+			w = cache.get_week()
+
 		aws = cache.get_aws()
 		inds = {}
 		for i in cache.get_inds(w):
@@ -1352,37 +1349,48 @@ class BaptismsPerWard(webapp.RequestHandler):
 			if ward not in inds:
 				inds[ward] = 0
 
-			inds[ward] += i.PB
+			inds[ward] += getattr(i, ind)
 
 		d = []
-		for w in Ward.all(keys_only=True).fetch(500):
-			if w in inds:
-				b = inds[w]
+		for wd in Ward.all(keys_only=True).fetch(500):
+			if wd in inds:
+				b = inds[wd]
 				if not b:
 					b = ''
 			else:
 				b = ''
 
-			d.append((w.name(), b))
+			d.append((wd.name(), b))
 
-		rendert(self, 'bap-per.html', {'d': d})
+		render(self, 'per.html', '%s Per Ward' %ind, {'d': d, 'w': w, 'wopts': cache.get_weekopts()})
 
-class BaptismsPerMissionary(webapp.RequestHandler):
-	def get(self):
-		w = cache.get_week()
-		areas = dict([(i.key(), i) for i in cache.get_snapareas(w)])
+class PerMissionary(webapp.RequestHandler):
+	def get(self, ind):
+		if ind not in Sum.inds:
+			return
+
+		cw = cache.get_week()
+
+		if 'w' in self.request.GET:
+			w = Week.get(self.request.GET['w'])
+		else:
+			w = cw
+
+		# pull the snaps from current week
+		areas = dict([(i.key(), i) for i in cache.get_snapareas(cw)])
 		aws = cache.get_aws()
-		missionaries = cache.get_snapmissionaries(w)
+		missionaries = cache.get_snapmissionaries(cw)
 		cache.prefetch_refprops(missionaries, SnapMissionary.missionary)
 		baps = {}
 		d = []
 
+		# pull the indicators from selected week
 		for i in cache.get_inds(w):
 			a = aws[i.get_key('area')]
 			if a.reports_with:
 				a = a.reports_with
 
-			baps[a.key()] = i.PB
+			baps[a.key()] = getattr(i, ind)
 
 		for m in missionaries:
 			a = aws[areas[m.get_key('snaparea')].get_key('area')]
@@ -1401,19 +1409,24 @@ class BaptismsPerMissionary(webapp.RequestHandler):
 
 			d.append((m.missionary, b))
 
-		rendert(self, 'bap-per.html', {'d': d})
+		render(self, 'per.html', '%s Per Missionary' %ind, {'d': d, 'w': w, 'wopts': cache.get_weekopts()})
 
 def make_chart(inds, disp, other={}, rmax=0, step=2):
 	d = {}
 
 	data = dict([inds[i] for i in disp])
-	dps = '|'.join([','.join([str(j) for j in i]) for i in data.values()])
+	dps = '|'.join([','.join(['%.2f' %j for j in i]) for i in data.values()])
 	d['chd'] = 't:' + dps
 	d['chdl'] = '|'.join([urllib.quote_plus(i) for i in data.keys()])
 
 	datas = []
-	for i in data.values():
-		datas.extend(i)
+
+	if 'cht' in other and other['cht'] == 'bvs':
+		# stacked list, so add them together
+		datas = map(lambda x: reduce(lambda a, b: a + b, x), zip(*data.values()))
+	else:
+		for i in data.values():
+			datas.extend(i)
 
 	dmin = 0
 	dmax = max(datas)
@@ -1424,7 +1437,7 @@ def make_chart(inds, disp, other={}, rmax=0, step=2):
 		if dmax < rmax:
 			dmax = rmax
 
-	d['chds'] = '%i,%i' %(dmin, dmax)
+	d['chds'] = '%f,%f' %(dmin, dmax)
 
 	for k, v in other.iteritems():
 		d[k] = v
@@ -1436,7 +1449,7 @@ def make_chart(inds, disp, other={}, rmax=0, step=2):
 
 		'chco': ','.join(['0000FF', 'FF0000', '00FF00'][:len(disp)]),
 		'chdlp': 'b', # chart legend on bottom
-		'chxr': '1,%i,%i,%i' %(dmin, dmax, step),
+		'chxr': '1,%f,%f,%f' %(dmin, dmax, step),
 		'chxs': '0,,12', # make the date labels larger
 		'chxt': 'x,y',
 		'chxtc': '1,-600', # horizontal tick marks across the graph
@@ -1454,7 +1467,18 @@ def make_chart(inds, disp, other={}, rmax=0, step=2):
 	if 'chm' not in d:
 		d['chm'] = '|'.join(['N,000000,%i,,12,,be' %i for i in range(len(disp))])
 
+	if 'life' in disp:
+		r = dmax / 100.0
+		d['chxl'] += '|2:|media|meta'
+		d['chxp'] = '2,%f,%f' %(Configuration.fetch(CONFIG_LIFE) / r, 7 / r)
+		d['chxs'] += '|2,0000dd,12,-1,t,FF0000'
+		d['chxt'] += ',r'
+		d['chxtc'] += '|2,-500'
+
 	return chart_url(d)
+
+def make_life_chart(data):
+	return make_chart(data, ['life'], {'chtt': 'Life Chart'}, 10, 2)
 
 def chart_url(data):
 	url = '<img src="http://chart.apis.google.com/chart?'
@@ -1487,7 +1511,7 @@ class AreaPage(webapp.RequestHandler):
 			self.session = get_current_session()
 
 			if 'is_admin' in self.session and self.session['is_admin']:
-				charts.append(make_chart(data, ['life'], {'chtt': 'Life Chart'}, 7, 1))
+				charts.append(make_life_chart(data))
 
 			charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas'}, 8))
 			charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas', 'cht': 'bvs'}, 25, 4))
@@ -1496,6 +1520,7 @@ class AreaPage(webapp.RequestHandler):
 
 		best = cache.get_best(akey)
 
+		#render(self, 'area.html', unicode(area), {'area': area, 'charts': charts, 'best': best})
 		render(self, 'area.html', unicode(area), {'area': area, 'charts': charts, 'best': best})
 
 class ZonePage(webapp.RequestHandler):
@@ -1972,7 +1997,7 @@ class MissionaryPage(webapp.RequestHandler):
 		data['life'] = ('Life Points', [i[1] for i in life])
 
 		charts = []
-		charts.append(make_chart(data, ['life'], {'chtt': 'Life Chart'}, 7, 1))
+		charts.append(make_life_chart(data))
 
 		render(self, 'missionary.html', 'Missionário', {'m': m, 'charts': charts})
 
@@ -2631,18 +2656,7 @@ class Indicators(webapp.RequestHandler):
 		inds.sort(cmp=lambda x,y: cmp(x.get_key('area').name(), y.get_key('area').name()))
 		inds.sort(cmp=lambda x,y: cmp(x.get_key('zone').name(), y.get_key('zone').name()))
 
-		ni = []
-		for i in inds:
-			pts = 0
-			if i.PB == 0: pts += 1
-			if i.PBM < 2: pts += 1
-			if i.PS < 5: pts += 1
-			if (i.OL + i.LM) < 15: pts += 1
-			if i.Con < 50: pts += 1
-			if i.PS < 15: pts += 1
-			ni.append((i, pts))
-
-		render(self, 'inds.html', 'Indicators', {'inds': ni})
+		render(self, 'inds.html', 'Indicators', {'inds': inds})
 
 class EntranceDates(webapp.RequestHandler):
 	def get(self):
@@ -2692,8 +2706,6 @@ class EntranceHandler(webapp.RequestHandler):
 
 		db.put(ps)
 
-##### RAIOX
-
 class RaioX(webapp.RequestHandler):
 	def get(self):
 		zones = [z for z in Zone.all().order('name').fetch(100) if z.is_open]
@@ -2709,8 +2721,6 @@ class RaioX(webapp.RequestHandler):
 		d = date(year, month, 1)
 
 		wks = [w for w in Week.all().filter('date >=', d).fetch(500) if w.date.year == year and w.date.month == month]
-		logging.info('weeks: %i' %len(wks))
-
 		sums = cache.get_sums(SUM_ZONE, SUM_MONTH, d)
 		zk = self.request.get('zone')
 
@@ -2718,90 +2728,42 @@ class RaioX(webapp.RequestHandler):
 			zkey = Key(zk)
 			sums = [i for i in sums if i.get_key('ref') == zkey]
 
-		logging.info('%s' %sums)
+		raio_x(sums, len(wks))
 
-def proc_raiox2(s):
-	r = {}
-	ws = inds.distinct('week').values('week')
+def raio_x(sums, wks):
+	for s in sums:
+		w = {}
 
-	if len(ws) == 0:
-		return r
+		md = s.reports / float(wks) # avg. number of duplas
 
-	md = len(inds) / float(len(ws)) # avg. number of duplas
+		r['pb'] = s.PB
+		r['pc'] = s.PC
+		r['ps'] = s.PS
+		r['li'] = s.OL + s.LM
+		r['np'] = s.NP
+		r['con'] = s.Con
 
-	a = inds.aggregate(Sum('PB'), Sum('PC'), Sum('Homen'), Sum('PS'), Sum('LM'), Sum('OL'), Sum('LMARC'), Sum('NP'), Sum('Con'))
-	r['pb'] = a['PB__sum']
-	r['pc'] = a['PC__sum']
-	r['ps'] = a['PS__sum']
-	r['li'] = a['LM__sum'] + a['OL__sum'] + a['LMARC__sum']
-	r['np'] = a['NP__sum']
-	r['con'] = a['Con__sum']
+		for k, v in list(r.iteritems()):
+			r['pd_' + k] = v / md / wks
 
-	for k, v in list(r.iteritems()):
-		r['pd_' + k] = v / md / len(ws)
+		r['crianca'] = s.child
+		r['moca'] = s.yw
+		r['rapaz'] = s.ym
+		r['mulher'] = s.woman
+		r['homem'] = s.man
 
-	r['crianca'] = inds.filter(baptisms__age__lt=12).count()
-	r['moca'] = inds.filter(baptisms__age__gte=12, baptisms__age__lt=18, baptisms__sex=False).count()
-	r['rapaz'] = inds.filter(baptisms__age__gte=12, baptisms__age__lt=18, baptisms__sex=True).count()
-	r['mulher'] = inds.filter(baptisms__age__gte=18, baptisms__sex=False).count()
-	r['homem'] = inds.filter(baptisms__age__gte=18, baptisms__sex=True).count()
+		r['wks'] = wks
+		r['md'] = md
 
-	r['wks'] = len(ws)
-	r['md'] = md
-
-	return r
-
-def raio_x(request, year, month):
-	year = int(year)
-	month = int(month)
-
-	lmonth = month - 1
-	lyear = year
-	if lmonth == 0:
-		lmonth = 12
-		lyear -= 1
-
-	weeks = Week.objects.filter(date__year=year, date__month=month)
-	lweeks = Week.objects.filter(date__year=lyear, date__month=lmonth)
-
-	areas = []
-	snapshots = Snapshot.objects.filter(id__in=weeks.values('snapshot'))
-	for s in snapshots:
-		areas.extend(s.areas.all().values_list('area', flat=True))
-	areas = list(set(areas))
-	areas = Area.objects.filter(id__in=areas)
-	zones = Zone.objects.filter(id__in=areas.values('zone')).order_by('name')
-
-	frames = []
-	for z in zones:
-		w1 = proc_zone2(weeks, z)
-
-		if len(w1) == 0:
-			continue
-
-		w2 = proc_zone2(lweeks, z)
-
-		w1['p_li'] = 100 * w1['ps'] / w1['np']
-		w1['p_pb'] = 100 * w1['pb'] / w1['ps']
-		if w1['pb']: w1['p_pc'] = 100 * w1['pc'] / w1['pb']
-		if w1['pb']: w1['p_hb'] = 100 * w1['homem'] / w1['pb']
-
-		if len(w2) > 0:
-			for i in ['np', 'li', 'ps', 'pb', 'pc']:
-				if w2['pd_' + i] == 0: w1['m_' + i] = 'inf';
-				else: w1['m_' + i] = 100 * w1['pd_'+ i]  / w2['pd_' + i] - 100
-				if w1['m_' + i] >= 0: w1['c_' + i] = 'green'
-				else: w1['c_' + i] = 'red'
-
-		rc('font', size=20)
-		pyplot.subplots_adjust(.05, 0, .85, 1)
-
-		figure(1, figsize=(8, 8))
+		w['p_li'] = 100 * w['ps'] / w['np']
+		w['p_pb'] = 100 * w['pb'] / w['ps']
+		if w['pb']: w['p_pc'] = 100 * w['pc'] / w['pb']
+		if w['pb']: w['p_hb'] = 100 * w['homem'] / w['pb']
 
 		labels = [u'Crianças', u'Moças', 'Rapazes', 'Mulheres', 'Homens']
 		explode = [0, 0, 0, 0, .05]
-		colors = ['#FFA500', '#FF33CC', '#3399FF', '#CCFF00', '#FF0000']
-		fracs = [w1['crianca'], w1['moca'], w1['rapaz'], w1['mulher'], w1['homem']]
+		colors = ['FFA500', 'FF33CC', '3399FF', 'CCFF00', 'FF0000']
+		fracs = [w['crianca'], w['moca'], w['rapaz'], w['mulher'], w['homem']]
 
 		while 0 in fracs:
 			i = fracs.index(0)
@@ -2810,35 +2772,28 @@ def raio_x(request, year, month):
 			explode.pop(i)
 			colors.pop(i)
 
-		pie(fracs, colors=colors, labeldistance=1.05, explode=explode, labels=labels, autopct='%i%%')
-		savefig('pdfs/pizza-%i-%i-%i.pdf' %(year, month, z.id))
-		clf()
-
-		d = {
-			'z': z,
-		}
-
-		for k, v in list(w1.iteritems()):
+		for k, v in list(w.iteritems()):
 			if isinstance(v, float):
-				v = ('%.2f' %v).replace('.', ',')
+				w[k] = ('%.1f' %v).replace('.', ',')
 
-			d[k] = v
+class LifeAverage(webapp.RequestHandler):
+	def get(self):
+		d = date.today() - timedelta(30 * 6) # six months
+		sums = Sum.all().filter('date >=', d).filter('ekind', SUM_AREA).filter('span', SUM_WEEK).fetch(5000)
 
-		frames.append(d)
+		life = 0.
+		n = 0
+		for i in sums:
+			try:
+				life += i.life
+				n += 1
+			except:
+				pass
 
-		# also generate this per zone
-		fname = 'raio-x-%i-%i-%s' %(year, month, z.name)
-		t = loader.get_template('raio-x-zone.tex')
-		c = Context({'f': d, 'month': months[month - 1], 'mid': month, 'year': year})
-		pdf(t, c, fname)
+		life /= n
+		Configuration.set(CONFIG_LIFE, life)
 
-	fname = 'raio-x-%i-%i' %(year, month)
-	t = loader.get_template('raio-x.tex')
-	c = Context({'frames': frames, 'month': months[month - 1], 'mid': month, 'year': year})
-
-	return pdf(t, c, fname)
-
-#######
+		render(self, '', 'Life Average', {'page_data': 'average life: %f over %i indicators' %(life, n)})
 
 application = webapp.WSGIApplication([
 	('/', MainPage),
@@ -2863,8 +2818,6 @@ application = webapp.WSGIApplication([
 	('/send-relatorio/', SendRelatorio),
 	('/send-numbers/', SendNumbers),
 
-	('/bap-per-missionary/', BaptismsPerMissionary),
-	('/bap-per-ward/', BaptismsPerWard),
 	('/email/(.*)', EmailPage),
 	('/keyindicators/', KeyIndicatorsPage),
 	('/names/', NamesPage),
@@ -2897,6 +2850,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/images/', ImagesPage),
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/indicators/', Indicators),
+	('/_ah/missao-rio/life-avg/', LifeAverage),
 	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
 	('/_ah/missao-rio/make-new/', MakeNewPage),
@@ -2906,6 +2860,8 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/missionaries/', MissionariesPage),
 	('/_ah/missao-rio/missionary/(.*)', MissionaryPage),
 	('/_ah/missao-rio/new-missionary/', NewMissionaryPage),
+	('/_ah/missao-rio/per-missionary/(.*)', PerMissionary),
+	('/_ah/missao-rio/per-ward/(.*)', PerWard),
 	('/_ah/missao-rio/pf/(.*)/(.*)', PFPage),
 	('/_ah/missao-rio/quadro/', Quadro),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),

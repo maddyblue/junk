@@ -41,6 +41,13 @@ indexes:
 
 - kind: Sum
   properties:
+  - name: date
+  - name: ekind
+  - name: span
+  - name: ref
+
+- kind: Sum
+  properties:
   - name: ekind
   - name: ref
   - name: span

@@ -105,6 +105,12 @@ def sums(entity, inds):
 					ekind=k,
 					span=span,
 					date=wd,
+
+					child=0,
+					ym=0,
+					yw=0,
+					man=0,
+					woman=0,
 				)
 
 				p[kn].reports = 1
@@ -117,6 +123,10 @@ def sums(entity, inds):
 
 				p[kn].reports += 1
 
+			types = cache.get_ind_baptypes(i.key())
+			for t, v in types.iteritems():
+				setattr(p[kn], t, v + getattr(p[kn], t))
+
 		best = dict([(i, (0, None)) for i in models.Sum.inds])
 
 		for i in p.values():
@@ -124,6 +134,9 @@ def sums(entity, inds):
 				v = getattr(i, ind)
 				if v > best[ind][0]:
 					best[ind] = (v, i)
+
+			if k == models.SUM_AREA and span == models.SUM_WEEK:
+				calc_life(i)
 
 		for ind, v in best.iteritems():
 			if v[1]:
@@ -153,7 +166,9 @@ def sums_week(entity):
 		PBM=0,
 		PS=0,
 		LM=0,
-		NP=0
+		NP=0,
+		OL=0,
+		Con=0,
 	)
 
 	for i in models.Indicator.all().filter('week', entity).fetch(500):
@@ -162,23 +177,26 @@ def sums_week(entity):
 		ws.PBM += i.PBM
 		ws.PS += i.PS
 		ws.LM += i.LM
+		ws.OL += i.OL
 		ws.NP += i.NP
+		ws.Con += i.Con
 
 	yield op.db.Put(ws)
+
+# assumes entity is a Sum and that mapreduce_spec.params['s'] is set to cache.get_lifepoints()
+def calc_life(entity):
+	ctx = context.get()
+
+	s = ctx.mapreduce_spec.params['s'].split('-')
+	entity.life = 0.
+
+	for v in models.Sum.life_inds:
+		entity.life += getattr(entity, v) / float(s.pop(0))
 
 def life_points(entity):
 	if entity.ekind != models.SUM_AREA or entity.span != models.SUM_WEEK:
 		return
 
-	ctx = context.get()
-
-	s = ctx.mapreduce_spec.params['s'].split('-')
-	entity.life = 0
-
-	for i in range(len(models.Sum.inds)):
-		v = models.Sum.inds[i]
-
-		if v in ['PB', 'PBM', 'PS', 'NP', 'OL', 'LM', 'Con'] and getattr(entity, v) >= float(s[i]):
-			entity.life += 1
+	calc_life(entity)
 
 	yield op.db.Put(entity)
