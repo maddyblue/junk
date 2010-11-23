@@ -37,12 +37,15 @@ def key_name(value):
 
 register.filter(key_name)
 
-months = ['', 'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+months = ['', 'janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 
 def span_disp(value):
-	if value[1] == models.SUM_WEEK:
-		return 'na semana de %s' %(value[2])
-	elif value[1] == models.SUM_MONTH:
-		return u'no mês de %s de %i' %(months[value[2].month], value[2].year)
+	try:
+		if value[1] == models.SUM_WEEK:
+			return 'na semana de %s' %(value[2])
+		elif value[1] == models.SUM_MONTH:
+			return u'no mês de %s de %i' %(months[value[2].month], value[2].year)
+	except:
+		pass
 
 register.filter(span_disp)
