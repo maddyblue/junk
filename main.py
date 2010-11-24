@@ -2794,6 +2794,58 @@ class LifeAverage(webapp.RequestHandler):
 
 		render(self, '', 'Life Average', {'page_data': 'average life: %f over %i indicators' %(life, n)})
 
+def get_bins(life, binw):
+	low = 0
+	high = binw
+	m = max(life)
+	bins = []
+	chxl = []
+
+	while low < m:
+		n = len([i for i in life if low <= i and i < high])
+		bins.append(n)
+		chxl.append('%.1f' %low)
+
+		low += binw
+		high += binw
+
+	return (bins, chxl)
+
+class LifeDistribution(webapp.RequestHandler):
+	def get(self):
+		w = cache.get_week()
+		d = w.date
+		life = []
+		nweeks = 10
+
+		for n in range(nweeks):
+			life.extend([i.life for i in cache.get_sums(SUM_AREA, SUM_WEEK, d)])
+			d = d - timedelta(7)
+
+		binw = 0.75
+		bins, chxl = get_bins(life, binw)
+
+		dist = {
+			'dist': ('Life Distribution', bins),
+			'chxl': '0:|' +'|'.join(['%s' %i for i in chxl]),
+		}
+
+		charts = []
+		charts.append(make_chart(dist, ['dist'], {'chtt': '%i weeks, %i pts, width=%.2f, avg=%.2f' %(nweeks, len(life), binw, sum(life) / len(life)), 'chbh': 'r,0.2,0.2'}))
+
+		life.sort()
+		life = life[:int(len(life) * 0.9)]
+		bins, chxl = get_bins(life, binw)
+
+		dist = {
+			'dist': ('Life Distribution', bins),
+			'chxl': '0:|' +'|'.join(['%s' %i for i in chxl]),
+		}
+
+		charts.append(make_chart(dist, ['dist'], {'chtt': 'Lower 90%%, %i weeks, %i pts, width=%.2f, avg=%.2f' %(nweeks, len(life), binw, sum(life) / len(life)), 'chbh': 'r,0.2,0.2'}))
+
+		render(self, 'life-dist.html', 'Life Distribution', {'charts': charts})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -2850,6 +2902,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/indicators/', Indicators),
 	('/_ah/missao-rio/life-avg/', LifeAverage),
+	('/_ah/missao-rio/life-dist/', LifeDistribution),
 	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
 	('/_ah/missao-rio/make-new/', MakeNewPage),
