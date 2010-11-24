@@ -1520,8 +1520,7 @@ class AreaPage(webapp.RequestHandler):
 
 		best = cache.get_best(akey)
 
-		#render(self, 'area.html', unicode(area), {'area': area, 'charts': charts, 'best': best})
-		render(self, 'area.html', unicode(area), {'area': area, 'charts': charts, 'best': best})
+		render(self, 'area.html', unicode(area), {'area': area, 'charts': charts, 'best': best, 'inds': data['inds']})
 
 class ZonePage(webapp.RequestHandler):
 	def get(self, zkey):

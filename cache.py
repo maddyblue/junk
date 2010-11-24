@@ -504,6 +504,8 @@ def get_area_inds(ak, weeks=12):
 			data[k] = (v, d)
 
 		data['life'] = ('Life Points', get_life(ak, weeks))
+		inds.reverse()
+		data['inds'] = inds
 
 		memcache.add(n, data)
 
