@@ -1850,7 +1850,11 @@ class EmailPage(webapp.RequestHandler):
 	def get(self, t):
 		ms = cache.get_ms()
 
-		if t == 'lz':
+		emails = []
+
+		if t == 'parents':
+			emails = [m.email_parents for m in ms if m.email_parents]
+		elif t == 'lz':
 			callings = [MISSIONARY_CALLING_AP, MISSIONARY_CALLING_LZ, MISSIONARY_CALLING_LZL]
 		elif t == 'ap':
 			callings = [MISSIONARY_CALLING_AP]
@@ -1859,7 +1863,8 @@ class EmailPage(webapp.RequestHandler):
 		else:
 			callings = MISSIONARY_CALLING_CHOICES
 
-		emails = [m.email for m in ms if m.email and m.calling in callings]
+		if not emails:
+			emails = [m.email for m in ms if m.email and m.calling in callings]
 
 		self.response.out.write('; '.join(emails))
 
