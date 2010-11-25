@@ -75,9 +75,9 @@ class MudancaForm(PFForm):
 class RegistroForm(PFForm):
 	class Meta:
 		model = models.MissionaryProfile
-		fields = ['birth_city', 'father', 'mother', 'passport', 'visa_num', 'issue_date', 'issued_by', 'entrance', 'entrance_place', 'entrance_state']
+		fields = ['birth_city', 'mother', 'father', 'passport', 'visa_num', 'issue_date', 'issued_by', 'entrance', 'entrance_place', 'entrance_state']
 
 class VistoForm(PFForm):
 	class Meta:
 		model = models.MissionaryProfile
-		fields = ['birth_city', 'father', 'mother', 'passport', 'visa_num', 'issue_date', 'issued_by', 'entrance', 'entrance_place', 'entrance_state', 'dou_prazo', 'dou_date']
+		fields = ['birth_city', 'mother', 'father', 'passport', 'visa_num', 'issue_date', 'issued_by', 'entrance', 'entrance_place', 'entrance_state', 'dou_prazo', 'dou_date']
