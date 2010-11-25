@@ -957,6 +957,133 @@ class MakeBatismosPage(webapp.RequestHandler):
 
 		self.response.out.write(r)
 
+class MakeBatizadoresPage(webapp.RequestHandler):
+	def get(self):
+		w = cache.get_week()
+		ms = cache.get_ms()
+		areas = [a for a in cache.get_snapareas(w) if a.get_key('area') == a.get_key('district')]
+
+		render(self, 'make-batizadores.html', 'Make Batizadores', {'ms': ms, 'areas': areas})
+
+	def post(self):
+		w = cache.get_week()
+		sas = cache.get_snapareas(w)
+		district = Area.get(self.request.get('distrito'))
+		dareas = [i for i in sas if i.get_key('district') == district.key()]
+		dkeys = [i.key() for i in dareas]
+		m_by_area = cache.get_m_by_area(w)
+		ms = dict([(str(m.key()), m) for m in cache.get_ms()])
+
+		bn = 0
+		ba = []
+		cn = 0
+		ca = []
+		db = 0
+		dbh = 0
+		dc = 0
+		dch = 0
+
+		jbs = [ms[m] for m in self.request.get_all('jbs')]
+		jcs = [ms[m] for m in self.request.get_all('jcs')]
+
+		for r in RPM.all().filter('week', w).fetch(500):
+			if r.bap > bn:
+				bn = r.bap
+				ba = [r]
+			elif r.bap == bn:
+				ba.append(r)
+
+			if r.conf > cn:
+				cn = r.conf
+				ca = [r]
+			elif r.conf == cn:
+				ca.append(r)
+
+			if r.get_key('area') in dkeys:
+				db += r.bap
+				dbh += r.men_bap
+				dc += r.conf
+				dch += r.men_conf
+
+		cache.prefetch_refprops(ba, RPM.area)
+		cache.prefetch_refprops(ca, RPM.area)
+
+		r = u'<div class="bouncr" id="batizadores">'
+
+		if self.request.get('jb_semanas'):
+			r += '<div style="color: #F660AB;">' # the mission is currently pink
+			#r += u'<p style="font: bold 20px Verdana;">O João Batista da Missão</p><br/>'
+			r += '<img src="/imgs/batizador.jpg" /><br/>'
+			#r += '<img src="/imgs/christ_john_baptism.jpg"/>'
+			r += '<div style="font-size: 15px; color: #8D38C9"><b>'
+
+			r += ', '.join([unicode(m) for m in jbs])
+			r += '</b><br />%i semanas<br />' %int(self.request.get('jb_semanas'))
+			for j in jbs:
+				r += '<img src="/photo/%s" width="120" />' %j.key()
+			r += '</div>' # pink mission div
+			r += '</div>'
+
+		if self.request.get('jc_semanas'):
+			r += '<br /><br /><br />'
+			r += '<img src="/imgs/confirmador.jpg" /><br/>'
+			r += '<div style="font-size: 15px;"><b>'
+
+			r += ', '.join([unicode(m) for m in jcs])
+			r += '</b><br />%i semanas<br />' %int(self.request.get('jc_semanas'))
+			for j in jcs:
+				r += '<img src="/photo/%s" width="120" />' %j.key()
+			r += '</div>'
+
+		r += '<br /><br /><br /><div>'
+		r += '<p style="font: bold 20px Verdana;">O Distrito Batizador e Confirmador da Semana</p><br/>'
+		r += '<div><b>%s</b>' %district.name
+
+		if dbh != 1: dbs = 'homens'
+		else: dbs = 'homem'
+		if dch != 1: dcs = 'homens'
+		else: dcs = 'homem'
+
+		r += u'<br />%i batismos/%i %s, %i confirmações/%i %s' %(db, dbh, dbs, dc, dch, dcs)
+		for a in dareas:
+			r += '<br />'
+			for m in m_by_area[a.get_key('area')]:
+				r += '<img src="/photo/%s" width="75" />' %m.get_key('missionary')
+			r += '<br />%s - %s' %(a.get_key('area').name(), ', '.join([unicode(i.missionary) for i in m_by_area[a.get_key('area')]]))
+
+		r += '</div>'
+
+		if bn > 3:
+			r += '<br /><br /><br />'
+			r += '<div><p style="font: bold 18px Verdana;">Batizadores da Semana<br />%i Batismos</p>' %bn
+			for rpm in ba:
+				r += '<br />'
+				mba = m_by_area[rpm.area.get_key('area')]
+				for m in mba:
+					r += '<img src="/photo/%s" width="150" />' %m.get_key('missionary')
+				r += '<br />%s - %s' %(rpm.area.get_key('area').name(), ', '.join([unicode(i.missionary) for i in mba]))
+
+			r += '</div>'
+
+		if cn > 3:
+			r += '<br /><br /><br />'
+			r += u'<div><p style="font: bold 18px Verdana;">Confirmadores da Semana<br />%i Confirmações</p>' %cn
+			for rpm in ca:
+				r += '<br />'
+				mba = m_by_area[rpm.area.get_key('area')]
+				for m in mba:
+					r += '<img src="/photo/%s" width="150" />' %m.get_key('missionary')
+				r += '<br />%s - %s' %(rpm.area.get_key('area').name(), ', '.join([unicode(i.missionary) for i in mba]))
+
+			r += '</div>'
+
+		r += '</div>'
+
+		FlatPage.make(FLATPAGE_BATIZADORES, r, w)
+
+		self.response.out.write(r)
+
+
 class ChooseWeekPage(webapp.RequestHandler):
 	def get(self):
 		if 'set' in self.request.GET:
@@ -2055,7 +2182,7 @@ class PFPage(webapp.RequestHandler):
 			else:
 				raise
 
-			c.drawString(520, 283, pf_date(m.birth))
+			c.drawString(516, 283, pf_date(m.birth))
 			c.drawString(391, 323, p.birth_city)
 			c.drawString(40, 318, 'X') # solteiro
 
@@ -2112,7 +2239,7 @@ class PFPage(webapp.RequestHandler):
 			c.drawString(28, 396, 'SÃO CONRADO')
 			c.drawString(184, 396, 'RIO DE JANEIRO')
 			c.drawString(480, 396, '22610-070')
-			c.drawString(556, 396, 'RJ')
+			c.drawString(553, 396, 'RJ')
 
 			c.drawString(28, 432, 'MISSÃO BRASIL RIO DE JANEIRO')
 			c.drawString(311, 432, 'AV. DAS AMÉRICAS, 1155, SALAS 502/503')
@@ -2910,6 +3037,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/life-dist/', LifeDistribution),
 	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
 	('/_ah/missao-rio/make-batismos/', MakeBatismosPage),
+	('/_ah/missao-rio/make-batizadores/', MakeBatizadoresPage),
 	('/_ah/missao-rio/make-new/', MakeNewPage),
 	('/_ah/missao-rio/make-passwords/', MakePasswordsPage),
 	('/_ah/missao-rio/make-snapshot/', MakeSnapshot),

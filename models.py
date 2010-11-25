@@ -70,6 +70,9 @@ class Area(DerefModel):
 	def __unicode__(self):
 		return self.zone_name + ' - ' + self.name
 
+	def __str__(self):
+		return self.__unicode__()
+
 MISSIONARY_SEX_ELDER  = 'Elder'
 MISSIONARY_SEX_SISTER = 'Sister'
 
