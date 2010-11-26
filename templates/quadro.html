@@ -4,7 +4,7 @@
 	{% for ms in areas %}
 		<tr><td align="center"><b>{{ ms.0.area.name }}</b><br/>
 		{% for m in ms %}
-			<img src="/missionaries/{{ m.photo_file }}.jpg" width="50" />
+			<img src="/photo/{{ m.key }}" width="50" />
 		{% endfor %}
 		<br/>
 		{% for m in ms %}
