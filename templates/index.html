@@ -7,63 +7,11 @@
 	<link rel="stylesheet" type="text/css" href="/styles/extra.css" />
 	<link rel="stylesheet" type="text/css" href="/styles/jquery-ui-1.8.6.css" />
 	<link rel="stylesheet" type="text/css" title="theme" href="/styles/style.css" />
-	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 	<script type="text/javascript" src="/js-static/jquery-1.4.3.min.js"></script>
 	<script type="text/javascript" src="/js-static/jquery-ui-1.8.5.min.js"></script>
+	<script type="text/javascript" src="/js-static/themr.js"></script>
 	{% block head %}{{ headstuff }}{% endblock %}
-
-<script type="text/javascript">
-function setCookie(c_name, value)
-{
-	document.cookie = c_name + "=" + escape(value) + "; path=/";
-}
-
-function getCookie(c_name)
-{
-	if (document.cookie.length > 0)
-	{
-		c_start = document.cookie.indexOf(c_name + "=");
-		if (c_start != -1)
-		{
-			c_start = c_start + c_name.length + 1;
-			c_end = document.cookie.indexOf(";", c_start);
-			if(c_end == -1) c_end = document.cookie.length;
-			return unescape(document.cookie.substring(c_start, c_end));
-		}
-	}
-	return "";
-}
-
-function theme(t)
-{
-	var i, a, name;
-
-	setCookie('theme', t);
-
-	if(t == 'Nefitas') name = 'nefitas';
-	else if(t == 'Pedra') name = 'pedra';
-	else if(t == 'Cristo - LDS') name = 'cristolds';
-	else if(t == 'Cristo - Rio') name = 'cristorio';
-	else name = '';
-
-	for(i=0; (a = document.getElementsByTagName("link")[i]); i++)
-	{
-		if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title"))
-		{
-			if(a.getAttribute("title") == "theme")
-			{
-				if(name)
-					a.href = "/themes/" + name + "/style.css";
-				else
-					a.href = "/styles/style.css";
-				break;
-			}
-		}
-	}
-}
-
-theme(getCookie('theme'));
-</script>
 
 </head>
 
@@ -84,7 +32,7 @@ theme(getCookie('theme'));
 </script>
 
 {% if show %}
-<script>
+<script type="text/javascript">
 	$(document).ready(function() {
 		$("#dialog").dialog({width: 600, resizable: false});
 	});
@@ -95,7 +43,7 @@ theme(getCookie('theme'));
 
 <div id="wrapper-menu-top">
 <div id="menu-top">
-	<ul>
+	<ul><li></li>
 	</ul>
 </div><!--menu-top-->
 </div><!--wrapper-menu-top-->
@@ -178,15 +126,7 @@ theme(getCookie('theme'));
 
 	{% endif %}
 
-	<style type="text/css">
-		#theme .ui-selecting {
-			background: #EEE;
-		}
-		#theme .ui-selected {
-			background: #DDD;
-		}
-	</style>
-	<script>
+	<script type="text/javascript">
 		$(function() {
 			$("#theme").selectable({
 				selected: function(event, ui) {
@@ -205,7 +145,7 @@ theme(getCookie('theme'));
 		<li>Cristo - Rio</li>
 	</ul>
 
-	<p><img src="/imgs/logo_tn.jpg" border="0" alt="" /></p>
+	<p><img src="/imgs/logo_tn.jpg" alt="" /></p>
 
 	{% if session.is_admin %}
 	<div><a href="/admin/">Admin</a></div>

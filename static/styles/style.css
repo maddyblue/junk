@@ -11,6 +11,10 @@ body {
 	text-align: center;
 }
 
+img {
+	border-style: none;
+}
+
 /* Set the page width */
 #wrapper-menu-top, #header, #wrapper-content, #wrapper-footer {
 	width: 95%;

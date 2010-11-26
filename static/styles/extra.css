@@ -72,3 +72,11 @@ DIV.td1 {
 input, textarea {
 	border: 1px solid #888;
 }
+
+#theme .ui-selecting {
+	background: #EEE;
+}
+
+#theme .ui-selected {
+	background: #DDD;
+}

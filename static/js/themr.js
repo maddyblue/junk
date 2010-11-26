@@ -1,0 +1,50 @@
+function setCookie(c_name, value)
+{
+	document.cookie = c_name + "=" + escape(value) + "; path=/";
+}
+
+function getCookie(c_name)
+{
+	if (document.cookie.length > 0)
+	{
+		c_start = document.cookie.indexOf(c_name + "=");
+		if (c_start != -1)
+		{
+			c_start = c_start + c_name.length + 1;
+			c_end = document.cookie.indexOf(";", c_start);
+			if(c_end == -1) c_end = document.cookie.length;
+			return unescape(document.cookie.substring(c_start, c_end));
+		}
+	}
+	return "";
+}
+
+function theme(t)
+{
+	var i, a, name;
+
+	setCookie('theme', t);
+
+	if(t == 'Nefitas') name = 'nefitas';
+	else if(t == 'Pedra') name = 'pedra';
+	else if(t == 'Cristo - LDS') name = 'cristolds';
+	else if(t == 'Cristo - Rio') name = 'cristorio';
+	else name = '';
+
+	for(i=0; (a = document.getElementsByTagName("link")[i]); i++)
+	{
+		if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title"))
+		{
+			if(a.getAttribute("title") == "theme")
+			{
+				if(name)
+					a.href = "/themes/" + name + "/style.css";
+				else
+					a.href = "/styles/style.css";
+				break;
+			}
+		}
+	}
+}
+
+theme(getCookie('theme'));
