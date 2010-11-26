@@ -1,12 +1,12 @@
-<html>
-<body>
-
 {% if done %}
-Good: {{ done }}
+Saved: {{ done }}
 <br/><br/>
 {% endif %}
 
 {% if missionary %}
+
+{{ missionary.errors }}
+{{ missionaryprofile.errors }}
 
 <form method="POST">
 <table>
@@ -17,6 +17,3 @@ Good: {{ done }}
 </form>
 
 {% endif %}
-
-</body>
-</html

@@ -370,6 +370,7 @@ class MissionStatusPage(webapp.RequestHandler):
 		ms = cache.get_missionaries()
 
 		zones = []
+		emails = []
 		z = None
 		a = None
 
@@ -379,13 +380,16 @@ class MissionStatusPage(webapp.RequestHandler):
 
 			if z != zk:
 				zones.append([])
+				emails.append([])
 				z = zk
 			if a != ak:
 				zones[-1].append([])
 				a = ak
 			zones[-1][-1].append(m)
 
-		rendert(self, 'mission-status.html', {'zones': zones})
+			emails[-1].append(m)
+
+		rendert(self, 'mission-status.html', {'zones': zones, 'emails': emails})
 
 def drawZone(c, missionaries, name, x, y):
 	if name not in missionaries:
@@ -740,6 +744,27 @@ class NewMissionaryPage(webapp.RequestHandler):
 				p.delete()
 
 		render(self, 'new-missionary.html', 'New Missionary', {'done': done, 'missionary': mf, 'missionaryprofile': pf})
+
+class EditMissionaryPage(webapp.RequestHandler):
+	def get(self, mkey):
+		m = Missionary.get(mkey)
+
+		render(self, 'new-missionary.html', 'Edit Missionary - %s' %m, {'missionary': forms.MissionaryForm(instance=m), 'missionaryprofile': forms.MissionaryProfileForm(instance=m.profile)})
+
+	def post(self, mkey):
+		m = Missionary.get(mkey)
+		p = m.profile
+		POST = self.request.POST
+		pf = forms.MissionaryProfileForm(data=POST, instance=p)
+		mf = forms.MissionaryForm(data=POST, instance=m)
+		done = None
+
+		if pf.is_valid() and mf.is_valid():
+			mf.save(commit=True)
+			pf.save(commit=True)
+			done = m
+
+		render(self, 'new-missionary.html', 'Edit Missionary - %s' %m, {'done': done, 'missionary': mf, 'missionaryprofile': pf})
 
 class EnterRPMPage(webapp.RequestHandler):
 	def get(self):
@@ -2542,7 +2567,7 @@ class Cardfront(webapp.RequestHandler):
 class MissionariesPage(webapp.RequestHandler):
 	def get(self):
 		ms = cache.get_ms()
-		render(self, 'missionaries.html', 'Missionaries', {'ms': ms})
+		render(self, 'missionaries.html', 'Missionaries', {'ms': ms, 'e': 'e' in self.request.GET})
 
 class Cards(webapp.RequestHandler):
 	def get(self):
@@ -3026,6 +3051,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
 	('/_ah/missao-rio/cards/', Cards),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
+	('/_ah/missao-rio/edit-missionary/(.*)', EditMissionaryPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
 	('/_ah/missao-rio/entrance-dates/', EntranceDates),

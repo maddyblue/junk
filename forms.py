@@ -48,7 +48,7 @@ class WardForm(djangoforms.ModelForm):
 class MissionaryForm(djangoforms.ModelForm):
 	class Meta:
 		model = models.Missionary
-		exclude = ['is_senior']
+		exclude = ['area', 'is_senior', 'profile', 'zone', 'area_name', 'zone_name']
 
 class MissionaryProfileForm(djangoforms.ModelForm):
 	class Meta:

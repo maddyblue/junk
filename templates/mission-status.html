@@ -20,3 +20,12 @@
 		{% endfor %}
 	{% endfor %}
 {% endfor %}
+
+<table border="1">
+{% for z in emails %}
+<tr><td>{{ z.0.zone_name }}</td><td>
+	{% for e in z %}
+		{{ e.email }};
+	{% endfor %}
+{% endfor %}
+</table>

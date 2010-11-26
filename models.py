@@ -195,6 +195,9 @@ class Missionary(DerefModel):
 	email_parents = db.TextProperty(indexed=False)
 	address_parents = db.TextProperty(indexed=False)
 
+	email_bishop = db.StringProperty(indexed=False)
+	email_spres = db.StringProperty(indexed=False)
+
 	birth = db.DateProperty(indexed=False)
 	bloodtype = db.StringProperty(indexed=False)
 
