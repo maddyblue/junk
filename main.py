@@ -104,7 +104,6 @@ class BatizadoresPage(webapp.RequestHandler):
 	def get(self):
 		d = FlatPage.get_flatpage(FLATPAGE_BATIZADORES)
 		d += '<script type="text/javascript" src="/js-static/jquery.easing.1.3.js"></script>'
-		d += '<script type="text/javascript" src="/js-static/bouncr.js"></script>'
 		render(self, '', 'Batizadores', {'page_data': d})
 
 class MilagrePage(webapp.RequestHandler):
@@ -975,8 +974,6 @@ class MakeBatismosPage(webapp.RequestHandler):
 			for a in hla[z]:
 				r += u'<dt>%s = %i (%i%%)</dt>\n' %(ad[a[1]][-1], a[0], 100.0 * a[0] / ad[a[1]][1])
 			r += '</dl>'
-
-		r += '<script type="text/javascript" src="/js-static/showr.js"></script>'
 
 		FlatPage.make(FLATPAGE_BATISMOS, r, w)
 
