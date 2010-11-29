@@ -2387,7 +2387,11 @@ def photo_crop(imgd, wr, hr=1):
 
 def make_port_date(d):
 	months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
-	return '%02i-%s-%02i' %(d.day, months[d.month - 1], d.year % 100)
+
+	if d:
+		return '%02i-%s-%02i' %(d.day, months[d.month - 1], d.year % 100)
+	else:
+		return ''
 
 def draw_width_string(c, x, y, s, fontname, defheight, width):
 	height = defheight
