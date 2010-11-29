@@ -25,7 +25,7 @@ import templatefilters.filters
 
 from reportlab.lib import units
 from reportlab.lib.utils import ImageReader
-from reportlab.lib.colors import red, black
+from reportlab.lib.colors import red, black, white
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
 import StringIO
@@ -108,7 +108,11 @@ class BatizadoresPage(webapp.RequestHandler):
 class MilagrePage(webapp.RequestHandler):
 	def get(self):
 		d = FlatPage.get_flatpage(FLATPAGE_MILAGRE)
-		rendert(self, 'superacao.html', {'page_data': d, 't1': 'Superação'})
+		rendert(self, 'milagre.html', {'page_data': d, 't1': 'Milagre da Semana'})
+
+class SuperPage(webapp.RequestHandler):
+	def get(self):
+		rendert(self, 'superacao.html', {'t1': 'Superação'})
 
 class NoticiasPage(webapp.RequestHandler):
 	def get(self):
@@ -1887,7 +1891,7 @@ class AreaDistrictPage(webapp.RequestHandler):
 		render(self, 'areas.html', 'Areas and Districts', {'areas': afs})
 
 	def post(self):
-		areas = models.Area.all().order('zone_name').order('name').fetch(500)
+		areas = cache.get_areas(True)
 
 		for a in areas:
 			akey = str(a.key())
@@ -2880,11 +2884,31 @@ class RaioX(webapp.RequestHandler):
 			zkey = Key(zk)
 			sums = [i for i in sums if i.get_key('ref') == zkey]
 
-		raio_x(sums, len(wks))
+		raio_x(self, sums, len(wks), month, year)
 
-def raio_x(sums, wks):
+def raio_x(self, sums, wks, month, year):
+	months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+	c = canvas.Canvas(self.response.out, bottomup=0, pagesize=landscape(A4))
+
+	from reportlab.pdfbase import pdfmetrics
+	from reportlab.pdfbase.ttfonts import TTFont
+	c.deffont = 'Vera'
+	c.boldfont = 'VeraBd'
+	pdfmetrics.registerFont(TTFont(c.deffont, 'Vera.ttf'))
+	pdfmetrics.registerFont(TTFont(c.boldfont, 'VeraBd.ttf'))
+
 	for s in sums:
-		w = {}
+		x = 5
+		y = 5
+
+		c.setFillColor(black)
+		c.rect(x, y, 1000, 30, 1, 1)
+
+		c.setFont(c.boldfont, 15)
+		c.setFillColor(white)
+		c.drawString(x + 5, y + 15, 'Raio-X : Missão Brasil Rio de Janeiro : %s %i' %(months[month], year))
+
+		r = {}
 
 		md = s.reports / float(wks) # avg. number of duplas
 
@@ -2907,15 +2931,15 @@ def raio_x(sums, wks):
 		r['wks'] = wks
 		r['md'] = md
 
-		w['p_li'] = 100 * w['ps'] / w['np']
-		w['p_pb'] = 100 * w['pb'] / w['ps']
-		if w['pb']: w['p_pc'] = 100 * w['pc'] / w['pb']
-		if w['pb']: w['p_hb'] = 100 * w['homem'] / w['pb']
+		r['p_li'] = 100 * r['ps'] / r['np']
+		r['p_pb'] = 100 * r['pb'] / r['ps']
+		if r['pb']: r['p_pc'] = 100 * r['pc'] / r['pb']
+		if r['pb']: r['p_hb'] = 100 * r['homem'] / r['pb']
 
 		labels = [u'Crianças', u'Moças', 'Rapazes', 'Mulheres', 'Homens']
 		explode = [0, 0, 0, 0, .05]
 		colors = ['FFA500', 'FF33CC', '3399FF', 'CCFF00', 'FF0000']
-		fracs = [w['crianca'], w['moca'], w['rapaz'], w['mulher'], w['homem']]
+		fracs = [r['crianca'], r['moca'], r['rapaz'], r['mulher'], r['homem']]
 
 		while 0 in fracs:
 			i = fracs.index(0)
@@ -2924,9 +2948,15 @@ def raio_x(sums, wks):
 			explode.pop(i)
 			colors.pop(i)
 
-		for k, v in list(w.iteritems()):
+		for k, v in list(r.iteritems()):
 			if isinstance(v, float):
-				w[k] = ('%.1f' %v).replace('.', ',')
+				r[k] = ('%.1f' %v).replace('.', ',')
+
+		c.showPage()
+
+	self.response.headers['Content-Type'] = 'application/pdf'
+	self.response.headers['Content-Disposition'] = 'attachment; filename=raio-x-%i-%02i.pdf' %(year, month)
+	c.save()
 
 class LifeAverage(webapp.RequestHandler):
 	def get(self):
@@ -3011,7 +3041,8 @@ application = webapp.WSGIApplication([
 	('/numeros/', NumerosPage),
 	('/quadro/', QuadroPhotoPage),
 	('/relatorio/', RelatorioPage),
-	('/super/', MilagrePage),
+	('/super/', SuperPage),
+	('/milagre/', MilagrePage),
 	('/unidades/', UnidadesPage),
 
 	('/image/(.*)', ImageHandler),
