@@ -6,6 +6,7 @@ from mapreduce import operation as op
 import cache
 import logging
 import models
+import main
 from datetime import date
 
 def get_areas():
@@ -200,3 +201,9 @@ def life_points(entity):
 	calc_life(entity)
 
 	yield op.db.Put(entity)
+
+def sync_history(entity):
+	if entity.is_released:
+		return
+
+	main.sync_history_m(entity)

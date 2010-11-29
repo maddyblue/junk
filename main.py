@@ -363,7 +363,13 @@ class MapControlPage(webapp.RequestHandler):
 			control.start_map('Life Points', handler_spec, reader_spec, {'entity_kind': 'models.Sum'}, shard_count=model._DEFAULT_SHARD_COUNT, mapreduce_parameters={'s': cache.get_lifepoints()})
 
 			self.response.out.write('done')
+		elif p == 'Sync History':
+			handler_spec = 'map_procs.sync_history'
+			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
 
+			control.start_map('Sync History', handler_spec, reader_spec, {'entity_kind': 'models.Missionary'}, shard_count=model._DEFAULT_SHARD_COUNT)
+
+			self.response.out.write('done')
 		else:
 			self.response.out.write('error')
 
@@ -3029,6 +3035,78 @@ class LifeDistribution(webapp.RequestHandler):
 
 		render(self, 'life-dist.html', 'Life Distribution', {'charts': charts})
 
+class SyncHistoryPage(webapp.RequestHandler):
+	def get(self, mkey):
+		m = Missionary.get(mkey)
+		r = sync_history_m(m)
+		render(self, '', 'Sync History - %s' %m, {'page_data': r})
+
+def sync_history_m(m):
+		r = ''
+		changed = False
+
+		if m.profile.hist_data:
+			h_last = m.profile.hist_data.split('\n')[-1].partition(' | ')[2]
+		else:
+			h_last = ''
+
+		d = m.profile.hist_last_update
+		if d is None:
+			d = m.start
+
+		sms = SnapMissionary.all().filter('missionary', m).fetch(500)
+		set_sms = set([s.key() for s in sms])
+
+		for s in Snapshot.all().filter('date >=', d).order('date').fetch(500):
+			si = cache.get_snapshotindex(s.key())
+			sism = set([db.Key(i) for i in si.snapmissionaries])
+			i = set_sms.intersection(sism)
+
+			if len(i) != 1:
+				continue
+
+			snap = SnapMissionary.get(i.pop())
+
+			comps = []
+			for i in [sm for sm in SnapMissionary.all().filter('snaparea', snap.get_key('snaparea')).fetch(1000) if sm.key() != snap.key()]:
+
+				if str(i.key()) in si.snapmissionaries:
+					comps.append(i)
+
+			if len(comps) == 0:
+				continue
+
+			h = mk_hist(make_port_date(s.date), snap.snaparea.get_key('area').name(), snap.calling, ', '.join([i.missionary.mission_name for i in comps]))
+			p = h.partition(' | ')[2]
+
+			if p != h_last:
+				add_hist_line(m, h)
+				h_last = p
+				changed = True
+				r += '&nbsp;&nbsp;add: ' + h + '<br>'
+
+		if changed:
+			m.profile.hist_last_update = s.date
+			m.profile.save()
+		else:
+			r = 'no changes'
+
+		return r
+
+def mk_hist(date, area, calling, comp):
+	return ' | '.join([unicode(i).strip() for i in [date, area, calling, comp]])
+
+def add_hist(m, date, area, calling, comp):
+	add_hist_line(m, mk_hist(date, area, calling, comp))
+
+def add_hist_line(m, line):
+	if not m.profile.hist_data:
+		m.profile.hist_data = ''
+	else:
+		m.profile.hist_data += '\n'
+
+	m.profile.hist_data += line
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3104,6 +3182,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/quadro/', Quadro),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
+	('/_ah/missao-rio/sync-history/(.*)', SyncHistoryPage),
 	('/_ah/missao-rio/sync/', SyncPage),
 	('/_ah/missao-rio/transfer/', TransferPage),
 	('/_ah/missao-rio/upload-image/', UploadImage),

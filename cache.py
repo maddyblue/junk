@@ -25,6 +25,7 @@ C_LIFE = 'life-%s-%s'
 C_LIFEPOINTS = 'lifepoints'
 C_MAIN_JS = 'main-js'
 C_MISSIONARIES = 'missionaries'
+C_MISSIONARY = 'missionary-%s'
 C_MISSIONARY_AREAS = 'missionary-areas-%s-%s'
 C_MISSIONARY_LIFE = 'missionary-life-%s-%s'
 C_MOPTS = 'mopts-%s'
@@ -36,13 +37,14 @@ C_SNAPAREAS = 'snapareas-%s'
 C_SNAPAREAS_BYZONE = 'snapareas-%s-%s'
 C_SNAPMISSIONARIES = 'snapmissionaries-%s'
 C_SNAPSHOT = 'snapshot-%s'
+C_SNAPSHOTINDEX = 'snapshotindex-%s'
 C_STAKES = 'stakes'
 C_SUMS = 'sums-%s-%s-%s'
 C_WEEK = 'week'
+C_WEEKOPTS = 'weekopts'
 C_WEEKS = 'weeks-%s'
 C_WEEK_INDS = 'week-%s'
 C_WOPTS = 'wopts'
-C_WEEKOPTS = 'weekopts'
 C_ZONES = 'zones'
 C_ZONE_INDS = 'zone-%s-%s'
 C_ZOPTS = 'zopts-%s'
@@ -807,5 +809,26 @@ def get_weekopts():
 		data = ''.join(['<option value="%s">%s</option>' %(w.key(), w.date) for w in wks])
 
 		memcache.add(n, data)
+
+	return data
+
+# SnapshotIndex of Snapshot with key skey
+def get_snapshotindex(skey):
+	n = C_SNAPSHOTINDEX %skey
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.SnapshotIndex.all().ancestor(skey).get()
+		memcache.add(n, pack(data))
+
+	return data
+
+def get_missionary(mkey):
+	n = C_MISSIONARY %mkey
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Missionary.get(mkey)
+		memcache.add(n, pack(data))
 
 	return data

@@ -34,6 +34,11 @@ indexes:
   - name: submitted
     direction: desc
 
+- kind: Missionary
+  properties:
+  - name: __key__
+    direction: desc
+
 - kind: Sum
   properties:
   - name: __key__
