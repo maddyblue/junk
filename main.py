@@ -763,6 +763,7 @@ class EditMissionaryPage(webapp.RequestHandler):
 		m = Missionary.get(mkey)
 		p = m.profile
 		POST = self.request.POST
+		POST['hist_last_update'] = POST['hist_last_update'].partition('.')[0] # remove possible milliseconds
 		pf = forms.MissionaryProfileForm(data=POST, instance=p)
 		mf = forms.MissionaryForm(data=POST, instance=m)
 		done = None
