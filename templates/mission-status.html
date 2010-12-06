@@ -1,7 +1,7 @@
 {% for areas in zones %}
-	<p/><b>{{ areas.0.0.zone_name }}</b> - {{ areas|length }} areas
+	<p/><b><a href="/zone/{{ areas.0.0|getkey:"zone" }}">{{ areas.0.0.zone_name }}</a></b> - {{ areas|length }} areas
 	{% for ms in areas %}
-		<br/>{{ ms.0.area.name }}</a>{% if ms.0.area.phone %} ({{ ms.0.area.phone }}){% endif %},
+		<br/><a href="/area/{{ ms.0.area.key }}">{{ ms.0.area.name }}</a>{% if ms.0.area.phone %} ({{ ms.0.area.phone }}){% endif %},
 		{% comment %}district: {{ ms.0.area.district.name }}{% endcomment %}
 		{% if ms.0.area.reports_with %} <b>reports with {{ ms.0.area.reports_with.name }}</b>{% endif %}
 		{% if ms.0.area.does_not_report %} <b>does not report</b>{% endif %}

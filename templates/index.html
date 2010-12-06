@@ -67,6 +67,7 @@
 		<li><a href="/_ah/missao-rio/area/">Números da Missão</a></li>
 		<li><a href="/_ah/missao-rio/status/">Mission Status</a></li>
 		<li><a href="/_ah/missao-rio/missionaries/">Missionaries</a></li>
+		<li><a href="/_ah/missao-rio/view-retention/">Relatório de Retenção</a></li>
 		<li><a href="/logout/">Sair</a></li>
 	</ul>
 	{% endif %}
@@ -98,6 +99,7 @@
 		<li><a href="/">Carta do Presidente</a></li>
 		{% if session.user %}
 		<li><a href="/relatorio/">Fazer Relatório</a></li>
+		<li><a href="/retencao/"><b>*Projeto de Retenção*</b></a></li>
 		{% endif %}
 		{% if session.user|is_zl %}
 		<li><a href="/numeros/">Passar Números</a></li>

@@ -397,7 +397,7 @@ class MissionStatusPage(webapp.RequestHandler):
 
 			emails[-1].append(m)
 
-		rendert(self, 'mission-status.html', {'zones': zones, 'emails': emails})
+		render(self, 'mission-status.html', 'Mission Status', {'zones': zones, 'emails': emails})
 
 def drawZone(c, missionaries, name, x, y):
 	if name not in missionaries:
@@ -3111,6 +3111,178 @@ def add_hist_line(m, line):
 
 	m.profile.hist_data += line
 
+class RetencaoPage(webapp.RequestHandler):
+	def get(self):
+		self.session = get_current_session()
+		cw = cache.get_week()
+
+		a = self.session['user'].area
+		wk = a.get_key('ward')
+		wname = a.get_key('ward').name()
+
+		rs = cache.get_retainees(wk)
+
+		wn = ['05/12','12/12','19/12','26/12']
+		if cw.date == date(2010, 12, 5):
+			weeks = 1
+		elif cw.date == date(2010, 12,12):
+			weeks = 2
+		elif cw.date == date(2010, 12, 19):
+			weeks = 3
+		else:
+			weeks = 4
+
+		#See if they're area is the same as the ward (no numbers) and senior
+		if wname == a.name:
+			permission = ''
+			submit = True
+		else:
+			permission = 'disabled'
+			submit = False
+
+		#Starts the table and adds the header
+		table = "<table border=\"1\">\n<tr><td>Name</td><td>Status</td>"
+		i = 1
+		while i <= weeks:
+			table += "<td>"
+			if i == weeks:
+					table += "<b><font color=\"black\">%s</font></b>" %wn[i-1]
+			else:
+				table += wn[i-1]
+			table += "</td>"
+
+			i += 1
+
+		table += "</tr>\n"
+
+		pr = 0 # People retained (went to church >0 Sundays)
+		tp = 0 # total people (not dead or moved)
+
+		for r in rs:
+			name = r.name
+
+			if r.status == RET_ALIVE:
+				tp += 1
+
+				if any([r.week1, r.week2, r.week3, r.week4]):
+					pr += 1
+				else:
+					name = "<b><font color=\"black\">%s</font></b>" %r.name
+
+			table += "<tr><td>%s</td>" %name
+			table += "<td>%s</td>" %mk_select('st_%s' %r.key(), [(v, v) for v in RET_CHOICES], r.status)
+
+			i = 1
+			while i < weeks + 1:
+				if i == weeks and permission == '':
+					name = r.key()
+				else:
+					name = ""
+
+				if str(getattr(r,"week" + str(i))) == 'True':
+					checked = "CHECKED"
+				else:
+					checked = ""
+
+				if i == weeks:
+					name = r.key()
+					table += "<td><input type=\"checkbox\" name=\"%s\" value=\"True\" %s %s /></td>" %(r.key(),checked,permission)
+				else:
+					if checked == 'CHECKED':
+						table += "<td style=\"vertical-align: middle; text-align: center;\"><img src=\"/imgs/check.gif\"</td>"
+					else:
+						table += "<td style=\"vertical-align: middle; text-align: center;\"><img src=\"/imgs/ex.jpg\"</td>"
+
+				i += 1
+			table += "</tr>\n"
+
+		table += "</table>\n"
+
+		ta = {'table': table, 'submit': submit, 'stats': (pr, tp, 100 * pr / tp)}
+
+		render(self,'retencao.html','Retenção',ta)
+
+	def post(self):
+		self.session = get_current_session()
+		a = self.session['user'].area
+		wk = a.get_key('ward')
+		wname = a.get_key('ward').name()
+
+		cw = cache.get_week()
+		if str(cw.date) == '2010-12-05':
+			wn = '1'
+		elif str(cw.date) == '2010-12-12':
+			wn = '2'
+		elif str(cw.date) == '2010-12-19':
+			wn = '3'
+		else:
+			wn = '4'
+
+		rets = cache.get_retainees(wk)
+		keys = self.request.POST.keys()
+		for r in rets:
+			setattr(r, 'week' + wn, str(r.key()) in keys)
+			st = self.request.POST['st_%s' %r.key()]
+			if st in RET_CHOICES:
+				r.status = st
+
+		db.put(rets)
+		memcache.delete(cache.C_RETAINEES %wk)
+
+		render(self, '', 'Retenção', {'page_data': "Enviado com sucesso."})
+
+class ViewRetention(webapp.RequestHandler):
+	def get(self):
+		wards = cache.get_wards()
+		r = []
+
+		ttp = 0
+		tpw = 0
+
+		for ward in wards:
+			rets = cache.get_retainees(ward.key())
+
+			tp = 0
+			pw = 0
+			for ret in rets:
+				if ret.status == RET_ALIVE:
+					tp += 1
+					if any([ret.week1, ret.week2, ret.week3, ret.week4]):
+						pw += 1
+
+			if tp == 0:
+				pct = '0%'
+			else:
+				pct = '%i%%' %(100.0 * pw / tp)
+			r.append((ward, pw, tp, pct))
+
+			ttp += tp
+			tpw += pw
+
+		render(self, 'view-retention.html', 'Relatório de Retenção', {'r': r, 'tp': ttp, 'pw': tpw, 'pct': '%i%%' %(100.0 * tpw / ttp)})
+
+class WeeklyReports(webapp.RequestHandler):
+	def get(self):
+		w = cache.get_week()
+		snapareas = cache.get_snapareas(w)
+		areas = [i for i in snapareas if not i.does_not_report and not i.reports_with]
+		nosubmit = set([i.get_key('area') for i in areas])
+		sent = set()
+		reps = Report.all().filter('week', w).fetch(200)
+
+		for r in reps:
+			rk = r.get_key('area')
+			if rk in nosubmit:
+				nosubmit.remove(rk)
+				sent.add(rk)
+
+		nosubmit = list(nosubmit)
+		nosubmit.sort(cmp=lambda x,y: cmp(x.name(), y.name()))
+		sent = list(sent)
+		sent.sort(cmp=lambda x,y: cmp(x.name(), y.name()))
+
+		render(self, 'weekly-reports.html', 'Weekly Reports', {'sent': sent, 'nosubmit': nosubmit})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3119,12 +3291,13 @@ application = webapp.WSGIApplication([
 	('/clima/', ClimaPage),
 	('/login/', LoginPage),
 	('/logout/', LogoutPage),
+	('/milagre/', MilagrePage),
 	('/noticias/', NoticiasPage),
 	('/numeros/', NumerosPage),
 	('/quadro/', QuadroPhotoPage),
 	('/relatorio/', RelatorioPage),
+	('/retencao/', RetencaoPage),
 	('/super/', SuperPage),
-	('/milagre/', MilagrePage),
 	('/unidades/', UnidadesPage),
 
 	('/image/(.*)', ImageHandler),
@@ -3190,6 +3363,8 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/sync/', SyncPage),
 	('/_ah/missao-rio/transfer/', TransferPage),
 	('/_ah/missao-rio/upload-image/', UploadImage),
+	('/_ah/missao-rio/view-retention/', ViewRetention),
+	('/_ah/missao-rio/weekly-reports/', WeeklyReports),
 	('/admin/', AdminRedirect),
 	('/cleanup_sessions', CleanupSessions),
 	], debug=True)

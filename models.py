@@ -854,3 +854,17 @@ class Image(db.Model):
 	image = db.BlobProperty()
 	notes = db.TextProperty()
 	uploaded = db.DateTimeProperty(auto_now_add=True)
+
+RET_ALIVE = 'Vivo'
+RET_DEAD = 'Morreu'
+RET_MOVED = 'Mudou-se'
+RET_CHOICES = [RET_ALIVE, RET_DEAD, RET_MOVED]
+
+class Retainee(db.Model):
+	name = db.StringProperty(required=True)
+	ward = db.ReferenceProperty(Ward, required=True)
+	week1 = db.BooleanProperty(default=False)
+	week2 = db.BooleanProperty(default=False)
+	week3 = db.BooleanProperty(default=False)
+	week4 = db.BooleanProperty(default=False)
+	status = db.StringProperty(required=True, default=RET_ALIVE, choices=RET_CHOICES)

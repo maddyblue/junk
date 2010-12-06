@@ -33,6 +33,7 @@ C_MS = 'ms-%s'
 C_M_BY_AREA = 'mbyarea-%s'
 C_M_PHOTO = 'm-photo-%s'
 C_RELATORIO_PAGE = 'relatorio'
+C_RETAINEES = 'retainees-%s'
 C_SNAPAREAS = 'snapareas-%s'
 C_SNAPAREAS_BYZONE = 'snapareas-%s-%s'
 C_SNAPMISSIONARIES = 'snapmissionaries-%s'
@@ -40,6 +41,7 @@ C_SNAPSHOT = 'snapshot-%s'
 C_SNAPSHOTINDEX = 'snapshotindex-%s'
 C_STAKES = 'stakes'
 C_SUMS = 'sums-%s-%s-%s'
+C_WARDS = 'wards'
 C_WEEK = 'week'
 C_WEEKOPTS = 'weekopts'
 C_WEEKS = 'weeks-%s'
@@ -673,10 +675,7 @@ def get_stakes():
 	data = memcache.get(n)
 
 	if not data:
-		wards = models.Ward.all().fetch(500)
-
-		wards.sort(cmp=lambda x,y: cmp(x.name, y.name))
-		wards.sort(cmp=lambda x,y: cmp(x.stake_name, y.stake_name))
+		wards = get_wards()
 
 		stakes = models.Stake.all().fetch(50)
 		sd = dict([(i.key(), i) for i in stakes])
@@ -829,6 +828,32 @@ def get_missionary(mkey):
 
 	if not data:
 		data = models.Missionary.get(mkey)
+		memcache.add(n, pack(data))
+
+	return data
+
+def get_wards():
+	n = C_WARDS
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Ward.all().fetch(500)
+
+		data.sort(cmp=lambda x,y: cmp(x.name, y.name))
+		data.sort(cmp=lambda x,y: cmp(x.stake_name, y.stake_name))
+
+		memcache.add(n, pack(data))
+
+	return data
+
+def get_retainees(wkey):
+	n = C_RETAINEES %wkey
+	data = unpack(memcache.get(n))
+
+	if not data:
+		data = models.Retainee.all().filter('ward', wkey).fetch(500)
+		data.sort(cmp=lambda x,y: cmp(x.name, y.name))
+
 		memcache.add(n, pack(data))
 
 	return data

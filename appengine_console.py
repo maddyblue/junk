@@ -1,4 +1,5 @@
 import code
+import codecs
 import getpass
 import sys
 import time
@@ -580,6 +581,44 @@ def sync_photos():
 
 		print 'put'
 		db.put(p)
+
+def rrc():
+	f = codecs.open('../rc2.txt', 'r', 'utf8')
+	wards = dict([(w.name, w) for w in aem.Ward.all().fetch(500)])
+	ward = None
+	todel = []
+
+	for i in f:
+		i = i.strip().partition(u'\t')
+
+		if i[0] != ward:
+			if todel:
+				print 'delete %i' %len(todel)
+				for t in todel:
+					print '     %s' %t.name.encode('cp1252')
+				db.delete(todel)
+				todel = []
+
+			ward = i[0]
+
+			# make sure it exists: KeyError out if not
+			w = wards[ward]
+			rets = dict([(r.name, r) for r in aem.Retainee.all().filter('ward', w).fetch(1000)])
+			todel = []
+
+			print '%i rets for %s' %(len(rets), ward.encode('cp1252'))
+
+		name = i[2]
+
+		if name in rets:
+			todel.append(rets[name])
+
+	if todel:
+		print 'delete %i' %len(todel)
+		for t in todel:
+			print '     %s' %t.name.encode('cp1252')
+		db.delete(todel)
+		todel = []
 
 if __name__ == '__main__':
 	if len(sys.argv) < 2:

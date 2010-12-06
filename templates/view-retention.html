@@ -1,0 +1,8 @@
+<table border="1">
+<tr><th>Estaca</th><th>Unidade</th><th>Foram</th><th>Possíveis</th><th>Por centagem</th></tr>
+<tr><th>TOTAL</th><th></th><th>{{ pw }}</th><th>{{ tp }}</th><th>{{ pct }}</th></tr>
+
+{% for i in r %}
+<tr><td>{{ i.0|getkey_name:"stake" }}</td><td>{{ i.0.name }}</td><td>{{ i.1 }}</td><td>{{ i.2 }}</td><td>{{ i.3 }}</td></tr>
+{% endfor %}
+</table>
