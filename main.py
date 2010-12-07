@@ -4,6 +4,7 @@ import logging
 import os
 import pickle
 import urllib
+import sys
 
 from datetime import timedelta, date, datetime
 from google.appengine.api import images
@@ -29,6 +30,13 @@ from reportlab.lib.colors import red, black, white
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
 import StringIO
+
+from time import gmtime, strftime
+
+sys.path.insert(0, 'ho.zip')
+sys.path.insert(0, 'html5lib.zip')
+sys.path.insert(0, 'sx.zip')
+import ho.pisa as pisa
 
 # returns True if authenticated
 def basicAuth(func):
@@ -2621,15 +2629,17 @@ def draw_cardback(c, m, x, y):
 	c.line(x+PW, y, x+PW, y+PW)
 	c.line(x+W, y, x+W, y+PW)
 
-	c.drawCentredString(x + PW + (W - PW)/2, y+H-F, str(m))
+	c.drawCentredString(x + PW + (W - PW)/2, y+H-F, unicode(m))
 	y += H
 
 	c.line(x+PW, y+H, x+W, y+H)
-	c.drawCentredString(x + PW + (W - PW)/2, y+H-F, m.full_name)
+	if m.full_name:
+		c.drawCentredString(x + PW + (W - PW)/2, y+H-F, m.full_name)
 	y += H
 
 	c.line(x+PW, y+H, x+W, y+H)
-	c.drawCentredString(x + PW + (W - PW)/2, y+H-F, m.profile.hometown)
+	if m.profile.hometown:
+		c.drawCentredString(x + PW + (W - PW)/2, y+H-F, m.profile.hometown)
 	y += H
 
 	c.line(x, y+H, x+W, y+H)
@@ -3284,6 +3294,44 @@ class WeeklyReports(webapp.RequestHandler):
 
 		render(self, 'weekly-reports.html', 'Weekly Reports', {'sent': sent, 'nosubmit': nosubmit})
 
+class Cardbacks(webapp.RequestHandler):
+	def get(self):
+		return cardbacks(self, cache.get_ms())
+
+class PFMudancaCarta(webapp.RequestHandler):
+	def get(self, mkey):
+
+		m = Missionary.get(mkey)
+		if m.sex == 'Elder':
+			amstr = 'o norte americano'
+		else:
+			amstr = 'a norte americana'
+
+		fullname = str(m.full_name).upper()
+
+		months = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro']
+		month = months[int(strftime('%m'))-1]
+
+		#Rio de Janeiro, 15 de Setembro de 2010
+		data = strftime("%d de ", gmtime()) + month + strftime(" de %Y", gmtime())
+
+		if not m.profile.passport:
+			raise ValueError, 'no passport number'
+
+		template_vars = {'amstr': amstr, 'fullname': fullname, 'passport': m.profile.passport,'data': data}
+
+		output=StringIO.StringIO()
+		try:
+			tfile = os.path.join(os.path.dirname(__file__), 'templates', 'pfcarta.html')
+			pdf = pisa.CreatePDF(template.render(tfile,template_vars),output)
+		except:
+			print "Unexpected error in creating PDF:", sys.exc_info()[0]
+			raise
+
+		self.response.headers['Content-Type'] = 'application/pdf'
+		self.response.headers['Content-Disposition'] = 'attachment; filename=pfcarta.pdf'
+		self.response.out.write(output.getvalue())
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3331,6 +3379,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
 	('/_ah/missao-rio/assign-mailboxes/', AssignMailboxesPage),
 	('/_ah/missao-rio/cardback/(.*)', Cardback),
+	('/_ah/missao-rio/cardbacks/', Cardbacks),
 	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
 	('/_ah/missao-rio/cards/', Cards),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
@@ -3353,6 +3402,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/map-control/', MapControlPage),
 	('/_ah/missao-rio/missionaries/', MissionariesPage),
 	('/_ah/missao-rio/missionary/(.*)', MissionaryPage),
+	('/_ah/missao-rio/mudanca-carta/(.*)', PFMudancaCarta),
 	('/_ah/missao-rio/new-missionary/', NewMissionaryPage),
 	('/_ah/missao-rio/per-missionary/(.*)', PerMissionary),
 	('/_ah/missao-rio/per-ward/(.*)', PerWard),

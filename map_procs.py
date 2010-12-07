@@ -188,7 +188,12 @@ def sums_week(entity):
 def calc_life(entity):
 	ctx = context.get()
 
-	s = ctx.mapreduce_spec.params['s'].split('-')
+	try:
+		s = ctx.mapreduce_spec.params['s']
+	except:
+		s = cache.get_lifepoints()
+
+	s = s.split('-')
 	entity.life = 0.
 
 	for v in models.Sum.life_inds:

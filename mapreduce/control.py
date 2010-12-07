@@ -27,17 +27,22 @@ from mapreduce import handlers
 from mapreduce import model
 
 
+_DEFAULT_SHARD_COUNT = 8
+
+
 def start_map(name,
               handler_spec,
               reader_spec,
               reader_parameters,
-              shard_count,
-              mapreduce_parameters={},
+              shard_count=_DEFAULT_SHARD_COUNT,
+              mapreduce_parameters=None,
               base_path="/mapreduce",
               queue_name="default",
               eta=None,
               countdown=None,
-              _app=None):
+              hooks_class_name=None,
+              _app=None,
+              transactional=False):
   """Start a new, mapper-only mapreduce.
 
   Args:
@@ -57,6 +62,9 @@ def start_map(name,
         timezone-naive.
     countdown: Time in seconds into the future that this MR should execute.
         Defaults to zero.
+    hooks_class_name: fully qualified name of a hooks.Hooks subclass.
+    transactional: Specifies if job should be started as a part of already
+      opened transaction.
 
   Returns:
     mapreduce id as string.
@@ -67,10 +75,11 @@ def start_map(name,
   return handlers.StartJobHandler._start_map(
       name,
       mapper_spec,
-      mapreduce_parameters,
+      mapreduce_parameters or {},
       base_path=base_path,
       queue_name=queue_name,
       eta=eta,
       countdown=countdown,
-      _app=_app)
-
+      hooks_class_name=hooks_class_name,
+      _app=_app,
+      transactional=transactional)

@@ -42,6 +42,7 @@ class BaseHandler(webapp.RequestHandler):
     path = self.request.path
     return path[:path.rfind("/")]
 
+
 class TaskQueueHandler(BaseHandler):
   """Base class for handlers intended to be run only from the task queue.
 
@@ -60,6 +61,10 @@ class TaskQueueHandler(BaseHandler):
   def handle(self):
     """To be implemented by subclasses."""
     raise NotImplementedError()
+
+  def task_retry_count(self):
+    """Number of times this task has been retried."""
+    return int(self.request.headers.get("X-AppEngine-TaskRetryCount", 0))
 
 
 class JsonHandler(BaseHandler):

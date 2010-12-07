@@ -42,6 +42,7 @@ from google.appengine.api import datastore_errors
 from google.appengine.api import datastore_types
 from google.appengine.ext import db
 from mapreduce import context
+from mapreduce import hooks
 from mapreduce import util
 from mapreduce.lib.graphy.backends import google_chart_api
 
@@ -382,6 +383,11 @@ class MapperSpec(JsonMixin):
         "mapper_shard_count": self.shard_count,
     }
 
+  def __str__(self):
+    return "MapperSpec(%s, %s, %s, %s)" % (
+        self.handler_spec, self.input_reader_spec, self.params,
+        self.shard_count)
+
   @classmethod
   def from_json(cls, json):
     """Creates MapperSpec from a dict-like object."""
@@ -408,7 +414,8 @@ class MapreduceSpec(JsonMixin):
                name,
                mapreduce_id,
                mapper_spec,
-               params = {}):
+               params={},
+               hooks_class_name=None):
     """Create new MapreduceSpec.
 
     Args:
@@ -416,17 +423,36 @@ class MapreduceSpec(JsonMixin):
       mapreduce_id: ID of the mapreduce.
       mapper_spec: JSON-encoded string containing a MapperSpec.
       params: dictionary of additional mapreduce parameters.
+      hooks_class_name: The fully qualified name of the hooks class to use.
 
     Properties:
       name: The name of this mapreduce job type.
       mapreduce_id: unique id of this mapreduce as string.
       mapper: This MapreduceSpec's instance of MapperSpec.
       params: dictionary of additional mapreduce parameters.
+      hooks_class_name: The fully qualified name of the hooks class to use.
     """
     self.name = name
     self.mapreduce_id = mapreduce_id
     self.mapper = MapperSpec.from_json(mapper_spec)
     self.params = params
+    self.hooks_class_name = hooks_class_name
+    self.__hooks = None
+    self.get_hooks()  # Fail fast on an invalid hook class.
+
+  def get_hooks(self):
+    """Returns a hooks.Hooks class or None if no hooks class has been set."""
+    if self.__hooks is None and self.hooks_class_name is not None:
+      hooks_class = util.for_name(self.hooks_class_name)
+      if not isinstance(hooks_class, type):
+        raise ValueError("hooks_class_name must refer to a class, got %s" %
+                         type(hooks_class).__name__)
+      if not issubclass(hooks_class, hooks.Hooks):
+        raise ValueError(
+            "hooks_class_name must refer to a hooks.Hooks subclass")
+      self.__hooks = hooks_class(self.mapper)
+
+    return self.__hooks
 
   def to_json(self):
     """Serializes all data in this mapreduce spec into json form.
@@ -440,6 +466,7 @@ class MapreduceSpec(JsonMixin):
         "mapreduce_id": self.mapreduce_id,
         "mapper_spec": mapper_spec,
         "params": self.params,
+        "hooks_class_name": self.hooks_class_name,
     }
 
   @classmethod
@@ -455,7 +482,8 @@ class MapreduceSpec(JsonMixin):
     mapreduce_spec = cls(json["name"],
                          json["mapreduce_id"],
                          json["mapper_spec"],
-                         json.get("params"))
+                         json.get("params"),
+                         json.get("hooks_class_name"))
     return mapreduce_spec
 
 
@@ -502,6 +530,11 @@ class MapreduceState(db.Model):
   start_time = db.DateTimeProperty(auto_now_add=True)
 
   @classmethod
+  def kind(cls):
+    """Returns entity kind."""
+    return "_AE_MR_MapreduceState"
+
+  @classmethod
   def get_key_by_job_id(cls, mapreduce_id):
     """Retrieves the Key for a Job.
 
@@ -512,6 +545,18 @@ class MapreduceState(db.Model):
       Datastore Key that can be used to fetch the MapreduceState.
     """
     return db.Key.from_path(cls.kind(), mapreduce_id)
+
+  @classmethod
+  def get_by_job_id(cls, mapreduce_id):
+    """Retrieves the instance of state for a Job.
+
+    Args:
+      mapreduce_id: The mapreduce job to retrieve.
+
+    Returns:
+      instance of MapreduceState for passed id.
+    """
+    return db.get(cls.get_key_by_job_id(mapreduce_id))
 
   def set_processed_counts(self, shards_processed):
     """Updates a chart url to display processed count for each shard.
@@ -539,18 +584,25 @@ class MapreduceState(db.Model):
   processed = property(get_processed)
 
   @staticmethod
-  def create_new(getkeyname=_get_descending_key,
+  def create_new(mapreduce_id=None,
                  gettime=datetime.datetime.now):
     """Create a new MapreduceState.
 
     Args:
-      getkeyname: Used for testing.
+      mapreduce_id: Mapreduce id as string.
       gettime: Used for testing.
     """
-    state = MapreduceState(key_name=getkeyname(),
+    if not mapreduce_id:
+      mapreduce_id = MapreduceState.new_mapreduce_id()
+    state = MapreduceState(key_name=mapreduce_id,
                            last_poll_time=gettime())
     state.set_processed_counts([])
     return state
+
+  @staticmethod
+  def new_mapreduce_id():
+    """Generate new mapreduce id."""
+    return _get_descending_key()
 
 
 class ShardState(db.Model):
@@ -600,6 +652,11 @@ class ShardState(db.Model):
     return self.key().name()
 
   shard_id = property(get_shard_id)
+
+  @classmethod
+  def kind(cls):
+    """Returns entity kind."""
+    return "_AE_MR_ShardState"
 
   @classmethod
   def shard_id_from_number(cls, mapreduce_id, shard_number):
@@ -682,6 +739,11 @@ class MapreduceControl(db.Model):
   _KEY_NAME = "command"
 
   command = db.TextProperty(choices=_COMMANDS, required=True)
+
+  @classmethod
+  def kind(cls):
+    """Returns entity kind."""
+    return "_AE_MR_MapreduceControl"
 
   @classmethod
   def get_key_by_job_id(cls, mapreduce_id):
