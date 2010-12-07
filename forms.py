@@ -50,6 +50,11 @@ class MissionaryForm(djangoforms.ModelForm):
 		model = models.Missionary
 		exclude = ['area', 'is_senior', 'profile', 'zone', 'area_name', 'zone_name']
 
+class MissionaryPForm(djangoforms.ModelForm):
+	class Meta:
+		model = models.Missionary
+		exclude = ['area', 'is_senior', 'zone', 'area_name', 'zone_name']
+
 class MissionaryProfileForm(djangoforms.ModelForm):
 	class Meta:
 		model = models.MissionaryProfile

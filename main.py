@@ -750,7 +750,7 @@ class NewMissionaryPage(webapp.RequestHandler):
 		if pf.is_valid():
 			p = pf.save(commit=True)
 			POST['profile'] = str(p.key())
-			mf = forms.MissionaryForm(data=POST)
+			mf = forms.MissionaryPForm(data=POST)
 			if mf.is_valid():
 				m = mf.save(commit=True)
 				done = m
