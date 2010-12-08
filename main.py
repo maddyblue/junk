@@ -22,6 +22,7 @@ import config
 import forms
 import map_procs
 import models
+import monkeytex
 import templatefilters.filters
 
 from reportlab.lib import units
@@ -3332,6 +3333,136 @@ class PFMudancaCarta(webapp.RequestHandler):
 		self.response.headers['Content-Disposition'] = 'attachment; filename=pfcarta.pdf'
 		self.response.out.write(output.getvalue())
 
+def deuni(s):
+	l = [
+		(u'á', "a"),
+		(u'â', "a"),
+		(u'ã', "a"),
+		(u'é', "e"),
+		(u'ê', "e"),
+		(u'í', "i"),
+		(u'ó', "o"),
+		(u'ú', "u"),
+		(u'ç', "c"),
+		(u'ñ', "n"),
+	]
+
+	for i in l:
+		s = s.replace(i[0], i[1])
+
+	return str(s)
+
+def slugify(s):
+	return deuni(s.lower()).replace(' ', '-')
+
+def texify(s):
+	l = [
+		(u'á', "\\'a"),
+		(u'Á', "\\'A"),
+		(u'Â', "\\^A"),
+		(u'à', "\\`a"),
+		(u'â', "\\^a"),
+		(u'ã', "\\~a"),
+		(u'é', "\\'e"),
+		(u'É', "\\'E"),
+		(u'ê', "\\^e"),
+		(u'í', "\\'i"),
+		(u'ó', "\\'o"),
+		(u'õ', "\\~o"),
+		(u'ô', "\\^o"),
+		(u'ú', "\\'u"),
+		(u'ç', "\\c c"),
+		(u'ª', "\\textordfeminine{}"),
+		(u'º', "\\textordmasculine{}"),
+		(u'°', "\\textdegree{}"),
+		(u'#', "\\#"),
+		(r'\\#', r'\#'),
+	]
+
+	for i in l:
+		s = s.replace(i[0], i[1])
+
+	return s
+
+def get_dstring(d = date.today()):
+	months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+	return '%i de %s de %i' %(d.day, months[d.month - 1], d.year)
+
+class ReturnLetterPage(webapp.RequestHandler):
+	def get(self, mkey):
+		m = Missionary.get(mkey)
+
+		if m.profile.return_areas:
+			ras = m.profile.return_areas
+		else:
+			areas = []
+			for i in m.profile.hist_data.splitlines():
+				a = i.split(' | ')[1].strip()
+				if a[-1] in [str(n) for n in range(10)]:
+					a = a[:-1].strip()
+
+				if a not in areas:
+					areas.append(a)
+
+			ras = ', '.join(areas)
+
+		rmf = forms.ReturnMForm(instance=m)
+		rmpf = forms.ReturnMPForm(instance=m.profile, initial={'return_areas': ras})
+
+		render(self, 'return-letter.html', 'Return Letter', {'rmf': rmf, 'rmpf': rmpf})
+
+	def post(self, mkey):
+		m = Missionary.get(mkey)
+		rmf = forms.ReturnMForm(instance=m, data=self.request.POST)
+		rmpf = forms.ReturnMPForm(instance=m.profile, data=self.request.POST)
+
+		if rmf.is_valid() and rmpf.is_valid():
+			rmf.save()
+			rmpf.save()
+
+			if self.request.POST['submit'] == 'english': r = 'return'
+			elif self.request.POST['submit'] == 'portuguese':
+				r = 'volta-'
+				if m.sex == MISSIONARY_SEX_ELDER: r += 'elder'
+				elif m.sex == MISSIONARY_SEX_SISTER: r += 'sister'
+
+			fname = '%s-%s' %(r, slugify(m.mission_name))
+			t = '%s.tex' %r
+
+			s = m.profile.it_stake.split('\n')[0].strip().split(' ')
+			spres = '%s %s' %(s[0], s[-1])
+
+			if m.sex == MISSIONARY_SEX_ELDER:
+				his = 'his'
+				man = 'man'
+				he = 'he'
+			else:
+				his = 'her'
+				man = 'woman'
+				he = 'she'
+
+			c = {'date': get_dstring(), 'm': m, 'name': texify(m.full_name), 'his': his, 'man': man, 'he': he, 'spres': spres, 'release': get_dstring(m.release)}
+
+			temp = render_temp(t, c)
+			p = mk_tex(t, temp)
+			mk_pdf(self, t, temp, fname)
+		else:
+			render(self, 'return-letter.html', 'Return Letter', {'rmf': rmf, 'rmpf': rmpf})
+
+def mk_tex(fname, ftext):
+	m = monkeytex.MonkeyTeX()
+	i = m.latex(fname, ftext)
+	p = m.pdf(i)
+
+	return p
+
+def mk_pdf(self, fname, ftext, pdfname):
+	p = mk_tex(fname, ftext)
+
+	self.response.headers['Content-Type'] = 'application/pdf'
+	self.response.headers['Content-Disposition'] = 'attachment; filename=%s.pdf' %pdfname
+	self.response.out.write(p)
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3408,6 +3539,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/per-ward/(.*)', PerWard),
 	('/_ah/missao-rio/pf/(.*)/(.*)', PFPage),
 	('/_ah/missao-rio/quadro/', Quadro),
+	('/_ah/missao-rio/return-letter/(.*)', ReturnLetterPage),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/sync-history/(.*)', SyncHistoryPage),

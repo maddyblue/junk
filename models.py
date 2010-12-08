@@ -125,6 +125,7 @@ class MissionaryProfile(db.Model):
 	it_destination = db.StringProperty(indexed=False)
 	it_ward = db.TextProperty(indexed=False)
 	it_stake = db.TextProperty(indexed=False)
+	return_areas = db.TextProperty(indexed=False)
 
 	# history
 	hist_data = db.TextProperty(indexed=False)

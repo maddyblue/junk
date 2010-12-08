@@ -86,3 +86,13 @@ class VistoForm(PFForm):
 	class Meta:
 		model = models.MissionaryProfile
 		fields = ['birth_city', 'mother', 'father', 'passport', 'visa_num', 'issue_date', 'issued_by', 'entrance', 'entrance_place', 'entrance_state', 'dou_prazo', 'dou_date']
+
+class ReturnMForm(djangoforms.ModelForm):
+	class Meta:
+		model = models.Missionary
+		fields = ['full_name', 'release']
+
+class ReturnMPForm(djangoforms.ModelForm):
+	class Meta:
+		model = models.MissionaryProfile
+		fields = ['return_areas', 'it_stake']
