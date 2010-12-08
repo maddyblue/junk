@@ -2910,26 +2910,10 @@ class RaioX(webapp.RequestHandler):
 
 def raio_x(self, sums, wks, month, year):
 	months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
-	c = canvas.Canvas(self.response.out, bottomup=0, pagesize=landscape(A4))
 
-	from reportlab.pdfbase import pdfmetrics
-	from reportlab.pdfbase.ttfonts import TTFont
-	c.deffont = 'Vera'
-	c.boldfont = 'VeraBd'
-	pdfmetrics.registerFont(TTFont(c.deffont, 'Vera.ttf'))
-	pdfmetrics.registerFont(TTFont(c.boldfont, 'VeraBd.ttf'))
+	frames = []
 
 	for s in sums:
-		x = 5
-		y = 5
-
-		c.setFillColor(black)
-		c.rect(x, y, 1000, 30, 1, 1)
-
-		c.setFont(c.boldfont, 15)
-		c.setFillColor(white)
-		c.drawString(x + 5, y + 15, 'Raio-X : Missão Brasil Rio de Janeiro : %s %i' %(months[month], year))
-
 		r = {}
 
 		md = s.reports / float(wks) # avg. number of duplas
@@ -2974,11 +2958,26 @@ def raio_x(self, sums, wks, month, year):
 			if isinstance(v, float):
 				r[k] = ('%.1f' %v).replace('.', ',')
 
-		c.showPage()
+		r['z'] = s
 
-	self.response.headers['Content-Type'] = 'application/pdf'
-	self.response.headers['Content-Disposition'] = 'attachment; filename=raio-x-%i-%02i.pdf' %(year, month)
-	c.save()
+		frames.append(r)
+
+	if len(frames) == 1:
+		fname = 'raio-x-%i-%i-%s' %(year, month, slugify(frames[0]['z'].get_key('ref').name()))
+		t = 'raio-x-zone.tex'
+		d = {'f': frames[0], 'month': months[month - 1], 'mid': month, 'year': year}
+	else:
+		fname = 'raio-x-%i-%i' %(year, month)
+		t = 'raio-x.tex'
+		d = {'frames': frames, 'month': months[month - 1], 'mid': month, 'year': year}
+
+	sma = cache.get_sums_month_avg(year, month)
+	md = float(sma['duplas'] * sma['weeks'])
+	for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
+		d['m_' + k.lower()] = ('%.1f' %(sma[k] / md)).replace('.', ',')
+
+	temp = render_temp(t, d)
+	mk_pdf(self, t, temp, fname)
 
 class LifeAverage(webapp.RequestHandler):
 	def get(self):

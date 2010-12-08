@@ -1,0 +1,41 @@
+\begin{frame}{ {{ f.z|getkey_name:"ref" }} \\ {{ f.pb }} batismos : {{ f.pc }} confirmações : {{ f.p_hb }}\% homens batizados }
+	\begin{center}
+	%\onslide<2->
+	\begin{tabular}{@{} r|c|c|c|c|c @{}}
+		& Encontrar & Ensinar & Levar à Igreja & Batizar & Confirmar \\
+		\hline
+%		zona & {{ f.np }} & {{ f.li }} & {{ f.ps }} & {{ f.pb }} & {{ f.pc }} \\
+		Por dupla & {{ f.pd_np }} & {{ f.pd_li }} & {{ f.pd_ps }} & {{ f.pd_pb }} & {{ f.pd_pc }} \\
+		Media da Missão &
+			{{ m_np }} &
+			{{ m_li }} &
+			{{ m_ps }} &
+			{{ m_pb }} &
+			{{ m_pc }}
+			\\
+	\end{tabular}
+
+	\begin{columns}
+		%\onslide<4->
+		\column{.5\textwidth}
+%			\includegraphics[width=1.2\textwidth]{pizza-{{ year }}-{{ mid }}-{{ f.z.id }}.pdf}
+		%\onslide<3->
+		\column{.5\textwidth}
+			\vspace{.3cm}
+			\rowcolors{1}{RoyalBlue!20}{RoyalBlue!5}
+			\begin{tabular}{p{4cm}|l}
+				Encontrar & {{ f.np }} \\
+				\textcolor{RoyalBlue!90}{\% que foram à Igreja} & \textbf{ {{ f.p_li }}\%} \\
+				Levar à Igreja & {{ f.ps }} \\
+				\textcolor{RoyalBlue!90}{\% que foram batizados} & \textbf{ {{ f.p_pb }}\%} \\
+				Batizar & {{ f.pb }} \\
+				\textcolor{RoyalBlue!90}{\% que foram confirmados} & \textbf{ {{ f.p_pc }}\%} \\
+				Confirmar & {{ f.pc }} \\
+				\hline
+				\hline
+				Homens batizados & {{ f.homem }} \\
+				Contatos por dupla \mbox{por semana} & {{ f.pd_con }}
+			\end{tabular}
+	\end{columns}
+	\end{center}
+\end{frame}

@@ -1,0 +1,27 @@
+\documentclass[10pt, xcolor=pdftex,dvipsnames,table]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+
+\mode<beamer>{
+	\usetheme{Frankfurt}
+	\usenavigationsymbolstemplate{}
+}
+
+\title{Raio-X}
+\subtitle{ {{ month }} {{ year }} }
+\institute{Missão Brasil Rio de Janeiro}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\section{Raio-X : Missão Brasil Rio de Janeiro : {{ month }} {{ year }}}
+
+{% for f in frames %}
+	{% include "raio-x-frame.tex" %}
+{% endfor %}
+
+\end{document}

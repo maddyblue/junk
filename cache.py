@@ -41,6 +41,7 @@ C_SNAPSHOT = 'snapshot-%s'
 C_SNAPSHOTINDEX = 'snapshotindex-%s'
 C_STAKES = 'stakes'
 C_SUMS = 'sums-%s-%s-%s'
+C_SUMS_MONTH_AVG = 'sums-month-avg-%i-%i'
 C_WARDS = 'wards'
 C_WEEK = 'week'
 C_WEEKOPTS = 'weekopts'
@@ -334,7 +335,7 @@ def get_missionaries():
 			ms[i].area = ar[i]
 		return ms
 	else:
-		data = get_ms()
+		data = [i for i in get_ms() if i.get_key('area')]
 
 		data.sort(cmp=lambda y,x: cmp(x.is_senior, y.is_senior))
 		data.sort(cmp=lambda x,y: cmp(x.area_name, y.area_name))
@@ -855,5 +856,33 @@ def get_retainees(wkey):
 		data.sort(cmp=lambda x,y: cmp(x.name, y.name))
 
 		memcache.add(n, pack(data))
+
+	return data
+
+def get_sums_month_avg(year, month):
+	n = C_SUMS_MONTH_AVG %(year, month)
+	data = memcache.get(n)
+
+	if not data:
+		d = datetime.date(year, month, 1)
+
+		if month == 12:
+			d2 = datetime.date(year + 1, 1, 1)
+		else:
+			d2 = datetime.date(year, month + 1, 1)
+
+		inds = ['PB', 'PC', 'PBM', 'PS', 'OL', 'LM', 'NP', 'Con', 'duplas']
+		data = dict([(i, 0) for i in inds])
+		data['LI'] = 0
+		wss = models.WeekSum.all().filter('weekdate >=', d).filter('weekdate <', d2).fetch(100)
+
+		for ws in wss:
+			for i in inds:
+				data[i] += getattr(ws, i)
+			data['LI'] += ws.OL + ws.LM
+
+		data['weeks'] = len(wss)
+
+		memcache.add(n, data)
 
 	return data
