@@ -1,3 +1,11 @@
+<form action="/raiox/" method="GET">
+<input type="hidden" name="zone" value="{{ zone.key }}"/>
+Raio X:
+{{ months }}
+{{ years }}
+<input type="submit" value="Raio-Xar" />
+</form>
+
 <p/>Recordes da zona:
 {% for b in best %}
 <br/><b>{{ b.0|ind_name }}</b>: {{ b.3 }} {{ b|span_disp }}

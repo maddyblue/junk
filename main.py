@@ -1709,7 +1709,12 @@ class ZonePage(webapp.RequestHandler):
 		areas = cache.get_areas_in_zone(zone)
 		best = cache.get_best(zkey)
 
-		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas, 'best': best})
+		d = date.today()
+		months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+		years = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
+		months = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
+
+		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas, 'best': best, 'years': years, 'months': months})
 
 class LoginPage(webapp.RequestHandler):
 	def get(self):
@@ -2898,14 +2903,18 @@ class RaioX(webapp.RequestHandler):
 
 		render(self, 'raiox.html', 'Raio-X', {'zs': zs, 'years': years, 'months': months})
 
-	def post(self):
-		month = int(self.request.get('month'))
-		year = int(self.request.get('year'))
+class RaioXRedirect(webapp.RequestHandler):
+	def get(self):
+		self.redirect('/raiox/%s/%s/%s' %(self.request.get('zone'), self.request.get('year'), self.request.get('month')))
+
+class RaioXProc(webapp.RequestHandler):
+	def get(self, zk, year, month):
+		year = int(year)
+		month = int(month)
 		d = date(year, month, 1)
 
 		wks = [w for w in Week.all().filter('date >=', d).fetch(500) if w.date.year == year and w.date.month == month]
 		sums = cache.get_sums(SUM_ZONE, SUM_MONTH, d)
-		zk = self.request.get('zone')
 
 		if zk != 'mission':
 			zkey = Key(zk)
@@ -2986,7 +2995,7 @@ def raio_x(self, sums, wks, month, year):
 
 	t = 'raio-x.tex'
 	temp = render_temp(t, d)
-	mk_pdf(self, t, temp, fname)
+	mk_pdf(self, fname + '.tex', temp, fname)
 
 class LifeAverage(webapp.RequestHandler):
 	def get(self):
@@ -3512,7 +3521,8 @@ application = webapp.WSGIApplication([
 	('/sums/(.*)/(.*)/(.*)', SumsPage),
 	('/weeks/', WeekSumsPage),
 	('/zone/(.*)', ZonePage),
-	('/raiox/', RaioX),
+	('/raiox/(.*)/(.*)/(.*)', RaioXProc),
+	('/raiox/', RaioXRedirect),
 
 	# task queue
 	('/_ah/tasks/indicator', ProcIndHandler),
@@ -3553,6 +3563,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/per-ward/(.*)', PerWard),
 	('/_ah/missao-rio/pf/(.*)/(.*)', PFPage),
 	('/_ah/missao-rio/quadro/', Quadro),
+	('/_ah/missao-rio/raiox/', RaioX),
 	('/_ah/missao-rio/return-letter/(.*)', ReturnLetterPage),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
