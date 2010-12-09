@@ -3590,6 +3590,31 @@ class Itinerary(webapp.RequestHandler):
 
 		render(self, 'itinerary.html', 'Itinerary', {'form': form, 'm': m})
 
+class Recommendation(webapp.RequestHandler):
+	def get(self, mkey, english):
+		m = Missionary.get(mkey)
+
+		if english == '1': r = 'recommendation'
+		else: r = 'recomendacao'
+
+		fname = '%s-%s' %(r, slugify(m.mission_name))
+		t = '%s.tex' %r
+
+		if m.sex == MISSIONARY_SEX_ELDER:
+			his = 'his'
+			man = 'man'
+			he = 'he'
+		else:
+			his = 'her'
+			man = 'woman'
+			he = 'she'
+
+		d = {'date': get_dstring(), 'name': texify(m.full_name), 'his': his, 'man': man, 'he': he}
+
+		temp = render_temp(t, d)
+		p = mk_tex(t, temp)
+		mk_pdf(self, t, temp, fname)
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3672,6 +3697,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/itinerary/(.*)', Itinerary),
 	('/_ah/missao-rio/release-letter/', ReleaseLetterPage),
 	('/_ah/missao-rio/release-letter/(.*)/(.*)/(.*)', ReleaseLetter),
+	('/_ah/missao-rio/recommendation/(.*)/(.*)', Recommendation),
 	('/_ah/missao-rio/release-envelope/(.*)/(.*)/(.*)', ReleaseEnvelope),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
