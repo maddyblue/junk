@@ -1,10 +1,8 @@
-\begin{frame}{ {{ f.z|getkey_name:"ref" }} \\ {{ f.pb }} batismos : {{ f.pc }} confirmações : {{ f.p_hb }}\% homens batizados }
+\begin{frame}{ {{ year }} {{ month }} : {{ f.z|getkey_name:"ref" }} \\ {{ f.pb }} batismos : {{ f.pc }} confirmações : {{ f.p_hb }}\% homens batizados }
 	\begin{center}
-	%\onslide<2->
 	\begin{tabular}{@{} r|c|c|c|c|c @{}}
 		& Encontrar & Ensinar & Levar à Igreja & Batizar & Confirmar \\
 		\hline
-%		zona & {{ f.np }} & {{ f.li }} & {{ f.ps }} & {{ f.pb }} & {{ f.pc }} \\
 		Por dupla & {{ f.pd_np }} & {{ f.pd_li }} & {{ f.pd_ps }} & {{ f.pd_pb }} & {{ f.pd_pc }} \\
 		Media da Missão &
 			{{ m_np }} &
@@ -16,10 +14,22 @@
 	\end{tabular}
 
 	\begin{columns}
-		%\onslide<4->
 		\column{.5\textwidth}
-%			\includegraphics[width=1.2\textwidth]{pizza-{{ year }}-{{ mid }}-{{ f.z.id }}.pdf}
-		%\onslide<3->
+			\begin{tikzpicture}[scale=1.5]
+			\tikzstyle{every node}=[font=\small]
+
+			\setcounter{b}{0}
+			\foreach \p/\t/\q in { {{ f.pie_labels }}}
+			{
+				\setcounter{a}{\value{b}}
+				\addtocounter{b}{\p}
+				\slice{\thea/100*360}
+					{\theb/100*360}
+					{\p\%}{\t}{\q}
+			}
+
+			\end{tikzpicture}
+
 		\column{.5\textwidth}
 			\vspace{.3cm}
 			\rowcolors{1}{RoyalBlue!20}{RoyalBlue!5}

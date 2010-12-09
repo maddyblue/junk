@@ -871,17 +871,25 @@ def get_sums_month_avg(year, month):
 		else:
 			d2 = datetime.date(year, month + 1, 1)
 
-		inds = ['PB', 'PC', 'PBM', 'PS', 'OL', 'LM', 'NP', 'Con', 'duplas']
+		inds = ['PB', 'PC', 'PBM', 'PS', 'OL', 'LM', 'NP', 'Con']
 		data = dict([(i, 0) for i in inds])
-		data['LI'] = 0
-		wss = models.WeekSum.all().filter('weekdate >=', d).filter('weekdate <', d2).fetch(100)
+		duplas = 0
+		wks = 0
 
-		for ws in wss:
+		for ws in models.WeekSum.all().filter('weekdate >=', d).filter('weekdate <', d2).fetch(100):
 			for i in inds:
 				data[i] += getattr(ws, i)
-			data['LI'] += ws.OL + ws.LM
+			duplas += ws.duplas
+			wks += 1
 
-		data['weeks'] = len(wss)
+		m = float(duplas)
+
+		for k, v in data.iteritems():
+			data[k] /= m
+
+		data['LI'] = data['OL'] + data['LM']
+		data['duplas'] = duplas
+		data['weeks'] = wks
 
 		memcache.add(n, data)
 

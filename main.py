@@ -2891,7 +2891,12 @@ class RaioX(webapp.RequestHandler):
 		zd.extend([(i.key(), i.name.encode('utf8')) for i in zones])
 		zs = mk_select('zone', zd)
 
-		render(self, 'raiox.html', 'Raio-X', {'zs': zs})
+		d = date.today()
+		months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+		years = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
+		months = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
+
+		render(self, 'raiox.html', 'Raio-X', {'zs': zs, 'years': years, 'months': months})
 
 	def post(self):
 		month = int(self.request.get('month'))
@@ -2916,7 +2921,7 @@ def raio_x(self, sums, wks, month, year):
 	for s in sums:
 		r = {}
 
-		md = s.reports / float(wks) # avg. number of duplas
+		md = float(s.reports)
 
 		r['pb'] = s.PB
 		r['pc'] = s.PC
@@ -2926,7 +2931,7 @@ def raio_x(self, sums, wks, month, year):
 		r['con'] = s.Con
 
 		for k, v in list(r.iteritems()):
-			r['pd_' + k] = v / md / wks
+			r['pd_' + k] = v / md
 
 		r['crianca'] = s.child
 		r['moca'] = s.yw
@@ -2935,47 +2940,51 @@ def raio_x(self, sums, wks, month, year):
 		r['homem'] = s.man
 
 		r['wks'] = wks
-		r['md'] = md
 
-		r['p_li'] = 100 * r['ps'] / r['np']
-		r['p_pb'] = 100 * r['pb'] / r['ps']
+		if r['np']: r['p_li'] = 100 * r['ps'] / r['np']
+		if r['ps']: r['p_pb'] = 100 * r['pb'] / r['ps']
 		if r['pb']: r['p_pc'] = 100 * r['pc'] / r['pb']
 		if r['pb']: r['p_hb'] = 100 * r['homem'] / r['pb']
 
-		labels = [u'Crianças', u'Moças', 'Rapazes', 'Mulheres', 'Homens']
-		explode = [0, 0, 0, 0, .05]
-		colors = ['FFA500', 'FF33CC', '3399FF', 'CCFF00', 'FF0000']
+		for k, v in list(r.iteritems()):
+			if isinstance(v, float):
+				r[k] = ('%.1f' %v).replace('.', ',')
+
+		labels = [u'Crian\c cas', u'Mo\c cas', 'Rapazes', 'Mulheres', 'Homens']
+		colors = ['criancas', 'mocas', 'rapazes', 'mulheres', 'homens']
 		fracs = [r['crianca'], r['moca'], r['rapaz'], r['mulher'], r['homem']]
 
 		while 0 in fracs:
 			i = fracs.index(0)
 			labels.pop(i)
 			fracs.pop(i)
-			explode.pop(i)
 			colors.pop(i)
 
-		for k, v in list(r.iteritems()):
-			if isinstance(v, float):
-				r[k] = ('%.1f' %v).replace('.', ',')
+		if sum(fracs) == 0:
+			r['pie_labels'] = '0/Nada/black'
+		else:
+			fsum = sum(fracs) / 100.0
+			fracs = map(lambda x: int(x/fsum), fracs)
+			fracs[-1] += 100 - sum(fracs) # fix roundoff error
+			p = zip(fracs, labels, colors)
+			r['pie_labels'] = ','.join(['%s/%s/%s' %(i[0], i[1], i[2]) for i in p])
 
 		r['z'] = s
 
 		frames.append(r)
 
+	d = {'frames': frames, 'month': months[month - 1], 'mid': month, 'year': year, 'zone': len(frames) == 1}
+
 	if len(frames) == 1:
 		fname = 'raio-x-%i-%i-%s' %(year, month, slugify(frames[0]['z'].get_key('ref').name()))
-		t = 'raio-x-zone.tex'
-		d = {'f': frames[0], 'month': months[month - 1], 'mid': month, 'year': year}
 	else:
 		fname = 'raio-x-%i-%i' %(year, month)
-		t = 'raio-x.tex'
-		d = {'frames': frames, 'month': months[month - 1], 'mid': month, 'year': year}
 
 	sma = cache.get_sums_month_avg(year, month)
-	md = float(sma['duplas'] * sma['weeks'])
 	for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
-		d['m_' + k.lower()] = ('%.1f' %(sma[k] / md)).replace('.', ',')
+		d['m_' + k.lower()] = ('%.1f' %sma[k]).replace('.', ',')
 
+	t = 'raio-x.tex'
 	temp = render_temp(t, d)
 	mk_pdf(self, t, temp, fname)
 
@@ -3451,6 +3460,12 @@ class ReturnLetterPage(webapp.RequestHandler):
 def mk_tex(fname, ftext):
 	m = monkeytex.MonkeyTeX()
 	i = m.latex(fname, ftext)
+
+	try:
+		int(i)
+	except:
+		raise ValueError, 'Could not generate PDF: %s' %i
+
 	p = m.pdf(i)
 
 	return p
