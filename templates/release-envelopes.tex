@@ -1,0 +1,26 @@
+\documentclass{letter}
+\usepackage[margin=0.15in,top=1.5in,papersize={4.125in,9.5in},landscape,twoside=false]{geometry}
+\usepackage{textcomp}
+
+\setlength\parskip{0pt}
+\pagestyle{empty}
+
+\begin{document}
+
+\Large
+
+{% for a in addresses %}
+
+{% if not forloop.first %}
+\newpage
+{% endif %}
+
+\setlength\parindent{3in}
+
+{% for i in a.splitlines %}
+{{ i }}
+{% endfor %}
+
+{% endfor %}
+
+\end{document}

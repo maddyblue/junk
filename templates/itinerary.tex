@@ -1,0 +1,28 @@
+\documentclass[12pt]{letter}
+\usepackage{textcomp}
+\usepackage{graphicx}
+
+{% include "incl-letter-english.tex" %}
+
+\begin{document}
+
+\def \body
+{It is with great satisfaction that we communicate the completion of the mission of {{ m.sex }} {{ m.full_name }}, who is completing {{ his }} mission honorably in the Brazil Rio de Janeiro Mission. {{ m }} will arrive at {{ m.profile.it_destination }} Airport on {{ m.profile.it_flight_comp }} flight {{ m.profile.it_flight_num }}, which is scheduled to arrive {{ m.profile.it_flight_arrive|date:"l, d M Y" }}, {{ m.profile.it_flight_arrive|time:"h:i A" }}.
+
+The itinerary of {{ m }} is enclosed.}
+
+\begin{letter}{ {{ stake }} }
+\opening{Dear {{ spres }},}
+\body
+\closing{Sincerely,}
+\cc{ {{ bishop }} }
+\end{letter}
+
+\begin{letter}{ {{ ward }} }
+\opening{Dear {{ bishop }},}
+\body
+\closing{Sincerely,}
+\cc{ {{ spres }} }
+\end{letter}
+
+\end{document}

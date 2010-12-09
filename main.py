@@ -39,6 +39,8 @@ sys.path.insert(0, 'html5lib.zip')
 sys.path.insert(0, 'sx.zip')
 import ho.pisa as pisa
 
+months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+
 # returns True if authenticated
 def basicAuth(func):
 	def callf(webappRequest, *args, **kwargs):
@@ -1710,7 +1712,6 @@ class ZonePage(webapp.RequestHandler):
 		best = cache.get_best(zkey)
 
 		d = date.today()
-		months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 		years = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
 		months = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
 
@@ -2897,7 +2898,6 @@ class RaioX(webapp.RequestHandler):
 		zs = mk_select('zone', zd)
 
 		d = date.today()
-		months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 		years = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
 		months = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
 
@@ -2923,7 +2923,6 @@ class RaioXProc(webapp.RequestHandler):
 		raio_x(self, sums, len(wks), month, year)
 
 def raio_x(self, sums, wks, month, year):
-	months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 
 	frames = []
 
@@ -3327,7 +3326,6 @@ class PFMudancaCarta(webapp.RequestHandler):
 
 		fullname = str(m.full_name).upper()
 
-		months = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro']
 		month = months[int(strftime('%m'))-1]
 
 		#Rio de Janeiro, 15 de Setembro de 2010
@@ -3402,7 +3400,6 @@ def texify(s):
 	return s
 
 def get_dstring(d = date.today()):
-	months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 	return '%i de %s de %i' %(d.day, months[d.month - 1], d.year)
 
 class ReturnLetterPage(webapp.RequestHandler):
@@ -3486,6 +3483,113 @@ def mk_pdf(self, fname, ftext, pdfname):
 	self.response.headers['Content-Disposition'] = 'attachment; filename=%s.pdf' %pdfname
 	self.response.out.write(p)
 
+class ReleaseLetterPage(webapp.RequestHandler):
+	def get(self):
+		last = None
+		dates = []
+		ms = [i for i in cache.get_ms() if i.release]
+		ms.sort(cmp=lambda x,y: cmp(x.release, y.release))
+		for m in ms:
+			if m.release != last:
+				last = m.release
+				dates.append((last, []))
+
+			dates[-1][-1].append(m)
+
+		render(self, 'release-letter.html', 'Release Letters', {'dates': dates})
+
+class ReleaseLetter(webapp.RequestHandler):
+	def get(self, y, m, d):
+		rdate = date(int(y), int(m), int(d))
+
+		fname = 'release-%04i-%02i-%02i' %(rdate.year, rdate.month, rdate.day)
+		t = 'release-letters.tex'
+		missionaries = []
+
+		for m in [i for i in cache.get_ms() if i.release == rdate]:
+			if m.sex == MISSIONARY_SEX_ELDER: article = 'o'
+			else: article = 'a'
+
+			missionaries.append((m, texify(m.mission_name), article))
+
+		d = {'date': get_dstring(), 'missionaries': missionaries}
+
+		temp = render_temp(t, d)
+		p = mk_tex(t, temp)
+		mk_pdf(self, t, temp, fname)
+
+class ReleaseEnvelope(webapp.RequestHandler):
+	def get(self, y, m, d):
+		rdate = date(int(y), int(m), int(d))
+		addresses = []
+
+		ms = [i for i in cache.get_ms() if i.release == rdate]
+		cache.prefetch_refprops(ms, Missionary.profile)
+
+		for m in ms:
+			addresses.append(m.profile.it_ward)
+			addresses.append(m.profile.it_stake)
+
+		fname = 'release-envelopes-%04i-%02i-%02i' %(rdate.year, rdate.month, rdate.day)
+		t = 'release-envelopes.tex'
+		d = {'addresses': addresses}
+
+		temp = render_temp(t, d)
+		p = mk_tex(t, temp)
+		mk_pdf(self, t, temp, fname)
+
+class Itinerary(webapp.RequestHandler):
+	def get(self, mkey):
+		m = Missionary.get(mkey)
+		form = forms.ItineraryForm(instance=m.profile)
+
+		render(self, 'itinerary.html', 'Itinerary', {'form': form, 'm': m})
+
+	def post(self, mkey):
+		m = Missionary.get(mkey)
+		form = forms.ItineraryForm(self.request.POST, instance=m.profile)
+
+		if form.is_valid():
+			form.save()
+
+			if self.request.POST['submit'] == 'english':
+				iname = 'itinerary'
+			elif self.request.POST['submit'] == 'portuguese':
+				iname = 'itinerario'
+
+			if m.sex == MISSIONARY_SEX_ELDER:
+				article = 'o'
+				his = 'his'
+			else:
+				article = 'a'
+				his = 'her'
+
+			t = m.profile.it_ward.splitlines()[0].strip().split()
+			bishop = '%s %s' %(t[0], t[-1])
+			t = m.profile.it_stake.splitlines()[0].strip().split()
+			spres = '%s %s' %(t[0], t[-1])
+			ward = r'\\'.join(m.profile.it_ward.splitlines())
+			stake = r'\\'.join(m.profile.it_stake.splitlines())
+
+			d = {'m': m, 'bishop': bishop, 'spres': spres, 'month': months[m.profile.it_flight_arrive.month - 1], 'date': get_dstring(), 'article': article, 'his': his, 'ward': ward, 'stake': stake}
+
+			if self.request.POST['submit'] != 'text':
+				fname = '%s-%s' %(iname, slugify(m.mission_name))
+				t = '%s.tex' %iname
+
+				temp = render_temp(t, d)
+				p = mk_tex(t, temp)
+				mk_pdf(self, t, temp, fname)
+				return
+			else:
+				d['month'] = months[m.profile.it_flight_arrive.month - 1]
+				self.response.out.write(render_temp('itinerary.txt', d))
+				return
+		else:
+			form = forms.ItineraryForm(instance=m)
+
+		render(self, 'itinerary.html', 'Itinerary', {'form': form, 'm': m})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3565,6 +3669,10 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/quadro/', Quadro),
 	('/_ah/missao-rio/raiox/', RaioX),
 	('/_ah/missao-rio/return-letter/(.*)', ReturnLetterPage),
+	('/_ah/missao-rio/itinerary/(.*)', Itinerary),
+	('/_ah/missao-rio/release-letter/', ReleaseLetterPage),
+	('/_ah/missao-rio/release-letter/(.*)/(.*)/(.*)', ReleaseLetter),
+	('/_ah/missao-rio/release-envelope/(.*)/(.*)/(.*)', ReleaseEnvelope),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/sync-history/(.*)', SyncHistoryPage),

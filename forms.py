@@ -96,3 +96,8 @@ class ReturnMPForm(djangoforms.ModelForm):
 	class Meta:
 		model = models.MissionaryProfile
 		fields = ['return_areas', 'it_stake']
+
+class ItineraryForm(djangoforms.ModelForm):
+	class Meta:
+		model = models.MissionaryProfile
+		fields = ['it_flight_num', 'it_flight_comp', 'it_flight_arrive', 'it_destination', 'it_ward', 'it_stake']

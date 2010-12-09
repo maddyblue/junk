@@ -1,0 +1,29 @@
+<html>
+<body>
+<pre>
+Dear {{ spres }},
+
+It is with great satisfaction that we communicate the completion of the mission of {{ m.sex }} {{ m.full_name }}, who is completing {{ his }} mission honorably in the Brazil Rio de Janeiro Mission. {{ m }} will arrive at {{ m.profile.it_destination }} Airport on {{ m.profile.it_flight_comp }} flight {{ m.profile.it_flight_num }}, which is scheduled to arrive {{ m.profile.it_flight_arrive|date:"l, d M Y" }}, {{ m.profile.it_flight_arrive|time:"h:i A" }}.
+
+The itinerary of {{ m }} is enclosed.
+
+Sincerely,
+
+Elder Jibson
+Executive Secretary
+Brazil Rio de Janeiro Mission
+
+Prezado {{ spres }},
+
+É com grande satisfação que comunicamos o término da missão de {{ m.sex}} {{ m.full_name }}, que está terminando sua missão honrosamente aqui na Missão Brasil Rio de Janeiro e estará chegando em {{ m.profile.it_destination }} no vôo {{ m.profile.it_flight_num }} da {{ m.profile.it_flight_comp}}, no dia {{ m.profile.it_flight_arrive|date:"d" }} de {{ month }} de {{ m.profile.it_flight_arrive|date:"Y"}}, {{ m.profile.it_flight_arrive|date:"H:i" }}h.
+
+Segue em anexo o itinerário d{{ article }} {{ m }}.
+
+Sinceramente,
+
+Elder Jibson
+Secretário Executivo
+Missão Brasil Rio de Janeiro
+</pre>
+</body>
+</html>
