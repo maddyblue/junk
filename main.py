@@ -2898,10 +2898,10 @@ class RaioX(webapp.RequestHandler):
 		zs = mk_select('zone', zd)
 
 		d = date.today()
-		years = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
-		months = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
+		yearsel = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
+		monthsel = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
 
-		render(self, 'raiox.html', 'Raio-X', {'zs': zs, 'years': years, 'months': months})
+		render(self, 'raiox.html', 'Raio-X', {'zs': zs, 'years': yearsel, 'months': monthsel})
 
 class RaioXRedirect(webapp.RequestHandler):
 	def get(self):
