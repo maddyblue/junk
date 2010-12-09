@@ -3615,6 +3615,47 @@ class Recommendation(webapp.RequestHandler):
 		p = mk_tex(t, temp)
 		mk_pdf(self, t, temp, fname)
 
+class CompareSnapshots(webapp.RequestHandler):
+	def get(self):
+		snaps = Snapshot.all().order('-date').fetch(50)
+		st = [(str(i.key()), i.name) for i in snaps]
+		first = mk_select('first', st, str(snaps[0].key()))
+		second = mk_select('second', st, str(snaps[1].key()))
+
+		render(self, 'compare-snapshots-form.html', 'Compare Snapshots', {'first': first, 'second': second})
+
+	def post(self):
+		s1, s2 = Snapshot.get(self.request.POST.values())
+
+		if s1.key() == s2.key():
+			render(self, '', 'Compare Snapshots', {'page_data': 'Same snapshots, choose others.'})
+			return
+
+		if s1.date > s2.date:
+			temp = s2
+			s2 = s1
+			s1 = temp
+			del temp
+
+		s1sa = cache.get_snapshotindex_areas(s1.key())
+		s1sm = cache.get_snapshotindex_missionaries(s1.key())
+		s2sa = cache.get_snapshotindex_areas(s2.key())
+		s2sm = cache.get_snapshotindex_missionaries(s2.key())
+
+		s1a = set([i.get_key('area') for i in s1sa])
+		s2a = set([i.get_key('area') for i in s2sa])
+		s1m = set([i.get_key('missionary') for i in s1sm])
+		s2m = set([i.get_key('missionary') for i in s2sm])
+
+		deaths = db.get(s1m - s2m)
+		births = db.get(s2m - s1m)
+		closed = db.get(s1a - s2a)
+		opened = db.get(s2a - s1a)
+
+		logging.info(deaths)
+
+		render(self, 'compare-snapshots.html', 'Compare Snapshots', {'births': births, 'deaths': deaths, 'opened': opened, 'closed': closed})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3667,6 +3708,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
 	('/_ah/missao-rio/cards/', Cards),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
+	('/_ah/missao-rio/compare-snapshots/', CompareSnapshots),
 	('/_ah/missao-rio/edit-missionary/(.*)', EditMissionaryPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
@@ -3675,6 +3717,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/images/', ImagesPage),
 	('/_ah/missao-rio/indicator-check/', IndicatorCheckPage),
 	('/_ah/missao-rio/indicators/', Indicators),
+	('/_ah/missao-rio/itinerary/(.*)', Itinerary),
 	('/_ah/missao-rio/life-avg/', LifeAverage),
 	('/_ah/missao-rio/life-dist/', LifeDistribution),
 	('/_ah/missao-rio/mailboxes/(.*)', MailboxesPage),
@@ -3693,12 +3736,11 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/pf/(.*)/(.*)', PFPage),
 	('/_ah/missao-rio/quadro/', Quadro),
 	('/_ah/missao-rio/raiox/', RaioX),
-	('/_ah/missao-rio/return-letter/(.*)', ReturnLetterPage),
-	('/_ah/missao-rio/itinerary/(.*)', Itinerary),
-	('/_ah/missao-rio/release-letter/', ReleaseLetterPage),
-	('/_ah/missao-rio/release-letter/(.*)/(.*)/(.*)', ReleaseLetter),
 	('/_ah/missao-rio/recommendation/(.*)/(.*)', Recommendation),
 	('/_ah/missao-rio/release-envelope/(.*)/(.*)/(.*)', ReleaseEnvelope),
+	('/_ah/missao-rio/release-letter/', ReleaseLetterPage),
+	('/_ah/missao-rio/release-letter/(.*)/(.*)/(.*)', ReleaseLetter),
+	('/_ah/missao-rio/return-letter/(.*)', ReturnLetterPage),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/sync-history/(.*)', SyncHistoryPage),

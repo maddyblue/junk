@@ -39,6 +39,8 @@ C_SNAPAREAS_BYZONE = 'snapareas-%s-%s'
 C_SNAPMISSIONARIES = 'snapmissionaries-%s'
 C_SNAPSHOT = 'snapshot-%s'
 C_SNAPSHOTINDEX = 'snapshotindex-%s'
+C_SNAPSHOTINDEX_AREAS = 'snapshotindex-areas-%s'
+C_SNAPSHOTINDEX_MISSIONARIES = 'snapshotindex-missionaries-%s'
 C_STAKES = 'stakes'
 C_SUMS = 'sums-%s-%s-%s'
 C_SUMS_MONTH_AVG = 'sums-month-avg-%i-%i'
@@ -819,6 +821,30 @@ def get_snapshotindex(skey):
 
 	if not data:
 		data = models.SnapshotIndex.all().ancestor(skey).get()
+		memcache.add(n, pack(data))
+
+	return data
+
+# SnapshotIndex areas of Snapshot with key skey
+def get_snapshotindex_areas(skey):
+	n = C_SNAPSHOTINDEX_AREAS %skey
+	data = unpack(memcache.get(n))
+
+	if not data:
+		si = get_snapshotindex(skey)
+		data = db.get(si.snapareas)
+		memcache.add(n, pack(data))
+
+	return data
+
+# SnapshotIndex missionaries of Snapshot with key skey
+def get_snapshotindex_missionaries(skey):
+	n = C_SNAPSHOTINDEX_MISSIONARIES %skey
+	data = unpack(memcache.get(n))
+
+	if not data:
+		si = get_snapshotindex(skey)
+		data = db.get(si.snapmissionaries)
 		memcache.add(n, pack(data))
 
 	return data
