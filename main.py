@@ -3656,6 +3656,10 @@ class CompareSnapshots(webapp.RequestHandler):
 
 		render(self, 'compare-snapshots.html', 'Compare Snapshots', {'births': births, 'deaths': deaths, 'opened': opened, 'closed': closed})
 
+class CallingsPage(webapp.RequestHandler):
+	def get(self):
+		rendert(self, 'callings.html', {'ms': cache.get_ms()})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3703,6 +3707,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/area/', AreaListPage),
 	('/_ah/missao-rio/areas/', AreaDistrictPage),
 	('/_ah/missao-rio/assign-mailboxes/', AssignMailboxesPage),
+	('/_ah/missao-rio/callings/', CallingsPage),
 	('/_ah/missao-rio/cardback/(.*)', Cardback),
 	('/_ah/missao-rio/cardbacks/', Cardbacks),
 	('/_ah/missao-rio/cardfront/(.*)', Cardfront),
