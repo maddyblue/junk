@@ -3660,6 +3660,20 @@ class CallingsPage(webapp.RequestHandler):
 	def get(self):
 		rendert(self, 'callings.html', {'ms': cache.get_ms()})
 
+class SiteHistoryPage(webapp.RequestHandler):
+	def get(self):
+		weeks = Week.all().order('-date').fetch(500)
+		pages = [FLATPAGE_CARTA, FLATPAGE_BATISMOS, FLATPAGE_BATIZADORES, FLATPAGE_MILAGRE, FLATPAGE_NOTICIAS]
+
+		render(self, 'site-history.html', 'Site History', {'weeks': weeks, 'pages': pages})
+
+class SiteHistory(webapp.RequestHandler):
+	def get(self, wk, p):
+		w = Week.get(wk)
+		fp = FlatPage.get_page(p, w)
+
+		render(self, '', 'Site History - %s - %s' %(w.date, p), {'page_data': fp})
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3747,6 +3761,8 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/release-letter/(.*)/(.*)/(.*)', ReleaseLetter),
 	('/_ah/missao-rio/return-letter/(.*)', ReturnLetterPage),
 	('/_ah/missao-rio/set-photo/', SetPhotoPage),
+	('/_ah/missao-rio/site-history/', SiteHistoryPage),
+	('/_ah/missao-rio/site-history/(.*)/(.*)', SiteHistory),
 	('/_ah/missao-rio/status/', MissionStatusPage),
 	('/_ah/missao-rio/sync-history/(.*)', SyncHistoryPage),
 	('/_ah/missao-rio/sync/', SyncPage),

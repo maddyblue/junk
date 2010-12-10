@@ -1,0 +1,9 @@
+<table>
+{% for i in weeks %}
+<tr><td>{{ i.date }}</td><td>
+{% for p in pages %}
+<a href="/_ah/missao-rio/site-history/{{ i.key }}/{{ p }}">{{ p }}</a>
+{% endfor %}
+</td></tr>
+{% endfor %}
+</table>
