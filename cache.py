@@ -337,7 +337,7 @@ def get_missionaries():
 			ms[i].area = ar[i]
 		return ms
 	else:
-		data = [i for i in get_ms() if i.get_key('area')]
+		data = get_ms()
 
 		data.sort(cmp=lambda y,x: cmp(x.is_senior, y.is_senior))
 		data.sort(cmp=lambda x,y: cmp(x.area_name, y.area_name))
@@ -368,6 +368,9 @@ def get_ms(active=True):
 
 		# after time, the 1000 limit won't be enough if active == False
 		data = data.fetch(1000)
+
+		if active:
+			data = [i for i in data if i.get_key('area')]
 
 		data.sort(cmp=lambda x,y: cmp(x.mission_name, y.mission_name))
 		memcache.add(n, pack(data))
