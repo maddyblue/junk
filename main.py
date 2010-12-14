@@ -33,13 +33,6 @@ from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
 import StringIO
 
-from time import gmtime, strftime
-
-sys.path.insert(0, 'ho.zip')
-sys.path.insert(0, 'html5lib.zip')
-sys.path.insert(0, 'sx.zip')
-import ho.pisa as pisa
-
 months = ['janeiro', 'fevereiro', u'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 
 # returns True if authenticated
@@ -1694,10 +1687,10 @@ class ZonePage(webapp.RequestHandler):
 		best = cache.get_best(zkey)
 
 		d = date.today()
-		years = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
-		months = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
+		ys = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
+		ms = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
 
-		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas, 'best': best, 'years': years, 'months': months})
+		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas, 'best': best, 'years': ys, 'months': ms})
 
 class LoginPage(webapp.RequestHandler):
 	def get(self):
@@ -1828,6 +1821,7 @@ def run_sync():
 class SyncPage(webapp.RequestHandler):
 	def get(self):
 		run_sync()
+		render(self, '', 'Sync', {'page_data': 'Running sync.'})
 
 class SyncHandler(webapp.RequestHandler):
 	def post(self):
@@ -2905,20 +2899,42 @@ class RaioXProc(webapp.RequestHandler):
 
 		raio_x(self, sums, len(wks), month, year)
 
-def raio_x(self, sums, wks, month, year):
+def pie_labels(fracs):
+	labels = [u'Crian\c cas', u'Mo\c cas', 'Rapazes', 'Mulheres', 'Homens']
+	colors = ['criancas', 'mocas', 'rapazes', 'mulheres', 'homens']
 
+	while 0 in fracs:
+		i = fracs.index(0)
+		labels.pop(i)
+		fracs.pop(i)
+		colors.pop(i)
+
+	if sum(fracs) == 0:
+		pl = '0/Nada/black'
+	else:
+		fsum = sum(fracs) / 100.0
+		fracs = map(lambda x: int(x/fsum), fracs)
+		fracs[0] += 100 - sum(fracs) # fix roundoff error
+		p = zip(fracs, labels, colors)
+		pl = ','.join(['%s/%s/%s' %(i[0], i[1], i[2]) for i in p])
+
+	return pl
+
+def raio_x(self, sums, wks, month, year):
 	frames = []
 	d = {}
+	tk = ['pb', 'pc', 'ps', 'li', 'np', 'con', 'crianca', 'moca', 'rapaz', 'mulher', 'homem']
+	tmd = 0
+	total = dict([(i, 0) for i in tk])
+	total['reports'] = 0
 
 	sma = cache.get_sums_month_avg(year, month)
-	for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
-		kl = k.lower()
-		d['m_' + kl] = ('%.1f' %sma[k]).replace('.', ',')
 
 	for s in sums:
 		r = {}
 
 		md = float(s.reports)
+		tmd += md
 
 		r['pb'] = s.PB
 		r['pc'] = s.PC
@@ -2938,44 +2954,35 @@ def raio_x(self, sums, wks, month, year):
 
 		r['wks'] = wks
 
+		for k in tk:
+			total[k] += r[k]
+
 		if r['np']: r['p_li'] = int(100.0 * r['ps'] / r['np'])
 		if r['ps']: r['p_pb'] = int(100.0 * r['pb'] / r['ps'])
 		if r['pb']: r['p_pc'] = int(100.0 * r['pc'] / r['pb'])
 		if r['pb']: r['p_hb'] = int(100.0 * r['homem'] / r['pb'])
 
+		for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
+			kl = k.lower()
+			if sma[k] >= r['pd_' + kl]:
+				r['pd_' + kl] = ('\\textcolor{red}{%.1f $\\Downarrow$}' %r['pd_' + kl]).replace('.', ',')
+			else:
+					r['pd_' + kl] = ('\\textcolor{green}{%.1f $\\Uparrow$}' %r['pd_' + kl]).replace('.', ',')
+
 		for k, v in list(r.iteritems()):
 			if isinstance(v, float):
 				r[k] = ('%.1f' %v).replace('.', ',')
 
-		for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
-			kl = k.lower()
-			if d['m_' + kl] >= r['pd_' + kl]:
-				r['pd_' + kl] = '\\textcolor{red}{%s $\\Downarrow$}' %r['pd_' + kl]
-			else:
-					r['pd_' + kl] = '\\textcolor{green}{%s $\\Uparrow$}' %r['pd_' + kl]
-
-		labels = [u'Crian\c cas', u'Mo\c cas', 'Rapazes', 'Mulheres', 'Homens']
-		colors = ['criancas', 'mocas', 'rapazes', 'mulheres', 'homens']
-		fracs = [r['crianca'], r['moca'], r['rapaz'], r['mulher'], r['homem']]
-
-		while 0 in fracs:
-			i = fracs.index(0)
-			labels.pop(i)
-			fracs.pop(i)
-			colors.pop(i)
-
-		if sum(fracs) == 0:
-			r['pie_labels'] = '0/Nada/black'
-		else:
-			fsum = sum(fracs) / 100.0
-			fracs = map(lambda x: int(x/fsum), fracs)
-			fracs[0] += 100 - sum(fracs) # fix roundoff error
-			p = zip(fracs, labels, colors)
-			r['pie_labels'] = ','.join(['%s/%s/%s' %(i[0], i[1], i[2]) for i in p])
+		r['pie_labels'] = pie_labels([r['crianca'], r['moca'], r['rapaz'], r['mulher'], r['homem']])
 
 		r['z'] = s
+		r['name'] = s.get_key('ref').name()
 
 		frames.append(r)
+
+	for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
+		kl = k.lower()
+		d['m_' + kl] = ('%.1f' %sma[k]).replace('.', ',')
 
 	d['frames'] = frames
 	d['month'] = months[month - 1]
@@ -2987,6 +2994,23 @@ def raio_x(self, sums, wks, month, year):
 		fname = 'raio-x-%i-%i-%s' %(year, month, slugify(frames[0]['z'].get_key('ref').name()))
 	else:
 		fname = 'raio-x-%i-%i' %(year, month)
+
+		for k in ['pb', 'pc', 'ps', 'li', 'np', 'con']:
+			total['pd_' + k] = total[k] / tmd
+
+		for k, v in list(total.iteritems()):
+			if isinstance(v, float):
+				total[k] = ('%.1f' %v).replace('.', ',')
+
+		if total['np']: total['p_li'] = int(100.0 * total['ps'] / total['np'])
+		if total['ps']: total['p_pb'] = int(100.0 * total['pb'] / total['ps'])
+		if total['pb']: total['p_pc'] = int(100.0 * total['pc'] / total['pb'])
+		if total['pb']: total['p_hb'] = int(100.0 * total['homem'] / total['pb'])
+
+		total['pie_labels'] = pie_labels([total['crianca'], total['moca'], total['rapaz'], total['mulher'], total['homem']])
+		total['name'] = 'Total'
+
+		frames.append(total)
 
 	t = 'raio-x.tex'
 	temp = render_temp(t, d)
@@ -3262,14 +3286,30 @@ class ViewRetention(webapp.RequestHandler):
 
 		ttp = 0
 		tpw = 0
+		wts = [0,0,0,0]
 
 		for ward in wards:
 			rets = cache.get_retainees(ward.key())
 
 			tp = 0
 			pw = 0
+			ew = [0,0,0,0]
+
 			for ret in rets:
 				if ret.status == RET_ALIVE:
+					if ret.week1 == True:
+						ew[0] += 1
+						wts[0] += 1
+					elif ret.week2 == True:
+						ew[1] += 1
+						wts[1] += 1
+					elif ret.week3 == True:
+						ew[2] += 1
+						wts[2] += 1
+					elif ret.week4 == True:
+						ew[3] += 1
+						wts[3] += 1
+
 					tp += 1
 					if any([ret.week1, ret.week2, ret.week3, ret.week4]):
 						pw += 1
@@ -3278,12 +3318,12 @@ class ViewRetention(webapp.RequestHandler):
 				pct = '0%'
 			else:
 				pct = '%i%%' %(100.0 * pw / tp)
-			r.append((ward, pw, tp, pct))
+			r.append((ward, pw, tp, pct, ew))
 
 			ttp += tp
 			tpw += pw
 
-		render(self, 'view-retention.html', 'Relatório de Retenção', {'r': r, 'tp': ttp, 'pw': tpw, 'pct': '%i%%' %(100.0 * tpw / ttp)})
+		render(self, 'view-retention.html', 'Relatório de Retenção', {'r': r, 'tp': ttp, 'pw': tpw, 'pct': '%i%%' %(100.0 * tpw / ttp), 'wts': wts})
 
 class WeeklyReports(webapp.RequestHandler):
 	def get(self):
@@ -3313,36 +3353,23 @@ class Cardbacks(webapp.RequestHandler):
 
 class PFMudancaCarta(webapp.RequestHandler):
 	def get(self, mkey):
-
 		m = Missionary.get(mkey)
-		if m.sex == 'Elder':
+
+		if m.sex == MISSIONARY_SEX_ELDER:
 			amstr = 'o norte americano'
 		else:
 			amstr = 'a norte americana'
 
-		fullname = str(m.full_name).upper()
-
-		month = months[int(strftime('%m'))-1]
-
-		#Rio de Janeiro, 15 de Setembro de 2010
-		data = strftime("%d de ", gmtime()) + month + strftime(" de %Y", gmtime())
-
 		if not m.profile.passport:
 			raise ValueError, 'no passport number'
 
-		template_vars = {'amstr': amstr, 'fullname': fullname, 'passport': m.profile.passport,'data': data}
+		d = {'amstr': amstr, 'fullname': m.full_name, 'passport': m.profile.passport, 'date': get_dstring()}
 
-		output=StringIO.StringIO()
-		try:
-			tfile = os.path.join(os.path.dirname(__file__), 'templates', 'pfcarta.html')
-			pdf = pisa.CreatePDF(template.render(tfile,template_vars),output)
-		except:
-			print "Unexpected error in creating PDF:", sys.exc_info()[0]
-			raise
+		fname = 'mudanca-%s' %slugify(m.mission_name)
+		t = 'mudanca-letter.tex'
 
-		self.response.headers['Content-Type'] = 'application/pdf'
-		self.response.headers['Content-Disposition'] = 'attachment; filename=pfcarta.pdf'
-		self.response.out.write(output.getvalue())
+		temp = render_temp(t, d)
+		mk_pdf(self, t, temp, fname)
 
 def deuni(s):
 	l = [

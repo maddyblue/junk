@@ -554,10 +554,13 @@ class IndicatorSubmission(DerefModel):
 
 		wk = self.get_key('week')
 		zk = self.get_key('zone')
+		inds = []
 
-		db.delete(Indicator.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
-		db.delete(IndicatorBaptism.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
-		db.delete(IndicatorConfirmation.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
+		inds.extend(Indicator.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
+		inds.extend(IndicatorBaptism.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
+		inds.extend(IndicatorConfirmation.all(keys_only=True).filter('week', wk).filter('zone', zk).fetch(500))
+
+		db.delete(inds)
 
 		subs = IndicatorSubmission.all().filter('week', self.week).filter('zone', self.zone).fetch(500)
 

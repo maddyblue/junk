@@ -1,8 +1,16 @@
 <table border="1">
-<tr><th>Estaca</th><th>Unidade</th><th>Foram</th><th>Possíveis</th><th>Por centagem</th></tr>
-<tr><th>TOTAL</th><th></th><th>{{ pw }}</th><th>{{ tp }}</th><th>{{ pct }}</th></tr>
+<tr><th>Estaca</th><th>Unidade</th><th>Week 1</th><th>Week 2</th><th>Week 3</th><th>Week 4</th><th>Foram (Total)</th><th>Possíveis</th><th>Por centagem</th></tr>
+<tr><th>TOTAIS</th><th></th>
+{% for i in wts %}
+<th>{{ i }}</th>
+{% endfor %}
+<th>{{ pw }}</th><th>{{ tp }}</th><th>{{ pct }}</th></tr>
 
 {% for i in r %}
-<tr><td>{{ i.0|getkey_name:"stake" }}</td><td>{{ i.0.name }}</td><td>{{ i.1 }}</td><td>{{ i.2 }}</td><td>{{ i.3 }}</td></tr>
+<tr><td>{{ i.0|getkey_name:"stake" }}</td><td>{{ i.0.name }}</td>
+	{% for k in i.4 %}
+	<td>{{ k }}</td>
+	{% endfor %}
+<td>{{ i.1 }}</td><td>{{ i.2 }}</td><td>{{ i.3 }}</td></tr>
 {% endfor %}
 </table>
