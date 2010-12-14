@@ -8,6 +8,7 @@ import sys
 
 from datetime import timedelta, date, datetime
 from google.appengine.api import images
+from google.appengine.api import mail
 from google.appengine.api import memcache
 from google.appengine.api import users
 from google.appengine.ext import webapp
@@ -336,26 +337,7 @@ class MapControlPage(webapp.RequestHandler):
 		from mapreduce import control, model
 		p = self.request.POST['submit']
 
-		if p == 'Sync Phase 1':
-			# pre-memcache
-			memcache.flush_all()
-			map_procs.get_zones()
-			map_procs.get_open_areas()
-
-			i = control.start_map('Sync Areas', 'map_procs.sync_area', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Area'}, model._DEFAULT_SHARD_COUNT)
-			self.response.out.write('sync areas: %s<br>' %i)
-		elif p == 'Sync Phase 2':
-			# pre-memcache
-			memcache.flush_all()
-			map_procs.get_open_zones()
-			map_procs.get_areas()
-
-			i = control.start_map('Sync Zones', 'map_procs.sync_zone', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Zone'}, model._DEFAULT_SHARD_COUNT)
-			self.response.out.write('sync zones: %s<br>' %i)
-
-			i = control.start_map('Sync Missionaries', 'map_procs.sync_missionary', 'mapreduce.input_readers.DatastoreInputReader', {'entity_kind': 'models.Missionary'}, model._DEFAULT_SHARD_COUNT)
-			self.response.out.write('sync missionaries: %s<br>' %i)
-		elif p == 'Compute Area Sums':
+		if p == 'Compute Area Sums':
 			handler_spec = 'map_procs.sums_'
 			reader_spec = 'mapreduce.input_readers.DatastoreInputReader'
 			control.start_map('Compute Sums: Area', handler_spec + 'area', reader_spec, {'entity_kind': 'models.Area'}, shard_count=model._DEFAULT_SHARD_COUNT, mapreduce_parameters={'s': cache.get_lifepoints()})
@@ -1812,8 +1794,9 @@ class TransferPage(webapp.RequestHandler):
 			m.is_senior = (mkey + '_senior') in self.request.POST and self.request.POST[mkey + '_senior'] == 'on'
 
 		db.put(ms)
+		run_sync()
 
-		render(self, '', 'Transfer', {'page_data': 'Done. Remember to run <a href="/_ah/missao-rio/sync/">sync</a>.'})
+		render(self, '', 'Transfer', {'page_data': 'Done.'})
 
 class AdminRedirect(webapp.RequestHandler):
 	def get(self):
@@ -1839,8 +1822,15 @@ class MakePasswordsPage(webapp.RequestHandler):
 		db.put(ms)
 		memcache.flush_all()
 
+def run_sync():
+	taskqueue.add(url='/_ah/tasks/sync')
+
 class SyncPage(webapp.RequestHandler):
 	def get(self):
+		run_sync()
+
+class SyncHandler(webapp.RequestHandler):
+	def post(self):
 		memcache.flush_all()
 
 		areas = Area.all().fetch(1000)
@@ -1852,49 +1842,41 @@ class SyncPage(webapp.RequestHandler):
 			a.name = a.key().name() # just to make sure
 			a.is_open = a.key() in open_areas
 
-		if self.request.get('a'):
-			self.response.out.write('areas')
-			db.put(areas)
+		db.put(areas)
 
 		zones = Zone.all().fetch(100)
 		for z in zones:
 			z.name = z.key().name() # just to make sure
 			z.is_open = z.key() in open_zones
 
-		if self.request.get('z'):
-			self.response.out.write(',zones')
-			db.put(zones)
+		db.put(zones)
 
 		adict = dict([(a.key(), a) for a in areas])
 
-		if self.request.get('m'):
-			missionaries = Missionary.all().fetch(1000)
-			for m in missionaries:
-				ak = m.get_key('area')
+		missionaries = Missionary.all().fetch(1000)
+		for m in missionaries:
+			ak = m.get_key('area')
 
-				if ak is None:
-					m.zone = None
-					m.zone_name = None
-					m.area_name = None
-					m.is_released = True
-				else:
-					a = adict[ak]
-					m.area_name = a.name
-					m.zone_name = a.zone_name
-					m.zone = a.get_key('zone')
-					m.is_released = False
+			if ak is None:
+				m.zone = None
+				m.zone_name = None
+				m.area_name = None
+				m.is_released = True
+			else:
+				a = adict[ak]
+				m.area_name = a.name
+				m.zone_name = a.zone_name
+				m.zone = a.get_key('zone')
+				m.is_released = False
 
-				m.is_dl = m.calling in [MISSIONARY_CALLING_LD, MISSIONARY_CALLING_LDTR, MISSIONARY_CALLING_SELD]
+			m.is_dl = m.calling in [MISSIONARY_CALLING_LD, MISSIONARY_CALLING_LDTR, MISSIONARY_CALLING_SELD]
 
-			self.response.out.write(',missionaries')
-			db.put(missionaries)
-
-		self.response.out.write('. done')
+		db.put(missionaries)
 
 class FlushPage(webapp.RequestHandler):
 	def get(self):
 		memcache.flush_all()
-		self.response.out.write('memcache flushed')
+		render(self, '', 'Flush Memcache', {'page_data': 'Memcache flushed.'})
 
 class AreaDistrictPage(webapp.RequestHandler):
 	def get(self):
@@ -1926,7 +1908,7 @@ class AreaDistrictPage(webapp.RequestHandler):
 
 			a.zone = db.Key(self.request.POST[akey + '_zone'])
 			a.phone = self.request.POST[akey + '_phone'].strip()
-			
+
 			try:
 				reports_with = db.Key(self.request.POST[akey + '_reports_with'])
 			except:
@@ -1936,8 +1918,9 @@ class AreaDistrictPage(webapp.RequestHandler):
 			a.does_not_report = (akey + '_does_not_report') in self.request.POST
 
 		db.put(areas)
+		run_sync()
 
-		render(self, '', 'Areas and Districts', {'page_data': 'Done. Remember to run <a href="/_ah/missao-rio/sync/?a=1&z=1">sync</a>.'})
+		render(self, '', 'Areas and Districts', {'page_data': 'Done.'})
 
 class ProcIndHandler(webapp.RequestHandler):
 	def post(self):
@@ -2925,6 +2908,12 @@ class RaioXProc(webapp.RequestHandler):
 def raio_x(self, sums, wks, month, year):
 
 	frames = []
+	d = {}
+
+	sma = cache.get_sums_month_avg(year, month)
+	for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
+		kl = k.lower()
+		d['m_' + kl] = ('%.1f' %sma[k]).replace('.', ',')
 
 	for s in sums:
 		r = {}
@@ -2949,14 +2938,21 @@ def raio_x(self, sums, wks, month, year):
 
 		r['wks'] = wks
 
-		if r['np']: r['p_li'] = 100 * r['ps'] / r['np']
-		if r['ps']: r['p_pb'] = 100 * r['pb'] / r['ps']
-		if r['pb']: r['p_pc'] = 100 * r['pc'] / r['pb']
-		if r['pb']: r['p_hb'] = 100 * r['homem'] / r['pb']
+		if r['np']: r['p_li'] = int(100.0 * r['ps'] / r['np'])
+		if r['ps']: r['p_pb'] = int(100.0 * r['pb'] / r['ps'])
+		if r['pb']: r['p_pc'] = int(100.0 * r['pc'] / r['pb'])
+		if r['pb']: r['p_hb'] = int(100.0 * r['homem'] / r['pb'])
 
 		for k, v in list(r.iteritems()):
 			if isinstance(v, float):
 				r[k] = ('%.1f' %v).replace('.', ',')
+
+		for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
+			kl = k.lower()
+			if d['m_' + kl] >= r['pd_' + kl]:
+				r['pd_' + kl] = '\\textcolor{red}{%s $\\Downarrow$}' %r['pd_' + kl]
+			else:
+					r['pd_' + kl] = '\\textcolor{green}{%s $\\Uparrow$}' %r['pd_' + kl]
 
 		labels = [u'Crian\c cas', u'Mo\c cas', 'Rapazes', 'Mulheres', 'Homens']
 		colors = ['criancas', 'mocas', 'rapazes', 'mulheres', 'homens']
@@ -2973,7 +2969,7 @@ def raio_x(self, sums, wks, month, year):
 		else:
 			fsum = sum(fracs) / 100.0
 			fracs = map(lambda x: int(x/fsum), fracs)
-			fracs[-1] += 100 - sum(fracs) # fix roundoff error
+			fracs[0] += 100 - sum(fracs) # fix roundoff error
 			p = zip(fracs, labels, colors)
 			r['pie_labels'] = ','.join(['%s/%s/%s' %(i[0], i[1], i[2]) for i in p])
 
@@ -2981,16 +2977,16 @@ def raio_x(self, sums, wks, month, year):
 
 		frames.append(r)
 
-	d = {'frames': frames, 'month': months[month - 1], 'mid': month, 'year': year, 'zone': len(frames) == 1}
+	d['frames'] = frames
+	d['month'] = months[month - 1]
+	d['mid'] = month
+	d['year'] = year
+	d['zone'] = len(frames) == 1
 
 	if len(frames) == 1:
 		fname = 'raio-x-%i-%i-%s' %(year, month, slugify(frames[0]['z'].get_key('ref').name()))
 	else:
 		fname = 'raio-x-%i-%i' %(year, month)
-
-	sma = cache.get_sums_month_avg(year, month)
-	for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
-		d['m_' + k.lower()] = ('%.1f' %sma[k]).replace('.', ',')
 
 	t = 'raio-x.tex'
 	temp = render_temp(t, d)
@@ -3458,7 +3454,6 @@ class ReturnLetterPage(webapp.RequestHandler):
 			c = {'date': get_dstring(), 'm': m, 'name': texify(m.full_name), 'his': his, 'man': man, 'he': he, 'spres': spres, 'release': get_dstring(m.release)}
 
 			temp = render_temp(t, c)
-			p = mk_tex(t, temp)
 			mk_pdf(self, t, temp, fname)
 		else:
 			render(self, 'return-letter.html', 'Return Letter', {'rmf': rmf, 'rmpf': rmpf})
@@ -3479,9 +3474,12 @@ def mk_tex(fname, ftext):
 def mk_pdf(self, fname, ftext, pdfname):
 	p = mk_tex(fname, ftext)
 
-	self.response.headers['Content-Type'] = 'application/pdf'
-	self.response.headers['Content-Disposition'] = 'attachment; filename=%s.pdf' %pdfname
-	self.response.out.write(p)
+	if self:
+		self.response.headers['Content-Type'] = 'application/pdf'
+		self.response.headers['Content-Disposition'] = 'attachment; filename=%s.pdf' %pdfname
+		self.response.out.write(p)
+
+	return p
 
 class ReleaseLetterPage(webapp.RequestHandler):
 	def get(self):
@@ -3515,7 +3513,6 @@ class ReleaseLetter(webapp.RequestHandler):
 		d = {'date': get_dstring(), 'missionaries': missionaries}
 
 		temp = render_temp(t, d)
-		p = mk_tex(t, temp)
 		mk_pdf(self, t, temp, fname)
 
 class ReleaseEnvelope(webapp.RequestHandler):
@@ -3535,7 +3532,6 @@ class ReleaseEnvelope(webapp.RequestHandler):
 		d = {'addresses': addresses}
 
 		temp = render_temp(t, d)
-		p = mk_tex(t, temp)
 		mk_pdf(self, t, temp, fname)
 
 class Itinerary(webapp.RequestHandler):
@@ -3578,7 +3574,6 @@ class Itinerary(webapp.RequestHandler):
 				t = '%s.tex' %iname
 
 				temp = render_temp(t, d)
-				p = mk_tex(t, temp)
 				mk_pdf(self, t, temp, fname)
 				return
 			else:
@@ -3612,7 +3607,6 @@ class Recommendation(webapp.RequestHandler):
 		d = {'date': get_dstring(), 'name': texify(m.full_name), 'his': his, 'man': man, 'he': he}
 
 		temp = render_temp(t, d)
-		p = mk_tex(t, temp)
 		mk_pdf(self, t, temp, fname)
 
 class CompareSnapshots(webapp.RequestHandler):
@@ -3674,6 +3668,98 @@ class SiteHistory(webapp.RequestHandler):
 
 		render(self, '', 'Site History - %s - %s' %(w.date, p), {'page_data': fp})
 
+class CallingLettersHandler(webapp.RequestHandler):
+	def post(self):
+		titles = {
+			'ap': 'Querido',
+			'lz': 'Estimado',
+			'ld': 'Querido',
+			'trs': 'Querida',
+			'tre': 'Querido',
+			'sens': 'Querida',
+			'sene': 'Querido',
+		}
+
+		letters = []
+		sv = set()
+
+		ms = dict([(i.key(), i) for i in cache.get_ms()])
+
+		ss = Snapshot.all().filter('date >=', date.today() - timedelta(365 * 2)).fetch(500)
+		ss.sort(cmp=lambda x,y: cmp(x.date, y.date))
+
+		for s in ss:
+			for sm in cache.get_snapshotindex_missionaries(s.key()):
+				try:
+					m = ms[sm.get_key('missionary')]
+				except KeyError:
+					continue
+
+				if not m.cl_ap and sm.calling == MISSIONARY_CALLING_AP:
+					letters.append((m, 'ap', s.date))
+					m.cl_ap = True
+					sv.add(m)
+
+				if not m.cl_tr and sm.calling in [MISSIONARY_CALLING_TR, MISSIONARY_CALLING_LDTR]:
+					if m.sex == MISSIONARY_SEX_ELDER: letters.append((m, 'tre', s.date))
+					if m.sex == MISSIONARY_SEX_SISTER: letters.append((m, 'trs', s.date))
+					m.cl_tr = True
+					sv.add(m)
+
+				if not m.cl_ld and sm.calling in [MISSIONARY_CALLING_LD, MISSIONARY_CALLING_LDTR]:
+					letters.append((m, 'ld', s.date))
+					m.cl_ld = True
+					sv.add(m)
+
+				if not m.cl_lz and sm.calling == MISSIONARY_CALLING_LZL:
+					letters.append((m, 'lz', s.date))
+					m.cl_lz = True
+					sv.add(m)
+
+				if not m.cl_sn and sm.calling == MISSIONARY_CALLING_SEN:
+					if m.sex == MISSIONARY_SEX_ELDER: letters.append((m, 'sene', s.date))
+					if m.sex == MISSIONARY_SEX_SISTER: letters.append((m, 'sens', s.date))
+					m.cl_sn = True
+					sv.add(m)
+
+		if 'mark' in self.request.POST:
+			db.put(sv)
+			memcache.flush_all()
+
+			b = '\n'.join(['%s - %s' %(i[0], i[1]) for i in letters])
+
+			mail.send_mail(sender=config.ADMINEMAIL, to=config.EMAIL,
+				subject="calling letters marked",
+				body="Marked as done:\n%s" %b
+			)
+		else:
+			letters = [(a, titles[b], get_dstring(c), 'calling-%s.tex' %b) for a, b, c in letters]
+
+			fname = 'callings'
+			t = 'calling-letters.tex'
+			d = {'letters': letters}
+
+			temp = render_temp(t, d)
+			pdf = mk_pdf(None, t, temp, fname)
+
+			mail.send_mail(sender=config.ADMINEMAIL, to=config.EMAIL,
+				subject="calling letters PDF",
+				body="PDF attached",
+				attachments=[('calling-letters.pdf', pdf)])
+
+class CallingLetters(webapp.RequestHandler):
+	def get(self):
+		render(self, 'calling-letters.html', 'Calling Letters')
+
+	def post(self):
+		if self.request.get('submit') == 'make pdf':
+			taskqueue.add(url='/_ah/tasks/calling-letters')
+			render(self, '', 'Calling Letters', {'page_data': 'Request sent; PDF will be emailed when done.'})
+		elif self.request.get('submit') == 'mark as done':
+			taskqueue.add(url='/_ah/tasks/calling-letters', params={'mark': True})
+			render(self, '', 'Calling Letters', {'page_data': 'Being marked; will email list when done.'})
+
+
 application = webapp.WSGIApplication([
 	('/', MainPage),
 	('/arquivos/', ArquivosPage),
@@ -3713,8 +3799,10 @@ application = webapp.WSGIApplication([
 	('/raiox/', RaioXRedirect),
 
 	# task queue
-	('/_ah/tasks/indicator', ProcIndHandler),
+	('/_ah/tasks/calling-letters', CallingLettersHandler),
 	('/_ah/tasks/entrance-dates', EntranceHandler),
+	('/_ah/tasks/indicator', ProcIndHandler),
+	('/_ah/tasks/sync', SyncHandler),
 
 	# _ah
 	('/_ah/missao-rio/', AdminPage),
@@ -3728,6 +3816,7 @@ application = webapp.WSGIApplication([
 	('/_ah/missao-rio/cards/', Cards),
 	('/_ah/missao-rio/choose-week/', ChooseWeekPage),
 	('/_ah/missao-rio/compare-snapshots/', CompareSnapshots),
+	('/_ah/missao-rio/calling-letters/', CallingLetters),
 	('/_ah/missao-rio/edit-missionary/(.*)', EditMissionaryPage),
 	('/_ah/missao-rio/edit-pages/', EditPages),
 	('/_ah/missao-rio/enter-rpm/', EnterRPMPage),
