@@ -1574,7 +1574,10 @@ def make_chart(inds, disp, other={}, rmax=0, step=2):
 			datas.extend(i)
 
 	dmin = 0
-	dmax = max(datas)
+	try:
+		dmax = max(datas)
+	except:
+		dmax = 0
 
 	if not rmax:
 		step = (dmax - dmin) / 5
