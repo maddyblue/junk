@@ -3009,6 +3009,7 @@ def raio_x(self, sums, wks, month, year):
 
 		total['pie_labels'] = pie_labels([total['crianca'], total['moca'], total['rapaz'], total['mulher'], total['homem']])
 		total['name'] = 'Total'
+		total['nopd'] = True
 
 		frames.append(total)
 
@@ -3508,6 +3509,16 @@ def mk_pdf(self, fname, ftext, pdfname):
 
 	return p
 
+def dcmp(x, y):
+	if x is None and y is None:
+		return 0
+	elif x is None:
+		return -1
+	elif y is None:
+		return 1
+	else:
+		return cmp(x, y)
+
 class ReleaseLetterPage(webapp.RequestHandler):
 	def get(self):
 		last = None
@@ -3521,7 +3532,10 @@ class ReleaseLetterPage(webapp.RequestHandler):
 
 			dates[-1][-1].append(m)
 
-		render(self, 'release-letter.html', 'Release Letters', {'dates': dates})
+		rel = cache.get_ms(False)
+		rel.sort(cmp=lambda x,y: dcmp(x.release, y.release))
+
+		render(self, 'release-letter.html', 'Release Letters', {'dates': dates, 'rel': rel})
 
 class ReleaseLetter(webapp.RequestHandler):
 	def get(self, y, m, d):

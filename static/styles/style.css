@@ -230,8 +230,8 @@ input, textarea {
 }
 
 textarea {
-	width: 300px;
-	height: 80px;
+	width: 350px;
+	height: 100px;
 }
 
 #theme .ui-selecting {

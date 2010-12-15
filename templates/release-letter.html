@@ -22,3 +22,10 @@
 </td></tr>
 {% endfor %}
 </table>
+
+<p>all:</p>
+<table>
+{% for m in rel %}
+<tr><td><a href="/_ah/missao-rio/missionary/{{ m.key }}">{{ m }}</a></td><td>{{ m.release }}</td></tr>
+{% endfor %}
+</table>

@@ -3,7 +3,9 @@
 	\begin{tabular}{@{} r|c|c|c|c|c @{}}
 		& Encontrar & Ensinar & Levar à Igreja & Batizar & Confirmar \\
 		\hline
+		{% if not f.nopd %}
 		Por dupla & {{ f.pd_np }} & {{ f.pd_li }} & {{ f.pd_ps }} & {{ f.pd_pb }} & {{ f.pd_pc }} \\
+		{% endif %}
 		Media da Missão &
 			{{ m_np }} &
 			{{ m_li }} &
