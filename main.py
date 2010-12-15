@@ -2930,7 +2930,9 @@ def raio_x(self, sums, wks, month, year):
 	total = dict([(i, 0) for i in tk])
 	total['reports'] = 0
 
-	sma = cache.get_sums_month_avg(year, month)
+	sma = dict(zip(Sum.life_inds, [float(i) for i in cache.get_lifepoints().split('-')]))
+	sma['LI'] = sma['OL'] + sma['LM']
+	sma['PC'] = 1.0
 
 	for s in sums:
 		r = {}
