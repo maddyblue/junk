@@ -3752,7 +3752,7 @@ class CallingLettersHandler(webapp.RequestHandler):
 					m.cl_ld = True
 					sv.add(m)
 
-				if not m.cl_lz and sm.calling == MISSIONARY_CALLING_LZL:
+				if not m.cl_lz and sm.calling in [MISSIONARY_CALLING_LZL, MISSIONARY_CALLING_LZ]:
 					letters.append((m, 'lz', s.date))
 					m.cl_lz = True
 					sv.add(m)
