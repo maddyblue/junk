@@ -2968,9 +2968,9 @@ def raio_x(self, sums, wks, month, year):
 
 		for k in ['LI', 'PS', 'NP', 'PC', 'PB']:
 			kl = k.lower()
-			if sma[k] >= r['pd_' + kl]:
+			if sma[k] > r['pd_' + kl]:
 				r['pd_' + kl] = ('\\textcolor{red}{%.1f $\\Downarrow$}' %r['pd_' + kl]).replace('.', ',')
-			else:
+			elif sma[k] < r['pd_' + kl]:
 					r['pd_' + kl] = ('\\textcolor{green}{%.1f $\\Uparrow$}' %r['pd_' + kl]).replace('.', ',')
 
 		for k, v in list(r.iteritems()):
