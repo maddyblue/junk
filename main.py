@@ -1756,7 +1756,9 @@ def mk_checkbox(name, opt):
 
 class TransferPage(webapp.RequestHandler):
 	def get_missionaries(self):
-		return cache.get_ms()
+		ms = Missionary.all().filter('calling !=', MISSIONARY_CALLING_REL).fetch(500)
+		ms.sort(cmp=lambda x,y: cmp(x.mission_name, y.mission_name))
+		return ms
 
 	def get(self):
 		ms = self.get_missionaries()
