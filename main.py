@@ -2392,6 +2392,9 @@ def make_port_date(d):
 		return ''
 
 def draw_width_string(c, x, y, s, fontname, defheight, width):
+	if not s:
+		return
+
 	height = defheight
 	while c.stringWidth(s, fontname, height) > width and height > 1:
 		height -= 1
