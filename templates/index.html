@@ -9,7 +9,17 @@
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 	<script type="text/javascript" src="/js-static/jquery-1.4.3.min.js"></script>
 	<script type="text/javascript" src="/js-static/jquery-ui-1.8.5.min.js"></script>
+
+	<script src="/js-static/snowstorm-min.js"></script>
+	<script type="text/javascript">
+	snowStorm.snowColor = '#b5f2ff'; // blue-ish snow!?
+	snowStorm.flakesMaxActive = 30;  // show more snow on screen at once
+	snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
+	snowStorm.animationInterval = 50;    // Theoretical "miliseconds per frame" measurement. 20 = fast + smooth, but high CPU use. 50 = more conservative, but slower
+	</script>
+
 	<script type="text/javascript" src="/js-static/site.js"></script>
+
 	{% block head %}{{ headstuff }}{% endblock %}
 
 </head>
@@ -120,6 +130,11 @@
 			$("#theme").selectable({
 				selected: function(event, ui) {
 					theme(ui.selected.innerHTML);
+
+					if(ui.selected.innerHTML == 'Natal')
+						snowStorm.init();
+					else
+						snowStorm.stop();
 				}
 			});
 		});
@@ -128,6 +143,7 @@
 	<h3>Tema</h3>
 	<ul id="theme">
 		<li>Botafogo</li>
+		<li>Natal</li>
 		<li>Nefitas</li>
 		<li>Pedra</li>
 		<li>Cristo - LDS</li>

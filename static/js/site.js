@@ -67,7 +67,8 @@ function theme(t)
 	else if(t == 'Pedra') name = 'pedra';
 	else if(t == 'Cristo - LDS') name = 'cristolds';
 	else if(t == 'Cristo - Rio') name = 'cristorio';
-	else name = '';
+	else if(t == 'Botafogo') name = '';
+	else name = 'natal';
 
 	for(i=0; (a = document.getElementsByTagName("link")[i]); i++)
 	{
@@ -86,3 +87,8 @@ function theme(t)
 }
 
 theme(getCookie('theme'));
+
+$(document).ready(function(){
+	if(getCookie('theme') != 'Natal')
+		snowStorm.stop();
+});
