@@ -89,6 +89,6 @@ function theme(t)
 theme(getCookie('theme'));
 
 $(document).ready(function(){
-	if(getCookie('theme') != 'Natal')
+	if(getCookie('theme') != 'Natal' && getCookie('theme') != '')
 		snowStorm.stop();
 });
