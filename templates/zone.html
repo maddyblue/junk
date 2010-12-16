@@ -6,11 +6,23 @@ Raio X:
 <input type="submit" value="Raio-Xar" />
 </form>
 
+{% if wi %}
+<h3>Projeto de Retenção:</h3>
+<table border="1">
+<th>Ward</th><th>Pessoas que foram</th><th>Total Pessoas</th><th>Percentual</th></tr>
+	{% for i in wi %}
+<tr><td>{{ i.0 }}</td><td>{{ i.1 }}</td><td>{{ i.2 }}</td><td>{{ i.3 }}</td></tr>
+	{% endfor %}
+</table>
+<br />
+{% endif %}
+
 <p/>Recordes da zona:
 {% for b in best %}
 <br/><b>{{ b.0|ind_name }}</b>: {{ b.3 }} {{ b|span_disp }}
 {% endfor %}
 
+<br/>
 {% for a in areas %}
 <br/><a href="/area/{{ a.key }}">{{ a.name }}</a>
 {% endfor %}

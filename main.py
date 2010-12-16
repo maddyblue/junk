@@ -495,6 +495,9 @@ def drawLine(c, x, y, strs):
 		c.line(x, y, x, y + c.H)
 
 def draw_width_string_left(c, x, y, s, width, defheight=0, fontname='Helvetica'):
+	if not s:
+		return
+
 	if defheight == 0:
 		defheight = c.S
 
@@ -1676,6 +1679,23 @@ class ZonePage(webapp.RequestHandler):
 		data = cache.get_zone_inds(zkey, 12)
 		time = '12 semanas'
 
+		areas = cache.get_areas_in_zone(zone)
+		wards = Ward.get(set([a.get_key('ward') for a in areas]))
+
+		wi = []
+		for ward in wards:
+			rets = cache.get_retainees(ward)
+
+			pw = 0
+			pt = 0
+			for ret in rets:
+				pt += 1
+
+				if any([ret.week1, ret.week2, ret.week3, ret.week4]):
+					pw += 1
+
+			wi.append((ward.name, pw, pt, '%i%%' %(100.0 * pw / pt)))
+
 		charts = []
 		charts.append(make_chart(data, ['PB', 'PC'], {'chtt': 'Almas Salvas - ' + time}))
 		charts.append(make_chart(data, ['LM', 'OL'], {'chtt': 'Doutrinas Ensinadas - ' + time, 'cht': 'bvs'}, 70, 10))
@@ -1693,7 +1713,7 @@ class ZonePage(webapp.RequestHandler):
 		ys = mk_select('year', [(i, i) for i in range(2009, d.year + 1)], d.year)
 		ms = mk_select('month', [(i, months[i - 1]) for i in range(1, 13)], d.month)
 
-		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas, 'best': best, 'years': ys, 'months': ms})
+		render(self, 'zone.html', 'Zona %s' %unicode(zone), {'zone': zone, 'charts': charts, 'areas': areas, 'best': best, 'years': ys, 'months': ms,'wi': wi})
 
 class LoginPage(webapp.RequestHandler):
 	def get(self):
