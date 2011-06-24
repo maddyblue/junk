@@ -14,7 +14,7 @@ import com.mattjibson.gmp.GMFile;
 public class Database
 {
 	private static final String TAG = "GMP";
-	
+
 	private static final String DATABASE_NAME = "gmp.db";
 	private static final int DATABASE_VERSION = 2;
 	private static final String TABLE_NAME = "music";
@@ -26,14 +26,14 @@ public class Database
 	public static final String CN_LENGTH = "length";
 	public static final String CN_TRACK = "track";
 	public static final String CN_FILE = "file";
-	
+
 	private DatabaseHelper dbh = null;
-	
+
 	public Database(Context c)
 	{
 		dbh = new DatabaseHelper(c);
 	}
-	
+
 	static class DatabaseHelper extends SQLiteOpenHelper
 	{
 		DatabaseHelper(Context context)
@@ -55,7 +55,7 @@ public class Database
 			+ CN_FILE + " TEXT"
 			+ ");");
 		}
-		
+
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 		{
@@ -63,12 +63,12 @@ public class Database
 			onCreate(db);
 		}
 	}
-	
+
 	public void refresh()
 	{
 		SQLiteDatabase db = dbh.getWritableDatabase();
 		db.execSQL("DELETE FROM " + TABLE_NAME);
-		
+
 		ArrayList<File> al = new ArrayList<File>();
 		File f;
 		File fs[];
@@ -93,7 +93,7 @@ public class Database
 			if(f.isFile())
 			{
 				gmf = new GMFile(f);
-				
+
 				if(gmf.tracks > 0)
 				{
 					values.put(CN_FILE, gmf.file);
@@ -101,62 +101,62 @@ public class Database
 					values.put(CN_GAME, gmf.game);
 					values.put(CN_AUTHOR, gmf.author);
 				}
-				
+
 				for(i = 0; i < gmf.tracks; i++)
 				{
 					values.put(CN_SONG, gmf.gmtracks[i].song);
 					values.put(CN_TRACK, gmf.gmtracks[i].track);
 					values.put(CN_LENGTH, gmf.gmtracks[i].play_len);
-					
+
 					Log.d(TAG, "row: " + db.insert(TABLE_NAME, null, values));
 				}
 			}
 		}
 	}
-	
+
 	public String[] get(String cname)
 	{
 		String ret[];
 		SQLiteDatabase db = dbh.getReadableDatabase();
 		Cursor c;
-		
+
 		c = db.query(true, TABLE_NAME, new String[] {cname}, null, null, null, null, cname, null);
 		ret = new String[c.getCount()];
 		int col = c.getColumnIndex(cname);
-		
+
 		c.moveToFirst();
-		
+
 		int i = 0;
-		
+
 		while(c.isAfterLast() == false)
 		{
 			ret[i++] = c.getString(col);
 			c.moveToNext();
 		}
-		
-		return ret;		
+
+		return ret;
 	}
-	
+
 	public String[] getList(String cname, String w)
 	{
 		String ret[];
 		SQLiteDatabase db = dbh.getReadableDatabase();
 		Cursor c;
-		
+
 		c = db.query(TABLE_NAME, new String[] {CN_GAME + "|| ' - ' ||" + CN_SONG}, cname + "=?", new String[] {w}, null, null, cname + "," + CN_TRACK, null);
 		ret = new String[c.getCount()];
 		int col = 0;
 
 		c.moveToFirst();
-		
+
 		int i = 0;
-		
+
 		while(c.isAfterLast() == false)
 		{
 			ret[i++] = c.getString(col);
 			c.moveToNext();
 		}
-		
-		return ret;		
+
+		return ret;
 	}
 }

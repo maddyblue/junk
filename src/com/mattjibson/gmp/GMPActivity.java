@@ -19,10 +19,10 @@ public class GMPActivity extends ListActivity
 	private GMPApp g;
 	private Intent i;
 	private int mode;
-	
+
 	private static final String TAG = "GMP";
-	
-	private static final String DEFAULT_FIELDS[] = { 
+
+	private static final String DEFAULT_FIELDS[] = {
 		Database.CN_SYSTEM,
 		Database.CN_GAME,
 		Database.CN_AUTHOR
@@ -44,7 +44,7 @@ public class GMPActivity extends ListActivity
 
 		g = (GMPApp)getApplication();
 		lv = getListView();
-		
+
 		i = getIntent();
 		final int mode = i.getIntExtra(C_MODE, MODE_NONE);
 		final String title = i.getStringExtra(C_TITLE);
@@ -54,23 +54,23 @@ public class GMPActivity extends ListActivity
 
 		if(title != null)
 			setTitle(title);
-		
+
 		switch(mode)
 		{
 		case MODE_LIST:
 			fields = g.getList(table, i.getStringExtra(C_WHERE));
 			break;
-			
+
 		case MODE_TABLE:
 			fields = g.getTable(table);
 			break;
-		
+
 		case MODE_NONE:
 		default:
 			fields = DEFAULT_FIELDS;
 			break;
 		}
-		
+
 		aa = new ArrayAdapter<String>(this, R.layout.list_item, fields);
 		setListAdapter(aa);
 
@@ -85,16 +85,16 @@ public class GMPActivity extends ListActivity
 				case MODE_NONE:
 					i.putExtra(C_MODE, MODE_TABLE);
 					i.putExtra(C_TABLE, t);
-					
+
 					if(t == Database.CN_SYSTEM)
 						i.putExtra(C_TITLE, "Systems");
-						
+
 					else if(t == Database.CN_GAME)
 						i.putExtra(C_TITLE, "Games");
 					else if(t == Database.CN_AUTHOR)
 						i.putExtra(C_TITLE, "Authors");
 					break;
-					
+
 				case MODE_TABLE:
 					i.putExtra(C_MODE, MODE_LIST);
 					i.putExtra(C_TITLE, getTitle() + " : " + t);
@@ -102,12 +102,12 @@ public class GMPActivity extends ListActivity
 					i.putExtra(C_WHERE, t);
 					break;
 				}
-				
+
 				startActivity(i);
 			}
 		});
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -115,7 +115,7 @@ public class GMPActivity extends ListActivity
 		inflater.inflate(R.menu.gmp_menu, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -125,7 +125,7 @@ public class GMPActivity extends ListActivity
 			refresh();
 			return true;
 		default:
-			return super.onOptionsItemSelected(item);	
+			return super.onOptionsItemSelected(item);
 		}
 	}
 

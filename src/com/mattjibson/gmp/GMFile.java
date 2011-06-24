@@ -37,16 +37,16 @@ public class GMFile
 	{
 		String info[] = info(f.getPath());
 		tracks = (info.length - I_TRACKS) / 2;
-		
+
 		if(tracks <= 0)
 			return;
-		
+
 		file = f.getPath();
 		system = info[I_SYSTEM];
 		game = info[I_GAME];
 		author = info[I_AUTHOR];
 		gmtracks = new GMTrack[tracks];
-		
+
 		for(int i = 0; i < tracks; i++)
 		{
 			gmtracks[i] = new GMTrack(info[I_TRACKS + i * 2], i + 1, Integer.parseInt(info[I_TRACKS + 1 + i * 2]) / 1000);
