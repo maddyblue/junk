@@ -28,12 +28,14 @@ public class GMPActivity extends ListActivity
 		Database.CN_AUTHOR
 	};
 
-	private static final int MODE_NONE   = 0;
-	private static final int MODE_SYSTEM = 1;
-	private static final int MODE_GAME   = 2;
-	private static final int MODE_AUTHOR = 3;
-	
+	private static final int MODE_NONE  = 0;
+	private static final int MODE_TABLE = 1;
+	private static final int MODE_LIST  = 2;
+
+	private static final String C_TITLE = "title";
 	private static final String C_MODE = "mode";
+	private static final String C_TABLE = "table";
+	private static final String C_WHERE = "where";
 
 	/** Called when the activity is first created. */
 	@Override
@@ -45,22 +47,22 @@ public class GMPActivity extends ListActivity
 		
 		i = getIntent();
 		final int mode = i.getIntExtra(C_MODE, MODE_NONE);
+		final String title = i.getStringExtra(C_TITLE);
+		final String table = i.getStringExtra(C_TABLE);
 		this.mode = mode;
 		String fields[];
+
+		if(title != null)
+			setTitle(title);
 		
 		switch(mode)
 		{
-		case MODE_SYSTEM:
-			setTitle("Systems");
-			fields = g.getSystems();
+		case MODE_LIST:
+			fields = g.getList(table, i.getStringExtra(C_WHERE));
 			break;
-		case MODE_GAME:
-			setTitle("Games");
-			fields = g.getGames(); 
-			break;
-		case MODE_AUTHOR:
-			setTitle("Authors");
-			fields = g.getAuthors(); 
+			
+		case MODE_TABLE:
+			fields = g.getTable(table);
 			break;
 		
 		case MODE_NONE:
@@ -81,17 +83,24 @@ public class GMPActivity extends ListActivity
 				switch(mode)
 				{
 				case MODE_NONE:
+					i.putExtra(C_MODE, MODE_TABLE);
+					i.putExtra(C_TABLE, t);
+					
 					if(t == Database.CN_SYSTEM)
-						i.putExtra(C_MODE, MODE_SYSTEM);
+						i.putExtra(C_TITLE, "Systems");
+						
 					else if(t == Database.CN_GAME)
-						i.putExtra(C_MODE, MODE_GAME);
+						i.putExtra(C_TITLE, "Games");
 					else if(t == Database.CN_AUTHOR)
-						i.putExtra(C_MODE, MODE_AUTHOR);
+						i.putExtra(C_TITLE, "Authors");
 					break;
 					
-				case MODE_GAME:
-					i.putExtra(C_MODE, MODE_SONGS_GAME);
-					i.putExtra(, t)
+				case MODE_TABLE:
+					i.putExtra(C_MODE, MODE_LIST);
+					i.putExtra(C_TITLE, getTitle() + " : " + t);
+					i.putExtra(C_TABLE, table);
+					i.putExtra(C_WHERE, t);
+					break;
 				}
 				
 				startActivity(i);

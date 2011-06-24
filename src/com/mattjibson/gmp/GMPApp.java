@@ -38,18 +38,13 @@ public class GMPApp extends Application
 		db.refresh();
 	}
 	
-	public String[] getSystems()
+	public String[] getTable(String t)
 	{
-		return db.getSystems();
+		return db.get(t);
 	}
 	
-	public String[] getGames()
+	public String[] getList(String t, String w)
 	{
-		return db.getGames();
-	}
-	
-	public String[] getAuthors()
-	{
-		return db.getAuthors();
+		return db.getList(t, w);
 	}
 }

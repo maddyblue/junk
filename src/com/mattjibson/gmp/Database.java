@@ -136,19 +136,27 @@ public class Database
 		
 		return ret;		
 	}
-
-	public String[] getSystems()
+	
+	public String[] getList(String cname, String w)
 	{
-		return get(CN_SYSTEM);
-	}
+		String ret[];
+		SQLiteDatabase db = dbh.getReadableDatabase();
+		Cursor c;
+		
+		c = db.query(TABLE_NAME, new String[] {CN_GAME + "|| ' - ' ||" + CN_SONG}, cname + "=?", new String[] {w}, null, null, cname + "," + CN_TRACK, null);
+		ret = new String[c.getCount()];
+		int col = 0;
 
-	public String[] getGames()
-	{
-		return get(CN_GAME);
-	}
-
-	public String[] getAuthors()
-	{
-		return get(CN_AUTHOR);
+		c.moveToFirst();
+		
+		int i = 0;
+		
+		while(c.isAfterLast() == false)
+		{
+			ret[i++] = c.getString(col);
+			c.moveToNext();
+		}
+		
+		return ret;		
 	}
 }
