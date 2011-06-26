@@ -26,6 +26,7 @@ public class Database
 	public static final String CN_LENGTH = "length";
 	public static final String CN_TRACK = "track";
 	public static final String CN_FILE = "file";
+	public static final String CN_ID = "rowid";
 
 	private DatabaseHelper dbh = null;
 
@@ -75,7 +76,7 @@ public class Database
 		int i = 0;
 		ContentValues values = new ContentValues();
 
-		GMFile gmf;
+		GMFile gmf[];
 
 		al.add(new File("/sdcard"));
 
@@ -92,21 +93,17 @@ public class Database
 
 			if(f.isFile())
 			{
-				gmf = new GMFile(f);
+				gmf = GMFile.makeTracks(f);
 
-				if(gmf.tracks > 0)
+				for(i = 0; i < gmf.length; i++)
 				{
-					values.put(CN_FILE, gmf.file);
-					values.put(CN_SYSTEM, gmf.system);
-					values.put(CN_GAME, gmf.game);
-					values.put(CN_AUTHOR, gmf.author);
-				}
-
-				for(i = 0; i < gmf.tracks; i++)
-				{
-					values.put(CN_SONG, gmf.gmtracks[i].song);
-					values.put(CN_TRACK, gmf.gmtracks[i].track);
-					values.put(CN_LENGTH, gmf.gmtracks[i].play_len);
+					values.put(CN_FILE, gmf[i].file);
+					values.put(CN_SYSTEM, gmf[i].system);
+					values.put(CN_GAME, gmf[i].game);
+					values.put(CN_AUTHOR, gmf[i].author);
+					values.put(CN_SONG, gmf[i].song);
+					values.put(CN_TRACK, gmf[i].track);
+					values.put(CN_LENGTH, gmf[i].play_len);
 
 					Log.d(TAG, "row: " + db.insert(TABLE_NAME, null, values));
 				}
@@ -134,18 +131,18 @@ public class Database
 			c.moveToNext();
 		}
 
+		c.close();
 		return ret;
 	}
 
-	public String[] getList(String cname, String w)
+	public GMFile[] getList(String cname, String w)
 	{
-		String ret[];
+		GMFile ret[];
 		SQLiteDatabase db = dbh.getReadableDatabase();
 		Cursor c;
 
-		c = db.query(TABLE_NAME, new String[] {CN_GAME + "|| ' - ' ||" + CN_SONG}, cname + "=?", new String[] {w}, null, null, cname + "," + CN_TRACK, null);
-		ret = new String[c.getCount()];
-		int col = 0;
+		c = db.query(TABLE_NAME, new String[] {CN_ID, CN_SYSTEM, CN_GAME, CN_AUTHOR, CN_SONG, CN_TRACK, CN_LENGTH, CN_FILE}, cname + "=?", new String[] {w}, null, null, cname + "," + CN_TRACK + "," + CN_SONG, null);
+		ret = new GMFile[c.getCount()];
 
 		c.moveToFirst();
 
@@ -153,10 +150,15 @@ public class Database
 
 		while(c.isAfterLast() == false)
 		{
-			ret[i++] = c.getString(col);
+			ret[i++] = new GMFile(c);
 			c.moveToNext();
 		}
 
 		return ret;
+	}
+
+	public GMFile getSong(long id)
+	{
+		return getList(CN_ID, String.valueOf(id))[0];
 	}
 }

@@ -6,7 +6,7 @@ import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
 import android.os.Bundle;
-import android.util.Log;
+import java.util.*;
 
 import com.mattjibson.gmp.Database;
 import com.mattjibson.gmp.GMFile;
@@ -18,9 +18,6 @@ public class GMPActivity extends ListActivity
 	private ArrayAdapter<String> aa;
 	private GMPApp g;
 	private Intent i;
-	private int mode;
-
-	private static final String TAG = "GMP";
 
 	private static final String DEFAULT_FIELDS[] = {
 		Database.CN_SYSTEM,
@@ -49,7 +46,8 @@ public class GMPActivity extends ListActivity
 		final int mode = i.getIntExtra(C_MODE, MODE_NONE);
 		final String title = i.getStringExtra(C_TITLE);
 		final String table = i.getStringExtra(C_TABLE);
-		this.mode = mode;
+		GMFile gmf[];
+		final HashMap<Long, Long> map = new HashMap<Long, Long>();
 		String fields[];
 
 		if(title != null)
@@ -58,20 +56,28 @@ public class GMPActivity extends ListActivity
 		switch(mode)
 		{
 		case MODE_LIST:
-			fields = g.getList(table, i.getStringExtra(C_WHERE));
+			gmf = g.getList(table, i.getStringExtra(C_WHERE));
+			aa = new ArrayAdapter<String>(this, R.layout.list_item);
+			fields = new String[gmf.length];
+			for(int j = 0; j < gmf.length; j++)
+			{
+				aa.add(gmf[j].toString());
+				map.put(aa.getItemId(j), gmf[j].id);
+			}
 			break;
 
 		case MODE_TABLE:
 			fields = g.getTable(table);
+			aa = new ArrayAdapter<String>(this, R.layout.list_item, fields);
 			break;
 
 		case MODE_NONE:
 		default:
 			fields = DEFAULT_FIELDS;
+			aa = new ArrayAdapter<String>(this, R.layout.list_item, fields);
 			break;
 		}
 
-		aa = new ArrayAdapter<String>(this, R.layout.list_item, fields);
 		setListAdapter(aa);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -100,6 +106,11 @@ public class GMPActivity extends ListActivity
 					i.putExtra(C_TITLE, getTitle() + " : " + t);
 					i.putExtra(C_TABLE, table);
 					i.putExtra(C_WHERE, t);
+					break;
+
+				case MODE_LIST:
+					i = new Intent(getApplicationContext(), SongActivity.class);
+					i.putExtra("song", map.get(id));
 					break;
 				}
 

@@ -43,8 +43,13 @@ public class GMPApp extends Application
 		return db.get(t);
 	}
 
-	public String[] getList(String t, String w)
+	public GMFile[] getList(String t, String w)
 	{
 		return db.getList(t, w);
+	}
+
+	public GMFile getSong(long id)
+	{
+		return db.getSong(id);
 	}
 }
