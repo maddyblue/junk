@@ -68,3 +68,43 @@ jobjectArray Java_com_mattjibson_gmp_GMFile_info(JNIEnv* env, jobject thiz, jstr
 
 	return ret;
 }
+
+Java_com_mattjibson_gmp_SongTask_open(JNIEnv* env, jobject thiz, jstring fname, jint track, jint play_len, jint sr)
+{
+	const char *str = (*env)->GetStringUTFChars(env, fname, 0);
+	gme_open_file(str, &emu, sr);
+	gme_start_track(emu, track - 1);
+	gme_set_fade(emu, play_len * 1000);
+	(*env)->ReleaseStringUTFChars(env, fname, str);
+}
+
+Java_com_mattjibson_gmp_SongTask_close(JNIEnv* env, jobject thiz)
+{
+	gme_delete(emu);
+}
+
+jshortArray Java_com_mattjibson_gmp_SongTask_play(JNIEnv* env, jobject thiz, jint count)
+{
+	jshortArray ret;
+	short *buf = (short *)malloc(count * sizeof(short));
+
+	if(gme_play(emu, count, buf))
+		return (jshortArray)(*env)->NewShortArray(env, 0);
+
+	ret = (jshortArray)(*env)->NewShortArray(env, count);
+
+	(*env)->SetShortArrayRegion(env, ret, 0, count, buf);
+	free(buf);
+
+	return ret;
+}
+
+jint Java_com_mattjibson_gmp_SongTask_tell(JNIEnv* env, jobject thiz)
+{
+	return gme_tell(emu);
+}
+
+jint Java_com_mattjibson_gmp_SongTask_ended(JNIEnv* env, jobject thiz)
+{
+	return gme_track_ended(emu);
+}

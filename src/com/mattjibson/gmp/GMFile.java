@@ -3,6 +3,7 @@ package com.mattjibson.gmp;
 import java.io.File;
 import android.database.*;
 import com.mattjibson.gmp.Database;
+import com.mattjibson.gmp.GMPApp;
 
 public class GMFile
 {

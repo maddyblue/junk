@@ -4,13 +4,16 @@ import android.app.*;
 import android.os.Bundle;
 import android.widget.*;
 import android.content.*;
+import android.media.*;
 
 import com.mattjibson.gmp.GMPApp;
+import com.mattjibson.gmp.GMFile;
 
 public class SongActivity extends Activity
 {
 	private GMPApp g;
 	private Intent i;
+	private GMFile f;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -22,7 +25,7 @@ public class SongActivity extends Activity
 		long id = i.getLongExtra("song", -1);
 
 		TextView tv = new TextView(this);
-		GMFile f = g.getSong(id);
+		f = g.getSong(id);
 
 		String s =
 			"System: " + f.system + "\n" +
@@ -35,5 +38,7 @@ public class SongActivity extends Activity
 
 		setTitle(f.toString());
 		setContentView(tv);
+
+		new SongTask().execute(f);
 	}
 }
