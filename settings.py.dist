@@ -1,0 +1,8 @@
+import os
+
+# fill this with data from os.urandom(64)
+COOKIE_KEY = ''
+
+FACEBOOK_KEY = ''
+FACEBOOK_SECRET = ''
+FACEBOOK_REDIRECT_URI = 'http://%s/login/facebook/' % os.environ['HTTP_HOST']

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>account</h1>
+	</div>
+
+	<div class="row">
+		<div class="span16">
+			<table>
+				<tr><td>name</td><td>{{ user.name }}</td></tr>
+				<tr><td>email</td><td>{{ user.email }}</td></tr>
+				<tr><td>login from</td><td>{{ user.source }}</td></tr>
+				<tr><td>user since</td><td>{{ user.register_date }}</td></tr>
+			</table>
+		</div>
+	</div>
+{% endblock %}

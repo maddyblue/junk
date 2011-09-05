@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>register</h1>
+	</div>
+
+	<div class="row">
+		<div class="span16">
+			<p>Welcome. You aren't yet registered with us. Please click below if you would like to register.</p>
+			<form method="POST" action="{{ "register"|url }}">
+				<input type="hidden" name="register" value="{{ register.key.name }}">
+				<input type="submit" class="btn primary" value="Register as {{ register }}">
+			</form>
+		</div>
+	</div>
+{% endblock %}

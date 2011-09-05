@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>journalr</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
+	<link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+
+	<div class="topbar">
+		<div class="topbar-inner">
+			<div class="container">
+				<h3><a href="/">journalr <small>beta</small></a></h3>
+				<ul class="nav">
+					<li{% ifequal active "index" %} class="active"{% endifequal %}><a href="/">home</a></li>
+				</ul>
+				<ul class="nav secondary-nav">
+					{% if user %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">journals</a>
+						<ul class="dropdown-menu">
+							{% for j in session.journals %}
+								<li><a href="#">{{ j.name }}</a></li>
+							{% endfor %}
+							<li class="divider"></li>
+							<li><a href="{{ "new-journal"|url }}">new journal</a></li>
+						</ul>
+					</li>
+					<li class="dropdown{% ifequal active "account" %} active{% endifequal %}">
+						<a href="#" class="dropdown-toggle">{{ user }}</a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ "account"|url }}">account</a></li>
+							<li><a href="{{ "logout"|url }}">logout</a></li>
+						</ul>
+					</li>
+					{% else %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">login</a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ "login-google"|url }}">with google</a></li>
+							<li><a href="{{ "login-facebook"|url }}">with facebook</a></li>
+						</ul>
+					</li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	{% if session.alert %}
+	<div class="container">
+		<div class="row"></div>
+		{% for alert in session.alert %}
+			<div class="row">
+				<div class="span16">
+					<div class="alert-message {{ alert.0 }}">
+						<p>{{ alert.1 }}</p>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
+	<div class="container">
+		{% block content %}{% endblock %}
+	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="/static/js/jquery-1.6.2.min.js"><\/script>')</script>
+
+	<script src="/static/js/site.js"></script>
+</body>
+</html>
