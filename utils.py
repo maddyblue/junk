@@ -55,7 +55,7 @@ def populate_user_session(user=None):
 	elif 'user' not in session:
 		return
 
-	session['journals'] = cache.get_journals(session['user'].key())
+	session['journals'] = cache.get_journal_list(session['user'].key())
 
 NUM_PAGE_DISP = 5
 def page_list(page, pages):

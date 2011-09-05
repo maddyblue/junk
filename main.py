@@ -23,8 +23,10 @@ from google.appengine.ext import webapp
 
 from gaesessions import get_current_session
 import cache
+import counters
 import facebook
 import models
+import settings
 import templatefilters.filters
 import utils
 import webapp2
@@ -40,6 +42,9 @@ def rendert(s, p, d={}):
 		del d['user']
 
 	d['active'] = p.partition('.')[0]
+
+	if settings.GOOGLE_ANALYTICS:
+		d['google_analytics'] = settings.GOOGLE_ANALYTICS
 
 	s.response.out.write(utils.render(p, d))
 
@@ -89,8 +94,10 @@ class Register(webapp2.RequestHandler):
 				user.put()
 				del session['register']
 				utils.populate_user_session(user)
-
+				counters.increment(counters.COUNTER_USERS)
 				utils.alert('success', '<strong>%s</strong>, you have been registered at jounalr.' %user)
+				self.redirect(webapp2.uri_for('new-journal'))
+				return
 
 		self.redirect(webapp2.uri_for('main'))
 
@@ -116,20 +123,25 @@ class NewJournal(webapp2.RequestHandler):
 
 	def post(self):
 		session = get_current_session()
+		name = self.request.get('name')
 
 		if len(session['journals']) >= models.Journal.MAX_JOURNALS:
 			utils.alert('error', 'Only %i journals allowed.' %models.Journal.MAX_JOURNALS)
+		elif not name:
+			utils.alert('error', 'Your journal needs a name.')
 		else:
-			name = self.request.get('name')
-			journal = models.Journal(parent=session['user'], key_name=name, title=name)
-			if journal.key() in session['journals']:
-				utils.alert('error', 'You already have a journal called %s.' %name)
+			journal = models.Journal(parent=session['user'], title=name)
+			for journal_id, journal_name in session['journals']:
+				if journal.title == journal_name:
+					utils.alert('error', 'You already have a journal called %s.' %name)
+					break
 			else:
 				journal.put()
-				cache.delete(cache.C_JOURNALS, session['user'].key())
+				cache.clear_journal_cache(session['user'].key())
 				utils.populate_user_session()
+				counters.increment(counters.COUNTER_JOURNALS)
 				utils.alert('success', 'Created your journal %s.' %name)
-				self.redirect(webapp2.uri_for('view-journal', journal=name))
+				self.redirect(webapp2.uri_for('view-journal', journal=journal.key().id()))
 				return
 
 		rendert(self, 'new-journal.html')
@@ -143,17 +155,19 @@ class ViewJournal(webapp2.RequestHandler):
 			'pagelist': utils.page_list(page, journal.pages),
 		})
 
+	def journal_key(self, journal_id):
+		session = get_current_session()
+		return db.Key.from_path('Journal', long(journal_id), parent=session['user'].key())
+
 	def get(self, journal, page):
 		page = int(page)
-		session = get_current_session()
-		journal_key = db.Key.from_path('Journal', journal, parent=session['user'].key())
+		journal_key = self.journal_key(journal)
 		journal = cache.get_by_key(journal_key)
 		self.render(journal, page)
 
 	def post(self, journal, page):
 		page = int(page)
-		session = get_current_session()
-		journal_key = db.Key.from_path('Journal', journal, parent=session['user'].key())
+		journal_key = self.journal_key(journal)
 
 		def txn(journal_key, entry):
 			journal = db.get(journal_key) # should be cache.get_by_key?
@@ -187,17 +201,24 @@ class ViewJournal(webapp2.RequestHandler):
 			cache.set(cache.pack(journal), cache.C_KEY, journal_key)
 			cache.clear_entries_cache(journal_key)
 			utils.alert('success', 'Entry posted.')
-			self.redirect(webapp2.uri_for('view-journal', journal=journal))
+			counters.increment(counters.COUNTER_ENTRIES)
+			self.redirect(webapp2.uri_for('view-journal', journal=journal_key.id()))
 
 class AboutHandler(webapp2.RequestHandler):
 	def get(self):
 		rendert(self, 'about.html')
 
+class StatsHandler(webapp2.RequestHandler):
+	def get(self):
+		logging.error(cache.get_stats())
+		rendert(self, 'stats.html', {'stats': cache.get_stats()})
+
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/account/', handler=Account, name='account'),
 	webapp2.Route(r'/about/', handler=AboutHandler, name='about'),
-	webapp2.Route(r'/journal/<journal>/<page:\d+>/', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
+	webapp2.Route(r'/stats/', handler=StatsHandler, name='stats'),
+	webapp2.Route(r'/journal/<journal:\d+>/<page:\d+>/', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
 	webapp2.Route(r'/login/facebook/', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google/', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout/', handler=Logout, name='logout'),

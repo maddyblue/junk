@@ -8,6 +8,20 @@
 
 	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
 	<link rel="stylesheet" href="/static/css/site.css">
+
+	{% if google_analytics %}
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', '{{ google_analytics }}']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+	{% endif %}
 </head>
 
 <body>
@@ -18,6 +32,7 @@
 				<ul class="nav">
 					<li{% ifequal active "index" %} class="active"{% endifequal %}><a href="{{ "main"|url }}">home</a></li>
 					<li{% ifequal active "about" %} class="active"{% endifequal %}><a href="{{ "about"|url }}">about</a></li>
+					<li{% ifequal active "stats" %} class="active"{% endifequal %}><a href="{{ "stats"|url }}">stats</a></li>
 				</ul>
 				<ul class="nav secondary-nav">
 					{% if user %}
@@ -25,7 +40,7 @@
 						<a href="#" class="dropdown-toggle">journals</a>
 						<ul class="dropdown-menu">
 							{% for j in session.journals %}
-								<li><a href="{{ "view-journal"|url:j.name }}">{{ j.name }}</a></li>
+								<li><a href="{{ "view-journal"|url:j.0 }}">{{ j.1 }}</a></li>
 							{% endfor %}
 							<li class="divider"></li>
 							<li><a href="{{ "new-journal"|url }}">new journal</a></li>

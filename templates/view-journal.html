@@ -2,7 +2,7 @@
 
 {% block content %}
 	<div class="page-header">
-		<h1><a href="{{ "view-journal"|url:journal.title }}">{{ journal }}</a>{% if journal.entry_count %} <small>{{ journal.entry_count }} entries from {{ journal.first_entry|date }} to {{ journal.last_entry|date }}</small>{% endif %}</h1>
+		<h1><a href="{{ "view-journal"|url:journal.key.id }}">{{ journal }}</a>{% if journal.entry_count %} <small>{{ journal.entry_count }} entries from {{ journal.first_entry|date }} to {{ journal.last_entry|date }}</small>{% endif %}</h1>
 	</div>
 
 	<div class="row">
@@ -41,21 +41,21 @@
 
 	<div class="pagination">
 		<ul>
-			<li class="prev"><a href="{{ journal.key.name|journal_url:1 }}">first</a></li>
+			<li class="prev"><a href="{{ journal.key.id|journal_url:1 }}">first</a></li>
 			{% ifequal page 1 %}
 			<li class="disabled"><a href="#">&larr; previous</a></li>
 			{% else %}
-			<li><a href="{{ journal.key.name|journal_prev:page }}">&larr; previous</a></li>
+			<li><a href="{{ journal.key.id|journal_prev:page }}">&larr; previous</a></li>
 			{% endifequal %}
 			{% for p in pagelist %}
-			<li{% ifequal p page %} class="active"{% endifequal %}><a href="{{ journal.key.name|journal_url:p }}">{{ p }}</a></li>
+			<li{% ifequal p page %} class="active"{% endifequal %}><a href="{{ journal.key.id|journal_url:p }}">{{ p }}</a></li>
 			{% endfor %}
 			{% ifequal page journal.pages %}
 			<li class="disabled"><a href="#">next &rarr;</a></li>
 			{% else %}
-			<li><a href="{{ journal.key.name|journal_next:page }}">next &rarr;</a></li>
+			<li><a href="{{ journal.key.id|journal_next:page }}">next &rarr;</a></li>
 			{% endifequal %}
-			<li class="next"><a href="{{ journal.key.name|journal_url:journal.pages }}">last</a></li>
+			<li class="next"><a href="{{ journal.key.id|journal_url:journal.pages }}">last</a></li>
 		</ul>
 	</div>
 

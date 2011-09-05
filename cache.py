@@ -18,16 +18,16 @@ from google.appengine.api import memcache
 from google.appengine.datastore import entity_pb
 from google.appengine.ext import db
 
+import counters
 import models
 
 C_ENTRIES_KEYS = 'entries-keys-%s'
 C_ENTRIES_KEYS_PAGE = 'entries-keys-page-%s-%s'
 C_ENTRIES_PAGE = 'entries-page-%s-%s'
 C_JOURNALS = 'journals-%s'
+C_JOURNAL_LIST = 'journals-list-%s'
 C_KEY = 'key-%s'
-
-def delete(c, *args):
-	memcache.delete(c %args)
+C_STATS = 'stats'
 
 def set(value, c, *args):
 	memcache.set(c %args, value)
@@ -65,9 +65,20 @@ def get_by_key(key):
 
 def get_journals(user_key):
 	n = C_JOURNALS %user_key
+	data = unpack(memcache.get(n))
+	if data is None:
+		data = models.Journal.all().ancestor(user_key).fetch(models.Journal.MAX_JOURNALS)
+		memcache.add(n, pack(data))
+
+	return data
+
+# returns a list of tuples: (journal key id, journal title)
+def get_journal_list(user_key):
+	n = C_JOURNAL_LIST %user_key
 	data = memcache.get(n)
 	if data is None:
-		data = models.Journal.all(keys_only=True).ancestor(user_key).fetch(models.Journal.MAX_JOURNALS)
+		journals = get_journals(user_key)
+		data = [(i.key().id(), i.title) for i in journals]
 		memcache.add(n, data)
 
 	return data
@@ -121,3 +132,20 @@ def clear_entries_cache(journal_key):
 		keys.extend([C_ENTRIES_PAGE %(journal_key, p), C_ENTRIES_KEYS_PAGE %(journal_key, p)])
 
 	memcache.delete_multi(keys)
+
+def get_stats():
+	n = C_STATS
+	data = memcache.get(n)
+	if data is None:
+		data = [(i, counters.get_count(i)) for i in [
+			counters.COUNTER_USERS,
+			counters.COUNTER_JOURNALS,
+			counters.COUNTER_ENTRIES,
+		]]
+
+		memcache.add(n, data)
+
+	return data
+
+def clear_journal_cache(user_key):
+	memcache.delete_multi([C_JOURNALS %user_key, C_JOURNAL_LIST %user_key])
