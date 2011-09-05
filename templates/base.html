@@ -16,7 +16,8 @@
 			<div class="container">
 				<h3><a href="/">journalr <small>beta</small></a></h3>
 				<ul class="nav">
-					<li{% ifequal active "index" %} class="active"{% endifequal %}><a href="/">home</a></li>
+					<li{% ifequal active "index" %} class="active"{% endifequal %}><a href="{{ "main"|url }}">home</a></li>
+					<li{% ifequal active "about" %} class="active"{% endifequal %}><a href="{{ "about"|url }}">about</a></li>
 				</ul>
 				<ul class="nav secondary-nav">
 					{% if user %}
