@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1><a href="{{ "view-journal"|url:journal.title }}">{{ journal }}</a>{% if journal.entry_count %} <small>{{ journal.entry_count }} entries from {{ journal.first_entry }} to {{ journal.last_entry }}</small>{% endif %}</h1>
+	</div>
+
+	<div class="row">
+		<div class="span16">
+			<form method="POST">
+				<fieldset>
+					<div class="clearfix">
+						<label for="subject">subject</label>
+						<div class="input">
+							<input class="xxlarge" id="subject" name="subject" type="text" value="{{ subject }}" />
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="text">text</label>
+						<div class="input">
+							<textarea class="xxlarge" id="text" name="text">{{ text }}</textarea>
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="tags">tags</label>
+						<div class="input">
+							<input class="xlarge" id="tags" name="tags" type="text" value="{{ tags }}" />
+							<span class="help-inline">comma separated (ex: kids, funny story, park)
+						</div>
+					</div>
+					<div class="actions">
+						<input type="submit" class="btn primary" value="Post new entry">
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}

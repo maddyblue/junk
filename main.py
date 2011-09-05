@@ -1,5 +1,6 @@
 from __future__ import with_statement
 
+import datetime
 import logging
 
 from google.appengine.api import users
@@ -102,11 +103,11 @@ class NewJournal(webapp2.RequestHandler):
 	def post(self):
 		session = get_current_session()
 
-		if len(session['journals']) > models.Journal.MAX_JOURNALS:
+		if len(session['journals']) >= models.Journal.MAX_JOURNALS:
 			utils.alert('error', 'Only %i journals allowed.' %models.Journal.MAX_JOURNALS)
 		else:
 			name = self.request.get('name')
-			journal = models.Journal(parent=session['user'], key_name=name, title='name')
+			journal = models.Journal(parent=session['user'], key_name=name, title=name)
 			if journal.key() in session['journals']:
 				utils.alert('error', 'You already have a journal called %s.' %name)
 			else:
@@ -119,10 +120,48 @@ class NewJournal(webapp2.RequestHandler):
 
 		rendert(self, 'new-journal.html')
 
+class ViewJournal(webapp2.RequestHandler):
+	def get(self, journal):
+		session = get_current_session()
+		journal_key = db.Key.from_path('Journal', journal, parent=session['user'].key())
+		journal = cache.get_journal(journal_key)
+		rendert(self, 'view-journal.html', {'journal': journal})
+
+	def post(self, journal):
+		session = get_current_session()
+		journal_key = db.Key.from_path('Journal', journal, parent=session['user'].key())
+
+		def txn(journal_key, entry):
+			journal = db.get(journal_key) # should be cache.get_journal?
+			journal.entry_count += 1
+
+			if not journal.last_entry or entry.date > journal.last_entry:
+				journal.last_entry = entry.date
+			if not journal.first_entry or entry.date < journal.first_entry:
+				journal.first_entry = entry.date
+
+			db.put([journal, entry])
+
+			return journal
+
+		subject = self.request.get('subject')
+		tags = [i.strip() for i in self.request.get('tags').split(',')]
+		text = self.request.get('text')
+
+		if not text:
+			journal = cache.get_journal(journal_key)
+			utils.alert('error', 'You didn\'t type anything. Try again.')
+			rendert(self, 'view-journal.html', {'journal': journal, 'subject': subject, 'text': text, 'tags': self.request.get('tags')})
+		else:
+			entry = models.Entry(parent=journal_key, subject=subject, text=text, tags=tags, date=datetime.datetime.now())
+			journal = db.run_in_transaction(txn, journal_key, entry)
+			cache.set(journal, cache.C_JOURNAL, journal_key)
+			rendert(self, 'view-journal.html', {'journal': journal})
 
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/account/', handler=Account, name='account'),
+	webapp2.Route(r'/journal/<journal>', handler=ViewJournal, name='view-journal'),
 	webapp2.Route(r'/login/facebook/', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google/', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout/', handler=Logout, name='logout'),

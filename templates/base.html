@@ -11,7 +11,6 @@
 </head>
 
 <body>
-
 	<div class="topbar">
 		<div class="topbar-inner">
 			<div class="container">
@@ -25,7 +24,7 @@
 						<a href="#" class="dropdown-toggle">journals</a>
 						<ul class="dropdown-menu">
 							{% for j in session.journals %}
-								<li><a href="#">{{ j.name }}</a></li>
+								<li><a href="{{ "view-journal"|url:j.name }}">{{ j.name }}</a></li>
 							{% endfor %}
 							<li class="divider"></li>
 							<li><a href="{{ "new-journal"|url }}">new journal</a></li>

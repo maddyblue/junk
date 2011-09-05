@@ -48,9 +48,15 @@ class User(db.Model):
 		return user, registered
 
 class Journal(db.Model):
-	MAX_JOURNALS = 100
+	ENTRIES_PER_PAGE = 5
+	MAX_JOURNALS = 10
 
 	title = db.StringProperty(indexed=False, required=True)
+	created_date = db.DateTimeProperty(auto_now_add=True)
+	last_entry = db.DateTimeProperty()
+	first_entry = db.DateTimeProperty()
+	last_modified = db.DateTimeProperty(auto_now=True)
+	entry_count = db.IntegerProperty(required=True, default=0)
 
 	def __str__(self):
 		return str(self.title)
