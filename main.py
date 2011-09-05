@@ -115,24 +115,34 @@ class NewJournal(webapp2.RequestHandler):
 				cache.delete(cache.C_JOURNALS, session['user'].key())
 				utils.populate_user_session()
 				utils.alert('success', 'Created your journal %s.' %name)
-				rendert(self, 'index.html')
+				self.redirect(webapp2.uri_for('view-journal', journal=name))
 				return
 
 		rendert(self, 'new-journal.html')
 
 class ViewJournal(webapp2.RequestHandler):
-	def get(self, journal):
+	def render(self, journal, page, subject='', text='', tags=''):
+		rendert(self, 'view-journal.html', {
+			'journal': journal,
+			'entries': cache.get_entries_page(journal.key(), page),
+			'page': page,
+			'pagelist': utils.page_list(page, journal.pages),
+		})
+
+	def get(self, journal, page):
+		page = int(page)
 		session = get_current_session()
 		journal_key = db.Key.from_path('Journal', journal, parent=session['user'].key())
-		journal = cache.get_journal(journal_key)
-		rendert(self, 'view-journal.html', {'journal': journal})
+		journal = cache.get_by_key(journal_key)
+		self.render(journal, page)
 
-	def post(self, journal):
+	def post(self, journal, page):
+		page = int(page)
 		session = get_current_session()
 		journal_key = db.Key.from_path('Journal', journal, parent=session['user'].key())
 
 		def txn(journal_key, entry):
-			journal = db.get(journal_key) # should be cache.get_journal?
+			journal = db.get(journal_key) # should be cache.get_by_key?
 			journal.entry_count += 1
 
 			if not journal.last_entry or entry.date > journal.last_entry:
@@ -141,27 +151,34 @@ class ViewJournal(webapp2.RequestHandler):
 				journal.first_entry = entry.date
 
 			db.put([journal, entry])
-
 			return journal
 
-		subject = self.request.get('subject')
-		tags = [i.strip() for i in self.request.get('tags').split(',')]
-		text = self.request.get('text')
+		subject = self.request.get('subject').strip()
+
+		tags = self.request.get('tags').strip()
+		if tags:
+			tags = [i.strip() for i in self.request.get('tags').split(',')]
+		else:
+			tags = []
+
+		text = self.request.get('text').strip()
 
 		if not text:
-			journal = cache.get_journal(journal_key)
+			journal = cache.get_by_key(journal_key)
 			utils.alert('error', 'You didn\'t type anything. Try again.')
-			rendert(self, 'view-journal.html', {'journal': journal, 'subject': subject, 'text': text, 'tags': self.request.get('tags')})
+			self.render(journal, page, subejct, text, tags)
 		else:
 			entry = models.Entry(parent=journal_key, subject=subject, text=text, tags=tags, date=datetime.datetime.now())
 			journal = db.run_in_transaction(txn, journal_key, entry)
-			cache.set(cache.pack(journal), cache.C_JOURNAL, journal_key)
-			rendert(self, 'view-journal.html', {'journal': journal})
+			cache.set(cache.pack(journal), cache.C_KEY, journal_key)
+			cache.clear_entries_cache(journal_key)
+			utils.alert('success', 'Entry posted.')
+			self.redirect(webapp2.uri_for('view-journal', journal=journal))
 
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/account/', handler=Account, name='account'),
-	webapp2.Route(r'/journal/<journal>', handler=ViewJournal, name='view-journal'),
+	webapp2.Route(r'/journal/<journal>/<page:\d+>/', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
 	webapp2.Route(r'/login/facebook/', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google/', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout/', handler=Logout, name='logout'),

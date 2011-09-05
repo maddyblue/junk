@@ -1,3 +1,4 @@
+import logging
 import os.path
 import urllib
 
@@ -41,3 +42,20 @@ def populate_user_session(user=None):
 		return
 
 	session['journals'] = cache.get_journals(session['user'].key())
+
+NUM_PAGE_DISP = 5
+def page_list(page, pages):
+	if pages <= NUM_PAGE_DISP:
+		return range(1, pages + 1)
+	else:
+		# this page logic could be better
+		half = NUM_PAGE_DISP / 2
+		if page < 1 + half:
+			page = half + 1
+		elif page > pages - half:
+			# have to handle even and odd NUM_PAGE_DISP differently
+			page = pages - half + abs(NUM_PAGE_DISP % 2 - 1)
+
+		page -= half
+
+		return range(page, page + NUM_PAGE_DISP)

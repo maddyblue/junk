@@ -61,8 +61,13 @@ class Journal(db.Model):
 	def __str__(self):
 		return str(self.title)
 
+	@property
+	def pages(self):
+		return (self.entry_count + self.ENTRIES_PER_PAGE - 1) / self.ENTRIES_PER_PAGE
+
 class Entry(db.Model):
 	subject = db.StringProperty()
 	text = db.TextProperty()
 	date = db.DateTimeProperty()
 	tags = db.StringListProperty()
+	created_date = db.DateTimeProperty(auto_now_add=True)
