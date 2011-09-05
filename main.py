@@ -155,7 +155,7 @@ class ViewJournal(webapp2.RequestHandler):
 		else:
 			entry = models.Entry(parent=journal_key, subject=subject, text=text, tags=tags, date=datetime.datetime.now())
 			journal = db.run_in_transaction(txn, journal_key, entry)
-			cache.set(journal, cache.C_JOURNAL, journal_key)
+			cache.set(cache.pack(journal), cache.C_JOURNAL, journal_key)
 			rendert(self, 'view-journal.html', {'journal': journal})
 
 application = webapp2.WSGIApplication([
