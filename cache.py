@@ -168,6 +168,6 @@ def get_activities(user_key='', action='', object_key=''):
 			data = data.filter('object', object_key)
 
 		data = data.order('-date').fetch(models.Activity.RESULTS)
-		memcache.add(n, pack(data), 2)
+		memcache.add(n, pack(data), 60)
 
 	return data
