@@ -21,6 +21,7 @@ from google.appengine.ext import db
 import counters
 import models
 
+C_ACTIVITIES = 'activities-%s-%s-%s'
 C_ENTRIES_KEYS = 'entries-keys-%s'
 C_ENTRIES_KEYS_PAGE = 'entries-keys-page-%s-%s'
 C_ENTRIES_PAGE = 'entries-page-%s-%s'
@@ -152,3 +153,21 @@ def get_stats():
 
 def clear_journal_cache(user_key):
 	memcache.delete_multi([C_JOURNALS %user_key, C_JOURNAL_LIST %user_key])
+
+def get_activities(user_key='', action='', object_key=''):
+	n = C_ACTIVITIES %(user_key, action, object_key)
+	data = unpack(memcache.get(n))
+	if data is None:
+		data = models.Activity.all()
+
+		if user_key:
+			data = data.filter('user', user_key)
+		if action:
+			data = data.filter('action', action)
+		if object_key:
+			data = data.filter('object', object_key)
+
+		data = data.order('-date').fetch(models.Activity.RESULTS)
+		memcache.add(n, pack(data), 2)
+
+	return data

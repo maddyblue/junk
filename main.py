@@ -141,6 +141,7 @@ class NewJournal(webapp2.RequestHandler):
 				cache.set(cache.pack(user), cache.C_KEY, user.key())
 				utils.populate_user_session()
 				counters.increment(counters.COUNTER_JOURNALS)
+				models.Activity.create(user, models.ACTIVITY_NEW_JOURNAL, journal.key())
 				utils.alert('success', 'Created your journal %s.' %name)
 				self.redirect(webapp2.uri_for('view-journal', journal=journal.key().id()))
 				return
@@ -217,6 +218,7 @@ class ViewJournal(webapp2.RequestHandler):
 			counters.increment(counters.COUNTER_CHARS, entry.chars)
 			counters.increment(counters.COUNTER_WORDS, entry.words)
 			counters.increment(counters.COUNTER_SENTENCES, entry.sentences)
+			models.Activity.create(user, models.ACTIVITY_NEW_ENTRY, entry.key())
 
 			utils.alert('success', 'Entry posted.')
 			self.redirect(webapp2.uri_for('view-journal', journal=journal_key.id()))
@@ -234,9 +236,14 @@ class JournalsHandler(webapp2.RequestHandler):
 		session = get_current_session()
 		rendert(self, 'journals.html', {'journals': cache.get_journals(session['user'].key())})
 
+class ActivityHandler(webapp2.RequestHandler):
+	def get(self):
+		rendert(self, 'activity.html', {'activities': cache.get_activities()})
+
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/account/', handler=Account, name='account'),
+	webapp2.Route(r'/activity/', handler=ActivityHandler, name='activity'),
 	webapp2.Route(r'/journals/', handler=JournalsHandler, name='my-journals'),
 	webapp2.Route(r'/about/', handler=AboutHandler, name='about'),
 	webapp2.Route(r'/stats/', handler=StatsHandler, name='stats'),

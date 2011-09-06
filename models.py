@@ -128,3 +128,33 @@ class Entry(db.Model):
 		self.chars = len(txt)
 		self.words = len(self.WORD_RE.findall(txt))
 		self.sentences = len(self.SENTENCE_RE.split(txt))
+
+ACTIVITY_NEW_JOURNAL = 1
+ACTIVITY_NEW_ENTRY = 2
+
+ACTIVITY_CHOICES = [
+	ACTIVITY_NEW_JOURNAL,
+	ACTIVITY_NEW_ENTRY,
+]
+
+ACTIVITY_ACTION = {
+	ACTIVITY_NEW_JOURNAL: 'created a new journal',
+	ACTIVITY_NEW_ENTRY: 'wrote a new journal entry',
+}
+
+class Activity(db.Model):
+	RESULTS = 25
+
+	user = db.ReferenceProperty(User, collection_name='activity_user_set')
+	user_name = db.StringProperty(indexed=False)
+	date = db.DateTimeProperty(auto_now_add=True)
+	action = db.IntegerProperty(required=True, choices=ACTIVITY_CHOICES)
+	object = db.ReferenceProperty()
+
+	def get_action(self):
+		return ACTIVITY_ACTION[self.action]
+
+	@staticmethod
+	def create(user, action, object):
+		a = Activity(user=user, user_name=user.name, action=action, object=object)
+		a.put()
