@@ -104,14 +104,8 @@ class Register(webapp2.RequestHandler):
 class Logout(webapp2.RequestHandler):
 	def get(self):
 		session = get_current_session()
-
-		self.redirect(webapp2.uri_for('main'))
-
-		if 'user' in session:
-			if session['user'].source == models.USER_SOURCE_GOOGLE:
-				self.redirect(users.create_logout_url(webapp2.uri_for('main')))
-
 		session.terminate()
+		self.redirect(webapp2.uri_for('main'))
 
 class Account(webapp2.RequestHandler):
 	def get(self):
