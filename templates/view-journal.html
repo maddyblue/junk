@@ -68,9 +68,11 @@
 				<h3>{{ e.date|jdate }}</h3>
 			{% endif %}
 			<p>{{ e.text|linebreaks }}</p>
+			<p><small>{{ e.chars }} character{{ e.chars|pluralize }}, {{ e.words }} word{{ e.words|pluralize }}, {{ e.sentences }} sentence{{ e.sentences|pluralize }}.
 			{% if e.tags %}
-				<p><small>tags: {{ e.tags|join:", " }}</small></p>
+				tags: {{ e.tags|join:", " }}
 			{% endif %}
+			</small></p>
 		</div>
 	</div>
 	{% endfor %}

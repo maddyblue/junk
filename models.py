@@ -15,6 +15,7 @@
 from __future__ import with_statement
 
 import logging
+import re
 
 from google.appengine.ext import db
 
@@ -37,6 +38,9 @@ class User(db.Model):
 
 	source = db.StringProperty(indexed=False, choices=USER_SOURCE_CHOICES)
 	uid = db.StringProperty(indexed=False)
+
+	journal_count = db.IntegerProperty(required=True, default=0)
+	entry_count = db.IntegerProperty(required=True, default=0)
 
 	def __str__(self):
 		return str(self.name)
@@ -71,6 +75,32 @@ class Journal(db.Model):
 	first_entry = db.DateTimeProperty()
 	last_modified = db.DateTimeProperty(auto_now=True)
 	entry_count = db.IntegerProperty(required=True, default=0)
+	entry_days = db.IntegerProperty(required=True, default=0)
+
+	chars = db.IntegerProperty(required=True, default=0)
+	words = db.IntegerProperty(required=True, default=0)
+	sentences = db.IntegerProperty(required=True, default=0)
+
+	# all frequencies are per week
+	freq_entries = db.FloatProperty(required=True, default=0.)
+	freq_chars = db.FloatProperty(required=True, default=0.)
+	freq_words = db.FloatProperty(required=True, default=0.)
+	freq_sentences = db.FloatProperty(required=True, default=0.)
+
+	def count(self):
+		if self.entry_count:
+			self.entry_days = (self.last_entry - self.first_entry).days + 1
+			weeks = self.entry_days / 7.
+			self.freq_entries = self.entry_count / weeks
+			self.freq_chars = self.chars / weeks
+			self.freq_words = self.words / weeks
+			self.freq_sentences = self.sentences / weeks
+		else:
+			self.entry_days = 0
+			self.freq_entries = 0.
+			self.freq_chars = 0.
+			self.freq_words = 0.
+			self.freq_sentences = 0.
 
 	def __str__(self):
 		return str(self.title)
@@ -85,3 +115,16 @@ class Entry(db.Model):
 	date = db.DateTimeProperty()
 	tags = db.StringListProperty()
 	created_date = db.DateTimeProperty(auto_now_add=True)
+
+	chars = db.IntegerProperty()
+	words = db.IntegerProperty()
+	sentences = db.IntegerProperty()
+
+	WORD_RE = re.compile("[A-Za-z']+")
+	SENTENCE_RE = re.compile("[.!?]+")
+
+	def count(self):
+		txt = str(self.text)
+		self.chars = len(txt)
+		self.words = len(self.WORD_RE.findall(txt))
+		self.sentences = len(self.SENTENCE_RE.split(txt))

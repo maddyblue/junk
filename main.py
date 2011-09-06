@@ -136,8 +136,15 @@ class NewJournal(webapp2.RequestHandler):
 					utils.alert('error', 'You already have a journal called %s.' %name)
 					break
 			else:
-				journal.put()
-				cache.clear_journal_cache(session['user'].key())
+				def txn(user_key, journal):
+					user = db.get(user_key)
+					user.journal_count += 1
+					db.put([user, journal])
+					return user, journal
+
+				user, journal = db.run_in_transaction(txn, session['user'].key(), journal)
+				cache.clear_journal_cache(user.key())
+				cache.set(cache.pack(user), cache.C_KEY, user.key())
 				utils.populate_user_session()
 				counters.increment(counters.COUNTER_JOURNALS)
 				utils.alert('success', 'Created your journal %s.' %name)
@@ -169,18 +176,6 @@ class ViewJournal(webapp2.RequestHandler):
 		page = int(page)
 		journal_key = self.journal_key(journal)
 
-		def txn(journal_key, entry):
-			journal = db.get(journal_key) # should be cache.get_by_key?
-			journal.entry_count += 1
-
-			if not journal.last_entry or entry.date > journal.last_entry:
-				journal.last_entry = entry.date
-			if not journal.first_entry or entry.date < journal.first_entry:
-				journal.first_entry = entry.date
-
-			db.put([journal, entry])
-			return journal
-
 		subject = self.request.get('subject').strip()
 
 		tags = self.request.get('tags').strip()
@@ -196,12 +191,37 @@ class ViewJournal(webapp2.RequestHandler):
 			utils.alert('error', 'You didn\'t type anything. Try again.')
 			self.render(journal, page, subejct, text, tags)
 		else:
+			def txn(user_key, journal_key, entry):
+				user, journal = db.get([user_key, journal_key])
+				journal.entry_count += 1
+				journal.chars += entry.chars
+				journal.words += entry.words
+				journal.sentences += entry.sentences
+				user.entry_count += 1
+
+				if not journal.last_entry or entry.date > journal.last_entry:
+					journal.last_entry = entry.date
+				if not journal.first_entry or entry.date < journal.first_entry:
+					journal.first_entry = entry.date
+
+				journal.count()
+
+				db.put([user, journal, entry])
+				return user, journal
+
+			session = get_current_session()
 			entry = models.Entry(parent=journal_key, subject=subject, text=text, tags=tags, date=datetime.datetime.now())
-			journal = db.run_in_transaction(txn, journal_key, entry)
+			entry.count()
+			user, journal = db.run_in_transaction(txn, session['user'].key(), journal_key, entry)
+
+			cache.clear_journal_cache(user.key())
+			cache.set(cache.pack(user), cache.C_KEY, user.key())
 			cache.set(cache.pack(journal), cache.C_KEY, journal_key)
 			cache.clear_entries_cache(journal_key)
-			utils.alert('success', 'Entry posted.')
+			utils.populate_user_session()
 			counters.increment(counters.COUNTER_ENTRIES)
+
+			utils.alert('success', 'Entry posted.')
 			self.redirect(webapp2.uri_for('view-journal', journal=journal_key.id()))
 
 class AboutHandler(webapp2.RequestHandler):
@@ -210,12 +230,17 @@ class AboutHandler(webapp2.RequestHandler):
 
 class StatsHandler(webapp2.RequestHandler):
 	def get(self):
-		logging.error(cache.get_stats())
 		rendert(self, 'stats.html', {'stats': cache.get_stats()})
+
+class JournalsHandler(webapp2.RequestHandler):
+	def get(self):
+		session = get_current_session()
+		rendert(self, 'journals.html', {'journals': cache.get_journals(session['user'].key())})
 
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/account/', handler=Account, name='account'),
+	webapp2.Route(r'/journals/', handler=JournalsHandler, name='my-journals'),
 	webapp2.Route(r'/about/', handler=AboutHandler, name='about'),
 	webapp2.Route(r'/stats/', handler=StatsHandler, name='stats'),
 	webapp2.Route(r'/journal/<journal:\d+>/<page:\d+>/', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
