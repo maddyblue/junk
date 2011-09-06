@@ -5,9 +5,12 @@ import random
 from google.appengine.api import memcache
 from google.appengine.ext import db
 
+COUNTER_CHARS = 'characters'
 COUNTER_ENTRIES = 'entries'
 COUNTER_JOURNALS = 'journals'
+COUNTER_SENTENCES = 'sentences'
 COUNTER_USERS = 'users'
+COUNTER_WORDS = 'words'
 
 class GeneralCounterShardConfig(db.Model):
 	"""Tracks the number of shards for each named counter."""

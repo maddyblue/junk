@@ -141,6 +141,9 @@ def get_stats():
 			counters.COUNTER_USERS,
 			counters.COUNTER_JOURNALS,
 			counters.COUNTER_ENTRIES,
+			counters.COUNTER_CHARS,
+			counters.COUNTER_WORDS,
+			counters.COUNTER_SENTENCES,
 		]]
 
 		memcache.add(n, data)

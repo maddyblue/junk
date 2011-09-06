@@ -220,6 +220,9 @@ class ViewJournal(webapp2.RequestHandler):
 			cache.clear_entries_cache(journal_key)
 			utils.populate_user_session()
 			counters.increment(counters.COUNTER_ENTRIES)
+			counters.increment(counters.COUNTER_CHARS, entry.chars)
+			counters.increment(counters.COUNTER_WORDS, entry.words)
+			counters.increment(counters.COUNTER_SENTENCES, entry.sentences)
 
 			utils.alert('success', 'Entry posted.')
 			self.redirect(webapp2.uri_for('view-journal', journal=journal_key.id()))
