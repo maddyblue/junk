@@ -15,7 +15,7 @@
 							<input class="xxlarge" id="subject" name="subject" type="text" value="{{ subject }}" />
 						</div>
 					</div>
-					<div class="clearfix">
+					<div id="post-speech" class="clearfix">
 						<label for="text">text</label>
 						<div class="input">
 							<textarea class="xxlarge" id="text" name="text">{{ text }}</textarea>
@@ -25,7 +25,7 @@
 						<label for="tags">tags</label>
 						<div class="input">
 							<input class="xlarge" id="tags" name="tags" type="text" value="{{ tags }}" />
-							<span class="help-inline">comma separated (ex: kids, funny story, park)
+							<span class="help-inline">comma separated (ex: kids, funny story, park)</span>
 						</div>
 					</div>
 					<div class="actions">
@@ -78,4 +78,6 @@
 	{% endfor %}
 
 	{% endif %}
+
+	<script src="/static/js/speech.js"></script>
 {% endblock %}
