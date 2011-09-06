@@ -47,6 +47,8 @@ def alert(atype, msg):
 
 	session['alert'].append((atype, msg))
 
+# This should be called anytime the session data needs to be updated.
+# session['var'] = var should never be used, except in this function
 def populate_user_session(user=None):
 	session = get_current_session()
 
@@ -55,6 +57,7 @@ def populate_user_session(user=None):
 	elif 'user' not in session:
 		return
 
+	session['user'] = cache.get_by_key(session['user'].key())
 	session['journals'] = cache.get_journal_list(session['user'].key())
 
 NUM_PAGE_DISP = 5
