@@ -8,7 +8,7 @@
 	{% for a in activities %}
 	<div class="row">
 		<div class="span16">
-			<p>{{ a.user_name }} {{ a.get_action }} about {{ a.date|timesince }} ago</p>
+			<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.name }}"> {% endif %}{{ a.name }} {{ a.get_action }} about {{ a.date|timesince }} ago</p>
 		</div>
 	</div>
 	{% endfor %}

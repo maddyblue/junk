@@ -54,7 +54,7 @@
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle">{{ user }}</a>
+						<a href="#" class="dropdown-toggle dropdown-gravatar">{{ user }} <img class="topbar-img-gravatar" src="{{ user.gravatar }}&s=30" alt="{{ user }}"></a>
 						<ul class="dropdown-menu">
 							<li><a href="{{ "account"|url }}">account</a></li>
 							<li><a href="{{ "logout"|url }}">logout</a></li>

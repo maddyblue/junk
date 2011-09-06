@@ -20,6 +20,8 @@ import re
 from google.appengine.ext import db
 
 from gaesessions import get_current_session
+import hashlib
+import urllib
 import utils
 
 USER_SOURCE_FACEBOOK = 'facebook'
@@ -44,6 +46,12 @@ class User(db.Model):
 
 	def __str__(self):
 		return str(self.name)
+
+	def gravatar(self, size=''):
+		if size:
+			size = 's=' + size
+
+		return 'http://www.gravatar.com/avatar/' + hashlib.md5(self.email.lower()).hexdigest() + '?%s&d=mm' %size
 
 	@staticmethod
 	def process_credentials(name, email, source, uid):
@@ -146,7 +154,8 @@ class Activity(db.Model):
 	RESULTS = 25
 
 	user = db.ReferenceProperty(User, collection_name='activity_user_set')
-	user_name = db.StringProperty(indexed=False)
+	name = db.StringProperty(indexed=False)
+	img = db.StringProperty(indexed=False)
 	date = db.DateTimeProperty(auto_now_add=True)
 	action = db.IntegerProperty(required=True, choices=ACTIVITY_CHOICES)
 	object = db.ReferenceProperty()
@@ -156,5 +165,5 @@ class Activity(db.Model):
 
 	@staticmethod
 	def create(user, action, object):
-		a = Activity(user=user, user_name=user.name, action=action, object=object)
+		a = Activity(user=user, name=user.name, img=user.gravatar('30'), action=action, object=object)
 		a.put()

@@ -12,6 +12,7 @@
 				<tr><td>email</td><td>{{ user.email }}</td></tr>
 				<tr><td>login from</td><td>{{ user.source }}</td></tr>
 				<tr><td>user since</td><td>{{ user.register_date }}</td></tr>
+				<tr><td>icon</td><td><img src="{{ user.gravatar }}&s=40" alt="{{ user.name }}"><p>Set your icon at <a href="http://gravatar.com">Gravatar</a>.</p></td></tr>
 			</table>
 		</div>
 	</div>
