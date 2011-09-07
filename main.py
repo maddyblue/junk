@@ -107,6 +107,8 @@ class Register(webapp2.RequestHandler):
 				else:
 					source = session['register']['source']
 					uid = session['register']['uid']
+					if not email:
+						email = None
 					user = models.User.get_or_insert(lusername, name=username, email=email, source=source, uid=uid)
 
 					if user.source != source or user.uid != uid:
@@ -138,8 +140,28 @@ class GoogleSwitch(webapp2.RequestHandler):
 		session.terminate()
 		self.redirect(users.create_logout_url(webapp2.uri_for('login-google')))
 
-class Account(webapp2.RequestHandler):
+class AccountHandler(webapp2.RequestHandler):
 	def get(self):
+		rendert(self, 'account.html')
+
+	def post(self):
+		session = get_current_session()
+		changed = False
+
+		if 'email' in self.request.POST:
+			email = self.request.get('email')
+			if not email:
+				email = None
+
+			utils.alert('success', 'Email address updated.')
+			if session['user'].email != email:
+				session['user'].email = email
+				changed = True
+
+		if changed:
+			session['user'].put()
+			cache.set(cache.pack(session['user']), cache.C_KEY, session['user'].key())
+
 		rendert(self, 'account.html')
 
 class NewJournal(webapp2.RequestHandler):
@@ -274,7 +296,7 @@ class ActivityHandler(webapp2.RequestHandler):
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/about/', handler=AboutHandler, name='about'),
-	webapp2.Route(r'/account/', handler=Account, name='account'),
+	webapp2.Route(r'/account/', handler=AccountHandler, name='account'),
 	webapp2.Route(r'/activity/', handler=ActivityHandler, name='activity'),
 	webapp2.Route(r'/journal/<journal:\d+>/<page:\d+>/', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
 	webapp2.Route(r'/journals/', handler=JournalsHandler, name='my-journals'),

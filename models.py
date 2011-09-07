@@ -51,7 +51,12 @@ class User(db.Model):
 		if size:
 			size = '&amp;s=' + size
 
-		return 'http://www.gravatar.com/avatar/' + hashlib.md5(self.email.lower()).hexdigest() + '?d=mm%s' %size
+		if not self.email:
+			email = ''
+		else:
+			email = self.email.lower()
+
+		return 'http://www.gravatar.com/avatar/' + hashlib.md5(email).hexdigest() + '?d=mm%s' %size
 
 	@staticmethod
 	def process_credentials(name, email, source, uid):
