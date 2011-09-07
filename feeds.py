@@ -16,6 +16,8 @@ import datetime
 import logging
 import os
 
+from google.appengine.ext import db
+
 import PyRSS2Gen
 import cache
 import webapp2
@@ -28,6 +30,22 @@ def feed(feed):
 
 		items = []
 		for i in cache.get_activities():
+			items.append(mk_item(
+				'%s %s' %(i.name, i.get_action()),
+				None,
+				'%s %s' %(i.name, i.get_action()),
+				i.key().id(),
+				i.date
+			))
+
+	elif feed.startswith('user-'):
+		user = feed.partition('-')[2]
+		title = '%s activity feed' %user
+		link = webapp2.uri_for('user', username=user)
+		description = 'Recent activity by %s' %user
+
+		items = []
+		for i in cache.get_activities(user_key=db.Key.from_path('User', user)):
 			items.append(mk_item(
 				'%s %s' %(i.name, i.get_action()),
 				None,

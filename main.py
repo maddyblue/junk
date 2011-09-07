@@ -284,11 +284,6 @@ class StatsHandler(webapp2.RequestHandler):
 	def get(self):
 		rendert(self, 'stats.html', {'stats': cache.get_stats()})
 
-class JournalsHandler(webapp2.RequestHandler):
-	def get(self):
-		session = get_current_session()
-		rendert(self, 'journals.html', {'journals': cache.get_journals(session['user'].key())})
-
 class ActivityHandler(webapp2.RequestHandler):
 	def get(self):
 		rendert(self, 'activity.html', {'activities': cache.get_activities()})
@@ -302,6 +297,14 @@ class FeedsHandler(webapp2.RequestHandler):
 		else:
 			self.response.out.write(xml)
 
+class UserHandler(webapp2.RequestHandler):
+	def get(self, username):
+		user_key = db.Key.from_path('User', username)
+		u = cache.get_by_key(user_key)
+		journals = cache.get_journals(user_key)
+		activities = cache.get_activities(user_key=user_key)
+		rendert(self, 'user.html', {'u': u, 'journals': journals, 'activities': activities})
+
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/about/', handler=AboutHandler, name='about'),
@@ -309,7 +312,6 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/activity/', handler=ActivityHandler, name='activity'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/journal/<journal:\d+>/<page:\d+>/', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
-	webapp2.Route(r'/journals/', handler=JournalsHandler, name='my-journals'),
 	webapp2.Route(r'/login/facebook/', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google/', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout/', handler=Logout, name='logout'),
@@ -317,6 +319,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/new/journal/', handler=NewJournal, name='new-journal'),
 	webapp2.Route(r'/register/', handler=Register, name='register'),
 	webapp2.Route(r'/stats/', handler=StatsHandler, name='stats'),
+	webapp2.Route(r'/user/<username>', handler=UserHandler, name='user'),
 	], debug=True)
 
 webapp.template.register_template_library('templatefilters.filters')

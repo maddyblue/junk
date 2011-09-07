@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>{{ u }}</h1>
+	</div>
+
+	<div class="row">
+		<div class="span6 columns">
+			<table>
+				<tr><td>member since</td><td>{{ u.register_date|sdate }}</td></tr>
+				<tr><td>journals</td><td>{{ u.journal_count }}</td></tr>
+				<tr><td>entries</td><td>{{ u.entry_count }}</td></tr>
+			</table>
+		</div>
+
+		<div class="span2 columns">
+			<img src="{{ u.gravatar }}&amp;s=50" alt="{{ u }}">
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row">
+		<div class="span8 columns">
+			<h2>{{ u }}'s journals</h2>
+			{% for j in journals %}
+				<h3>
+					{% ifequal u.key user.key %}
+						<a href="{{ "view-journal"|url:j.key.id }}">{{ j }}</a>
+					{% else %}
+						{{ j }}
+					{% endifequal %}
+				</h3>
+				<table>
+					<tr><td>entries</td><td>{{ j.entry_count }}</td></tr>
+					<tr><td>created on</td><td>{{ j.created_date|sdate }}</td></tr>
+					<tr><td>characters</td><td>{{ j.chars }}</td></tr>
+					<tr><td>words</td><td>{{ j.words }}</td></tr>
+					<tr><td>sentences</td><td>{{ j.sentences }}</td></tr>
+					<tr><td>entries per week</td><td>{{ j.freq_entries|floatformat }}</td></tr>
+					<tr><td>characters per week</td><td>{{ j.freq_chars|floatformat }}</td></tr>
+					<tr><td>words per week</td><td>{{ j.freq_words|floatformat }}</td></tr>
+					<tr><td>sentences per week</td><td>{{ j.freq_sentences|floatformat }}</td></tr>
+					{% if j.last_entry %}<tr><td>last entry</td><td>{{ j.last_entry|jdate }}</td></tr>{% endif %}
+					{% if j.first_entry %}<tr><td>first entry</td><td>{{ j.first_entry|jdate }}</td></tr>{% endif %}
+					{% if j.entry_days %}<tr><td>entries spanning</td><td>{{ j.entry_days }} day{{ j.entry_days|pluralize }}</td></tr>{% endif %}
+				</table>
+			{% endfor %}
+		</div>
+		<div class="span8 columns">
+			<h2>activity <small><a href="{{ "user-feeds"|url:u.name }}">rss feed</a></small></h2>
+			{% for a in activities %}
+				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.name }}"> {% endif %}<a href="{{ "user"|url:a.name }}">{{ a.name }}</a> {{ a.get_action }} {{ a.date|timesince }} ago</p>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

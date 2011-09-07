@@ -26,6 +26,10 @@ def url(ob, name=''):
 		return webapp2.uri_for(ob, journal=name)
 	elif ob == 'feeds':
 		return webapp2.uri_for(ob, feed=name)
+	elif ob == 'user':
+		return webapp2.uri_for(ob, username=name)
+	elif ob == 'user-feeds':
+		return webapp2.uri_for('feeds', feed='user-%s' %name)
 	else:
 		return webapp2.uri_for(ob)
 
@@ -41,7 +45,12 @@ def journal_prev(ob, page):
 def journal_next(ob, page):
 	return journal_url(ob, str(page + 1))
 
-JDATE_FMT = '%A, %b. %d, %Y %I:%M %p'
+JDATE_FMT = '%A, %b %d, %Y %I:%M %p'
 @register.filter
 def jdate(date):
 	return date.strftime(JDATE_FMT)
+
+SDATE_FMT = '%b %d, %Y'
+@register.filter
+def sdate(date):
+	return date.strftime(SDATE_FMT)
