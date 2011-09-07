@@ -38,8 +38,8 @@ class User(db.Model):
 	register_date = db.DateTimeProperty(auto_now_add=True)
 	last_login = db.DateTimeProperty(auto_now_add=True)
 
-	source = db.StringProperty(indexed=False, choices=USER_SOURCE_CHOICES)
-	uid = db.StringProperty(indexed=False)
+	source = db.StringProperty(choices=USER_SOURCE_CHOICES)
+	uid = db.StringProperty()
 
 	journal_count = db.IntegerProperty(required=True, default=0)
 	entry_count = db.IntegerProperty(required=True, default=0)
@@ -55,8 +55,7 @@ class User(db.Model):
 
 	@staticmethod
 	def process_credentials(name, email, source, uid):
-		key_name = '%s-%s' %(source, uid)
-		user = User.get_by_key_name(key_name)
+		user = User.all().filter('source', source).filter('uid', uid).get()
 
 		session = get_current_session()
 		if session.is_active():
@@ -64,8 +63,7 @@ class User(db.Model):
 
 		if not user:
 			registered = False
-			user = User(key_name=key_name, name=name, email=email, source=source, uid=uid)
-			session['register'] = user
+			session['register'] = {'name': name, 'email': email, 'source': source, 'uid': uid}
 		else:
 			registered = True
 			utils.populate_user_session(user)

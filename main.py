@@ -16,6 +16,7 @@ from __future__ import with_statement
 
 import datetime
 import logging
+import re
 
 from google.appengine.api import users
 from google.appengine.ext import db
@@ -61,7 +62,7 @@ class GoogleLogin(webapp2.RequestHandler):
 		user, registered = models.User.process_credentials(current_user.nickname(), current_user.email(), models.USER_SOURCE_GOOGLE, current_user.user_id())
 
 		if not registered:
-			rendert(self, 'register.html', {'register': user})
+			self.redirect(webapp2.uri_for('register'))
 		else:
 			self.redirect(webapp2.uri_for('main'))
 
@@ -79,33 +80,63 @@ class FacebookLogin(webapp2.RequestHandler):
 				user, registered = models.User.process_credentials(user_data['username'], user_data['email'], models.USER_SOURCE_FACEBOOK, user_data['id'])
 
 				if not registered:
-					rendert(self, 'register.html', {'register': user})
+					self.redirect(webapp2.uri_for('register'))
 					return
 
 		self.redirect(webapp2.uri_for('main'))
 
 class Register(webapp2.RequestHandler):
+	USERNAME_RE = re.compile("^[a-z0-9][a-z0-9-]+$")
+
+	def get(self):
+		return self.post()
+
 	def post(self):
 		session = get_current_session()
 
-		if 'register' in session and 'register' in self.request.POST:
-			if session['register'].key().name() == self.request.POST['register']:
-				user = session['register']
-				user.put()
-				del session['register']
-				utils.populate_user_session(user)
-				counters.increment(counters.COUNTER_USERS)
-				utils.alert('success', '<strong>%s</strong>, you have been registered at jounalr.' %user)
-				self.redirect(webapp2.uri_for('new-journal'))
-				return
+		if 'register' in session:
+			errors = {}
 
-		self.redirect(webapp2.uri_for('main'))
+			if 'submit' in self.request.POST:
+				username = self.request.get('username')
+				lusername = username.lower()
+				email = self.request.get('email')
+
+				if not Register.USERNAME_RE.match(lusername):
+					errors['username'] = 'Username may only contain alphanumeric characters or dashes and cannot begin with a dash.'
+				else:
+					source = session['register']['source']
+					uid = session['register']['uid']
+					user = models.User.get_or_insert(lusername, name=username, email=email, source=source, uid=uid)
+
+					if user.source != source or user.uid != uid:
+						errors['username'] = 'Username is already taken.'
+					else:
+						del session['register']
+						utils.populate_user_session(user)
+						counters.increment(counters.COUNTER_USERS)
+						utils.alert('success', '<strong>%s</strong>, you have been registered at jounalr.' %user)
+						self.redirect(webapp2.uri_for('new-journal'))
+						return
+			else:
+				username = ''
+				email = session['register']['email']
+
+			rendert(self, 'register.html', {'username': username, 'email': email, 'errors': errors})
+		else:
+			self.redirect(webapp2.uri_for('main'))
 
 class Logout(webapp2.RequestHandler):
 	def get(self):
 		session = get_current_session()
 		session.terminate()
 		self.redirect(webapp2.uri_for('main'))
+
+class GoogleSwitch(webapp2.RequestHandler):
+	def get(self):
+		session = get_current_session()
+		session.terminate()
+		self.redirect(users.create_logout_url(webapp2.uri_for('login-google')))
 
 class Account(webapp2.RequestHandler):
 	def get(self):
@@ -242,17 +273,18 @@ class ActivityHandler(webapp2.RequestHandler):
 
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
+	webapp2.Route(r'/about/', handler=AboutHandler, name='about'),
 	webapp2.Route(r'/account/', handler=Account, name='account'),
 	webapp2.Route(r'/activity/', handler=ActivityHandler, name='activity'),
-	webapp2.Route(r'/journals/', handler=JournalsHandler, name='my-journals'),
-	webapp2.Route(r'/about/', handler=AboutHandler, name='about'),
-	webapp2.Route(r'/stats/', handler=StatsHandler, name='stats'),
 	webapp2.Route(r'/journal/<journal:\d+>/<page:\d+>/', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
+	webapp2.Route(r'/journals/', handler=JournalsHandler, name='my-journals'),
 	webapp2.Route(r'/login/facebook/', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google/', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout/', handler=Logout, name='logout'),
+	webapp2.Route(r'/logout/google/', handler=GoogleSwitch, name='logout-google'),
 	webapp2.Route(r'/new/journal/', handler=NewJournal, name='new-journal'),
 	webapp2.Route(r'/register/', handler=Register, name='register'),
+	webapp2.Route(r'/stats/', handler=StatsHandler, name='stats'),
 	], debug=True)
 
 webapp.template.register_template_library('templatefilters.filters')
