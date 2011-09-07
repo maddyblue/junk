@@ -293,11 +293,21 @@ class ActivityHandler(webapp2.RequestHandler):
 	def get(self):
 		rendert(self, 'activity.html', {'activities': cache.get_activities()})
 
+class FeedsHandler(webapp2.RequestHandler):
+	def get(self, feed):
+		xml = cache.get_feed(feed)
+
+		if not xml:
+			self.error(404)
+		else:
+			self.response.out.write(xml)
+
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/about/', handler=AboutHandler, name='about'),
 	webapp2.Route(r'/account/', handler=AccountHandler, name='account'),
 	webapp2.Route(r'/activity/', handler=ActivityHandler, name='activity'),
+	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/journal/<journal:\d+>/<page:\d+>/', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
 	webapp2.Route(r'/journals/', handler=JournalsHandler, name='my-journals'),
 	webapp2.Route(r'/login/facebook/', handler=FacebookLogin, name='login-facebook'),

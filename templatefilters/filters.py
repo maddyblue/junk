@@ -24,6 +24,8 @@ register = template.create_template_register()
 def url(ob, name=''):
 	if ob == 'view-journal':
 		return webapp2.uri_for(ob, journal=name)
+	elif ob == 'feeds':
+		return webapp2.uri_for(ob, feed=name)
 	else:
 		return webapp2.uri_for(ob)
 

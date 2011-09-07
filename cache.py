@@ -19,12 +19,14 @@ from google.appengine.datastore import entity_pb
 from google.appengine.ext import db
 
 import counters
+import feeds
 import models
 
 C_ACTIVITIES = 'activities-%s-%s-%s'
 C_ENTRIES_KEYS = 'entries-keys-%s'
 C_ENTRIES_KEYS_PAGE = 'entries-keys-page-%s-%s'
 C_ENTRIES_PAGE = 'entries-page-%s-%s'
+C_FEED = 'feed-%s'
 C_JOURNALS = 'journals-%s'
 C_JOURNAL_LIST = 'journals-list-%s'
 C_KEY = 'key-%s'
@@ -168,6 +170,15 @@ def get_activities(user_key='', action='', object_key=''):
 			data = data.filter('object', object_key)
 
 		data = data.order('-date').fetch(models.Activity.RESULTS)
-		memcache.add(n, pack(data), 60)
+		memcache.add(n, pack(data), 60) # cache for 1 minute
+
+	return data
+
+def get_feed(feed):
+	n = C_FEED %feed
+	data = memcache.get(n)
+	if data is None:
+		data = feeds.feed(feed)
+		memcache.add(n, data, 600) # cache for 10 minutes
 
 	return data
