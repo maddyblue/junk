@@ -49,9 +49,9 @@ class User(db.Model):
 
 	def gravatar(self, size=''):
 		if size:
-			size = 's=' + size
+			size = '&amp;s=' + size
 
-		return 'http://www.gravatar.com/avatar/' + hashlib.md5(self.email.lower()).hexdigest() + '?%s&d=mm' %size
+		return 'http://www.gravatar.com/avatar/' + hashlib.md5(self.email.lower()).hexdigest() + '?d=mm%s' %size
 
 	@staticmethod
 	def process_credentials(name, email, source, uid):
