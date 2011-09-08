@@ -17,7 +17,7 @@ handlers:
   static_files: static/images/favicon.ico
   upload: static/images/favicon\.ico
 
-- url: /login/google/
+- url: /login/google
   script: main.py
   login: required
 
