@@ -20,6 +20,7 @@ import re
 from google.appengine.ext import db
 
 from gaesessions import get_current_session
+import cache
 import hashlib
 import urllib
 import utils
@@ -190,3 +191,10 @@ class Activity(DerefModel):
 	def create(user, action, object):
 		a = Activity(user=user, name=user.name, img=user.gravatar('30'), action=action, object=object)
 		a.put()
+
+		receivers = cache.get_followers(user.name)
+		ai = ActivityIndex(parent=a, receivers=receivers)
+		ai.put()
+
+class ActivityIndex(db.Model):
+	receivers = db.StringListProperty()
