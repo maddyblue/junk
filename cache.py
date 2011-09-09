@@ -27,6 +27,8 @@ C_ENTRIES_KEYS = 'entries-keys-%s'
 C_ENTRIES_KEYS_PAGE = 'entries-keys-page-%s-%s'
 C_ENTRIES_PAGE = 'entries-page-%s-%s'
 C_FEED = 'feed-%s'
+C_FOLLOWERS = 'followers-%s'
+C_FOLLOWING = 'following-%s'
 C_JOURNALS = 'journals-%s'
 C_JOURNAL_LIST = 'journals-list-%s'
 C_KEY = 'key-%s'
@@ -182,3 +184,38 @@ def get_feed(feed):
 		memcache.add(n, data, 600) # cache for 10 minutes
 
 	return data
+
+def get_user(username):
+	user_key = db.Key.from_path('User', username)
+	return get_by_key(user_key)
+
+def get_followers(username):
+	n = C_FOLLOWERS %username
+	data = memcache.get(n)
+	if data is None:
+		followers = models.UserFollowersIndex.get_by_key_name(username, parent=db.Key.from_path('User', username))
+		if not followers:
+			data = []
+		else:
+			data = followers.users
+
+		memcache.add(n, data)
+
+	return data
+
+def get_following(username):
+	n = C_FOLLOWING %username
+	data = memcache.get(n)
+	if data is None:
+		following = models.UserFollowingIndex.get_by_key_name(username, parent=db.Key.from_path('User', username))
+		if not following:
+			data = []
+		else:
+			data = following.users
+
+		memcache.add(n, data)
+
+	return data
+
+def clear_follow(follower, following):
+	memcache.delete_multi([C_FOLLOWERS %follower, C_FOLLOWING %following])

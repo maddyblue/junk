@@ -30,6 +30,8 @@ def url(ob, name=''):
 		return webapp2.uri_for(ob, username=name)
 	elif ob == 'user-feeds':
 		return webapp2.uri_for('feeds', feed='user-%s' %name)
+	elif ob == 'follow':
+		return webapp2.uri_for('follow', username=name)
 	else:
 		return webapp2.uri_for(ob)
 

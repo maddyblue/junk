@@ -17,6 +17,16 @@
 		<div class="span2 columns">
 			<img src="{{ u.gravatar }}&amp;s=50" alt="{{ u }}">
 		</div>
+
+		{% if user.key != u.key %}
+		<div class="span4 columns offset4">
+			{% if not following %}
+				<a href="{{ "follow"|url:u.name }}" class="btn">follow</a>
+			{% else %}
+				<a href="{{ "follow"|url:u.name }}?unfollow" class="btn">unfollow</a>
+			{% endif %}
+		</div>
+		{% endif %}
 	</div>
 
 	<hr>
@@ -51,7 +61,7 @@
 		<div class="span8 columns">
 			<h2>activity <small><a href="{{ "user-feeds"|url:u.name }}">rss feed</a></small></h2>
 			{% for a in activities %}
-				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.name }}"> {% endif %}<a href="{{ "user"|url:a.name }}">{{ a.name }}</a> {{ a.get_action }} {{ a.date|timesince }} ago</p>
+				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.name }}"> {% endif %}<a href="{{ "user"|url:a.name }}">{{ a.name }}</a> {{ a.get_action|safe }} {{ a.date|timesince }} ago</p>
 			{% endfor %}
 		</div>
 	</div>

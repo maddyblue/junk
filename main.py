@@ -14,6 +14,12 @@
 
 from __future__ import with_statement
 
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
+from google.appengine.dist import use_library
+use_library('django', '1.2')
+
 import datetime
 import logging
 import re
@@ -117,7 +123,7 @@ class Register(webapp2.RequestHandler):
 						del session['register']
 						utils.populate_user_session(user)
 						counters.increment(counters.COUNTER_USERS)
-						utils.alert('success', '<strong>%s</strong>, you have been registered at jounalr.' %user)
+						utils.alert('success', '%s, you have been registered at jounalr.' %user)
 						self.redirect(webapp2.uri_for('new-journal'))
 						return
 			else:
@@ -299,11 +305,74 @@ class FeedsHandler(webapp2.RequestHandler):
 
 class UserHandler(webapp2.RequestHandler):
 	def get(self, username):
-		user_key = db.Key.from_path('User', username)
-		u = cache.get_by_key(user_key)
-		journals = cache.get_journals(user_key)
-		activities = cache.get_activities(user_key=user_key)
-		rendert(self, 'user.html', {'u': u, 'journals': journals, 'activities': activities})
+		u = cache.get_user(username)
+
+		if not u:
+			self.error(404)
+			return
+
+		journals = cache.get_journals(u.key())
+		activities = cache.get_activities(user_key=u.key())
+
+		session = get_current_session()
+		if 'user' in session:
+			following = username in cache.get_following(session['user'].name)
+		else:
+			following = False
+
+		rendert(self, 'user.html', {'u': u, 'journals': journals, 'activities': activities, 'following': following})
+
+class FollowHandler(webapp2.RequestHandler):
+	def get(self, username):
+		session = get_current_session()
+
+		user = cache.get_user(username)
+		if not user:
+			self.error(404)
+			return
+
+		if 'unfollow' in self.request.GET:
+			op = 'del'
+			unop = 'add'
+		else:
+			op = 'add'
+			unop = 'del'
+
+		def txn(key, user, op):
+			index = db.get(key)
+
+			if not index:
+				index = getattr(models, key.kind())(parent=key.parent(), key_name=key.name())
+
+			if op == 'add' and user not in index.users:
+				index.users.append(user)
+			elif op == 'del' and user in index.users:
+				index.users.remove(user)
+			else:
+				return
+
+			index.put()
+
+		followers_key = db.Key.from_path('User', username, 'UserFollowersIndex', username)
+		following_key = db.Key.from_path('User', session['user'].name, 'UserFollowingIndex', session['user'].name)
+
+		db.run_in_transaction(txn, followers_key, session['user'].name, op)
+
+		try:
+			db.run_in_transaction(txn, following_key, username, op)
+		except TransactionFailedError:
+			logging.error('Second transaction failed in FollowHandler')
+			# do some ghetto rollback if the second transaction fails, can still fail...
+			db.run_in_transaction(txn, followers_key, session['user'].name, unop)
+
+		if op == 'add':
+			utils.alert('success', 'You are now following %s.' %username)
+			models.Activity.create(session['user'], models.ACTIVITY_FOLLOWING, user)
+		elif op == 'del':
+			utils.alert('success', 'You are no longer following %s.' %username)
+
+		cache.clear_follow(username, session['user'].name)
+		self.redirect(webapp2.uri_for('user', username=username))
 
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
@@ -311,6 +380,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/account', handler=AccountHandler, name='account'),
 	webapp2.Route(r'/activity', handler=ActivityHandler, name='activity'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
+	webapp2.Route(r'/follow/<username>', handler=FollowHandler, name='follow'),
 	webapp2.Route(r'/journal/<journal:\d+>/<page:\d+>', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
 	webapp2.Route(r'/login/facebook', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google', handler=GoogleLogin, name='login-google'),

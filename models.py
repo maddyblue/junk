@@ -23,6 +23,11 @@ from gaesessions import get_current_session
 import hashlib
 import urllib
 import utils
+import webapp2
+
+class DerefModel(db.Model):
+	def get_key(self, prop_name):
+		return getattr(self.__class__, prop_name).get_value_for_datastore(self)
 
 USER_SOURCE_FACEBOOK = 'facebook'
 USER_SOURCE_GOOGLE = 'google'
@@ -49,7 +54,7 @@ class User(db.Model):
 
 	def gravatar(self, size=''):
 		if size:
-			size = '&amp;s=' + size
+			size = '&s=' + size
 
 		if not self.email:
 			email = ''
@@ -75,6 +80,12 @@ class User(db.Model):
 			user.put() # to update last_login
 
 		return user, registered
+
+class UserFollowersIndex(db.Model):
+	users = db.StringListProperty()
+
+class UserFollowingIndex(db.Model):
+	users = db.StringListProperty()
 
 class Journal(db.Model):
 	ENTRIES_PER_PAGE = 5
@@ -142,18 +153,21 @@ class Entry(db.Model):
 
 ACTIVITY_NEW_JOURNAL = 1
 ACTIVITY_NEW_ENTRY = 2
+ACTIVITY_FOLLOWING = 3
 
 ACTIVITY_CHOICES = [
 	ACTIVITY_NEW_JOURNAL,
 	ACTIVITY_NEW_ENTRY,
+	ACTIVITY_FOLLOWING,
 ]
 
 ACTIVITY_ACTION = {
 	ACTIVITY_NEW_JOURNAL: 'created a new journal',
 	ACTIVITY_NEW_ENTRY: 'wrote a new journal entry',
+	ACTIVITY_FOLLOWING: 'started following',
 }
 
-class Activity(db.Model):
+class Activity(DerefModel):
 	RESULTS = 25
 
 	user = db.ReferenceProperty(User, collection_name='activity_user_set')
@@ -164,7 +178,13 @@ class Activity(db.Model):
 	object = db.ReferenceProperty()
 
 	def get_action(self):
-		return ACTIVITY_ACTION[self.action]
+		r = ACTIVITY_ACTION[self.action]
+
+		if self.action == ACTIVITY_FOLLOWING:
+			u = self.get_key('object').name()
+			r += ' <a href="%s">%s</a>' %(webapp2.uri_for('user', username=u), u)
+
+		return r
 
 	@staticmethod
 	def create(user, action, object):
