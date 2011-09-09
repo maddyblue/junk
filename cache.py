@@ -37,6 +37,9 @@ C_STATS = 'stats'
 def set(value, c, *args):
 	memcache.set(c %args, value)
 
+def set_multi(mapping):
+	memcache.set_multi(mapping)
+
 def flush():
 	memcache.flush_all()
 
@@ -216,6 +219,3 @@ def get_following(username):
 		memcache.add(n, data)
 
 	return data
-
-def clear_follow(follower, following):
-	memcache.delete_multi([C_FOLLOWERS %follower, C_FOLLOWING %following])

@@ -344,34 +344,45 @@ class FollowHandler(webapp2.RequestHandler):
 			if not index:
 				index = getattr(models, key.kind())(parent=key.parent(), key_name=key.name())
 
+			change = False
 			if op == 'add' and user not in index.users:
 				index.users.append(user)
+				change = True
 			elif op == 'del' and user in index.users:
 				index.users.remove(user)
-			else:
-				return
+				change = True
 
-			index.put()
+			if change:
+				index.put()
+
+			return index
 
 		followers_key = db.Key.from_path('User', username, 'UserFollowersIndex', username)
 		following_key = db.Key.from_path('User', session['user'].name, 'UserFollowingIndex', session['user'].name)
 
-		db.run_in_transaction(txn, followers_key, session['user'].name, op)
+		followers = db.run_in_transaction(txn, followers_key, session['user'].name, op)
 
 		try:
-			db.run_in_transaction(txn, following_key, username, op)
-		except TransactionFailedError:
+			following = db.run_in_transaction(txn, following_key, username, op)
+
+			if op == 'add':
+				utils.alert('success', 'You are now following %s.' %username)
+				models.Activity.create(session['user'], models.ACTIVITY_FOLLOWING, user)
+			elif op == 'del':
+				utils.alert('success', 'You are no longer following %s.' %username)
+
+			cache.set_multi({
+				cache.C_FOLLOWERS %username: followers.users,
+				cache.C_FOLLOWING %session['user'].name: following.users,
+			})
+
+		except db.TransactionFailedError:
 			logging.error('Second transaction failed in FollowHandler')
+			utils.alert('error', 'We\'re sorry, there was a problem. Try that again.')
+
 			# do some ghetto rollback if the second transaction fails, can still fail...
 			db.run_in_transaction(txn, followers_key, session['user'].name, unop)
 
-		if op == 'add':
-			utils.alert('success', 'You are now following %s.' %username)
-			models.Activity.create(session['user'], models.ACTIVITY_FOLLOWING, user)
-		elif op == 'del':
-			utils.alert('success', 'You are no longer following %s.' %username)
-
-		cache.clear_follow(username, session['user'].name)
 		self.redirect(webapp2.uri_for('user', username=username))
 
 application = webapp2.WSGIApplication([
