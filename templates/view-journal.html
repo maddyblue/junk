@@ -15,7 +15,7 @@
 							<input class="xxlarge" id="subject" name="subject" type="text" value="{{ subject }}" />
 						</div>
 					</div>
-					<div id="post-speech" class="clearfix">
+					<div class="clearfix post-speech">
 						<label for="text">text</label>
 						<div class="input">
 							<textarea class="xxlarge" id="text" name="text">{{ text }}</textarea>
@@ -28,7 +28,7 @@
 							<span class="help-inline">comma separated (ex: kids, funny story, park)</span>
 						</div>
 					</div>
-					<div class="actions">
+					<div class="actions post-attach">
 						<input type="submit" class="btn primary" value="Post new entry">
 					</div>
 				</fieldset>
@@ -67,7 +67,7 @@
 			{% else %}
 				<h3>{{ e.date|jdate }}</h3>
 			{% endif %}
-			<p>{{ e.text|linebreaks }}</p>
+			{{ e.text|linebreaks }}
 			<p><small>{{ e.chars }} character{{ e.chars|pluralize }}, {{ e.words }} word{{ e.words|pluralize }}, {{ e.sentences }} sentence{{ e.sentences|pluralize }}.
 			{% if e.tags %}
 				tags: {{ e.tags|join:", " }}
@@ -78,6 +78,4 @@
 	{% endfor %}
 
 	{% endif %}
-
-	<script src="/static/js/speech.js"></script>
 {% endblock %}
