@@ -2,82 +2,50 @@
 
 {% block content %}
 	<div class="page-header">
-		<h1><a href="{{ "view-journal"|url:journal.key.id }}">{{ journal }}</a>{% if journal.entry_count %} <small>{{ journal.entry_count }} entries from {{ journal.first_entry|date }} to {{ journal.last_entry|date }}</small>{% endif %}</h1>
+		<h1><a href="{{ username|user_journal_url:journal_name }}">{{ journal_name }}</a></h1>
 	</div>
 
 	<div class="row">
 		<div class="span16">
 			<form method="POST" action="{{ upload_url }}" enctype="multipart/form-data">
-			<input type="hidden" name="journal" value="{{ journal.key.id }}">
+			<input type="hidden" name="journal_name" value="{{ journal_name }}">
+			<input type="hidden" name="username" value="{{ username }}">
+			<input type="hidden" name="entry_id" value="{{ entry.key.id }}">
 				<fieldset>
 					<div class="clearfix">
 						<label for="subject">subject</label>
 						<div class="input">
-							<input class="xxlarge" id="subject" name="subject" type="text" value="{{ subject }}" />
+							<input class="xxlarge" id="subject" name="subject" type="text" value="{{ content.subject|default:"" }}" />
 						</div>
 					</div>
 					<div class="clearfix post-speech">
 						<label for="text">text</label>
 						<div class="input">
-							<textarea class="xxlarge" id="text" name="text">{{ text }}</textarea>
+							<textarea class="xxlarge" id="text" name="text">{{ content.text|default:"" }}</textarea>
 						</div>
 					</div>
 					<div class="clearfix">
 						<label for="tags">tags</label>
 						<div class="input">
-							<input class="xlarge" id="tags" name="tags" type="text" value="{{ tags }}" />
+							<input class="xlarge" id="tags" name="tags" type="text" value="{{ content.tags|join:", " }}" />
 							<span class="help-inline">comma separated (ex: kids, funny story, park)</span>
 						</div>
 					</div>
+
+					{% for b in blobs %}
+					<div class="clearfix">
+						<div class="input">
+							<input type="checkbox" name="blob" value="{{ b.key.id }}" checked>
+							{{ b.size|filesizeformat }}, {{ b.name }}
+						</div>
+					</div>
+					{% endfor %}
+
 					<div class="actions post-attach">
-						<input type="submit" class="btn primary" value="Post new entry">
-						<input type="submit" class="btn" value="Save">
+						<input type="submit" class="btn primary" value="Save">
 					</div>
 				</fieldset>
 			</form>
 		</div>
 	</div>
-
-	{% if entries %}
-	<hr>
-
-	<div class="pagination">
-		<ul>
-			<li class="prev"><a href="{{ journal.key.id|journal_url:1 }}">first</a></li>
-			{% ifequal page 1 %}
-			<li class="disabled"><a href="#">&larr; previous</a></li>
-			{% else %}
-			<li><a href="{{ journal.key.id|journal_prev:page }}">&larr; previous</a></li>
-			{% endifequal %}
-			{% for p in pagelist %}
-			<li{% ifequal p page %} class="active"{% endifequal %}><a href="{{ journal.key.id|journal_url:p }}">{{ p }}</a></li>
-			{% endfor %}
-			{% ifequal page journal.pages %}
-			<li class="disabled"><a href="#">next &rarr;</a></li>
-			{% else %}
-			<li><a href="{{ journal.key.id|journal_next:page }}">next &rarr;</a></li>
-			{% endifequal %}
-			<li class="next"><a href="{{ journal.key.id|journal_url:journal.pages }}">last</a></li>
-		</ul>
-	</div>
-
-	{% for e in entries %}
-	<div class="row">
-		<div class="span16">
-			{% if e.subject %}
-				<h3>{{ e.subject }} <small>from {{ e.date|jdate }}</small></h3>
-			{% else %}
-				<h3>{{ e.date|jdate }}</h3>
-			{% endif %}
-			{{ e.text|linebreaks }}
-			<p><small>{{ e.chars }} character{{ e.chars|pluralize }}, {{ e.words }} word{{ e.words|pluralize }}, {{ e.sentences }} sentence{{ e.sentences|pluralize }}.
-			{% if e.tags %}
-				tags: {{ e.tags|join:", " }}
-			{% endif %}
-			</small></p>
-		</div>
-	</div>
-	{% endfor %}
-
-	{% endif %}
 {% endblock %}

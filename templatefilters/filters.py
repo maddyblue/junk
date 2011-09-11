@@ -31,13 +31,16 @@ def url(ob, name=''):
 	elif ob == 'follow':
 		return webapp2.uri_for(ob, username=name)
 	elif ob == 'new-entry':
-		return webapp2.uri_for(ob, journal_name=name)
+		return webapp2.uri_for(ob, username=name.key().parent().name(), journal_name=name.name)
 	else:
 		return webapp2.uri_for(ob)
 
 @register.filter
+def user_journal_url(username, journal_name):
+	return webapp2.uri_for('view-journal', username=username, journal_name=journal_name)
+
+@register.filter
 def journal_url(journal, page=1):
-	logging.error('HERE: %s, %s', journal, page)
 	return journal.url(page)
 
 @register.filter

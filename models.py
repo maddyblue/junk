@@ -120,19 +120,29 @@ class Journal(db.Model):
 		else:
 			return webapp2.uri_for('view-journal', username=self.key().parent().name(), journal_name=self.name)
 
-class Entry(db.Model):
+class EntryContent(db.Model):
 	subject = db.StringProperty()
-	text = db.TextProperty()
-	date = db.DateTimeProperty()
 	tags = db.StringListProperty()
-	created_date = db.DateTimeProperty(auto_now_add=True)
+	text = db.TextProperty()
 
-	chars = db.IntegerProperty()
-	words = db.IntegerProperty()
-	sentences = db.IntegerProperty()
+class Entry(db.Model):
+	date = db.DateTimeProperty(auto_now_add=True)
+	created = db.DateTimeProperty(required=True, auto_now_add=True)
+	last_edited = db.DateTimeProperty(required=True, auto_now=True)
+
+	content = db.IntegerProperty(required=True) # key id of EntryContent
+	blobs = db.StringListProperty()
+
+	chars = db.IntegerProperty(required=True, default=0)
+	words = db.IntegerProperty(required=True, default=0)
+	sentences = db.IntegerProperty(required=True, default=0)
 
 	WORD_RE = re.compile("[A-Za-z']+")
 	SENTENCE_RE = re.compile("[.!?]+")
+
+	@property
+	def content_key(self):
+		return db.Key.from_path('EntryContent', long(self.content), parent=self.key())
 
 	def count(self):
 		txt = str(self.text)
@@ -195,5 +205,6 @@ BLOB_TYPE_CHOICES = [
 
 class Blob(db.Expando):
 	blob = blobstore.BlobReferenceProperty(required=True)
-	desc = db.StringProperty(indexed=False)
-	type = db.IntegerProperty(indexed=False, required=True, choices=BLOB_TYPE_CHOICES)
+	type = db.IntegerProperty(required=True, choices=BLOB_TYPE_CHOICES)
+	name = db.StringProperty(indexed=False)
+	size = db.IntegerProperty()

@@ -26,12 +26,14 @@ C_ACTIVITIES = 'activities-%s-%s-%s'
 C_ENTRIES_KEYS = 'entries-keys-%s'
 C_ENTRIES_KEYS_PAGE = 'entries-keys-page-%s-%s'
 C_ENTRIES_PAGE = 'entries-page-%s-%s'
+C_ENTRY = 'entry-%s_%s-%s'
 C_FEED = 'feed-%s'
 C_FOLLOWERS = 'followers-%s'
 C_FOLLOWING = 'following-%s'
-C_JOURNALS = 'journals-%s'
-C_JOURNAL_LIST = 'journals-list-%s'
 C_JOURNAL = 'journal-%s_%s' # use an underscore since username can have -
+C_JOURNALS = 'journals-%s'
+C_JOURNAL_KEY = 'journal-key-%s_%s'
+C_JOURNAL_LIST = 'journals-list-%s'
 C_KEY = 'key-%s'
 C_STATS = 'stats'
 
@@ -40,6 +42,9 @@ def set(value, c, *args):
 
 def set_multi(mapping):
 	memcache.set_multi(mapping)
+
+def set_keys(entities):
+	memcache.set_multi(dict([(C_KEY %i.key(), pack(i)) for i in entities]))
 
 def flush():
 	memcache.flush_all()
@@ -225,8 +230,38 @@ def get_journal(username, journal_name):
 	n = C_JOURNAL %(username, journal_name)
 	data = unpack(memcache.get(n))
 	if data is None:
-		user_key = db.Key.from_path('User', username)
-		data = models.Journal.all().ancestor(user_key).filter('name', journal_name).get()
+		journal_key = get_journal_key(username, journal_name)
+		data = db.get(journal_key)
 		memcache.add(n, pack(data))
 
 	return data
+
+def get_journal_key(username, journal_name):
+	n = C_JOURNAL_KEY %(username, journal_name)
+	data = memcache.get(n)
+	if data is None:
+		user_key = db.Key.from_path('User', username)
+		data = models.Journal.all(keys_only=True).ancestor(user_key).filter('name', journal_name).get()
+		memcache.add(n, data)
+
+	return data
+
+def get_entry(username, journal_name, entry_id):
+	n = C_ENTRY %(username, journal_name, entry_id)
+	data = memcache.get(n)
+	if data is None:
+		entry_id = long(entry_id)
+		journal_key = get_journal_key(username, journal_name)
+		entry_key = db.Key.from_path('Entry', entry_id, parent=journal_key)
+		entry = get_by_key(entry_key)
+		content = get_by_key(entry.content_key)
+		blobs = pack(db.get([db.Key.from_path('Blob', long(i), parent=entry_key) for i in entry.blobs]))
+		data = (pack(entry), pack(content), blobs)
+		memcache.add(n, data)
+
+	entry, content, blobs = data
+	entry = unpack(entry)
+	content = unpack(content)
+	blobs = unpack(blobs)
+
+	return entry, content, blobs

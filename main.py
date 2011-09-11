@@ -51,7 +51,6 @@ def rendert(s, p, d={}):
 		del d['user']
 
 	d['messages'] = s.get_messages()
-	logging.error(d['messages'])
 	d['active'] = p.partition('.')[0]
 
 	if settings.GOOGLE_ANALYTICS:
@@ -92,10 +91,10 @@ class BaseHandler(webapp2.RequestHandler):
 
 	MESSAGE_KEY = '_flash_message'
 	def add_message(self, level, message):
-		self.session.add_flash(message, level, self.MESSAGE_KEY)
+		self.session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
 
 	def get_messages(self):
-		return self.session.get_flashes(self.MESSAGE_KEY)
+		return self.session.get_flashes(BaseHandler.MESSAGE_KEY)
 
 	def process_credentials(self, name, email, source, uid):
 		user = models.User.all().filter('source', source).filter('uid', uid).get()
@@ -114,6 +113,13 @@ class BaseHandler(webapp2.RequestHandler):
 		for k in ['user', 'journals']:
 			if k in self.session:
 				del self.session[k]
+
+class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+	def add_message(self, level, message):
+		store = sessions.get_store(request=self.request)
+		session = store.get_session()
+		session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
+		store.save_sessions(self.response)
 
 class MainPage(BaseHandler):
 	def get(self):
@@ -240,7 +246,6 @@ class NewJournal(BaseHandler):
 			self.add_message('error', 'Your journal needs a name.')
 		else:
 			journal = models.Journal(parent=db.Key(self.session['user']['key']), name=name)
-			logging.error("JOURNALS: %s", self.session['journals'])
 			for journal_url, journal_name in self.session['journals']:
 				if journal.name == journal_name:
 					self.add_message('error', 'You already have a journal called %s.' %name)
@@ -265,15 +270,6 @@ class NewJournal(BaseHandler):
 		rendert(self, 'new-journal.html')
 
 class ViewJournal(BaseHandler):
-	def render(self, journal, page=1, subject='', text='', tags=''):
-		rendert(self, 'view-journal.html', {
-			'journal': journal,
-			'entries': cache.get_entries_page(journal.key(), page),
-			'page': page,
-			'pagelist': utils.page_list(page, journal.pages),
-			'upload_url': blobstore.create_upload_url(webapp2.uri_for('new-entry-upload')),
-		})
-
 	def get(self, username, journal_name, page=1):
 		page = int(page)
 		journal = cache.get_journal(username, journal_name)
@@ -281,65 +277,12 @@ class ViewJournal(BaseHandler):
 		if not journal:
 			self.error(404)
 		else:
-			self.render(journal, page)
-
-	def post(self, username, journal_name, page=1):
-		page = int(page)
-		journal = cache.get_journal(username, journal_name)
-
-		if not journal:
-			self.error(404)
-			return
-
-		subject = self.request.get('subject').strip()
-
-		tags = self.request.get('tags').strip()
-		if tags:
-			tags = [i.strip() for i in self.request.get('tags').split(',')]
-		else:
-			tags = []
-
-		text = self.request.get('text').strip()
-
-		if not text:
-			self.add_message('error', 'You didn\'t type anything. Try again.')
-			self.render(journal, page, subejct, text, tags)
-		else:
-			def txn(user_key, journal_key, entry):
-				user, journal = db.get([user_key, journal_key])
-				journal.entry_count += 1
-				journal.chars += entry.chars
-				journal.words += entry.words
-				journal.sentences += entry.sentences
-				user.entry_count += 1
-
-				if not journal.last_entry or entry.date > journal.last_entry:
-					journal.last_entry = entry.date
-				if not journal.first_entry or entry.date < journal.first_entry:
-					journal.first_entry = entry.date
-
-				journal.count()
-
-				db.put([user, journal, entry])
-				return user, journal
-
-			entry = models.Entry(parent=journal.key(), subject=subject, text=text, tags=tags, date=datetime.datetime.now())
-			entry.count()
-			user, journal = db.run_in_transaction(txn, self.session['user']['key'], journal.key(), entry)
-
-			cache.clear_journal_cache(user.key())
-			cache.set(cache.pack(user), cache.C_KEY, user.key())
-			cache.set(cache.pack(journal), cache.C_KEY, journal.key())
-			cache.clear_entries_cache(journal.key())
-			self.populate_user_session()
-			counters.increment(counters.COUNTER_ENTRIES)
-			counters.increment(counters.COUNTER_CHARS, entry.chars)
-			counters.increment(counters.COUNTER_WORDS, entry.words)
-			counters.increment(counters.COUNTER_SENTENCES, entry.sentences)
-			models.Activity.create(user, models.ACTIVITY_NEW_ENTRY, entry.key())
-
-			self.add_message('success', 'Entry posted.')
-			self.redirect(webapp2.uri_for('view-journal', username=username, journal_name=journal_name))
+			rendert(self, 'view-journal.html', {
+				'journal': journal,
+				'entries': cache.get_entries_page(journal.key(), page),
+				'page': page,
+				'pagelist': utils.page_list(page, journal.pages),
+			})
 
 class AboutHandler(BaseHandler):
 	def get(self):
@@ -444,35 +387,144 @@ class FollowHandler(BaseHandler):
 		self.redirect(webapp2.uri_for('user', username=username))
 
 class NewEntryHandler(BaseHandler):
-	def get(self, journal_id):
-		journal_key = utils.journal_key(journal_id)
-		journal = cache.get_by_key(journal_key)
+	def get(self, username, journal_name):
+		if username != self.session['user']['name']:
+			self.error(404)
+			return
 
-		if journal:
-			pass
+		# only need to fetch key here?
+		journal = cache.get_journal(username, journal_name)
 
-class NewEntryUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+		if not journal:
+			self.error(404)
+			return
+
+		def txn(user_key, journal_key, entry, content):
+			user, journal = db.get([user_key, journal_key])
+			journal.entry_count += 1
+			user.entry_count += 1
+
+			db.put([user, journal, entry, content])
+			return user, journal
+
+		handmade_key = db.Key.from_path('Entry', 1, parent=journal.key())
+		entry_id = db.allocate_ids(handmade_key, 1)[0]
+		entry_key = db.Key.from_path('Entry', entry_id, parent=journal.key())
+
+		handmade_key = db.Key.from_path('EntryContent', 1, parent=entry_key)
+		content_id = db.allocate_ids(handmade_key, 1)[0]
+		content_key = db.Key.from_path('EntryContent', content_id, parent=entry_key)
+
+		content = models.EntryContent(key=content_key)
+		entry = models.Entry(key=entry_key, content=content_id)
+
+		user, journal = db.run_in_transaction(txn, self.session['user']['key'], journal.key(), entry, content)
+
+		# move this to new entry saving for first time
+		models.Activity.create(user, models.ACTIVITY_NEW_ENTRY, entry.key())
+
+		counters.increment(counters.COUNTER_ENTRIES)
+		cache.set_keys([user, journal, entry, content])
+		cache.set(cache.pack(journal), cache.C_JOURNAL, username, journal_name)
+
+		self.redirect(webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id))
+
+class ViewEntryHandler(BaseHandler):
+	def get(self, username, journal_name, entry_id):
+		if self.session['user']['name'] != username:
+			self.error(404) # should probably be change to 401 or 403
+			return
+
+		entry, content, blobs = cache.get_entry(username, journal_name, entry_id)
+
+		if not entry:
+			self.error(404)
+			return
+
+		rendert(self, 'entry.html', {
+			'blobs': blobs,
+			'content': content,
+			'entry': entry,
+			'journal_name': journal_name,
+			'upload_url': blobstore.create_upload_url(webapp2.uri_for('entry-upload')),
+			'username': username,
+		})
+
+class EntryUploadHandler(BaseUploadHandler):
 	def post(self):
-		journal_key = db.Key.from_path('Journal', long(self.request.get('journal')), parent=self.session['user']['key'])
-		j = cache.get_by_key(journal_key)
+		username = self.request.get('username')
+		journal_name = self.request.get('journal_name')
+		entry_id = long(self.request.get('entry_id'))
+		self.redirect(webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id))
+
+		entry, content, blobs = cache.get_entry(username, journal_name, entry_id)
+
+		if not entry:
+			for upload in self.get_uploads():
+				upload.delete()
+			return
 
 		subject = self.request.get('subject').strip()
-
 		tags = self.request.get('tags').strip()
+		lines = self.request.get('text').strip().splitlines()
+		blob_list = self.request.get_all('blob')
+		text = []
+
+		# Something is adding blank lines. Problem with the blobstore/upload stuff?
+		while lines:
+			text.append(lines.pop(0))
+			if lines:
+				lines.pop(0)
+
+		text = '\n'.join(text)
+
 		if tags:
 			tags = [i.strip() for i in self.request.get('tags').split(',')]
 		else:
 			tags = []
 
-		text = self.request.get('text').strip()
+		for b in blobs:
+			bid = str(b.key().id())
+			if bid not in blob_list:
+				b.delete()
+				blobs.remove(b)
+				entry.blobs.remove(bid)
 
-		#entry = models.Entry(parent=journal_key, subject=
+		def txn(entry_key, content_key, blobs, subject, tags, text):
+			# is this get necessary, or can we use them from memcache above?
+			entry, content  = db.get([entry_key, content_key])
+
+			entry.blobs = [str(i.key().id()) for i in blobs]
+			content.subject = subject
+			content.tags = tags
+			content.text = text
+
+			to_put = [entry, content]
+			to_put.extend(blobs)
+			db.put(to_put)
+
+			return entry, content, blobs
+
+		blobs_to_add = []
 
 		for upload in self.get_uploads('attach'):
-			if not j:
-				upload.delete()
+			if upload.content_type.startswith('image/'):
+				blobs_to_add.append((upload, models.BLOB_TYPE_IMAGE))
 
-#		self.redirect(webapp2.uri_for('view-journal', journal=self.request.POST['journal']))
+		if blobs_to_add:
+			handmade_key = db.Key.from_path('Blob', 1, parent=entry.key())
+			blob_ids = db.allocate_ids(handmade_key, len(blobs_to_add))
+			blob_range = range(blob_ids[0], blob_ids[1] + 1)
+
+			while blobs_to_add:
+				blob, blob_type = blobs_to_add.pop(0)
+				blob_key = db.Key.from_path('Blob', blob_range.pop(0), parent=entry.key())
+				blobs.append(models.Blob(key=blob_key, blob=blob, type=blob_type, name=blob.filename, size=blob.size))
+
+		entry, content, blobs = db.run_in_transaction(txn, entry.key(), content.key(), blobs, subject, tags, text)
+		cache.set((cache.pack(entry), cache.pack(content), cache.pack(blobs)), cache.C_ENTRY, username, journal_name, entry_id)
+
+		self.add_message('success', 'Your entry has been saved.')
 
 config = {
 	'webapp2_extras.sessions': {
@@ -491,14 +543,15 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/login/google', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/logout/google', handler=GoogleSwitch, name='logout-google'),
-	webapp2.Route(r'/new/entry/<journal_name>', handler=NewEntryHandler, name='new-entry'),
-	webapp2.Route(r'/new/entry/upload', handler=NewEntryUploadHandler, name='new-entry-upload'),
+	webapp2.Route(r'/new/entry', handler=EntryUploadHandler, name='entry-upload'),
 	webapp2.Route(r'/new/journal', handler=NewJournal, name='new-journal'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
 	webapp2.Route(r'/stats', handler=StatsHandler, name='stats'),
 
-	webapp2.Route(r'/<username>/<journal_name>', handler=ViewJournal, name='view-journal'),
 	webapp2.Route(r'/<username>', handler=UserHandler, name='user'),
+	webapp2.Route(r'/<username>/<journal_name>', handler=ViewJournal, name='view-journal'),
+	webapp2.Route(r'/<username>/<journal_name>/new', handler=NewEntryHandler, name='new-entry'),
+	webapp2.Route(r'/<username>/<journal_name>/<entry_id>', handler=ViewEntryHandler, name='view-entry'),
 	], debug=True, config=config)
 
 RESERVED_NAMES = set([
@@ -509,6 +562,7 @@ RESERVED_NAMES = set([
 	'activity',
 	'blog',
 	'contact',
+	'entry',
 	'features',
 	'feeds',
 	'follow',
@@ -519,9 +573,14 @@ RESERVED_NAMES = set([
 	'login',
 	'logout',
 	'new',
+	'news',
+	'privacy',
 	'register',
+	'save',
+	'security',
 	'site',
 	'stats',
+	'terms',
 	'user',
 ])
 
