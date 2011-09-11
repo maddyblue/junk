@@ -31,6 +31,7 @@ C_FOLLOWERS = 'followers-%s'
 C_FOLLOWING = 'following-%s'
 C_JOURNALS = 'journals-%s'
 C_JOURNAL_LIST = 'journals-list-%s'
+C_JOURNAL = 'journal-%s_%s' # use an underscore since username can have -
 C_KEY = 'key-%s'
 C_STATS = 'stats'
 
@@ -80,13 +81,13 @@ def get_journals(user_key):
 
 	return data
 
-# returns a list of tuples: (journal key id, journal title)
+# returns a list of journal names
 def get_journal_list(user_key):
 	n = C_JOURNAL_LIST %user_key
 	data = memcache.get(n)
 	if data is None:
 		journals = get_journals(user_key)
-		data = [(i.key().id(), i.title) for i in journals]
+		data = [(i.url(), i.name) for i in journals]
 		memcache.add(n, data)
 
 	return data
@@ -217,5 +218,15 @@ def get_following(username):
 			data = following.users
 
 		memcache.add(n, data)
+
+	return data
+
+def get_journal(username, journal_name):
+	n = C_JOURNAL %(username, journal_name)
+	data = unpack(memcache.get(n))
+	if data is None:
+		user_key = db.Key.from_path('User', username)
+		data = models.Journal.all().ancestor(user_key).filter('name', journal_name).get()
+		memcache.add(n, pack(data))
 
 	return data

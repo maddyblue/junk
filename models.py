@@ -17,9 +17,9 @@ from __future__ import with_statement
 import logging
 import re
 
+from google.appengine.ext import blobstore
 from google.appengine.ext import db
 
-from gaesessions import get_current_session
 import cache
 import hashlib
 import urllib
@@ -39,13 +39,13 @@ USER_SOURCE_CHOICES = [
 ]
 
 class User(db.Model):
-	name = db.StringProperty(indexed=False)
+	name = db.StringProperty(required=True, indexed=False)
 	email = db.EmailProperty()
 	register_date = db.DateTimeProperty(auto_now_add=True)
 	last_login = db.DateTimeProperty(auto_now_add=True)
 
-	source = db.StringProperty(choices=USER_SOURCE_CHOICES)
-	uid = db.StringProperty()
+	source = db.StringProperty(required=True, choices=USER_SOURCE_CHOICES)
+	uid = db.StringProperty(required=True)
 
 	journal_count = db.IntegerProperty(required=True, default=0)
 	entry_count = db.IntegerProperty(required=True, default=0)
@@ -64,24 +64,6 @@ class User(db.Model):
 
 		return 'http://www.gravatar.com/avatar/' + hashlib.md5(email).hexdigest() + '?d=mm%s' %size
 
-	@staticmethod
-	def process_credentials(name, email, source, uid):
-		user = User.all().filter('source', source).filter('uid', uid).get()
-
-		session = get_current_session()
-		if session.is_active():
-			session.terminate()
-
-		if not user:
-			registered = False
-			session['register'] = {'name': name, 'email': email, 'source': source, 'uid': uid}
-		else:
-			registered = True
-			utils.populate_user_session(user)
-			user.put() # to update last_login
-
-		return user, registered
-
 class UserFollowersIndex(db.Model):
 	users = db.StringListProperty()
 
@@ -92,7 +74,7 @@ class Journal(db.Model):
 	ENTRIES_PER_PAGE = 5
 	MAX_JOURNALS = 10
 
-	title = db.StringProperty(indexed=False, required=True)
+	name = db.StringProperty(required=True)
 	created_date = db.DateTimeProperty(auto_now_add=True)
 	last_entry = db.DateTimeProperty()
 	first_entry = db.DateTimeProperty()
@@ -126,11 +108,17 @@ class Journal(db.Model):
 			self.freq_sentences = 0.
 
 	def __str__(self):
-		return str(self.title)
+		return str(self.name)
 
 	@property
 	def pages(self):
 		return (self.entry_count + self.ENTRIES_PER_PAGE - 1) / self.ENTRIES_PER_PAGE
+
+	def url(self, page=1):
+		if page > 1:
+			return webapp2.uri_for('view-journal', username=self.key().parent().name(), journal_name=self.name, page=page)
+		else:
+			return webapp2.uri_for('view-journal', username=self.key().parent().name(), journal_name=self.name)
 
 class Entry(db.Model):
 	subject = db.StringProperty()
@@ -198,3 +186,14 @@ class Activity(DerefModel):
 
 class ActivityIndex(db.Model):
 	receivers = db.StringListProperty()
+
+BLOB_TYPE_IMAGE = 1
+
+BLOB_TYPE_CHOICES = [
+	BLOB_TYPE_IMAGE,
+]
+
+class Blob(db.Expando):
+	blob = blobstore.BlobReferenceProperty(required=True)
+	desc = db.StringProperty(indexed=False)
+	type = db.IntegerProperty(indexed=False, required=True, choices=BLOB_TYPE_CHOICES)

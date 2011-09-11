@@ -22,22 +22,23 @@ register = template.create_template_register()
 
 @register.filter
 def url(ob, name=''):
-	if ob == 'view-journal':
-		return webapp2.uri_for(ob, journal=name)
-	elif ob == 'feeds':
+	if ob == 'feeds':
 		return webapp2.uri_for(ob, feed=name)
 	elif ob == 'user':
 		return webapp2.uri_for(ob, username=name)
 	elif ob == 'user-feeds':
 		return webapp2.uri_for('feeds', feed='user-%s' %name)
 	elif ob == 'follow':
-		return webapp2.uri_for('follow', username=name)
+		return webapp2.uri_for(ob, username=name)
+	elif ob == 'new-entry':
+		return webapp2.uri_for(ob, journal_name=name)
 	else:
 		return webapp2.uri_for(ob)
 
 @register.filter
-def journal_url(ob, page):
-	return webapp2.uri_for('view-journal', journal=ob, page=page)
+def journal_url(journal, page=1):
+	logging.error('HERE: %s, %s', journal, page)
+	return journal.url(page)
 
 @register.filter
 def journal_prev(ob, page):

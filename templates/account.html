@@ -8,17 +8,17 @@
 	<div class="row">
 		<div class="span16">
 			<table>
-				<tr><td>name</td><td>{{ user.name }}</td></tr>
-				<tr><td>login with</td><td>{{ user.source }}</td></tr>
-				<tr><td>user since</td><td>{{ user.register_date|jdate }}</td></tr>
+				<tr><td>name</td><td>{{ u.name }}</td></tr>
+				<tr><td>login with</td><td>{{ u.source }}</td></tr>
+				<tr><td>user since</td><td>{{ u.register_date|jdate }}</td></tr>
 				<tr>
 					<td>avatar</td>
 					<td>
-						<img src="{{ user.gravatar }}&amp;s=50" alt="{{ user.name }}">
+						<img src="{{ u.gravatar }}&amp;s=50" alt="{{ u.name }}">
 						<p>Change your avatar at <a href="http://gravatar.com/emails">gravatar.com</a>
 						<br><small>
-							{% if user.email %}
-								We're using {{ user.email }}
+							{% if u.email %}
+								We're using {{ u.email }}
 							{% else %}
 								No email address, so no avatar
 							{% endif %}
@@ -38,7 +38,7 @@
 					<div class="clearfix">
 						<label for="email">email</label>
 						<div class="input">
-							<input id="email" name="email" type="text" value="{{ user.email|default_if_none:"" }}" />
+							<input id="email" name="email" type="text" value="{{ u.email|default_if_none:"" }}" />
 						</div>
 					</div>
 					<div class="actions">

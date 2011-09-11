@@ -46,7 +46,7 @@
 						<a href="#" class="dropdown-toggle">journals</a>
 						<ul class="dropdown-menu">
 							{% for j in session.journals %}
-								<li><a href="{{ "view-journal"|url:j.0 }}">{{ j.1 }}</a></li>
+								<li><a href="{{ j.0 }}">{{ j.1 }}</a></li>
 							{% endfor %}
 							<li class="divider"></li>
 							<li><a href="{{ "user"|url:user.name }}">my journals</a></li>
@@ -54,7 +54,7 @@
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle dropdown-gravatar">{{ user }} <img class="topbar-img-gravatar" src="{{ user.gravatar }}&amp;s=30" alt="{{ user }}"></a>
+						<a href="#" class="dropdown-toggle dropdown-gravatar">{{ user.name }} <img class="topbar-img-gravatar" src="{{ user.avatar }}&amp;s=30" alt="{{ user.name }}"></a>
 						<ul class="dropdown-menu">
 							<li><a href="{{ "account"|url }}">account</a></li>
 							<li><a href="{{ "logout"|url }}">logout</a></li>
@@ -75,14 +75,14 @@
 		</div>
 	</div>
 
-	{% if session.alert %}
+	{% if messages %}
 	<div class="container">
 		<div class="row"></div>
-		{% for alert in session.alert %}
+		{% for m in messages %}
 			<div class="row">
 				<div class="span16">
-					<div class="alert-message {{ alert.0 }}">
-						<p>{{ alert.1 }}</p>
+					<div class="alert-message {{ m.1 }}">
+						<p>{{ m.0 }}</p>
 					</div>
 				</div>
 			</div>

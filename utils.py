@@ -14,15 +14,9 @@
 
 import logging
 import os.path
-import urllib
 
-from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
-
-from gaesessions import get_current_session
-import cache
-import webapp2
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -38,27 +32,6 @@ def render(tname, d={}):
 	path = os.path.join(os.path.dirname(__file__), 'templates', tname)
 
 	return template.render(path, d)
-
-def alert(atype, msg):
-	session = get_current_session()
-
-	if 'alert' not in session:
-		session['alert'] = []
-
-	session['alert'].append((atype, msg))
-
-# This should be called anytime the session data needs to be updated.
-# session['var'] = var should never be used, except in this function
-def populate_user_session(user=None):
-	session = get_current_session()
-
-	if user:
-		session['user'] = user
-	elif 'user' not in session:
-		return
-
-	session['user'] = cache.get_by_key(session['user'].key())
-	session['journals'] = cache.get_journal_list(session['user'].key())
 
 NUM_PAGE_DISP = 5
 def page_list(page, pages):

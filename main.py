@@ -25,10 +25,12 @@ import logging
 import re
 
 from google.appengine.api import users
+from google.appengine.ext import blobstore
 from google.appengine.ext import db
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import blobstore_handlers
 
-from gaesessions import get_current_session
+from webapp2_extras import sessions
 import cache
 import counters
 import facebook
@@ -39,7 +41,7 @@ import utils
 import webapp2
 
 def rendert(s, p, d={}):
-	session = get_current_session()
+	session = s.session
 	d['session'] = session
 
 	if 'user' in session:
@@ -48,6 +50,8 @@ def rendert(s, p, d={}):
 	elif 'user' in d:
 		del d['user']
 
+	d['messages'] = s.get_messages()
+	logging.error(d['messages'])
 	d['active'] = p.partition('.')[0]
 
 	if settings.GOOGLE_ANALYTICS:
@@ -55,24 +59,77 @@ def rendert(s, p, d={}):
 
 	s.response.out.write(utils.render(p, d))
 
-	if 'alert' in session:
-		del session['alert']
+class BaseHandler(webapp2.RequestHandler):
+	def dispatch(self):
+		self.session_store = sessions.get_store(request=self.request)
 
-class MainPage(webapp2.RequestHandler):
+		try:
+			webapp2.RequestHandler.dispatch(self)
+		finally:
+			self.session_store.save_sessions(self.response)
+
+	@webapp2.cached_property
+	def session(self):
+		return self.session_store.get_session()
+
+	# This should be called anytime the session data needs to be updated.
+	# session['var'] = var should never be used, except in this function
+	def populate_user_session(self, user=None):
+		if 'user' not in self.session and not user:
+			return
+		elif not user:
+			user = cache.get_user(self.session['user']['name'])
+
+		self.session['user'] = {
+			'avatar': user.gravatar(),
+			'email': user.email,
+			'key': str(user.key()),
+			'name': user.name,
+			'source': user.source,
+		}
+
+		self.session['journals'] = cache.get_journal_list(db.Key(self.session['user']['key']))
+
+	MESSAGE_KEY = '_flash_message'
+	def add_message(self, level, message):
+		self.session.add_flash(message, level, self.MESSAGE_KEY)
+
+	def get_messages(self):
+		return self.session.get_flashes(self.MESSAGE_KEY)
+
+	def process_credentials(self, name, email, source, uid):
+		user = models.User.all().filter('source', source).filter('uid', uid).get()
+
+		if not user:
+			registered = False
+			self.session['register'] = {'name': name, 'email': email, 'source': source, 'uid': uid}
+		else:
+			registered = True
+			self.populate_user_session(user)
+			user.put() # to update last_login
+
+		return user, registered
+
+	def logout(self):
+		for k in ['user', 'journals']:
+			if k in self.session:
+				del self.session[k]
+
+class MainPage(BaseHandler):
 	def get(self):
 		rendert(self, 'index.html')
 
-class GoogleLogin(webapp2.RequestHandler):
+class GoogleLogin(BaseHandler):
 	def get(self):
 		current_user = users.get_current_user()
-		user, registered = models.User.process_credentials(current_user.nickname(), current_user.email(), models.USER_SOURCE_GOOGLE, current_user.user_id())
+		user, registered = self.process_credentials(current_user.nickname(), current_user.email(), models.USER_SOURCE_GOOGLE, current_user.user_id())
 
 		if not registered:
 			self.redirect(webapp2.uri_for('register'))
 		else:
 			self.redirect(webapp2.uri_for('main'))
 
-class FacebookLogin(webapp2.RequestHandler):
+class FacebookLogin(BaseHandler):
 	def get(self):
 		if 'code' in self.request.GET:
 			access_dict = facebook.login(self.request.get('code'))
@@ -83,7 +140,7 @@ class FacebookLogin(webapp2.RequestHandler):
 		if access_dict:
 			user_data = facebook.graph_request(access_dict['access_token'])
 			if user_data is not False:
-				user, registered = models.User.process_credentials(user_data['username'], user_data['email'], models.USER_SOURCE_FACEBOOK, user_data['id'])
+				user, registered = self.process_credentials(user_data['username'], user_data['email'], models.USER_SOURCE_FACEBOOK, user_data['id'])
 
 				if not registered:
 					self.redirect(webapp2.uri_for('register'))
@@ -91,16 +148,14 @@ class FacebookLogin(webapp2.RequestHandler):
 
 		self.redirect(webapp2.uri_for('main'))
 
-class Register(webapp2.RequestHandler):
+class Register(BaseHandler):
 	USERNAME_RE = re.compile("^[a-z0-9][a-z0-9-]+$")
 
 	def get(self):
 		return self.post()
 
 	def post(self):
-		session = get_current_session()
-
-		if 'register' in session:
+		if 'register' in self.session:
 			errors = {}
 
 			if 'submit' in self.request.POST:
@@ -110,9 +165,11 @@ class Register(webapp2.RequestHandler):
 
 				if not Register.USERNAME_RE.match(lusername):
 					errors['username'] = 'Username may only contain alphanumeric characters or dashes and cannot begin with a dash.'
+				elif lusername in RESERVED_NAMES:
+					errors['username'] = 'Username is already taken.'
 				else:
-					source = session['register']['source']
-					uid = session['register']['uid']
+					source = self.session['register']['source']
+					uid = self.session['register']['uid']
 					if not email:
 						email = None
 					user = models.User.get_or_insert(lusername, name=username, email=email, source=source, uid=uid)
@@ -120,73 +177,73 @@ class Register(webapp2.RequestHandler):
 					if user.source != source or user.uid != uid:
 						errors['username'] = 'Username is already taken.'
 					else:
-						del session['register']
-						utils.populate_user_session(user)
+						del self.session['register']
+						self.populate_user_session(user)
 						counters.increment(counters.COUNTER_USERS)
-						utils.alert('success', '%s, you have been registered at jounalr.' %user)
+						self.add_message('success', '%s, you have been registered at jounalr.' %user)
 						self.redirect(webapp2.uri_for('new-journal'))
 						return
 			else:
 				username = ''
-				email = session['register']['email']
+				email = self.session['register']['email']
 
 			rendert(self, 'register.html', {'username': username, 'email': email, 'errors': errors})
 		else:
 			self.redirect(webapp2.uri_for('main'))
 
-class Logout(webapp2.RequestHandler):
+class Logout(BaseHandler):
 	def get(self):
-		session = get_current_session()
-		session.terminate()
+		self.logout()
 		self.redirect(webapp2.uri_for('main'))
 
-class GoogleSwitch(webapp2.RequestHandler):
+class GoogleSwitch(BaseHandler):
 	def get(self):
-		session = get_current_session()
-		session.terminate()
+		self.logout()
 		self.redirect(users.create_logout_url(webapp2.uri_for('login-google')))
 
-class AccountHandler(webapp2.RequestHandler):
+class AccountHandler(BaseHandler):
 	def get(self):
-		rendert(self, 'account.html')
+		u = cache.get_user(self.session['user']['name'])
+		rendert(self, 'account.html', {'u': u})
 
 	def post(self):
-		session = get_current_session()
 		changed = False
+		u = cache.get_user(self.session['user']['name'])
 
 		if 'email' in self.request.POST:
 			email = self.request.get('email')
 			if not email:
 				email = None
 
-			utils.alert('success', 'Email address updated.')
-			if session['user'].email != email:
-				session['user'].email = email
+			self.add_message('success', 'Email address updated.')
+			if self.session['user']['email'] != email:
+				u.email = email
 				changed = True
 
 		if changed:
-			session['user'].put()
-			cache.set(cache.pack(session['user']), cache.C_KEY, session['user'].key())
+			u.put()
+			cache.set(cache.pack(u), cache.C_KEY, u.key())
+			self.populate_user_session()
 
-		rendert(self, 'account.html')
+		rendert(self, 'account.html', {'u': u})
 
-class NewJournal(webapp2.RequestHandler):
+class NewJournal(BaseHandler):
 	def get(self):
 		rendert(self, 'new-journal.html')
 
 	def post(self):
-		session = get_current_session()
 		name = self.request.get('name')
 
-		if len(session['journals']) >= models.Journal.MAX_JOURNALS:
-			utils.alert('error', 'Only %i journals allowed.' %models.Journal.MAX_JOURNALS)
+		if len(self.session['journals']) >= models.Journal.MAX_JOURNALS:
+			self.add_message('error', 'Only %i journals allowed.' %models.Journal.MAX_JOURNALS)
 		elif not name:
-			utils.alert('error', 'Your journal needs a name.')
+			self.add_message('error', 'Your journal needs a name.')
 		else:
-			journal = models.Journal(parent=session['user'], title=name)
-			for journal_id, journal_name in session['journals']:
-				if journal.title == journal_name:
-					utils.alert('error', 'You already have a journal called %s.' %name)
+			journal = models.Journal(parent=db.Key(self.session['user']['key']), name=name)
+			logging.error("JOURNALS: %s", self.session['journals'])
+			for journal_url, journal_name in self.session['journals']:
+				if journal.name == journal_name:
+					self.add_message('error', 'You already have a journal called %s.' %name)
 					break
 			else:
 				def txn(user_key, journal):
@@ -195,40 +252,44 @@ class NewJournal(webapp2.RequestHandler):
 					db.put([user, journal])
 					return user, journal
 
-				user, journal = db.run_in_transaction(txn, session['user'].key(), journal)
+				user, journal = db.run_in_transaction(txn, self.session['user']['key'], journal)
 				cache.clear_journal_cache(user.key())
 				cache.set(cache.pack(user), cache.C_KEY, user.key())
-				utils.populate_user_session()
+				self.populate_user_session()
 				counters.increment(counters.COUNTER_JOURNALS)
 				models.Activity.create(user, models.ACTIVITY_NEW_JOURNAL, journal.key())
-				utils.alert('success', 'Created your journal %s.' %name)
-				self.redirect(webapp2.uri_for('view-journal', journal=journal.key().id()))
+				self.add_message('success', 'Created your journal %s.' %name)
+				self.redirect(webapp2.uri_for('view-journal', username=self.session['user']['name'], journal_name=journal.name))
 				return
 
 		rendert(self, 'new-journal.html')
 
-class ViewJournal(webapp2.RequestHandler):
-	def render(self, journal, page, subject='', text='', tags=''):
+class ViewJournal(BaseHandler):
+	def render(self, journal, page=1, subject='', text='', tags=''):
 		rendert(self, 'view-journal.html', {
 			'journal': journal,
 			'entries': cache.get_entries_page(journal.key(), page),
 			'page': page,
 			'pagelist': utils.page_list(page, journal.pages),
+			'upload_url': blobstore.create_upload_url(webapp2.uri_for('new-entry-upload')),
 		})
 
-	def journal_key(self, journal_id):
-		session = get_current_session()
-		return db.Key.from_path('Journal', long(journal_id), parent=session['user'].key())
-
-	def get(self, journal, page):
+	def get(self, username, journal_name, page=1):
 		page = int(page)
-		journal_key = self.journal_key(journal)
-		journal = cache.get_by_key(journal_key)
-		self.render(journal, page)
+		journal = cache.get_journal(username, journal_name)
 
-	def post(self, journal, page):
+		if not journal:
+			self.error(404)
+		else:
+			self.render(journal, page)
+
+	def post(self, username, journal_name, page=1):
 		page = int(page)
-		journal_key = self.journal_key(journal)
+		journal = cache.get_journal(username, journal_name)
+
+		if not journal:
+			self.error(404)
+			return
 
 		subject = self.request.get('subject').strip()
 
@@ -241,8 +302,7 @@ class ViewJournal(webapp2.RequestHandler):
 		text = self.request.get('text').strip()
 
 		if not text:
-			journal = cache.get_by_key(journal_key)
-			utils.alert('error', 'You didn\'t type anything. Try again.')
+			self.add_message('error', 'You didn\'t type anything. Try again.')
 			self.render(journal, page, subejct, text, tags)
 		else:
 			def txn(user_key, journal_key, entry):
@@ -263,38 +323,37 @@ class ViewJournal(webapp2.RequestHandler):
 				db.put([user, journal, entry])
 				return user, journal
 
-			session = get_current_session()
-			entry = models.Entry(parent=journal_key, subject=subject, text=text, tags=tags, date=datetime.datetime.now())
+			entry = models.Entry(parent=journal.key(), subject=subject, text=text, tags=tags, date=datetime.datetime.now())
 			entry.count()
-			user, journal = db.run_in_transaction(txn, session['user'].key(), journal_key, entry)
+			user, journal = db.run_in_transaction(txn, self.session['user']['key'], journal.key(), entry)
 
 			cache.clear_journal_cache(user.key())
 			cache.set(cache.pack(user), cache.C_KEY, user.key())
-			cache.set(cache.pack(journal), cache.C_KEY, journal_key)
-			cache.clear_entries_cache(journal_key)
-			utils.populate_user_session()
+			cache.set(cache.pack(journal), cache.C_KEY, journal.key())
+			cache.clear_entries_cache(journal.key())
+			self.populate_user_session()
 			counters.increment(counters.COUNTER_ENTRIES)
 			counters.increment(counters.COUNTER_CHARS, entry.chars)
 			counters.increment(counters.COUNTER_WORDS, entry.words)
 			counters.increment(counters.COUNTER_SENTENCES, entry.sentences)
 			models.Activity.create(user, models.ACTIVITY_NEW_ENTRY, entry.key())
 
-			utils.alert('success', 'Entry posted.')
-			self.redirect(webapp2.uri_for('view-journal', journal=journal_key.id()))
+			self.add_message('success', 'Entry posted.')
+			self.redirect(webapp2.uri_for('view-journal', username=username, journal_name=journal_name))
 
-class AboutHandler(webapp2.RequestHandler):
+class AboutHandler(BaseHandler):
 	def get(self):
 		rendert(self, 'about.html')
 
-class StatsHandler(webapp2.RequestHandler):
+class StatsHandler(BaseHandler):
 	def get(self):
 		rendert(self, 'stats.html', {'stats': cache.get_stats()})
 
-class ActivityHandler(webapp2.RequestHandler):
+class ActivityHandler(BaseHandler):
 	def get(self):
 		rendert(self, 'activity.html', {'activities': cache.get_activities()})
 
-class FeedsHandler(webapp2.RequestHandler):
+class FeedsHandler(BaseHandler):
 	def get(self, feed):
 		xml = cache.get_feed(feed)
 
@@ -303,7 +362,7 @@ class FeedsHandler(webapp2.RequestHandler):
 		else:
 			self.response.out.write(xml)
 
-class UserHandler(webapp2.RequestHandler):
+class UserHandler(BaseHandler):
 	def get(self, username):
 		u = cache.get_user(username)
 
@@ -314,18 +373,17 @@ class UserHandler(webapp2.RequestHandler):
 		journals = cache.get_journals(u.key())
 		activities = cache.get_activities(user_key=u.key())
 
-		session = get_current_session()
-		if 'user' in session:
-			following = username in cache.get_following(session['user'].name)
+		if 'user' in self.session:
+			following = username in cache.get_following(self.session['user']['name'])
+			thisuser = self.session['user']['name'] == u.name
 		else:
 			following = False
+			thisuser = False
 
-		rendert(self, 'user.html', {'u': u, 'journals': journals, 'activities': activities, 'following': following})
+		rendert(self, 'user.html', {'u': u, 'journals': journals, 'activities': activities, 'following': following, 'thisuser': thisuser})
 
-class FollowHandler(webapp2.RequestHandler):
+class FollowHandler(BaseHandler):
 	def get(self, username):
-		session = get_current_session()
-
 		user = cache.get_user(username)
 		if not user:
 			self.error(404)
@@ -358,32 +416,69 @@ class FollowHandler(webapp2.RequestHandler):
 			return index
 
 		followers_key = db.Key.from_path('User', username, 'UserFollowersIndex', username)
-		following_key = db.Key.from_path('User', session['user'].name, 'UserFollowingIndex', session['user'].name)
+		following_key = db.Key.from_path('User', self.session['user'].name, 'UserFollowingIndex', self.session['user'].name)
 
-		followers = db.run_in_transaction(txn, followers_key, session['user'].name, op)
+		followers = db.run_in_transaction(txn, followers_key, self.session['user'].name, op)
 
 		try:
 			following = db.run_in_transaction(txn, following_key, username, op)
 
 			if op == 'add':
-				utils.alert('success', 'You are now following %s.' %username)
-				models.Activity.create(session['user'], models.ACTIVITY_FOLLOWING, user)
+				self.add_message('success', 'You are now following %s.' %username)
+				models.Activity.create(self.session['user'], models.ACTIVITY_FOLLOWING, user)
 			elif op == 'del':
-				utils.alert('success', 'You are no longer following %s.' %username)
+				self.add_message('success', 'You are no longer following %s.' %username)
 
 			cache.set_multi({
 				cache.C_FOLLOWERS %username: followers.users,
-				cache.C_FOLLOWING %session['user'].name: following.users,
+				cache.C_FOLLOWING %self.session['user'].name: following.users,
 			})
 
 		except db.TransactionFailedError:
 			logging.error('Second transaction failed in FollowHandler')
-			utils.alert('error', 'We\'re sorry, there was a problem. Try that again.')
+			self.add_message('error', 'We\'re sorry, there was a problem. Try that again.')
 
 			# do some ghetto rollback if the second transaction fails, can still fail...
-			db.run_in_transaction(txn, followers_key, session['user'].name, unop)
+			db.run_in_transaction(txn, followers_key, self.session['user'].name, unop)
 
 		self.redirect(webapp2.uri_for('user', username=username))
+
+class NewEntryHandler(BaseHandler):
+	def get(self, journal_id):
+		journal_key = utils.journal_key(journal_id)
+		journal = cache.get_by_key(journal_key)
+
+		if journal:
+			pass
+
+class NewEntryUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+	def post(self):
+		journal_key = db.Key.from_path('Journal', long(self.request.get('journal')), parent=self.session['user']['key'])
+		j = cache.get_by_key(journal_key)
+
+		subject = self.request.get('subject').strip()
+
+		tags = self.request.get('tags').strip()
+		if tags:
+			tags = [i.strip() for i in self.request.get('tags').split(',')]
+		else:
+			tags = []
+
+		text = self.request.get('text').strip()
+
+		#entry = models.Entry(parent=journal_key, subject=
+
+		for upload in self.get_uploads('attach'):
+			if not j:
+				upload.delete()
+
+#		self.redirect(webapp2.uri_for('view-journal', journal=self.request.POST['journal']))
+
+config = {
+	'webapp2_extras.sessions': {
+		'secret_key': settings.COOKIE_KEY,
+	},
+}
 
 application = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
@@ -392,16 +487,52 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/activity', handler=ActivityHandler, name='activity'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/follow/<username>', handler=FollowHandler, name='follow'),
-	webapp2.Route(r'/journal/<journal:\d+>/<page:\d+>', handler=ViewJournal, name='view-journal', defaults={'page': 1}),
 	webapp2.Route(r'/login/facebook', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/logout/google', handler=GoogleSwitch, name='logout-google'),
+	webapp2.Route(r'/new/entry/<journal_name>', handler=NewEntryHandler, name='new-entry'),
+	webapp2.Route(r'/new/entry/upload', handler=NewEntryUploadHandler, name='new-entry-upload'),
 	webapp2.Route(r'/new/journal', handler=NewJournal, name='new-journal'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
 	webapp2.Route(r'/stats', handler=StatsHandler, name='stats'),
-	webapp2.Route(r'/user/<username>', handler=UserHandler, name='user'),
-	], debug=True)
+
+	webapp2.Route(r'/<username>/<journal_name>', handler=ViewJournal, name='view-journal'),
+	webapp2.Route(r'/<username>', handler=UserHandler, name='user'),
+	], debug=True, config=config)
+
+RESERVED_NAMES = set([
+	'',
+	'<username>',
+	'about',
+	'account',
+	'activity',
+	'blog',
+	'contact',
+	'features',
+	'feeds',
+	'follow',
+	'help',
+	'journal',
+	'journaler',
+	'journalr',
+	'login',
+	'logout',
+	'new',
+	'register',
+	'site',
+	'stats',
+	'user',
+])
+
+# assert that all routes are listed in RESERVED_NAMES
+for i in application.router.build_routes.values():
+	name = i.template.partition('/')[2].partition('/')[0]
+	if name not in RESERVED_NAMES:
+		import sys
+		logging.critical('%s not in RESERVED_NAMES', name)
+		print '%s not in RESERVED_NAMES' %name
+		sys.exit(1)
 
 webapp.template.register_template_library('templatefilters.filters')
 
