@@ -17,6 +17,7 @@ from __future__ import with_statement
 import logging
 import re
 
+from google.appengine.api import images
 from google.appengine.ext import blobstore
 from google.appengine.ext import db
 
@@ -144,6 +145,10 @@ class Entry(db.Model):
 	def content_key(self):
 		return db.Key.from_path('EntryContent', long(self.content), parent=self.key())
 
+	@property
+	def blob_keys(self):
+		return [db.Key.from_path('Blob', long(i), parent=self.key()) for i in self.blobs]
+
 	def count(self):
 		txt = str(self.text)
 		self.chars = len(txt)
@@ -208,3 +213,7 @@ class Blob(db.Expando):
 	type = db.IntegerProperty(required=True, choices=BLOB_TYPE_CHOICES)
 	name = db.StringProperty(indexed=False)
 	size = db.IntegerProperty()
+
+	def url(self, size=None):
+		if self.type == BLOB_TYPE_IMAGE:
+			return images.get_serving_url(self.blob, size)

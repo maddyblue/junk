@@ -270,8 +270,8 @@ class NewJournal(BaseHandler):
 		rendert(self, 'new-journal.html')
 
 class ViewJournal(BaseHandler):
-	def get(self, username, journal_name, page=1):
-		page = int(page)
+	def get(self, username, journal_name):
+		page = int(self.request.get('page', 1))
 		journal = cache.get_journal(username, journal_name)
 
 		if not journal:
@@ -279,7 +279,7 @@ class ViewJournal(BaseHandler):
 		else:
 			rendert(self, 'view-journal.html', {
 				'journal': journal,
-				'entries': cache.get_entries_page(journal.key(), page),
+				'entries': cache.get_entries_page(username, journal_name, page, journal.key()),
 				'page': page,
 				'pagelist': utils.page_list(page, journal.pages),
 			})
@@ -446,6 +446,7 @@ class ViewEntryHandler(BaseHandler):
 			'content': content,
 			'entry': entry,
 			'journal_name': journal_name,
+			'render': cache.get_entry_render(username, journal_name, entry_id),
 			'upload_url': blobstore.create_upload_url(webapp2.uri_for('entry-upload')),
 			'username': username,
 		})
@@ -468,6 +469,18 @@ class EntryUploadHandler(BaseUploadHandler):
 		tags = self.request.get('tags').strip()
 		lines = self.request.get('text').strip().splitlines()
 		blob_list = self.request.get_all('blob')
+
+		date = self.request.get('date').strip()
+		time = self.request.get('time').strip()
+		if not time:
+			time = '12:00 AM'
+
+		try:
+			newdate = datetime.datetime.strptime('%s %s' %(date, time), '%m/%d/%Y %I:%M %p')
+		except:
+			self.add_message('error', 'Couldn\'t understand that date: %s %s' %(date, time))
+			newdate = entry.date
+
 		text = []
 
 		# Something is adding blank lines. Problem with the blobstore/upload stuff?
@@ -490,10 +503,11 @@ class EntryUploadHandler(BaseUploadHandler):
 				blobs.remove(b)
 				entry.blobs.remove(bid)
 
-		def txn(entry_key, content_key, blobs, subject, tags, text):
+		def txn(entry_key, content_key, blobs, subject, tags, text, date):
 			# is this get necessary, or can we use them from memcache above?
 			entry, content  = db.get([entry_key, content_key])
 
+			entry.date = date
 			entry.blobs = [str(i.key().id()) for i in blobs]
 			content.subject = subject
 			content.tags = tags
@@ -521,8 +535,16 @@ class EntryUploadHandler(BaseUploadHandler):
 				blob_key = db.Key.from_path('Blob', blob_range.pop(0), parent=entry.key())
 				blobs.append(models.Blob(key=blob_key, blob=blob, type=blob_type, name=blob.filename, size=blob.size))
 
-		entry, content, blobs = db.run_in_transaction(txn, entry.key(), content.key(), blobs, subject, tags, text)
+		entry, content, blobs = db.run_in_transaction(txn, entry.key(), content.key(), blobs, subject, tags, text, newdate)
 		cache.set((cache.pack(entry), cache.pack(content), cache.pack(blobs)), cache.C_ENTRY, username, journal_name, entry_id)
+
+		entry_render = utils.render('entry-render.html', {
+			'blobs': blobs,
+			'content': content,
+			'entry': entry,
+			'entry_url': webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id),
+		})
+		cache.set(entry_render, cache.C_ENTRY_RENDER, username, journal_name, entry_id)
 
 		self.add_message('success', 'Your entry has been saved.')
 

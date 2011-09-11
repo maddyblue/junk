@@ -18,6 +18,14 @@
 							<input class="xxlarge" id="subject" name="subject" type="text" value="{{ content.subject|default:"" }}" />
 						</div>
 					</div>
+					<div class="clearfix">
+						<label for="date">date</label>
+						<div class="input">
+							<input class="small" id="date" name="date" type="text" value="{{ entry.date|date:"m/d/Y" }}" />
+							<input class="mini" id="time" name="time" type="text" value="{{ entry.date|date:"h:i A" }}" />
+							<span class="help-inline">date format: MM/DD/YYYY; time is optional, format is HH:MM AM/PM</span>
+						</div>
+					</div>
 					<div class="clearfix post-speech">
 						<label for="text">text</label>
 						<div class="input">
@@ -36,7 +44,7 @@
 					<div class="clearfix">
 						<div class="input">
 							<input type="checkbox" name="blob" value="{{ b.key.id }}" checked>
-							{{ b.size|filesizeformat }}, {{ b.name }}
+							{{ b.size|filesizeformat }}, <a href="{{ b.url }}">{{ b.name }}</a>
 						</div>
 					</div>
 					{% endfor %}
@@ -48,4 +56,6 @@
 			</form>
 		</div>
 	</div>
+
+	{{ render|safe }}
 {% endblock %}

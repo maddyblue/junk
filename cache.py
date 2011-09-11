@@ -21,16 +21,21 @@ from google.appengine.ext import db
 import counters
 import feeds
 import models
+import utils
+import webapp2
 
+# Some have underscores to protect against usernames with -, but I am not
+# convinced that it is right. Maybe move all - to _?
 C_ACTIVITIES = 'activities-%s-%s-%s'
 C_ENTRIES_KEYS = 'entries-keys-%s'
 C_ENTRIES_KEYS_PAGE = 'entries-keys-page-%s-%s'
-C_ENTRIES_PAGE = 'entries-page-%s-%s'
+C_ENTRIES_PAGE = 'entries-page-%s-%s-%s'
 C_ENTRY = 'entry-%s_%s-%s'
+C_ENTRY_RENDER = 'entry-render-%s_%s-%s'
 C_FEED = 'feed-%s'
 C_FOLLOWERS = 'followers-%s'
 C_FOLLOWING = 'following-%s'
-C_JOURNAL = 'journal-%s_%s' # use an underscore since username can have -
+C_JOURNAL = 'journal-%s_%s'
 C_JOURNALS = 'journals-%s'
 C_JOURNAL_KEY = 'journal-key-%s_%s'
 C_JOURNAL_LIST = 'journals-list-%s'
@@ -123,16 +128,16 @@ def get_entries_keys_page(journal_key, page):
 	return data
 
 # returns entries of given page
-def get_entries_page(journal_key, page):
-	n = C_ENTRIES_PAGE %(journal_key, page)
-	data = unpack(memcache.get(n))
+def get_entries_page(username, journal_name, page, journal_key):
+	n = C_ENTRIES_PAGE %(username, journal_name, page)
+	data = memcache.get(n)
 	if data is None:
 		if page < 1:
 			page = 1
 
 		entries = get_entries_keys_page(journal_key, page)
-		data = db.get(entries)
-		memcache.add(n, pack(data))
+		data = [unicode(get_entry_render(username, journal_name, i.id())) for i in entries]
+		memcache.add(n, data)
 
 	return data
 
@@ -254,8 +259,14 @@ def get_entry(username, journal_name, entry_id):
 		journal_key = get_journal_key(username, journal_name)
 		entry_key = db.Key.from_path('Entry', entry_id, parent=journal_key)
 		entry = get_by_key(entry_key)
+		# try async queries here
 		content = get_by_key(entry.content_key)
-		blobs = pack(db.get([db.Key.from_path('Blob', long(i), parent=entry_key) for i in entry.blobs]))
+
+		if entry.blobs:
+			blobs = pack(db.get(entry.blob_keys))
+		else:
+			blobs = []
+
 		data = (pack(entry), pack(content), blobs)
 		memcache.add(n, data)
 
@@ -265,3 +276,18 @@ def get_entry(username, journal_name, entry_id):
 	blobs = unpack(blobs)
 
 	return entry, content, blobs
+
+def get_entry_render(username, journal_name, entry_id):
+	n = C_ENTRY_RENDER %(username, journal_name, entry_id)
+	data = memcache.get(n)
+	if data is None:
+		entry, content, blobs = get_entry(username, journal_name, entry_id)
+		data = utils.render('entry-render.html', {
+			'blobs': blobs,
+			'content': content,
+			'entry': entry,
+			'entry_url': webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id),
+		})
+		memcache.add(n, data)
+
+	return data
