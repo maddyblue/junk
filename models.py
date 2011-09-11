@@ -108,8 +108,8 @@ class Journal(db.Model):
 			self.freq_words = 0.
 			self.freq_sentences = 0.
 
-	def __str__(self):
-		return str(self.name)
+	def __unicode__(self):
+		return unicode(self.name)
 
 	@property
 	def pages(self):

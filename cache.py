@@ -148,7 +148,7 @@ def clear_entries_cache(journal_key):
 
 	# add one key per page for get_entries_page and get_entries_keys_page
 	for p in range(1, journal.entry_count / models.Journal.ENTRIES_PER_PAGE + 2):
-		keys.extend([C_ENTRIES_PAGE %(journal_key, p), C_ENTRIES_KEYS_PAGE %(journal_key, p)])
+		keys.extend([C_ENTRIES_PAGE %(journal.key().parent().name(), journal.name, p), C_ENTRIES_KEYS_PAGE %(journal_key, p)])
 
 	memcache.delete_multi(keys)
 
@@ -246,7 +246,7 @@ def get_journal_key(username, journal_name):
 	data = memcache.get(n)
 	if data is None:
 		user_key = db.Key.from_path('User', username)
-		data = models.Journal.all(keys_only=True).ancestor(user_key).filter('name', journal_name).get()
+		data = models.Journal.all(keys_only=True).ancestor(user_key).filter('name', journal_name.decode('utf-8')).get()
 		memcache.add(n, data)
 
 	return data

@@ -424,6 +424,7 @@ class NewEntryHandler(BaseHandler):
 		models.Activity.create(user, models.ACTIVITY_NEW_ENTRY, entry.key())
 
 		counters.increment(counters.COUNTER_ENTRIES)
+		cache.clear_entries_cache(journal.key())
 		cache.set_keys([user, journal, entry, content])
 		cache.set(cache.pack(journal), cache.C_JOURNAL, username, journal_name)
 
