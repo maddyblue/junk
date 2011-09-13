@@ -468,7 +468,7 @@ class EntryUploadHandler(BaseUploadHandler):
 
 		subject = self.request.get('subject').strip()
 		tags = self.request.get('tags').strip()
-		lines = self.request.get('text').strip().splitlines()
+		text = self.request.get('text').strip()
 		blob_list = self.request.get_all('blob')
 
 		date = self.request.get('date').strip()
@@ -481,16 +481,6 @@ class EntryUploadHandler(BaseUploadHandler):
 		except:
 			self.add_message('error', 'Couldn\'t understand that date: %s %s' %(date, time))
 			newdate = entry.date
-
-		text = []
-
-		# Something is adding blank lines. Problem with the blobstore/upload stuff?
-		while lines:
-			text.append(lines.pop(0))
-			if lines:
-				lines.pop(0)
-
-		text = '\n'.join(text)
 
 		if tags:
 			tags = [i.strip() for i in self.request.get('tags').split(',')]
