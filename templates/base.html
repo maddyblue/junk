@@ -77,12 +77,12 @@
 
 	{% if messages %}
 	<div class="container">
-		<div class="row"></div>
+		<div class="row"><p></p></div>
 		{% for m in messages %}
 			<div class="row">
 				<div class="span16">
 					<div class="alert-message {{ m.1 }}">
-						<p>{{ m.0 }}</p>
+						{{ m.0 }}
 					</div>
 				</div>
 			</div>
