@@ -31,9 +31,9 @@ def feed(feed):
 		items = []
 		for i in cache.get_activities():
 			items.append(mk_item(
-				'%s %s' %(i.name, i.get_action()),
+				'%s %s' %(i.user, i.get_action()),
 				None,
-				'%s %s' %(i.name, i.get_action()),
+				'%s %s' %(i.user, i.get_action()),
 				i.key().id(),
 				i.date
 			))
@@ -47,9 +47,9 @@ def feed(feed):
 		items = []
 		for i in cache.get_activities(user_key=db.Key.from_path('User', user)):
 			items.append(mk_item(
-				'%s %s' %(i.name, i.get_action()),
+				'%s %s' %(i.user, i.get_action()),
 				None,
-				'%s %s' %(i.name, i.get_action()),
+				'%s %s' %(i.user, i.get_action()),
 				i.key().id(),
 				i.date
 			))

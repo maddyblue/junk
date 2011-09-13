@@ -158,24 +158,26 @@ class Entry(db.Model):
 ACTIVITY_NEW_JOURNAL = 1
 ACTIVITY_NEW_ENTRY = 2
 ACTIVITY_FOLLOWING = 3
+ACTIVITY_SAVE_ENTRY = 4
 
 ACTIVITY_CHOICES = [
 	ACTIVITY_NEW_JOURNAL,
 	ACTIVITY_NEW_ENTRY,
 	ACTIVITY_FOLLOWING,
+	ACTIVITY_SAVE_ENTRY,
 ]
 
 ACTIVITY_ACTION = {
 	ACTIVITY_NEW_JOURNAL: 'created a new journal',
-	ACTIVITY_NEW_ENTRY: 'wrote a new journal entry',
+	ACTIVITY_NEW_ENTRY: 'started a new journal entry',
 	ACTIVITY_FOLLOWING: 'started following',
+	ACTIVITY_SAVE_ENTRY: 'updated a journal entry',
 }
 
 class Activity(DerefModel):
 	RESULTS = 25
 
-	user = db.ReferenceProperty(User, collection_name='activity_user_set')
-	name = db.StringProperty(indexed=False)
+	user = db.StringProperty(required=True)
 	img = db.StringProperty(indexed=False)
 	date = db.DateTimeProperty(auto_now_add=True)
 	action = db.IntegerProperty(required=True, choices=ACTIVITY_CHOICES)
@@ -185,17 +187,17 @@ class Activity(DerefModel):
 		r = ACTIVITY_ACTION[self.action]
 
 		if self.action == ACTIVITY_FOLLOWING:
-			u = self.get_key('object').name()
-			r += ' <a href="%s">%s</a>' %(webapp2.uri_for('user', username=u), u)
+			r += ' <a href="%s">%s</a>' %(webapp2.uri_for('user', username=self.user), self.user)
 
 		return r
 
 	@staticmethod
 	def create(user, action, object):
-		a = Activity(user=user, name=user.name, img=user.gravatar('30'), action=action, object=object)
-		a.put()
+		a = Activity(user=user.name, img=user.gravatar('30'), action=action, object=object)
+		ar = db.put_async(a)
 
 		receivers = cache.get_followers(user.name)
+		ar.get_result()
 		ai = ActivityIndex(parent=a, receivers=receivers)
 		ai.put()
 

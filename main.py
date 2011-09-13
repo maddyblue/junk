@@ -530,6 +530,7 @@ class EntryUploadHandler(BaseUploadHandler):
 
 		cache.clear_entries_cache(entry.key().parent())
 		cache.set((cache.pack(entry), cache.pack(content), cache.pack(blobs)), cache.C_ENTRY, username, journal_name, entry_id)
+		models.Activity.create(user, models.ACTIVITY_SAVE_ENTRY, entry.key())
 
 		entry_render = utils.render('entry-render.html', {
 			'blobs': blobs,
