@@ -43,7 +43,7 @@ $(function() {
 						<label for="attach" class="label-attach">attach a file</label> \
 						<div class="input"> \
 							<input class="xlarge file-attach" id="attach" name="attach" type="file" /> \
-							<span id="span-attach" class="help-block">we currently only support images</span> \
+							<span id="span-attach" class="help-block">we currently only support images, up to 4MB</span> \
 						</div> \
 					</div> \
 	';

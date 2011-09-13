@@ -448,7 +448,7 @@ class ViewEntryHandler(BaseHandler):
 			'entry': entry,
 			'journal_name': journal_name,
 			'render': cache.get_entry_render(username, journal_name, entry_id),
-			'upload_url': blobstore.create_upload_url(webapp2.uri_for('entry-upload')),
+			'upload_url': blobstore.create_upload_url(webapp2.uri_for('entry-upload'), max_bytes_per_blob=models.Blob.MAXSIZE),
 			'username': username,
 		})
 

@@ -211,6 +211,8 @@ BLOB_TYPE_CHOICES = [
 ]
 
 class Blob(db.Expando):
+	MAXSIZE = 4 * 2 ** 20 # 4MB
+
 	blob = blobstore.BlobReferenceProperty(required=True)
 	type = db.IntegerProperty(required=True, choices=BLOB_TYPE_CHOICES)
 	name = db.StringProperty(indexed=False)
