@@ -314,7 +314,7 @@ class UserHandler(BaseHandler):
 			return
 
 		journals = cache.get_journals(u.key())
-		activities = cache.get_activities(user_key=u.key())
+		activities = cache.get_activities(username=username)
 
 		if 'user' in self.session:
 			following = username in cache.get_following(self.session['user']['name'])
@@ -392,10 +392,9 @@ class NewEntryHandler(BaseHandler):
 			self.error(404)
 			return
 
-		# only need to fetch key here?
-		journal = cache.get_journal(username, journal_name)
+		journal_key = cache.get_journal_key(username, journal_name)
 
-		if not journal:
+		if not journal_key:
 			self.error(404)
 			return
 
@@ -407,9 +406,9 @@ class NewEntryHandler(BaseHandler):
 			db.put([user, journal, entry, content])
 			return user, journal
 
-		handmade_key = db.Key.from_path('Entry', 1, parent=journal.key())
+		handmade_key = db.Key.from_path('Entry', 1, parent=journal_key)
 		entry_id = db.allocate_ids(handmade_key, 1)[0]
-		entry_key = db.Key.from_path('Entry', entry_id, parent=journal.key())
+		entry_key = db.Key.from_path('Entry', entry_id, parent=journal_key)
 
 		handmade_key = db.Key.from_path('EntryContent', 1, parent=entry_key)
 		content_id = db.allocate_ids(handmade_key, 1)[0]
@@ -418,7 +417,7 @@ class NewEntryHandler(BaseHandler):
 		content = models.EntryContent(key=content_key)
 		entry = models.Entry(key=entry_key, content=content_id)
 
-		user, journal = db.run_in_transaction(txn, self.session['user']['key'], journal.key(), entry, content)
+		user, journal = db.run_in_transaction(txn, self.session['user']['key'], journal_key, entry, content)
 
 		# move this to new entry saving for first time
 		models.Activity.create(user, models.ACTIVITY_NEW_ENTRY, entry.key())
@@ -457,6 +456,9 @@ class EntryUploadHandler(BaseUploadHandler):
 		username = self.request.get('username')
 		journal_name = self.request.get('journal_name')
 		entry_id = long(self.request.get('entry_id'))
+		delete = self.request.get('delete')
+		sure = self.request.get('sure')
+
 		self.redirect(webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id))
 
 		entry, content, blobs = cache.get_entry(username, journal_name, entry_id)
@@ -466,81 +468,112 @@ class EntryUploadHandler(BaseUploadHandler):
 				upload.delete()
 			return
 
-		subject = self.request.get('subject').strip()
-		tags = self.request.get('tags').strip()
-		text = self.request.get('text').strip()
-		blob_list = self.request.get_all('blob')
+		if delete == 'Delete entry' and sure == 'on':
+			journal_key = entry.key().parent()
+			user_key = journal_key.parent()
 
-		date = self.request.get('date').strip()
-		time = self.request.get('time').strip()
-		if not time:
-			time = '12:00 AM'
+			for upload in self.get_uploads():
+				upload.delete()
 
-		try:
-			newdate = datetime.datetime.strptime('%s %s' %(date, time), '%m/%d/%Y %I:%M %p')
-		except:
-			self.add_message('error', 'Couldn\'t understand that date: %s %s' %(date, time))
-			newdate = entry.date
+			def txn(user_key, journal_key, entry_key, content_key, blob_keys):
+				delete = [entry_key, content_key]
+				delete.extend(blob_keys)
+				db.delete_async(delete)
 
-		if tags:
-			tags = [i.strip() for i in self.request.get('tags').split(',')]
+				user, journal = db.get([user_key, journal_key])
+				journal.entry_count -= 1
+				user.entry_count -= 1
+
+				db.put([user, journal])
+				return user, journal
+
+			user, journal = db.run_in_transaction(txn, user_key, journal_key, entry.key(), content.key(), [i.key() for i in blobs])
+
+			blobstore.delete([i.get_key('blob') for i in blobs])
+
+			db.delete([entry, content])
+			cache.clear_entries_cache(journal_key)
+			cache.set_keys([user, journal])
+			cache.set(cache.pack(journal), cache.C_JOURNAL, username, journal_name)
+			self.add_message('success', 'Entry deleted.')
+			self.redirect(webapp2.uri_for('view-journal', username=username, journal_name=journal_name))
+
 		else:
-			tags = []
+			subject = self.request.get('subject').strip()
+			tags = self.request.get('tags').strip()
+			text = self.request.get('text').strip()
+			blob_list = self.request.get_all('blob')
 
-		for b in blobs:
-			bid = str(b.key().id())
-			if bid not in blob_list:
-				b.delete()
-				blobs.remove(b)
-				entry.blobs.remove(bid)
+			date = self.request.get('date').strip()
+			time = self.request.get('time').strip()
+			if not time:
+				time = '12:00 AM'
 
-		def txn(entry_key, content_key, blobs, subject, tags, text, date):
-			# is this get necessary, or can we use them from memcache above?
-			entry, content  = db.get([entry_key, content_key])
+			try:
+				newdate = datetime.datetime.strptime('%s %s' %(date, time), '%m/%d/%Y %I:%M %p')
+			except:
+				self.add_message('error', 'Couldn\'t understand that date: %s %s' %(date, time))
+				newdate = entry.date
 
-			entry.date = date
-			entry.blobs = [str(i.key().id()) for i in blobs]
-			content.subject = subject
-			content.tags = tags
-			content.text = text
+			if tags:
+				tags = [i.strip() for i in self.request.get('tags').split(',')]
+			else:
+				tags = []
 
-			to_put = [entry, content]
-			to_put.extend(blobs)
-			db.put(to_put)
+			for b in blobs:
+				bid = str(b.key().id())
+				if bid not in blob_list:
+					b.delete()
+					blobs.remove(b)
+					entry.blobs.remove(bid)
 
-			return entry, content, blobs
+			def txn(entry_key, content_key, blobs, subject, tags, text, date):
+				# is this get necessary, or can we use them from memcache above?
+				entry, content  = db.get([entry_key, content_key])
 
-		blobs_to_add = []
+				entry.date = date
+				entry.blobs = [str(i.key().id()) for i in blobs]
+				content.subject = subject
+				content.tags = tags
+				content.text = text
 
-		for upload in self.get_uploads('attach'):
-			if upload.content_type.startswith('image/'):
-				blobs_to_add.append((upload, models.BLOB_TYPE_IMAGE))
+				to_put = [entry, content]
+				to_put.extend(blobs)
+				db.put(to_put)
 
-		if blobs_to_add:
-			handmade_key = db.Key.from_path('Blob', 1, parent=entry.key())
-			blob_ids = db.allocate_ids(handmade_key, len(blobs_to_add))
-			blob_range = range(blob_ids[0], blob_ids[1] + 1)
+				return entry, content, blobs
 
-			while blobs_to_add:
-				blob, blob_type = blobs_to_add.pop(0)
-				blob_key = db.Key.from_path('Blob', blob_range.pop(0), parent=entry.key())
-				blobs.append(models.Blob(key=blob_key, blob=blob, type=blob_type, name=blob.filename, size=blob.size))
+			blobs_to_add = []
 
-		entry, content, blobs = db.run_in_transaction(txn, entry.key(), content.key(), blobs, subject, tags, text, newdate)
+			for upload in self.get_uploads('attach'):
+				if upload.content_type.startswith('image/'):
+					blobs_to_add.append((upload, models.BLOB_TYPE_IMAGE))
+
+			if blobs_to_add:
+				handmade_key = db.Key.from_path('Blob', 1, parent=entry.key())
+				blob_ids = db.allocate_ids(handmade_key, len(blobs_to_add))
+				blob_range = range(blob_ids[0], blob_ids[1] + 1)
+
+				while blobs_to_add:
+					blob, blob_type = blobs_to_add.pop(0)
+					blob_key = db.Key.from_path('Blob', blob_range.pop(0), parent=entry.key())
+					blobs.append(models.Blob(key=blob_key, blob=blob, type=blob_type, name=blob.filename, size=blob.size))
+
+			entry, content, blobs = db.run_in_transaction(txn, entry.key(), content.key(), blobs, subject, tags, text, newdate)
+			models.Activity.create(cache.get_user(username), models.ACTIVITY_SAVE_ENTRY, entry.key())
+
+			entry_render = utils.render('entry-render.html', {
+				'blobs': blobs,
+				'content': content,
+				'entry': entry,
+				'entry_url': webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id),
+			})
+			cache.set(entry_render, cache.C_ENTRY_RENDER, username, journal_name, entry_id)
+
+			self.add_message('success', 'Your entry has been saved.')
 
 		cache.clear_entries_cache(entry.key().parent())
 		cache.set((cache.pack(entry), cache.pack(content), cache.pack(blobs)), cache.C_ENTRY, username, journal_name, entry_id)
-		models.Activity.create(user, models.ACTIVITY_SAVE_ENTRY, entry.key())
-
-		entry_render = utils.render('entry-render.html', {
-			'blobs': blobs,
-			'content': content,
-			'entry': entry,
-			'entry_url': webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id),
-		})
-		cache.set(entry_render, cache.C_ENTRY_RENDER, username, journal_name, entry_id)
-
-		self.add_message('success', 'Your entry has been saved.')
 
 config = {
 	'webapp2_extras.sessions': {

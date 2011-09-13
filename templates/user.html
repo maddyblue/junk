@@ -61,7 +61,7 @@
 		<div class="span8 columns">
 			<h2>activity <small><a href="{{ "user-feeds"|url:u.name }}">rss feed</a></small></h2>
 			{% for a in activities %}
-				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.name }}"> {% endif %}<a href="{{ "user"|url:a.name }}">{{ a.name }}</a> {{ a.get_action|safe }} {{ a.date|timesince }} ago</p>
+				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.user }}"> {% endif %}<a href="{{ "user"|url:a.user }}">{{ a.user }}</a> {{ a.get_action|safe }} {{ a.date|timesince }} ago</p>
 			{% endfor %}
 		</div>
 	</div>

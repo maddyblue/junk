@@ -63,3 +63,19 @@ $(function() {
 
 	doattach();
 });
+
+// delete enabled/disable
+$(function() {
+	$("#sure").click(function() {
+		if($(this).attr('checked') == 'checked')
+		{
+			$("#delete").removeClass('disabled');
+			$("#delete").removeAttr('disabled');
+		}
+		else
+		{
+			$("#delete").addClass('disabled');
+			$("#delete").attr('disabled', 'disabled');
+		}
+	});
+});

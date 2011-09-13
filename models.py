@@ -31,6 +31,10 @@ class DerefModel(db.Model):
 	def get_key(self, prop_name):
 		return getattr(self.__class__, prop_name).get_value_for_datastore(self)
 
+class DerefExpando(db.Expando):
+	def get_key(self, prop_name):
+		return getattr(self.__class__, prop_name).get_value_for_datastore(self)
+
 USER_SOURCE_FACEBOOK = 'facebook'
 USER_SOURCE_GOOGLE = 'google'
 
@@ -210,7 +214,7 @@ BLOB_TYPE_CHOICES = [
 	BLOB_TYPE_IMAGE,
 ]
 
-class Blob(db.Expando):
+class Blob(DerefExpando):
 	MAXSIZE = 4 * 2 ** 20 # 4MB
 
 	blob = blobstore.BlobReferenceProperty(required=True)
