@@ -527,6 +527,8 @@ class EntryUploadHandler(BaseUploadHandler):
 				blobs.append(models.Blob(key=blob_key, blob=blob, type=blob_type, name=blob.filename, size=blob.size))
 
 		entry, content, blobs = db.run_in_transaction(txn, entry.key(), content.key(), blobs, subject, tags, text, newdate)
+
+		cache.clear_entries_cache(entry.key().parent())
 		cache.set((cache.pack(entry), cache.pack(content), cache.pack(blobs)), cache.C_ENTRY, username, journal_name, entry_id)
 
 		entry_render = utils.render('entry-render.html', {
