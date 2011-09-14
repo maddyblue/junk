@@ -18,15 +18,15 @@ import os
 
 from google.appengine.ext import db
 
-import PyRSS2Gen
 import cache
+import utils
 import webapp2
 
 def feed(feed):
 	if feed == 'activity':
-		title = 'journalr activity feed'
+		title = 'journalr user activity'
 		link = webapp2.uri_for('activity')
-		description = 'Recent activity by journalr users'
+		subtitle = 'Recent activity by journalr users'
 
 		items = []
 		for i in cache.get_activities():
@@ -42,7 +42,7 @@ def feed(feed):
 		user = feed.partition('-')[2]
 		title = '%s activity feed' %user
 		link = webapp2.uri_for('user', username=user)
-		description = 'Recent activity by %s' %user
+		subtitle = 'Recent activity by %s' %user
 
 		items = []
 		for i in cache.get_activities(user_key=db.Key.from_path('User', user)):
@@ -57,27 +57,30 @@ def feed(feed):
 	else:
 		return ''
 
-	rss = PyRSS2Gen.RSS2(
-		title=title,
-		link=mk_link(link),
-		description=description,
-		lastBuildDate=datetime.datetime.utcnow(),
-		items=items,
-	)
+	d = {
+		'title': title,
+		'link': mk_link(link),
+		'subtitle': subtitle,
+		'updated': datetime.datetime.utcnow(),
+		'items': items,
+		'host': os.environ['HTTP_HOST'],
+		'journal_url': mk_link(webapp2.uri_for('main')),
+		'self_link': mk_link(webapp2.uri_for('feeds', feed=feed)),
+	}
 
-	return rss.to_xml()
+	return utils.render('atom.xml', d)
 
 def mk_link(link):
 	if link:
 		return 'http://' + os.environ['HTTP_HOST'] + link
 	else:
-		return None
+		return ''
 
 def mk_item(title, link, desc, uid, date):
-	return PyRSS2Gen.RSSItem(
-		title=title,
-		link=mk_link(link),
-		description=desc,
-		guid=PyRSS2Gen.Guid('%s%s' %(link, uid)),
-		pubDate=date,
-	)
+	return {
+		'title': title,
+		'link': mk_link(link),
+		'content': desc,
+		'id': uid,
+		'date': date,
+	}
