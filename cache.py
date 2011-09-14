@@ -199,7 +199,7 @@ def get_activities_follower_keys(username):
 	if data is None:
 		index_keys = models.ActivityIndex.all(keys_only=True).filter('receivers', username).order('-date').fetch(50)
 		data = [str(i.parent()) for i in index_keys]
-		memcache.add(n, data)
+		memcache.add(n, data, 300) # cache for 5 minutes
 
 	return data
 
@@ -208,7 +208,7 @@ def get_activities_follower_data(keys):
 	data = unpack(memcache.get(n))
 	if data is None:
 		data = db.get(keys)
-		memcache.add(n, pack(data))
+		memcache.add(n, pack(data)) # no limit on this cache since this data never changes
 
 	return data
 
