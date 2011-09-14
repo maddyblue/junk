@@ -48,6 +48,7 @@ class User(db.Model):
 	email = db.EmailProperty()
 	register_date = db.DateTimeProperty(auto_now_add=True)
 	last_login = db.DateTimeProperty(auto_now_add=True)
+	token = db.StringProperty(required=True, indexed=False)
 
 	source = db.StringProperty(required=True, choices=USER_SOURCE_CHOICES)
 	uid = db.StringProperty(required=True)
@@ -191,7 +192,8 @@ class Activity(DerefModel):
 		r = ACTIVITY_ACTION[self.action]
 
 		if self.action == ACTIVITY_FOLLOWING:
-			r += ' <a href="%s">%s</a>' %(webapp2.uri_for('user', username=self.user), self.user)
+			name = self.get_key('object').name()
+			r += ' <a href="%s">%s</a>' %(webapp2.uri_for('user', username=name), name)
 
 		return r
 
@@ -201,12 +203,14 @@ class Activity(DerefModel):
 		ar = db.put_async(a)
 
 		receivers = cache.get_followers(user.name)
+		receivers.append(user.name)
 		ar.get_result()
 		ai = ActivityIndex(parent=a, receivers=receivers)
 		ai.put()
 
 class ActivityIndex(db.Model):
 	receivers = db.StringListProperty()
+	date = db.DateTimeProperty(auto_now_add=True)
 
 BLOB_TYPE_IMAGE = 1
 

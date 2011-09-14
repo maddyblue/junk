@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>journalr <small>modern journaling</small></h1>
+	</div>
+
+	<div class="row">
+		<div class="span10 columns">
+			<h2>news feed<small>(things done by you and people you are following) <a href="{{ "user-feeds"|url:user.name }}?token={{ token }}"><img src="/static/images/feed.png" class="feed-img" alt="feed">rss feed</a></h2>
+			{% include "activities.html" %}
+		</div>
+
+		<div class="span6 columns">
+			<h2>your journals</h2>
+
+			{% include "journals.html" %}
+		</div>
+	</div>
+{% endblock %}

@@ -34,32 +34,12 @@
 	<div class="row">
 		<div class="span8 columns">
 			<h2>{{ u }}'s journals</h2>
-			{% for j in journals %}
-				<h3>
-					{% if thisuser %}
-						<a href="{{ j|journal_url }}">{{ j }}</a>
-					{% else %}
-						{{ j }}
-					{% endif %}
-				</h3>
-				<table>
-					<tr><td>entries</td><td>{{ j.entry_count }}</td></tr>
-					<tr><td>created on</td><td>{{ j.created_date|sdate }}</td></tr>
-					<tr><td>characters</td><td>{{ j.chars }}</td></tr>
-					<tr><td>words</td><td>{{ j.words }}</td></tr>
-					<tr><td>sentences</td><td>{{ j.sentences }}</td></tr>
-					<tr><td>entries per week</td><td>{{ j.freq_entries|floatformat }}</td></tr>
-					<tr><td>characters per week</td><td>{{ j.freq_chars|floatformat }}</td></tr>
-					<tr><td>words per week</td><td>{{ j.freq_words|floatformat }}</td></tr>
-					<tr><td>sentences per week</td><td>{{ j.freq_sentences|floatformat }}</td></tr>
-					{% if j.last_entry %}<tr><td>last entry</td><td>{{ j.last_entry|jdate }}</td></tr>{% endif %}
-					{% if j.first_entry %}<tr><td>first entry</td><td>{{ j.first_entry|jdate }}</td></tr>{% endif %}
-					{% if j.entry_days %}<tr><td>entries spanning</td><td>{{ j.entry_days }} day{{ j.entry_days|pluralize }}</td></tr>{% endif %}
-				</table>
-			{% endfor %}
+
+			{% include "journals.html" %}
 		</div>
+
 		<div class="span8 columns">
-			<h2>activity <small><a href="{{ "user-feeds"|url:u.name }}">rss feed</a></small></h2>
+			<h2>activity <small><a href="{{ "user-feeds"|url:u.name }}"><img src="/static/images/feed.png" class="feed-img" alt="feed">rss feed</a></small></h2>
 			{% for a in activities %}
 				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.user }}"> {% endif %}<a href="{{ "user"|url:a.user }}">{{ a.user }}</a> {{ a.get_action|safe }} {{ a.date|timesince }} ago</p>
 			{% endfor %}

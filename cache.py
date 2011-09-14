@@ -24,22 +24,25 @@ import models
 import utils
 import webapp2
 
-# Some have underscores to protect against usernames with -, but I am not
-# convinced that it is right. Maybe move all - to _?
-C_ACTIVITIES = 'activities-%s-%s-%s'
-C_ENTRIES_KEYS = 'entries-keys-%s'
-C_ENTRIES_KEYS_PAGE = 'entries-keys-page-%s-%s'
-C_ENTRIES_PAGE = 'entries-page-%s-%s-%s'
-C_ENTRY = 'entry-%s_%s-%s'
-C_ENTRY_RENDER = 'entry-render-%s_%s-%s'
-C_FEED = 'feed-%s'
-C_FOLLOWERS = 'followers-%s'
-C_FOLLOWING = 'following-%s'
-C_JOURNAL = 'journal-%s_%s'
-C_JOURNALS = 'journals-%s'
-C_JOURNAL_KEY = 'journal-key-%s_%s'
-C_JOURNAL_LIST = 'journals-list-%s'
-C_KEY = 'key-%s'
+# use underscores since usernames are guaranteed to not have them
+# still a problem with journal names?
+C_ACTIVITIES = 'activities_%s_%s_%s'
+C_ACTIVITIES_FOLLOWER = 'activities_follower_%s'
+C_ACTIVITIES_FOLLOWER_KEYS = 'activities_follower_keys_%s'
+C_ACTIVITIES_FOLLOWER_DATA = 'activities_follower_data_%s'
+C_ENTRIES_KEYS = 'entries_keys_%s'
+C_ENTRIES_KEYS_PAGE = 'entries_keys_page_%s_%s'
+C_ENTRIES_PAGE = 'entries_page_%s_%s_%s'
+C_ENTRY = 'entry_%s_%s_%s'
+C_ENTRY_RENDER = 'entry_render_%s_%s_%s'
+C_FEED = 'feed_%s'
+C_FOLLOWERS = 'followers_%s'
+C_FOLLOWING = 'following_%s'
+C_JOURNAL = 'journal_%s_%s'
+C_JOURNALS = 'journals_%s'
+C_JOURNAL_KEY = 'journal_key_%s_%s'
+C_JOURNAL_LIST = 'journals_list_%s'
+C_KEY = 'key_%s'
 C_STATS = 'stats'
 
 def set(value, c, *args):
@@ -187,6 +190,36 @@ def get_activities(username='', action='', object_key=''):
 
 		data = data.order('-date').fetch(models.Activity.RESULTS)
 		memcache.add(n, pack(data), 60) # cache for 1 minute
+
+	return data
+
+def get_activities_follower_keys(username):
+	n = C_ACTIVITIES_FOLLOWER_KEYS %username
+	data = memcache.get(n)
+	if data is None:
+		index_keys = models.ActivityIndex.all(keys_only=True).filter('receivers', username).order('-date').fetch(50)
+		data = [str(i.parent()) for i in index_keys]
+		memcache.add(n, data)
+
+	return data
+
+def get_activities_follower_data(keys):
+	n = C_ACTIVITIES_FOLLOWER_DATA %'_'.join(keys)
+	data = unpack(memcache.get(n))
+	if data is None:
+		data = db.get(keys)
+		memcache.add(n, pack(data))
+
+	return data
+
+def get_activities_follower(username):
+	n = C_ACTIVITIES_FOLLOWER %username
+	data = unpack(memcache.get(n))
+	if data is None:
+		keys = get_activities_follower_keys(username)
+		# perhaps the keys didn't change, so keep a backup of that data
+		data = get_activities_follower_data(keys)
+		memcache.add(n, pack(data), 300) # cache for 5 minutes
 
 	return data
 

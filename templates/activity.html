@@ -2,14 +2,8 @@
 
 {% block content %}
 	<div class="page-header">
-		<h1>recent activity <small><a href="{{ "feeds"|url:"activity" }}">rss feed</a></small></h1>
+		<h1>recent activity <small><a href="{{ "feeds"|url:"activity" }}"><img src="/static/images/feed.png" class="feed-img" alt="feed">rss feed</a></small></h1>
 	</div>
 
-	{% for a in activities %}
-	<div class="row">
-		<div class="span16">
-			<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.user }}"> {% endif %}<a href="{{ "user"|url:a.user }}">{{ a.user }}</a> {{ a.get_action|safe }} {{ a.date|timesince }} ago</p>
-		</div>
-	</div>
-	{% endfor %}
+	{% include "activities.html" %}
 {% endblock %}

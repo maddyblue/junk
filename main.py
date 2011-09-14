@@ -20,8 +20,10 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.dist import use_library
 use_library('django', '1.2')
 
+import base64
 import datetime
 import logging
+import os
 import re
 
 from google.appengine.api import users
@@ -85,6 +87,7 @@ class BaseHandler(webapp2.RequestHandler):
 			'key': str(user.key()),
 			'name': user.name,
 			'source': user.source,
+			'token': user.token,
 		}
 
 		self.session['journals'] = cache.get_journal_list(db.Key(self.session['user']['key']))
@@ -123,7 +126,16 @@ class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 class MainPage(BaseHandler):
 	def get(self):
-		rendert(self, 'index.html')
+		if 'user' in self.session:
+			journals = cache.get_journals(db.Key(self.session['user']['key']))
+			rendert(self, 'index-user.html', {
+				'activities': cache.get_activities_follower(self.session['user']['name']),
+				'journals': journals,
+				'thisuser': True,
+				'token': self.session['user']['token'],
+			})
+		else:
+			rendert(self, 'index.html')
 
 class GoogleLogin(BaseHandler):
 	def get(self):
@@ -178,7 +190,13 @@ class Register(BaseHandler):
 					uid = self.session['register']['uid']
 					if not email:
 						email = None
-					user = models.User.get_or_insert(lusername, name=username, email=email, source=source, uid=uid)
+					user = models.User.get_or_insert(lusername,
+						name=username,
+						email=email,
+						source=source,
+						uid=uid,
+						token=base64.urlsafe_b64encode(os.urandom(30))[:32],
+					)
 
 					if user.source != source or user.uid != uid:
 						errors['username'] = 'Username is already taken.'
@@ -359,30 +377,30 @@ class FollowHandler(BaseHandler):
 			return index
 
 		followers_key = db.Key.from_path('User', username, 'UserFollowersIndex', username)
-		following_key = db.Key.from_path('User', self.session['user'].name, 'UserFollowingIndex', self.session['user'].name)
+		following_key = db.Key.from_path('User', self.session['user']['name'], 'UserFollowingIndex', self.session['user']['name'])
 
-		followers = db.run_in_transaction(txn, followers_key, self.session['user'].name, op)
+		followers = db.run_in_transaction(txn, followers_key, self.session['user']['name'], op)
 
 		try:
 			following = db.run_in_transaction(txn, following_key, username, op)
 
 			if op == 'add':
 				self.add_message('success', 'You are now following %s.' %username)
-				models.Activity.create(self.session['user'], models.ACTIVITY_FOLLOWING, user)
+				models.Activity.create(cache.get_by_key(self.session['user']['key']), models.ACTIVITY_FOLLOWING, user)
 			elif op == 'del':
 				self.add_message('success', 'You are no longer following %s.' %username)
 
 			cache.set_multi({
 				cache.C_FOLLOWERS %username: followers.users,
-				cache.C_FOLLOWING %self.session['user'].name: following.users,
+				cache.C_FOLLOWING %self.session['user']['name']: following.users,
 			})
 
 		except db.TransactionFailedError:
 			logging.error('Second transaction failed in FollowHandler')
 			self.add_message('error', 'We\'re sorry, there was a problem. Try that again.')
 
-			# do some ghetto rollback if the second transaction fails, can still fail...
-			db.run_in_transaction(txn, followers_key, self.session['user'].name, unop)
+			# do some ghetto rollback if the second transaction fails; this can still fail...
+			db.run_in_transaction(txn, followers_key, self.session['user']['name'], unop)
 
 		self.redirect(webapp2.uri_for('user', username=username))
 

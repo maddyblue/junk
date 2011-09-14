@@ -14,3 +14,7 @@ textarea {
 .dropdown-gravatar:after {
 	margin-left: 34px;
 }
+
+.feed-img {
+	margin-right: 5px;
+}

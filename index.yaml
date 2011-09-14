@@ -16,6 +16,12 @@ indexes:
   - name: date
     direction: desc
 
+- kind: ActivityIndex
+  properties:
+  - name: receivers
+  - name: date
+    direction: desc
+
 - kind: Entry
   ancestor: yes
   properties:
