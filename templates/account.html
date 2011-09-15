@@ -11,6 +11,7 @@
 				<tr><td>name</td><td>{{ u.name }}</td></tr>
 				<tr><td>login with</td><td>{{ u.source }}</td></tr>
 				<tr><td>user since</td><td>{{ u.register_date|jdate }}</td></tr>
+				<tr><td>uploaded file data</td><td>{{ u.used_data|filesizeformat }}</td></tr>
 				<tr>
 					<td>avatar</td>
 					<td>

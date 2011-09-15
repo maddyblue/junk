@@ -53,6 +53,9 @@ class User(db.Model):
 	source = db.StringProperty(required=True, choices=USER_SOURCE_CHOICES)
 	uid = db.StringProperty(required=True)
 
+	allowed_data = db.IntegerProperty(required=True, default=0)
+	used_data = db.IntegerProperty(required=True, default=0)
+
 	journal_count = db.IntegerProperty(required=True, default=0)
 	entry_count = db.IntegerProperty(required=True, default=0)
 
@@ -69,6 +72,13 @@ class User(db.Model):
 			email = self.email.lower()
 
 		return 'http://www.gravatar.com/avatar/' + hashlib.md5(email).hexdigest() + '?d=mm%s' %size
+
+	def can_upload(self):
+		return self.bytes_remaining > 0
+
+	@property
+	def bytes_remaining(self):
+		return self.allowed_data - self.used_data
 
 class UserFollowersIndex(db.Model):
 	users = db.StringListProperty()
