@@ -310,7 +310,8 @@ class ActivityHandler(BaseHandler):
 
 class FeedsHandler(BaseHandler):
 	def get(self, feed):
-		xml = cache.get_feed(feed)
+		token = self.request.get('token')
+		xml = cache.get_feed(feed, token)
 
 		if not xml:
 			self.error(404)

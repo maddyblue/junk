@@ -35,7 +35,7 @@ C_ENTRIES_KEYS_PAGE = 'entries_keys_page_%s_%s'
 C_ENTRIES_PAGE = 'entries_page_%s_%s_%s'
 C_ENTRY = 'entry_%s_%s_%s'
 C_ENTRY_RENDER = 'entry_render_%s_%s_%s'
-C_FEED = 'feed_%s'
+C_FEED = 'feed_%s_%s'
 C_FOLLOWERS = 'followers_%s'
 C_FOLLOWING = 'following_%s'
 C_JOURNAL = 'journal_%s_%s'
@@ -223,11 +223,11 @@ def get_activities_follower(username):
 
 	return data
 
-def get_feed(feed):
-	n = C_FEED %feed
+def get_feed(feed, token):
+	n = C_FEED %(feed, token)
 	data = memcache.get(n)
 	if data is None:
-		data = feeds.feed(feed)
+		data = feeds.feed(feed, token)
 		memcache.add(n, data, 600) # cache for 10 minutes
 
 	return data

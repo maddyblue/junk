@@ -22,7 +22,7 @@ import cache
 import utils
 import webapp2
 
-def feed(feed):
+def feed(feed, token):
 	if feed == 'activity':
 		title = 'journalr user activity'
 		link = webapp2.uri_for('activity')
@@ -39,20 +39,38 @@ def feed(feed):
 			))
 
 	elif feed.startswith('user-'):
-		user = feed.partition('-')[2]
-		title = '%s activity feed' %user
-		link = webapp2.uri_for('user', username=user)
-		subtitle = 'Recent activity by %s' %user
+		username = feed.partition('-')[2]
+		user_key = db.Key.from_path('User', username)
+		user = cache.get_by_key(user_key)
 
-		items = []
-		for i in cache.get_activities(user_key=db.Key.from_path('User', user)):
-			items.append(mk_item(
-				'%s %s' %(i.user, i.get_action()),
-				None,
-				'%s %s' %(i.user, i.get_action()),
-				i.key().id(),
-				i.date
-			))
+		if user.token == token:
+			title = '%s\'s journalr feed' %username
+			link = webapp2.uri_for('user', username=username)
+			subtitle = 'Recent activity by followed by %s' %username
+
+			items = []
+			for i in cache.get_activities_follower(username):
+				items.append(mk_item(
+					'%s %s' %(i.user, i.get_action()),
+					None,
+					'%s %s' %(i.user, i.get_action()),
+					i.key().id(),
+					i.date
+				))
+		else:
+			title = '%s activity feed' %username
+			link = webapp2.uri_for('user', username=username)
+			subtitle = 'Recent activity by %s' %username
+
+			items = []
+			for i in cache.get_activities(username=username):
+				items.append(mk_item(
+					'%s %s' %(i.user, i.get_action()),
+					None,
+					'%s %s' %(i.user, i.get_action()),
+					i.key().id(),
+					i.date
+				))
 
 	else:
 		return ''
