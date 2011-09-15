@@ -1,7 +1,7 @@
 			{% for j in journals %}
 				<h3>
 					{% if thisuser %}
-						<a href="{{ j|journal_url }}">{{ j }}</a>
+						<a href="{{ j|journal_url }}">{{ j }}</a> <a href="{{ "new-entry"|url:j }}" class="btn primary">new entry</a>
 					{% else %}
 						{{ j }}
 					{% endif %}
