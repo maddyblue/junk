@@ -6,7 +6,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<link rel="stylesheet" href="/static/css/bootstrap-1.2.0.min.css">
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/css/site.css">
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
@@ -42,8 +42,7 @@
 				</ul>
 				<ul class="nav secondary-nav">
 					{% if user %}
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle">journals</a>
+					<li class="dropdown{% if active  == "view-journal" or active == "entry" or active == "new-journal" %} active{% endif %}" data-dropdown="dropdown"> <a href="#" class="dropdown-toggle">journals</a>
 						<ul class="dropdown-menu">
 							{% for j in session.journals %}
 								<li><a href="{{ j.0 }}">{{ j.1 }}</a></li>
@@ -53,7 +52,7 @@
 							<li><a href="{{ "new-journal"|url }}">new journal</a></li>
 						</ul>
 					</li>
-					<li class="dropdown">
+					<li class="dropdown{% if active == "account" %} active{% endif %}" data-dropdown="dropdown">
 						<a href="#" class="dropdown-toggle dropdown-gravatar">{{ user.name }} <img class="topbar-img-gravatar" src="{{ user.avatar }}&amp;s=30" alt="{{ user.name }}"></a>
 						<ul class="dropdown-menu">
 							<li><a href="{{ "account"|url }}">account</a></li>
@@ -62,7 +61,7 @@
 						</ul>
 					</li>
 					{% else %}
-					<li class="dropdown">
+					<li class="dropdown" data-dropdown="dropdown">
 						<a href="#" class="dropdown-toggle">login / signup</a>
 						<ul class="dropdown-menu">
 							<li><a href="{{ "login-google"|url }}">with google</a></li>
@@ -81,7 +80,8 @@
 		{% for m in messages %}
 			<div class="row">
 				<div class="span16">
-					<div class="alert-message {{ m.1 }}">
+					<div class="alert-message {{ m.1 }} fade in" data-alert="alert">
+						<a class="close" href="#">&times;</a>
 						{{ m.0 }}
 					</div>
 				</div>
