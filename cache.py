@@ -28,12 +28,13 @@ import webapp2
 # still a problem with journal names?
 C_ACTIVITIES = 'activities_%s_%s_%s'
 C_ACTIVITIES_FOLLOWER = 'activities_follower_%s'
-C_ACTIVITIES_FOLLOWER_KEYS = 'activities_follower_keys_%s'
 C_ACTIVITIES_FOLLOWER_DATA = 'activities_follower_data_%s'
+C_ACTIVITIES_FOLLOWER_KEYS = 'activities_follower_keys_%s'
 C_ENTRIES_KEYS = 'entries_keys_%s'
 C_ENTRIES_KEYS_PAGE = 'entries_keys_page_%s_%s'
 C_ENTRIES_PAGE = 'entries_page_%s_%s_%s'
 C_ENTRY = 'entry_%s_%s_%s'
+C_ENTRY_KEY = 'entry_key_%s_%s_%s'
 C_ENTRY_RENDER = 'entry_render_%s_%s_%s'
 C_FEED = 'feed_%s_%s'
 C_FOLLOWERS = 'followers_%s'
@@ -146,6 +147,20 @@ def get_entries_page(username, journal_name, page, journal_key):
 		memcache.add(n, data)
 
 	return data
+
+def get_entry_key(username, journal_name, entry_id):
+	n = C_ENTRY_KEY %(username, journal_name, entry_id)
+	data = memcache.get(n)
+	if data is None:
+		data = db.get(db.Key.from_path('Entry', long(entry_id), parent=get_journal_key(username, journal_name)))
+
+		if data:
+			data = data.key()
+
+		memcache.add(n, data)
+
+	return data
+
 
 # called when a new entry is posted, and we must clear all the entry and page cache
 def clear_entries_cache(journal_key):
@@ -291,9 +306,7 @@ def get_entry(username, journal_name, entry_id):
 	n = C_ENTRY %(username, journal_name, entry_id)
 	data = memcache.get(n)
 	if data is None:
-		entry_id = long(entry_id)
-		journal_key = get_journal_key(username, journal_name)
-		entry_key = db.Key.from_path('Entry', entry_id, parent=journal_key)
+		entry_key = get_entry_key(username, journal_name, entry_id)
 		entry = get_by_key(entry_key)
 		# try async queries here
 		content = get_by_key(entry.content_key)

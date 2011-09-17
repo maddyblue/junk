@@ -508,17 +508,9 @@ class SaveEntryHandler(BaseHandler):
 
 		entry, content, blobs = cache.get_entry(username, journal_name, entry_id)
 
-		if not entry:
-			for upload in self.get_uploads():
-				upload.delete()
-			return
-
 		if delete == 'delete':
 			journal_key = entry.key().parent()
 			user_key = journal_key.parent()
-
-			for upload in self.get_uploads():
-				upload.delete()
 
 			def txn(user_key, journal_key, entry_key, content_key, blobs):
 				delete = [entry_key, content_key]
@@ -568,9 +560,7 @@ class SaveEntryHandler(BaseHandler):
 			else:
 				tags = []
 
-			def txn(entry_key, content_key, new_blobs, rm_blobs, subject, tags, text, date):
-				# is this get necessary, or can we use them from memcache above?
-				db.put_async(new_blobs)
+			def txn(entry_key, content_key, rm_blobs, subject, tags, text, date):
 				db.delete_async(rm_blobs)
 
 				user, entry, content  = db.get([entry_key.parent().parent(), entry_key, content_key])
@@ -579,10 +569,6 @@ class SaveEntryHandler(BaseHandler):
 				content.subject = subject
 				content.tags = tags
 				content.text = text
-
-				for i in new_blobs:
-					user.used_data += i.size
-					entry.blobs.append(str(i.key().id()))
 
 				for i in rm_blobs:
 					user.used_data -= i.size
@@ -603,26 +589,7 @@ class SaveEntryHandler(BaseHandler):
 			for b in rm_blobs:
 				blobs.remove(b)
 
-			blobs_to_add = []
-			new_blobs = []
-
-			for upload in self.get_uploads('attach'):
-				if upload.content_type.startswith('image/'):
-					blobs_to_add.append((upload, models.BLOB_TYPE_IMAGE))
-
-			if blobs_to_add:
-				handmade_key = db.Key.from_path('Blob', 1, parent=entry.key())
-				blob_ids = db.allocate_ids(handmade_key, len(blobs_to_add))
-				blob_range = range(blob_ids[0], blob_ids[1] + 1)
-
-				while blobs_to_add:
-					blob, blob_type = blobs_to_add.pop(0)
-					blob_key = db.Key.from_path('Blob', blob_range.pop(0), parent=entry.key())
-					new_blobs.append(models.Blob(key=blob_key, blob=blob, type=blob_type, name=blob.filename, size=blob.size))
-
-			blobs.extend(new_blobs)
-
-			user, entry, content = db.run_in_transaction(txn, entry.key(), content.key(), new_blobs, rm_blobs, subject, tags, text, newdate)
+			user, entry, content = db.run_in_transaction(txn, entry.key(), content.key(), rm_blobs, subject, tags, text, newdate)
 			models.Activity.create(cache.get_user(username), models.ACTIVITY_SAVE_ENTRY, entry.key())
 
 			entry_render = utils.render('entry-render.html', {
@@ -641,7 +608,7 @@ class SaveEntryHandler(BaseHandler):
 
 class UploadHandler(BaseUploadHandler):
 	def post(self, username, journal_name, entry_id):
-		entry, content, blobs = cache.get_entry(username, journal_name, entry_id)
+		entry_key = cache.get_entry_key(username, journal_name, entry_id)
 		uploads = self.get_uploads()
 
 		blob_type = -1
@@ -650,32 +617,33 @@ class UploadHandler(BaseUploadHandler):
 			if blob.content_type.startswith('image/'):
 				blob_type = models.BLOB_TYPE_IMAGE
 
-		if not entry or self.session['user']['name'] != username or blob_type == -1:
+		if not entry_key or self.session['user']['name'] != username or blob_type == -1:
 			for upload in uploads:
 				upload.delete()
 			return
 
 		def txn(user_key, entry_key, blob):
-			db.put_async(blob)
 			user, entry = db.get([user_key, entry_key])
 			user.used_data += blob.size
 			entry.blobs.append(str(blob.key().id()))
-			db.put([user, entry])
+			db.put([user, entry, blob])
 			return user, entry
 
-		handmade_key = db.Key.from_path('Blob', 1, parent=entry.key())
+		handmade_key = db.Key.from_path('Blob', 1, parent=entry_key)
 		blob_id = db.allocate_ids(handmade_key, 1)[0]
 
-		blob_key = db.Key.from_path('Blob', blob_id, parent=entry.key())
+		blob_key = db.Key.from_path('Blob', blob_id, parent=entry_key)
 		new_blob = models.Blob(key=blob_key, blob=blob, type=blob_type, name=blob.filename, size=blob.size)
 		new_blob.get_url()
 
-		user, entry = db.run_in_transaction(txn, entry.key().parent().parent(), entry.key(), new_blob)
+		user, entry = db.run_in_transaction(txn, entry_key.parent().parent(), entry_key, new_blob)
 		cache.delete([
 			cache.C_KEY %user.key(),
+			cache.C_KEY %entry.key(),
 			cache.C_ENTRY %(username, journal_name, entry_id),
 			cache.C_ENTRY_RENDER %(username, journal_name, entry_id),
 		])
+		cache.clear_entries_cache(entry.key().parent())
 
 		self.redirect(webapp2.uri_for('upload-success', blob_id=blob_id, name=new_blob.name, size=new_blob.size, url=new_blob.get_url()))
 
