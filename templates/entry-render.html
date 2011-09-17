@@ -16,10 +16,16 @@
 			{% endif %}
 		{% endfor %}
 
-		<p><small>{{ entry.chars }} character{{ entry.chars|pluralize }}, {{ entry.words }} word{{ entry.words|pluralize }}, {{ entry.sentences }} sentence{{ entry.sentences|pluralize }}.
-		{% if content.tags %}
-			tags: {{ content.tags|join:", " }}
-		{% endif %}
+		{% if entry.chars and content.tags %}
+		<p><small>
+			{% if entry.chars %}
+				{{ entry.chars }} character{{ entry.chars|pluralize }}, {{ entry.words }} word{{ entry.words|pluralize }}, {{ entry.sentences }} sentence{{ entry.sentences|pluralize }}.
+			{% endif %}
+
+			{% if content.tags %}
+				tags: {{ content.tags|join:", " }}
+			{% endif %}
 		</small></p>
+		{% endif %}
 	</div>
 </div>
