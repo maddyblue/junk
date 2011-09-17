@@ -11,7 +11,9 @@
 				<tr><td>name</td><td>{{ u.name }}</td></tr>
 				<tr><td>login with</td><td>{{ u.source }}</td></tr>
 				<tr><td>user since</td><td>{{ u.register_date|jdate }}</td></tr>
-				<tr><td>uploaded file data</td><td>{{ u.used_data|filesizeformat }}</td></tr>
+				<tr><td>total upload size</td><td>{{ u.allowed_data|filesizeformat }}</td></tr>
+				<tr><td>used upload size</td><td>{{ u.used_data|filesizeformat }}</td></tr>
+				{% if u.can_upload %}<tr><td>remaining upload size</td><td>{{ u.bytes_remaining|filesizeformat }}</td></tr>{% endif %}
 				<tr>
 					<td>avatar</td>
 					<td>
@@ -49,4 +51,5 @@
 			</form>
 		</div>
 	</div>
+
 {% endblock %}

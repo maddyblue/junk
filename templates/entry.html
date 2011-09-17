@@ -7,7 +7,7 @@
 
 	<div class="row">
 		<div class="span16">
-			<form method="POST" action="{{ upload_url }}" enctype="multipart/form-data">
+			<form id="form" method="POST" action="{{ "entry-save"|url }}">
 			<input type="hidden" name="journal_name" value="{{ journal_name }}">
 			<input type="hidden" name="username" value="{{ username }}">
 			<input type="hidden" name="entry_id" value="{{ entry.key.id }}">
@@ -39,27 +39,138 @@
 							<span class="help-inline">comma separated (ex: kids, funny story, park)</span>
 						</div>
 					</div>
-
 					{% for b in blobs %}
 					<div class="clearfix">
 						<div class="input">
 							<input type="checkbox" name="blob" value="{{ b.key.id }}" checked>
-							{{ b.size|filesizeformat }}, <a href="{{ b.url }}">{{ b.name }}</a>
+							{{ b.size|filesizeformat }}, <a href="{{ b.get_url }}">{{ b.name }}</a>
 						</div>
 					</div>
 					{% endfor %}
-
-					<div class="actions post-attach">
-						<input type="submit" class="btn primary" value="Save">
-						<input id="delete" type="submit" class="btn danger disabled" disabled="disabled" name="delete" value="Delete entry">
-							<input id="sure" type="checkbox" name="sure">
-							<span>I'm sure</span>
-							<span class="help-inline">this will delete all files attached to this entry, too</span>
-					</div>
 				</fieldset>
 			</form>
+
+			<div class="actions post-attach">
+				<button id="save" class="btn primary">Save</button>
+				<button id="delete" class="btn danger disabled" disabled="disabled">Delete entry</button>
+					<input id="sure" type="checkbox" name="sure">
+					<span>I'm sure</span>
+					<span class="help-inline">this will delete all files attached to this entry, too</span>
+			</div>
 		</div>
 	</div>
 
 	{{ render|safe }}
+
+	<script src="/static/js/jquery.form.js"></script>
+
+	<script type="text/javascript">
+	$(function() {
+		$("#save").click(function() {
+			$("#form").submit();
+		});
+		$("#delete").click(function() {
+			$("#form").append('<input type="hidden" name="delete" value="delete">');
+			$("#form").submit();
+		});
+	});
+
+	// file attaching
+	$(function() {
+		var attach = '\
+			<div class="clearfix"> \
+				<label for="attach" class="label-attach">attach a file</label> \
+					<form method="POST" enctype="multipart/form-data"> \
+						<div class="input"> \
+							<input class="xlarge file-attach" id="attach" name="attach" type="file" /> \
+							<span id="span-attach" class="help-block">we currently only support images, up to 4MB</span> \
+						</div> \
+					</form> \
+			</div> \
+		';
+
+		var full_text = '\
+			<div class="clearfix"> \
+				<div class="input"> \
+					your account has reached its upload limit: you cannot upload any more files \
+				</div> \
+			</div> \
+		';
+
+		var cnt = 1;
+		var full = {% if can_upload %}0{% else %}1{% endif %};
+
+		var addattach = function() {
+			$(".file-attach").unbind('change');
+			$(".iilabel-attach").each(function() {
+				$(this).html('<a href="#" onclick="$(this).parent().parent().remove(); return false;">remove</a>');
+			});
+
+			if(full == 1)
+			{
+				full = 2;
+				$(".post-attach").before(full_text);
+				return;
+			}
+
+			$(".post-attach").before(attach);
+			$(".file-attach").last().change(function() {
+				var $this = $(this);
+				var name = $this.val().split('\\').pop();
+				var label = $this.parent().parent().parent().children("label");
+				var form = $this.parent().parent();
+				$("#span-attach").remove();
+
+				addattach();
+
+				label.html('uploading...');
+
+				$.ajax({
+					url: '{{ upload_url }}',
+					success: function(data) {
+						if(data == '')
+						{
+							full = 1;
+						}
+
+						var target = 'upload-' + cnt++;
+						label.prepend('<iframe id="' + target + '" src="#" style="width: 0; height: 0; border: 0px solid #fff;"></iframe>');
+						form.attr('target', target);
+						form.attr('action', data);
+
+						form.ajaxSubmit({
+							success: function(data) {
+								$("#" + target).remove();
+
+								if(data == '')
+								{
+									label.html('error during upload');
+									$this.parent().html('<span class="uneditable-input">' + name + '</span>');
+								}
+								else
+								{
+									label.html('uploaded');
+									var obj = jQuery.parseJSON(data);
+									$this.parent().html(
+										'<input type="checkbox" checked disabled> ' +
+										filesizeformat(obj.size) +
+										', ' +
+										'<a href="' +
+										obj.url +
+										'">' +
+										obj.name +
+										'</a>'
+									);
+									$("#form").append('<input type="hidden" name="blob" value="' + obj.blob_id + '">');
+								}
+							}
+						});
+					}
+				});
+			});
+		}
+
+		addattach();
+	});
+	</script>
 {% endblock %}

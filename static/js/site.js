@@ -24,35 +24,6 @@ $(function() {
 	}
 });
 
-// file attaching
-// this is probably bad javascript -- improvements are welcome
-$(function() {
-	var attach = '\
-					<div class="clearfix"> \
-						<label for="attach" class="label-attach">attach a file</label> \
-						<div class="input"> \
-							<input class="xlarge file-attach" id="attach" name="attach" type="file" /> \
-							<span id="span-attach" class="help-block">we currently only support images, up to 4MB</span> \
-						</div> \
-					</div> \
-	';
-
-	var doattach = function() {
-		$(".file-attach").unbind('change');
-		$(".label-attach").each(function() {
-			$(this).html('<a href="#" onclick="$(this).parent().parent().remove(); return false;">remove</a>');
-		});
-
-		$(".post-attach").before(attach);
-		$(".file-attach").last().change(function() {
-			$("#span-attach").remove();
-			doattach();
-		});
-	}
-
-	doattach();
-});
-
 // delete enabled/disable
 $(function() {
 	$("#sure").click(function() {
@@ -228,6 +199,16 @@ $(function() {
   })
 
 })( window.jQuery || window.ender )
+
+// local functions
+
+function filesizeformat(size)
+{
+	if(size >= 1024 * 1024)
+		return (size / (1024 * 1024)).toFixed(1) + ' MB';
+	else
+		return (size / 1024).toFixed(1) + ' KB';
+}
 
 // local commands
 

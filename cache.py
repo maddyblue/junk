@@ -54,6 +54,9 @@ def set_multi(mapping):
 def set_keys(entities):
 	memcache.set_multi(dict([(C_KEY %i.key(), pack(i)) for i in entities]))
 
+def delete(keys):
+	memcache.delete_multi(keys)
+
 def flush():
 	memcache.flush_all()
 

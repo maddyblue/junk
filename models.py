@@ -53,7 +53,7 @@ class User(db.Model):
 	source = db.StringProperty(required=True, choices=USER_SOURCE_CHOICES)
 	uid = db.StringProperty(required=True)
 
-	allowed_data = db.IntegerProperty(required=True, default=0)
+	allowed_data = db.IntegerProperty(required=True, default=50 * 2 ** 20) # 50 MB default
 	used_data = db.IntegerProperty(required=True, default=0)
 
 	journal_count = db.IntegerProperty(required=True, default=0)
@@ -235,7 +235,16 @@ class Blob(DerefExpando):
 	type = db.IntegerProperty(required=True, choices=BLOB_TYPE_CHOICES)
 	name = db.StringProperty(indexed=False)
 	size = db.IntegerProperty()
+	url = db.StringProperty(indexed=False)
 
-	def url(self, size=None):
+	def get_url(self, size=None):
 		if self.type == BLOB_TYPE_IMAGE:
-			return images.get_serving_url(self.blob, size)
+			if not self.url:
+				self.url = images.get_serving_url(self.blob)
+
+			url = self.url
+
+			if size:
+				url += '=s' + size
+
+			return url

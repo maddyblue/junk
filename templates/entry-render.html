@@ -12,7 +12,7 @@
 
 		{% for b in blobs %}
 			{% if b.type == 1 %}
-				<p><a href="{{ b.url }}"><img src="{{ b.url }}=s100" alt="{{ b.name }}"></a></p>
+				<p><a href="{{ b.get_url }}"><img src="{{ b.get_url }}=s100" alt="{{ b.name }}"></a></p>
 			{% endif %}
 		{% endfor %}
 

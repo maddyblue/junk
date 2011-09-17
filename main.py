@@ -14,12 +14,18 @@
 
 from __future__ import with_statement
 
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
+from google.appengine.dist import use_library
+use_library('django', '1.2')
+
 import base64
 import datetime
 import logging
-import os
 import re
 
+from django.utils import simplejson
 from google.appengine.api import users
 from google.appengine.ext import blobstore
 from google.appengine.ext import db
@@ -112,14 +118,24 @@ class BaseHandler(webapp2.RequestHandler):
 				del self.session[k]
 
 class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+	session_store = None
+
 	def add_message(self, level, message):
-		store = sessions.get_store(request=self.request)
-		session = store.get_session()
-		session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
-		store.save_sessions(self.response)
+		self.session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
+		self.store()
+
+	def store(self):
+		self.session_store.save_sessions(self.response)
+
+	@webapp2.cached_property
+	def session(self):
+		if not self.session_store:
+			self.session_store = sessions.get_store(request=self.request)
+		return self.session_store.get_session()
 
 class MainPage(BaseHandler):
 	def get(self):
+		self.add_message('success', 'test')
 		if 'user' in self.session:
 			journals = cache.get_journals(db.Key(self.session['user']['key']))
 			rendert(self, 'index-user.html', {
@@ -461,17 +477,32 @@ class ViewEntryHandler(BaseHandler):
 			'entry': entry,
 			'journal_name': journal_name,
 			'render': cache.get_entry_render(username, journal_name, entry_id),
-			'upload_url': blobstore.create_upload_url(webapp2.uri_for('entry-upload'), max_bytes_per_blob=models.Blob.MAXSIZE),
 			'username': username,
+			'upload_url': webapp2.uri_for('upload-url', username=username, journal_name=journal_name, entry_id=entry_id),
+			'can_upload': user.can_upload(),
 		})
 
-class EntryUploadHandler(BaseUploadHandler):
+class GetUploadURL(BaseHandler):
+	def get(self, username, journal_name, entry_id):
+		user = cache.get_by_key(self.session['user']['key'])
+		if user.can_upload() and user.name == username:
+			self.response.out.write(blobstore.create_upload_url(
+				webapp2.uri_for('upload-file',
+					username=username,
+					journal_name=journal_name,
+					entry_id=entry_id
+				),
+				max_bytes_per_blob=models.Blob.MAXSIZE
+			))
+		else:
+			self.response.out.write('')
+
+class SaveEntryHandler(BaseHandler):
 	def post(self):
 		username = self.request.get('username')
 		journal_name = self.request.get('journal_name')
 		entry_id = long(self.request.get('entry_id'))
 		delete = self.request.get('delete')
-		sure = self.request.get('sure')
 
 		self.redirect(webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id))
 
@@ -482,7 +513,7 @@ class EntryUploadHandler(BaseUploadHandler):
 				upload.delete()
 			return
 
-		if delete == 'Delete entry' and sure == 'on':
+		if delete == 'delete':
 			journal_key = entry.key().parent()
 			user_key = journal_key.parent()
 
@@ -608,6 +639,57 @@ class EntryUploadHandler(BaseUploadHandler):
 		cache.clear_entries_cache(entry.key().parent())
 		cache.set((cache.pack(entry), cache.pack(content), cache.pack(blobs)), cache.C_ENTRY, username, journal_name, entry_id)
 
+class UploadHandler(BaseUploadHandler):
+	def post(self, username, journal_name, entry_id):
+		entry, content, blobs = cache.get_entry(username, journal_name, entry_id)
+		uploads = self.get_uploads()
+
+		blob_type = -1
+		if len(uploads) == 1:
+			blob = uploads[0]
+			if blob.content_type.startswith('image/'):
+				blob_type = models.BLOB_TYPE_IMAGE
+
+		if not entry or self.session['user']['name'] != username or blob_type == -1:
+			for upload in uploads:
+				upload.delete()
+			return
+
+		def txn(user_key, entry_key, blob):
+			db.put_async(blob)
+			user, entry = db.get([user_key, entry_key])
+			user.used_data += blob.size
+			entry.blobs.append(str(blob.key().id()))
+			db.put([user, entry])
+			return user, entry
+
+		handmade_key = db.Key.from_path('Blob', 1, parent=entry.key())
+		blob_id = db.allocate_ids(handmade_key, 1)[0]
+
+		blob_key = db.Key.from_path('Blob', blob_id, parent=entry.key())
+		new_blob = models.Blob(key=blob_key, blob=blob, type=blob_type, name=blob.filename, size=blob.size)
+		new_blob.get_url()
+
+		user, entry = db.run_in_transaction(txn, entry.key().parent().parent(), entry.key(), new_blob)
+		cache.delete([
+			cache.C_KEY %user.key(),
+			cache.C_ENTRY %(username, journal_name, entry_id),
+			cache.C_ENTRY_RENDER %(username, journal_name, entry_id),
+		])
+
+		self.redirect(webapp2.uri_for('upload-success', blob_id=blob_id, name=new_blob.name, size=new_blob.size, url=new_blob.get_url()))
+
+class UploadSuccess(BaseHandler):
+	def get(self):
+		d = dict([(i, self.request.get(i)) for i in [
+			'blob_id',
+			'name',
+			'size',
+			'url',
+		]])
+
+		self.response.out.write(simplejson.dumps(d))
+
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
@@ -625,10 +707,13 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/login/google', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/logout/google', handler=GoogleSwitch, name='logout-google'),
-	webapp2.Route(r'/new/entry', handler=EntryUploadHandler, name='entry-upload'),
 	webapp2.Route(r'/new/journal', handler=NewJournal, name='new-journal'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
+	webapp2.Route(r'/save', handler=SaveEntryHandler, name='entry-save'),
 	webapp2.Route(r'/stats', handler=StatsHandler, name='stats'),
+	webapp2.Route(r'/upload/file/<username>/<journal_name>/<entry_id>', handler=UploadHandler, name='upload-file'),
+	webapp2.Route(r'/upload/success', handler=UploadSuccess, name='upload-success'),
+	webapp2.Route(r'/upload/url/<username>/<journal_name>/<entry_id>', handler=GetUploadURL, name='upload-url'),
 
 	webapp2.Route(r'/<username>', handler=UserHandler, name='user'),
 	webapp2.Route(r'/<username>/<journal_name>', handler=ViewJournal, name='view-journal'),
@@ -647,6 +732,7 @@ RESERVED_NAMES = set([
 	'entry',
 	'features',
 	'feeds',
+	'file',
 	'follow',
 	'help',
 	'journal',
@@ -663,6 +749,7 @@ RESERVED_NAMES = set([
 	'site',
 	'stats',
 	'terms',
+	'upload',
 	'user',
 ])
 
