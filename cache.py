@@ -165,7 +165,7 @@ def get_entry_key(username, journal_name, entry_id):
 # called when a new entry is posted, and we must clear all the entry and page cache
 def clear_entries_cache(journal_key):
 	journal = get_by_key(journal_key)
-	keys = [C_ENTRIES_KEYS %journal_key]
+	keys = [C_ENTRIES_KEYS %journal_key, C_JOURNALS %journal_key.parent()]
 
 	# add one key per page for get_entries_page and get_entries_keys_page
 	for p in range(1, journal.entry_count / models.Journal.ENTRIES_PER_PAGE + 2):

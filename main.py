@@ -135,7 +135,6 @@ class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 class MainPage(BaseHandler):
 	def get(self):
-		self.add_message('success', 'test')
 		if 'user' in self.session:
 			journals = cache.get_journals(db.Key(self.session['user']['key']))
 			rendert(self, 'index-user.html', {
@@ -513,6 +512,7 @@ class SaveEntryHandler(BaseHandler):
 			user_key = journal_key.parent()
 
 			def txn(user_key, journal_key, entry_key, content_key, blobs):
+				entry = db.get(entry_key)
 				delete = [entry_key, content_key]
 				delete.extend([i.key() for i in blobs])
 				db.delete_async(delete)
@@ -520,6 +520,8 @@ class SaveEntryHandler(BaseHandler):
 				user, journal = db.get([user_key, journal_key])
 				journal.entry_count -= 1
 				user.entry_count -= 1
+
+				## ADD IN COUNTING HERE
 
 				for i in blobs:
 					user.used_data -= i.size
@@ -563,9 +565,43 @@ class SaveEntryHandler(BaseHandler):
 			def txn(entry_key, content_key, rm_blobs, subject, tags, text, date):
 				db.delete_async(rm_blobs)
 
-				user, entry, content  = db.get([entry_key.parent().parent(), entry_key, content_key])
+				user, journal, entry  = db.get([entry_key.parent().parent(), entry_key.parent(), entry_key])
+
+				if entry.chars:
+					journal.chars -= entry.chars
+					journal.words -= entry.words
+					journal.sentences -= entry.sentences
+
+					user.chars -= entry.chars
+					user.words -= entry.words
+					user.sentences -= entry.sentences
+
+				if text:
+					entry.chars = len(text)
+					entry.words = len(entry.WORD_RE.findall(text))
+					entry.sentences = len(entry.SENTENCE_RE.split(text))
+				else:
+					entry.chars = 0
+					entry.words = 0
+					entry.sentences = 0
+
+				journal.chars += entry.chars
+				journal.words += entry.words
+				journal.sentences += entry.sentences
+
+				user.chars += entry.chars
+				user.words += entry.words
+				user.sentences += entry.sentences
 
 				entry.date = date
+
+				user.set_dates()
+				user.count()
+
+				journal.set_dates(date)
+				journal.count()
+
+				content = models.EntryContent(key=content_key)
 				content.subject = subject
 				content.tags = tags
 				content.text = text
@@ -574,7 +610,7 @@ class SaveEntryHandler(BaseHandler):
 					user.used_data -= i.size
 					entry.blobs.remove(str(i.key().id()))
 
-				db.put([user, entry, content])
+				db.put([user, journal, entry, content])
 
 				return user, entry, content
 

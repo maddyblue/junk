@@ -11,6 +11,16 @@
 				<tr><td>member since</td><td>{{ u.register_date|sdate }}</td></tr>
 				<tr><td>journals</td><td>{{ u.journal_count }}</td></tr>
 				<tr><td>entries</td><td>{{ u.entry_count }}</td></tr>
+				<tr><td>characters</td><td>{{ u.chars }}</td></tr>
+				<tr><td>words</td><td>{{ u.words }}</td></tr>
+				<tr><td>sentences</td><td>{{ u.sentences }}</td></tr>
+				<tr><td>entries per week</td><td>{{ u.freq_entries|floatformat }}</td></tr>
+				<tr><td>characters per week</td><td>{{ u.freq_chars|floatformat }}</td></tr>
+				<tr><td>words per week</td><td>{{ u.freq_words|floatformat }}</td></tr>
+				<tr><td>sentences per week</td><td>{{ u.freq_sentences|floatformat }}</td></tr>
+				{% if u.last_entry %}<tr><td>last entry edited</td><td>{{ u.last_entry|jdate }}</td></tr>{% endif %}
+				{% if u.first_entry %}<tr><td>first entry edited</td><td>{{ u.first_entry|jdate }}</td></tr>{% endif %}
+				{% if u.entry_days %}<tr><td>entries spanning</td><td>{{ u.entry_days }} day{{ u.entry_days|pluralize }}</td></tr>{% endif %}
 			</table>
 		</div>
 

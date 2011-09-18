@@ -14,6 +14,7 @@
 
 from __future__ import with_statement
 
+import datetime
 import logging
 import re
 
@@ -50,6 +51,20 @@ class User(db.Model):
 	last_login = db.DateTimeProperty(auto_now_add=True)
 	token = db.StringProperty(required=True, indexed=False)
 
+	chars = db.IntegerProperty(required=True, default=0)
+	words = db.IntegerProperty(required=True, default=0)
+	sentences = db.IntegerProperty(required=True, default=0)
+
+	first_entry = db.DateTimeProperty()
+	last_entry = db.DateTimeProperty()
+	entry_days = db.IntegerProperty(required=True, default=0)
+
+	# all frequencies are per week
+	freq_entries = db.FloatProperty(required=True, default=0.)
+	freq_chars = db.FloatProperty(required=True, default=0.)
+	freq_words = db.FloatProperty(required=True, default=0.)
+	freq_sentences = db.FloatProperty(required=True, default=0.)
+
 	source = db.StringProperty(required=True, choices=USER_SOURCE_CHOICES)
 	uid = db.StringProperty(required=True)
 
@@ -58,6 +73,27 @@ class User(db.Model):
 
 	journal_count = db.IntegerProperty(required=True, default=0)
 	entry_count = db.IntegerProperty(required=True, default=0)
+
+	def count(self):
+		if self.entry_count:
+			self.entry_days = (self.last_entry - self.first_entry).days + 1
+			weeks = self.entry_days / 7.
+			self.freq_entries = self.entry_count / weeks
+			self.freq_chars = self.chars / weeks
+			self.freq_words = self.words / weeks
+			self.freq_sentences = self.sentences / weeks
+		else:
+			self.entry_days = 0
+			self.freq_entries = 0.
+			self.freq_chars = 0.
+			self.freq_words = 0.
+			self.freq_sentences = 0.
+
+	def set_dates(self):
+		self.last_entry = datetime.datetime.now()
+
+		if not self.first_entry:
+			self.first_entry = self.last_entry
 
 	def __str__(self):
 		return str(self.name)
@@ -123,6 +159,22 @@ class Journal(db.Model):
 			self.freq_words = 0.
 			self.freq_sentences = 0.
 
+	# sets the last and first entry dates for this journal, based on a new or changed entry with given date
+	def set_dates(self, date):
+		if not self.last_entry or date > self.last_entry:
+			self.last_entry = date
+		else:
+			last_entry = Entry.all().ancestor(self).order('-date').get()
+			if last_entry and last_entry.date > self.last_entry:
+				self.last_entry = last_entry.date
+
+		if not self.first_entry or date < self.first_entry:
+			self.first_entry = date
+		else:
+			first_entry = Entry.all().ancestor(self).order('date').get()
+			if first_entry and first_entry.date > self.first_entry:
+				self.first_entry = first_entry.date
+
 	def __unicode__(self):
 		return unicode(self.name)
 
@@ -154,7 +206,7 @@ class Entry(db.Model):
 	sentences = db.IntegerProperty(required=True, default=0)
 
 	WORD_RE = re.compile("[A-Za-z']+")
-	SENTENCE_RE = re.compile("[.!?]+")
+	SENTENCE_RE = re.compile("[.!?\n]+")
 
 	@property
 	def content_key(self):
@@ -163,12 +215,6 @@ class Entry(db.Model):
 	@property
 	def blob_keys(self):
 		return [db.Key.from_path('Blob', long(i), parent=self.key()) for i in self.blobs]
-
-	def count(self):
-		txt = str(self.text)
-		self.chars = len(txt)
-		self.words = len(self.WORD_RE.findall(txt))
-		self.sentences = len(self.SENTENCE_RE.split(txt))
 
 ACTIVITY_NEW_JOURNAL = 1
 ACTIVITY_NEW_ENTRY = 2
