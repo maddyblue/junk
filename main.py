@@ -545,6 +545,10 @@ class SaveEntryHandler(BaseHandler):
 			blobstore.delete([i.get_key('blob') for i in blobs])
 
 			db.delete([entry, content])
+			counters.increment(counters.COUNTER_ENTRIES, -1)
+			counters.increment(counters.COUNTER_CHARS, -entry.chars)
+			counters.increment(counters.COUNTER_SENTENCES, -entry.sentences)
+			counters.increment(counters.COUNTER_WORDS, -entry.words)
 			cache.clear_entries_cache(journal_key)
 			cache.set_keys([user, journal])
 			cache.set(cache.pack(journal), cache.C_JOURNAL, username, journal_name)
@@ -587,6 +591,10 @@ class SaveEntryHandler(BaseHandler):
 					user.words -= entry.words
 					user.sentences -= entry.sentences
 
+				dchars = -entry.chars
+				dwords = -entry.words
+				dsentences = -entry.sentences
+
 				if text:
 					entry.chars = len(text)
 					entry.words = len(entry.WORD_RE.findall(text))
@@ -603,6 +611,10 @@ class SaveEntryHandler(BaseHandler):
 				user.chars += entry.chars
 				user.words += entry.words
 				user.sentences += entry.sentences
+
+				dchars += entry.chars
+				dwords += entry.words
+				dsentences += entry.sentences
 
 				entry.date = date
 
@@ -623,7 +635,7 @@ class SaveEntryHandler(BaseHandler):
 
 				db.put([user, journal, entry, content])
 
-				return user, entry, content
+				return user, entry, content, dchars, dwords, dsentences
 
 			rm_blobs = []
 
@@ -636,8 +648,12 @@ class SaveEntryHandler(BaseHandler):
 			for b in rm_blobs:
 				blobs.remove(b)
 
-			user, entry, content = db.run_in_transaction(txn, entry.key(), content.key(), rm_blobs, subject, tags, text, newdate)
+			user, entry, content, dchars, dwords, dsentences = db.run_in_transaction(txn, entry.key(), content.key(), rm_blobs, subject, tags, text, newdate)
 			models.Activity.create(cache.get_user(username), models.ACTIVITY_SAVE_ENTRY, entry.key())
+
+			counters.increment(counters.COUNTER_CHARS, dchars)
+			counters.increment(counters.COUNTER_SENTENCES, dsentences)
+			counters.increment(counters.COUNTER_WORDS, dwords)
 
 			entry_render = utils.render('entry-render.html', {
 				'blobs': blobs,
