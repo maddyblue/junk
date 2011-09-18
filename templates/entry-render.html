@@ -16,7 +16,7 @@
 			{% endif %}
 		{% endfor %}
 
-		{% if entry.chars and content.tags %}
+		{% if entry.chars or content.tags %}
 		<p><small>
 			{% if entry.chars %}
 				{{ entry.chars }} character{{ entry.chars|pluralize }}, {{ entry.words }} word{{ entry.words|pluralize }}, {{ entry.sentences }} sentence{{ entry.sentences|pluralize }}.
