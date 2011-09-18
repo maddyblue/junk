@@ -82,6 +82,7 @@ class BaseHandler(webapp2.RequestHandler):
 			user = cache.get_user(self.session['user']['name'])
 
 		self.session['user'] = {
+			'admin': users.is_current_user_admin(),
 			'avatar': user.gravatar(),
 			'email': user.email,
 			'key': str(user.key()),
@@ -108,7 +109,7 @@ class BaseHandler(webapp2.RequestHandler):
 		else:
 			registered = True
 			self.populate_user_session(user)
-			user.put() # to update last_login
+			user.put() # to update last_active
 
 		return user, registered
 
@@ -721,6 +722,11 @@ class UploadSuccess(BaseHandler):
 
 		self.response.out.write(simplejson.dumps(d))
 
+class FlushMemcache(BaseHandler):
+	def get(self):
+		cache.flush()
+		rendert(self, 'admin.html', {'msg': 'memcache flushed'})
+
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
@@ -732,6 +738,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/about', handler=AboutHandler, name='about'),
 	webapp2.Route(r'/account', handler=AccountHandler, name='account'),
 	webapp2.Route(r'/activity', handler=ActivityHandler, name='activity'),
+	webapp2.Route(r'/admin/flush', handler=FlushMemcache, name='flush-memcache'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/follow/<username>', handler=FollowHandler, name='follow'),
 	webapp2.Route(r'/login/facebook', handler=FacebookLogin, name='login-facebook'),
@@ -758,6 +765,7 @@ RESERVED_NAMES = set([
 	'about',
 	'account',
 	'activity',
+	'admin',
 	'blog',
 	'contact',
 	'entry',

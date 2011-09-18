@@ -42,6 +42,15 @@
 				</ul>
 				<ul class="nav secondary-nav">
 					{% if user %}
+
+					{% if user.admin %}
+					<li class="dropdown{% if active  == "admin" %} active{% endif %}" data-dropdown="dropdown"> <a href="#" class="dropdown-toggle">admin</a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ "flush-memcache"|url }}">flush memcache</a></li>
+						</ul>
+					</li>
+					{% endif %}
+
 					<li class="dropdown{% if active  == "view-journal" or active == "entry" or active == "new-journal" %} active{% endif %}" data-dropdown="dropdown"> <a href="#" class="dropdown-toggle">journals</a>
 						<ul class="dropdown-menu">
 							{% for j in session.journals %}
