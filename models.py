@@ -48,7 +48,7 @@ class User(db.Model):
 	name = db.StringProperty(required=True, indexed=False)
 	email = db.EmailProperty()
 	register_date = db.DateTimeProperty(auto_now_add=True)
-	last_login = db.DateTimeProperty(auto_now_add=True)
+	last_active = db.DateTimeProperty(auto_now_add=True)
 	token = db.StringProperty(required=True, indexed=False)
 
 	chars = db.IntegerProperty(required=True, default=0)
