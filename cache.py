@@ -161,7 +161,6 @@ def get_entry_key(username, journal_name, entry_id):
 
 	return data
 
-
 # called when a new entry is posted, and we must clear all the entry and page cache
 def clear_entries_cache(journal_key):
 	journal = get_by_key(journal_key)
