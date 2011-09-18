@@ -521,7 +521,18 @@ class SaveEntryHandler(BaseHandler):
 				journal.entry_count -= 1
 				user.entry_count -= 1
 
-				## ADD IN COUNTING HERE
+				journal.chars -= entry.chars
+				journal.words -= entry.words
+				journal.sentences -= entry.sentences
+
+				user.chars -= entry.chars
+				user.words -= entry.words
+				user.sentences -= entry.sentences
+
+				user.count()
+
+				journal.set_dates()
+				journal.count()
 
 				for i in blobs:
 					user.used_data -= i.size
