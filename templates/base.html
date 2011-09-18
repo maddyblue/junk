@@ -45,17 +45,17 @@
 					<li class="dropdown{% if active  == "view-journal" or active == "entry" or active == "new-journal" %} active{% endif %}" data-dropdown="dropdown"> <a href="#" class="dropdown-toggle">journals</a>
 						<ul class="dropdown-menu">
 							{% for j in session.journals %}
-								<li><a href="{{ j.0 }}">{{ j.1 }}</a></li>
+								<li{% if active == "view-journal" and j.1 == journal.name %} class="active"{% endif %}><a href="{{ j.0 }}">{{ j.1 }}</a></li>
 							{% endfor %}
 							<li class="divider"></li>
 							<li><a href="{{ "user"|url:user.name }}">my journals</a></li>
-							<li><a href="{{ "new-journal"|url }}">new journal</a></li>
+							<li{% if active == "new-journal" %} class="active"{% endif %}><a href="{{ "new-journal"|url }}">new journal</a></li>
 						</ul>
 					</li>
 					<li class="dropdown{% if active == "account" %} active{% endif %}" data-dropdown="dropdown">
 						<a href="#" class="dropdown-toggle dropdown-gravatar">{{ user.name }} <img class="topbar-img-gravatar" src="{{ user.avatar }}&amp;s=30" alt="{{ user.name }}"></a>
 						<ul class="dropdown-menu">
-							<li><a href="{{ "account"|url }}">account</a></li>
+							<li{% if active == "account" %} class="active"{% endif %}><a href="{{ "account"|url }}">account</a></li>
 							<li><a href="{{ "logout"|url }}">logout</a></li>
 							{% ifequal user.source "google" %}<li><a href="{{ "logout-google"|url }}">switch account</a></li>{% endifequal %}
 						</ul>
