@@ -32,6 +32,10 @@ def url(ob, name=''):
 		return webapp2.uri_for(ob, username=name)
 	elif ob == 'new-entry':
 		return webapp2.uri_for(ob, username=name.key().parent().name(), journal_name=name.name)
+	elif ob == 'blog-entry':
+		return webapp2.uri_for(ob, entry=name)
+	elif ob == 'edit-blog':
+		return webapp2.uri_for(ob, blog_id=name)
 	else:
 		return webapp2.uri_for(ob)
 
@@ -50,6 +54,18 @@ def journal_prev(ob, page):
 @register.filter
 def journal_next(ob, page):
 	return journal_url(ob, str(page + 1))
+
+@register.filter
+def blog_url(page=1):
+	return webapp2.uri_for('blog', page=page)
+
+@register.filter
+def blog_prev(page):
+	return blog_url(page - 1)
+
+@register.filter
+def blog_next(page):
+	return blog_url(page + 1)
 
 JDATE_FMT = '%A, %b %d, %Y %I:%M %p'
 @register.filter

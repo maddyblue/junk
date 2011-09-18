@@ -36,6 +36,7 @@
 				<h3><a href="/">journalr <small>beta</small></a></h3>
 				<ul class="nav">
 					<li{% if active == "index" or active == "index-user" %} class="active"{% endif %}><a href="{{ "main"|url }}">home</a></li>
+					<li{% if active == "blog" %} class="active"{% endif %}><a href="{{ "blog"|url }}">blog</a></li>
 					<li{% if active == "activity" %} class="active"{% endif %}><a href="{{ "activity"|url }}">activity</a></li>
 					<li{% if active == "about" %} class="active"{% endif %}><a href="{{ "about"|url }}">about</a></li>
 					<li{% if active == "stats" %} class="active"{% endif %}><a href="{{ "stats"|url }}">stats</a></li>
@@ -46,6 +47,8 @@
 					{% if user.admin %}
 					<li class="dropdown{% if active  == "admin" %} active{% endif %}" data-dropdown="dropdown"> <a href="#" class="dropdown-toggle">admin</a>
 						<ul class="dropdown-menu">
+							<li><a href="{{ "new-blog"|url }}">new blog entry</a></li>
+							<li><a href="{{ "blog-drafts"|url }}">blog drafts</a></li>
 							<li><a href="{{ "flush-memcache"|url }}">flush memcache</a></li>
 						</ul>
 					</li>

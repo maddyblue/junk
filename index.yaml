@@ -22,6 +22,12 @@ indexes:
   - name: date
     direction: desc
 
+- kind: BlogEntry
+  properties:
+  - name: draft
+  - name: date
+    direction: desc
+
 - kind: Entry
   ancestor: yes
   properties:

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>blog</h1>
+	</div>
+
+	{% if entries %}
+
+	<div class="pagination">
+		<ul>
+			<li class="prev"><a href="{{ blog_url }}">first</a></li>
+			{% if page == 1 %}
+				<li class="disabled"><a href="#">&larr; previous</a></li>
+			{% else %}
+				<li><a href="{{ page|blog_prev }}">&larr; previous</a></li>
+			{% endif %}
+
+			{% for p in pagelist %}
+				<li{% ifequal p page %} class="active"{% endifequal %}><a href="{{ p|blog_url }}">{{ p }}</a></li>
+			{% endfor %}
+
+			{% if page == pages %}
+				<li class="disabled"><a href="#">next &rarr;</a></li>
+			{% else %}
+				<li><a href="{{ page|blog_next }}">next &rarr;</a></li>
+			{% endif %}
+
+			<li class="next"><a href="{{ pages|blog_url }}">last</a></li>
+		</ul>
+	</div>
+
+	{% for e in entries %}
+	<div class="row">
+		<div class="span16">
+		<h3><a href="{{ e.url }}">{{ e.title }}</a></h3>
+		<h5>by <a href="{{ "user"|url:e.user }}">{{ e.user }}</a> on {{ e.date|jdate }}</h5>
+		{{ e.rendered|safe }}
+		</div>
+	</div>
+	{% endfor %}
+
+	{% else %}
+
+	<div class="row">
+		<div class="span16">
+			<p>No entries in the blog.</p>
+		</div>
+	</div>
+
+	{% endif %}
+{% endblock %}

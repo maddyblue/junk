@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>blog drafts</h1>
+	</div>
+
+	{% if entries %}
+
+	{% for e in entries %}
+	<div class="row">
+		<div class="span16">
+		<h3><a href="{{ e.url }}">{{ e.title }}</a></h3>
+		<h5>by <a href="{{ "user"|url:e.user }}">{{ e.user }}</a> on {{ e.date|jdate }}</h5>
+		{{ e.rendered|safe }}
+		</div>
+	</div>
+	{% endfor %}
+
+	{% else %}
+
+	<div class="row">
+		<div class="span16">
+			<p>No drafts in the blog.</p>
+		</div>
+	</div>
+
+	{% endif %}
+{% endblock %}

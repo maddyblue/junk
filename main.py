@@ -727,6 +727,129 @@ class FlushMemcache(BaseHandler):
 		cache.flush()
 		rendert(self, 'admin.html', {'msg': 'memcache flushed'})
 
+class NewBlogHandler(BaseHandler):
+	def get(self):
+		b = models.BlogEntry(user=self.session['user']['name'])
+		b.put()
+		self.redirect(webapp2.uri_for('edit-blog', blog_id=b.key().id()))
+
+class EditBlogHandler(BaseHandler):
+	def get(self, blog_id):
+		b = models.BlogEntry.get_by_id(long(blog_id))
+
+		if not b:
+			self.error(404)
+			return
+
+		rendert(self, 'edit-blog.html', {
+			'b': b,
+			'markup_options': utils.render_options(models.RENDER_TYPE_CHOICES, b.markup),
+		})
+
+	def post(self, blog_id):
+		b = models.BlogEntry.get_by_id(long(blog_id))
+		delete = self.request.get('delete')
+
+		if not b:
+			self.error(404)
+			return
+
+		if delete == 'Delete entry':
+			b.delete()
+
+			if not b.draft:
+				def txn():
+					c = models.Config.get_by_key_name('blog_count')
+					c.count -= 1
+					c.put()
+
+				db.run_in_transaction(txn)
+
+			cache.clear_blog_entries_cache()
+			self.add_message('success', 'Blog entry deleted.')
+			self.redirect(webapp2.uri_for('blog-drafts'))
+			return
+
+		title = self.request.get('title').strip()
+		if not title:
+			self.add_message('error', 'Must specify a title.')
+		else:
+			b.title = title
+
+		b.text = self.request.get('text').strip()
+		b.markup = self.request.get('markup')
+		b.slug = '%s-%s' %(blog_id, utils.slugify(b.title))
+
+		draft = self.request.get('draft') == 'on'
+
+		# new post
+		if not draft and b.draft:
+			blog_count = 1
+		# was post, now draft
+		elif draft and not b.draft:
+			blog_count = -1
+		else:
+			blog_count = 0
+
+		if blog_count:
+			def txn(config_key, blog_count):
+				c = db.get(config_key)
+				c.count += blog_count
+				c.put()
+
+			c = models.Config.get_or_insert('blog_count', count=0)
+			db.run_in_transaction(txn, c.key(), blog_count)
+			cache.clear_blog_entries_cache()
+
+		b.draft = draft
+
+		date = self.request.get('date').strip()
+		time = self.request.get('time').strip()
+
+		try:
+			b.date = datetime.datetime.strptime('%s %s' %(date, time), '%m/%d/%Y %I:%M %p')
+		except:
+			self.add_message('error', 'Couldn\'t understand that date: %s %s' %(date, time))
+
+		b.rendered = utils.markup(b.text, b.markup)
+
+		b.put()
+		self.add_message('success', 'Blog entry saved.')
+		self.redirect(webapp2.uri_for('edit-blog', blog_id=blog_id))
+
+class BlogHandler(BaseHandler):
+	def get(self):
+		page = int(self.request.get('page', 1))
+		entries = cache.get_blog_entries_page(page)
+		pages = cache.get_blog_count() / models.BlogEntry.ENTRIES_PER_PAGE
+
+		rendert(self, 'blog.html', {
+			'entries': entries,
+			'page': page,
+			'pages': pages,
+			'pagelist': utils.page_list(page, pages),
+		})
+
+class BlogEntryHandler(BaseHandler):
+	def get(self, entry):
+		blog_id = long(entry.partition('-')[0])
+		entry = models.BlogEntry.get_by_id(blog_id)
+
+		rendert(self, 'blog-entry.html', {
+			'entry': entry,
+		})
+
+class BlogDraftsHandler(BaseHandler):
+	def get(self):
+		entries = models.BlogEntry.all().filter('draft', True).order('-date').fetch(500)
+		rendert(self, 'blog-drafts.html', {
+			'entries': entries,
+		})
+
+class MarkupHandler(BaseHandler):
+	def get(self):
+		rendert(self, 'markup.html')
+
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
@@ -738,13 +861,19 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/about', handler=AboutHandler, name='about'),
 	webapp2.Route(r'/account', handler=AccountHandler, name='account'),
 	webapp2.Route(r'/activity', handler=ActivityHandler, name='activity'),
+	webapp2.Route(r'/admin/blog/<blog_id>', handler=EditBlogHandler, name='edit-blog'),
+	webapp2.Route(r'/admin/drafts', handler=BlogDraftsHandler, name='blog-drafts'),
 	webapp2.Route(r'/admin/flush', handler=FlushMemcache, name='flush-memcache'),
+	webapp2.Route(r'/admin/new/blog', handler=NewBlogHandler, name='new-blog'),
+	webapp2.Route(r'/blog', handler=BlogHandler, name='blog'),
+	webapp2.Route(r'/blog/<entry>', handler=BlogEntryHandler, name='blog-entry'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/follow/<username>', handler=FollowHandler, name='follow'),
 	webapp2.Route(r'/login/facebook', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/logout/google', handler=GoogleSwitch, name='logout-google'),
+	webapp2.Route(r'/markup', handler=MarkupHandler, name='markup'),
 	webapp2.Route(r'/new/journal', handler=NewJournal, name='new-journal'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
 	webapp2.Route(r'/save', handler=SaveEntryHandler, name='entry-save'),
@@ -779,6 +908,7 @@ RESERVED_NAMES = set([
 	'journalr',
 	'login',
 	'logout',
+	'markup',
 	'new',
 	'news',
 	'privacy',

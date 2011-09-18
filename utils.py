@@ -12,11 +12,26 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+from cStringIO import StringIO
 import logging
 import os.path
+import re
+import unicodedata
 
+from django.utils import html
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
+
+import models
+
+# Fix sys.path
+import fix_path
+fix_path.fix_sys_path()
+
+from docutils.core import publish_parts
+import markdown
+import rst_directive
+import textile
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -49,3 +64,45 @@ def page_list(page, pages):
 		page -= half
 
 		return range(page, page + NUM_PAGE_DISP)
+
+def render_options(options, default=None):
+	ret = ''
+
+	for i in options:
+		if i == default:
+			d = ' selected'
+		else:
+			d = ''
+
+		ret += '<option%s>%s</option>' %(d, i)
+
+	return ret
+
+def markup(text, format):
+	if format == models.RENDER_TYPE_HTML:
+		return text
+	elif format == models.RENDER_TYPE_TEXT:
+		return html.linebreaks(html.escape(text))
+	elif format == models.RENDER_TYPE_MARKDOWN:
+		return markdown.Markdown().convert(text)
+	elif format == models.RENDER_TYPE_TEXTILE:
+		return textile.textile(text)
+	elif format == models.RENDER_TYPE_RST:
+		warning_stream = StringIO()
+		parts = publish_parts(text, writer_name='html4css1',
+			settings_overrides={
+				'_disable_config': True,
+				'embed_stylesheet': False,
+				'warning_stream': warning_stream,
+				'report_level': 2,
+		})
+		rst_warnings = warning_stream.getvalue()
+		if rst_warnings:
+			logging.warn(rst_warnings)
+		return parts['html_body']
+	else:
+		raise ValueError('invalid markup')
+
+def slugify(s):
+	s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
+	return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')

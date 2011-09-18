@@ -299,3 +299,39 @@ class Blob(DerefExpando):
 				url += '=s' + size
 
 			return url
+
+RENDER_TYPE_HTML = 'HTML'
+RENDER_TYPE_MARKDOWN = 'markdown'
+RENDER_TYPE_RST = 'reStructured Text'
+RENDER_TYPE_TEXT = 'plain text'
+RENDER_TYPE_TEXTILE = 'textile'
+
+RENDER_TYPE_CHOICES = [
+	RENDER_TYPE_HTML,
+	RENDER_TYPE_MARKDOWN,
+	RENDER_TYPE_RST,
+	RENDER_TYPE_TEXT,
+	RENDER_TYPE_TEXTILE,
+]
+
+class BlogEntry(db.Model):
+	ENTRIES_PER_PAGE = 10
+
+	date = db.DateTimeProperty(required=True, auto_now_add=True)
+	draft = db.BooleanProperty(required=True, default=True)
+	markup = db.StringProperty(required=True, indexed=False, choices=RENDER_TYPE_CHOICES, default=RENDER_TYPE_HTML)
+	title = db.StringProperty(required=True, indexed=False, default='Title')
+	text = db.TextProperty(default='')
+	rendered = db.TextProperty()
+	user = db.StringProperty(required=True)
+	slug = db.StringProperty(indexed=False)
+
+	@property
+	def url(self):
+		if not self.slug:
+			self.slug = str(self.key().id())
+
+		return webapp2.uri_for('blog-entry', entry=self.slug)
+
+class Config(db.Expando):
+	pass

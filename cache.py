@@ -30,6 +30,10 @@ C_ACTIVITIES = 'activities_%s_%s_%s'
 C_ACTIVITIES_FOLLOWER = 'activities_follower_%s'
 C_ACTIVITIES_FOLLOWER_DATA = 'activities_follower_data_%s'
 C_ACTIVITIES_FOLLOWER_KEYS = 'activities_follower_keys_%s'
+C_BLOG_ENTRIES_KEYS = 'blog_entries_keys'
+C_BLOG_ENTRIES_KEYS_PAGE = 'blog_entries_keys_page_%s'
+C_BLOG_ENTRIES_PAGE = 'blog_entries_page_%s'
+C_BLOG_COUNT = 'blog_count'
 C_ENTRIES_KEYS = 'entries_keys_%s'
 C_ENTRIES_KEYS_PAGE = 'entries_keys_page_%s_%s'
 C_ENTRIES_PAGE = 'entries_page_%s_%s_%s'
@@ -336,6 +340,67 @@ def get_entry_render(username, journal_name, entry_id):
 			'entry': entry,
 			'entry_url': webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id),
 		})
+		memcache.add(n, data)
+
+	return data
+
+def get_blog_entries_page(page):
+	n = C_BLOG_ENTRIES_PAGE %page
+	data = unpack(memcache.get(n))
+	if data is None:
+		if page < 1:
+			page = 1
+
+		entries = get_blog_entries_keys_page(page)
+		data = [get_by_key(i) for i in entries]
+		memcache.add(n, pack(data))
+
+	return data
+
+# returns all blog entry keys sorted by descending date
+def get_blog_entries_keys():
+	n = C_BLOG_ENTRIES_KEYS
+	data = memcache.get(n)
+	if data is None:
+		# todo: fix limit to 1000 most recent blog entries
+		data = models.BlogEntry.all(keys_only=True).filter('draft', False).order('-date').fetch(1000)
+		memcache.add(n, data)
+
+	return data
+
+# returns blog entry keys of given page
+def get_blog_entries_keys_page(page):
+	n = C_BLOG_ENTRIES_KEYS_PAGE %page
+	data = memcache.get(n)
+	if data is None:
+		entries = get_blog_entries_keys()
+		data = entries[(page  - 1) * models.BlogEntry.ENTRIES_PER_PAGE:page * models.BlogEntry.ENTRIES_PER_PAGE]
+		memcache.add(n, data)
+
+		if not data:
+			logging.warning('Page %i requested from blog, but only %i entries, %i pages.', page, len(entries), len(entries) / models.BlogEntry.ENTRIES_PER_PAGE + 1)
+
+	return data
+
+# called when a new blog entry is posted, and we must clear all the entry and page cache
+def clear_blog_entries_cache():
+	keys = [C_BLOG_ENTRIES_KEYS, C_BLOG_COUNT]
+
+	# add one key per page for get_blog_entries_page and get_blog_entries_keys_page
+	for p in range(1, get_blog_count() / models.BlogEntry.ENTRIES_PER_PAGE + 2):
+		keys.extend([C_BLOG_ENTRIES_PAGE %p, C_BLOG_ENTRIES_KEYS_PAGE %p])
+
+	memcache.delete_multi(keys)
+
+def get_blog_count():
+	n = C_BLOG_COUNT
+	data = memcache.get(n)
+	if data is None:
+		try:
+			data = models.Config.get_by_key_name('blog_count').count
+		except:
+			data = 0
+
 		memcache.add(n, data)
 
 	return data
