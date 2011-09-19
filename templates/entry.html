@@ -22,7 +22,7 @@
 						<label for="date">date</label>
 						<div class="input">
 							<input class="small" id="date" name="date" type="text" value="{{ entry.date|date:"m/d/Y" }}" />
-							<input class="mini" id="time" name="time" type="text" value="{{ entry.date|date:"h:i A" }}" />
+							<input class="mini" id="time" name="time" type="text" value="{{ entry.get_time }}" />
 							<span class="help-inline">date format: MM/DD/YYYY; time is optional, format is HH:MM AM/PM</span>
 						</div>
 					</div>

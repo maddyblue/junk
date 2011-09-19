@@ -68,9 +68,15 @@ def blog_next(page):
 	return blog_url(page + 1)
 
 JDATE_FMT = '%A, %b %d, %Y %I:%M %p'
+JDATE_NOTIME_FMT = '%A, %b %d, %Y'
 @register.filter
 def jdate(date):
-	return date.strftime(JDATE_FMT)
+	if not date.hour and not date.minute and not date.second:
+		fmt = JDATE_NOTIME_FMT
+	else:
+		fmt = JDATE_FMT
+
+	return date.strftime(fmt)
 
 SDATE_FMT = '%b %d, %Y'
 @register.filter

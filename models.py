@@ -214,6 +214,13 @@ class Entry(db.Model):
 	SENTENCE_RE = re.compile("[.!?\n]+")
 
 	@property
+	def time(self):
+		if not self.date.hour and not self.date.minute and not self.date.second:
+			return ''
+		else:
+			return self.date.strftime('%I:%M %S')
+
+	@property
 	def content_key(self):
 		return db.Key.from_path('EntryContent', long(self.content), parent=self.key())
 
