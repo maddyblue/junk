@@ -732,7 +732,7 @@ class FlushMemcache(BaseHandler):
 
 class NewBlogHandler(BaseHandler):
 	def get(self):
-		b = models.BlogEntry(user=self.session['user']['name'])
+		b = models.BlogEntry(user=self.session['user']['name'], avatar=self.session['user']['avatar'])
 		b.put()
 		self.redirect(webapp2.uri_for('edit-blog', blog_id=b.key().id()))
 

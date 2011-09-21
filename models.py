@@ -342,6 +342,7 @@ class BlogEntry(db.Model):
 	text = db.TextProperty(default='')
 	rendered = db.TextProperty()
 	user = db.StringProperty(required=True)
+	avatar = db.StringProperty()
 	slug = db.StringProperty(indexed=False)
 
 	@property

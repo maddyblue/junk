@@ -7,7 +7,7 @@
 
 		<div class="row">
 		<div class="span16">
-		<h3>by <a href="{{ "user"|url:entry.user }}">{{ entry.user }}</a> on {{ entry.date|jdate }}</h3>
+		<h3><img src="{{ entry.avatar }}&amp;s=40" alt="{{ entry.user }}"> <a href="{{ "user"|url:entry.user }}">{{ entry.user }}</a> {{ entry.date|sdate }}</h3>
 		{{ entry.rendered|safe }}
 		</div>
 	</div>
