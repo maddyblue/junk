@@ -8,7 +8,7 @@
 		{% endif %}
 		</h3>
 
-		{{ content.text|default:""|linebreaks }}
+		{{ content.rendered|safe }}
 
 		{% for b in blobs %}
 			{% if b.type == 1 %}

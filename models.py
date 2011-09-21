@@ -193,10 +193,25 @@ class Journal(db.Model):
 		else:
 			return webapp2.uri_for('view-journal', username=self.key().parent().name(), journal_name=self.name)
 
+RENDER_TYPE_HTML = 'HTML'
+RENDER_TYPE_MARKDOWN = 'markdown'
+RENDER_TYPE_RST = 'reStructured Text'
+RENDER_TYPE_TEXT = 'plain text'
+RENDER_TYPE_TEXTILE = 'textile'
+
+CONTENT_TYPE_CHOICES = [
+	RENDER_TYPE_MARKDOWN,
+	RENDER_TYPE_RST,
+	RENDER_TYPE_TEXT,
+	RENDER_TYPE_TEXTILE,
+]
+
 class EntryContent(db.Model):
 	subject = db.StringProperty()
 	tags = db.StringListProperty()
 	text = db.TextProperty()
+	rendered = db.TextProperty()
+	markup = db.StringProperty(required=True, indexed=False, choices=CONTENT_TYPE_CHOICES, default=RENDER_TYPE_TEXT)
 
 class Entry(db.Model):
 	date = db.DateTimeProperty(auto_now_add=True)
@@ -210,15 +225,15 @@ class Entry(db.Model):
 	words = db.IntegerProperty(required=True, default=0)
 	sentences = db.IntegerProperty(required=True, default=0)
 
-	WORD_RE = re.compile("[A-Za-z']+")
-	SENTENCE_RE = re.compile("[.!?\n]+")
+	WORD_RE = re.compile("[A-Za-z0-9']+")
+	SENTENCE_RE = re.compile("[.!?]+")
 
 	@property
 	def time(self):
 		if not self.date.hour and not self.date.minute and not self.date.second:
 			return ''
 		else:
-			return self.date.strftime('%I:%M %S')
+			return self.date.strftime('%I:%M %p')
 
 	@property
 	def content_key(self):
@@ -306,12 +321,6 @@ class Blob(DerefExpando):
 				url += '=s' + size
 
 			return url
-
-RENDER_TYPE_HTML = 'HTML'
-RENDER_TYPE_MARKDOWN = 'markdown'
-RENDER_TYPE_RST = 'reStructured Text'
-RENDER_TYPE_TEXT = 'plain text'
-RENDER_TYPE_TEXTILE = 'textile'
 
 RENDER_TYPE_CHOICES = [
 	RENDER_TYPE_HTML,

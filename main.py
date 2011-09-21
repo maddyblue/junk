@@ -25,6 +25,7 @@ import datetime
 import logging
 import re
 
+from django.utils import html
 from django.utils import simplejson
 from google.appengine.api import users
 from google.appengine.ext import blobstore
@@ -480,6 +481,7 @@ class ViewEntryHandler(BaseHandler):
 			'username': username,
 			'upload_url': webapp2.uri_for('upload-url', username=username, journal_name=journal_name, entry_id=entry_id),
 			'can_upload': user.can_upload(),
+			'markup_options': utils.render_options(models.CONTENT_TYPE_CHOICES, content.markup),
 		})
 
 class GetUploadURL(BaseHandler):
@@ -560,6 +562,7 @@ class SaveEntryHandler(BaseHandler):
 			subject = self.request.get('subject').strip()
 			tags = self.request.get('tags').strip()
 			text = self.request.get('text').strip()
+			markup = self.request.get('markup')
 			blob_list = self.request.get_all('blob')
 
 			date = self.request.get('date').strip()
@@ -578,57 +581,41 @@ class SaveEntryHandler(BaseHandler):
 			else:
 				tags = []
 
-			def txn(entry_key, content_key, rm_blobs, subject, tags, text, date):
+			def txn(entry_key, content_key, rm_blobs, subject, tags, text, markup, rendered, chars, words, sentences, date):
 				db.delete_async(rm_blobs)
 
 				user, journal, entry  = db.get([entry_key.parent().parent(), entry_key.parent(), entry_key])
 
-				if entry.chars:
-					journal.chars -= entry.chars
-					journal.words -= entry.words
-					journal.sentences -= entry.sentences
+				dchars = -entry.chars + chars
+				dwords = -entry.words + words
+				dsentences = -entry.sentences + sentences
 
-					user.chars -= entry.chars
-					user.words -= entry.words
-					user.sentences -= entry.sentences
+				journal.chars += dchars
+				journal.words += dwords
+				journal.sentences += dsentences
 
-				dchars = -entry.chars
-				dwords = -entry.words
-				dsentences = -entry.sentences
+				user.chars += dchars
+				user.words += dwords
+				user.sentences += dsentences
 
-				if text:
-					entry.chars = len(text)
-					entry.words = len(entry.WORD_RE.findall(text))
-					entry.sentences = len(entry.SENTENCE_RE.split(text))
-				else:
-					entry.chars = 0
-					entry.words = 0
-					entry.sentences = 0
-
-				journal.chars += entry.chars
-				journal.words += entry.words
-				journal.sentences += entry.sentences
-
-				user.chars += entry.chars
-				user.words += entry.words
-				user.sentences += entry.sentences
-
-				dchars += entry.chars
-				dwords += entry.words
-				dsentences += entry.sentences
+				entry.chars = chars
+				entry.words = words
+				entry.sentences = sentences
 
 				entry.date = date
 
 				user.set_dates()
 				user.count()
 
-				journal.set_dates(date)
+				journal.set_dates(entry)
 				journal.count()
 
 				content = models.EntryContent(key=content_key)
 				content.subject = subject
 				content.tags = tags
 				content.text = text
+				content.markup = markup
+				content.rendered = rendered
 
 				for i in rm_blobs:
 					user.used_data -= i.size
@@ -649,7 +636,19 @@ class SaveEntryHandler(BaseHandler):
 			for b in rm_blobs:
 				blobs.remove(b)
 
-			user, entry, content, dchars, dwords, dsentences = db.run_in_transaction(txn, entry.key(), content.key(), rm_blobs, subject, tags, text, newdate)
+			rendered = utils.markup(text, markup)
+
+			if text:
+				nohtml = html.strip_tags(rendered)
+				chars = len(nohtml)
+				words = len(entry.WORD_RE.findall(nohtml))
+				sentences = len(entry.SENTENCE_RE.split(nohtml))
+			else:
+				chars = 0
+				words = 0
+				sentences = 0
+
+			user, entry, content, dchars, dwords, dsentences = db.run_in_transaction(txn, entry.key(), content.key(), rm_blobs, subject, tags, text, markup, rendered, chars, words, sentences, newdate)
 			models.Activity.create(cache.get_user(username), models.ACTIVITY_SAVE_ENTRY, entry.key())
 
 			counters.increment(counters.COUNTER_CHARS, dchars)
