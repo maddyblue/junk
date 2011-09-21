@@ -78,7 +78,7 @@ def jdate(date):
 
 	return date.strftime(fmt)
 
-SDATE_FMT = '%b %d, %Y'
+SDATE_FMT = '%B %d, %Y'
 @register.filter
 def sdate(date):
 	return date.strftime(SDATE_FMT)
