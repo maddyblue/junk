@@ -2,7 +2,7 @@
 
 {% block content %}
 	<div class="page-header">
-		<h1>blog</h1>
+		<h1>blog <small><a href="{{ "feeds"|url:"blog" }}"><img src="/static/images/feed.png" class="feed-img" alt="feed">rss feed</a></small></h1>
 	</div>
 
 	{% if entries %}

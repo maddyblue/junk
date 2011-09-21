@@ -38,6 +38,21 @@ def feed(feed, token):
 				i.date
 			))
 
+	elif feed == 'blog':
+		title = 'journalr blog'
+		link = webapp2.uri_for('blog')
+		subtitle = 'Recent journalr blog posts'
+
+		items = []
+		for i in cache.get_blog_entries_page(1):
+			items.append(mk_item(
+				i.title,
+				i.url,
+				i.rendered,
+				i.key().id(),
+				i.date
+			))
+
 	elif feed.startswith('user-'):
 		username = feed.partition('-')[2]
 		user_key = db.Key.from_path('User', username)
