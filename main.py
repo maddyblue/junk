@@ -303,6 +303,10 @@ class ViewJournal(BaseHandler):
 		page = int(self.request.get('page', 1))
 		journal = cache.get_journal(username, journal_name)
 
+		if page < 1 or page > journal.pages:
+			self.error(404)
+			return
+
 		if not journal:
 			self.error(404)
 		else:
@@ -821,6 +825,12 @@ class BlogHandler(BaseHandler):
 		page = int(self.request.get('page', 1))
 		entries = cache.get_blog_entries_page(page)
 		pages = cache.get_blog_count() / models.BlogEntry.ENTRIES_PER_PAGE
+		if pages < 1:
+			pages = 1
+
+		if page < 1 or page > pages:
+			self.error(404)
+			return
 
 		rendert(self, 'blog.html', {
 			'entries': entries,

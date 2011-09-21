@@ -185,6 +185,8 @@ class Journal(db.Model):
 
 	@property
 	def pages(self):
+		if self.entry_count == 0:
+			return 1
 		return (self.entry_count + self.ENTRIES_PER_PAGE - 1) / self.ENTRIES_PER_PAGE
 
 	def url(self, page=1):
