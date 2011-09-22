@@ -511,6 +511,10 @@ class SaveEntryHandler(BaseHandler):
 		entry_id = long(self.request.get('entry_id'))
 		delete = self.request.get('delete')
 
+		if username != self.session['user']['name']:
+			self.error(404)
+			return
+
 		self.redirect(webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id))
 
 		entry, content, blobs = cache.get_entry(username, journal_name, entry_id)
@@ -732,6 +736,10 @@ class SaveEntryHandler(BaseHandler):
 
 class UploadHandler(BaseUploadHandler):
 	def post(self, username, journal_name, entry_id):
+		if username != self.session['user']['name']:
+			self.error(404)
+			return
+
 		entry_key = cache.get_entry_key(username, journal_name, entry_id)
 		uploads = self.get_uploads()
 
