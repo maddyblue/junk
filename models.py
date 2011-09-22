@@ -159,27 +159,6 @@ class Journal(db.Model):
 			self.freq_words = 0.
 			self.freq_sentences = 0.
 
-	# sets the last and first entry dates for this journal, based on a new or changed entry with given date
-	def set_dates(self, date=None):
-		if not self.entry_count:
-			self.last_entry = None
-			self.first_entry = None
-			return
-
-		if date and (not self.last_entry or date > self.last_entry):
-			self.last_entry = date
-		else:
-			last_entry = Entry.all().ancestor(self).order('-date').get()
-			if last_entry and last_entry.date > self.last_entry:
-				self.last_entry = last_entry.date
-
-		if date and (not self.first_entry or date < self.first_entry):
-			self.first_entry = date
-		else:
-			first_entry = Entry.all().ancestor(self).order('date').get()
-			if first_entry and first_entry.date > self.first_entry:
-				self.first_entry = first_entry.date
-
 	def __unicode__(self):
 		return unicode(self.name)
 

@@ -537,15 +537,41 @@ class SaveEntryHandler(BaseHandler):
 				user.words -= entry.words
 				user.sentences -= entry.sentences
 
-				user.count()
-
-				journal.set_dates()
-				journal.count()
-
 				for i in blobs:
 					user.used_data -= i.size
 
-				db.put([user, journal])
+				user.count()
+				db.put_async(user)
+
+				# just deleted the last journal entry
+				if journal.entry_count == 0:
+					journal.last_entry = None
+					journal.first_entry = None
+
+				# only 1 left (but there are 2 in the datastore still)
+				else:
+					# find last entry
+					entries = models.Entry.all().ancestor(journal).order('-date').fetch(2)
+					logging.info('%s last entries returned', len(entries))
+					for e in entries:
+						if e.key() != entry.key():
+							journal.last_entry = e.date
+							break
+					else:
+						logging.error('Did not find n last entry not %s', entry.key())
+
+					# find first entry
+					entries = models.Entry.all().ancestor(journal).order('date').fetch(2)
+					logging.info('%s first entries returned', len(entries))
+					for e in entries:
+						if e.key() != entry.key():
+							journal.first_entry = e.date
+							break
+					else:
+						logging.error('Did not find n first entry not %s', entry.key())
+
+				journal.count()
+				db.put(journal)
 				return user, journal
 
 			user, journal = db.run_in_transaction(txn, user_key, journal_key, entry.key(), content.key(), blobs)
@@ -612,9 +638,6 @@ class SaveEntryHandler(BaseHandler):
 				user.set_dates()
 				user.count()
 
-				journal.set_dates(entry)
-				journal.count()
-
 				content = models.EntryContent(key=content_key)
 				content.subject = subject
 				content.tags = tags
@@ -626,9 +649,42 @@ class SaveEntryHandler(BaseHandler):
 					user.used_data -= i.size
 					entry.blobs.remove(str(i.key().id()))
 
-				db.put([user, journal, entry, content])
+				db.put_async([user, entry, content])
 
-				return user, entry, content, dchars, dwords, dsentences
+				# just added the first journal entry
+				if journal.entry_count == 1:
+					journal.last_entry = date
+					journal.first_entry = date
+				else:
+					# find last entry
+					entries = models.Entry.all().ancestor(journal).order('-date').fetch(2)
+					logging.info('%s last entries returned', len(entries))
+					for e in entries:
+						if e.key() != entry.key():
+							if date > e.date:
+								journal.last_entry = date
+							else:
+								journal.last_entry = e.date
+							break
+					else:
+						logging.error('Did not find n last entry not %s', entry.key())
+
+					# find first entry
+					entries = models.Entry.all().ancestor(journal).order('date').fetch(2)
+					logging.info('%s first entries returned', len(entries))
+					for e in entries:
+						if e.key() != entry.key():
+							if date < e.date:
+								journal.first_entry = date
+							else:
+								journal.first_entry = e.date
+							break
+					else:
+						logging.error('Did not find n first entry not %s', entry.key())
+
+				journal.count()
+				db.put(journal)
+				return user, journal, entry, content, dchars, dwords, dsentences
 
 			rm_blobs = []
 
@@ -653,7 +709,7 @@ class SaveEntryHandler(BaseHandler):
 				words = 0
 				sentences = 0
 
-			user, entry, content, dchars, dwords, dsentences = db.run_in_transaction(txn, entry.key(), content.key(), rm_blobs, subject, tags, text, markup, rendered, chars, words, sentences, newdate)
+			user, journal, entry, content, dchars, dwords, dsentences = db.run_in_transaction(txn, entry.key(), content.key(), rm_blobs, subject, tags, text, markup, rendered, chars, words, sentences, newdate)
 			models.Activity.create(cache.get_user(username), models.ACTIVITY_SAVE_ENTRY, entry.key())
 
 			counters.increment(counters.COUNTER_CHARS, dchars)
