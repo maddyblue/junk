@@ -263,8 +263,6 @@ class AccountHandler(BaseHandler):
 		rendert(self, 'account.html', {'u': u})
 
 class NewJournal(BaseHandler):
-	JOURNALNAME_RE = re.compile("^[A-Za-z0-9- ',]+$")
-
 	def get(self):
 		rendert(self, 'new-journal.html')
 
@@ -275,8 +273,6 @@ class NewJournal(BaseHandler):
 			self.add_message('error', 'Only %i journals allowed.' %models.Journal.MAX_JOURNALS)
 		elif not name:
 			self.add_message('error', 'Your journal needs a name.')
-		elif not NewJournal.JOURNALNAME_RE.match(name):
-			self.add_message('error', 'Journal name may only contain letters, numbers, spaces, commas, and apostrophes.')
 		else:
 			journal = models.Journal(parent=db.Key(self.session['user']['key']), name=name)
 			for journal_url, journal_name in self.session['journals']:
@@ -300,7 +296,7 @@ class NewJournal(BaseHandler):
 				self.redirect(webapp2.uri_for('new-entry', username=self.session['user']['name'], journal_name=journal.name))
 				return
 
-		rendert(self, 'new-journal.html', {'name': name})
+		rendert(self, 'new-journal.html')
 
 class ViewJournal(BaseHandler):
 	def get(self, username, journal_name):
