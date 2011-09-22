@@ -28,7 +28,7 @@
 			<img src="{{ u.gravatar }}&amp;s=50" alt="{{ u }}">
 		</div>
 
-		{% if not thisuser %}
+		{% if user and not thisuser %}
 		<div class="span4 columns offset4">
 			{% if not following %}
 				<a href="{{ "follow"|url:u.name }}" class="btn">follow</a>
