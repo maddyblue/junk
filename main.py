@@ -362,6 +362,7 @@ class UserHandler(BaseHandler):
 class FollowHandler(BaseHandler):
 	def get(self, username):
 		user = cache.get_user(username)
+		thisuser = self.session['user']['name']
 		if not user:
 			self.error(404)
 			return
@@ -393,9 +394,9 @@ class FollowHandler(BaseHandler):
 			return index
 
 		followers_key = db.Key.from_path('User', username, 'UserFollowersIndex', username)
-		following_key = db.Key.from_path('User', self.session['user']['name'], 'UserFollowingIndex', self.session['user']['name'])
+		following_key = db.Key.from_path('User', thisuser, 'UserFollowingIndex', thisuser)
 
-		followers = db.run_in_transaction(txn, followers_key, self.session['user']['name'], op)
+		followers = db.run_in_transaction(txn, followers_key, thisuser, op)
 
 		try:
 			following = db.run_in_transaction(txn, following_key, username, op)
@@ -408,7 +409,7 @@ class FollowHandler(BaseHandler):
 
 			cache.set_multi({
 				cache.C_FOLLOWERS %username: followers.users,
-				cache.C_FOLLOWING %self.session['user']['name']: following.users,
+				cache.C_FOLLOWING %thisuser: following.users,
 			})
 
 		except db.TransactionFailedError:
@@ -416,7 +417,7 @@ class FollowHandler(BaseHandler):
 			self.add_message('error', 'We\'re sorry, there was a problem. Try that again.')
 
 			# do some ghetto rollback if the second transaction fails; this can still fail...
-			db.run_in_transaction(txn, followers_key, self.session['user']['name'], unop)
+			db.run_in_transaction(txn, followers_key, thisuser, unop)
 
 		self.redirect(webapp2.uri_for('user', username=username))
 
