@@ -191,7 +191,7 @@ class EntryContent(db.Model):
 	subject = db.StringProperty()
 	tags = db.StringListProperty()
 	text = db.TextProperty()
-	rendered = db.TextProperty()
+	rendered = db.TextProperty(default='')
 	markup = db.StringProperty(required=True, indexed=False, choices=CONTENT_TYPE_CHOICES, default=RENDER_TYPE_TEXT)
 
 class Entry(db.Model):
