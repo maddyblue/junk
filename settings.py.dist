@@ -5,7 +5,7 @@ COOKIE_KEY = ''
 
 FACEBOOK_KEY = ''
 FACEBOOK_SECRET = ''
-FACEBOOK_REDIRECT_URI = 'http://%s/login/facebook/' % os.environ['HTTP_HOST']
+FACEBOOK_REDIRECT_URI = 'http://%s/login/facebook' % os.environ['HTTP_HOST']
 
 # to enable, set to analytics id: 'UA-12345678-9'
 GOOGLE_ANALYTICS = ''
