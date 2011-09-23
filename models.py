@@ -75,7 +75,7 @@ class User(db.Model):
 	entry_count = db.IntegerProperty(required=True, default=0)
 
 	def count(self):
-		if self.entry_count:
+		if self.entry_count and self.last_entry and self.first_entry:
 			self.entry_days = (self.last_entry - self.first_entry).days + 1
 			weeks = self.entry_days / 7.
 			self.freq_entries = self.entry_count / weeks
