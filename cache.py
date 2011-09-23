@@ -290,7 +290,8 @@ def get_journal(username, journal_name):
 	data = unpack(memcache.get(n))
 	if data is None:
 		journal_key = get_journal_key(username, journal_name)
-		data = db.get(journal_key)
+		if journal_key:
+			data = db.get(journal_key)
 		memcache.add(n, pack(data))
 
 	return data

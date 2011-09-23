@@ -303,7 +303,7 @@ class ViewJournal(BaseHandler):
 		page = int(self.request.get('page', 1))
 		journal = cache.get_journal(username, journal_name)
 
-		if page < 1 or page > journal.pages or username != self.session['user']['name']:
+		if not journal or page < 1 or page > journal.pages or username != self.session['user']['name']:
 			self.error(404)
 			return
 
