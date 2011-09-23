@@ -924,6 +924,10 @@ class MarkupHandler(BaseHandler):
 	def get(self):
 		rendert(self, 'markup.html')
 
+class SecurityHandler(BaseHandler):
+	def get(self):
+		rendert(self, 'security.html')
+
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
@@ -951,6 +955,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/new/journal', handler=NewJournal, name='new-journal'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
 	webapp2.Route(r'/save', handler=SaveEntryHandler, name='entry-save'),
+	webapp2.Route(r'/security', handler=SecurityHandler, name='security'),
 	webapp2.Route(r'/stats', handler=StatsHandler, name='stats'),
 	webapp2.Route(r'/upload/file/<username>/<journal_name>/<entry_id>', handler=UploadHandler, name='upload-file'),
 	webapp2.Route(r'/upload/success', handler=UploadSuccess, name='upload-success'),

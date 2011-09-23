@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>security <small>keeping your journals private</small></h1>
+	</div>
+
+	<div class="row">
+		<div class="span16">
+			<h3>privacy</h3>
+			<p>Your journal is one of the most private things in your life. It is where you write things you sometimes cannot say. To keep a journal, you will first make sure it is in a safe place where only you can see it. Journalr does this for you. Your journalr content is never shared. We keep our own journals here (that's why we made the site, after all), and would not want our journals in the public eye.</p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span16">
+			<h3>even more privacy</h3>
+			<p>For the super paranoid, however, even this is not enough. Technically, there is still someone else who could theoretically access your data since it's stored on a computer somewhere that you don't have total control of. Maybe someone is watching all the data you send over the internet, and can read everything you send (we're looking into securing journalr connections to prevent this). For those who want complete and total protection against this kind of problem, we have a solution for you, in two parts.</p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span16">
+			<h3>encipher.it</h3>
+			<p><a href="https://encipher.it/" target="_blank">encipher.it</a> is a simple, secure, fast way to encrypt your journal post before saving it to journalr. It is a service that encrypts text right in your web browser, which means that anything we get is not readable by us (but we'll save it anyway). When you are writing an entry, click the <span class="btn info">Encipher It</span> button, enter a password, and your text is encrypted. To decrypt it, just click the <span class="btn info">Encipher It</span> button and enter you password again.</p>
+			<p class="alert-message warning"><strong>If you lose your encipher.it password, you cannot get your journal entry back.</strong></p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span16">
+			<h3>KeePass</h3>
+			<p><a href="http://keepass.info/">KeePass</a> is a password safe: a secure, single place to keep all of your passwords. The problem with encipher.it is that if you forget your password, you cannot decrypt your data. KeePass provides a place to store your passwords. <a href="http://keepass.info/download.html">Download KeePass</a> and create a new password safe with a master password. Then you can have KeePass create a random password, and store it as your encipher.it password. Use KeePass to copy the password to your clipboard whenever you use encipher.it. You should backup your password safe file, too.</p>
+		</div>
+	</div>
+{% endblock %}
