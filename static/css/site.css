@@ -18,3 +18,8 @@ textarea {
 .feed-img {
 	margin-right: 5px;
 }
+
+#rss img {
+	float: right;
+	margin-left: 20px;
+}

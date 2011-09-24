@@ -904,6 +904,7 @@ class BlogHandler(BaseHandler):
 			'page': page,
 			'pages': pages,
 			'pagelist': utils.page_list(page, pages),
+			'top': cache.get_blog_top(),
 		})
 
 class BlogEntryHandler(BaseHandler):
@@ -913,6 +914,7 @@ class BlogEntryHandler(BaseHandler):
 
 		rendert(self, 'blog-entry.html', {
 			'entry': entry,
+			'top': cache.get_blog_top(),
 		})
 
 class BlogDraftsHandler(BaseHandler):

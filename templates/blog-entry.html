@@ -2,13 +2,15 @@
 
 {% block content %}
 	<div class="page-header">
-		<h1>{{ entry.title }}{% if user.admin %} <a href="{{ "edit-blog"|url:entry.key.id }}" class="btn primary">edit</a>{% endif %}</h1>
+		<h1><a href="{{ entry.url }}">{{ entry.title }}</a>{% if user.admin %} <a href="{{ "edit-blog"|url:entry.key.id }}" class="btn primary">edit</a>{% endif %}</h1>
 	</div>
 
-		<div class="row">
-		<div class="span16">
-		<h3><img src="{{ entry.avatar }}&amp;s=40" alt="{{ entry.user }}"> <a href="{{ "user"|url:entry.user }}">{{ entry.user }}</a> {{ entry.date|sdate }}</h3>
-		{{ entry.rendered|safe }}
+	<div class="row">
+		<div class="span10">
+			<h3><img src="{{ entry.avatar }}&amp;s=40" alt="{{ entry.user }}"> <a href="{{ "user"|url:entry.user }}">{{ entry.user }}</a> {{ entry.date|sdate }}</h3>
+			{{ entry.rendered|safe }}
 		</div>
+
+		{{ top }}
 	</div>
 {% endblock %}

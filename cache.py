@@ -30,10 +30,11 @@ C_ACTIVITIES = 'activities_%s_%s_%s'
 C_ACTIVITIES_FOLLOWER = 'activities_follower_%s'
 C_ACTIVITIES_FOLLOWER_DATA = 'activities_follower_data_%s'
 C_ACTIVITIES_FOLLOWER_KEYS = 'activities_follower_keys_%s'
+C_BLOG_COUNT = 'blog_count'
 C_BLOG_ENTRIES_KEYS = 'blog_entries_keys'
 C_BLOG_ENTRIES_KEYS_PAGE = 'blog_entries_keys_page_%s'
 C_BLOG_ENTRIES_PAGE = 'blog_entries_page_%s'
-C_BLOG_COUNT = 'blog_count'
+C_BLOG_TOP = 'blog_top'
 C_ENTRIES_KEYS = 'entries_keys_%s'
 C_ENTRIES_KEYS_PAGE = 'entries_keys_page_%s_%s'
 C_ENTRIES_PAGE = 'entries_page_%s_%s_%s'
@@ -385,7 +386,7 @@ def get_blog_entries_keys_page(page):
 
 # called when a new blog entry is posted, and we must clear all the entry and page cache
 def clear_blog_entries_cache():
-	keys = [C_BLOG_ENTRIES_KEYS, C_BLOG_COUNT]
+	keys = [C_BLOG_ENTRIES_KEYS, C_BLOG_COUNT, C_BLOG_TOP]
 
 	# add one key per page for get_blog_entries_page and get_blog_entries_keys_page
 	for p in range(1, get_blog_count() / models.BlogEntry.ENTRIES_PER_PAGE + 2):
@@ -402,6 +403,17 @@ def get_blog_count():
 		except:
 			data = 0
 
+		memcache.add(n, data)
+
+	return data
+
+def get_blog_top():
+	n = C_BLOG_TOP
+	data = memcache.get(n)
+	if data is None:
+		keys = get_blog_entries_keys()[:25]
+		blogentries = db.get(keys)
+		data = utils.render('blog-top.html', {'top': blogentries})
 		memcache.add(n, data)
 
 	return data
