@@ -953,7 +953,7 @@ class UpdateUsersHandler(BaseHandler):
 		if len(ukeys) == LIMIT:
 			self.response.out.write('<br><a href="%s">next</a>' %webapp2.uri_for('update-users', cursor=q.cursor()))
 		else:
-			self.response.out.write('done')
+			self.response.out.write('<br>done')
 
 config = {
 	'webapp2_extras.sessions': {
