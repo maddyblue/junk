@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div class="page-header">
-		<h1><a href="{{ journal|journal_url }}">{{ journal }}</a>{% if journal.entry_count %} <small>{{ journal.entry_count }} entr{{ journal.entry_count|pluralize:"y,ies" }}</small>{% endif %}</h1>
+	<div>
+		<h1>
+			<ul class="breadcrumb">
+				<li><a href="{{ "user"|url:username }}">{{ username }}</a> <span class="divider">/</span></li>
+				<li class="active"><a href="{{ journal|journal_url }}">{{ journal }}</a></li>
+			</ul>
+		</h1>
 	</div>
 
 	<div class="row">

@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div class="page-header">
-		<h1><a href="{{ username|user_journal_url:journal_name }}">{{ journal_name }}</a></h1>
+	<div>
+		<h1>
+			<ul class="breadcrumb">
+				<li><a href="{{ "user"|url:username }}">{{ username }}</a> <span class="divider">/</span></li>
+				<li><a href="{{ username|user_journal_url:journal_name }}">{{ journal_name }}</a> <span class="divider">/</span></li>
+				<li class="active"><a href="{{ entry.url }}">{{ content.subject|entry_subject:entry.date }}</a></li>
+			</ul>
+		</h1>
 	</div>
 
 	<div class="row">

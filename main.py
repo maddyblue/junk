@@ -313,6 +313,7 @@ class ViewJournal(BaseHandler):
 			self.error(404)
 		else:
 			rendert(self, 'view-journal.html', {
+				'username': username,
 				'journal': journal,
 				'entries': cache.get_entries_page(username, journal_name, page, journal.key()),
 				'page': page,

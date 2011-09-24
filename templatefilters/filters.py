@@ -82,3 +82,10 @@ SDATE_FMT = '%B %d, %Y'
 @register.filter
 def sdate(date):
 	return date.strftime(SDATE_FMT)
+
+@register.filter
+def entry_subject(sub, date):
+	if sub:
+		return sub
+
+	return date.strftime(JDATE_FMT)
