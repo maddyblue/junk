@@ -46,6 +46,7 @@ USER_SOURCE_CHOICES = [
 
 class User(db.Model):
 	name = db.StringProperty(required=True, indexed=False)
+	lname = db.StringProperty(indexed=True)
 	email = db.EmailProperty()
 	register_date = db.DateTimeProperty(auto_now_add=True)
 	last_active = db.DateTimeProperty(auto_now_add=True)

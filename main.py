@@ -191,18 +191,20 @@ class Register(BaseHandler):
 				username = self.request.get('username')
 				lusername = username.lower()
 				email = self.request.get('email')
+				lusers = models.User.all(keys_only=True).filter('lname', lusername).get()
 
 				if not Register.USERNAME_RE.match(lusername):
 					errors['username'] = 'Username may only contain alphanumeric characters or dashes and cannot begin with a dash.'
-				elif lusername in RESERVED_NAMES:
+				elif lusername in RESERVED_NAMES or lusers:
 					errors['username'] = 'Username is already taken.'
 				else:
 					source = self.session['register']['source']
 					uid = self.session['register']['uid']
 					if not email:
 						email = None
-					user = models.User.get_or_insert(lusername,
+					user = models.User.get_or_insert(username,
 						name=username,
+						lname=lusername,
 						email=email,
 						source=source,
 						uid=uid,
@@ -928,6 +930,31 @@ class SecurityHandler(BaseHandler):
 	def get(self):
 		rendert(self, 'security.html')
 
+class UpdateUsersHandler(BaseHandler):
+	def get(self):
+		q = models.User.all(keys_only=True)
+		cursor = self.request.get('cursor')
+
+		if cursor:
+			q.with_cursor(cursor)
+
+		def txn(user_key):
+			u = db.get(user_key)
+			u.lname = u.name.lower()
+			u.put()
+			return u
+
+		LIMIT = 5
+		ukeys = q.fetch(LIMIT)
+		for u in ukeys:
+			user = db.run_in_transaction(txn, u)
+			self.response.out.write('<br>updated %s: %s' %(user.name, user.lname))
+
+		if len(ukeys) == LIMIT:
+			self.response.out.write('<br><a href="%s">next</a>' %webapp2.uri_for('update-users', cursor=q.cursor()))
+		else:
+			self.response.out.write('done')
+
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
@@ -943,6 +970,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/drafts', handler=BlogDraftsHandler, name='blog-drafts'),
 	webapp2.Route(r'/admin/flush', handler=FlushMemcache, name='flush-memcache'),
 	webapp2.Route(r'/admin/new/blog', handler=NewBlogHandler, name='new-blog'),
+	webapp2.Route(r'/admin/update/users', handler=UpdateUsersHandler, name='update-users'),
 	webapp2.Route(r'/blog', handler=BlogHandler, name='blog'),
 	webapp2.Route(r'/blog/<entry>', handler=BlogEntryHandler, name='blog-entry'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
