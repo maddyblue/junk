@@ -365,9 +365,16 @@ class UserHandler(BaseHandler):
 class FollowHandler(BaseHandler):
 	def get(self, username):
 		user = cache.get_user(username)
-		thisuser = self.session['user']['name']
-		if not user:
+		if not user or 'user' not in self.session:
 			self.error(404)
+			return
+
+		thisuser = self.session['user']['name']
+
+		self.redirect(webapp2.uri_for('user', username=username))
+
+		# don't allow users to follow themselves
+		if thisuser == username:
 			return
 
 		if 'unfollow' in self.request.GET:
@@ -421,8 +428,6 @@ class FollowHandler(BaseHandler):
 
 			# do some ghetto rollback if the second transaction fails; this can still fail...
 			db.run_in_transaction(txn, followers_key, thisuser, unop)
-
-		self.redirect(webapp2.uri_for('user', username=username))
 
 class NewEntryHandler(BaseHandler):
 	def get(self, username, journal_name):
