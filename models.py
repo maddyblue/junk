@@ -320,7 +320,7 @@ class BlogEntry(db.Model):
 	markup = db.StringProperty(required=True, indexed=False, choices=RENDER_TYPE_CHOICES, default=RENDER_TYPE_HTML)
 	title = db.StringProperty(required=True, indexed=False, default='Title')
 	text = db.TextProperty(default='')
-	rendered = db.TextProperty()
+	rendered = db.TextProperty(default='')
 	user = db.StringProperty(required=True)
 	avatar = db.StringProperty()
 	slug = db.StringProperty(indexed=False)
