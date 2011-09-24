@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="row">
-		<div class="span8 columns">
+		<div class="span8">
 			<table>
 				<tr><td>member since</td><td>{{ u.register_date|sdate }}</td></tr>
 				<tr><td>journals</td><td>{{ u.journal_count }}</td></tr>
@@ -22,18 +22,18 @@
 				<tr><td>characters per week</td><td>{{ u.freq_chars|floatformat }}</td></tr>
 				<tr><td>words per week</td><td>{{ u.freq_words|floatformat }}</td></tr>
 				<tr><td>sentences per week</td><td>{{ u.freq_sentences|floatformat }}</td></tr>
-				{% if u.last_entry %}<tr><td>last entry edited</td><td>{{ u.last_entry|jdate }}</td></tr>{% endif %}
-				{% if u.first_entry %}<tr><td>first entry edited</td><td>{{ u.first_entry|jdate }}</td></tr>{% endif %}
+				{% if u.last_entry %}<tr><td>last entry edited</td><td>{{ u.last_entry|sdate }}</td></tr>{% endif %}
+				{% if u.first_entry %}<tr><td>first entry edited</td><td>{{ u.first_entry|sdate }}</td></tr>{% endif %}
 				{% if u.entry_days %}<tr><td>entries spanning</td><td>{{ u.entry_days }} day{{ u.entry_days|pluralize }}</td></tr>{% endif %}
 			</table>
 		</div>
 
-		<div class="span2 columns">
+		<div class="span2">
 			<img src="{{ u.gravatar }}&amp;s=50" alt="{{ u }}">
 		</div>
 
 		{% if user and not thisuser %}
-		<div class="span4 columns offset4">
+		<div class="span4 offset2">
 			{% if not following %}
 				<a href="{{ "follow"|url:u.name }}" class="btn">follow</a>
 			{% else %}
@@ -46,13 +46,13 @@
 	<hr>
 
 	<div class="row">
-		<div class="span8 columns">
+		<div class="span8">
 			<h2>{{ u }}'s journals</h2>
 
 			{% include "journals.html" %}
 		</div>
 
-		<div class="span8 columns">
+		<div class="span8">
 			<h2>activity <small><a href="{{ "user-feeds"|url:u.name }}"><img src="/static/images/feed.png" class="feed-img" alt="feed">rss feed</a></small></h2>
 			{% for a in activities %}
 				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.user }}"> {% endif %}<a href="{{ "user"|url:a.user }}">{{ a.user }}</a> {{ a.get_action|safe }} {{ a.date|timesince }} ago</p>
