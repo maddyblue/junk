@@ -999,8 +999,8 @@ application = webapp2.WSGIApplication([
 
 	webapp2.Route(r'/<username>', handler=UserHandler, name='user'),
 	webapp2.Route(r'/<username>/<journal_name>', handler=ViewJournal, name='view-journal'),
+	webapp2.Route(r'/<username>/<journal_name>/<entry_id:\d+>', handler=ViewEntryHandler, name='view-entry'),
 	webapp2.Route(r'/<username>/<journal_name>/new', handler=NewEntryHandler, name='new-entry'),
-	webapp2.Route(r'/<username>/<journal_name>/<entry_id>', handler=ViewEntryHandler, name='view-entry'),
 	], debug=True, config=config)
 
 RESERVED_NAMES = set([
