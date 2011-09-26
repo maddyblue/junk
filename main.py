@@ -965,10 +965,11 @@ class UpdateUsersHandler(BaseHandler):
 
 class BlobHandler(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, key):
-		if not blobstore.get(key):
+		blob_info = blobstore.BlobInfo.get(key)
+		if not blob_info:
 			self.error(404)
 		else:
-			self.send_blob(key, save_as=True)
+			self.send_blob(blob_info)#, save_as=True)
 
 config = {
 	'webapp2_extras.sessions': {
