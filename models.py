@@ -303,6 +303,8 @@ class Blob(DerefExpando):
 				url += '=s' + size
 
 			return url
+		else:
+			return webapp2.uri_for('blob', key=self.get_key('blob'))
 
 RENDER_TYPE_CHOICES = [
 	RENDER_TYPE_HTML,

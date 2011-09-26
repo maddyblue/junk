@@ -963,6 +963,13 @@ class UpdateUsersHandler(BaseHandler):
 		else:
 			self.response.out.write('<br>done')
 
+class BlobHandler(blobstore_handlers.BlobstoreDownloadHandler):
+	def get(self, key):
+		if not blobstore.get(key):
+			self.error(404)
+		else:
+			self.send_blob(key, save_as=True)
+
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
@@ -979,6 +986,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/flush', handler=FlushMemcache, name='flush-memcache'),
 	webapp2.Route(r'/admin/new/blog', handler=NewBlogHandler, name='new-blog'),
 	webapp2.Route(r'/admin/update/users', handler=UpdateUsersHandler, name='update-users'),
+	webapp2.Route(r'/blob/<key>', handler=BlobHandler, name='blob'),
 	webapp2.Route(r'/blog', handler=BlogHandler, name='blog'),
 	webapp2.Route(r'/blog/<entry>', handler=BlogEntryHandler, name='blog-entry'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
@@ -1010,6 +1018,7 @@ RESERVED_NAMES = set([
 	'account',
 	'activity',
 	'admin',
+	'blob',
 	'blog',
 	'contact',
 	'entry',
