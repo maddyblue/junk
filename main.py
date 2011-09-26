@@ -479,11 +479,11 @@ class ViewEntryHandler(BaseHandler):
 			return
 
 		entry, content, blobs = cache.get_entry(username, journal_name, entry_id)
-		user = cache.get_user(username)
-
 		if not entry:
 			self.error(404)
 			return
+
+		user = cache.get_user(username)
 
 		rendert(self, 'entry.html', {
 			'blobs': blobs,
