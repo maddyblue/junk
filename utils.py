@@ -106,3 +106,12 @@ def markup(text, format):
 def slugify(s):
 	s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
 	return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
+
+def html_to_pdf(f, title, entries):
+	import xhtml2pdf.pisa as pisa
+	import StringIO
+
+	html = render('pdf.html', {'title': title, 'entries': entries})
+	pdf = pisa.CreatePDF(StringIO.StringIO(html), f)
+
+	return not pdf.err

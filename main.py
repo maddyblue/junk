@@ -27,6 +27,7 @@ import re
 
 from django.utils import html
 from django.utils import simplejson
+from google.appengine.api import files
 from google.appengine.api import users
 from google.appengine.ext import blobstore
 from google.appengine.ext import db
@@ -484,6 +485,32 @@ class ViewEntryHandler(BaseHandler):
 			return
 
 		user = cache.get_user(username)
+
+		if 'pdf' in self.request.GET:
+			pdf_blob = models.Blob.get_by_key_name('pdf', parent=entry)
+
+			# either no cached entry, or it's outdated
+			if not pdf_blob or pdf_blob.date < entry.last_edited:
+				if pdf_blob:
+					pdf_blob.blob.delete()
+
+				file_name = files.blobstore.create(mime_type='application/pdf')
+				subject = content.subject if content.subject else templatefilters.filters.jdate(entry.date)
+				with files.open(file_name, 'a') as f:
+					utils.html_to_pdf(f, subject, [(entry, content, blobs)]) # need to check for error return
+				files.finalize(file_name)
+				pdf_blob = models.Blob(
+					key_name='pdf',
+					parent=entry,
+					blob=files.blobstore.get_blob_key(file_name),
+					type=models.BLOB_TYPE_PDF,
+					name='%s - %s - %s' %(username, journal_name, subject),
+					date=entry.last_edited,
+				)
+				pdf_blob.put()
+
+			self.redirect(pdf_blob.get_url(name=True))
+			return
 
 		rendert(self, 'entry.html', {
 			'blobs': blobs,
@@ -966,10 +993,15 @@ class UpdateUsersHandler(BaseHandler):
 class BlobHandler(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, key):
 		blob_info = blobstore.BlobInfo.get(key)
+
+		name = self.request.get('name')
+		if name == 'True':
+			name = True
+
 		if not blob_info:
 			self.error(404)
 		else:
-			self.send_blob(blob_info)#, save_as=True)
+			self.send_blob(blob_info, save_as=name)
 
 config = {
 	'webapp2_extras.sessions': {

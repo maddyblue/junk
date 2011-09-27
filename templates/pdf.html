@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<body>
+	{% for entry, content, blobs in entries %}
+		<h3>
+		{% if content.subject %}
+			{{ content.subject }}<small>from {{ entry.date|jdate }}</small>
+		{% else %}
+			{{ entry.date|jdate }}
+		{% endif %}
+		</h3>
+
+		{{ content.rendered|safe }}
+
+		{% if not forloop.last %}
+		<hr>
+		{% endif %}
+
+	{% endfor %}
+</body>
+</html>

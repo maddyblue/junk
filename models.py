@@ -278,9 +278,11 @@ class ActivityIndex(db.Model):
 	date = db.DateTimeProperty(auto_now_add=True)
 
 BLOB_TYPE_IMAGE = 1
+BLOB_TYPE_PDF = 2
 
 BLOB_TYPE_CHOICES = [
 	BLOB_TYPE_IMAGE,
+	BLOB_TYPE_PDF,
 ]
 
 class Blob(DerefExpando):
@@ -292,7 +294,7 @@ class Blob(DerefExpando):
 	size = db.IntegerProperty()
 	url = db.StringProperty(indexed=False)
 
-	def get_url(self, size=None):
+	def get_url(self, size=None, name=None):
 		if self.type == BLOB_TYPE_IMAGE:
 			if not self.url:
 				self.url = images.get_serving_url(self.blob)
@@ -304,7 +306,14 @@ class Blob(DerefExpando):
 
 			return url
 		else:
-			return webapp2.uri_for('blob', key=self.get_key('blob'))
+			kwargs = {'key': self.get_key('blob')}
+
+			if name is True:
+				name = self.name
+			if name:
+				kwargs['name'] = name
+
+			return webapp2.uri_for('blob', **kwargs)
 
 RENDER_TYPE_CHOICES = [
 	RENDER_TYPE_HTML,
