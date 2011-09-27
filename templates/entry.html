@@ -160,12 +160,17 @@
 						form.attr('action', data);
 
 						form.ajaxSubmit({
-							success: function(data) {
+							success: function(data, stat, xhr) {
 								$("#" + target).remove();
 
 								if(data == '')
 								{
 									label.html('error during upload');
+									$this.parent().html('<span class="uneditable-input">' + name + '</span>');
+								}
+								else if(xhr.responseXML.title.substr(0, 3) == "413")
+								{
+									label.html('file too large');
 									$this.parent().html('<span class="uneditable-input">' + name + '</span>');
 								}
 								else
