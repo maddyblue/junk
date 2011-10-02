@@ -10,22 +10,29 @@ from google.appengine.api import urlfetch
 import settings
 import webapp2
 
-OAUTH_URL = 'https://www.facebook.com/dialog/oauth?client_id=%s&redirect_uri=%s'
+OAUTH_URL = 'https://www.facebook.com/dialog/oauth'
 TOKEN_ENDPOINT = 'https://graph.facebook.com/oauth/access_token'
 GRAPH_URL = 'https://graph.facebook.com/me'
 
-def make_url(url=None):
-	if url is None:
-		url = webapp2.uri_for('login-facebook')
-	return 'http://%s%s' %(os.environ['HTTP_HOST'], url)
+def redirect_uri(payload_dict={}):
+	url = webapp2.uri_for('facebook')
+	payload = urllib.urlencode(payload_dict)
+	return 'http://%s%s?%s' %(os.environ['HTTP_HOST'], url, payload)
 
-def oauth_url(redirect=None):
-	return OAUTH_URL %(settings.FACEBOOK_KEY, urllib.quote(make_url(redirect)))
+def oauth_url(redirect_dict={}, payload_dict={}):
+	oauth_dict = {
+		'client_id': settings.FACEBOOK_KEY,
+		'redirect_uri': redirect_uri(redirect_dict),
+	}
+	oauth_dict.update(payload_dict)
 
-def login(code, url=None):
+	payload = urllib.urlencode(oauth_dict)
+	return '%s?%s' %(OAUTH_URL, payload)
+
+def access_dict(code, redirect_dict={}):
 	payload = urllib.urlencode({
 		'client_id': settings.FACEBOOK_KEY,
-		'redirect_uri': make_url(url),
+		'redirect_uri': redirect_uri(redirect_dict),
 		'client_secret': settings.FACEBOOK_SECRET,
 		'code': code,
 	})

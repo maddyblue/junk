@@ -1,0 +1,25 @@
+<html>
+<head>
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+	<script src="/static/js/site.js"></script>
+</head>
+<body>
+
+Menu: <a href="{{ "logout"|url }}">logout</a>
+
+{% if user %}
+<p>Logged in as: {{ user.name }}
+{% endif %}
+
+{% for msg, lvl in messages %}
+<p>{{ lvl }}: {{ msg }}
+{% endfor %}
+
+<hr>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

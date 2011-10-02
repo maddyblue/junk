@@ -24,11 +24,20 @@ USER_SOURCE_CHOICES = [
 	USER_SOURCE_GOOGLE,
 ]
 
-class User(db.Model):
-	name = db.StringProperty(required=True, indexed=False)
+class User(DerefModel):
+	first_name = db.StringProperty(required=True, indexed=False)
+	last_name = db.StringProperty(required=True, indexed=False)
 	email = db.EmailProperty()
 	register_date = db.DateTimeProperty(auto_now_add=True)
 	last_active = db.DateTimeProperty(auto_now_add=True)
 
 	source = db.StringProperty(required=True, choices=USER_SOURCE_CHOICES)
 	uid = db.StringProperty(required=True)
+
+	site = db.ReferenceProperty()
+
+class Site(DerefModel):
+	name = db.StringProperty(required=True)
+	user = db.ReferenceProperty(User, required=True)
+	headline = db.StringProperty(indexed=False)
+	subheader = db.StringProperty(indexed=False)
