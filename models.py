@@ -343,7 +343,7 @@ class BlogEntry(db.Model):
 
 	date = db.DateTimeProperty(required=True, auto_now_add=True)
 	draft = db.BooleanProperty(required=True, default=True)
-	markup = db.StringProperty(required=True, indexed=False, choices=RENDER_TYPE_CHOICES, default=RENDER_TYPE_HTML)
+	markup = db.StringProperty(required=True, indexed=False, choices=RENDER_TYPE_CHOICES, default=RENDER_TYPE_MARKDOWN)
 	title = db.StringProperty(required=True, indexed=False, default='Title')
 	text = db.TextProperty(default='')
 	rendered = db.TextProperty(default='')
