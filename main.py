@@ -259,6 +259,11 @@ class GoogleSwitch(BaseHandler):
 
 class AccountHandler(BaseHandler):
 	def get(self):
+		if 'user' not in self.session:
+			self.add_message('error', 'You must log in to access your account.')
+			self.redirect(webapp2.uri_for('main'))
+			return
+
 		u = cache.get_user(self.session['user']['name'])
 		changed = False
 
