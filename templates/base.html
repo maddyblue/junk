@@ -72,7 +72,7 @@
 						<ul class="dropdown-menu">
 							<li{% if active == "account" %} class="active"{% endif %}><a href="{{ "account"|url }}">account</a></li>
 							<li><a href="{{ "logout"|url }}">logout</a></li>
-							{% ifequal user.source "google" %}<li><a href="{{ "logout-google"|url }}">switch account</a></li>{% endifequal %}
+							{% ifequal login_source "google" %}<li><a href="{{ "logout-google"|url }}">switch account</a></li>{% endifequal %}
 						</ul>
 					</li>
 					{% else %}

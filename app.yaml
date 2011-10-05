@@ -7,6 +7,7 @@ builtins:
 - admin_redirect: on
 - appstats: on
 - datastore_admin: on
+- deferred: on
 - remote_api: on
 
 handlers:
@@ -23,6 +24,10 @@ handlers:
 
 - url: /admin/.*
   script: main.py
+  login: admin
+
+- url: /_ah/queue/deferred
+  script: $PYTHON_LIB/google/appengine/ext/deferred/handler.py
   login: admin
 
 - url: /.*

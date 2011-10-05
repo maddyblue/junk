@@ -44,6 +44,10 @@ USER_SOURCE_CHOICES = [
 	USER_SOURCE_GOOGLE,
 ]
 
+USER_SOCIAL_NETWORKS = [
+	USER_SOURCE_FACEBOOK,
+]
+
 class User(db.Model):
 	name = db.StringProperty(required=True, indexed=False)
 	lname = db.StringProperty(indexed=True)
@@ -66,14 +70,21 @@ class User(db.Model):
 	freq_words = db.FloatProperty(required=True, default=0.)
 	freq_sentences = db.FloatProperty(required=True, default=0.)
 
-	source = db.StringProperty(required=True, choices=USER_SOURCE_CHOICES)
-	uid = db.StringProperty(required=True)
+	# these two properties will be deleted
+	source = db.StringProperty(choices=USER_SOURCE_CHOICES)
+	uid = db.StringProperty()
+
+	facebook_id = db.StringProperty()
+	google_id = db.StringProperty()
 
 	allowed_data = db.IntegerProperty(required=True, default=50 * 2 ** 20) # 50 MB default
 	used_data = db.IntegerProperty(required=True, default=0)
 
 	journal_count = db.IntegerProperty(required=True, default=0)
 	entry_count = db.IntegerProperty(required=True, default=0)
+
+	facebook_enable = db.BooleanProperty(indexed=False)
+	facebook_token = db.StringProperty(indexed=False)
 
 	def count(self):
 		if self.entry_count and self.last_entry and self.first_entry:
@@ -116,6 +127,10 @@ class User(db.Model):
 	@property
 	def bytes_remaining(self):
 		return self.allowed_data - self.used_data
+
+	@property
+	def sources(self):
+		return [i for i in USER_SOURCE_CHOICES if getattr(self, '%s_id' %i)]
 
 class UserFollowersIndex(db.Model):
 	users = db.StringListProperty()

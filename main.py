@@ -31,6 +31,7 @@ from google.appengine.api import files
 from google.appengine.api import users
 from google.appengine.ext import blobstore
 from google.appengine.ext import db
+from google.appengine.ext import deferred
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import blobstore_handlers
 
@@ -53,6 +54,10 @@ def rendert(s, p, d={}):
 	# this is still set after logout (i'm not sure why it's set at all), so use this workaround
 	elif 'user' in d:
 		del d['user']
+
+	for k in ['login_source']:
+		if k in session:
+			d[k] = session[k]
 
 	d['messages'] = s.get_messages()
 	d['active'] = p.partition('.')[0]
@@ -89,7 +94,6 @@ class BaseHandler(webapp2.RequestHandler):
 			'email': user.email,
 			'key': str(user.key()),
 			'name': user.name,
-			'source': user.source,
 			'token': user.token,
 		}
 
@@ -103,7 +107,7 @@ class BaseHandler(webapp2.RequestHandler):
 		return self.session.get_flashes(BaseHandler.MESSAGE_KEY)
 
 	def process_credentials(self, name, email, source, uid):
-		user = models.User.all().filter('source', source).filter('uid', uid).get()
+		user = models.User.all().filter('%s_id' %source, uid).get()
 
 		if not user:
 			registered = False
@@ -111,6 +115,7 @@ class BaseHandler(webapp2.RequestHandler):
 		else:
 			registered = True
 			self.populate_user_session(user)
+			self.session['login_source'] = source
 			user.put() # to update last_active
 
 		return user, registered
@@ -149,6 +154,19 @@ class MainPage(BaseHandler):
 		else:
 			rendert(self, 'index.html')
 
+class FacebookCallback(BaseHandler):
+	def get(self):
+		if 'code' in self.request.GET and 'local_redirect' in self.request.GET:
+			local_redirect = self.request.get('local_redirect')
+			access_dict = facebook.access_dict(self.request.get('code'), {'local_redirect': local_redirect})
+
+			if access_dict:
+				self.session['access_token'] = access_dict['access_token']
+				self.redirect(webapp2.uri_for(local_redirect, callback='callback'))
+				return
+
+		self.redirect(webapp2.uri_for('main'))
+
 class GoogleLogin(BaseHandler):
 	def get(self):
 		current_user = users.get_current_user()
@@ -161,20 +179,18 @@ class GoogleLogin(BaseHandler):
 
 class FacebookLogin(BaseHandler):
 	def get(self):
-		if 'code' in self.request.GET:
-			access_dict = facebook.login(self.request.get('code'))
-		else:
-			self.redirect(facebook.OAUTH_URL)
-			return
+		if 'callback' in self.request.GET:
+			user_data = facebook.graph_request(self.session['access_token'])
 
-		if access_dict:
-			user_data = facebook.graph_request(access_dict['access_token'])
 			if user_data is not False:
 				user, registered = self.process_credentials(user_data['username'], user_data['email'], models.USER_SOURCE_FACEBOOK, user_data['id'])
 
 				if not registered:
 					self.redirect(webapp2.uri_for('register'))
 					return
+		else:
+			self.redirect(facebook.oauth_url({'local_redirect': 'login-facebook'}, {'scope': 'email'}))
+			return
 
 		self.redirect(webapp2.uri_for('main'))
 
@@ -201,18 +217,20 @@ class Register(BaseHandler):
 				else:
 					source = self.session['register']['source']
 					uid = self.session['register']['uid']
+
 					if not email:
 						email = None
+
 					user = models.User.get_or_insert(username,
 						name=username,
 						lname=lusername,
 						email=email,
-						source=source,
-						uid=uid,
+						facebook_id=uid if source == models.USER_SOURCE_FACEBOOK else None,
+						google_id=uid if source == models.USER_SOURCE_GOOGLE else None,
 						token=base64.urlsafe_b64encode(os.urandom(30))[:32],
 					)
 
-					if user.source != source or user.uid != uid:
+					if getattr(user, '%s_id' %source) != uid:
 						errors['username'] = 'Username is already taken.'
 					else:
 						del self.session['register']
@@ -242,28 +260,89 @@ class GoogleSwitch(BaseHandler):
 class AccountHandler(BaseHandler):
 	def get(self):
 		u = cache.get_user(self.session['user']['name'])
-		rendert(self, 'account.html', {'u': u})
+		changed = False
+
+		if 'callback' in self.request.GET:
+			if 'access_token' in self.session:
+				user_data = facebook.graph_request(self.session['access_token'])
+				logging.error("UD: %s, %s", user_data, self.session['access_token'])
+
+				if u.facebook_id and user_data['id'] != u.facebook_id:
+					self.add_message('error', 'This account has already been attached to a facebook account.')
+				else:
+					u.facebook_id = user_data['id']
+					u.facebook_enable = True
+					u.facebook_token = self.session['access_token']
+					changed = True
+					self.add_message('success', 'Facebook integration enabled.')
+		elif 'disable' in self.request.GET:
+			disable = self.request.get('disable')
+			if disable in models.USER_SOCIAL_NETWORKS:
+				setattr(u, '%s_enable' %disable, False)
+				self.add_message('success', '%s posting disabled.' %disable.title())
+				changed = True
+		elif 'enable' in self.request.GET:
+			enable = self.request.get('enable')
+			if enable in models.USER_SOCIAL_NETWORKS:
+				setattr(u, '%s_enable' %enable, True)
+				self.add_message('success', '%s posting enabled.' %enable.title())
+				changed = True
+		elif 'deauthorize' in self.request.GET:
+			deauthorize = self.request.get('deauthorize')
+			changed = True
+			self.add_message('success', '%s posting deauthorized.' %deauthorize.title())
+			if deauthorize == models.USER_SOURCE_FACEBOOK:
+				u.facebook_token = None
+				u.facebook_enable = False
+
+		if changed:
+			u.put()
+			cache.set_keys([u])
+
+		rendert(self, 'account.html', {
+			'u': u,
+			'social': {
+				'facebook': {
+					'auth_text': 'authorize' if not u.facebook_token else 'deauthorize',
+					'auth_url': facebook.oauth_url({'local_redirect': 'account'}, {'scope': 'publish_stream,offline_access'}) if not u.facebook_token else webapp2.uri_for('account', deauthorize='facebook'),
+					'enable_class': 'disabled' if not u.facebook_token else '',
+					'enable_text': 'enable' if not u.facebook_enable or not u.facebook_token else 'disable',
+					'enable_url': '#' if not u.facebook_token else webapp2.uri_for('account', enable='facebook') if not u.facebook_enable else webapp2.uri_for('account', disable='facebook'),
+					'label_class': 'warning' if not u.facebook_token else 'success' if u.facebook_enable else 'important',
+					'label_text': 'not authorized' if not u.facebook_token else 'enabled' if u.facebook_enable else 'disabled',
+				},
+			},
+		})
 
 	def post(self):
 		changed = False
 		u = cache.get_user(self.session['user']['name'])
 
-		if 'email' in self.request.POST:
-			email = self.request.get('email')
-			if not email:
-				email = None
+		if 'settings' in self.request.POST:
+			if 'email' in self.request.POST:
+				email = self.request.get('email')
+				if not email:
+					email = None
 
-			self.add_message('success', 'Email address updated.')
-			if self.session['user']['email'] != email:
-				u.email = email
+				self.add_message('success', 'Email address updated.')
+				if self.session['user']['email'] != email:
+					u.email = email
+					changed = True
+
+		if 'social' in self.request.POST:
+			self.add_message('success', 'Social media settings saved.')
+
+			facebook_enable = 'facebook' in self.request.POST and self.request.get('facebook') == 'on'
+			if u.facebook_enable != facebook_enable:
+				u.facebook_enable = facebook_enable
 				changed = True
 
 		if changed:
 			u.put()
-			cache.set(cache.pack(u), cache.C_KEY, u.key())
+			cache.set_keys([u])
 			self.populate_user_session()
 
-		rendert(self, 'account.html', {'u': u})
+		self.redirect(webapp2.uri_for('account'))
 
 class NewJournal(BaseHandler):
 	def get(self):
@@ -470,6 +549,9 @@ class NewEntryHandler(BaseHandler):
 		cache.clear_entries_cache(journal.key())
 		cache.set_keys([user, journal, entry, content])
 		cache.set(cache.pack(journal), cache.C_JOURNAL, username, journal_name)
+
+		if user.facebook_token and user.facebook_enable:
+			deferred.defer(utils.social_post, entry_key, models.USER_SOURCE_FACEBOOK, utils.absolute_uri('user', username=user.name))
 
 		self.redirect(webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id))
 
@@ -975,11 +1057,16 @@ class UpdateUsersHandler(BaseHandler):
 
 		def txn(user_key):
 			u = db.get(user_key)
-			u.lname = u.name.lower()
+
+			if u.source == models.USER_SOURCE_GOOGLE:
+				u.google_id = u.uid
+			elif u.source == models.USER_SOURCE_FACEBOOK:
+				u.facebook_id = u.uid
+
 			u.put()
 			return u
 
-		LIMIT = 5
+		LIMIT = 10
 		ukeys = q.fetch(LIMIT)
 		for u in ukeys:
 			user = db.run_in_transaction(txn, u)
@@ -1022,6 +1109,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/blob/<key>', handler=BlobHandler, name='blob'),
 	webapp2.Route(r'/blog', handler=BlogHandler, name='blog'),
 	webapp2.Route(r'/blog/<entry>', handler=BlogEntryHandler, name='blog-entry'),
+	webapp2.Route(r'/facebook', handler=FacebookCallback, name='facebook'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/follow/<username>', handler=FollowHandler, name='follow'),
 	webapp2.Route(r'/login/facebook', handler=FacebookLogin, name='login-facebook'),
@@ -1055,10 +1143,12 @@ RESERVED_NAMES = set([
 	'blog',
 	'contact',
 	'entry',
+	'facebook',
 	'features',
 	'feeds',
 	'file',
 	'follow',
+	'google',
 	'help',
 	'journal',
 	'journaler',
@@ -1068,6 +1158,8 @@ RESERVED_NAMES = set([
 	'markup',
 	'new',
 	'news',
+	'oauth',
+	'openid',
 	'privacy',
 	'register',
 	'save',
