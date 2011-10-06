@@ -28,10 +28,10 @@ import re
 from django.utils import html
 from django.utils import simplejson
 from google.appengine.api import files
+from google.appengine.api import taskqueue
 from google.appengine.api import users
 from google.appengine.ext import blobstore
 from google.appengine.ext import db
-from google.appengine.ext import deferred
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import blobstore_handlers
 
@@ -42,6 +42,7 @@ import facebook
 import models
 import settings
 import templatefilters.filters
+import twitter
 import utils
 import webapp2
 
@@ -270,7 +271,6 @@ class AccountHandler(BaseHandler):
 		if 'callback' in self.request.GET:
 			if 'access_token' in self.session:
 				user_data = facebook.graph_request(self.session['access_token'])
-				logging.error("UD: %s, %s", user_data, self.session['access_token'])
 
 				if u.facebook_id and user_data['id'] != u.facebook_id:
 					self.add_message('error', 'This account has already been attached to a facebook account.')
@@ -299,6 +299,10 @@ class AccountHandler(BaseHandler):
 			if deauthorize == models.USER_SOURCE_FACEBOOK:
 				u.facebook_token = None
 				u.facebook_enable = False
+			elif deauthorize == models.USER_SOURCE_TWITTER:
+				u.twitter_key = None
+				u.twitter_secret = None
+				u.twitter_enable = None
 
 		if changed:
 			u.put()
@@ -315,6 +319,15 @@ class AccountHandler(BaseHandler):
 					'enable_url': '#' if not u.facebook_token else webapp2.uri_for('account', enable='facebook') if not u.facebook_enable else webapp2.uri_for('account', disable='facebook'),
 					'label_class': 'warning' if not u.facebook_token else 'success' if u.facebook_enable else 'important',
 					'label_text': 'not authorized' if not u.facebook_token else 'enabled' if u.facebook_enable else 'disabled',
+				},
+				'twitter': {
+					'auth_text': 'authorize' if not u.twitter_key else 'deauthorize',
+					'auth_url': webapp2.uri_for('twitter', action='login') if not u.twitter_key else webapp2.uri_for('account', deauthorize='twitter'),
+					'enable_class': 'disabled' if not u.twitter_key else '',
+					'enable_text': 'enable' if not u.twitter_enable or not u.twitter_key else 'disable',
+					'enable_url': '#' if not u.twitter_key else webapp2.uri_for('account', enable='twitter') if not u.twitter_enable else webapp2.uri_for('account', disable='twitter'),
+					'label_class': 'warning' if not u.twitter_key else 'success' if u.twitter_enable else 'important',
+					'label_text': 'not authorized' if not u.twitter_key else 'enabled' if u.twitter_enable else 'disabled',
 				},
 			},
 		})
@@ -556,7 +569,9 @@ class NewEntryHandler(BaseHandler):
 		cache.set(cache.pack(journal), cache.C_JOURNAL, username, journal_name)
 
 		if user.facebook_token and user.facebook_enable:
-			deferred.defer(utils.social_post, entry_key, models.USER_SOURCE_FACEBOOK, utils.absolute_uri('user', username=user.name))
+			taskqueue.add(url=webapp2.uri_for('social-post'), params={'entry_key': entry_key, 'network': models.USER_SOURCE_FACEBOOK, 'username': user.name})
+		if user.twitter_key and user.twitter_enable:
+			taskqueue.add(url=webapp2.uri_for('social-post'), params={'entry_key': entry_key, 'network': models.USER_SOURCE_TWITTER, 'username': user.name})
 
 		self.redirect(webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id))
 
@@ -1095,6 +1110,83 @@ class BlobHandler(blobstore_handlers.BlobstoreDownloadHandler):
 		else:
 			self.send_blob(blob_info, save_as=name)
 
+# from https://github.com/ryanwi/twitteroauth/blob/master/source/main.py
+class TwitterHandler(BaseHandler):
+	def get(self, action):
+		if 'user' not in self.session:
+			self.redirect(webapp2.uri_for('main'))
+			return
+
+		self._client = twitter.oauth_client(self)
+
+		if action == 'login':
+			self.login()
+		elif action == 'callback':
+			self.callback()
+
+	def login(self):
+		# get a request token
+		raw_request_token = self._client.get_request_token()
+
+		self.session['twitter_token'] = raw_request_token.key
+		self.session['twitter_secret'] = raw_request_token.secret
+
+		# get the authorize url and redirect to twitter
+		authorize_url = self._client.get_authorize_url(raw_request_token)
+		self.redirect(authorize_url)
+
+	def callback(self):
+		if 'denied' in self.request.GET:
+			self.redirect(webapp2.uri_for('account'))
+
+		# lookup request token
+		raw_oauth_token = self.request.get('oauth_token')
+
+		# get an access token for the authorized user
+		oauth_token = twitter.oauth_token(self.session['twitter_token'], self.session['twitter_secret'])
+		raw_access_token = self._client.get_access_token(oauth_token)
+
+		# get the screen_name
+		self._client = twitter.oauth_client(self, raw_access_token)
+		screen_name = self._client.get('/account/verify_credentials')['screen_name']
+
+		# store access token
+		def txn(user_key, screen_name, key, secret):
+			u = db.get(user_key)
+			u.twitter_id = screen_name
+			u.twitter_key = key
+			u.twitter_secret = secret
+			u.twitter_enable = True
+			u.put()
+			return u
+
+		user = db.run_in_transaction(txn, self.session['user']['key'], screen_name, raw_access_token.key, raw_access_token.secret)
+		cache.set_keys([user])
+		self.redirect(webapp2.uri_for('account'))
+
+class SocialPost(BaseHandler):
+	def post(self):
+		entry_key = db.Key(self.request.get('entry_key'))
+		network = self.request.get('network')
+		username = self.request.get('username')
+
+		MESSAGE = 'Wrote a new entry on journalr.'
+		NAME = 'my journalr account'
+		link = utils.absolute_uri('user', username=username)
+
+		user = cache.get_by_key(entry_key.parent().parent())
+
+		if network == models.USER_SOURCE_FACEBOOK and all([user.facebook_token, user.facebook_enable]):
+			data = facebook.graph_request(user.facebook_token, method='POST', path='/feed', payload_dict={
+				'message': MESSAGE,
+				'link': link,
+				'name': NAME,
+			})
+		if network == models.USER_SOURCE_TWITTER and all([user.twitter_id, user.twitter_key, user.twitter_secret]):
+			oauth_token = twitter.oauth_token(user.twitter_key, user.twitter_secret)
+			client = twitter.oauth_client(None, oauth_token)
+			status = client.post('/statuses/update', status='%s %s' %(MESSAGE, link))
+
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
@@ -1127,10 +1219,15 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/save', handler=SaveEntryHandler, name='entry-save'),
 	webapp2.Route(r'/security', handler=SecurityHandler, name='security'),
 	webapp2.Route(r'/stats', handler=StatsHandler, name='stats'),
+	webapp2.Route(r'/twitter/<action>', handler=TwitterHandler, name='twitter'),
 	webapp2.Route(r'/upload/file/<username>/<journal_name>/<entry_id>', handler=UploadHandler, name='upload-file'),
 	webapp2.Route(r'/upload/success', handler=UploadSuccess, name='upload-success'),
 	webapp2.Route(r'/upload/url/<username>/<journal_name>/<entry_id>', handler=GetUploadURL, name='upload-url'),
 
+	# taskqueue
+	webapp2.Route(r'/tasks/social_post', handler=SocialPost, name='social-post'),
+
+	# this section must be last, since the regexes below will match one and two -level URLs
 	webapp2.Route(r'/<username>', handler=UserHandler, name='user'),
 	webapp2.Route(r'/<username>/<journal_name>', handler=ViewJournal, name='view-journal'),
 	webapp2.Route(r'/<username>/<journal_name>/<entry_id:\d+>', handler=ViewEntryHandler, name='view-entry'),
@@ -1154,6 +1251,7 @@ RESERVED_NAMES = set([
 	'file',
 	'follow',
 	'google',
+	'googleplus',
 	'help',
 	'journal',
 	'journaler',
@@ -1171,7 +1269,9 @@ RESERVED_NAMES = set([
 	'security',
 	'site',
 	'stats',
+	'tasks',
 	'terms',
+	'twitter',
 	'upload',
 	'user',
 ])

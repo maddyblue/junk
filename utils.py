@@ -21,7 +21,6 @@ import unicodedata
 
 from django.utils import html
 from google.appengine.ext import db
-from google.appengine.ext import deferred
 from google.appengine.ext.webapp import template
 
 import cache
@@ -120,17 +119,6 @@ def html_to_pdf(f, title, entries):
 	pdf = pisa.CreatePDF(StringIO.StringIO(html), f)
 
 	return not pdf.err
-
-def social_post(entry_key, network, link):
-	entry = cache.get_by_key(entry_key)
-	user = cache.get_by_key(entry_key.parent().parent())
-
-	if network == models.USER_SOURCE_FACEBOOK and user.facebook_token and user.facebook_enable:
-		data = facebook.graph_request(user.facebook_token, method='POST', path='/feed', payload_dict={
-			'message': 'Wrote a new entry on journalr.',
-			'link': link,
-			'name': 'my journalr account',
-		})
 
 def absolute_uri(*args, **kwargs):
 	return 'http://' + os.environ['HTTP_HOST'] + webapp2.uri_for(*args, **kwargs)

@@ -6,3 +6,6 @@ FACEBOOK_SECRET = ''
 
 # to enable, set to analytics id: 'UA-12345678-9'
 GOOGLE_ANALYTICS = ''
+
+TWITTER_KEY = 'pCUVbTMmjUgFdUte2OpKw'
+TWITTER_SECRET = '2ZkmX9uZXViXRTvHulBMTBo7XFpSygyyxAWRKUz0'

@@ -38,6 +38,7 @@ class DerefExpando(db.Expando):
 
 USER_SOURCE_FACEBOOK = 'facebook'
 USER_SOURCE_GOOGLE = 'google'
+USER_SOURCE_TWITTER = 'twitter'
 
 USER_SOURCE_CHOICES = [
 	USER_SOURCE_FACEBOOK,
@@ -46,6 +47,7 @@ USER_SOURCE_CHOICES = [
 
 USER_SOCIAL_NETWORKS = [
 	USER_SOURCE_FACEBOOK,
+	USER_SOURCE_TWITTER,
 ]
 
 class User(db.Model):
@@ -74,7 +76,6 @@ class User(db.Model):
 	source = db.StringProperty(choices=USER_SOURCE_CHOICES)
 	uid = db.StringProperty()
 
-	facebook_id = db.StringProperty()
 	google_id = db.StringProperty()
 
 	allowed_data = db.IntegerProperty(required=True, default=50 * 2 ** 20) # 50 MB default
@@ -83,8 +84,14 @@ class User(db.Model):
 	journal_count = db.IntegerProperty(required=True, default=0)
 	entry_count = db.IntegerProperty(required=True, default=0)
 
+	facebook_id = db.StringProperty()
 	facebook_enable = db.BooleanProperty(indexed=False)
 	facebook_token = db.StringProperty(indexed=False)
+
+	twitter_id = db.StringProperty()
+	twitter_enable = db.BooleanProperty(indexed=False)
+	twitter_key = db.StringProperty(indexed=False)
+	twitter_secret = db.StringProperty(indexed=False)
 
 	def count(self):
 		if self.entry_count and self.last_entry and self.first_entry:

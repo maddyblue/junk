@@ -55,17 +55,22 @@
 	<div class="row">
 		<div class="span16">
 			<h3>social media <small>when you save journal entries, get a small message automatically written</small></h3>
-			<div class="row">
 			{% for network, values in social.items %}
-				<div class="span3">
-					{{ network }} <span class="label {{ values.label_class }}">{{ values.label_text }}</span>
+			<div class="row">
+				<div class="span2">
+					{{ network }}
 				</div>
-				<div class="span8">
+				<div class="span2">
+					<span class="label {{ values.label_class }}">{{ values.label_text }}</span>
+				</div>
+				<div class="span2">
 					<a href="{{ values.auth_url }}" class="btn">{{ values.auth_text }}</a>
+				</div>
+				<div class="span2">
 					<a href="{{ values.enable_url }}" class="btn {{ values.enable_class }}">{{ values.enable_text }}</a>
 				</div>
-			{% endfor %}
 			</div>
+			{% endfor %}
 		</div>
 	</div>
 
