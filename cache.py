@@ -6,6 +6,8 @@ from google.appengine.api import memcache
 from google.appengine.datastore import entity_pb
 from google.appengine.ext import db
 
+C_KEY = 'key-%s'
+
 def set(value, c, *args):
 	memcache.set(c %args, value)
 
