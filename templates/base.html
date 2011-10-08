@@ -7,7 +7,10 @@
 </head>
 <body>
 
-Menu: <a href="{{ "logout"|url }}">logout</a>
+Menu:
+<a href="{{ "logout"|url }}">logout</a>
+<a href="{{ "social"|url }}">social networks</a>
+<a href="{{ "checkout"|url }}">checkout</a>
 
 {% if user %}
 <p>Logged in as: {{ user.name }}

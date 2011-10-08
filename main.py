@@ -64,7 +64,7 @@ class BaseHandler(webapp2.RequestHandler):
 			'email': user.email,
 			'key': str(user.key()),
 			'name': user.first_name,
-			'source': user.source,
+			'site': str(user.get_key('site')),
 		}
 
 	MESSAGE_KEY = '_flash_message'
@@ -75,7 +75,7 @@ class BaseHandler(webapp2.RequestHandler):
 		return self.session.get_flashes(BaseHandler.MESSAGE_KEY)
 
 	def process_credentials(self, email, source, uid):
-		user = models.User.get_by_key_name('%s-%s' %(source, uid))
+		user = models.User.all().filter('%s_id' %source, uid).get()
 
 		if not user:
 			registered = False
@@ -198,13 +198,14 @@ class Register(BaseHandler):
 					uid = self.session['register']['uid']
 					if not email:
 						email = None
-					user = models.User.get_or_insert('%s-%s' %(source, uid),
+					user = models.User(
 						first_name=first_name,
 						last_name=last_name,
 						email=email,
-						source=source,
-						uid=uid,
+						google_id=uid if source == models.USER_SOURCE_GOOGLE else None,
+						facebook_id=uid if source == models.USER_SOURCE_FACEBOOK else None,
 					)
+					user.put()
 
 					site = models.Site.get_or_insert(lsitename,
 						name=sitename,
@@ -244,7 +245,54 @@ class Register(BaseHandler):
 
 class Social(BaseHandler):
 	def get(self):
-		rendert(self, 'social.html')
+		site = cache.get_by_key(self.session['user']['site'])
+		rendert(self, 'social.html', {'site': site})
+
+	def post(self):
+		site = cache.get_by_key(self.session['user']['site'])
+
+		site.facebook = self.request.get('facebook').strip()
+		site.flickr = self.request.get('facebook').strip()
+		site.linkedin = self.request.get('linkedin').strip()
+		site.twitter = self.request.get('twitter').strip()
+		site.google = self.request.get('google').strip()
+
+		site.put()
+		cache.set_keys([site])
+		self.add_message('success', 'Social networks saved.')
+
+		rendert(self, 'social.html', {'site': site})
+
+class Checkout(BaseHandler):
+	def get(self):
+		user = cache.get_by_key(self.session['user']['key'])
+
+		if not user:
+			return
+
+		rendert(self, 'checkout.html', {
+			'stripe_key': settings.STRIPE_KEY,
+			'u': user,
+			'plans': utils.make_plan_options(user.plan),
+		})
+
+	def post(self):
+		try:
+			token = self.request.get('stripeToken')
+			plan = self.request.get('plan')
+
+			user = cache.get_by_key(self.session['user']['key'])
+			if not user or plan not in models.USER_PLAN_CHOICES:
+				return
+
+			user = utils.stripe_set_plan(user, token, plan)
+			cache.set_keys([user])
+			self.add_message('success', 'Payment data saved.')
+		except Exception, e:
+			logging.error('Checkout error: %s', e)
+			self.add_message('error', 'An error occurred during payment.')
+
+		self.redirect(webapp2.uri_for('checkout'))
 
 config = {
 	'webapp2_extras.sessions': {
@@ -260,6 +308,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
 	webapp2.Route(r'/social', handler=Social, name='social'),
+	webapp2.Route(r'/checkout', handler=Checkout, name='checkout'),
 
 	], debug=True, config=config)
 

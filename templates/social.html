@@ -2,6 +2,32 @@
 
 {% block content %}
 
-social
+{% for k, v in errors.items %}
+<br>Error in {{ k }}: {{ v }}
+{% endfor %}
+
+<form method="POST">
+
+<p><input type="text" id="facebook" name="facebook" value="{{ site.facebook|default:"" }}">
+<p><input type="text" id="flickr" name="flickr" value="{{ site.flickr|default:"" }}">
+<p><input type="text" id="linkedin" name="linkedin" value="{{ site.linkedin|default:"" }}">
+<p><input type="text" id="twitter" name="twitter" value="{{ site.twitter|default:"" }}">
+<p><input type="text" id="google" name="google" value="{{ site.google|default:"" }}">
+
+<p><input type="submit" name="submit">
+
+</form>
+
+<script src="/static/js/jquery.watermark.min.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#facebook").watermark("Facebook Profile URL");
+	$("#flickr").watermark("Flickr Profile URL");
+	$("#linkedin").watermark("LinkedIn Profile URL");
+	$("#twitter").watermark("Twitter Profile URL");
+	$("#google").watermark("Google+ Profile URL");
+});
+</script>
 
 {% endblock %}
