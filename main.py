@@ -145,12 +145,17 @@ class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 class MainPage(BaseHandler):
 	def get(self):
 		if 'user' in self.session:
+			following = cache.get_by_keys(cache.get_following(self.session['user']['name']), 'User')
+			followers = cache.get_by_keys(cache.get_followers(self.session['user']['name']), 'User')
+			logging.error(following, followers)
 			journals = cache.get_journals(db.Key(self.session['user']['key']))
 			rendert(self, 'index-user.html', {
 				'activities': cache.get_activities_follower(self.session['user']['name']),
 				'journals': journals,
 				'thisuser': True,
 				'token': self.session['user']['token'],
+				'following': following,
+				'followers': followers,
 			})
 		else:
 			rendert(self, 'index.html')
@@ -450,15 +455,25 @@ class UserHandler(BaseHandler):
 
 		journals = cache.get_journals(u.key())
 		activities = cache.get_activities(username=username)
+		following = cache.get_following(username)
+		followers = cache.get_followers(username)
 
 		if 'user' in self.session:
-			following = username in cache.get_following(self.session['user']['name'])
+			is_following = username in cache.get_following(self.session['user']['name'])
 			thisuser = self.session['user']['name'] == u.name
 		else:
-			following = False
+			is_following = False
 			thisuser = False
 
-		rendert(self, 'user.html', {'u': u, 'journals': journals, 'activities': activities, 'following': following, 'thisuser': thisuser})
+		rendert(self, 'user.html', {
+			'u': u,
+			'journals': journals,
+			'activities': activities,
+			'following': following,
+			'followers': followers,
+			'is_following': is_following,
+			'thisuser': thisuser,
+		})
 
 class FollowHandler(BaseHandler):
 	def get(self, username):
@@ -1187,6 +1202,14 @@ class SocialPost(BaseHandler):
 			client = twitter.oauth_client(None, oauth_token)
 			status = client.post('/statuses/update', status='%s %s' %(MESSAGE, link))
 
+class FollowingHandler(BaseHandler):
+	def get(self, username):
+		u = cache.get_user(username)
+		following = cache.get_by_keys(cache.get_following(username), 'User')
+		followers = cache.get_by_keys(cache.get_followers(username), 'User')
+
+		rendert(self, 'following.html', {'u': u, 'following': following, 'followers': followers})
+
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
@@ -1209,6 +1232,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/facebook', handler=FacebookCallback, name='facebook'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/follow/<username>', handler=FollowHandler, name='follow'),
+	webapp2.Route(r'/following/<username>', handler=FollowingHandler, name='following'),
 	webapp2.Route(r'/login/facebook', handler=FacebookLogin, name='login-facebook'),
 	webapp2.Route(r'/login/google', handler=GoogleLogin, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
@@ -1250,12 +1274,15 @@ RESERVED_NAMES = set([
 	'feeds',
 	'file',
 	'follow',
+	'followers',
+	'following',
 	'google',
 	'googleplus',
 	'help',
 	'journal',
 	'journaler',
 	'journalr',
+	'journals',
 	'login',
 	'logout',
 	'markup',
@@ -1274,6 +1301,7 @@ RESERVED_NAMES = set([
 	'twitter',
 	'upload',
 	'user',
+	'users',
 ])
 
 # assert that all routes are listed in RESERVED_NAMES

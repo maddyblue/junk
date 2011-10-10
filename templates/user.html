@@ -28,19 +28,60 @@
 			</table>
 		</div>
 
-		<div class="span2">
-			<img src="{{ u.gravatar }}&amp;s=50" alt="{{ u }}">
-		</div>
+		<div class="span8">
+			<div class="row">
+				<div class="span2">
+					<img src="{{ u.gravatar }}&amp;s=50" alt="{{ u }}">
+				</div>
 
-		{% if user and not thisuser %}
-		<div class="span4 offset2">
-			{% if not following %}
-				<a href="{{ "follow"|url:u.name }}" class="btn">follow</a>
-			{% else %}
-				<a href="{{ "follow"|url:u.name }}?unfollow" class="btn">unfollow</a>
-			{% endif %}
+				<div class="span4 offset2">
+					{% if user and not thisuser %}
+						{% if not is_following %}
+							<a href="{{ "follow"|url:u.name }}" class="btn">follow</a>
+						{% else %}
+							<a href="{{ "follow"|url:u.name }}?unfollow" class="btn">unfollow</a>
+						{% endif %}
+					{% endif %}
+					{% if thisuser %}
+						<a href="{{ "new-journal"|url }}" class="btn primary">new journal</a>
+					{% endif %}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="span8">
+					<h1></h1>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="span2">
+					<h2>{{ u.journal_count }}</h2>
+					<span>journal{{ u.journal_count|pluralize }}</span>
+				</div>
+				<div class="span2">
+					<h2>{{ followers|length }}</h2>
+					<span>follower{{ followers|length|pluralize }}</span>
+				</div>
+				<div class="span2">
+					<h2>{{ following|length }}</h2>
+					<span>following</span>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="span8">
+					<h1></h1>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="span8">
+					<h3><a href="{{ "following"|url:u.name }}">{{ u.name }}'s following</a></h3>
+				</div>
+			</div>
+
 		</div>
-		{% endif %}
 	</div>
 
 	<hr>

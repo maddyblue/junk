@@ -36,6 +36,8 @@ def url(ob, name=''):
 		return webapp2.uri_for(ob, entry=name)
 	elif ob == 'edit-blog':
 		return webapp2.uri_for(ob, blog_id=name)
+	elif ob == 'following':
+		return webapp2.uri_for(ob, username=name)
 	else:
 		return webapp2.uri_for(ob)
 

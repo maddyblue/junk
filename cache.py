@@ -94,6 +94,31 @@ def get_by_key(key):
 
 	return data
 
+# idea: use async functions, although i'm not convinced it'd be faster
+# fetches all keys; if kind is specified, converts the given key names to keys of that kind
+def get_by_keys(keys, kind=None):
+	if kind:
+		keys = [str(db.Key.from_path(kind, i)) for i in keys]
+
+	client = memcache.Client()
+	values = client.get_multi(keys)
+	data = [values.get(i) for i in keys]
+
+	if None in data:
+		to_fetch = []
+		for i in range(len(keys)):
+			if data[i] is None:
+				to_fetch.append(i)
+
+		fetch_keys = [keys[i] for i in to_fetch]
+		fetched = db.get(fetch_keys)
+		set_multi(dict(zip(fetch_keys, fetched)))
+
+		for i in to_fetch:
+			data[i] = fetched.pop(0)
+
+	return data
+
 def get_journals(user_key):
 	n = C_JOURNALS %user_key
 	data = unpack(memcache.get(n))
