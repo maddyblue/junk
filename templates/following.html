@@ -10,15 +10,15 @@
 		<div class="span16">
 			<div class="row">
 				<div class="span8">
-					<h2>following <a href="{{ "user"|url:u.name }}">{{ u.name }}</a></h2>
-					{% for f in followers %}
+					<h2><a href="{{ "user"|url:u.name }}">{{ u.name }}</a> is following</h2>
+					{% for f in following %}
 						{% include "follow.html" %}
 					{% endfor %}
 				</div>
 
 				<div class="span8">
-					<h2><a href="{{ "user"|url:u.name }}">{{ u.name }}</a> is following</h2>
-					{% for f in following %}
+					<h2>following <a href="{{ "user"|url:u.name }}">{{ u.name }}</a></h2>
+					{% for f in followers %}
 						{% include "follow.html" %}
 					{% endfor %}
 				</div>
