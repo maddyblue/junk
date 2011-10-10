@@ -24,7 +24,11 @@
 
 			<div class="span6">
 				<h2>your journals</h2>
-				{% include "journals.html" %}
+				{% if not journals %}
+					You haven't created a journal yet.
+				{% else %}
+					{% include "journals.html" %}
+				{% endif %}
 			</div>
 		</div>
 	</div>
