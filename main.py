@@ -1211,9 +1211,12 @@ class FollowingHandler(BaseHandler):
 
 		rendert(self, 'following.html', {'u': u, 'following': following, 'followers': followers})
 
+SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
+		'session_max_age': SECS_PER_WEEK,
+		'cookie_args': {'max_age': SECS_PER_WEEK},
 	},
 }
 
