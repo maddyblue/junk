@@ -497,50 +497,51 @@ class FollowHandler(BaseHandler):
 			op = 'add'
 			unop = 'del'
 
-		def txn(key, user, op):
-			index = db.get(key)
+		xg_on = db.create_transaction_options(xg=True)
 
-			if not index:
-				index = getattr(models, key.kind())(parent=key.parent(), key_name=key.name())
+		def txn(thisuser, otheruser, op):
+			tu, ou = db.get([thisuser, otheruser])
 
-			change = False
-			if op == 'add' and user not in index.users:
-				index.users.append(user)
-				change = True
-			elif op == 'del' and user in index.users:
-				index.users.remove(user)
-				change = True
+			if not tu:
+				tu = models.UserFollowingIndex(parent=thisuser.parent(), key_name=thisuser.name())
+			if not ou:
+				ou = models.UserFollowersIndex(parent=otheruser.parent(), key_name=otheruser.name())
 
-			if change:
-				index.put()
+			changed = []
+			if op == 'add':
+				if thisuser.name() not in ou.users:
+					ou.users.append(thisuser.name())
+					changed.append(ou)
+				if otheruser.name() not in tu.users:
+					tu.users.append(otheruser.name())
+					changed.append(tu)
+			if op == 'del':
+				if thisuser.name() in ou.users:
+					ou.users.remove(thisuser.name())
+					changed.append(ou)
+				if otheruser.name() in tu.users:
+					tu.users.remove(otheruser.name())
+					changed.append(tu)
 
-			return index
+			db.put(changed)
+
+			return tu, ou
 
 		followers_key = db.Key.from_path('User', username, 'UserFollowersIndex', username)
 		following_key = db.Key.from_path('User', thisuser, 'UserFollowingIndex', thisuser)
 
-		followers = db.run_in_transaction(txn, followers_key, thisuser, op)
+		followers, following = db.run_in_transaction_options(xg_on, txn, following_key, followers_key, op)
 
-		try:
-			following = db.run_in_transaction(txn, following_key, username, op)
+		if op == 'add':
+			self.add_message('success', 'You are now following %s.' %username)
+			models.Activity.create(cache.get_by_key(self.session['user']['key']), models.ACTIVITY_FOLLOWING, user)
+		elif op == 'del':
+			self.add_message('success', 'You are no longer following %s.' %username)
 
-			if op == 'add':
-				self.add_message('success', 'You are now following %s.' %username)
-				models.Activity.create(cache.get_by_key(self.session['user']['key']), models.ACTIVITY_FOLLOWING, user)
-			elif op == 'del':
-				self.add_message('success', 'You are no longer following %s.' %username)
-
-			cache.set_multi({
-				cache.C_FOLLOWERS %username: followers.users,
-				cache.C_FOLLOWING %thisuser: following.users,
-			})
-
-		except db.TransactionFailedError:
-			logging.error('Second transaction failed in FollowHandler')
-			self.add_message('error', 'We\'re sorry, there was a problem. Try that again.')
-
-			# do some ghetto rollback if the second transaction fails; this can still fail...
-			db.run_in_transaction(txn, followers_key, thisuser, unop)
+		cache.set_multi({
+			cache.C_FOLLOWERS %username: followers.users,
+			cache.C_FOLLOWING %thisuser: following.users,
+		})
 
 class NewEntryHandler(BaseHandler):
 	def get(self, username, journal_name):
