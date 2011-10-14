@@ -503,9 +503,9 @@ class FollowHandler(BaseHandler):
 			tu, ou = db.get([thisuser, otheruser])
 
 			if not tu:
-				tu = models.UserFollowingIndex(parent=thisuser.parent(), key_name=thisuser.name())
+				tu = models.UserFollowingIndex(key=thisuser)
 			if not ou:
-				ou = models.UserFollowersIndex(parent=otheruser.parent(), key_name=otheruser.name())
+				ou = models.UserFollowersIndex(key=otheruser)
 
 			changed = []
 			if op == 'add':
@@ -515,7 +515,7 @@ class FollowHandler(BaseHandler):
 				if otheruser.name() not in tu.users:
 					tu.users.append(otheruser.name())
 					changed.append(tu)
-			if op == 'del':
+			elif op == 'del':
 				if thisuser.name() in ou.users:
 					ou.users.remove(thisuser.name())
 					changed.append(ou)
@@ -530,7 +530,7 @@ class FollowHandler(BaseHandler):
 		followers_key = db.Key.from_path('User', username, 'UserFollowersIndex', username)
 		following_key = db.Key.from_path('User', thisuser, 'UserFollowingIndex', thisuser)
 
-		followers, following = db.run_in_transaction_options(xg_on, txn, following_key, followers_key, op)
+		following, followers = db.run_in_transaction_options(xg_on, txn, following_key, followers_key, op)
 
 		if op == 'add':
 			self.add_message('success', 'You are now following %s.' %username)
