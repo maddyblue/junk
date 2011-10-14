@@ -79,7 +79,7 @@ class BaseHandler(webapp2.RequestHandler):
 
 	@webapp2.cached_property
 	def session(self):
-		return self.session_store.get_session()
+		return self.session_store.get_session(backend='datastore')
 
 	# This should be called anytime the session data needs to be updated.
 	# session['var'] = var should never be used, except in this function
@@ -140,7 +140,7 @@ class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 	def session(self):
 		if not self.session_store:
 			self.session_store = sessions.get_store(request=self.request)
-		return self.session_store.get_session()
+		return self.session_store.get_session(backend='datastore')
 
 class MainPage(BaseHandler):
 	def get(self):
