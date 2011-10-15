@@ -881,6 +881,11 @@ class SaveEntryHandler(BaseHandler):
 			})
 			cache.set(entry_render, cache.C_ENTRY_RENDER, username, journal_name, entry_id)
 			cache.set_keys([user])
+			cache.set_multi({
+				cache.C_KEY %user.key(): cache.pack(user),
+				cache.C_ENTRY_RENDER %(username, journal_name, entry_id): entry_render,
+				cache.C_ENTRY %(username, journal_name, entry_id): (cache.pack(entry), cache.pack(content), cache.pack(blobs)),
+			})
 
 			self.add_message('success', 'Your entry has been saved.')
 
