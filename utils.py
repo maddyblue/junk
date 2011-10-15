@@ -12,7 +12,8 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-from cStringIO import StringIO
+import cStringIO
+import StringIO
 import logging
 import os
 import os.path
@@ -36,6 +37,7 @@ from docutils.core import publish_parts
 import markdown
 import rst_directive
 import textile
+import xhtml2pdf.pisa as pisa
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
@@ -92,7 +94,7 @@ def markup(text, format):
 	elif format == models.RENDER_TYPE_TEXTILE:
 		return textile.textile(text)
 	elif format == models.RENDER_TYPE_RST:
-		warning_stream = StringIO()
+		warning_stream = cStringIO.StringIO()
 		parts = publish_parts(text, writer_name='html4css1',
 			settings_overrides={
 				'_disable_config': True,
@@ -112,9 +114,6 @@ def slugify(s):
 	return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
 
 def html_to_pdf(f, title, entries):
-	import xhtml2pdf.pisa as pisa
-	import StringIO
-
 	html = render('pdf.html', {'title': title, 'entries': entries})
 	pdf = pisa.CreatePDF(StringIO.StringIO(html), f)
 

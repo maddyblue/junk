@@ -332,11 +332,13 @@ def get_journal_key(username, journal_name):
 
 	return data
 
-def get_entry(username, journal_name, entry_id):
+def get_entry(username, journal_name, entry_id, entry_key=None):
 	n = C_ENTRY %(username, journal_name, entry_id)
 	data = memcache.get(n)
 	if data is None:
-		entry_key = get_entry_key(username, journal_name, entry_id)
+		if not entry_key:
+			entry_key = get_entry_key(username, journal_name, entry_id)
+
 		entry = get_by_key(entry_key)
 		# try async queries here
 		content = get_by_key(entry.content_key)

@@ -1211,6 +1211,76 @@ class FollowingHandler(BaseHandler):
 
 		rendert(self, 'following.html', {'u': u, 'following': following, 'followers': followers})
 
+class DownloadJournalHandler(BaseHandler):
+	def get(self, username, journal_name):
+		if username != self.session['user']['name']:
+			self.error(404)
+			return
+
+		journal_key = cache.get_journal_key(username, journal_name)
+
+		if not journal_key:
+			self.error(404)
+			return
+
+		journal = cache.get_by_key(journal_key)
+
+		DATE_FORMAT = '%m/%d/%Y'
+		errors = []
+		try:
+			from_date = datetime.datetime.strptime(self.request.get('from'), DATE_FORMAT)
+		except ValueError:
+			if 'from' in self.request.GET:
+				errors.append('from')
+			from_date = journal.first_entry
+
+		try:
+			to_date = datetime.datetime.strptime(self.request.get('to'), DATE_FORMAT)
+		except ValueError:
+			if 'to' in self.request.GET:
+				errors.append('to')
+			to_date = journal.last_entry
+
+		if not errors and 'format' in self.request.GET and from_date and to_date:
+			key_name = 'pdf-%s-%s' %(from_date, to_date)
+			key = db.Key.from_path('Blob', key_name, parent=journal_key)
+			pdf_blob = db.get(key)
+
+			# either no cached entry, or it's outdated
+			if not pdf_blob or pdf_blob.date < journal.last_modified:
+				if pdf_blob:
+					pdf_blob.blob.delete()
+
+				file_name = files.blobstore.create(mime_type='application/pdf')
+				title = '%s: %s to %s' %(journal.name, from_date.strftime(DATE_FORMAT), to_date.strftime(DATE_FORMAT))
+
+				entries = []
+				for entry_key in models.Entry.all(keys_only=True).ancestor(journal).filter('date >=', from_date).filter('date <', to_date + datetime.timedelta(1)).order('date'):
+					entries.append(cache.get_entry(username, journal_name, entry_key.id(), entry_key))
+
+				with files.open(file_name, 'a') as f:
+					utils.html_to_pdf(f, title, entries) # need to check for error return
+				files.finalize(file_name)
+				pdf_blob = models.Blob(
+					key=key,
+					blob=files.blobstore.get_blob_key(file_name),
+					type=models.BLOB_TYPE_PDF,
+					name='%s - %s - %s to %s' %(username, journal_name, from_date, to_date),
+					date=journal.last_modified,
+				)
+				pdf_blob.put()
+
+			self.redirect(pdf_blob.get_url(name=True))
+			return
+
+		rendert(self, 'download-journal.html', {
+			'journal': journal,
+			'username': username,
+			'errors': errors,
+			'from': self.request.get('from', from_date.strftime(DATE_FORMAT)),
+			'to': self.request.get('to', to_date.strftime(DATE_FORMAT)),
+		})
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -1259,6 +1329,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/<username>', handler=UserHandler, name='user'),
 	webapp2.Route(r'/<username>/<journal_name>', handler=ViewJournal, name='view-journal'),
 	webapp2.Route(r'/<username>/<journal_name>/<entry_id:\d+>', handler=ViewEntryHandler, name='view-entry'),
+	webapp2.Route(r'/<username>/<journal_name>/download', handler=DownloadJournalHandler, name='download-journal'),
 	webapp2.Route(r'/<username>/<journal_name>/new', handler=NewEntryHandler, name='new-entry'),
 	], debug=True, config=config)
 

@@ -30,7 +30,7 @@ def url(ob, name=''):
 		return webapp2.uri_for('feeds', feed='user-%s' %name)
 	elif ob == 'follow':
 		return webapp2.uri_for(ob, username=name)
-	elif ob == 'new-entry':
+	elif ob in ['new-entry', 'download-journal']:
 		return webapp2.uri_for(ob, username=name.key().parent().name(), journal_name=name.name)
 	elif ob == 'blog-entry':
 		return webapp2.uri_for(ob, entry=name)
