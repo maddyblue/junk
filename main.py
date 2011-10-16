@@ -286,13 +286,13 @@ class AccountHandler(BaseHandler):
 					self.add_message('success', 'Facebook integration enabled.')
 		elif 'disable' in self.request.GET:
 			disable = self.request.get('disable')
-			if disable in models.USER_SOCIAL_NETWORKS:
+			if disable in models.USER_SOCIAL_NETWORKS or disable in models.USER_BACKUP_NETWORKS:
 				setattr(u, '%s_enable' %disable, False)
 				self.add_message('success', '%s posting disabled.' %disable.title())
 				changed = True
 		elif 'enable' in self.request.GET:
 			enable = self.request.get('enable')
-			if enable in models.USER_SOCIAL_NETWORKS:
+			if enable in models.USER_SOCIAL_NETWORKS or enable in models.USER_BACKUP_NETWORKS:
 				setattr(u, '%s_enable' %enable, True)
 				self.add_message('success', '%s posting enabled.' %enable.title())
 				changed = True
@@ -307,6 +307,9 @@ class AccountHandler(BaseHandler):
 				u.twitter_key = None
 				u.twitter_secret = None
 				u.twitter_enable = None
+			elif deauthorize == models.USER_BACKUP_DROPBOX:
+				u.dropbox_token = None
+				u.dropbox_enable = None
 
 		if changed:
 			u.put()
@@ -314,6 +317,18 @@ class AccountHandler(BaseHandler):
 
 		rendert(self, 'account.html', {
 			'u': u,
+			'backup':
+			{
+				'dropbox': {
+					'auth_text': 'authorize' if not u.dropbox_token else 'deauthorize',
+					'auth_url': webapp2.uri_for('dropbox', action='authorize') if not u.dropbox_token else webapp2.uri_for('account', deauthorize='dropbox'),
+					'enable_class': 'disabled' if not u.dropbox_token else '',
+					'enable_text': 'enable' if not u.dropbox_enable or not u.dropbox_token else 'disable',
+					'enable_url': '#' if not u.dropbox_token else webapp2.uri_for('account', enable='dropbox') if not u.dropbox_enable else webapp2.uri_for('account', disable='dropbox'),
+					'label_class': 'warning' if not u.dropbox_token else 'success' if u.dropbox_enable else 'important',
+					'label_text': 'not authorized' if not u.dropbox_token else 'enabled' if u.dropbox_enable else 'disabled',
+				},
+			},
 			'social': {
 				'facebook': {
 					'auth_text': 'authorize' if not u.facebook_token else 'deauthorize',
@@ -886,6 +901,9 @@ class SaveEntryHandler(BaseHandler):
 				cache.C_ENTRY %(username, journal_name, entry_id): (cache.pack(entry), cache.pack(content), cache.pack(blobs)),
 			})
 
+			if user.dropbox_enable and user.dropbox_token:
+				taskqueue.add(url=webapp2.uri_for('backup'), params={'entry_key': entry.key(), 'network': models.USER_BACKUP_DROPBOX, 'journal_name': journal_name, 'username': username})
+
 			self.add_message('success', 'Your entry has been saved.')
 
 		cache.clear_entries_cache(entry.key().parent())
@@ -1285,6 +1303,64 @@ class DownloadJournalHandler(BaseHandler):
 			'to': self.request.get('to', to_date.strftime(DATE_FORMAT)),
 		})
 
+class DropboxCallback(BaseHandler):
+	def get(self):
+		if 'user' not in self.session:
+			return
+
+		if self.request.get('action') == 'authorize':
+			token, url = utils.dropbox_url()
+			self.session['dropbox_token'] = token
+			self.redirect(url)
+			return
+
+		if 'dropbox_token' not in self.session:
+			return
+
+		def txn(user_key, dropbox_token, dropbox_uid):
+			u = db.get(user_key)
+			u.dropbox_token = dropbox_token
+			u.dropbox_id = dropbox_uid
+			u.dropbox_enable = True
+			u.put()
+			return u
+
+		try:
+			access_token = utils.dropbox_token(self.session['dropbox_token'])
+			u = db.run_in_transaction(txn, self.session['user']['key'], str(access_token), self.request.get('uid'))
+			cache.set_keys([u])
+			self.add_message('success', 'Dropbox authorized.')
+		except Exception, e:
+			self.add_message('error', 'An error occurred with dropbox. Try again.')
+			logging.error('Dropbox error: %s', e)
+
+		self.redirect(webapp2.uri_for('account'))
+
+class BackupHandler(BaseHandler):
+	def post(self):
+		entry_key = db.Key(self.request.get('entry_key'))
+		network = self.request.get('network')
+		username = self.request.get('username')
+		journal_name = self.request.get('journal_name')
+
+		user = cache.get_user(username)
+		entry, content, blobs = cache.get_entry(username, journal_name, entry_key.id(), entry_key)
+		path = '%s/%s.html' %(journal_name.replace('/', '_'), entry_key.id())
+		rendered = utils.render('pdf.html', {'entries': [(entry, content, [])]})
+
+		try:
+			put = utils.dropbox_put(user.dropbox_token, path, rendered, entry.dropbox_rev)
+
+			def txn(entry_key, rev):
+				e = db.get(entry_key)
+				e.dropbox_rev = rev
+				e.put()
+				return e
+
+			entry = db.run_in_transaction(txn, entry_key, put['rev'])
+		except Exception, e:
+			logging.error('Dropbox put error: %s', e)
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -1307,6 +1383,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/blob/<key>', handler=BlobHandler, name='blob'),
 	webapp2.Route(r'/blog', handler=BlogHandler, name='blog'),
 	webapp2.Route(r'/blog/<entry>', handler=BlogEntryHandler, name='blog-entry'),
+	webapp2.Route(r'/dropbox', handler=DropboxCallback, name='dropbox'),
 	webapp2.Route(r'/facebook', handler=FacebookCallback, name='facebook'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/follow/<username>', handler=FollowHandler, name='follow'),
@@ -1328,6 +1405,7 @@ application = webapp2.WSGIApplication([
 
 	# taskqueue
 	webapp2.Route(r'/tasks/social_post', handler=SocialPost, name='social-post'),
+	webapp2.Route(r'/tasks/backup', handler=BackupHandler, name='backup'),
 
 	# this section must be last, since the regexes below will match one and two -level URLs
 	webapp2.Route(r'/<username>', handler=UserHandler, name='user'),
@@ -1344,9 +1422,12 @@ RESERVED_NAMES = set([
 	'account',
 	'activity',
 	'admin',
+	'backup',
 	'blob',
 	'blog',
 	'contact',
+	'docs',
+	'dropbox',
 	'entry',
 	'facebook',
 	'features',
@@ -1356,6 +1437,7 @@ RESERVED_NAMES = set([
 	'followers',
 	'following',
 	'google',
+	'googledocs',
 	'googleplus',
 	'help',
 	'journal',

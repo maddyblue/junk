@@ -50,6 +50,12 @@ USER_SOCIAL_NETWORKS = [
 	USER_SOURCE_TWITTER,
 ]
 
+USER_BACKUP_DROPBOX = 'dropbox'
+
+USER_BACKUP_NETWORKS = [
+	USER_BACKUP_DROPBOX,
+]
+
 class User(db.Model):
 	name = db.StringProperty(required=True, indexed=False)
 	lname = db.StringProperty(indexed=True)
@@ -92,6 +98,10 @@ class User(db.Model):
 	twitter_enable = db.BooleanProperty(indexed=False)
 	twitter_key = db.StringProperty(indexed=False)
 	twitter_secret = db.StringProperty(indexed=False)
+
+	dropbox_id = db.StringProperty(indexed=False)
+	dropbox_enable = db.BooleanProperty(indexed=False)
+	dropbox_token = db.StringProperty(indexed=False)
 
 	def count(self):
 		if self.entry_count and self.last_entry and self.first_entry:
@@ -228,6 +238,8 @@ class Entry(db.Model):
 	chars = db.IntegerProperty(required=True, default=0)
 	words = db.IntegerProperty(required=True, default=0)
 	sentences = db.IntegerProperty(required=True, default=0)
+
+	dropbox_rev = db.StringProperty(indexed=False)
 
 	WORD_RE = re.compile("[A-Za-z0-9']+")
 	SENTENCE_RE = re.compile("[.!?]+")

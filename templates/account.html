@@ -74,4 +74,26 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="span16">
+			<h3>backup <small>automatically back up your journal entries every time you save</small></h3>
+				{% for network, values in backup.items %}
+			<div class="row">
+				<div class="span2">
+					{{ network }}
+				</div>
+				<div class="span2">
+					<span class="label {{ values.label_class }}">{{ values.label_text }}</span>
+				</div>
+				<div class="span2">
+					<a href="{{ values.auth_url }}" class="btn">{{ values.auth_text }}</a>
+				</div>
+				<div class="span2">
+					<a href="{{ values.enable_url }}" class="btn {{ values.enable_class }}">{{ values.enable_text }}</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+
 {% endblock %}
