@@ -147,7 +147,6 @@ class MainPage(BaseHandler):
 		if 'user' in self.session:
 			following = cache.get_by_keys(cache.get_following(self.session['user']['name']), 'User')
 			followers = cache.get_by_keys(cache.get_followers(self.session['user']['name']), 'User')
-			logging.error(following, followers)
 			journals = cache.get_journals(db.Key(self.session['user']['key']))
 			rendert(self, 'index-user.html', {
 				'activities': cache.get_activities_follower(self.session['user']['name']),
