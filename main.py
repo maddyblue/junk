@@ -1305,7 +1305,7 @@ class DownloadJournalHandler(BaseHandler):
 					key=key,
 					blob=files.blobstore.get_blob_key(file_name),
 					type=models.BLOB_TYPE_PDF,
-					name='%s - %s - %s to %s' %(username, journal_name, from_date, to_date),
+					name='%s - %s - %s to %s' %(username, utils.deunicode(journal_name.decode('utf-8')), from_date, to_date),
 					date=journal.last_modified,
 				)
 				pdf_blob.put()
