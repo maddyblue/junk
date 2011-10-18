@@ -187,7 +187,7 @@ class FacebookLogin(BaseHandler):
 		if 'callback' in self.request.GET:
 			user_data = facebook.graph_request(self.session['access_token'])
 
-			if user_data is not False:
+			if user_data is not False and 'username' in user_data and 'email' in user_data:
 				user, registered = self.process_credentials(user_data['username'], user_data['email'], models.USER_SOURCE_FACEBOOK, user_data['id'])
 
 				if not registered:
