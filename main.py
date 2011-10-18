@@ -299,17 +299,24 @@ class AccountHandler(BaseHandler):
 		elif 'deauthorize' in self.request.GET:
 			deauthorize = self.request.get('deauthorize')
 			changed = True
-			self.add_message('success', '%s posting deauthorized.' %deauthorize.title())
 			if deauthorize == models.USER_SOURCE_FACEBOOK:
 				u.facebook_token = None
 				u.facebook_enable = False
+				self.add_message('success', 'Facebook posting deauthorized.')
 			elif deauthorize == models.USER_SOURCE_TWITTER:
 				u.twitter_key = None
 				u.twitter_secret = None
 				u.twitter_enable = None
+				self.add_message('success', 'Twitter posting deauthorized.')
 			elif deauthorize == models.USER_BACKUP_DROPBOX:
 				u.dropbox_token = None
 				u.dropbox_enable = None
+				self.add_message('success', 'Dropbox backup deauthorized.')
+			elif deauthorize == models.USER_BACKUP_GOOGLE_DOCS:
+				utils.google_revoke(u.google_docs_token)
+				u.google_docs_token = None
+				u.google_docs_enable = None
+				self.add_message('success', 'Google Docs backup deauthorized.')
 
 		if changed:
 			u.put()
@@ -327,6 +334,15 @@ class AccountHandler(BaseHandler):
 					'enable_url': '#' if not u.dropbox_token else webapp2.uri_for('account', enable='dropbox') if not u.dropbox_enable else webapp2.uri_for('account', disable='dropbox'),
 					'label_class': 'warning' if not u.dropbox_token else 'success' if u.dropbox_enable else 'important',
 					'label_text': 'not authorized' if not u.dropbox_token else 'enabled' if u.dropbox_enable else 'disabled',
+				},
+				'google docs': {
+					'auth_text': 'authorize' if not u.google_docs_token else 'deauthorize',
+					'auth_url': webapp2.uri_for('google', action='authorize') if not u.google_docs_token else webapp2.uri_for('account', deauthorize='google_docs'),
+					'enable_class': 'disabled' if not u.google_docs_token else '',
+					'enable_text': 'enable' if not u.google_docs_enable or not u.google_docs_token else 'disable',
+					'enable_url': '#' if not u.google_docs_token else webapp2.uri_for('account', enable='google_docs') if not u.google_docs_enable else webapp2.uri_for('account', disable='google_docs'),
+					'label_class': 'warning' if not u.google_docs_token else 'success' if u.google_docs_enable else 'important',
+					'label_text': 'not authorized' if not u.google_docs_token else 'enabled' if u.google_docs_enable else 'disabled',
 				},
 			},
 			'social': {
@@ -903,6 +919,8 @@ class SaveEntryHandler(BaseHandler):
 
 			if user.dropbox_enable and user.dropbox_token:
 				taskqueue.add(url=webapp2.uri_for('backup'), params={'entry_key': entry.key(), 'network': models.USER_BACKUP_DROPBOX, 'journal_name': journal_name, 'username': username})
+			if user.google_docs_enable and user.google_docs_token:
+				taskqueue.add(url=webapp2.uri_for('backup'), params={'entry_key': entry.key(), 'network': models.USER_BACKUP_GOOGLE_DOCS, 'journal_name': journal_name, 'username': username})
 
 			self.add_message('success', 'Your entry has been saved.')
 
@@ -1345,21 +1363,69 @@ class BackupHandler(BaseHandler):
 
 		user = cache.get_user(username)
 		entry, content, blobs = cache.get_entry(username, journal_name, entry_key.id(), entry_key)
-		path = '%s/%s.html' %(journal_name.replace('/', '_'), entry_key.id())
+		path = '%s/%s.html' %(utils.deunicode(journal_name).replace('/', '_'), entry_key.id())
 		rendered = utils.render('pdf.html', {'entries': [(entry, content, [])]})
 
-		try:
-			put = utils.dropbox_put(user.dropbox_token, path, rendered, entry.dropbox_rev)
+		if network == models.USER_BACKUP_DROPBOX:
+			try:
+				put = utils.dropbox_put(user.dropbox_token, path, rendered, entry.dropbox_rev)
 
-			def txn(entry_key, rev):
-				e = db.get(entry_key)
-				e.dropbox_rev = rev
-				e.put()
-				return e
+				def txn(entry_key, rev):
+					e = db.get(entry_key)
+					e.dropbox_rev = rev
+					e.put()
+					return e
 
-			entry = db.run_in_transaction(txn, entry_key, put['rev'])
-		except Exception, e:
-			logging.error('Dropbox put error: %s', e)
+				entry = db.run_in_transaction(txn, entry_key, put['rev'])
+			except Exception, e:
+				logging.error('Dropbox put error: %s', e)
+		elif network == models.USER_BACKUP_GOOGLE_DOCS:
+			try:
+				doc_id = utils.google_upload(user.google_docs_token, path, rendered, entry.google_docs_id)
+
+				if doc_id and doc_id != entry.google_docs_id:
+					def txn(entry_key, doc_id):
+						e = db.get(entry_key)
+						e.google_docs_id = doc_id
+						e.put()
+						return e
+
+					entry = db.run_in_transaction(txn, entry_key, doc_id)
+			except Exception, e:
+				logging.error('Google Docs upload error: %s', e)
+				raise
+
+class GoogleSiteVerification(BaseHandler):
+	def get(self):
+		self.response.out.write('google-site-verification: %s.html' %settings.GOOGLE_SITE_VERIFICATION)
+
+class GoogleCallback(BaseHandler):
+	def get(self):
+		if 'user' not in self.session:
+			return
+
+		if self.request.get('action') == 'authorize':
+			self.redirect(str(utils.google_url()))
+			return
+
+		if 'token' in self.request.GET:
+			def txn(user_key, token):
+				u = db.get(user_key)
+				u.google_docs_token = token
+				u.google_docs_enable = True
+				u.put()
+				return u
+
+			try:
+				session_token = utils.google_session_token(self.request.get('token'))
+				user = db.run_in_transaction(txn, self.session['user']['key'], session_token.get_token_string())
+				cache.set_keys([user])
+				self.add_message('success', 'Google Docs authorized.')
+			except Exception, e:
+				self.add_message('error', 'An error occurred with Google Docs. Try again.')
+				logging.error('Google Docs error: %s', e)
+
+			self.redirect(webapp2.uri_for('account'))
 
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
@@ -1385,6 +1451,7 @@ application = webapp2.WSGIApplication([
 	webapp2.Route(r'/blog/<entry>', handler=BlogEntryHandler, name='blog-entry'),
 	webapp2.Route(r'/dropbox', handler=DropboxCallback, name='dropbox'),
 	webapp2.Route(r'/facebook', handler=FacebookCallback, name='facebook'),
+	webapp2.Route(r'/google', handler=GoogleCallback, name='google'),
 	webapp2.Route(r'/feeds/<feed>', handler=FeedsHandler, name='feeds'),
 	webapp2.Route(r'/follow/<username>', handler=FollowHandler, name='follow'),
 	webapp2.Route(r'/following/<username>', handler=FollowingHandler, name='following'),
@@ -1406,6 +1473,9 @@ application = webapp2.WSGIApplication([
 	# taskqueue
 	webapp2.Route(r'/tasks/social_post', handler=SocialPost, name='social-post'),
 	webapp2.Route(r'/tasks/backup', handler=BackupHandler, name='backup'),
+
+	# google site verification
+	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler=GoogleSiteVerification),
 
 	# this section must be last, since the regexes below will match one and two -level URLs
 	webapp2.Route(r'/<username>', handler=UserHandler, name='user'),

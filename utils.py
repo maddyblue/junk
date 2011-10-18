@@ -36,6 +36,11 @@ fix_path.fix_sys_path()
 
 from docutils.core import publish_parts
 import dropbox
+import gdata.data
+import gdata.docs.client
+import gdata.docs.data
+import gdata.docs.service
+import gdata.gauth
 import markdown
 import rst_directive
 import textile
@@ -111,8 +116,11 @@ def markup(text, format):
 	else:
 		raise ValueError('invalid markup')
 
+def deunicode(s):
+	return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
+
 def slugify(s):
-	s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
+	s = deunicode(s)
 	return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
 
 def html_to_pdf(f, title, entries):
@@ -143,3 +151,51 @@ def dropbox_put(access_token, path, content, rev=None):
 	sess.set_token(tokens['oauth_token'], tokens['oauth_token_secret'])
 	client = dropbox.client.DropboxClient(sess)
 	return client.put_file(path, content, parent_rev=rev)
+
+GOOGLE_DATA_SCOPES = ['https://docs.google.com/feeds/']
+def google_url():
+	next = absolute_uri('google')
+	return gdata.gauth.generate_auth_sub_url(next, GOOGLE_DATA_SCOPES, session=True)
+
+def google_session_token(token):
+	single_use_token = gdata.auth.AuthSubToken()
+	single_use_token.set_token_string(token)
+	docs_service = gdata.docs.service.DocsService()
+	return docs_service.upgrade_to_session_token(single_use_token)
+
+def google_revoke(token):
+	docs_service = gdata.docs.service.DocsService()
+	docs_service.SetAuthSubToken(token, GOOGLE_DATA_SCOPES)
+	docs_service.RevokeAuthSubToken()
+
+def google_folder(service, name, subfolder=None):
+	folder_name_query = gdata.docs.service.DocumentQuery(categories=['folder'], params={'showfolders': 'true'})
+	folder_name_query['title-exact'] = 'true'
+	folder_name_query['title'] = name
+	folder_feed = service.Query(folder_name_query.ToUri())
+
+	if folder_feed.entry:
+		return folder_feed.entry[0]
+
+	return service.CreateFolder(name, subfolder)
+
+def google_upload(token, path, content, entryid=None):
+	docs_service = gdata.docs.service.DocsService()
+	docs_service.SetAuthSubToken(token, GOOGLE_DATA_SCOPES)
+
+	file_dir, file_name = path.rsplit('/', 1)
+	f = StringIO.StringIO(content)
+	ms = gdata.data.MediaSource(file_handle=f, content_type='text/html', content_length=len(content), file_name=file_name)
+
+	if not entryid:
+		j_folder = google_folder(docs_service, 'journalr')
+		dest_folder = google_folder(docs_service, file_dir, j_folder)
+
+		entry = docs_service.Upload(ms, file_name, folder_or_uri=dest_folder)
+		return entry.resourceId.text
+	else:
+		client = gdata.docs.client.DocsClient()
+		authsub = gdata.gauth.AuthSubToken(token)
+		client.auth_token = authsub
+		entry = client.GetDoc(entryid)
+		entry = client.Update(entry, media_source=ms)

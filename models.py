@@ -51,9 +51,11 @@ USER_SOCIAL_NETWORKS = [
 ]
 
 USER_BACKUP_DROPBOX = 'dropbox'
+USER_BACKUP_GOOGLE_DOCS = 'google_docs'
 
 USER_BACKUP_NETWORKS = [
 	USER_BACKUP_DROPBOX,
+	USER_BACKUP_GOOGLE_DOCS,
 ]
 
 class User(db.Model):
@@ -102,6 +104,9 @@ class User(db.Model):
 	dropbox_id = db.StringProperty(indexed=False)
 	dropbox_enable = db.BooleanProperty(indexed=False)
 	dropbox_token = db.StringProperty(indexed=False)
+
+	google_docs_enable = db.BooleanProperty(indexed=False)
+	google_docs_token = db.StringProperty(indexed=False)
 
 	def count(self):
 		if self.entry_count and self.last_entry and self.first_entry:
@@ -240,6 +245,7 @@ class Entry(db.Model):
 	sentences = db.IntegerProperty(required=True, default=0)
 
 	dropbox_rev = db.StringProperty(indexed=False)
+	google_docs_id = db.StringProperty(indexed=False)
 
 	WORD_RE = re.compile("[A-Za-z0-9']+")
 	SENTENCE_RE = re.compile("[.!?]+")
