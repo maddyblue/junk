@@ -1349,7 +1349,7 @@ class DropboxCallback(BaseHandler):
 			cache.set_keys([u])
 			self.add_message('success', 'Dropbox authorized.')
 		except Exception, e:
-			self.add_message('error', 'An error occurred with dropbox. Try again.')
+			self.add_message('error', 'An error occurred with Dropbox. Try again.')
 			logging.error('Dropbox error: %s', e)
 
 		self.redirect(webapp2.uri_for('account'))
