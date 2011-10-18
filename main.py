@@ -652,7 +652,7 @@ class ViewEntryHandler(BaseHandler):
 					parent=entry,
 					blob=files.blobstore.get_blob_key(file_name),
 					type=models.BLOB_TYPE_PDF,
-					name='%s - %s - %s' %(username, journal_name, subject),
+					name='%s - %s - %s' %(username, utils.deunicode(journal_name.decode('utf-8')), subject),
 					date=entry.last_edited,
 				)
 				pdf_blob.put()
