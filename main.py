@@ -1369,16 +1369,20 @@ class BackupHandler(BaseHandler):
 		if network == models.USER_BACKUP_DROPBOX:
 			try:
 				put = utils.dropbox_put(user.dropbox_token, path, rendered, entry.dropbox_rev)
+			except: # maybe a parent_rev problem? try again without
+				try:
+					put = utils.dropbox_put(user.dropbox_token, path, rendered) # no parent rev
+				except Exception, e:
+					logging.error('Dropbox put error: %s', e)
+					return
 
-				def txn(entry_key, rev):
-					e = db.get(entry_key)
-					e.dropbox_rev = rev
-					e.put()
-					return e
+			def txn(entry_key, rev):
+				e = db.get(entry_key)
+				e.dropbox_rev = rev
+				e.put()
+				return e
 
-				entry = db.run_in_transaction(txn, entry_key, put['rev'])
-			except Exception, e:
-				logging.error('Dropbox put error: %s', e)
+			entry = db.run_in_transaction(txn, entry_key, put['rev'])
 		elif network == models.USER_BACKUP_GOOGLE_DOCS:
 			try:
 				doc_id = utils.google_upload(user.google_docs_token, utils.deunicode(path), rendered, entry.google_docs_id)
