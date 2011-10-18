@@ -125,6 +125,7 @@ def slugify(s):
 
 def html_to_pdf(f, title, entries):
 	html = render('pdf.html', {'title': title, 'entries': entries})
+	html = deunicode(html)
 	pdf = pisa.CreatePDF(StringIO.StringIO(html), f)
 
 	return not pdf.err
