@@ -1363,7 +1363,7 @@ class BackupHandler(BaseHandler):
 
 		user = cache.get_user(username)
 		entry, content, blobs = cache.get_entry(username, journal_name, entry_key.id(), entry_key)
-		path = '%s/%s.html' %(utils.deunicode(journal_name).replace('/', '_'), entry_key.id())
+		path = '%s/%s.html' %(journal_name.replace('/', '_'), entry_key.id())
 		rendered = utils.render('pdf.html', {'entries': [(entry, content, [])]})
 
 		if network == models.USER_BACKUP_DROPBOX:
@@ -1381,7 +1381,7 @@ class BackupHandler(BaseHandler):
 				logging.error('Dropbox put error: %s', e)
 		elif network == models.USER_BACKUP_GOOGLE_DOCS:
 			try:
-				doc_id = utils.google_upload(user.google_docs_token, path, rendered, entry.google_docs_id)
+				doc_id = utils.google_upload(user.google_docs_token, utils.deunicode(path), rendered, entry.google_docs_id)
 
 				if doc_id and doc_id != entry.google_docs_id:
 					def txn(entry_key, doc_id):
