@@ -25,6 +25,7 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 
 import cache
+import conversion
 import facebook
 import models
 import settings
@@ -124,6 +125,16 @@ def slugify(s):
 	return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
 
 def html_to_pdf(f, title, entries):
+	entry, content, blobs = entries[0]
+	data = conversion.entry_doc(entry, content, blobs)
+
+	if data:
+		f.write(data)
+		return True
+
+	return False
+
+def old_html_to_pdf(f, title, entries):
 	html = render('pdf.html', {'title': title, 'entries': entries})
 	html = deunicode(html)
 	pdf = pisa.CreatePDF(StringIO.StringIO(html), f)
