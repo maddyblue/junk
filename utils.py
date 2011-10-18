@@ -133,7 +133,7 @@ def absolute_uri(*args, **kwargs):
 	return 'http://' + os.environ['HTTP_HOST'] + webapp2.uri_for(*args, **kwargs)
 
 def dropbox_session():
-	return dropbox.session.DropboxSession(settings.DROPBOX_KEY, settings.DROPBOX_SECRET, 'dropbox')
+	return dropbox.session.DropboxSession(settings.DROPBOX_KEY, settings.DROPBOX_SECRET, 'app_folder')
 
 def dropbox_url():
 	sess = dropbox_session()
