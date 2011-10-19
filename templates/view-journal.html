@@ -21,6 +21,10 @@
 
 	{% if entries %}
 
+	{% for e in entries %}
+	 {{ e|safe }}
+	{% endfor %}
+
 	<div class="pagination">
 		<ul>
 			<li class="prev"><a href="{{ journal|journal_url }}">first</a></li>
@@ -43,10 +47,6 @@
 			<li class="next"><a href="{{ journal|journal_url:journal.pages }}">last</a></li>
 		</ul>
 	</div>
-
-	{% for e in entries %}
-	 {{ e|safe }}
-	{% endfor %}
 
 	{% else %}
 
