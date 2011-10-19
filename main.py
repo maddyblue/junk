@@ -1379,6 +1379,7 @@ class BackupHandler(BaseHandler):
 		entry, content, blobs = cache.get_entry(username, journal_name, entry_key.id(), entry_key)
 		path = '%s/%s.html' %(journal_name.replace('/', '_'), entry_key.id())
 		rendered = utils.render('pdf.html', {'entries': [(entry, content, [])]})
+		rendered = rendered.encode('utf-8')
 
 		if network == models.USER_BACKUP_DROPBOX:
 			try:
