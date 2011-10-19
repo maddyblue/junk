@@ -46,7 +46,6 @@ import gdata.gauth
 import markdown
 import rst_directive
 import textile
-import xhtml2pdf.pisa as pisa
 
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
