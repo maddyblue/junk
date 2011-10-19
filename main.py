@@ -636,6 +636,7 @@ class ViewEntryHandler(BaseHandler):
 
 		if 'pdf' in self.request.GET:
 			pdf_blob = models.Blob.get_by_key_name('pdf', parent=entry)
+			error = None
 
 			# either no cached entry, or it's outdated
 			if not pdf_blob or pdf_blob.date < entry.last_edited:
@@ -645,7 +646,7 @@ class ViewEntryHandler(BaseHandler):
 				file_name = files.blobstore.create(mime_type='application/pdf')
 				subject = content.subject if content.subject else templatefilters.filters.jdate(entry.date)
 				with files.open(file_name, 'a') as f:
-					utils.html_to_pdf(f, subject, [(entry, content, blobs)]) # need to check for error return
+					error = utils.convert_html(f, subject, [(entry, content, blobs)])
 				files.finalize(file_name)
 				pdf_blob = models.Blob(
 					key_name='pdf',
@@ -655,10 +656,16 @@ class ViewEntryHandler(BaseHandler):
 					name='%s - %s - %s' %(username, utils.deunicode(journal_name.decode('utf-8')), subject),
 					date=entry.last_edited,
 				)
-				pdf_blob.put()
 
-			self.redirect(pdf_blob.get_url(name=True))
-			return
+				if error:
+					pdf_blob.blob.delete()
+					self.add_message('error', 'Error while converting to PDF: %s' %error)
+				else:
+					pdf_blob.put()
+
+			if not error:
+				self.redirect(pdf_blob.get_url(name=True))
+				return
 
 		rendert(self, 'entry.html', {
 			'blobs': blobs,
@@ -910,7 +917,7 @@ class SaveEntryHandler(BaseHandler):
 				'entry_url': webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id),
 			})
 			cache.set(entry_render, cache.C_ENTRY_RENDER, username, journal_name, entry_id)
-			cache.set_keys([user])
+			cache.set_keys([user, journal])
 			cache.set_multi({
 				cache.C_KEY %user.key(): cache.pack(user),
 				cache.C_ENTRY_RENDER %(username, journal_name, entry_id): entry_render,
@@ -1267,6 +1274,7 @@ class DownloadJournalHandler(BaseHandler):
 
 		DATE_FORMAT = '%m/%d/%Y'
 		errors = []
+		error = None
 		try:
 			from_date = datetime.datetime.strptime(self.request.get('from'), DATE_FORMAT)
 		except ValueError:
@@ -1299,19 +1307,25 @@ class DownloadJournalHandler(BaseHandler):
 					entries.append(cache.get_entry(username, journal_name, entry_key.id(), entry_key))
 
 				with files.open(file_name, 'a') as f:
-					utils.html_to_pdf(f, title, entries) # need to check for error return
+					error = utils.convert_html(f, title, entries)
 				files.finalize(file_name)
 				pdf_blob = models.Blob(
 					key=key,
 					blob=files.blobstore.get_blob_key(file_name),
 					type=models.BLOB_TYPE_PDF,
-					name='%s - %s - %s to %s' %(username, utils.deunicode(journal_name.decode('utf-8')), from_date, to_date),
+					name='%s - %s - %s to %s' %(username, utils.deunicode(journal_name.decode('utf-8')), from_date.strftime(DATE_FORMAT), to_date.strftime(DATE_FORMAT)),
 					date=journal.last_modified,
 				)
-				pdf_blob.put()
 
-			self.redirect(pdf_blob.get_url(name=True))
-			return
+				if error:
+					pdf_blob.blob.delete()
+					self.add_message('error', 'Error while converting to PDF: %s' %error)
+				else:
+					pdf_blob.put()
+
+			if not error:
+				self.redirect(pdf_blob.get_url(name=True))
+				return
 
 		rendert(self, 'download-journal.html', {
 			'journal': journal,
