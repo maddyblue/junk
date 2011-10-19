@@ -144,11 +144,9 @@ def convert_html(f, title, entries, output_type='application/pdf'):
 			return None
 		else:
 			logging.error('Conversion error: %s', result.error_text)
-			raise
 			return result.error_text
 	except Exception, e:
 		logging.error('Conversion exception: %s', e)
-		raise
 		return str(e)
 
 def absolute_uri(*args, **kwargs):

@@ -1412,7 +1412,6 @@ class BackupHandler(BaseHandler):
 					entry = db.run_in_transaction(txn, entry_key, doc_id)
 			except Exception, e:
 				logging.error('Google Docs upload error: %s', e)
-				raise
 
 class GoogleSiteVerification(BaseHandler):
 	def get(self):
