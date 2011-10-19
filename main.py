@@ -1295,7 +1295,6 @@ class DownloadJournalHandler(BaseHandler):
 			pdf_blob = db.get(key)
 
 			# either no cached entry, or it's outdated
-			logging.info('%s. %s', pdf_blob.date, journal.last_modified)
 			if not pdf_blob or pdf_blob.date < journal.last_modified:
 				if pdf_blob:
 					pdf_blob.blob.delete()
