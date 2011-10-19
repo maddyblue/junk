@@ -21,11 +21,12 @@ import re
 import unicodedata
 
 from django.utils import html
+from google.appengine.api import conversion
+from google.appengine.ext import blobstore
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 
 import cache
-import conversion
 import facebook
 import models
 import settings
@@ -124,22 +125,32 @@ def slugify(s):
 	s = deunicode(s)
 	return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
 
-def html_to_pdf(f, title, entries):
-	entry, content, blobs = entries[0]
-	data = conversion.entry_doc(entry, content, blobs)
+def convert_html(f, title, entries, output_type='application/pdf'):
+	try:
+		html = render('pdf.html', {'title': title, 'entries': entries})
+		asset = conversion.Asset('text/html', deunicode(html))
+		conversion_request = conversion.ConversionRequest(asset, output_type)
 
-	if data:
-		f.write(data)
-		return True
+		for entry, content, blobs in entries:
+			for b in blobs:
+				if b.type == models.BLOB_TYPE_IMAGE:
+					data = blobstore.BlobReader(b.blob, buffer_size=1048576).read()
+					conversion_request.add_asset(conversion.Asset(b.blob.content_type, data, str(b.key())))
 
-	return False
+		result = conversion.convert(conversion_request)
 
-def old_html_to_pdf(f, title, entries):
-	html = render('pdf.html', {'title': title, 'entries': entries})
-	html = deunicode(html)
-	pdf = pisa.CreatePDF(StringIO.StringIO(html), f)
-
-	return not pdf.err
+		if result and result.assets:
+			for i in result.assets:
+				f.write(i.data)
+			return None
+		else:
+			logging.error('Conversion error: %s', result.error_text)
+			raise
+			return result.error_text
+	except Exception, e:
+		logging.error('Conversion exception: %s', e)
+		raise
+		return str(e)
 
 def absolute_uri(*args, **kwargs):
 	return 'http://' + os.environ['HTTP_HOST'] + webapp2.uri_for(*args, **kwargs)

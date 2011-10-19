@@ -8,13 +8,17 @@
 	{% for entry, content, blobs in entries %}
 		<h2>
 		{% if content.subject %}
-			{{ content.subject }}<small>from {{ entry.date|jdate }}</small>
+			{{ content.subject }}<small> from {{ entry.date|jdate }}</small>
 		{% else %}
 			{{ entry.date|jdate }}
 		{% endif %}
 		</h2>
 
 		{{ content.rendered|safe }}
+
+		{% for b in blobs %}
+			<p><img src="{{ b.key }}"/></p>
+		{% endfor %}
 	{% endfor %}
 </body>
 </html>
