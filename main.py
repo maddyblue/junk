@@ -615,9 +615,9 @@ class NewEntryHandler(BaseHandler):
 		cache.set(cache.pack(journal), cache.C_JOURNAL, username, journal_name)
 
 		if user.facebook_token and user.facebook_enable:
-			taskqueue.add(url=webapp2.uri_for('social-post'), params={'entry_key': entry_key, 'network': models.USER_SOURCE_FACEBOOK, 'username': user.name})
+			taskqueue.add(queue_name='retry-limit', url=webapp2.uri_for('social-post'), params={'entry_key': entry_key, 'network': models.USER_SOURCE_FACEBOOK, 'username': user.name})
 		if user.twitter_key and user.twitter_enable:
-			taskqueue.add(url=webapp2.uri_for('social-post'), params={'entry_key': entry_key, 'network': models.USER_SOURCE_TWITTER, 'username': user.name})
+			taskqueue.add(queue_name='retry-limit', url=webapp2.uri_for('social-post'), params={'entry_key': entry_key, 'network': models.USER_SOURCE_TWITTER, 'username': user.name})
 
 		self.redirect(webapp2.uri_for('view-entry', username=username, journal_name=journal_name, entry_id=entry_id))
 
@@ -925,9 +925,9 @@ class SaveEntryHandler(BaseHandler):
 			})
 
 			if user.dropbox_enable and user.dropbox_token:
-				taskqueue.add(url=webapp2.uri_for('backup'), params={'entry_key': entry.key(), 'network': models.USER_BACKUP_DROPBOX, 'journal_name': journal_name, 'username': username})
+				taskqueue.add(queue_name='retry-limit', url=webapp2.uri_for('backup'), params={'entry_key': entry.key(), 'network': models.USER_BACKUP_DROPBOX, 'journal_name': journal_name, 'username': username})
 			if user.google_docs_enable and user.google_docs_token:
-				taskqueue.add(url=webapp2.uri_for('backup'), params={'entry_key': entry.key(), 'network': models.USER_BACKUP_GOOGLE_DOCS, 'journal_name': journal_name, 'username': username})
+				taskqueue.add(queue_name='retry-limit', url=webapp2.uri_for('backup'), params={'entry_key': entry.key(), 'network': models.USER_BACKUP_GOOGLE_DOCS, 'journal_name': journal_name, 'username': username})
 
 			self.add_message('success', 'Your entry has been saved.')
 
