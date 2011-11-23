@@ -57,7 +57,7 @@
 						</ul>
 					</li>
 					<li class="dropdown{% if active == "account" %} active{% endif %}" data-dropdown="dropdown">
-						<a href="#" class="dropdown-toggle dropdown-gravatar">{{ user.name }} <img class="topbar-img-gravatar" src="{{ user.avatar }}&amp;s=30" alt="{{ user.name }}"></a>
+						<a href="#" class="dropdown-toggle dropdown-gravatar">{{ user.name }} <img class="topbar-img-gravatar" src="{{ user.avatar }}&amp;s=30" alt="{{ user.name }}" width="30" height="30"></a>
 						<ul class="dropdown-menu">
 							<li{% if active == "account" %} class="active"{% endif %}><a href="{{ "account"|url }}">account</a></li>
 							<li><a href="{{ "logout"|url }}">logout</a></li>
