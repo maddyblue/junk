@@ -48,8 +48,6 @@ def from_fieldstorage(cls, fs):
 
 multidict.MultiDict.from_fieldstorage = classmethod(from_fieldstorage)
 
-webapp_django_version = '1.2'
-
 def webapp_add_wsgi_middleware(app):
 	from google.appengine.ext.appstats import recording
 	app = recording.appstats_wsgi_middleware(app)

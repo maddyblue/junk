@@ -1,7 +1,8 @@
 application: journalr-org
 version: 1
-runtime: python
+runtime: python27
 api_version: 1
+threadsafe: true
 
 builtins:
 - admin_redirect: on
@@ -9,6 +10,10 @@ builtins:
 - datastore_admin: on
 - deferred: on
 - remote_api: on
+
+libraries:
+- name: django
+  version: latest
 
 handlers:
 - url: /static
@@ -19,16 +24,16 @@ handlers:
   upload: static/images/favicon\.ico
 
 - url: /login/google
-  script: main.py
+  script: main.app
   login: required
 
 - url: /admin/.*
-  script: main.py
+  script: main.app
   login: admin
 
 - url: /tasks/.*
-  script: main.py
+  script: main.app
   login: admin
 
 - url: /.*
-  script: main.py
+  script: main.app

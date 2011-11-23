@@ -7,7 +7,12 @@ import unittest
 from google.appengine.api import datastore_errors
 from google.appengine.datastore import entity_pb
 
-from . import eventloop, key, model, tasklets, test_utils
+from . import eventloop
+from . import key
+from . import model
+from . import tasklets
+from . import test_utils
+
 
 class KeyTests(test_utils.NDBTest):
 
@@ -21,7 +26,7 @@ class KeyTests(test_utils.NDBTest):
 
   def testFlat(self):
     flat = ('Kind', 1)
-    pairs = tuple((flat[i], flat[i+1]) for i in xrange(0, len(flat), 2))
+    pairs = tuple((flat[i], flat[i + 1]) for i in xrange(0, len(flat), 2))
     k = key.Key(flat=flat)
     self.assertEqual(k.pairs(), pairs)
     self.assertEqual(k.flat(), flat)
@@ -29,7 +34,7 @@ class KeyTests(test_utils.NDBTest):
 
   def testFlatLong(self):
     flat = ('Kind', 1, 'Subkind', 'foobar')
-    pairs = tuple((flat[i], flat[i+1]) for i in xrange(0, len(flat), 2))
+    pairs = tuple((flat[i], flat[i + 1]) for i in xrange(0, len(flat), 2))
     k = key.Key(flat=flat)
     self.assertEqual(k.pairs(), pairs)
     self.assertEqual(k.flat(), flat)
@@ -184,7 +189,7 @@ class KeyTests(test_utils.NDBTest):
     flat_input = (u'Kind\u1234', 1, 'Subkind', u'foobar\u4321')
     flat = (flat_input[0].encode('utf8'), flat_input[1],
             flat_input[2], flat_input[3].encode('utf8'))
-    pairs = tuple((flat[i], flat[i+1]) for i in xrange(0, len(flat), 2))
+    pairs = tuple((flat[i], flat[i + 1]) for i in xrange(0, len(flat), 2))
     k = key.Key(flat=flat_input)
     self.assertEqual(k.pairs(), pairs)
     self.assertEqual(k.flat(), flat)
@@ -206,7 +211,7 @@ class KeyTests(test_utils.NDBTest):
 
   def testHash(self):
     flat = ['Kind', 1, 'Subkind', 'foobar']
-    pairs = [(flat[i], flat[i+1]) for i in xrange(0, len(flat), 2)]
+    pairs = [(flat[i], flat[i + 1]) for i in xrange(0, len(flat), 2)]
     k = key.Key(flat=flat)
     self.assertEqual(hash(k), hash(tuple(pairs)))
 
@@ -222,7 +227,7 @@ class KeyTests(test_utils.NDBTest):
     key.Key(flat=['Kind', None])
     self.assertRaises(datastore_errors.BadArgumentError,
                       key.Key, flat=['Kind', None, 'Subkind', 1])
-    self.assertRaises(AssertionError, key.Key, flat=['Kind', ()])
+    self.assertRaises(TypeError, key.Key, flat=['Kind', ()])
 
   def testKindFromModel(self):
     class M(model.Model):
@@ -281,19 +286,17 @@ class KeyTests(test_utils.NDBTest):
     self.assertEqual(self.post_counter, 11,
                      'Post delete hooks not called on delete_multi')
 
-  def test_issue_58_delete(self):
+  def testNoDefaultDeleteCallback(self):
+    # See issue 58.  http://goo.gl/hPN6j
     ctx = tasklets.get_context()
     ctx.set_cache_policy(False)
     class EmptyModel(model.Model):
       pass
     entity = EmptyModel()
     entity.put()
-    entity.key.delete()
-    ev = eventloop.get_event_loop()
-    ev.run0() # Trigger check_success
-    ev_len = len(ev.queue)
-    self.assertEqual(ev_len, 0,
-                     'Delete hook queued default no-op: %r' % ev.queue)
+    fut = entity.key.delete_async()
+    self.assertFalse(fut._immediate_callbacks,
+                     'Delete hook queued default no-op.')
 
   def testGetHooksCalled(self):
     test = self # Closure for inside hook
@@ -402,19 +405,16 @@ class KeyTests(test_utils.NDBTest):
     self.assertRaises(tasklets.Return, entity.key.get)
     self.assertRaises(tasklets.Return, entity.key.delete)
 
-  def test_issue_58_get(self):
+  def testNoDefaultGetCallback(self):
+    # See issue 58.  http://goo.gl/hPN6j
     ctx = tasklets.get_context()
     ctx.set_cache_policy(False)
     class EmptyModel(model.Model):
       pass
     entity = EmptyModel()
     entity.put()
-    entity.key.get()
-    ev = eventloop.get_event_loop()
-    ev.run0() # Trigger check_success
-    ev_len = len(ev.queue)
-    self.assertEqual(ev_len, 0,
-                     'Get hook queued default no-op: %r' % ev.queue)
+    fut = entity.key.get_async()
+    self.assertFalse(fut._immediate_callbacks, 'Get hook queued default no-op.')
 
 
 def main():

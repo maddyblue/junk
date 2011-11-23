@@ -14,19 +14,12 @@
 
 from __future__ import with_statement
 
-import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
-from google.appengine.dist import use_library
-use_library('django', '1.2')
-
 import base64
 import datetime
 import logging
 import re
 
 from django.utils import html
-from django.utils import simplejson
 from google.appengine.api import files
 from google.appengine.api import taskqueue
 from google.appengine.api import users
@@ -34,8 +27,11 @@ from google.appengine.ext import blobstore
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import blobstore_handlers
-
 from webapp2_extras import sessions
+import django
+import json
+import webapp2
+
 import cache
 import counters
 import facebook
@@ -44,7 +40,6 @@ import settings
 import templatefilters.filters
 import twitter
 import utils
-import webapp2
 
 def rendert(s, p, d={}):
 	session = s.session
@@ -988,7 +983,7 @@ class UploadSuccess(BaseHandler):
 			'url',
 		]])
 
-		self.response.out.write(simplejson.dumps(d))
+		self.response.out.write(json.dumps(d))
 
 class FlushMemcache(BaseHandler):
 	def get(self):
@@ -1454,7 +1449,7 @@ config = {
 	},
 }
 
-application = webapp2.WSGIApplication([
+app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/about', handler=AboutHandler, name='about'),
 	webapp2.Route(r'/account', handler=AccountHandler, name='account'),
@@ -1554,7 +1549,7 @@ RESERVED_NAMES = set([
 ])
 
 # assert that all routes are listed in RESERVED_NAMES
-for i in application.router.build_routes.values():
+for i in app.router.build_routes.values():
 	name = i.template.partition('/')[2].partition('/')[0]
 	if name not in RESERVED_NAMES:
 		import sys
@@ -1563,9 +1558,3 @@ for i in application.router.build_routes.values():
 		sys.exit(1)
 
 webapp.template.register_template_library('templatefilters.filters')
-
-def main():
-	application.run()
-
-if __name__ == "__main__":
-	main()

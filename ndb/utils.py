@@ -4,6 +4,7 @@ import sys
 
 DEBUG = True  # Set to False for some speedups
 
+
 def wrapping(wrapped):
   # A decorator to decorate a decorator's wrapper.  Following the lead
   # of Twisted and Monocle, this is supposed to make debugging heavily
@@ -96,5 +97,5 @@ def tweak_logging():
     global DEBUG
     DEBUG = False
 
-if sys.argv[0].endswith('_test.py'):
+if 'test' in os.path.basename(sys.argv[0]):
   tweak_logging()

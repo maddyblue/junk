@@ -38,7 +38,7 @@ Calling a tasklet automatically schedules it with the event loop:
   def main():
     f = main_tasklet()
     eventloop.run()  # Run until no tasklets left to do
-    assert f.done()
+    f.done()  # Returns True
 
 As a special feature, if the wrapped function is not a generator
 function, its return value is returned via the Future.  This makes the
@@ -68,9 +68,10 @@ import types
 
 from google.appengine.api.apiproxy_stub_map import UserRPC
 from google.appengine.api.apiproxy_rpc import RPC
-
 from google.appengine.datastore import datastore_rpc
-from . import eventloop, utils
+
+from . import eventloop
+from . import utils
 
 logging_debug = utils.logging_debug
 
@@ -363,8 +364,9 @@ class Future(object):
         mfut.add_callback(self._on_future_completion, mfut, gen)
         return
       if is_generator(value):
-        assert False  # TODO: emulate PEP 380 here?
-      assert False  # A tasklet shouldn't yield plain values.
+        # TODO: emulate PEP 380 here?
+        raise NotImplementedError('Cannot defer to another generator.')
+      raise RuntimeError('A tasklet should not yield plain values.')
 
   def _on_rpc_completion(self, rpc, gen):
     try:
@@ -454,7 +456,8 @@ class MultiFuture(Future):
   # TODO: Maybe rename this method, since completion of a Future/RPC
   # already means something else.  But to what?
   def complete(self):
-    assert not self._full
+    if self._full:
+      raise RuntimeError('MultiFuture cannot complete twice.')
     self._full = True
     if not self._dependents:
       self._finish()
@@ -465,9 +468,13 @@ class MultiFuture(Future):
     super(MultiFuture, self).set_exception(exc, tb)
 
   def _finish(self):
-    assert self._full
-    assert not self._dependents
-    assert not self._done
+    if not self._full:
+      raise RuntimeError('MultiFuture cannot finish until completed.')
+    if self._dependents:
+      raise RuntimeError('MultiFuture cannot finish whilst waiting for '
+                         'dependents %r' % self._dependents)
+    if self._done:
+      raise RuntimeError('MultiFuture done before finishing.')
     try:
       result = [r.get_result() for r in self._results]
     except Exception, err:
@@ -492,7 +499,8 @@ class MultiFuture(Future):
       fut = mfut
     elif not isinstance(fut, Future):
       raise TypeError('Expected Future received %r' % fut)
-    assert not self._full
+    if self._full:
+      raise RuntimeError('MultiFuture cannot add a dependent once complete.')
     self._results.append(fut)
     if fut not in self._dependents:
       self._dependents.add(fut)
@@ -537,7 +545,8 @@ class QueueFuture(Future):
   # TODO: __repr__
 
   def complete(self):
-    assert not self._full
+    if self._full:
+      raise RuntimeError('MultiFuture cannot complete twice.')
     self._full = True
     if not self._dependents:
       self.set_result(None)
@@ -558,14 +567,17 @@ class QueueFuture(Future):
     self.add_dependent(fut)
 
   def add_dependent(self, fut):
-    assert isinstance(fut, Future)
-    assert not self._full
+    if not isinstance(fut, Future):
+      raise TypeError('fut must be a Future instance; received %r' % fut)
+    if self._full:
+      raise RuntimeError('QueueFuture add dependent once complete.')
     if fut not in self._dependents:
       self._dependents.add(fut)
       fut.add_callback(self._signal_dependent_done, fut)
 
   def _signal_dependent_done(self, fut):
-    assert fut.done()
+    if not fut.done():
+      raise RuntimeError('Future not done before signalling dependant done.')
     self._dependents.remove(fut)
     exc = fut.get_exception()
     tb = fut.get_traceback()
@@ -582,7 +594,8 @@ class QueueFuture(Future):
       self._mark_finished()
 
   def _mark_finished(self):
-    assert self._done
+    if not self.done():
+      raise RuntimeError('Future not done before marking as finished.')
     while self._waiting:
       waiter = self._waiting.popleft()
       self._pass_eof(waiter)
@@ -599,7 +612,8 @@ class QueueFuture(Future):
     return fut
 
   def _pass_eof(self, fut):
-    assert self._done
+    if not self._done:
+      raise RuntimeError('QueueFuture cannot pass EOF until done.')
     exc = self.get_exception()
     if exc is not None:
       tb = self.get_traceback()
@@ -678,7 +692,8 @@ class SerialQueueFuture(Future):
   # TODO: __repr__
 
   def complete(self):
-    assert not self._full
+    if self._full:
+      raise RuntimeError('SerialQueueFuture cannot complete twice.')
     self._full = True
     while self._waiting:
       waiter = self._waiting.popleft()
@@ -708,7 +723,9 @@ class SerialQueueFuture(Future):
   def add_dependent(self, fut):
     if not isinstance(fut, Future):
       raise TypeError('fut must be a Future instance; received %r' % fut)
-    assert not self._full
+    if self._full:
+      raise RuntimeError('SerialQueueFuture cannot add dependent '
+                         'once complete.')
     if self._waiting:
       waiter = self._waiting.popleft()
       fut.add_callback(_transfer_result, fut, waiter)
@@ -726,7 +743,6 @@ class SerialQueueFuture(Future):
       if self._full:
         if not self._done:
           raise RuntimeError('self._queue should be non-empty.')
-        err = None
         err = self.get_exception()
         if err is not None:
           tb = self.get_traceback()
@@ -776,7 +792,8 @@ class ReducingFuture(Future):
   # TODO: __repr__
 
   def complete(self):
-    assert not self._full
+    if self._full:
+      raise RuntimeError('ReducingFuture cannot complete twice.')
     self._full = True
     if not self._dependents:
       self._mark_finished()
@@ -795,7 +812,8 @@ class ReducingFuture(Future):
     self.add_dependent(fut)
 
   def add_dependent(self, fut):
-    assert not self._full
+    if self._full:
+      raise RuntimeError('ReducingFuture cannot add dependent once complete.')
     self._internal_add_dependent(fut)
 
   def _internal_add_dependent(self, fut):
@@ -928,7 +946,7 @@ def get_context():
   return ctx
 
 def make_default_context():
-  import context  # Late import to deal with circular imports.
+  from . import context  # Late import to deal with circular imports.
   return context.Context()
 
 def set_context(new_context):

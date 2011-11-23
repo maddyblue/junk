@@ -1,5 +1,6 @@
 """Tests for query.py."""
 
+import datetime
 import unittest
 
 from google.appengine.api import datastore_errors
@@ -96,6 +97,7 @@ class QueryTests(test_utils.NDBTest):
     self.assertEqual(results[2][2], self.moe)
 
   def testRunToQueueError(self):
+    self.ExpectWarnings()
     qry = Foo.query(Foo.name > '', Foo.rate > 0)
     queue = tasklets.MultiFuture()
     fut = qry.run_to_queue(queue, self.conn)
@@ -147,6 +149,7 @@ class QueryTests(test_utils.NDBTest):
                        query.FilterNode('rank', '>', 5)))
 
   def testEmptyInFilter(self):
+    self.ExpectWarnings()
     class Employee(model.Model):
       name = model.StringProperty()
     for arg in [], (), set(), frozenset():
@@ -191,10 +194,65 @@ class QueryTests(test_utils.NDBTest):
       q = Employee.query(Employee.name.IN(arg))
       self.assertEqual(list(q), [a, b])
 
+  def testInFilterWithNone(self):
+    class Employee(model.Model):
+      # Try a few different property types, to get a good mix of what
+      # used to fail.
+      name = model.StringProperty()
+      boss = model.KeyProperty()
+      age = model.IntegerProperty()
+      date = model.DateProperty()
+    a = Employee(name='a', age=42L)
+    a.put()
+    bosskey = model.Key(Employee, 'x')
+    b = Employee(boss=bosskey, date=datetime.date(1996, 1, 31))
+    b.put()
+    keys = set([a.key, b.key])
+    q1 = Employee.query(Employee.name.IN(['a', None]))
+    self.assertEqual(set(e.key for e in q1), keys)
+    q2 = Employee.query(Employee.boss.IN([bosskey, None]))
+    self.assertEqual(set(e.key for e in q2), keys)
+    q3 = Employee.query(Employee.age.IN([42, None]))
+    self.assertEqual(set(e.key for e in q3), keys)
+    q4 = Employee.query(Employee.date.IN([datetime.date(1996, 1, 31), None]))
+    self.assertEqual(set(e.key for e in q4), keys)
+
   def testQueryExceptions(self):
+    self.ExpectWarnings()
     q = Foo.query(Foo.name > '', Foo.rate > 0)
     f = q.fetch_async()
     self.assertRaises(datastore_errors.BadRequestError, f.check_success)
+
+  def testQueryUnindexedFails(self):
+    # Shouldn't be able to query for unindexed properties
+    class SubModel(model.Model):
+      booh = model.IntegerProperty(indexed=False)
+    class Emp(model.Model):
+      name = model.StringProperty()
+      text = model.TextProperty()
+      blob = model.BlobProperty()
+      sub = model.StructuredProperty(SubModel)
+      struct = model.StructuredProperty(Foo, indexed=False)
+      local = model.LocalStructuredProperty(Foo)
+    Emp.query(Emp.name == 'a').fetch()  # Should pass
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Emp.text == 'a')
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Emp.text.IN(['a', 'b']))
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Emp.blob == 'a')
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Emp.sub == SubModel(booh=42))
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Emp.sub.booh == 42)
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Emp.struct == Foo(name='a'))
+    # TODO: Make this fail?  See issue 89.  http://goo.gl/K4gbY
+    # Currently StructuredProperty(..., indexed=False) has no effect.
+    ## self.assertRaises(datastore_errors.BadFilterError,
+    ##                   lambda: Emp.struct.name == 'a')
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Emp.local == Foo(name='a'))
 
   def testFilterRepr(self):
     class Employee(model.Model):
@@ -238,6 +296,43 @@ class QueryTests(test_utils.NDBTest):
     self.assertEqual(q2.fetch(10), [b2, b3])
     q3 = q2.order(Bar.foo.rate, -Bar.foo.name, +Bar.foo.rate)
     self.assertEqual(q3.fetch(10), [b3, b2])
+
+  def testQueryForStructuredPropertyErrors(self):
+    class Bar(model.Model):
+      name = model.StringProperty()
+      foo = model.StructuredProperty(Foo)
+    # Can't use inequalities.
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Bar.foo < Foo())
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Bar.foo != Foo())
+    # Can't use an empty value.
+    self.assertRaises(datastore_errors.BadFilterError,
+                      lambda: Bar.foo == Foo())
+
+  def testQueryForStructuredPropertyIn(self):
+    self.ExpectWarnings()
+    class Bar(model.Model):
+      name = model.StringProperty()
+      foo = model.StructuredProperty(Foo)
+    a = Bar(name='a', foo=Foo(name='a'))
+    a.put()
+    b = Bar(name='b', foo=Foo(name='b'))
+    b.put()
+    self.assertEqual(
+      Bar.query(Bar.foo.IN((Foo(name='a'), Foo(name='b')))).fetch(),
+      [a, b])
+    self.assertEqual(Bar.query(Bar.foo.IN([Foo(name='a')])).fetch(), [a])
+    # An IN query with empty argument can be constructed but not executed.
+    q = Bar.query(Bar.foo.IN(set()))
+    self.assertRaises(datastore_errors.BadQueryError, q.fetch)
+    # Passing a non-sequence argument should fail.
+    self.assertRaises(datastore_errors.BadArgumentError,
+                      Bar.foo.IN, 42)
+    self.assertRaises(datastore_errors.BadArgumentError,
+                      Bar.foo.IN, None)
+    self.assertRaises(datastore_errors.BadArgumentError,
+                      Bar.foo.IN, 'not a sequence')
 
   def testQueryForNestedStructuredProperty(self):
     class Bar(model.Model):
@@ -301,6 +396,32 @@ class QueryTests(test_utils.NDBTest):
     res = list(q.iter(limit=1))
     self.assertEqual(res, [mgr_a])
 
+  def testQueryForWholeStructureCallsDatastoreType(self):
+    # See issue 87.  http://goo.gl/Tl5Ed
+    class Event(model.Model):
+      what = model.StringProperty()
+      when = model.DateProperty()  # Has non-trivial _datastore_type().
+    class Outer(model.Model):
+      who = model.StringProperty()
+      events = model.StructuredProperty(Event, repeated=True)
+    q = Outer.query(Outer.events == Event(what='stuff',
+                                          when=datetime.date.today()))
+    q.fetch()  # Failed before the fix.
+
+  def testQueryForWholeNestedStructure(self):
+    class A(model.Model):
+      a1 = model.StringProperty()
+      a2 = model.StringProperty()
+    class B(model.Model):
+      b1 = model.StructuredProperty(A)
+      b2 = model.StructuredProperty(A)
+    class C(model.Model):
+      c = model.StructuredProperty(B)
+    x = C(c=B(b1=A(a1='a1', a2='a2'), b2=A(a1='a3', a2='a4')))
+    x.put()
+    q = C.query(C.c == x.c)
+    self.assertEqual(q.get(), x)
+
   def testQueryAncestorConsistentWithAppId(self):
     class Employee(model.Model):
       pass
@@ -339,6 +460,16 @@ class QueryTests(test_utils.NDBTest):
     e.put()
     self.assertEqual(Employee.query().fetch(), [])
     self.assertEqual(Employee.query(namespace='ns').fetch(), [e])
+
+  def testQueryFilterAndOrderPreserveNamespace(self):
+    class Employee(model.Model):
+      name = model.StringProperty()
+    q1 = Employee.query(namespace='ns')
+    q2 = q1.filter(Employee.name == 'Joe')
+    self.assertEqual(q2.namespace, 'ns')
+    # Ditto for order()
+    q3 = q2.order(Employee.name)
+    self.assertEqual(q3.namespace, 'ns')
 
   def testMultiQuery(self):
     q1 = query.Query(kind='Foo').filter(Foo.tags == 'jill').order(Foo.name)
@@ -474,7 +605,7 @@ class QueryTests(test_utils.NDBTest):
     cursors = {}
     mores = {}
     for pagesize in [1, 2, 3, 4]:
-      it = q.iter(produce_cursors=True, limit=pagesize+1, batch_size=pagesize)
+      it = q.iter(produce_cursors=True, limit=pagesize + 1, batch_size=pagesize)
       todo = pagesize
       for _ in it:
         todo -= 1
@@ -642,7 +773,7 @@ class QueryTests(test_utils.NDBTest):
     self.assertEqual(q.count(keys_only=True), 2)
 
   def testMultiQueryCursors(self):
-    # NOTE: This test will fail with SDK 1.5.0.  Please upgrade to 1.5.1.
+    self.ExpectWarnings()
     q = Foo.query(Foo.tags.IN(['joe', 'jill']))
     self.assertRaises(datastore_errors.BadArgumentError, q.fetch_page, 1)
     q = q.order(Foo.tags)

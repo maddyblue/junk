@@ -12,7 +12,12 @@ from google.appengine.api import memcache
 from google.appengine.api import namespace_manager
 from google.appengine.api import users
 
-from . import eventloop, key, model, query, tasklets, test_utils
+from . import eventloop
+from . import key
+from . import model
+from . import query
+from . import tasklets
+from . import test_utils
 
 TESTUSER = users.User('test@example.com', 'example.com', '123')
 AMSTERDAM = model.GeoPt(52.35, 4.9166667)
@@ -489,6 +494,26 @@ class ModelTests(test_utils.NDBTest):
     self.assertRaises(datastore_errors.BadArgumentError, model.Model, key=k,
                       id='bar', parent=p)
 
+  def testAdapter(self):
+    class Foo(model.Model):
+      name = model.StringProperty()
+    ad = model.ModelAdapter()
+    foo1 = Foo(name='abc')
+    pb1 = ad.entity_to_pb(foo1)
+    foo2 = ad.pb_to_entity(pb1)
+    self.assertEqual(foo1, foo2)
+    self.assertTrue(foo2.key is None)
+    pb2 = foo2._to_pb(set_key=False)
+    self.assertRaises(model.KindError, ad.pb_to_entity, pb2)
+    ad = model.ModelAdapter(Foo)
+    foo3 = ad.pb_to_entity(pb2)
+    self.assertEqual(foo3, foo2)
+
+    key1 = model.Key(Foo, 1)
+    pbk1 = ad.key_to_pb(key1)
+    key2 = ad.pb_to_key(pbk1)
+    self.assertEqual(key1, key2)
+
   def testQuery(self):
     class MyModel(model.Model):
       p = model.IntegerProperty()
@@ -518,6 +543,63 @@ class ModelTests(test_utils.NDBTest):
 
     q2 = MyModel.query().filter(MyModel.p >= 0)
     self.assertEqual(q.filters, q2.filters)
+
+  def testQueryForNone(self):
+    class MyModel(model.Model):
+      b = model.BooleanProperty()
+      bb = model.BlobProperty(indexed=True)
+      d = model.DateProperty()
+      f = model.FloatProperty()
+      i = model.IntegerProperty()
+      k = model.KeyProperty()
+      s = model.StringProperty()
+      t = model.TimeProperty()
+      u = model.UserProperty()
+      xy = model.GeoPtProperty()
+    m1 = MyModel()
+    m1.put()
+    m2 = MyModel(
+      b=True,
+      bb='z',
+      d=datetime.date.today(),
+      f=3.14,
+      i=1,
+      k=m1.key,
+      s='a',
+      t=datetime.time(),
+      u=TESTUSER,
+      xy=AMSTERDAM,
+      )
+    m2.put()
+    q = MyModel.query(
+      MyModel.b == None,
+      MyModel.bb == None,
+      MyModel.d == None,
+      MyModel.f == None,
+      MyModel.i == None,
+      MyModel.k == None,
+      MyModel.s == None,
+      MyModel.t == None,
+      MyModel.u == None,
+      MyModel.xy == None,
+      )
+    r = q.fetch()
+    self.assertEqual(r, [m1])
+    qq = [
+      MyModel.query(MyModel.b != None),
+      MyModel.query(MyModel.bb != None),
+      MyModel.query(MyModel.d != None),
+      MyModel.query(MyModel.f != None),
+      MyModel.query(MyModel.i != None),
+      MyModel.query(MyModel.k != None),
+      MyModel.query(MyModel.s != None),
+      MyModel.query(MyModel.t != None),
+      MyModel.query(MyModel.u != None),
+      MyModel.query(MyModel.xy != None),
+      ]
+    for q in qq:
+      r = q.fetch()
+      self.assertEqual(r, [m2], str(q))
 
   def testProperty(self):
     class MyModel(model.Model):
@@ -686,6 +768,7 @@ class ModelTests(test_utils.NDBTest):
       self.assertRaises(Exception,
                         model.StringProperty,
                         repeated=True, required=True, default='')
+    self.assertEqual('MyModel()', repr(MyModel()))
 
   def testBlobKeyProperty(self):
     class MyModel(model.Model):
@@ -764,7 +847,7 @@ class ModelTests(test_utils.NDBTest):
       ctime = propclass(auto_now_add=True)
       mtime = propclass(auto_now=True)
       atime = propclass()
-      times =  propclass(repeated=True)
+      times = propclass(repeated=True)
       struct = model.StructuredProperty(ClockInOut)
       repstruct = model.StructuredProperty(ClockInOut, repeated=True)
       localstruct = model.LocalStructuredProperty(ClockInOut)
@@ -1114,7 +1197,7 @@ class ModelTests(test_utils.NDBTest):
   def testCannotMultipleInMultiple(self):
     class Inner(model.Model):
       innerval = model.StringProperty(repeated=True)
-    self.assertRaises(AssertionError,
+    self.assertRaises(TypeError,
                       model.StructuredProperty, Inner, repeated=True)
 
   def testNullProperties(self):
@@ -1169,6 +1252,20 @@ class ModelTests(test_utils.NDBTest):
     linesq = str(qb).splitlines(True)
     lines = difflib.unified_diff(linesp, linesq, 'Expected', 'Actual')
     self.assertEqual(pb, qb, ''.join(lines))
+
+  def testMetaModelRepr(self):
+    class MyModel(model.Model):
+      name = model.StringProperty()
+      tags = model.StringProperty(repeated=True)
+      age = model.IntegerProperty(name='a')
+      other = model.KeyProperty()
+    self.assertEqual(repr(MyModel),
+                     "MyModel<"
+                     "age=IntegerProperty('a'), "
+                     "name=StringProperty('name'), "
+                     "other=KeyProperty('other'), "
+                     "tags=StringProperty('tags', repeated=True)"
+                     ">")
 
   def testModelPickling(self):
     global MyModel
@@ -1285,6 +1382,19 @@ class ModelTests(test_utils.NDBTest):
     p.baz = 'baz'
     self.assertEqual(p._values,
                      {'foo': 'bar', 'bar': 'foo', 'baz': 'baz'})
+
+  def testExpando_Repr(self):
+    class E(model.Expando):
+      pass
+    ent = E(a=1, b=[2], c=E(x=3, y=[4]))
+    self.assertEqual(repr(ent),
+                     "E(a=1, b=[2], c=E(x=3, y=[4]))")
+    pb = ent._to_pb(set_key=False)
+    ent2 = E._from_pb(pb)
+    # NOTE: The 'E' kind name for the inner instance is not persisted,
+    # so it comes out as Expando.
+    self.assertEqual(repr(ent2),
+                     "E(a=1, b=[2], c=Expando(x=3, y=[4]))")
 
   def testPropertyRepr(self):
     p = model.Property()
@@ -1610,7 +1720,7 @@ class ModelTests(test_utils.NDBTest):
       name = model.StringProperty('Name')
       city = model.StringProperty('City')
     p = Person(name='Guido', zip='00000')
-    p.city= 'SF'
+    p.city = 'SF'
     self.assertEqual(repr(p),
                      "Person(city='SF', name='Guido', zip='00000')")
     # White box confirmation.
@@ -1684,7 +1794,7 @@ class ModelTests(test_utils.NDBTest):
     self.assertFalse(a._properties['baz']._indexed)
     Mine._default_indexed = False
     b = Mine(foo=1)
-    b.bar=['a', 'b']
+    b.bar = ['a', 'b']
     self.assertFalse(b._properties['foo']._indexed)
     self.assertFalse(b._properties['bar']._indexed)
 
@@ -1702,6 +1812,7 @@ class ModelTests(test_utils.NDBTest):
       computed_hash = model.ComputedProperty(_compute_hash, name='hashcode')
 
     m = ComputedTest(name='Foobar')
+    m._prepare_for_put()
     pb = m._to_pb()
 
     for p in pb.property_list():
@@ -1716,6 +1827,42 @@ class ModelTests(test_utils.NDBTest):
     self.assertEqual(m.name_lower, 'foobar')
     self.assertEqual(m.length, 6)
     self.assertEqual(m.computed_hash, hash('Foobar'))
+
+    func = lambda unused_ent: None
+    self.assertRaises(TypeError, model.ComputedProperty, func,
+                      choices=('foo', 'bar'))
+    self.assertRaises(TypeError, model.ComputedProperty, func, default='foo')
+    self.assertRaises(TypeError, model.ComputedProperty, func, required=True)
+    self.assertRaises(TypeError, model.ComputedProperty, func, validator=func)
+
+  def testComputedPropertyRepeated(self):
+    class StopWatch(model.Model):
+      start = model.IntegerProperty()
+      end = model.IntegerProperty()
+      cp = model.ComputedProperty(lambda self: range(self.start, self.end),
+                                   repeated=True)
+    e = StopWatch(start=1, end=10)
+    self.assertEqual(e.cp, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    k = e.put()
+    self.assertEqual(k.get().cp, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    # Check that the computed property works when retrieved without cache
+    ctx = tasklets.get_context()
+    ctx.set_cache_policy(False)
+    ctx.set_memcache_policy(False)
+    self.assertEqual(k.get().cp, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+  def testComputedPropertyInRepeatedStructuredProperty(self):
+    class Inner(model.Model):
+      arg = model.IntegerProperty()
+      comp1 = model.ComputedProperty(lambda ent: 1)
+      comp2 = model.ComputedProperty(lambda ent: 2)
+    class Outer(model.Model):
+      wrap = model.StructuredProperty(Inner, repeated=True)
+    orig = Outer(wrap=[Inner(arg=1), Inner(arg=2)])
+    key = orig.put()
+    copy = Outer.query().get()
+    self.assertEqual(copy, orig)
 
   def testLargeValues(self):
     class Demo(model.Model):
@@ -1992,7 +2139,7 @@ class ModelTests(test_utils.NDBTest):
     # Verify that it is in both caches.
     self.assertTrue(ctx._cache[key] is ent)
     self.assertEqual(memcache.get(ctx._memcache_prefix + key.urlsafe()),
-                     ent._to_pb())
+                     ent._to_pb(set_key=False).SerializePartialToString())
     # Get it bypassing the in-process cache.
     ent_copy = key.get(use_cache=False)
     self.assertEqual(ent_copy, ent)
@@ -2028,7 +2175,7 @@ class ModelTests(test_utils.NDBTest):
     ent6 = key.get(use_cache=False)
     self.assertEqual(ent6.name, 'yo')
     self.assertEqual(memcache.get(ctx._memcache_prefix + key.urlsafe()),
-                     ent._to_pb())
+                     ent._to_pb(set_key=False).SerializePartialToString())
     # Assure it is still in the in-memory cache.
     ent7 = key.get()
     self.assertEqual(ent7.name, 'yo')
@@ -2054,12 +2201,12 @@ class ModelTests(test_utils.NDBTest):
     ctx.set_cache_policy(True)
     ctx.set_memcache_policy(True)
     ctx.set_memcache_timeout_policy(0)
-    # Mock memcache.add_multi_async().
-    save_memcache_add_multi_async = ctx._memcache.add_multi_async
+    # Mock memcache.cas_multi_async().
+    save_memcache_cas_multi_async = ctx._memcache.cas_multi_async
     memcache_args_log = []
-    def mock_memcache_add_multi_async(*args, **kwds):
+    def mock_memcache_cas_multi_async(*args, **kwds):
       memcache_args_log.append((args, kwds))
-      return save_memcache_add_multi_async(*args, **kwds)
+      return save_memcache_cas_multi_async(*args, **kwds)
     # Mock conn.async_put().
     save_conn_async_put = ctx._conn.async_put
     conn_args_log = []
@@ -2076,7 +2223,7 @@ class ModelTests(test_utils.NDBTest):
     e5 = MyModel(name='5')
     # Test that the timeouts make it through to memcache and the datastore.
     try:
-      ctx._memcache.add_multi_async = mock_memcache_add_multi_async
+      ctx._memcache.cas_multi_async = mock_memcache_cas_multi_async
       ctx._conn.async_put = mock_conn_async_put
       [f1, f3] = model.put_multi_async([e1, e3],
                                        memcache_timeout=7,
@@ -2095,7 +2242,7 @@ class ModelTests(test_utils.NDBTest):
       eventloop.run()  # Wait for async memcache request to complete.
       # (And there are straggler events too, but they don't matter here.)
     finally:
-      ctx._memcache.add_multi_async = save_memcache_add_multi_async
+      ctx._memcache.cas_multi_async = save_memcache_cas_multi_async
       ctx._conn.async_put = save_conn_async_put
     self.assertEqual([e1.key, e2.key, e3.key, e4.key, e5.key],
                      [x1, x2, x3, x4, x5])
@@ -2127,7 +2274,8 @@ class ModelTests(test_utils.NDBTest):
     c.put(use_cache=False, use_memcache=False, use_datastore=True)
 
     self.assertEqual(ctx._cache[k], a)
-    self.assertEqual(memcache.get('NDB:' + k.urlsafe()), b._to_pb())
+    self.assertEqual(memcache.get(ctx._memcache_prefix + k.urlsafe()),
+                     b._to_pb(set_key=False).SerializePartialToString())
     self.assertEqual(ctx._conn.get([k]), [c])
 
     self.assertEqual(k.get(), a)
@@ -2166,8 +2314,9 @@ class ModelTests(test_utils.NDBTest):
 
     self.assertFalse(a.key in ctx._cache)
     self.assertFalse(b.key in ctx._cache)
-    self.assertEqual(memcache.get('NDB:' + a.key.urlsafe()), a._to_pb())
-    self.assertEqual(memcache.get('NDB:' + b.key.urlsafe()), None)
+    self.assertEqual(memcache.get(ctx._memcache_prefix + a.key.urlsafe()),
+                     a._to_pb(set_key=False).SerializePartialToString())
+    self.assertEqual(memcache.get(ctx._memcache_prefix + b.key.urlsafe()), None)
     self.assertEqual(ctx._conn.get([a.key]), [None])
     self.assertEqual(ctx._conn.get([b.key]), [b])
 
@@ -2224,13 +2373,13 @@ class ModelTests(test_utils.NDBTest):
 
   def testOverrideModelKey(self):
     class MyModel(model.Model):
-      # key, overriden
+      # key, overridden
       key = model.StringProperty()
       # aha, here it is!
       real_key = model.ModelKey()
 
     class MyExpando(model.Expando):
-      # key, overriden
+      # key, overridden
       key = model.StringProperty()
       # aha, here it is!
       real_key = model.ModelKey()
@@ -2447,17 +2596,16 @@ class ModelTests(test_utils.NDBTest):
       b = model.BlobProperty(compressed=True)
       t = model.TextProperty(compressed=True)
       l = model.LocalStructuredProperty(Foo, compressed=True)
-    x = M(b='b'*100, t=u't'*100, l=Foo(name='joe'))
+    x = M(b='b' * 100, t=u't' * 100, l=Foo(name='joe'))
     x.put()
     y = x.key.get()
     self.assertFalse(x is y)
     self.assertEqual(
       repr(y),
-      'M(key=Key(\'M\', 1), '
-      'b=_CompressedValue(\'x\\x9cKJ\\xa2=\\x00\\x00\\x8e\\x01&I\'), '
-      'l=_CompressedValue(\'x\\x9c+\\xe2\\x97b\\xc9K\\xccMU`\\xd0b'
-      '\\x95b\\xce\\xcaO\\x05\\x00"\\x87\\x03\\xeb\'), '
-      't=_CompressedValue(\'x\\x9c+)\\xa1=\\x00\\x00\\xf1$-Q\'))')
+      'M(key=Key(\'M\', 1), ' +
+      'b=%r, ' % ('b' * 100) +
+      'l=%r, ' % Foo(name=u'joe') +
+      't=%r)' % (u't' * 100))
 
   def testCorruption(self):
     # Thanks to Ricardo Banffy
@@ -2505,16 +2653,15 @@ class ModelTests(test_utils.NDBTest):
     future.get_result()
     self.assertEqual(self.post_counter, 1, 'Post allocate ids hook not called')
 
-  def test_issue_58_allocate_ids(self):
+  def testNoDefaultAllocateIdsCallback(self):
+    # See issue 58.  http://goo.gl/hPN6j
     ctx = tasklets.get_context()
     ctx.set_cache_policy(False)
     class EmptyModel(model.Model):
       pass
-    EmptyModel.allocate_ids(1)
-    ev = eventloop.get_event_loop()
-    ev_len = len(ev.queue)
-    self.assertEqual(ev_len, 0,
-                     'Allocate ids hook queued default no-op: %r' % ev.queue)
+    fut = EmptyModel.allocate_ids_async(1)
+    self.assertFalse(fut._immediate_callbacks,
+                     'Allocate ids hook queued default no-op.')
 
   def testPutHooksCalled(self):
     test = self # Closure for inside hooks
@@ -2612,19 +2759,57 @@ class ModelTests(test_utils.NDBTest):
     entity = HatStand()
     self.assertRaises(tasklets.Return, entity.put)
 
-  def test_issue_58_put(self):
+  def testNoDefaultPutCallback(self):
+    # See issue 58.  http://goo.gl/hPN6j
     ctx = tasklets.get_context()
     ctx.set_cache_policy(False)
     class EmptyModel(model.Model):
       pass
     entity = EmptyModel()
-    entity.put()
-    ev = eventloop.get_event_loop()
-    ev.run0() # Trigger check_success
-    ev_len = len(ev.queue)
-    self.assertEqual(ev_len, 0,
-                     'Put hook queued default no-op: %r' % ev.queue)
+    fut = entity.put_async()
+    self.assertFalse(fut._immediate_callbacks, 'Put hook queued default no-op.')
 
+  def testKeyValidation(self):
+    # See issue 75.  http://goo.gl/k0Gfv
+    class Foo(model.Model):
+      # Override the default Model method with our own.
+      def _validate_key(self, key):
+        if key.parent() is None:
+          raise TypeError
+        elif key.parent().kind() != 'Foo':
+          raise TypeError
+        elif key.id().startswith('a'):
+          raise ValueError
+        return key
+
+    # Using no arguments
+    self.assertRaises(TypeError, Foo().put)
+
+    # Using id/parent arguments
+    rogue_parent = model.Key('Bar', 1)
+    self.assertRaises(TypeError, Foo, parent=rogue_parent, id='b')
+    parent = model.Key(Foo, 1)
+    self.assertRaises(ValueError, Foo, parent=parent, id='a')
+
+    # Using key argument
+    rogue_key = model.Key(Foo, 1, Foo, 'a')
+    self.assertRaises(ValueError, Foo, key=rogue_key)
+
+    # Using Key assignment
+    entity = Foo()
+    self.assertRaises(ValueError, setattr, entity, 'key', rogue_key)
+
+    # None assignment (including delete) should work correctly
+    entity.key = None
+    self.assertTrue(entity.key is None)
+    del entity.key
+    self.assertTrue(entity.key is None)
+
+    # Sanity check a valid key
+    key = Foo(parent=parent, id='b').put()
+    self.assertEqual(key.parent(), parent)
+    self.assertEqual(key.id(), 'b')
+    self.assertEqual(key.kind(), 'Foo')
 
 class CacheTests(test_utils.NDBTest):
 
@@ -2640,13 +2825,14 @@ class CacheTests(test_utils.NDBTest):
     ctx.set_cache_policy(True)
     ctx.set_memcache_policy(True)
 
-  def test_issue_13(self):
+  def testCachedEntityKeyMatchesGetArg(self):
+    # See issue 13.  http://goo.gl/jxjOP
     class Employee(model.Model):
       pass
 
     e = Employee(key=model.Key(Employee, 'joe'))
     e.put()
-    e.key = model.Key(Employee, 'fred')
+    e._key = model.Key(Employee, 'fred')
 
     f = model.Key(Employee, 'joe').get()
 
@@ -2658,7 +2844,8 @@ class CacheTests(test_utils.NDBTest):
     # makes the test correct.
     self.assertEqual(f.key, model.Key(Employee, 'joe'))
 
-  def test_issue_57_cache(self):
+  def testTransactionalDeleteClearsCache(self):
+    # See issue 57.  http://goo.gl/bXkib
     class Employee(model.Model):
       pass
     ctx = tasklets.get_context()
@@ -2666,14 +2853,15 @@ class CacheTests(test_utils.NDBTest):
     ctx.set_memcache_policy(False)
     e = Employee()
     key = e.put()
-    e = key.get()  # Warm the cache
+    key.get()  # Warm the cache
     def trans():
       key.delete()
     model.transaction(trans)
     e = key.get()
     self.assertEqual(e, None)
 
-  def test_issue_57_memcache(self):
+  def testTransactionalDeleteClearsMemcache(self):
+    # See issue 57.  http://goo.gl/bXkib
     class Employee(model.Model):
       pass
     ctx = tasklets.get_context()
@@ -2681,7 +2869,7 @@ class CacheTests(test_utils.NDBTest):
     ctx.set_memcache_policy(True)
     e = Employee()
     key = e.put()
-    e = key.get()  # Warm the cache
+    key.get()  # Warm the cache
     def trans():
       key.delete()
     model.transaction(trans)
