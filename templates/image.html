@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!--div id="mask" class="opacity" style="border: 1px solid black; width: 200px; height: 200px; overflow: visible;">
+	<img id="image" src="/static/images/header_large.png" width="2093" height="538">
+</div-->
+
+<div id="container">
+	<div id="topcontainer"></div>
+	<div id="leftcontainer"></div>
+	<span id="img"></span>
+	<div id="slider"></div>
+	<div id="rightcontainer"></div>
+	<div id="bottomcontainer"></div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	$("#img").draggable({ containment: 'parent' });
+	$("#img").css({cursor: 'move'});
+
+	var size = 1.0;
+	var basew = 400;
+	var baseh = 400;
+	var portw = 200;
+	var porth = 200;
+	var w = basew;
+	var h = baseh;
+	var f = 0.8;
+	var basetop = 200;
+	var baseleft = 300;
+
+	var wscale = portw / basew;
+	var hscale = porth / baseh;
+	var min_scale = Math.min(wscale, hscale);
+	var max_scale = 3;
+
+	function resize(event, ui) {
+		size = ui.value;
+		w = basew * size;
+		h = baseh * size;
+
+		$("#img").css({height: h, width: w});
+		$("#leftcontainer").css({width: w - portw, height: porth, top: h - porth});
+		$("#rightcontainer").css({width: w - portw, height: porth, top: h - porth});
+		$("#topcontainer").css({width: 2 * w - portw, height: h - porth});
+		$("#bottomcontainer").css({width: 2 * w - portw, height: h - porth});
+		$("#slider").css({top: h - porth * (f + 1) / 2, left: w - 20, height: porth * f});
+		$("#container").css({
+			width: 2 * w - portw,
+			height: 2 * h - porth,
+			top: basetop + porth - h,
+			left: baseleft + portw - w,
+		});
+
+		pos = $("#img").position();
+		if(pos.left + w > 2 * w - portw)
+			$("#img").css({left: w - portw});
+		if(pos.top + h > 2 * h - porth)
+			$("#img").css({top: h - porth});
+
+	}
+
+	$("#slider").slider({
+		orientation: "vertical",
+		min: min_scale,
+		max: max_scale,
+		step: (max_scale - min_scale) / 100,
+		slide: resize,
+		value: 1,
+	});
+
+	resize(0, {'value': 1});
+});
+</script>
+
+<style type="text/css">
+/* .container needs to be same size at img */
+#container
+{
+	position:absolute;
+	z-index:1;
+	margin:0 auto;
+	overflow: visible;
+}
+
+#slider
+{
+	position: relative;
+	z-index:15;
+	width: 4px;
+}
+
+#slider a
+{
+	width: 15px;
+	height: 15px;
+}
+
+/* .container:before 1/4 img width, 1/2 img height, left 0, top 1/4 img, */
+#leftcontainer
+{
+	content:"";
+	display:block;
+	position:absolute;
+	z-index:15;
+	opacity:0.8;
+	background: white;
+}
+
+/* .container:before 1/4 img width, 1/2 img height, left 0, top 1/4 img, */
+#topcontainer
+{
+	content:"";
+	display:block;
+	position:absolute;
+	z-index:15;
+	opacity:0.8;
+	background: white;
+}
+
+/* .container:before 1/4 img width, 1/2 img height, left 3/4 img, top 1/4 img */
+#rightcontainer
+{
+	content:"";
+	display:block;
+	position:absolute;
+	right:0;
+	z-index:15;
+	opacity:0.8;
+	background: white;
+}
+/* .container:before 1/4 img width, 1/2 img height, left 3/4 img, top 1/4 img */
+#bottomcontainer
+{
+	content:"";
+	display:block;
+	position:absolute;
+	bottom:0;
+	z-index:15;
+	opacity:0.8;
+	background: white;
+}
+
+/* .img would be your actual img at full size */
+#img
+{
+	display:block;
+	position:absolute;
+	z-index:10;
+	background-image: url('/static/images/test.png');
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+</style>
+
+{% endblock %}

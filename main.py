@@ -1,45 +1,38 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
-import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
-from google.appengine.dist import use_library
-use_library('django', '1.2')
-
 import logging
 import re
 
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import blobstore_handlers
-
 from webapp2_extras import sessions
+import webapp2
+
+from ndb import model
 import cache
 import facebook
 import models
 import settings
 import utils
-import webapp2
-
-def rendert(s, p, d={}):
-	session = s.session
-	d['session'] = session
-
-	if 'user' in session:
-		d['user'] = session['user']
-	# this is still set after logout (i'm not sure why it's set at all), so use this workaround
-	elif 'user' in d:
-		del d['user']
-
-	d['messages'] = s.get_messages()
-	d['active'] = p.partition('.')[0]
-
-	if settings.GOOGLE_ANALYTICS:
-		d['google_analytics'] = settings.GOOGLE_ANALYTICS
-
-	s.response.out.write(utils.render(p, d))
 
 class BaseHandler(webapp2.RequestHandler):
+	def render(self, template, context={}):
+		context['session'] = self.session
+		context['user'] = self.session.get('user')
+		context['messages'] = self.get_messages()
+		context['active'] = template.partition('.')[0]
+
+		for k in ['login_source']:
+			if k in self.session:
+				context[k] = self.session[k]
+
+		if settings.GOOGLE_ANALYTICS:
+			context['google_analytics'] = settings.GOOGLE_ANALYTICS
+
+		rv = utils.render(template, context)
+		self.response.write(rv)
+
 	def dispatch(self):
 		self.session_store = sessions.get_store(request=self.request)
 
@@ -62,9 +55,9 @@ class BaseHandler(webapp2.RequestHandler):
 
 		self.session['user'] = {
 			'email': user.email,
-			'key': str(user.key()),
+			'key': user.key.urlsafe(),
 			'name': user.first_name,
-			'site': str(user.get_key('site')),
+			'site': user.sites[0].urlsafe(),
 		}
 
 	MESSAGE_KEY = '_flash_message'
@@ -75,7 +68,7 @@ class BaseHandler(webapp2.RequestHandler):
 		return self.session.get_flashes(BaseHandler.MESSAGE_KEY)
 
 	def process_credentials(self, email, source, uid):
-		user = models.User.all().filter('%s_id' %source, uid).get()
+		user = models.User.find(source, uid).get()
 
 		if not user:
 			registered = False
@@ -110,7 +103,7 @@ class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 class MainPage(BaseHandler):
 	def get(self):
-		rendert(self, 'index.html')
+		self.render('index.html')
 
 class Logout(BaseHandler):
 	def get(self):
@@ -182,7 +175,7 @@ class Register(BaseHandler):
 				elif not Register.SITENAME_RE.match(lsitename):
 					errors['sitename'] = 'Website extension may only contain alphanumeric characters or dashes and cannot begin with a dash.'
 				else:
-					site = models.Site.get_by_key_name(lsitename)
+					site = model.Key('Site', lsitename).get()
 					if site:
 						errors['sitename'] = 'Website extension is already taken.'
 
@@ -209,16 +202,17 @@ class Register(BaseHandler):
 
 					site = models.Site.get_or_insert(lsitename,
 						name=sitename,
-						user=user,
+						user=user.key,
 						headline=headline,
 						subheader=subheader,
 					)
 
-					if site.user != user:
+					if site.user != user.key:
+						user.key.delete()
 						errors['sitename'] = 'Website extension is already taken.'
 					else:
 						del self.session['register']
-						user.site = site
+						user.sites = [site.key]
 						user.put()
 						self.populate_user_session(user)
 						self.redirect(webapp2.uri_for('social'))
@@ -231,7 +225,7 @@ class Register(BaseHandler):
 				subheader = ''
 				email = self.session['register']['email']
 
-			rendert(self, 'register.html', {
+			self.render('register.html', {
 				'fname': first_name,
 				'lname': last_name,
 				'email': email,
@@ -245,35 +239,36 @@ class Register(BaseHandler):
 
 class Social(BaseHandler):
 	def get(self):
-		site = cache.get_by_key(self.session['user']['site'])
-		rendert(self, 'social.html', {'site': site})
+		site = model.Key(urlsafe=self.session['user']['site']).get()
+		self.render('social.html', {'site': site})
 
 	def post(self):
-		site = cache.get_by_key(self.session['user']['site'])
+		site = model.Key(urlsafe=self.session['user']['site']).get()
 
 		site.facebook = self.request.get('facebook').strip()
-		site.flickr = self.request.get('facebook').strip()
+		site.flickr = self.request.get('flickr').strip()
 		site.linkedin = self.request.get('linkedin').strip()
 		site.twitter = self.request.get('twitter').strip()
 		site.google = self.request.get('google').strip()
 
 		site.put()
-		cache.set_keys([site])
 		self.add_message('success', 'Social networks saved.')
-
-		rendert(self, 'social.html', {'site': site})
+		self.render('social.html', {'site': site})
 
 class Checkout(BaseHandler):
 	def get(self):
-		user = cache.get_by_key(self.session['user']['key'])
+		user, site = model.get_multi([
+			model.Key(urlsafe=self.session['user']['key']),
+			model.Key(urlsafe=self.session['user']['site']),
+		])
 
-		if not user:
+		if not user or not site:
 			return
 
-		rendert(self, 'checkout.html', {
+		self.render('checkout.html', {
 			'stripe_key': settings.STRIPE_KEY,
 			'u': user,
-			'plans': utils.make_plan_options(user.plan),
+			'plans': utils.make_plan_options(site.plan),
 		})
 
 	def post(self):
@@ -281,41 +276,43 @@ class Checkout(BaseHandler):
 			token = self.request.get('stripeToken')
 			plan = self.request.get('plan')
 
-			user = cache.get_by_key(self.session['user']['key'])
-			if not user or plan not in models.USER_PLAN_CHOICES:
+			user, site = model.get_multi([
+				model.Key(urlsafe=self.session['user']['key']),
+				model.Key(urlsafe=self.session['user']['site']),
+			])
+			if not user or not site or plan not in models.USER_PLAN_CHOICES:
 				return
 
-			user = utils.stripe_set_plan(user, token, plan)
-			cache.set_keys([user])
+			user, site = utils.stripe_set_plan(user, site, token, plan)
 			self.add_message('success', 'Payment data saved.')
 		except Exception, e:
+			raise
 			logging.error('Checkout error: %s', e)
 			self.add_message('error', 'An error occurred during payment.')
 
 		self.redirect(webapp2.uri_for('checkout'))
 
+class Image(BaseHandler):
+	def get(self):
+		self.render('image.html')
+
+SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
 		'secret_key': settings.COOKIE_KEY,
+		'session_max_age': SECS_PER_WEEK,
+		'cookie_args': {'max_age': SECS_PER_WEEK},
 	},
 }
 
-application = webapp2.WSGIApplication([
+app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
+	webapp2.Route(r'/checkout', handler=Checkout, name='checkout'),
 	webapp2.Route(r'/facebook', handler=FacebookCallback, name='facebook'),
+	webapp2.Route(r'/image', handler=Image, name='image'),
 	webapp2.Route(r'/login/facebook', handler=LoginFacebook, name='login-facebook'),
 	webapp2.Route(r'/login/google', handler=LoginGoogle, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
 	webapp2.Route(r'/social', handler=Social, name='social'),
-	webapp2.Route(r'/checkout', handler=Checkout, name='checkout'),
-
 	], debug=True, config=config)
-
-webapp.template.register_template_library('templatefilters.filters')
-
-def main():
-	application.run()
-
-if __name__ == "__main__":
-	main()

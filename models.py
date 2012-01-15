@@ -1,20 +1,6 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
-import re
-
-from google.appengine.api import images
-from google.appengine.ext import blobstore
-from google.appengine.ext import db
-
-import cache
-
-class DerefModel(db.Model):
-	def get_key(self, prop_name):
-		return getattr(self.__class__, prop_name).get_value_for_datastore(self)
-
-class DerefExpando(db.Expando):
-	def get_key(self, prop_name):
-		return getattr(self.__class__, prop_name).get_value_for_datastore(self)
+from ndb import model
 
 USER_SOURCE_FACEBOOK = 'facebook'
 USER_SOURCE_GOOGLE = 'google'
@@ -40,30 +26,34 @@ PLAN_COSTS = {
 
 PLAN_COSTS_DESC = ['%s ($%i/month)' %(i.title(), PLAN_COSTS[i]) for i in USER_PLAN_CHOICES]
 
-class User(DerefModel):
-	first_name = db.StringProperty(required=True, indexed=False)
-	last_name = db.StringProperty(required=True, indexed=False)
-	email = db.EmailProperty()
-	register_date = db.DateTimeProperty(auto_now_add=True)
-	last_active = db.DateTimeProperty(auto_now_add=True)
+class User(model.Model):
+	first_name = model.StringProperty('f', required=True, indexed=False)
+	last_name = model.StringProperty('l', required=True, indexed=False)
+	email = model.StringProperty('e')
+	register_date = model.DateTimeProperty('r', auto_now_add=True)
+	last_active = model.DateTimeProperty('a', auto_now_add=True)
 
-	google_id = db.StringProperty()
-	facebook_id = db.StringProperty()
+	google_id = model.StringProperty('g')
+	facebook_id = model.StringProperty('b')
 
-	site = db.ReferenceProperty()
-	plan = db.StringProperty(required=True, default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
+	sites = model.KeyProperty('s', repeated=True)
 
-	stripe_id = db.StringProperty(indexed=False)
-	stripe_last4 = db.StringProperty(indexed=False)
+	stripe_id = model.StringProperty('i', indexed=False)
+	stripe_last4 = model.StringProperty('t', indexed=False)
 
-class Site(DerefModel):
-	name = db.StringProperty(required=True)
-	user = db.ReferenceProperty(User, required=True)
-	headline = db.StringProperty(indexed=False)
-	subheader = db.StringProperty(indexed=False)
+	@classmethod
+	def find(cls, source, uid):
+		return cls.query().filter(getattr(cls, '%s_id' %source) == uid)
 
-	facebook = db.StringProperty(indexed=False)
-	flickr = db.StringProperty(indexed=False)
-	google = db.StringProperty(indexed=False)
-	linkedin = db.StringProperty(indexed=False)
-	twitter = db.StringProperty(indexed=False)
+class Site(model.Model):
+	name = model.StringProperty('n', required=True)
+	user = model.KeyProperty('u', required=True)
+	plan = model.StringProperty('p', default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
+	headline = model.StringProperty('h', indexed=False)
+	subheader = model.StringProperty('s', indexed=False)
+
+	facebook = model.StringProperty('f', indexed=False)
+	flickr = model.StringProperty('k', indexed=False)
+	google = model.StringProperty('g', indexed=False)
+	linkedin = model.StringProperty('l', indexed=False)
+	twitter = model.StringProperty('t', indexed=False)

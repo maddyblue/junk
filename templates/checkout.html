@@ -2,9 +2,11 @@
 
 {% block content %}
 
-{% for k, v in errors.items %}
-<br>Error in {{ k }}: {{ v }}
-{% endfor %}
+{% if errors %}
+	{% for k, v in errors.items %}
+	<br>Error in {{ k }}: {{ v }}
+	{% endfor %}
+{% endif %}
 
 <div class="payment-errors"></div>
 
@@ -16,7 +18,7 @@
 	<span> / </span>
 	<input type="text" size="4" class="card-expiry-year"/>
 	<p>Plan: <select name="plan" class="plan">
-		{{ plans|slice:"1:"|safeseq|join:"" }}
+		{{ plans[1:]|join('') }}
 	</select>
 	<p><button type="submit" class="submit-button">Submit Payment</button>
 </form>
@@ -26,7 +28,7 @@
 <p>Using card ending in {{ u.stripe_last4 }}
 <form action="" method="POST">
 	<p>Plan: <select name="plan" class="plan">
-		{{ plans|safeseq|join:"" }}
+		{{ plans|join('') }}
 	</select>
 	<p><button type="submit" class="submit-button">Change Plan</button>
 </form>

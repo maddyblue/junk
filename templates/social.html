@@ -2,17 +2,19 @@
 
 {% block content %}
 
-{% for k, v in errors.items %}
-<br>Error in {{ k }}: {{ v }}
-{% endfor %}
+{% if errors %}
+	{% for k, v in errors.items %}
+	<br>Error in {{ k }}: {{ v }}
+	{% endfor %}
+	{% endif %}
 
 <form method="POST">
 
-<p><input type="text" id="facebook" name="facebook" value="{{ site.facebook|default:"" }}">
-<p><input type="text" id="flickr" name="flickr" value="{{ site.flickr|default:"" }}">
-<p><input type="text" id="linkedin" name="linkedin" value="{{ site.linkedin|default:"" }}">
-<p><input type="text" id="twitter" name="twitter" value="{{ site.twitter|default:"" }}">
-<p><input type="text" id="google" name="google" value="{{ site.google|default:"" }}">
+<p><input type="text" id="facebook" name="facebook" value="{{ site.facebook|default('', true) }}">
+<p><input type="text" id="flickr" name="flickr" value="{{ site.flickr|default('', true) }}">
+<p><input type="text" id="linkedin" name="linkedin" value="{{ site.linkedin|default('', true) }}">
+<p><input type="text" id="twitter" name="twitter" value="{{ site.twitter|default('', true) }}">
+<p><input type="text" id="google" name="google" value="{{ site.google|default('', true) }}">
 
 <p><input type="submit" name="submit">
 

@@ -1,7 +1,14 @@
 application: thenextmuse
-version: 1
-runtime: python
+version: test
+runtime: python27
 api_version: 1
+threadsafe: true
+
+libraries:
+- name: jinja2
+  version: "2.6"
+- name: markupsafe
+  version: "latest"
 
 builtins:
 - admin_redirect: on
@@ -18,12 +25,12 @@ handlers:
   upload: static/images/favicon\.ico
 
 - url: /login/google
-  script: main.py
+  script: main.app
   login: required
 
 - url: /admin/.*
-  script: main.py
+  script: main.app
   login: admin
 
 - url: /.*
-  script: main.py
+  script: main.app

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% for k, v in errors.items %}
+{% for k, v in errors.items() %}
 <br>Error in {{ k }}: {{ v }}
 {% endfor %}
 

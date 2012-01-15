@@ -3,9 +3,12 @@
 import logging
 import os
 
-from google.appengine.ext import db
 from google.appengine.ext.webapp import template
+import jinja2
+import webapp2
 
+from ndb import model
+import filters
 import models
 import settings
 
@@ -17,66 +20,55 @@ import stripe
 
 stripe.api_key = settings.STRIPE_SECRET
 
-def prefetch_refprops(entities, *props):
-	fields = [(entity, prop) for entity in entities for prop in props]
-	ref_keys_with_none = [prop.get_value_for_datastore(x) for x, prop in fields]
-	ref_keys = filter(None, ref_keys_with_none)
-	ref_entities = dict((x.key(), x) for x in db.get(set(ref_keys)))
-	for (entity, prop), ref_key in zip(fields, ref_keys_with_none):
-		if ref_key is not None:
-			prop.__set__(entity, ref_entities[ref_key])
-	return entities
+env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
+env.filters.update(filters.filters)
 
-def render(tname, d={}):
-	path = os.path.join(os.path.dirname(__file__), 'templates', tname)
+def render(_template, context):
+		return env.get_template(_template).render(**context)
 
-	return template.render(path, d)
-
-def stripe_set_plan(user, token=None, plan=None):
+def stripe_set_plan(user, site, token=None, plan=None):
 	# called for new users
 	if not user.stripe_id and token and plan:
-		def txn(user_key, cust):
-			u = db.get(user_key)
-			u.stripe_id = cust['id']
-			u.stripe_last4 = cust['active_card']['last4']
-			u.plan = plan
-			u.put()
-			return u
-
 		cust = stripe.Customer.create(
 			email=user.email,
-			description=user.key().id_or_name(),
+			description=user.key.id(),
 			card=token,
 			plan=plan,
 		)
 
-		user = db.run_in_transaction(txn, user.key(), cust)
-
+		def callback():
+			u, s = model.get_multi([user.key, site.key])
+			u.stripe_id = cust['id']
+			u.stripe_last4 = cust['active_card']['last4']
+			s.plan = plan
+			model.put_multi([u, s])
+			return u, s
 	# called when changing card on plan
 	elif user.stripe_id and (token or plan):
-		def txn(user_key, **kwargs):
-			u = db.get(user_key)
-			for k, v in kwargs.items():
-				setattr(u, k, v)
-			u.put()
-			return u
-
 		cust = stripe.Customer.retrieve(user.stripe_id)
-		kwargs = {}
+		kwargs = {'user': {}, 'site': {}}
 
 		if token:
 			cust.card=token
 			cust = cust.save()
-			kwargs['stripe_last4'] = cust['active_card']['last4']
-		if plan and plan != user.plan:
-			kwargs['plan'] = plan
+			kwargs['user']['stripe_last4'] = cust['active_card']['last4']
+		if plan and plan != site.plan:
+			kwargs['site']['plan'] = plan
 			cust.update_subscription(plan=plan, prorate='True')
 
-		user = db.run_in_transaction(txn, user.key(), **kwargs)
+		def callback():
+			u, s = model.get_multi([user.key, site.key])
+			for k, v in kwargs['user'].items():
+				setattr(u, k, v)
+			for k, v in kwargs['site'].items():
+				setattr(s, k, v)
+			model.put_multi([u, s])
+			return u, s
 	else:
 		raise ValueError('no card specified')
 
-	return user
+	user, site = model.transaction(callback, xg=True)
+	return user, site
 
 def make_options(options, default=None):
 	ret = []
