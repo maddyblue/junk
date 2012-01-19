@@ -1,0 +1,40 @@
+<div id="slider">
+	{{ images[0].render() }}
+</div>
+
+<div class="column">
+<ul>
+	<li>
+	<h2><a href="{{ page.link(0, rel) }}">{{ page.linktext[0] }}</a></h2>
+	<a href="{{ page.link(0, rel) }}">{{ images[1].render() }}</a>
+	</li>
+	<li class="middle">
+	<h2><a href="{{ page.link(1, rel) }}">{{ page.linktext[1] }}</a></h2>
+	<a href="{{ page.link(1, rel) }}">{{ images[2].render() }}</a>
+	</li>
+	<li>
+	<h2><a href="{{ page.link(2, rel) }}">{{ page.linktext[2] }}</a></h2>
+	<a href="{{ page.link(2, rel) }}">{{ images[3].render() }}</a>
+	</li>
+</ul>
+</div>
+
+<div class="blog">
+{% if page.layout == 1 %}
+<h2><a href="#">Latest from blog</a></h2>
+	<div class="post">
+		<a href="#" class="thumb"><img src="/{{ base }}imgs/home-blog.png" alt="Bio"></a>
+		<h3><a href="#">Post title goes here</a></h3>
+		<p>Cras mattis consectetur purus sit amet fermentum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Nullam id dolor id nibh ultricies vehicula ut id elit.
+	Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec sed odio dui ...</p>
+		<span class="more"><a href="#">More</a></span>
+	</div>
+{% elif page.layout == 2 %}
+<h2><a href="{{ page.link(3, rel) }}">{{ page.linktext[3] }}</a></h2>
+	<div class="post">
+		<a href="{{ page.link(3, rel) }}" class="thumb">{{ images[4].render() }}</a>
+		<h3><a href="{{ page.link(4, rel) }}">{{ page.linktext[4] }}</a></h3>
+		<p>{{ page.text[1] }}</p>
+	</div>
+{% endif %}
+</div>

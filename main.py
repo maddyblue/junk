@@ -85,6 +85,15 @@ class BaseHandler(webapp2.RequestHandler):
 			if k in self.session:
 				del self.session[k]
 
+	def us(self):
+		if 'user' not in self.session:
+			return None, None
+
+		return model.get_multi([
+			model.Key(urlsafe=self.session['user']['key']),
+			model.Key(urlsafe=self.session['user']['site']),
+		])
+
 class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 	session_store = None
 
@@ -214,6 +223,16 @@ class Register(BaseHandler):
 						del self.session['register']
 						user.sites = [site.key]
 						user.put()
+
+						p_home = models.Page.new('home', site, models.PAGE_TYPE_HOME)
+						p_bio = models.Page.new('bio', site, models.PAGE_TYPE_TEXT)
+						p_gallery = models.Page.new('gallery', site, models.PAGE_TYPE_GALLERY)
+						p_blog = models.Page.new('blog', site, models.PAGE_TYPE_BLOG)
+						pages = [p_home, p_bio, p_gallery, p_blog]
+
+						site.pages = [i.key for i in pages]
+						site.put()
+
 						self.populate_user_session(user)
 						self.redirect(webapp2.uri_for('social'))
 						return
@@ -257,10 +276,7 @@ class Social(BaseHandler):
 
 class Checkout(BaseHandler):
 	def get(self):
-		user, site = model.get_multi([
-			model.Key(urlsafe=self.session['user']['key']),
-			model.Key(urlsafe=self.session['user']['site']),
-		])
+		user, site = self.us()
 
 		if not user or not site:
 			return
@@ -276,10 +292,7 @@ class Checkout(BaseHandler):
 			token = self.request.get('stripeToken')
 			plan = self.request.get('plan')
 
-			user, site = model.get_multi([
-				model.Key(urlsafe=self.session['user']['key']),
-				model.Key(urlsafe=self.session['user']['site']),
-			])
+			user, site = self.us
 			if not user or not site or plan not in models.USER_PLAN_CHOICES:
 				return
 
@@ -296,6 +309,24 @@ class Image(BaseHandler):
 	def get(self):
 		self.render('image.html')
 
+class Edit(BaseHandler):
+	def get(self):
+		user, site = self.us()
+		pages = dict([(i.key, i) for i in model.get_multi(site.pages)])
+		basedir = 'themes/%s/' %site.theme
+		page = pages[site.pages[0]]
+		images = model.get_multi(page.images)
+		self.render('edit.html', {
+			'base': basedir,
+			'images': images,
+			'rel': webapp2.uri_for('edit'),
+			'page': page,
+			'pages': pages,
+			'pagetemplate': basedir + page.type + '.html',
+			'site': site,
+			'template': basedir + 'index.html',
+		})
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -308,6 +339,7 @@ config = {
 app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=MainPage, name='main'),
 	webapp2.Route(r'/checkout', handler=Checkout, name='checkout'),
+	webapp2.Route(r'/edit', handler=Edit, name='edit'),
 	webapp2.Route(r'/facebook', handler=FacebookCallback, name='facebook'),
 	webapp2.Route(r'/image', handler=Image, name='image'),
 	webapp2.Route(r'/login/facebook', handler=LoginFacebook, name='login-facebook'),

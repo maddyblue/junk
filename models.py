@@ -2,6 +2,8 @@
 
 from ndb import model
 
+from themes import *
+
 USER_SOURCE_FACEBOOK = 'facebook'
 USER_SOURCE_GOOGLE = 'google'
 
@@ -52,8 +54,71 @@ class Site(model.Model):
 	headline = model.StringProperty('h', indexed=False)
 	subheader = model.StringProperty('s', indexed=False)
 
+	theme = model.StringProperty('m', default=THEME_MARCO, choices=THEMES)
+	nav = model.StringProperty('v', default=NAV_TOP, choices=NAVS)
+
+	pages = model.KeyProperty('a', repeated=True, indexed=False)
+
 	facebook = model.StringProperty('f', indexed=False)
 	flickr = model.StringProperty('k', indexed=False)
 	google = model.StringProperty('g', indexed=False)
 	linkedin = model.StringProperty('l', indexed=False)
 	twitter = model.StringProperty('t', indexed=False)
+
+class Page(model.Expando):
+	_default_indexed = False
+
+	type = model.StringProperty('t', required=True, choices=PAGE_TYPES, indexed=True)
+	layout = model.IntegerProperty('y', default=1, indexed=True)
+	name = model.StringProperty('n', required=True)
+	images = model.KeyProperty('i', repeated=True)
+	links = model.StringProperty('l', repeated=True)
+	linktext = model.StringProperty('e', repeated=True)
+
+	def link(self, idx, rel):
+		url = self.links[idx]
+		if url.startswith('page:'):
+			k = url.partition(':')[2]
+			page = model.get(Key(urlsafe=k))
+			return rel + page.name
+
+		return url
+
+	@classmethod
+	def new(cls, name, site, pagetype):
+		p = Page(parent=site.key, type=pagetype, name=name)
+
+		specs = spec(site.theme, p.type, p.layout)
+		p.links = [''] * specs.get('links', 0)
+		p.linktext = ['link'] * specs.get('links', 0)
+
+		p.put()
+
+		images = []
+		for n, i in enumerate(specs.get('images', [])):
+			images.append(Image(key=model.Key('Image', str(n), parent=p.key), width=i[0], height=i[1]))
+
+		if images:
+			p.images = [i.key for i in images]
+			images.append(p)
+			model.put_multi(images)
+
+		return p
+
+IMAGE_TYPE_BLOB = 'blob'
+IMAGE_TYPE_COLOR = 'color'
+IMAGE_TYPE_HOLDER = 'holder'
+IMAGE_TYPES = [
+	IMAGE_TYPE_BLOB,
+	IMAGE_TYPE_COLOR,
+	IMAGE_TYPE_HOLDER,
+]
+
+class Image(model.Expando):
+	type = model.StringProperty('t', default=IMAGE_TYPE_HOLDER, choices=IMAGE_TYPES, indexed=False)
+	width = model.IntegerProperty('w', required=True, indexed=False)
+	height = model.IntegerProperty('h', required=True, indexed=False)
+
+	def render(self):
+		if self.type == IMAGE_TYPE_HOLDER:
+			return '<img src="http://placehold.it/%ix%i">' %(self.width, self.height)

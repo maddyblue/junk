@@ -1,0 +1,54 @@
+THEME_MARCO = 'marco'
+THEMES = [
+	THEME_MARCO,
+]
+
+NAV_LEFT = 'left'
+NAV_RIGHT = 'right'
+NAV_TOP = 'top'
+NAVS = [
+	NAV_LEFT,
+	NAV_RIGHT,
+	NAV_TOP,
+]
+
+PAGE_TYPE_BLOG = 'blog'
+PAGE_TYPE_GALLERY = 'gallery'
+PAGE_TYPE_HOME = 'home'
+PAGE_TYPE_TEXT = 'text'
+PAGE_TYPES = [
+	PAGE_TYPE_BLOG,
+	PAGE_TYPE_GALLERY,
+	PAGE_TYPE_HOME,
+	PAGE_TYPE_TEXT,
+]
+
+SPECS = {
+	THEME_MARCO: {
+		PAGE_TYPE_HOME: {
+			1: { # blog section at bottom
+				'links': 3,
+				'images': [
+					(1000, 370),
+					(310, 180),
+					(310, 180),
+					(310, 180),
+				],
+			},
+			2: { # pic and text at bottom
+				'links': 5,
+				'images': [
+					(1000, 370),
+					(310, 180),
+					(310, 180),
+					(310, 180),
+					(310, 180),
+				],
+				'text': 2,
+			},
+		},
+	},
+}
+
+def spec(theme, pagetype, layout):
+	return SPECS.get(theme, {}).get(pagetype, {}).get(layout, {})
