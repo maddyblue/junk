@@ -1,1 +1,50 @@
 {% extends template %}
+
+{% block head %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+<script>
+	$(function() {
+		$(".editable.text").each(function() {
+			var i = this.id + "_text";
+			var f = this.id + "_focus";
+			var h = '<div class="modal">' +
+				'<p><label for="text">Text</label>' +
+				'<input type="text" size="30" class="' + f + '" name="' + i + '" id="' + i + '" value="' + $(this).html() + '" /></p>' +
+				'<p><a class="close" href="#">Close</a></p></div>';
+			$(this).after(h);
+		});
+
+		$(".editable.text").live('click', function(event) {
+			$(this).next().show();
+			$("." + this.id + "_focus").focus();
+			return false;
+		});
+
+		$(".close").live('click', function() {
+			var d = $(this).parents("div").first();
+			var i = d.prev();
+			var t = d.find("#" + i[0].id + "_text");
+			i.html(t[0].value);
+			$(this).parents(".modal").hide();
+			return false;
+		});
+
+	});
+</script>
+
+<style media="screen" type="text/css">
+	.editable {
+		border: 2px solid yellow;
+	}
+	.modal {
+		background: white;
+		z-index: 1000;
+		border: 2px solid red;
+		display: none;
+		position: absolute;
+	}
+</style>
+
+{% endblock %}

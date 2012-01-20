@@ -15,6 +15,8 @@
 
 	<link rel="stylesheet" href="/{{ base }}css/style.css">
 
+	{% block head %}{% endblock %}
+
 	<!--[if lt IE 9]>
 	<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -24,12 +26,12 @@
 <div id="container">
 
 	<header id="top">
-		<h1><a href="#">{{ site.headline }}</a></h1>
+		<h1><a href="{{ rel }}" class="editable text" id="_headline">{{ site.headline }}</a></h1>
 		<nav>
 			<ul>
 				<li><a href="#" class="current">Home</a></li>
 				{% for p in site.pages %}
-				<li><a href="#">{{ pages[p].name }}</a></li>
+				<li><a href="{{ rel }}{{ pages[p].name }}">{{ pages[p].name }}</a></li>
 				{% endfor %}
 				<li class="search"><a href="#">Search</a></li>
 				<li class="audio"><a href="#">Audio</a></li>
@@ -92,9 +94,6 @@
 	<p>&copy; 2011 <a href="http://www.thenextmuse.com">thenextmuse.com</a></p>
  </div>
 </footer>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.2.min.js"><\/script>')</script>
 
 <script src="/{{ base }}js/script.js"></script>
 
