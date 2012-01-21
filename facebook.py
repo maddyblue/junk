@@ -1,10 +1,10 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
+import json
 import logging
 import os
 import urllib
 
-from django.utils import simplejson
 from google.appengine.api import urlfetch
 
 import settings
