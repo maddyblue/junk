@@ -6,6 +6,28 @@
 
 <script>
 	$(function() {
+		$('body').prepend(
+			'<div class="toolbar">' +
+				'<a href="#" id="save">save</a>' +
+			'</div>'
+		);
+
+		$('#save').live('click', function() {
+			var i = this;
+			$(i).html('saving...');
+
+			var m = {};
+			$('.editable').each(function(i, e) {
+				m[e.id] = $(e).html();
+			});
+			$.post('{{ "save"|url }}', m);
+
+			$(i).html('save');
+			$(i).after('<span> saved</span>');
+			$(i).next().fadeOut(1000);
+			return false;
+		});
+
 		$(".editable.text").each(function() {
 			var i = this.id + "_text";
 			var f = this.id + "_focus";
@@ -26,7 +48,10 @@
 			var d = $(this).parents("div").first();
 			var i = d.prev();
 			var t = d.find("#" + i[0].id + "_text");
-			i.html(t[0].value);
+
+			if(t[0].value)
+				i.html(t[0].value);
+
 			$(this).parents(".modal").hide();
 			return false;
 		});

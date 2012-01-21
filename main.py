@@ -327,6 +327,18 @@ class Edit(BaseHandler):
 			'template': basedir + 'index.html',
 		})
 
+class Save(BaseHandler):
+	def post(self):
+		skey = model.Key(urlsafe=self.session['user']['site'])
+		def callback():
+			s = skey.get()
+			for k, v in self.request.POST.items():
+				if k == '_headline':
+					s.headline = v
+			s.put()
+
+		model.transaction(callback)
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -346,5 +358,6 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/login/google', handler=LoginGoogle, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
+	webapp2.Route(r'/save', handler=Save, name='save'),
 	webapp2.Route(r'/social', handler=Social, name='social'),
 	], debug=True, config=config)
