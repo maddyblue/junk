@@ -79,8 +79,8 @@ class Page(model.Expando):
 	def link(self, idx, rel):
 		url = self.links[idx]
 		if url.startswith('page:'):
-			k = url.partition(':')[2]
-			page = model.get(Key(urlsafe=k))
+			kid = long(url.partition(':')[2])
+			page = model.Key('Page', kid, parent=self.key.parent()).get()
 			return rel + page.name
 
 		return url

@@ -13,7 +13,13 @@ def editlink(page, i, rel):
 		page.link(i, rel), page.links[i], i, page.linktext[i]
 	)
 
+def linkmap(link):
+	if link.startswith('page:'):
+		return link
+	return 'url'
+
 filters = dict([(i, globals()[i]) for i in [
 	'editlink',
+	'linkmap',
 	'url',
 ]])
