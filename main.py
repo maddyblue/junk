@@ -317,7 +317,7 @@ class Edit(BaseHandler):
 		page = pages[site.pages[0]]
 		images = model.get_multi(page.images)
 		self.render('edit.html', {
-			'base': basedir,
+			'base': '/static/' + basedir,
 			'images': images,
 			'rel': webapp2.uri_for('edit'),
 			'page': page,
