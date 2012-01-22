@@ -5,6 +5,22 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
 <script>
+	function validURL(u) {
+		if(u.match('^[-_0-9A-Za-z/ .#?=&%:]+$'))
+			return true;
+		return false;
+	};
+
+	function checkURL(u) {
+		if(!validURL(u))
+		{
+			alert('Invalid URL: ' + u);
+			return false;
+		}
+
+		return true;
+	}
+
 	$(function() {
 		var savemap = {};
 		var backup;
@@ -22,13 +38,13 @@
 
 			if(!$.isEmptyObject(savemap))
 			{
-				$(i).html('saving...');
+				$(i).text('saving...');
 				var m = savemap;
 				backup = m;
 				savemap = {};
 
 				$.post('{{ "save"|url(pagekey=page.key.urlsafe()) }}', m, function(data, textStatus, jqXHR) {
-					$(i).html('save');
+					$(i).text('save');
 					$('#saved').show().fadeOut(1000);
 				});
 			}
@@ -41,7 +57,7 @@
 		});
 
 		$('#save').ajaxError(function() {
-			$(this).html('save');
+			$(this).text('save');
 			$('#error').show().fadeOut(4000);
 			$.extend(savemap, backup);
 		});
@@ -54,23 +70,22 @@
 			var d = this.id + "_div";
 			var h = '<div class="modal" id="' + d + '">' +
 				'<p><label for="text">Text</label>' +
-				'<input type="text" size="30" class="' + f + '" name="' + i + '" id="' + i + '" value="' + $(this).html() + '" /></p>' +
-				'<p><a class="close text" href="#">Close</a></p></div>';
+				'<input type="text" size="30" class="' + f + '" name="' + i + '" id="' + i + '" value="' + $(this).text() + '" /></p>' +
+				'<p><a class="close text" href="#">close</a> <a href="#" class="cancel">cancel</a></p></div>';
 			$(this).after(h);
 		});
 
 		$(".close.text").live('click', function() {
-			var d = $(this).parents("div").first();
-			var i = d.prev();
-			var t = d.find("#" + i[0].id + "_text");
+			var i = $(this).parents("div").first().prev();
+			var t = $("#" + i[0].id + "_text");
 
 			if(t[0].value)
 			{
-				i.html(t[0].value);
-				savemap[i[0].id] = t[0].value;
+				i.text(t[0].value);
+				savemap[i[0].id] = i.html();
+				$(this).parents(".modal").hide();
 			}
 
-			$(this).parents(".modal").hide();
 			return false;
 		});
 
@@ -83,7 +98,7 @@
 			var h = '<div class="modal" id="' + d + '">' +
 				'<p>URL: ' +
 				'<input type="text" size="45" class="' + f + '" name="' + i + '" id="' + i + '" value="' + this.name + '" /></p>' +
-				'<p><a class="close social" href="#" style="color: black">Close</a></p></div>';
+				'<p><a class="close social" style="color: black" href="#">close</a> <a href="#" style="color: black" class="cancel">cancel</a></p></div>';
 			$(this).after(h);
 		});
 
@@ -91,11 +106,15 @@
 			var d = $(this).parents("div").first();
 			var i = d.prev();
 			var t = d.find("#" + i[0].id + "_url");
-			i.href = t[0].value;
-			i.name = t[0].value;
-			savemap[i[0].id] = t[0].value;
 
-			$(this).parents(".modal").hide();
+			if(checkURL(t[0].value))
+			{
+				i.href = t[0].value;
+				i.name = t[0].value;
+				savemap[i[0].id] = t[0].value;
+				$(this).parents(".modal").hide();
+			}
+
 			return false;
 		});
 
@@ -109,10 +128,10 @@
 			var d = this.id + "_div";
 			var h = '<div class="modal" id="' + d + '">' +
 				'<p>Text: ' +
-				'<input type="text" size="45" class="' + f + '" name="' + t + '" id="' + t + '" value="' + $(this).html() + '" /></p>' +
+				'<input type="text" size="45" class="' + f + '" name="' + t + '" id="' + t + '" value="' + $(this).text() + '" /></p>' +
 				'<p>URL: ' +
 				'<input type="text" size="45" name="' + i + '" id="' + i + '" value="' + this.name + '" /></p>' +
-				'<p><a class="close link" href="#" style="color: black">Close</a></p></div>';
+				'<p><a class="close link" href="#">close</a> <a href="#" class="cancel">cancel</a></p></div>';
 			$(this).after(h);
 		});
 
@@ -123,24 +142,29 @@
 			var t = $("#" + i[0].id + "_text");
 			var p = $("#" + i[0].id + "_page");
 
-			if(t[0].value)
+			if(t[0].value && checkURL(u[0].value))
 			{
-				i.html(t[0].value);
+				i.text(t[0].value);
 				i.name = u[0].value;
 				i.href = u[0].value;
-				savemap[t[0].id] = t[0].value;
+				savemap[t[0].id] = i.html();
 				savemap[u[0].id] = u[0].value;
+			$(this).parents(".modal").hide();
 			}
 
-			$(this).parents(".modal").hide();
 			return false;
 		});
 
 		// all
 
-		$(".editable").live('click', function(event) {
+		$(".editable").live('click', function() {
 			$('#' + this.id + '_div').show();
 			$("." + this.id + "_focus").focus();
+			return false;
+		});
+
+		$(".cancel").live('click', function() {
+			$(this).parents(".modal").hide();
 			return false;
 		});
 	});
