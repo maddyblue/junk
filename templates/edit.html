@@ -43,7 +43,7 @@
 		$('#save').ajaxError(function() {
 			$(this).html('save');
 			$('#error').show().fadeOut(4000);
-			savemap = backup;
+			$.extend(savemap, backup);
 		});
 
 		// text
