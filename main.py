@@ -328,8 +328,9 @@ class Edit(BaseHandler):
 		})
 
 class Save(BaseHandler):
-	def post(self):
+	def post(self, pagekey):
 		skey = model.Key(urlsafe=self.session['user']['site'])
+		pkey = model.Key(urlsafe=pagekey)
 		keys = [
 			'headline',
 
@@ -344,12 +345,24 @@ class Save(BaseHandler):
 		logging.error(self.request.POST)
 
 		def callback():
-			s = skey.get()
+			s, p = model.get_multi([skey, pkey])
+			if p.key.parent() != s.key:
+				return
+
 			for k in keys:
 				v = self.request.POST.get('_%s' %k)
 				if v:
 					setattr(s, k, v)
-			s.put()
+
+			spec = p.spec()
+			for i in range(spec['links']):
+				k = '_link_%i_' %i
+				kt, ku = k + 'text', k + 'url'
+				if kt in self.request.POST and ku in self.request.POST:
+					p.links[i] = self.request.POST[ku]
+					p.linktext[i] = self.request.POST[kt]
+
+			model.put_multi([s, p])
 
 		model.transaction(callback)
 
@@ -372,6 +385,6 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/login/google', handler=LoginGoogle, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
-	webapp2.Route(r'/save', handler=Save, name='save'),
+	webapp2.Route(r'/save/<pagekey>', handler=Save, name='save'),
 	webapp2.Route(r'/social', handler=Social, name='social'),
 	], debug=True, config=config)

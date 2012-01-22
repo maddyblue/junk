@@ -5,15 +5,15 @@
 <div class="column">
 <ul>
 	<li>
-	<h2><a href="{{ page.link(0, rel) }}">{{ page.linktext[0] }}</a></h2>
+	<h2>{{ page|editlink(0, rel) }}</h2>
 	<a href="{{ page.link(0, rel) }}">{{ images[1].render() }}</a>
 	</li>
 	<li class="middle">
-	<h2><a href="{{ page.link(1, rel) }}">{{ page.linktext[1] }}</a></h2>
+	<h2>{{ page|editlink(1, rel) }}</h2>
 	<a href="{{ page.link(1, rel) }}">{{ images[2].render() }}</a>
 	</li>
 	<li>
-	<h2><a href="{{ page.link(2, rel) }}">{{ page.linktext[2] }}</a></h2>
+	<h2>{{ page|editlink(2, rel) }}</h2>
 	<a href="{{ page.link(2, rel) }}">{{ images[3].render() }}</a>
 	</li>
 </ul>
@@ -30,10 +30,10 @@
 		<span class="more"><a href="#">More</a></span>
 	</div>
 {% elif page.layout == 2 %}
-<h2><a href="{{ page.link(3, rel) }}">{{ page.linktext[3] }}</a></h2>
+<h2>{{ page|editlink(3, rel) }}</h2>
 	<div class="post">
 		<a href="{{ page.link(3, rel) }}" class="thumb">{{ images[4].render() }}</a>
-		<h3><a href="{{ page.link(4, rel) }}">{{ page.linktext[4] }}</a></h3>
+		<h3>{{ page|editlink(4, rel) }}</h3>
 		<p>{{ page.text[1] }}</p>
 	</div>
 {% endif %}

@@ -85,6 +85,10 @@ class Page(model.Expando):
 
 		return url
 
+	def spec(self):
+		site = self.key.parent().get()
+		return spec(site.theme, self.type, self.layout)
+
 	@classmethod
 	def new(cls, name, site, pagetype):
 		p = Page(parent=site.key, type=pagetype, name=name)
