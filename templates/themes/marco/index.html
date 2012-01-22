@@ -84,12 +84,12 @@
 <footer class="bottom">
  <div class="inner">
 	<ul class="sn">
-		<li class="facebook"><a href="#">Facebook</a></li>
-		<li class="twitter"><a href="#">Twitter</a></li>
-		<li class="youtube"><a href="#">YoutTube</a></li>
-		<li class="flickr"><a href="#">flickr</a></li>
-		<li class="linkedin"><a href="#">Linkedin</a></li>
-		<li class="google"><a href="#">Google +</a></li>
+		<li class="facebook"><a href="{{ site.facebook|default('', true) }}" name="{{ site.facebook|default('', true) }}" class="editable social" id="_facebook">Facebook</a></li>
+		<li class="twitter"><a href="{{ site.twitter|default('', true) }}" name="{{ site.twitter|default('', true) }}" class="editable social" id="_twitter">Twitter</a></li>
+		<li class="youtube"><a href="{{ site.youtube|default('', true) }}" name="{{ site.youtube|default('', true) }}" class="editable social" id="_youtube">YouTube</a></li>
+		<li class="flickr"><a href="{{ site.flickr|default('', true) }}" name="{{ site.flickr|default('', true) }}" class="editable social" id="_flickr">flickr</a></li>
+		<li class="linkedin"><a href="{{ site.linkedin|default('', true) }}" name="{{ site.linkedin|default('', true) }}" class="editable social" id="_linkedin">Linkedin</a></li>
+		<li class="google"><a href="{{ site.google|default('', true) }}" name="{{ site.google|default('', true) }}" class="editable social" id="_google">Google+</a></li>
 	</ul>
 	<p>&copy; 2011 <a href="http://www.thenextmuse.com">thenextmuse.com</a></p>
  </div>

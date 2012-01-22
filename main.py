@@ -330,11 +330,25 @@ class Edit(BaseHandler):
 class Save(BaseHandler):
 	def post(self):
 		skey = model.Key(urlsafe=self.session['user']['site'])
+		keys = [
+			'headline',
+
+			'facebook',
+			'flickr',
+			'google',
+			'linkedin',
+			'twitter',
+			'youtube',
+		]
+
+		logging.error(self.request.POST)
+
 		def callback():
 			s = skey.get()
-			for k, v in self.request.POST.items():
-				if k == '_headline':
-					s.headline = v
+			for k in keys:
+				v = self.request.POST.get('_%s' %k)
+				if v:
+					setattr(s, k, v)
 			s.put()
 
 		model.transaction(callback)

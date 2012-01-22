@@ -12,9 +12,10 @@
 
 <p><input type="text" id="facebook" name="facebook" value="{{ site.facebook|default('', true) }}">
 <p><input type="text" id="flickr" name="flickr" value="{{ site.flickr|default('', true) }}">
+<p><input type="text" id="google" name="google" value="{{ site.google|default('', true) }}">
 <p><input type="text" id="linkedin" name="linkedin" value="{{ site.linkedin|default('', true) }}">
 <p><input type="text" id="twitter" name="twitter" value="{{ site.twitter|default('', true) }}">
-<p><input type="text" id="google" name="google" value="{{ site.google|default('', true) }}">
+<p><input type="text" id="youtube" name="youtube" value="{{ site.youtube|default('', true) }}">
 
 <p><input type="submit" name="submit">
 
@@ -26,9 +27,10 @@
 $(function() {
 	$("#facebook").watermark("Facebook Profile URL");
 	$("#flickr").watermark("Flickr Profile URL");
+	$("#google").watermark("Google+ Profile URL");
 	$("#linkedin").watermark("LinkedIn Profile URL");
 	$("#twitter").watermark("Twitter Profile URL");
-	$("#google").watermark("Google+ Profile URL");
+	$("#youtube").watermark("YouTube Profile URL");
 });
 </script>
 

@@ -6,56 +6,107 @@
 
 <script>
 	$(function() {
+		var savemap = {};
+		var backup;
+
 		$('body').prepend(
 			'<div class="toolbar">' +
 				'<a href="#" id="save">save</a>' +
+				' <span id="saved" style="display: none">saved</span>' +
+				' <span id="error" style="display: none"><b>error</b></span>' +
 			'</div>'
 		);
 
 		$('#save').live('click', function() {
 			var i = this;
-			$(i).html('saving...');
 
-			var m = {};
-			$('.editable').each(function(i, e) {
-				m[e.id] = $(e).html();
-			});
-			$.post('{{ "save"|url }}', m);
+			if(!$.isEmptyObject(savemap))
+			{
+				$(i).html('saving...');
+				var m = savemap;
+				backup = m;
+				savemap = {};
 
-			$(i).html('save');
-			$(i).after('<span> saved</span>');
-			$(i).next().fadeOut(1000);
+				$.post('{{ "save"|url }}', m, function(data, textStatus, jqXHR) {
+					$(i).html('save');
+					$('#saved').show().fadeOut(1000);
+				});
+			}
+			else
+			{
+				$('#saved').show().fadeOut(1000);
+			}
+
 			return false;
 		});
+
+		$('#save').ajaxError(function() {
+			$(this).html('save');
+			$('#error').show().fadeOut(4000);
+			savemap = backup;
+		});
+
+		// text
 
 		$(".editable.text").each(function() {
 			var i = this.id + "_text";
 			var f = this.id + "_focus";
-			var h = '<div class="modal">' +
+			var d = this.id + "_div";
+			var h = '<div class="modal" id="' + d + '">' +
 				'<p><label for="text">Text</label>' +
 				'<input type="text" size="30" class="' + f + '" name="' + i + '" id="' + i + '" value="' + $(this).html() + '" /></p>' +
-				'<p><a class="close" href="#">Close</a></p></div>';
+				'<p><a class="close text" href="#">Close</a></p></div>';
 			$(this).after(h);
 		});
 
-		$(".editable.text").live('click', function(event) {
-			$(this).next().show();
-			$("." + this.id + "_focus").focus();
-			return false;
-		});
-
-		$(".close").live('click', function() {
+		$(".close.text").live('click', function() {
 			var d = $(this).parents("div").first();
 			var i = d.prev();
 			var t = d.find("#" + i[0].id + "_text");
 
 			if(t[0].value)
+			{
 				i.html(t[0].value);
+				savemap[i[0].id] = t[0].value;
+			}
 
 			$(this).parents(".modal").hide();
 			return false;
 		});
 
+		// social
+
+		$(".editable.social").each(function() {
+			var i = this.id + "_url";
+			var f = this.id + "_focus";
+			var d = this.id + "_div";
+			var h = '<div class="modal" id="' + d + '">' +
+				'<p>URL: ' +
+				'<input type="text" size="45" class="' + f + '" name="' + i + '" id="' + i + '" value="' + this.name + '" /></p>' +
+				'<p>test</p>' +
+				'<p><a class="close social" href="#" style="color: black">Close</a></p></div>';
+			$(this).after(h);
+		});
+
+		$(".close.social").live('click', function() {
+			var d = $(this).parents("div").first();
+			var i = d.prev();
+			var t = d.find("#" + i[0].id + "_url");
+			i.href = t[0].value;
+			i.name = t[0].value;
+			savemap[i[0].id] = t[0].value;
+
+			$(this).parents(".modal").hide();
+			return false;
+		});
+
+		// all
+
+		$(".editable").live('click', function(event) {
+			$('#' + this.id + '_div').show();
+			$("." + this.id + "_focus").focus();
+			return false;
+		});
 	});
 </script>
 

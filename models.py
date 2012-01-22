@@ -64,6 +64,7 @@ class Site(model.Model):
 	google = model.StringProperty('g', indexed=False)
 	linkedin = model.StringProperty('l', indexed=False)
 	twitter = model.StringProperty('t', indexed=False)
+	youtube = model.StringProperty('y', indexed=False)
 
 class Page(model.Expando):
 	_default_indexed = False
