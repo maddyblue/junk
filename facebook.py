@@ -58,6 +58,6 @@ def graph_request(access_token):
 	result = urlfetch.fetch(GRAPH_URL + '?' + payload)
 
 	if result.status_code == 200:
-			return simplejson.loads(result.content)
+			return json.loads(result.content)
 	else:
 		return False
