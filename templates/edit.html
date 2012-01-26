@@ -101,30 +101,38 @@
 
 		// social
 
+		socialmap = {};
+		socialmap["facebook"] = "{{ site.facebook|default('', true) }}";
+		socialmap["twitter"] = "{{ site.twitter|default('', true) }}";
+		socialmap["youtube"] = "{{ site.youtube|default('', true) }}";
+		socialmap["flickr"] = "{{ site.flickr|default('', true) }}";
+		socialmap["linkedin"] = "{{ site.linkedin|default('', true) }}";
+		socialmap["google"] = "{{ site.google|default('', true) }}";
+
 		$(".editable.social").each(function() {
-			var i = this.id + "_url";
-			var f = this.id + "_focus";
-			var d = this.id + "_div";
-			var h = '<div class="modal" id="' + d + '">' +
-				'<p>URL: ' +
-				'<input type="text" size="45" class="' + f + '" name="' + i + '" id="' + i + '" value="' + this.name + '" /></p>' +
+			var i = "social";
+			var d = "social_div";
+			var h = '<div class="modal" style="color: black" id="' + d + '">' +
+				'<p>Facebook: <input type="text" size="45" id="' + i + '_facebook" value="' + socialmap["facebook"] + '" /></p>' +
+				'<p>Twitter: <input type="text" size="45" id="' + i + '_twitter" value="' + socialmap["twitter"] + '" /></p>' +
+				'<p>YouTube: <input type="text" size="45" id="' + i + '_youtube" value="' + socialmap["youtube"] + '" /></p>' +
+				'<p>flickr: <input type="text" size="45" id="' + i + '_flickr" value="' + socialmap["flickr"] + '" /></p>' +
+				'<p>Linkedin: <input type="text" size="45" id="' + i + '_linkedin" value="' + socialmap["linkedin"] + '" /></p>' +
+				'<p>Google+: <input type="text" size="45" id="' + i + '_google" value="' + socialmap["google"] + '" /></p>' +
 				'<p><a class="close social" style="color: black" href="#">close</a> <a href="#" style="color: black" class="cancel">cancel</a></p></div>';
 			$(this).after(h);
 		});
 
 		$(".close.social").live('click', function() {
-			var d = $(this).parents("div").first();
-			var i = d.prev();
-			var t = d.find("#" + i[0].id + "_url");
+			$.each(socialmap, function(k, v) {
+				var i = $("#social_" + k)[0];
+				if(!i.value || checkURL(i.value))
+				{
+					savemap["_" + k] = i.value;
+				}
+			});
 
-			if(checkURL(t[0].value))
-			{
-				i.href = t[0].value;
-				i.name = t[0].value;
-				savemap[i[0].id] = t[0].value;
-				$(this).parents(".modal").hide();
-			}
-
+			$(this).parents(".modal").hide();
 			return false;
 		});
 
