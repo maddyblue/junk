@@ -31,40 +31,36 @@
 		return '';
 	}
 
+	var savemap = {};
+	function save() {
+		if(!$.isEmptyObject(savemap))
+		{
+			$("#save").show();
+			var m = savemap;
+			backup = m;
+			savemap = {};
+
+			$.post('{{ "save"|url(pagekey=page.key.urlsafe()) }}', m, function(data, textStatus, jqXHR) {
+				$('#save').hide();
+				$('#saved').show().fadeOut(1000);
+			});
+		}
+		else
+		{
+			$('#saved').show().fadeOut(1000);
+		}
+	}
+
 	$(function() {
-		var savemap = {};
 		var backup;
 
 		$('body').prepend(
 			'<div class="toolbar">' +
-				'<a href="#" id="save">save</a>' +
+				'<a href="#" id="save" style="display: none">saving</a>' +
 				' <span id="saved" style="display: none">saved</span>' +
 				' <span id="error" style="display: none"><b>error</b></span>' +
 			'</div>'
 		);
-
-		$('#save').live('click', function() {
-			var i = this;
-
-			if(!$.isEmptyObject(savemap))
-			{
-				$(i).text('saving...');
-				var m = savemap;
-				backup = m;
-				savemap = {};
-
-				$.post('{{ "save"|url(pagekey=page.key.urlsafe()) }}', m, function(data, textStatus, jqXHR) {
-					$(i).text('save');
-					$('#saved').show().fadeOut(1000);
-				});
-			}
-			else
-			{
-				$('#saved').show().fadeOut(1000);
-			}
-
-			return false;
-		});
 
 		$('#save').ajaxError(function() {
 			$(this).text('save');
@@ -94,6 +90,7 @@
 				i.text(t[0].value);
 				savemap[i[0].id] = i.html();
 				$(this).parents(".modal").hide();
+				save();
 			}
 
 			return false;
@@ -133,6 +130,7 @@
 			});
 
 			$(this).parents(".modal").hide();
+			save();
 			return false;
 		});
 
@@ -179,6 +177,7 @@
 				savemap[t[0].id] = i.html();
 				savemap[i[0].id + "_url"] = url;
 				$(this).parents(".modal").hide();
+				save();
 			}
 
 			return false;
