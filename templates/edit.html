@@ -35,13 +35,13 @@
 	function save() {
 		if(!$.isEmptyObject(savemap))
 		{
-			$("#save").show();
+			$("#save").text('saving...');
 			var m = savemap;
 			backup = m;
 			savemap = {};
 
 			$.post('{{ "save"|url(pagekey=page.key.urlsafe()) }}', m, function(data, textStatus, jqXHR) {
-				$('#save').hide();
+				$('#save').html('&nbsp;');
 				$('#saved').show().fadeOut(1000);
 			});
 		}
@@ -56,7 +56,7 @@
 
 		$('body').prepend(
 			'<div class="toolbar">' +
-				'<a href="#" id="save" style="display: none">saving</a>' +
+				'<span id="save">&nbsp;</span>' +
 				' <span id="saved" style="display: none">saved</span>' +
 				' <span id="error" style="display: none"><b>error</b></span>' +
 			'</div>'
