@@ -77,7 +77,7 @@
 			var h = '<div class="modal" id="' + d + '">' +
 				'<p><label for="text">Text</label>' +
 				'<input type="text" size="30" class="' + f + '" name="' + i + '" id="' + i + '" value="' + $(this).text() + '" /></p>' +
-				'<p><a class="close text" href="#">close</a> <a href="#" class="cancel">cancel</a></p></div>';
+				'<p><a class="close text" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
 			$(this).after(h);
 		});
 
@@ -116,7 +116,7 @@
 				'<p>flickr: <input type="text" size="45" id="' + i + '_flickr" value="' + socialmap["flickr"] + '" /></p>' +
 				'<p>Linkedin: <input type="text" size="45" id="' + i + '_linkedin" value="' + socialmap["linkedin"] + '" /></p>' +
 				'<p>Google+: <input type="text" size="45" id="' + i + '_google" value="' + socialmap["google"] + '" /></p>' +
-				'<p><a class="close social" style="color: black" href="#">close</a> <a href="#" style="color: black" class="cancel">cancel</a></p></div>';
+				'<p><a class="close social" style="color: black" href="#">save</a> <a href="#" style="color: black" class="cancel">cancel</a></p></div>';
 			$(this).after(h);
 		});
 
@@ -154,7 +154,7 @@
 				{% for k, v in pages.items() %}
 					'<br><input type="radio" name="' + i + '" value="page:{{ k.id() }}" ' + linkCheck('page:{{ k.id() }}', i) + '> {{ v.name }}' +
 				{% endfor %}
-				'<p><a class="close link" href="#">close</a> <a href="#" class="cancel">cancel</a></p></div>';
+				'<p><a class="close link" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
 			$(this).after(h);
 		});
 
