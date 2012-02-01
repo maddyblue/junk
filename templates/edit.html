@@ -197,7 +197,8 @@
 		});
 
 		$(document).keyup(function(e){
-			$(".modal").hide();
+			if(e.keyCode == 27)
+				$(".modal").hide();
 		});
 	});
 </script>
