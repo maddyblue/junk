@@ -195,6 +195,10 @@
 			$(this).parents(".modal").hide();
 			return false;
 		});
+
+		$(document).keyup(function(e){
+			$(".modal").hide();
+		});
 	});
 </script>
 
