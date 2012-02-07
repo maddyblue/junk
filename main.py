@@ -10,7 +10,6 @@ from webapp2_extras import sessions
 import webapp2
 
 from ndb import model
-import cache
 import facebook
 import models
 import settings
