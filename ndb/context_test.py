@@ -772,31 +772,6 @@ class ContextTests(test_utils.NDBTest):
     self.assertNotEqual(memcache.get(skey1), None)
     self.assertNotEqual(memcache.get(skey2), None)
 
-  def testContext_GetOrInsert(self):
-    # This also tests Context.transaction()
-    class Mod(model.Model):
-      data = model.StringProperty()
-    @tasklets.tasklet
-    def foo():
-      ent = yield self.ctx.get_or_insert(Mod, 'a', data='hello')
-      self.assertTrue(isinstance(ent, Mod))
-      ent2 = yield self.ctx.get_or_insert(Mod, 'a', data='hello')
-      self.assertEqual(ent2, ent)
-    foo().check_success()
-
-  def testContext_GetOrInsertWithParent(self):
-    # This also tests Context.transaction()
-    class Mod(model.Model):
-      data = model.StringProperty()
-    @tasklets.tasklet
-    def foo():
-      parent = model.Key(flat=('Foo', 1))
-      ent = yield self.ctx.get_or_insert(Mod, 'a', _parent=parent, data='hello')
-      self.assertTrue(isinstance(ent, Mod))
-      ent2 = yield self.ctx.get_or_insert(Mod, 'a', parent=parent, data='hello')
-      self.assertEqual(ent2, ent)
-    foo().check_success()
-
   def testAddContextDecorator(self):
     class Demo(object):
       @context.toplevel
@@ -1140,6 +1115,13 @@ class ContextTests(test_utils.NDBTest):
 
     # Check that ndb ignores the corrupt memcache value
     self.assertEqual(ent, key.get())
+
+  def testUrlFetch(self):
+    self.testbed.init_urlfetch_stub()
+    # TODO: Avoid depending on actually accessing google.com.
+    fut = self.ctx.urlfetch('http://google.com')
+    result = fut.get_result()
+    self.assertTrue(isinstance(result.content, str))
 
 
 class ContextFutureCachingTests(test_utils.NDBTest):

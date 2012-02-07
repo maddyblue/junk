@@ -232,48 +232,42 @@ key <
 >
 entity_group <
 >
-raw_property <
-  meaning: 15
+property <
   name: "root.left.left.name"
   value <
     stringValue: "a1a"
   >
   multiple: false
 >
-raw_property <
-  meaning: 15
+property <
   name: "root.left.name"
   value <
     stringValue: "a1"
   >
   multiple: false
 >
-raw_property <
-  meaning: 15
+property <
   name: "root.left.rite.name"
   value <
     stringValue: "a1b"
   >
   multiple: false
 >
-raw_property <
-  meaning: 15
+property <
   name: "root.name"
   value <
     stringValue: "a"
   >
   multiple: false
 >
-raw_property <
-  meaning: 15
+property <
   name: "root.rite.name"
   value <
     stringValue: "a2"
   >
   multiple: false
 >
-raw_property <
-  meaning: 15
+property <
   name: "root.rite.rite.name"
   value <
     stringValue: "a2b"
@@ -802,6 +796,56 @@ class ModelTests(test_utils.NDBTest):
                         repeated=True, required=True, default='')
     self.assertEqual('MyModel()', repr(MyModel()))
 
+  def testKeyProperty(self):
+    class RefModel(model.Model):
+      pass
+    class FancyModel(model.Model):
+      @classmethod
+      def _get_kind(cls):
+        return 'Fancy'
+    class FancierModel(model.Model):
+      @classmethod
+      def _get_kind(cls):
+        return u'Fancier'
+    class FanciestModel(model.Model):
+      @classmethod
+      def _get_kind(cls):
+        return '\xff'
+    class MyModel(model.Model):
+      basic = model.KeyProperty(kind=None)
+      ref = model.KeyProperty(kind=RefModel)
+      refs = model.KeyProperty(kind=RefModel, repeated=True)
+      fancy = model.KeyProperty(kind=FancyModel)
+      fancee = model.KeyProperty(kind='Fancy')
+      fancier = model.KeyProperty(kind=FancierModel)
+      fanciest = model.KeyProperty(kind=FanciestModel)
+      faanceest = model.KeyProperty(kind=u'\xff')
+    a = MyModel(basic=model.Key('Foo', 1),
+                ref=model.Key(RefModel, 1),
+                refs=[model.Key(RefModel, 2), model.Key(RefModel, 3)],
+                fancy=model.Key(FancyModel, 1),
+                fancee=model.Key(FancyModel, 2),
+                fancier=model.Key('Fancier', 1),
+                fanciest=model.Key(FanciestModel, 1))
+    a.put()
+    b = a.key.get()
+    self.assertEqual(a, b)
+    # Try some assignments.
+    b.basic = model.Key('Bar', 1)
+    b.ref = model.Key(RefModel, 2)
+    b.refs = [model.Key(RefModel, 4)]
+    # Try the repr().
+    self.assertEqual(repr(MyModel.basic), "KeyProperty('basic')")
+    self.assertEqual(repr(MyModel.ref), "KeyProperty('ref', kind='RefModel')")
+    # Try some errors declaring properties.
+    self.assertRaises(TypeError, model.KeyProperty, kind=42)  # Non-class.
+    self.assertRaises(TypeError, model.KeyProperty, kind=int)  # Non-Model.
+    # Try some errors assigning property values.
+    self.assertRaises(datastore_errors.BadValueError,
+                      setattr, a, 'ref', model.Key('Bar', 1))
+    self.assertRaises(datastore_errors.BadValueError,
+                      setattr, a, 'refs', [model.Key('Bar', 1)])
+
   def testBlobKeyProperty(self):
     class MyModel(model.Model):
       image = model.BlobKeyProperty()
@@ -1125,9 +1169,9 @@ class ModelTests(test_utils.NDBTest):
 
   def testRecursiveStructuredProperty(self):
     class Node(model.Model):
-      name = model.StringProperty(indexed=False)
+      name = model.StringProperty()
     Node.left = model.StructuredProperty(Node)
-    Node.rite = model.StructuredProperty(Node)
+    Node.right = model.StructuredProperty(Node, 'rite')
     Node._fix_up_properties()
     class Tree(model.Model):
       root = model.StructuredProperty(Node)
@@ -1138,14 +1182,19 @@ class ModelTests(test_utils.NDBTest):
     tree.root = Node(name='a',
                      left=Node(name='a1',
                                left=Node(name='a1a'),
-                               rite=Node(name='a1b')),
-                     rite=Node(name='a2',
-                               rite=Node(name='a2b')))
+                               right=Node(name='a1b')),
+                     right=Node(name='a2',
+                                right=Node(name='a2b')))
     pb = tree._to_pb()
     self.assertEqual(str(pb), RECURSIVE_PB)
 
     tree2 = Tree._from_pb(pb)
     self.assertEqual(tree2, tree)
+
+    # Also test querying nodes.
+    tree.put()
+    tree3 = Tree.query(Tree.root.left.right.name == 'a1b').get()
+    self.assertEqual(tree3, tree)
 
   def testRenamedProperty(self):
     class MyModel(model.Model):
@@ -2105,6 +2154,30 @@ class ModelTests(test_utils.NDBTest):
     MyModel.get_or_insert('baz', text='baz')
     self.assertNotEqual(key.get(), None)
     self.assertEqual(key.get().text, 'baz')
+
+
+  def testGetOrInsertAsync(self):
+    class Mod(model.Model):
+      data = model.StringProperty()
+    @tasklets.tasklet
+    def foo():
+      ent = yield Mod.get_or_insert_async('a', data='hello')
+      self.assertTrue(isinstance(ent, Mod))
+      ent2 = yield Mod.get_or_insert_async('a', data='hello')
+      self.assertEqual(ent2, ent)
+    foo().check_success()
+
+  def testGetOrInsertAsyncWithParent(self):
+    class Mod(model.Model):
+      data = model.StringProperty()
+    @tasklets.tasklet
+    def foo():
+      parent = model.Key(flat=('Foo', 1))
+      ent = yield Mod.get_or_insert_async('a', _parent=parent, data='hello')
+      self.assertTrue(isinstance(ent, Mod))
+      ent2 = yield Mod.get_or_insert_async('a', parent=parent, data='hello')
+      self.assertEqual(ent2, ent)
+    foo().check_success()
 
   def testGetById(self):
     class MyModel(model.Model):
@@ -3071,6 +3144,17 @@ class ModelTests(test_utils.NDBTest):
     self.assertEqual(key.id(), 'b')
     self.assertEqual(key.kind(), 'Foo')
 
+  def testExpandoBlobKey(self):
+    class Foo(model.Expando):
+      pass
+    bk = model.BlobKey('blah')
+    foo = Foo(bk=bk)
+    foo.put()
+    bar = foo.key.get(use_memcache=False, use_cache=False)
+    self.assertTrue(isinstance(bar.bk, model.BlobKey))
+    self.assertEqual(bar.bk, bk)
+
+
 class CacheTests(test_utils.NDBTest):
 
   def SetupContextCache(self):
@@ -3190,6 +3274,26 @@ class CacheTests(test_utils.NDBTest):
     q = Outer.query()
     copy = q.get()
     self.assertEqual(copy, orig)
+
+  def testSubStructureEqualToNone(self):
+    class IntRangeModel(model.Model):
+      first = model.IntegerProperty()
+      last = model.IntegerProperty()
+
+    class Inner(model.Model):
+      range = model.StructuredProperty(IntRangeModel)
+      other = model.IntegerProperty()
+
+    class Outer(model.Model):
+      wrap = model.StructuredProperty(Inner, repeated=True)
+
+    orig = Outer(wrap=[Inner(other=2),
+                       Inner(range=IntRangeModel(first=0, last=10), other=4)])
+    orig.put()
+    q = Outer.query()
+    copy = q.get()
+    self.assertEqual(copy.wrap[0].range, None)
+    self.assertEqual(copy.wrap[1].range, IntRangeModel(first=0, last=10))
 
 def main():
   unittest.main()

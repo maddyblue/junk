@@ -13,6 +13,13 @@ __all__ = []
 DEBUG = True  # Set to False for some speedups
 
 
+def logging_debug(*args):
+  # NOTE: If you want to see debug messages, set the logging level
+  # manually to logging.DEBUG - 1; or for tests use -v -v -v (see below).
+  if DEBUG and logging.getLogger().level < logging.DEBUG:
+    logging.debug(*args)
+
+
 def wrapping(wrapped):
   # A decorator to decorate a decorator's wrapper.  Following the lead
   # of Twisted and Monocle, this is supposed to make debugging heavily
@@ -29,10 +36,10 @@ def wrapping(wrapped):
 
 # Define a base class for classes that need to be thread-local.
 if os.getenv('wsgi.multithread'):
-  logging.debug('Using threading.local')
+  logging_debug('Using threading.local')
   threading_local = threading.local
 else:
-  logging.debug('Not using threading.local')
+  logging_debug('Not using threading.local')
   threading_local = object
 
 
@@ -55,12 +62,16 @@ def get_stack(limit=10):
 
 
 def func_info(func, lineno=None):
+  if not DEBUG:
+    return None
   func = getattr(func, '__wrapped__', func)
   code = func.func_code
   return code_info(code, lineno)
 
 
 def gen_info(gen):
+  if not DEBUG:
+    return None
   frame = gen.gi_frame
   if gen.gi_running:
     prefix = 'running generator '
@@ -80,10 +91,14 @@ def gen_info(gen):
 
 
 def frame_info(frame):
+  if not DEBUG:
+    return None
   return code_info(frame.f_code, frame.f_lineno)
 
 
 def code_info(code, lineno=None):
+  if not DEBUG:
+    return None
   funcname = code.co_name
   # TODO: Be cleverer about stripping filename,
   # e.g. strip based on sys.path.
@@ -100,6 +115,8 @@ def positional(max_pos_args):
   """
   __ndb_debug__ = 'SKIP'
   def positional_decorator(wrapped):
+    if not DEBUG:
+      return wrapped
     __ndb_debug__ = 'SKIP'
     @wrapping(wrapped)
     def positional_wrapper(*args, **kwds):
@@ -114,13 +131,6 @@ def positional(max_pos_args):
       return wrapped(*args, **kwds)
     return positional_wrapper
   return positional_decorator
-
-
-def logging_debug(*args):
-  # NOTE: If you want to see debug messages, set the logging level
-  # manually to logging.DEBUG - 1; or for tests use -v -v -v (see below).
-  if DEBUG and logging.getLogger().level < logging.DEBUG:
-    logging.debug(*args)
 
 
 def tweak_logging():
