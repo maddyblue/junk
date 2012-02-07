@@ -8,7 +8,9 @@ libraries:
 - name: jinja2
   version: "2.6"
 - name: markupsafe
-  version: "latest"
+  version: latest
+- name: PIL
+  version: latest
 
 builtins:
 - admin_redirect: on

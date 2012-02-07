@@ -3,6 +3,10 @@
 {% block head %}
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script src="/static/js/jquery.form.js"></script>
+
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css">
 
 <script>
 	function validURL(u) {
@@ -41,6 +45,12 @@
 			savemap = {};
 
 			$.post('{{ "save"|url(pagekey=page.key.urlsafe()) }}', m, function(data, textStatus, jqXHR) {
+				var j = jQuery.parseJSON(data);
+				$.each(j, function(k, v) {
+					imageurls[k].url = v;
+					$("#" + k)[0].src = v;
+				});
+
 				$('#save').html('&nbsp;');
 				$('#saved').show().fadeOut(1000);
 			});
@@ -81,7 +91,7 @@
 			$(this).after(h);
 		});
 
-		$(".close.text").live('click', function() {
+		$(document).on("click", ".close.text", function() {
 			var i = $(this).parents("div").first().prev();
 			var t = $("#" + i[0].id + "_text");
 
@@ -120,7 +130,7 @@
 			$(this).after(h);
 		});
 
-		$(".close.social").live('click', function() {
+		$(document).on("click", ".close.social", function() {
 			$.each(socialmap, function(k, v) {
 				var i = $("#social_" + k)[0];
 				if(!i.value || checkURL(i.value))
@@ -158,7 +168,7 @@
 			$(this).after(h);
 		});
 
-		$(".close.link").live('click', function() {
+		$(document).on("click", ".close.link", function() {
 			var d = $(this).parents("div").first();
 			var i = d.prev();
 			var v = $("#" + i[0].id + "_url_val");
@@ -183,22 +193,204 @@
 			return false;
 		});
 
+		// image
+
+		imageurls = {};
+		{% for i in images %}
+		imageurls["_image_{{ loop.index0 }}"] = {
+			orig: "{{ i.orig|default('', true) }}",
+			url: "{{ i.url|default('', true) }}",
+			portw: {{ i.width }},
+			porth: {{ i.height }},
+			basew: {{ i.ow|default(0) }},
+			baseh: {{ i.oh|default(0) }},
+			x: {{ i.x|default(0) }},
+			y: {{ i.y|default(0) }},
+			s: {{ i.s|default(0) }},
+			basetop: $("#_image_{{ loop.index0 }}").position().top,
+			baseleft: $("#_image_{{ loop.index0 }}").position().left,
+			wscale: 0,
+			hscale: 0,
+			min_scale: 0,
+			max_scale: 0,
+
+		};
+		{% endfor %}
+
+		var cur_img;
+		$(".editable.image").each(function() {
+			var f = this.id + "_file";
+			var d = this.id + "_div";
+			var r = this.id + "_iframe";
+			var form = this.id + "_form";
+
+			var h = '<div class="modal" id="' + d + '">' +
+				'<p>Upload: <form method="POST" id="' + form + '" target="' + r + '" enctype="multipart/form-data"><input type="file" id="' + f + '" name="' + f + '"></form><a class="upload image" href="#">upload</a></p>' +
+				'<iframe id="' + r + '" src="#" style="width: 0; height: 0; border: 0px solid #fff;"></iframe>' +
+				'<p><a class="close image" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
+			$(this).after(h);
+		});
+
+		function loadimg(id) {
+			var o = imageurls[id];
+
+			o.wscale = o.portw / o.basew;
+			o.hscale = o.porth / o.baseh;
+			o.min_scale = Math.max(o.wscale, o.hscale);
+			o.max_scale = Math.max(o.min_scale * 3);
+			o.s = Math.max(o.min_scale, o.s);
+			o.s = Math.min(o.max_scale, o.s);
+
+			$("#imgslider").slider("destroy");
+			$("#imgslider").slider({
+				orientation: "vertical",
+				min: o.min_scale,
+				max: o.max_scale,
+				step: (o.max_scale - o.min_scale) / 100,
+				slide: resize,
+				value: o.s,
+			});
+		}
+
+		function resize(event, ui) {
+			var o = imageurls[cur_img];
+			var wscale = o.wscale;
+			var hscale = o.hscale;
+			var min_scale = o.min_scale;
+			var max_scale = o.max_scale;
+			var size = Math.max(o.min_scale, ui.value);
+			size = Math.min(o.max_scale, size);
+
+			var w = o.basew * size;
+			var h = o.baseh * size;
+			var portw = o.portw;
+			var porth = o.porth;
+			var basetop = o.basetop;
+			var baseleft = o.baseleft;
+			var f = 0.8;
+
+			$("#containerimg").css({height: h, width: w});
+			$("#leftcontainer").css({width: w - portw, height: porth, top: h - porth});
+			$("#rightcontainer").css({width: w - portw, height: porth, top: h - porth});
+			$("#topcontainer").css({width: 2 * w - portw, height: h - porth});
+			$("#bottomcontainer").css({width: 2 * w - portw, height: h - porth});
+			$("#imgslider").css({top: h - porth * (f + 1) / 2, left: w - 20, height: porth * f});
+			$("#imgcontainer").css({
+				width: 2 * w - portw,
+				height: 2 * h - porth,
+				top: basetop + porth - h,
+				left: baseleft + portw - w,
+			});
+
+			var pos = $("#containerimg").position();
+			if(pos.left + w > 2 * w - portw)
+				$("#containerimg").css({left: w - portw});
+			if(pos.top + h > 2 * h - porth)
+				$("#containerimg").css({top: h - porth});
+
+			o.x = pos.left;
+			o.y = pos.top;
+			o.s = size;
+		}
+
+		$(document).on("click", ".close.image", function() {
+			var d = $(this).parents("div").first();
+			var i = d.prev();
+			var o = imageurls[i[0].id];
+
+			// resize isn't called if the image is only dragged around, so call it now
+			resize(0, {'value': o.s});
+
+			savemap[i[0].id + "_x"] = o.x;
+			savemap[i[0].id + "_y"] = o.y;
+			savemap[i[0].id + "_s"] = o.s;
+			$(this).parents(".modal").hide();
+			stopImageEdit();
+			save();
+
+			return false;
+		});
+
+		$(document).on("click", ".upload.image", function() {
+			var d = $(this).parents("div").first();
+			var i = d.prev();
+			var form = $("#" + i[0].id + "_form");
+
+			$.ajax({
+				url: '{{ upload_url }}?image=' + i[0].id,
+				success: function(data) {
+					form.attr('action', data);
+					form.ajaxSubmit({
+						success: function(data, stat, xhr) {
+							if(data == '')
+							{
+								alert("error during upload");
+								return
+							}
+
+							var j = jQuery.parseJSON(data);
+							i[0].src = j.url;
+							var o = imageurls[i[0].id];
+							o.url = j.url;
+							o.orig = j.orig;
+							o.basew = j.w;
+							o.baseh = j.h;
+							$("#containerimg").css('background-image', 'url(' + o.orig + ')');
+							loadimg(i[0].id);
+							resize(0, {'value': o.s});
+						}
+					});
+				}
+			});
+		});
+
+		$(document).on("click", ".editable.image", function() {
+			var h = '<div id="imgcontainer">' +
+				'<div id="topcontainer" class="containerdiv"></div>' +
+				'<div id="leftcontainer" class="containerdiv"></div>' +
+				'<span id="containerimg"></span>' +
+				'<div id="imgslider"></div>' +
+				'<div id="rightcontainer" class="containerdiv"></div>' +
+				'<div id="bottomcontainer" class="containerdiv"></div>' +
+				'</div>';
+			$(this).before(h);
+
+			cur_img = this.id;
+			var o = imageurls[this.id];
+
+			$("#containerimg").draggable({ containment: 'parent' });
+			$("#containerimg").css('background-image', 'url(' + o.orig + ')');
+
+			loadimg(this.id);
+			resize(0, {'value': o.s});
+
+			return false;
+		});
+
 		// all
 
-		$(".editable").live('click', function() {
+		function stopImageEdit() {
+			$("#imgcontainer").remove();
+		}
+
+		$(document).on("click", ".editable", function() {
 			$('#' + this.id + '_div').show();
 			$("." + this.id + "_focus").focus();
 			return false;
 		});
 
-		$(".cancel").live('click', function() {
+		$(document).on("click", ".cancel", function() {
 			$(this).parents(".modal").hide();
+			stopImageEdit();
 			return false;
 		});
 
 		$(document).keyup(function(e){
 			if(e.keyCode == 27)
+			{
 				$(".modal").hide();
+				stopImageEdit();
+			}
 		});
 	});
 </script>
@@ -214,6 +406,74 @@
 		display: none;
 		position: absolute;
 	}
+</style>
+<style type="text/css">
+/* .container needs to be same size at img */
+#imgcontainer
+{
+	position:absolute;
+	z-index:1;
+	margin:0 auto;
+	overflow: visible;
+}
+
+#imgslider
+{
+	position: relative;
+	z-index:15;
+	width: 4px;
+}
+
+#imgslider a
+{
+	width: 15px;
+	height: 15px;
+}
+
+/* .container:before 1/4 img width, 1/2 img height, left 0, top 1/4 img, */
+#leftcontainer
+{
+}
+
+/* .container:before 1/4 img width, 1/2 img height, left 0, top 1/4 img, */
+#topcontainer
+{
+}
+
+/* .container:before 1/4 img width, 1/2 img height, left 3/4 img, top 1/4 img */
+#rightcontainer
+{
+	right:0;
+}
+/* .container:before 1/4 img width, 1/2 img height, left 3/4 img, top 1/4 img */
+#bottomcontainer
+{
+	bottom:0;
+}
+
+/* .img would be your actual img at full size */
+#containerimg
+{
+	display:block;
+	position:absolute;
+	z-index:10;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	cursor: move;
+}
+
+.containerdiv
+{
+	content: "";
+	display: block;
+	position: absolute;
+	z-index: 15;
+	opacity: 0.6;
+	background: white;
+}
+
 </style>
 
 {% endblock %}

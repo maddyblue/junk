@@ -1,7 +1,15 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
-from ndb import model
+import StringIO
+import logging
+import math
 
+from PIL import Image as PILImage
+from google.appengine.api import files
+from google.appengine.api import images
+from google.appengine.ext import blobstore
+
+from ndb import model
 from themes import *
 
 USER_SOURCE_FACEBOOK = 'facebook'
@@ -53,6 +61,8 @@ class Site(model.Model):
 	plan = model.StringProperty('p', default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
 	headline = model.StringProperty('h', indexed=False)
 	subheader = model.StringProperty('s', indexed=False)
+
+	size = model.IntegerProperty('z', indexed=False, default=0)
 
 	theme = model.StringProperty('m', default=THEME_MARCO, choices=THEMES)
 	nav = model.StringProperty('v', default=NAV_TOP, choices=NAVS)
@@ -120,10 +130,70 @@ IMAGE_TYPES = [
 ]
 
 class Image(model.Expando):
-	type = model.StringProperty('t', default=IMAGE_TYPE_HOLDER, choices=IMAGE_TYPES, indexed=False)
-	width = model.IntegerProperty('w', required=True, indexed=False)
-	height = model.IntegerProperty('h', required=True, indexed=False)
+	_default_indexed = False
+
+	type = model.StringProperty('t', default=IMAGE_TYPE_HOLDER, choices=IMAGE_TYPES)
+	width = model.IntegerProperty('w', required=True) # template image width
+	height = model.IntegerProperty('h', required=True) # template image height
+	url = model.StringProperty('u')
+	orig = model.StringProperty('o')
+
+	@property
+	def blob_key(self):
+		return model.Key('ImageBlob', self.b, parent=self.key.parent().parent())
+
+	def _pre_put_hook(self):
+		if self.type == IMAGE_TYPE_HOLDER:
+			self.url = 'http://placehold.it/%ix%i' %(self.width, self.height)
+			self.orig = self.url
+		elif self.type == IMAGE_TYPE_BLOB and hasattr(self, 'i'):
+			self.url = images.get_serving_url(self.i, max(self.width, self.height))
+
+			os = max(self.ow, self.oh)
+			os = min(os, images.IMG_SERVING_SIZES_LIMIT)
+			self.orig = images.get_serving_url(self.blob_key.get().blob, os)
+
+	def set_type(self, type, *args):
+		self.type = type
+
+		if type == IMAGE_TYPE_BLOB:
+			self.b = args[0].key.id()
+			self.x = 0 # x offset
+			self.y = 0 # y offset
+			self.s = 1 # size scale
+			self.ow = args[0].width # original image width
+			self.oh = args[0].height # original image height
+
+	# must not be called within a transaction; not sure why
+	def set_blob(self):
+		w = int(math.ceil(self.ow * self.s))
+		h = int(math.ceil(self.oh * self.s))
+		b = blobstore.BlobInfo.get(self.blob_key.get().blob)
+		i = PILImage.open(b.open())
+
+		lx = w - self.width - self.x
+		ty = h - self.height - self.y
+		rx = w - self.x
+		by = h - self.y
+		ni = i.resize((w, h)).crop((lx, ty, rx, by))
+		fn = files.blobstore.create(mime_type='image/png')
+		with files.open(fn, 'a') as f:
+			ni.save(f, 'png')
+		files.finalize(fn)
+
+		if hasattr(self, 'i'):
+			b = blobstore.BlobInfo.get(self.i)
+			if b:
+				b.delete()
+
+		self.i = files.blobstore.get_blob_key(fn)
 
 	def render(self):
-		if self.type == IMAGE_TYPE_HOLDER:
-			return '<img src="http://placehold.it/%ix%i">' %(self.width, self.height)
+		return '<img width="%i" height="%i" src="%s" class="editable image" id="_image_%s">' %(self.width, self.height, self.url, self.key.id())
+
+class ImageBlob(model.Model):
+	blob = model.BlobKeyProperty('b', indexed=False, required=True)
+	size = model.IntegerProperty('s', indexed=False, required=True)
+	name = model.StringProperty('n', indexed=False, required=True)
+	width = model.IntegerProperty('w', indexed=False, required=True)
+	height = model.IntegerProperty('h', indexed=False, required=True)

@@ -1,14 +1,19 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
+import json
 import logging
 import re
 
+from PIL import Image
+from google.appengine.api import images
 from google.appengine.api import users
+from google.appengine.ext import blobstore
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import blobstore_handlers
 from webapp2_extras import sessions
 import webapp2
 
+from ndb import context
 from ndb import model
 import facebook
 import models
@@ -320,9 +325,11 @@ class Edit(BaseHandler):
 			'pagetemplate': basedir + page.type + '.html',
 			'site': site,
 			'template': basedir + 'index.html',
+			'upload_url': webapp2.uri_for('upload-url', sitename=site.name, pageid=page.key.id()),
 		})
 
 class Save(BaseHandler):
+	@context.toplevel
 	def post(self, pagekey):
 		skey = model.Key(urlsafe=self.session['user']['site'])
 		pkey = model.Key(urlsafe=pagekey)
@@ -337,7 +344,7 @@ class Save(BaseHandler):
 			'youtube',
 		]
 
-		logging.error(self.request.POST)
+		r = {}
 
 		def callback():
 			s, p = model.get_multi([skey, pkey])
@@ -348,8 +355,10 @@ class Save(BaseHandler):
 				v = self.request.POST.get('_%s' %k)
 				if v:
 					setattr(s, k, v)
+			s.put_async()
 
 			spec = p.spec()
+
 			for i in range(spec['links']):
 				k = '_link_%i_' %i
 				kt, ku = k + 'text', k + 'url'
@@ -357,9 +366,102 @@ class Save(BaseHandler):
 					p.links[i] = self.request.POST[ku]
 					p.linktext[i] = self.request.POST[kt]
 
-			model.put_multi([s, p])
+			p.put_async()
 
-		model.transaction(callback)
+			return [s, p]
+
+		s, p = model.transaction(callback)
+		spec = p.spec()
+
+		for i in range(len(spec['images'])):
+			k = '_image_%i_' %i
+			kx, ky, ks = k + 'x', k + 'y', k + 's'
+			if kx in self.request.POST and ky in self.request.POST and ks in self.request.POST:
+				img = p.images[i].get()
+				img.x = int(self.request.POST[kx])
+				img.y = int(self.request.POST[ky])
+				img.s = float(self.request.POST[ks])
+				img.set_blob()
+				img.put_async()
+				r['_image_%i' %i] = img.url
+
+		self.response.out.write(json.dumps(dict(r)))
+
+class GetUploadURL(BaseHandler):
+	def get(self, sitename, pageid):
+		skey = model.Key('Site', sitename)
+		pkey = model.Key('Page', long(pageid), parent=skey)
+		site, page = model.get_multi([skey, pkey])
+		image = int(self.request.get('image').rpartition('_')[2])
+
+		if site and page and site.user.urlsafe() == self.session['user']['key'] and image <= len(page.images):
+			self.response.out.write(blobstore.create_upload_url(
+				webapp2.uri_for('upload-file',
+					sitename=sitename,
+					pageid=pageid,
+					image=str(image)
+				)
+			))
+		else:
+			self.response.out.write('')
+
+class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+	session_store = None
+
+	def add_message(self, level, message):
+		self.session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
+		self.store()
+
+	def store(self):
+		self.session_store.save_sessions(self.response)
+
+	@webapp2.cached_property
+	def session(self):
+		if not self.session_store:
+			self.session_store = sessions.get_store(request=self.request)
+		return self.session_store.get_session(backend='datastore')
+
+class UploadHandler(BaseUploadHandler):
+	def post(self, sitename, pageid, image):
+		skey = model.Key('Site', sitename)
+		pkey = model.Key('Page', long(pageid), parent=skey)
+		site, page = model.get_multi([skey, pkey])
+		image = int(image)
+		uploads = self.get_uploads()
+
+		# todo: return useful error code if content type is not image/*
+		if site and site.user.urlsafe() == self.session['user']['key'] and image <= len(page.images) and len(uploads) == 1 and uploads[0].content_type.startswith('image/'):
+			upload = uploads[0]
+			i = Image.open(upload.open())
+			w, h = i.size
+			blob = models.ImageBlob(
+				parent=site.key,
+				blob=upload.key(),
+				size=upload.size,
+				name=upload.filename,
+				width=w,
+				height=h
+			)
+			blob.put()
+
+			def callback():
+				s, i = model.get_multi([skey, page.images[image]])
+				s.size += blob.size
+				i.set_type(models.IMAGE_TYPE_BLOB, blob)
+				model.put_multi([s, i])
+				return s, i
+
+			s, i = model.transaction(callback)
+			i.set_blob()
+			i.put()
+			self.redirect(webapp2.uri_for('upload-success', url=i.url, orig=i.orig, w=i.ow, h=i.oh))
+		else:
+			for upload in uploads:
+				upload.delete()
+
+class UploadSuccess(BaseHandler):
+	def get(self):
+		self.response.out.write(json.dumps(dict(self.request.GET)))
 
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
@@ -381,4 +483,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/register', handler=Register, name='register'),
 	webapp2.Route(r'/save/<pagekey>', handler=Save, name='save'),
 	webapp2.Route(r'/social', handler=Social, name='social'),
+	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler=UploadHandler, name='upload-file'),
+	webapp2.Route(r'/upload/success', handler=UploadSuccess, name='upload-success'),
+	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler=GetUploadURL, name='upload-url'),
 	], debug=True, config=config)
