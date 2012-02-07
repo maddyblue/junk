@@ -304,10 +304,6 @@ class Checkout(BaseHandler):
 
 		self.redirect(webapp2.uri_for('checkout'))
 
-class Image(BaseHandler):
-	def get(self):
-		self.render('image.html')
-
 class Edit(BaseHandler):
 	def get(self):
 		user, site = self.us()
@@ -379,7 +375,6 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/checkout', handler=Checkout, name='checkout'),
 	webapp2.Route(r'/edit', handler=Edit, name='edit'),
 	webapp2.Route(r'/facebook', handler=FacebookCallback, name='facebook'),
-	webapp2.Route(r'/image', handler=Image, name='image'),
 	webapp2.Route(r'/login/facebook', handler=LoginFacebook, name='login-facebook'),
 	webapp2.Route(r'/login/google', handler=LoginGoogle, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
