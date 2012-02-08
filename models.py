@@ -158,14 +158,18 @@ class Image(model.Expando):
 			self.url = 'http://placehold.it/%ix%i' %(self.width, self.height)
 			self.orig = self.url
 		elif self.type == IMAGE_TYPE_BLOB and hasattr(self, 'i'):
-			self.url = get_serving_url(self.i, max(self.width, self.height))
+			if not self.url:
+				self.url = get_serving_url(self.i, max(self.width, self.height))
 
-			os = max(self.ow, self.oh)
-			os = min(os, images.IMG_SERVING_SIZES_LIMIT)
-			self.orig = get_serving_url(self.blob_key.get().blob, os)
+			if not self.orig:
+				os = max(self.ow, self.oh)
+				os = min(os, images.IMG_SERVING_SIZES_LIMIT)
+				self.orig = get_serving_url(self.blob_key.get().blob, os)
 
 	def set_type(self, type, *args):
 		self.type = type
+		self.orig = None
+		self.url = None
 
 		if type == IMAGE_TYPE_BLOB:
 			self.b = args[0].key.id()
@@ -198,6 +202,7 @@ class Image(model.Expando):
 				b.delete()
 
 		self.i = files.blobstore.get_blob_key(fn)
+		self.url = None
 
 	def render(self):
 		return '<img width="%i" height="%i" src="%s" class="editable image" id="_image_%s">' %(self.width, self.height, self.url, self.key.id())
