@@ -378,8 +378,8 @@ class Save(BaseHandler):
 			kx, ky, ks = k + 'x', k + 'y', k + 's'
 			if kx in self.request.POST and ky in self.request.POST and ks in self.request.POST:
 				img = p.images[i].get()
-				img.x = int(self.request.POST[kx])
-				img.y = int(self.request.POST[ky])
+				img.x = int(self.request.POST[kx].partition('.')[0])
+				img.y = int(self.request.POST[ky].partition('.')[0])
 				img.s = float(self.request.POST[ks])
 				img.set_blob()
 				img.put_async()
