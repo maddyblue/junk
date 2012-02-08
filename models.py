@@ -8,6 +8,7 @@ from PIL import Image as PILImage
 from google.appengine.api import files
 from google.appengine.api import images
 from google.appengine.ext import blobstore
+from google.appengine.runtime import DeadlineExceededError
 
 from ndb import model
 from themes import *
@@ -129,6 +130,16 @@ IMAGE_TYPES = [
 	IMAGE_TYPE_HOLDER,
 ]
 
+# app engine is seeing high failure rates here, so retry a few times
+# this should be removed once they fix it
+# for now, try forever and timeout instead of trying to gracefully recover
+def get_serving_url(*args, **kwargs):
+	while True:
+		try:
+			return images.get_serving_url(*args, **kwargs)
+		except DeadlineExceededError:
+			pass
+
 class Image(model.Expando):
 	_default_indexed = False
 
@@ -147,11 +158,11 @@ class Image(model.Expando):
 			self.url = 'http://placehold.it/%ix%i' %(self.width, self.height)
 			self.orig = self.url
 		elif self.type == IMAGE_TYPE_BLOB and hasattr(self, 'i'):
-			self.url = images.get_serving_url(self.i, max(self.width, self.height))
+			self.url = get_serving_url(self.i, max(self.width, self.height))
 
 			os = max(self.ow, self.oh)
 			os = min(os, images.IMG_SERVING_SIZES_LIMIT)
-			self.orig = images.get_serving_url(self.blob_key.get().blob, os)
+			self.orig = get_serving_url(self.blob_key.get().blob, os)
 
 	def set_type(self, type, *args):
 		self.type = type
