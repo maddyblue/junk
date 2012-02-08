@@ -197,13 +197,16 @@ class Image(model.Expando):
 			f.write(i.execute_transforms())
 		files.finalize(fn)
 
-		if hasattr(self, 'i'):
-			b = blobstore.BlobInfo.get(self.i)
-			if b:
-				b.delete()
+		has_i = hasattr(self, 'i')
+		if has_i:
+			d_f = blobstore.delete_async(self.i)
 
 		self.i = files.blobstore.get_blob_key(fn)
 		self.url = None
+
+		# is this necessary? without it some warnings about RPCs without responses show up
+		if has_i:
+			d_f.get_result()
 
 	def render(self):
 		return '<img width="%i" height="%i" src="%s" class="editable image" id="_image_%s">' %(self.width, self.height, self.url, self.key.id())
