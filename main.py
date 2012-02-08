@@ -422,6 +422,7 @@ class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 		return self.session_store.get_session(backend='datastore')
 
 class UploadHandler(BaseUploadHandler):
+	@context.toplevel
 	def post(self, sitename, pageid, image):
 		skey = model.Key('Site', sitename)
 		pkey = model.Key('Page', long(pageid), parent=skey)
@@ -445,15 +446,19 @@ class UploadHandler(BaseUploadHandler):
 			blob.put()
 
 			def callback():
-				s, i = model.get_multi([skey, page.images[image]])
+				s = skey.get()
 				s.size += blob.size
-				i.set_type(models.IMAGE_TYPE_BLOB, blob)
-				model.put_multi([s, i])
-				return s, i
+				s.put()
+				return s
 
-			s, i = model.transaction(callback)
+			i_f = page.images[image].get_async()
+
+			s = model.transaction(callback)
+
+			i = i_f.get_result()
+			i.set_type(models.IMAGE_TYPE_BLOB, blob)
 			i.set_blob()
-			i.put()
+			i.put_async()
 			self.redirect(webapp2.uri_for('upload-success', url=i.url, orig=i.orig, w=i.ow, h=i.oh))
 		else:
 			for upload in uploads:
