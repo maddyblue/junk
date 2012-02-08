@@ -195,6 +195,9 @@
 
 		// image
 
+		// remove <a> from around images
+		$("a:has(img)").find(".editable.image").unwrap();
+
 		imageurls = {};
 		{% for i in images %}
 		imageurls["_image_{{ loop.index0 }}"] = {
