@@ -1,10 +1,8 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
-import cStringIO
 import logging
 import math
 
-from PIL import Image as PILImage
 from google.appengine.api import files
 from google.appengine.api import images
 from google.appengine.ext import blobstore
@@ -184,27 +182,19 @@ class Image(model.Expando):
 	def set_blob(self):
 		w = int(math.ceil(self.ow * self.s))
 		h = int(math.ceil(self.oh * self.s))
-		b = blobstore.BlobInfo.get(self.blob_key.get().blob)
-		br = b.open()
-		s = cStringIO.StringIO(br.read(b.size))
-		i = PILImage.open(s)
 
-		# I am guessing that these two help reduce memory usage.
-		# This matters because I have seen OOM, instance killed errors before.
-		# I think they are related to the resize and crop below, so try this here.
-		br.close()
-		del s
+		lx = float(w - self.width - self.x) / float(w)
+		ty = float(h - self.height - self.y) / float(h)
+		rx = float(w - self.x) / float(w)
+		by = float(h - self.y) / float(h)
 
-		lx = w - self.width - self.x
-		ty = h - self.height - self.y
-		rx = w - self.x
-		by = h - self.y
-		ni = i.resize((w, h)).crop((lx, ty, rx, by))
+		i = images.Image(blob_key=self.blob_key.get().blob)
+		i.crop(lx, ty, rx, by)
+		i.resize(width=self.width, height=self.height)
+
 		fn = files.blobstore.create(mime_type='image/png')
-		s = cStringIO.StringIO()
-		ni.save(s, 'png')
 		with files.open(fn, 'a') as f:
-			f.write(s.getvalue())
+			f.write(i.execute_transforms())
 		files.finalize(fn)
 
 		if hasattr(self, 'i'):
