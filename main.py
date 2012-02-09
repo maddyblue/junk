@@ -20,6 +20,8 @@ import models
 import settings
 import utils
 
+JQUERY = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>'
+
 class BaseHandler(webapp2.RequestHandler):
 	def render(self, template, context={}):
 		context['session'] = self.session
@@ -319,6 +321,7 @@ class Edit(BaseHandler):
 		self.render('edit.html', {
 			'base': '/static/' + basedir,
 			'images': images,
+			'jquery': JQUERY,
 			'rel': webapp2.uri_for('edit'),
 			'page': page,
 			'pages': pages,
@@ -326,6 +329,7 @@ class Edit(BaseHandler):
 			'site': site,
 			'template': basedir + 'index.html',
 			'upload_url': webapp2.uri_for('upload-url', sitename=site.name, pageid=page.key.id()),
+			'view_url': webapp2.uri_for('view', sitename=site.name, pagename=page.name),
 		})
 
 class Save(BaseHandler):
@@ -472,6 +476,38 @@ class GoogleSiteVerification(webapp2.RequestHandler):
 	def get(self):
 		self.response.out.write('google-site-verification: %s.html' %settings.GOOGLE_SITE_VERIFICATION)
 
+class View(BaseHandler):
+	def get(self, sitename, pagename):
+		site = model.Key('Site', sitename).get()
+		pages = dict([(i.key, i) for i in model.get_multi(site.pages)])
+
+		if not pagename:
+			page = pages[0]
+		else:
+			for p in pages.values():
+				if p.name == pagename:
+					page = p
+					break
+			else:
+				page = None
+
+		if not site or not page or site.user.urlsafe() != self.session['user']['key']:
+			return
+
+		images = model.get_multi(page.images)
+		basedir = 'themes/%s/' %site.theme
+
+		self.render(basedir + 'index.html', {
+			'base': '/static/' + basedir,
+			'images': images,
+			'jquery': JQUERY,
+			'rel': webapp2.uri_for('view-home', sitename=sitename) + '/',
+			'page': page,
+			'pages': pages,
+			'pagetemplate': basedir + page.type + '.html',
+			'site': site,
+		})
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -495,6 +531,8 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler=UploadHandler, name='upload-file'),
 	webapp2.Route(r'/upload/success', handler=UploadSuccess, name='upload-success'),
 	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler=GetUploadURL, name='upload-url'),
+	webapp2.Route(r'/view/<sitename>', handler=View, name='view-home', defaults={'pagename': None}),
+	webapp2.Route(r'/view/<sitename>/<pagename>', handler=View, name='view'),
 
 # google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler=GoogleSiteVerification),
