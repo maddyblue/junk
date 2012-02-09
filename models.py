@@ -6,6 +6,7 @@ import math
 from google.appengine.api import files
 from google.appengine.api import images
 from google.appengine.ext import blobstore
+from google.appengine.ext import deferred
 from google.appengine.runtime import DeadlineExceededError
 
 from ndb import model
@@ -197,16 +198,11 @@ class Image(model.Expando):
 			f.write(i.execute_transforms())
 		files.finalize(fn)
 
-		has_i = hasattr(self, 'i')
-		if has_i:
-			d_f = blobstore.delete_async(self.i)
+		if hasattr(self, 'i'):
+			deferred.defer(delete_blob, self.i)
 
 		self.i = files.blobstore.get_blob_key(fn)
 		self.url = None
-
-		# is this necessary? without it some warnings about RPCs without responses show up
-		if has_i:
-			d_f.get_result()
 
 	def render(self):
 		return '<img width="%i" height="%i" src="%s" class="editable image" id="_image_%s">' %(self.width, self.height, self.url, self.key.id())
@@ -217,3 +213,6 @@ class ImageBlob(model.Model):
 	name = model.StringProperty('n', indexed=False, required=True)
 	width = model.IntegerProperty('w', indexed=False, required=True)
 	height = model.IntegerProperty('h', indexed=False, required=True)
+
+def delete_blob(k):
+	blobstore.delete(k)
