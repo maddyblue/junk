@@ -70,6 +70,9 @@
 				' <span id="saved" style="display: none">saved</span>' +
 				' <span id="error" style="display: none"><b>error</b></span>' +
 				' <a id="view" href="{{ view_url }}">view</a>' +
+				' <a id="publish" href="#">publish</a>' +
+				' <a href="{{ published_url }}">published</a>' +
+				' <span id="publishing" style="display: none">publishing...</span>' +
 			'</div>'
 		);
 
@@ -77,6 +80,14 @@
 			$(this).text('save');
 			$('#error').show().fadeOut(4000);
 			$.extend(savemap, backup);
+		});
+
+		$(document).on("click", "#publish", function() {
+			$.ajax({
+				url: '{{ publish_url }}',
+			});
+
+			$('#publishing').show().fadeOut(4000);
 		});
 
 		// text

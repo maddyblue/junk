@@ -10,3 +10,5 @@ STRIPE_KEY = ''
 STRIPE_SECRET = ''
 
 GOOGLE_SITE_VERIFICATION = ''
+BUCKET_NAME = ''
+TNM_URL = 'http://application-id.appspot.com'

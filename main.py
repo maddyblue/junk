@@ -5,9 +5,11 @@ import logging
 import re
 
 from PIL import Image
+from google.appengine.api import files
 from google.appengine.api import images
 from google.appengine.api import users
 from google.appengine.ext import blobstore
+from google.appengine.ext import deferred
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import blobstore_handlers
 from webapp2_extras import sessions
@@ -167,7 +169,7 @@ class FacebookCallback(BaseHandler):
 		self.redirect(webapp2.uri_for('main'))
 
 class Register(BaseHandler):
-	SITENAME_RE = re.compile("^[a-z0-9][a-z0-9-]+$")
+	SITENAME_RE = re.compile("^[a-z0-9][a-z0-9-]+[a-z0-9]$")
 
 	def get(self):
 		return self.post()
@@ -187,8 +189,12 @@ class Register(BaseHandler):
 
 				if not sitename:
 					errors['sitename'] = 'Website extension required.'
+				elif 3 > len(sitename) or 63 < len(sitename):
+					errors['sitename'] = 'Website extension must be between 3 and 63 characters.'
+				elif lsitename.startswith('goog'):
+					errors['sitename'] = 'Website extension may not start with "goog".'
 				elif not Register.SITENAME_RE.match(lsitename):
-					errors['sitename'] = 'Website extension may only contain alphanumeric characters or dashes and cannot begin with a dash.'
+					errors['sitename'] = 'Website extension may only contain letters, numbers, or dashes, and may not begin or end with a dash.'
 				else:
 					site = model.Key('Site', lsitename).get()
 					if site:
@@ -322,10 +328,12 @@ class Edit(BaseHandler):
 			'base': '/static/' + basedir,
 			'images': images,
 			'jquery': JQUERY,
-			'rel': webapp2.uri_for('edit'),
 			'page': page,
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
+			'publish_url': webapp2.uri_for('publish', sitename=site.name),
+			'published_url': 'http://commondatastorage.googleapis.com/' + settings.BUCKET_NAME + '/' + site.key.id() + '/' + page.name,
+			'rel': webapp2.uri_for('edit'),
 			'site': site,
 			'template': basedir + 'index.html',
 			'upload_url': webapp2.uri_for('upload-url', sitename=site.name, pageid=page.key.id()),
@@ -508,6 +516,49 @@ class View(BaseHandler):
 			'site': site,
 		})
 
+class Publish(BaseHandler):
+	def get(self, sitename):
+		site = model.Key('Site', sitename).get()
+
+		if not site or site.user.urlsafe() != self.session['user']['key']:
+			return
+
+		deferred.defer(publish_site, sitename)
+
+def publish_site(sitename):
+	site = model.Key('Site', sitename).get()
+	pages = dict([(i.key, i) for i in model.get_multi(site.pages)])
+
+	if not site or not pages:
+		return
+
+	basedir = 'themes/%s/' %site.theme
+
+	for page in pages.values():
+		if page.type != 'home':
+			continue
+
+		images = model.get_multi(page.images)
+		c = utils.render(basedir + 'index.html', {
+			'base': settings.TNM_URL + '/static/' + basedir,
+			'images': images,
+			'jquery': JQUERY,
+			'page': page,
+			'pages': pages,
+			'pagetemplate': basedir + page.type + '.html',
+			'rel': '',
+			'site': site,
+		})
+
+		oname = settings.BUCKET_NAME + '/' + site.key.id() + '/' + page.name
+		gs_write(oname, 'text/html', c)
+
+def gs_write(name, mime, content):
+	fn = files.gs.create('/gs/' + name, mime_type=mime, acl='public-read')
+	with files.open(fn, 'a') as f:
+		f.write(content)
+	files.finalize(fn)
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -525,6 +576,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/login/facebook', handler=LoginFacebook, name='login-facebook'),
 	webapp2.Route(r'/login/google', handler=LoginGoogle, name='login-google'),
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
+	webapp2.Route(r'/publish/<sitename>', handler=Publish, name='publish'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
 	webapp2.Route(r'/save/<pagekey>', handler=Save, name='save'),
 	webapp2.Route(r'/social', handler=Social, name='social'),
