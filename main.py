@@ -554,7 +554,12 @@ def publish_site(sitename):
 		gs_write(oname, 'text/html', c)
 
 def gs_write(name, mime, content):
-	fn = files.gs.create('/gs/' + name, mime_type=mime, acl='public-read')
+	fn = files.gs.create(
+		'/gs/' + name,
+		mime_type=mime,
+		acl='public-read',
+		cache_control='no-cache'
+	)
 	with files.open(fn, 'a') as f:
 		f.write(content)
 	files.finalize(fn)
