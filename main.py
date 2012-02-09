@@ -468,6 +468,10 @@ class UploadSuccess(BaseHandler):
 	def get(self):
 		self.response.out.write(json.dumps(dict(self.request.GET)))
 
+class GoogleSiteVerification(webapp2.RequestHandler):
+	def get(self):
+		self.response.out.write('google-site-verification: %s.html' %settings.GOOGLE_SITE_VERIFICATION)
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -491,4 +495,8 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler=UploadHandler, name='upload-file'),
 	webapp2.Route(r'/upload/success', handler=UploadSuccess, name='upload-success'),
 	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler=GetUploadURL, name='upload-url'),
+
+# google site verification
+	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler=GoogleSiteVerification),
+
 	], debug=True, config=config)
