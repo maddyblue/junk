@@ -163,7 +163,7 @@ class Image(model.Expando):
 
 			if not self.orig:
 				os = max(self.ow, self.oh)
-				os = min(os, images.IMG_SERVING_SIZES_LIMIT)
+				os = min(os, images.IMG_SERVING_SIZES_LIMIT, max(self.w * 3, self.h * 3))
 				self.orig = get_serving_url(self.blob_key.get().blob, os)
 
 	def set_type(self, type, *args):
