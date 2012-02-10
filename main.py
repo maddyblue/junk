@@ -343,9 +343,9 @@ class Edit(BaseHandler):
 
 class Save(BaseHandler):
 	@context.toplevel
-	def post(self, pagekey):
-		skey = model.Key(urlsafe=self.session['user']['site'])
-		pkey = model.Key(urlsafe=pagekey)
+	def post(self, siteid, pageid):
+		skey = model.Key('Site', siteid)
+		pkey = model.Key('Page', long(pageid), parent=skey)
 		keys = [
 			'headline',
 
@@ -361,7 +361,7 @@ class Save(BaseHandler):
 
 		def callback():
 			s, p = model.get_multi([skey, pkey])
-			if p.key.parent() != s.key:
+			if not s or not p or p.key.parent() != s.key:
 				return
 
 			for k in keys:
@@ -584,7 +584,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/logout', handler=Logout, name='logout'),
 	webapp2.Route(r'/publish/<sitename>', handler=Publish, name='publish'),
 	webapp2.Route(r'/register', handler=Register, name='register'),
-	webapp2.Route(r'/save/<pagekey>', handler=Save, name='save'),
+	webapp2.Route(r'/save/<siteid>/<pageid>', handler=Save, name='save'),
 	webapp2.Route(r'/social', handler=Social, name='social'),
 	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler=UploadHandler, name='upload-file'),
 	webapp2.Route(r'/upload/success', handler=UploadSuccess, name='upload-success'),

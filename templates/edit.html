@@ -44,7 +44,7 @@
 			backup = m;
 			savemap = {};
 
-			$.post('{{ "save"|url(pagekey=page.key.urlsafe()) }}', m, function(data, textStatus, jqXHR) {
+			$.post('{{ "save"|url(siteid=site.key.id(), pageid=page.key.id()) }}', m, function(data, textStatus, jqXHR) {
 				var j = jQuery.parseJSON(data);
 				$.each(j, function(k, v) {
 					imageurls[k].url = v;
