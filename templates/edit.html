@@ -364,6 +364,9 @@
 		});
 
 		$(document).on("click", ".editable.image", function() {
+			stopImageEdit();
+			$(".modal").hide();
+
 			var h = '<div id="imgcontainer">' +
 				'<div id="topcontainer" class="containerdiv"></div>' +
 				'<div id="leftcontainer" class="containerdiv"></div>' +
