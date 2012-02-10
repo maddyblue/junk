@@ -9,8 +9,8 @@ from google.appengine.ext import blobstore
 from google.appengine.ext import deferred
 from google.appengine.runtime import DeadlineExceededError
 
-from ndb import model
 from themes import *
+import ndb
 
 USER_SOURCE_FACEBOOK = 'facebook'
 USER_SOURCE_GOOGLE = 'google'
@@ -36,61 +36,61 @@ PLAN_COSTS = {
 
 PLAN_COSTS_DESC = ['%s ($%i/month)' %(i.title(), PLAN_COSTS[i]) for i in USER_PLAN_CHOICES]
 
-class User(model.Model):
-	first_name = model.StringProperty('f', required=True, indexed=False)
-	last_name = model.StringProperty('l', required=True, indexed=False)
-	email = model.StringProperty('e')
-	register_date = model.DateTimeProperty('r', auto_now_add=True)
-	last_active = model.DateTimeProperty('a', auto_now_add=True)
+class User(ndb.Model):
+	first_name = ndb.StringProperty('f', required=True, indexed=False)
+	last_name = ndb.StringProperty('l', required=True, indexed=False)
+	email = ndb.StringProperty('e')
+	register_date = ndb.DateTimeProperty('r', auto_now_add=True)
+	last_active = ndb.DateTimeProperty('a', auto_now_add=True)
 
-	google_id = model.StringProperty('g')
-	facebook_id = model.StringProperty('b')
+	google_id = ndb.StringProperty('g')
+	facebook_id = ndb.StringProperty('b')
 
-	sites = model.KeyProperty('s', repeated=True)
+	sites = ndb.KeyProperty('s', repeated=True)
 
-	stripe_id = model.StringProperty('i', indexed=False)
-	stripe_last4 = model.StringProperty('t', indexed=False)
+	stripe_id = ndb.StringProperty('i', indexed=False)
+	stripe_last4 = ndb.StringProperty('t', indexed=False)
 
 	@classmethod
 	def find(cls, source, uid):
 		return cls.query().filter(getattr(cls, '%s_id' %source) == uid)
 
-class Site(model.Model):
-	name = model.StringProperty('n', required=True)
-	user = model.KeyProperty('u', required=True)
-	plan = model.StringProperty('p', default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
-	headline = model.StringProperty('h', indexed=False)
-	subheader = model.StringProperty('s', indexed=False)
+class Site(ndb.Model):
+	name = ndb.StringProperty('n', required=True)
+	user = ndb.KeyProperty('u', required=True)
+	plan = ndb.StringProperty('p', default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
+	headline = ndb.StringProperty('h', indexed=False)
+	subheader = ndb.StringProperty('s', indexed=False)
 
-	size = model.IntegerProperty('z', indexed=False, default=0)
+	size = ndb.IntegerProperty('z', indexed=False, default=0)
 
-	theme = model.StringProperty('m', default=THEME_MARCO, choices=THEMES)
-	nav = model.StringProperty('v', default=NAV_TOP, choices=NAVS)
+	theme = ndb.StringProperty('m', default=THEME_MARCO, choices=THEMES)
+	nav = ndb.StringProperty('v', default=NAV_TOP, choices=NAVS)
 
-	pages = model.KeyProperty('a', repeated=True, indexed=False)
+	pages = ndb.KeyProperty('a', repeated=True, indexed=False)
 
-	facebook = model.StringProperty('f', indexed=False)
-	flickr = model.StringProperty('k', indexed=False)
-	google = model.StringProperty('g', indexed=False)
-	linkedin = model.StringProperty('l', indexed=False)
-	twitter = model.StringProperty('t', indexed=False)
-	youtube = model.StringProperty('y', indexed=False)
+	facebook = ndb.StringProperty('f', indexed=False)
+	flickr = ndb.StringProperty('k', indexed=False)
+	google = ndb.StringProperty('g', indexed=False)
+	linkedin = ndb.StringProperty('l', indexed=False)
+	twitter = ndb.StringProperty('t', indexed=False)
+	youtube = ndb.StringProperty('y', indexed=False)
 
-class Page(model.Expando):
+class Page(ndb.Expando):
 	_default_indexed = False
 
-	type = model.StringProperty('t', required=True, choices=PAGE_TYPES, indexed=True)
-	layout = model.IntegerProperty('y', default=1, indexed=True)
-	name = model.StringProperty('n', required=True)
-	images = model.KeyProperty('i', repeated=True)
-	links = model.StringProperty('l', repeated=True)
-	linktext = model.StringProperty('e', repeated=True)
+	type = ndb.StringProperty('t', required=True, choices=PAGE_TYPES, indexed=True)
+	layout = ndb.IntegerProperty('y', default=1, indexed=True)
+	name = ndb.StringProperty('n', required=True)
+	images = ndb.KeyProperty('i', repeated=True)
+	links = ndb.StringProperty('l', repeated=True)
+	linktext = ndb.StringProperty('e', repeated=True)
 
 	def link(self, idx, rel):
 		url = self.links[idx]
 		if url.startswith('page:'):
 			kid = long(url.partition(':')[2])
-			page = model.Key('Page', kid, parent=self.key.parent()).get()
+			page = ndb.Key('Page', kid, parent=self.key.parent()).get()
 			return rel + page.name
 
 		return url
@@ -111,12 +111,12 @@ class Page(model.Expando):
 
 		images = []
 		for n, i in enumerate(specs.get('images', [])):
-			images.append(Image(key=model.Key('Image', str(n), parent=p.key), width=i[0], height=i[1]))
+			images.append(Image(key=ndb.Key('Image', str(n), parent=p.key), width=i[0], height=i[1]))
 
 		if images:
 			p.images = [i.key for i in images]
 			images.append(p)
-			model.put_multi(images)
+			ndb.put_multi(images)
 
 		return p
 
@@ -145,18 +145,18 @@ def get_serving_url(*args, **kwargs):
 			logging.warning('2: get_serving_url timeout')
 			pass
 
-class Image(model.Expando):
+class Image(ndb.Expando):
 	_default_indexed = False
 
-	type = model.StringProperty('t', default=IMAGE_TYPE_HOLDER, choices=IMAGE_TYPES)
-	width = model.IntegerProperty('w', required=True) # template image width
-	height = model.IntegerProperty('h', required=True) # template image height
-	url = model.StringProperty('u')
-	orig = model.StringProperty('o')
+	type = ndb.StringProperty('t', default=IMAGE_TYPE_HOLDER, choices=IMAGE_TYPES)
+	width = ndb.IntegerProperty('w', required=True) # template image width
+	height = ndb.IntegerProperty('h', required=True) # template image height
+	url = ndb.StringProperty('u')
+	orig = ndb.StringProperty('o')
 
 	@property
 	def blob_key(self):
-		return model.Key('ImageBlob', self.b, parent=self.key.parent().parent())
+		return ndb.Key('ImageBlob', self.b, parent=self.key.parent().parent())
 
 	def _pre_put_hook(self):
 		if self.type == IMAGE_TYPE_HOLDER:
@@ -212,12 +212,12 @@ class Image(model.Expando):
 	def render(self):
 		return '<img width="%i" height="%i" src="%s" class="editable image" id="_image_%s">' %(self.width, self.height, self.url, self.key.id())
 
-class ImageBlob(model.Model):
-	blob = model.BlobKeyProperty('b', indexed=False, required=True)
-	size = model.IntegerProperty('s', indexed=False, required=True)
-	name = model.StringProperty('n', indexed=False, required=True)
-	width = model.IntegerProperty('w', indexed=False, required=True)
-	height = model.IntegerProperty('h', indexed=False, required=True)
+class ImageBlob(ndb.Model):
+	blob = ndb.BlobKeyProperty('b', indexed=False, required=True)
+	size = ndb.IntegerProperty('s', indexed=False, required=True)
+	name = ndb.StringProperty('n', indexed=False, required=True)
+	width = ndb.IntegerProperty('w', indexed=False, required=True)
+	height = ndb.IntegerProperty('h', indexed=False, required=True)
 
 def delete_blob(k):
 	blobstore.delete(k)

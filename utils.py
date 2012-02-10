@@ -7,9 +7,9 @@ from google.appengine.ext.webapp import template
 import jinja2
 import webapp2
 
-from ndb import model
 import filters
 import models
+import ndb
 import settings
 
 # Fix sys.path
@@ -37,11 +37,11 @@ def stripe_set_plan(user, site, token=None, plan=None):
 		)
 
 		def callback():
-			u, s = model.get_multi([user.key, site.key])
+			u, s = ndb.get_multi([user.key, site.key])
 			u.stripe_id = cust['id']
 			u.stripe_last4 = cust['active_card']['last4']
 			s.plan = plan
-			model.put_multi([u, s])
+			ndb.put_multi([u, s])
 			return u, s
 	# called when changing card on plan
 	elif user.stripe_id and (token or plan):
@@ -57,17 +57,17 @@ def stripe_set_plan(user, site, token=None, plan=None):
 			cust.update_subscription(plan=plan, prorate='True')
 
 		def callback():
-			u, s = model.get_multi([user.key, site.key])
+			u, s = ndb.get_multi([user.key, site.key])
 			for k, v in kwargs['user'].items():
 				setattr(u, k, v)
 			for k, v in kwargs['site'].items():
 				setattr(s, k, v)
-			model.put_multi([u, s])
+			ndb.put_multi([u, s])
 			return u, s
 	else:
 		raise ValueError('no card specified')
 
-	user, site = model.transaction(callback, xg=True)
+	user, site = ndb.transaction(callback, xg=True)
 	return user, site
 
 def make_options(options, default=None):

@@ -15,10 +15,9 @@ from google.appengine.ext.webapp import blobstore_handlers
 from webapp2_extras import sessions
 import webapp2
 
-from ndb import context
-from ndb import model
 import facebook
 import models
+import ndb
 import settings
 import utils
 
@@ -97,9 +96,9 @@ class BaseHandler(webapp2.RequestHandler):
 		if 'user' not in self.session:
 			return None, None
 
-		return model.get_multi([
-			model.Key(urlsafe=self.session['user']['key']),
-			model.Key(urlsafe=self.session['user']['site']),
+		return ndb.get_multi([
+			ndb.Key(urlsafe=self.session['user']['key']),
+			ndb.Key(urlsafe=self.session['user']['site']),
 		])
 
 class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
@@ -196,7 +195,7 @@ class Register(BaseHandler):
 				elif not Register.SITENAME_RE.match(lsitename):
 					errors['sitename'] = 'Website extension may only contain letters, numbers, or dashes, and may not begin or end with a dash.'
 				else:
-					site = model.Key('Site', lsitename).get()
+					site = ndb.Key('Site', lsitename).get()
 					if site:
 						errors['sitename'] = 'Website extension is already taken.'
 
@@ -270,11 +269,11 @@ class Register(BaseHandler):
 
 class Social(BaseHandler):
 	def get(self):
-		site = model.Key(urlsafe=self.session['user']['site']).get()
+		site = ndb.Key(urlsafe=self.session['user']['site']).get()
 		self.render('social.html', {'site': site})
 
 	def post(self):
-		site = model.Key(urlsafe=self.session['user']['site']).get()
+		site = ndb.Key(urlsafe=self.session['user']['site']).get()
 
 		site.facebook = self.request.get('facebook').strip()
 		site.flickr = self.request.get('flickr').strip()
@@ -320,10 +319,10 @@ class Checkout(BaseHandler):
 class Edit(BaseHandler):
 	def get(self):
 		user, site = self.us()
-		pages = dict([(i.key, i) for i in model.get_multi(site.pages)])
+		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 		basedir = 'themes/%s/' %site.theme
 		page = pages[site.pages[0]]
-		images = model.get_multi(page.images)
+		images = ndb.get_multi(page.images)
 		self.render('edit.html', {
 			'base': '/static/' + basedir,
 			'edit': True,
@@ -342,10 +341,10 @@ class Edit(BaseHandler):
 		})
 
 class Save(BaseHandler):
-	@context.toplevel
+	@ndb.toplevel
 	def post(self, siteid, pageid):
-		skey = model.Key('Site', siteid)
-		pkey = model.Key('Page', long(pageid), parent=skey)
+		skey = ndb.Key('Site', siteid)
+		pkey = ndb.Key('Page', long(pageid), parent=skey)
 		keys = [
 			'headline',
 
@@ -360,7 +359,7 @@ class Save(BaseHandler):
 		r = {}
 
 		def callback():
-			s, p = model.get_multi([skey, pkey])
+			s, p = ndb.get_multi([skey, pkey])
 			if not s or not p or p.key.parent() != s.key:
 				return
 
@@ -383,7 +382,7 @@ class Save(BaseHandler):
 
 			return [s, p]
 
-		s, p = model.transaction(callback)
+		s, p = ndb.transaction(callback)
 		spec = p.spec()
 
 		for i in range(len(spec['images'])):
@@ -402,9 +401,9 @@ class Save(BaseHandler):
 
 class GetUploadURL(BaseHandler):
 	def get(self, sitename, pageid):
-		skey = model.Key('Site', sitename)
-		pkey = model.Key('Page', long(pageid), parent=skey)
-		site, page = model.get_multi([skey, pkey])
+		skey = ndb.Key('Site', sitename)
+		pkey = ndb.Key('Page', long(pageid), parent=skey)
+		site, page = ndb.get_multi([skey, pkey])
 		image = int(self.request.get('image').rpartition('_')[2])
 
 		if site and page and site.user.urlsafe() == self.session['user']['key'] and image <= len(page.images):
@@ -435,11 +434,11 @@ class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 		return self.session_store.get_session(backend='datastore')
 
 class UploadHandler(BaseUploadHandler):
-	@context.toplevel
+	@ndb.toplevel
 	def post(self, sitename, pageid, image):
-		skey = model.Key('Site', sitename)
-		pkey = model.Key('Page', long(pageid), parent=skey)
-		site, page = model.get_multi([skey, pkey])
+		skey = ndb.Key('Site', sitename)
+		pkey = ndb.Key('Page', long(pageid), parent=skey)
+		site, page = ndb.get_multi([skey, pkey])
 		image = int(image)
 		uploads = self.get_uploads()
 
@@ -466,7 +465,7 @@ class UploadHandler(BaseUploadHandler):
 
 			i_f = page.images[image].get_async()
 
-			s = model.transaction(callback)
+			s = ndb.transaction(callback)
 
 			i = i_f.get_result()
 			i.set_type(models.IMAGE_TYPE_BLOB, blob)
@@ -487,8 +486,8 @@ class GoogleSiteVerification(webapp2.RequestHandler):
 
 class View(BaseHandler):
 	def get(self, sitename, pagename):
-		site = model.Key('Site', sitename).get()
-		pages = dict([(i.key, i) for i in model.get_multi(site.pages)])
+		site = ndb.Key('Site', sitename).get()
+		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 
 		if not pagename:
 			page = pages[0]
@@ -503,7 +502,7 @@ class View(BaseHandler):
 		if not site or not page or site.user.urlsafe() != self.session['user']['key']:
 			return
 
-		images = model.get_multi(page.images)
+		images = ndb.get_multi(page.images)
 		basedir = 'themes/%s/' %site.theme
 
 		self.render(basedir + 'index.html', {
@@ -519,7 +518,7 @@ class View(BaseHandler):
 
 class Publish(BaseHandler):
 	def get(self, sitename):
-		site = model.Key('Site', sitename).get()
+		site = ndb.Key('Site', sitename).get()
 
 		if not site or site.user.urlsafe() != self.session['user']['key']:
 			return
@@ -527,8 +526,8 @@ class Publish(BaseHandler):
 		deferred.defer(publish_site, sitename)
 
 def publish_site(sitename):
-	site = model.Key('Site', sitename).get()
-	pages = dict([(i.key, i) for i in model.get_multi(site.pages)])
+	site = ndb.Key('Site', sitename).get()
+	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 
 	if not site or not pages:
 		return
@@ -539,7 +538,7 @@ def publish_site(sitename):
 		if page.type != 'home':
 			continue
 
-		images = model.get_multi(page.images)
+		images = ndb.get_multi(page.images)
 		c = utils.render(basedir + 'index.html', {
 			'base': settings.TNM_URL + '/static/' + basedir,
 			'images': images,
