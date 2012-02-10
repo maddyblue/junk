@@ -238,9 +238,10 @@
 			var d = this.id + "_div";
 			var r = this.id + "_iframe";
 			var form = this.id + "_form";
+			var o = imageurls[this.id];
 
 			var h = '<div class="modal" id="' + d + '">' +
-				'<p>Upload: <form method="POST" id="' + form + '" target="' + r + '" enctype="multipart/form-data"><input type="file" id="' + f + '" name="' + f + '"></form><a class="upload image" href="#">upload</a></p>' +
+				'<p>Upload (' + o['portw'] + 'x' + o['porth'] + '): <form method="POST" id="' + form + '" target="' + r + '" enctype="multipart/form-data"><input type="file" id="' + f + '" name="' + f + '"></form><a class="upload image" href="#">upload</a></p>' +
 				'<iframe id="' + r + '" src="#" style="width: 0; height: 0; border: 0px solid #fff;"></iframe>' +
 				'<p><a class="close image" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
 			$(this).after(h);
