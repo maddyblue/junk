@@ -243,7 +243,10 @@
 			var h = '<div class="modal" id="' + d + '">' +
 				'<p>Upload (' + o['portw'] + 'x' + o['porth'] + '): <form method="POST" id="' + form + '" target="' + r + '" enctype="multipart/form-data"><input type="file" id="' + f + '" name="' + f + '"></form><a class="upload image" href="#">upload</a></p>' +
 				'<iframe id="' + r + '" src="#" style="width: 0; height: 0; border: 0px solid #fff;"></iframe>' +
-				'<p><a class="close image" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
+				'<p><a class="close image" href="#">save</a>' +
+				' <a href="#" class="imgclear">clear</a>' +
+				' <a href="#" class="cancel">cancel</a>' +
+				'</p></div>';
 			$(this).after(h);
 		});
 
@@ -380,6 +383,17 @@
 			loadimg(this.id);
 			resize(0, {'value': o.s});
 
+			return false;
+		});
+
+		$(document).on("click", ".imgclear", function() {
+			var d = $(this).parents("div").first();
+			var i = d.prev();
+
+			$(this).parents(".modal").hide();
+			stopImageEdit();
+			savemap[i[0].id + "_c"] = true;
+			save();
 			return false;
 		});
 

@@ -387,13 +387,18 @@ class Save(BaseHandler):
 
 		for i in range(len(spec['images'])):
 			k = '_image_%i_' %i
-			kx, ky, ks = k + 'x', k + 'y', k + 's'
+			kx, ky, ks, kc = k + 'x', k + 'y', k + 's', k + 'c'
 			if kx in self.request.POST and ky in self.request.POST and ks in self.request.POST:
 				img = p.images[i].get()
 				img.x = int(self.request.POST[kx].partition('.')[0])
 				img.y = int(self.request.POST[ky].partition('.')[0])
 				img.s = float(self.request.POST[ks])
 				img.set_blob()
+				img.put_async()
+				r['_image_%i' %i] = img.url
+			elif kc in self.request.POST:
+				img = p.images[i].get()
+				img.set_type(models.IMAGE_TYPE_HOLDER)
 				img.put_async()
 				r['_image_%i' %i] = img.url
 
