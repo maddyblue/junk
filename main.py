@@ -326,6 +326,7 @@ class Edit(BaseHandler):
 		images = model.get_multi(page.images)
 		self.render('edit.html', {
 			'base': '/static/' + basedir,
+			'edit': True,
 			'images': images,
 			'jquery': JQUERY,
 			'page': page,

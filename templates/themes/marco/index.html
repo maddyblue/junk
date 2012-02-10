@@ -84,12 +84,12 @@
 <footer class="bottom">
  <div class="inner">
 	<ul class="sn editable social" id="social">
-		<li class="facebook"><a href="{{ site.facebook|default('', true) }}" value="{{ site.facebook|default('', true) }}" id="_facebook">Facebook</a></li>
-		<li class="twitter"><a href="{{ site.twitter|default('', true) }}" value="{{ site.twitter|default('', true) }}" id="_twitter">Twitter</a></li>
-		<li class="youtube"><a href="{{ site.youtube|default('', true) }}" value="{{ site.youtube|default('', true) }}" id="_youtube">YouTube</a></li>
-		<li class="flickr"><a href="{{ site.flickr|default('', true) }}" value="{{ site.flickr|default('', true) }}" id="_flickr">flickr</a></li>
-		<li class="linkedin"><a href="{{ site.linkedin|default('', true) }}" value="{{ site.linkedin|default('', true) }}" id="_linkedin">Linkedin</a></li>
-		<li class="google"><a href="{{ site.google|default('', true) }}" value="{{ site.google|default('', true) }}" id="_google">Google+</a></li>
+		{% if edit or site.facebook %}<li class="facebook"><a href="{{ site.facebook|default('', true) }}" value="{{ site.facebook|default('', true) }}" id="_facebook">Facebook</a></li>{% endif %}
+		{% if edit or site.twitter %}<li class="twitter"><a href="{{ site.twitter|default('', true) }}" value="{{ site.twitter|default('', true) }}" id="_twitter">Twitter</a></li>{% endif %}
+		{% if edit or site.youtube %}<li class="youtube"><a href="{{ site.youtube|default('', true) }}" value="{{ site.youtube|default('', true) }}" id="_youtube">YouTube</a></li>{% endif %}
+		{% if edit or site.flickr %}<li class="flickr"><a href="{{ site.flickr|default('', true) }}" value="{{ site.flickr|default('', true) }}" id="_flickr">flickr</a></li>{% endif %}
+		{% if edit or site.linkedin %}<li class="linkedin"><a href="{{ site.linkedin|default('', true) }}" value="{{ site.linkedin|default('', true) }}" id="_linkedin">Linkedin</a></li>{% endif %}
+		{% if edit or site.google %}<li class="google"><a href="{{ site.google|default('', true) }}" value="{{ site.google|default('', true) }}" id="_google">Google+</a></li>{% endif %}
 	</ul>
 	<p>&copy; 2011 <a href="http://www.thenextmuse.com">thenextmuse.com</a></p>
  </div>
