@@ -137,7 +137,12 @@ def get_serving_url(*args, **kwargs):
 		try:
 			return images.get_serving_url(*args, **kwargs)
 		except DeadlineExceededError:
-			logging.warning('get_serving_url timeout')
+			logging.warning('1: get_serving_url timeout')
+			pass
+		# saw something in the app engine log that indicated the above catch didn't happen
+		# try this...not sure why it didn't work above
+		except:
+			logging.warning('2: get_serving_url timeout')
 			pass
 
 class Image(model.Expando):
