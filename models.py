@@ -121,11 +121,9 @@ class Page(ndb.Expando):
 		return p
 
 IMAGE_TYPE_BLOB = 'blob'
-IMAGE_TYPE_COLOR = 'color'
 IMAGE_TYPE_HOLDER = 'holder'
 IMAGE_TYPES = [
 	IMAGE_TYPE_BLOB,
-	IMAGE_TYPE_COLOR,
 	IMAGE_TYPE_HOLDER,
 ]
 
