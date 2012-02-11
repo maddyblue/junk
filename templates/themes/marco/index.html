@@ -29,9 +29,8 @@
 		<h1><a href="{{ rel }}" class="editable text" id="_headline">{{ site.headline }}</a></h1>
 		<nav>
 			<ul>
-				<li><a href="#" class="current">Home</a></li>
 				{% for p in site.pages %}
-				<li><a href="{{ rel }}{{ pages[p].name }}">{{ pages[p].name }}</a></li>
+				<li><a href="{{ rel }}{{ pages[p].name }}"{% if page.key == p %} class="current"{% endif %}>{{ pages[p].name }}</a></li>
 				{% endfor %}
 				<li class="search"><a href="#">Search</a></li>
 				<li class="audio"><a href="#">Audio</a></li>
