@@ -92,6 +92,8 @@ class Page(ndb.Expando):
 			kid = long(url.partition(':')[2])
 			page = ndb.Key('Page', kid, parent=self.key.parent()).get()
 			return rel + page.name
+		elif ':/' not in url:
+			url = 'http://' + url
 
 		return url
 
