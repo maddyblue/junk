@@ -46,9 +46,22 @@
 
 			$.post('{{ "save"|url(siteid=site.key.id(), pageid=page.key.id()) }}', m, function(data, textStatus, jqXHR) {
 				var j = jQuery.parseJSON(data);
-				$.each(j, function(k, v) {
-					imageurls[k].url = v;
-					$("#" + k)[0].src = v;
+				$.each(j, function(imgkey, imgdata) {
+					var setimg = false;
+
+					$.each(imgdata, function(k, v) {
+						imageurls[imgkey][k] = v;
+						if(k == 'url')
+							$("#" + imgkey)[0].src = v;
+						if(k == 'orig')
+							setimg = true;
+					});
+
+					if(setimg) {
+						$("#containerimg").css('background-image', 'url(' + imageurls[imgkey].orig + ')');
+						loadimg(imgkey);
+						resize(0, {'value': 0});
+					}
 				});
 
 				$('#save').html('&nbsp;');
@@ -59,6 +72,69 @@
 		{
 			$('#saved').show().fadeOut(1000);
 		}
+	}
+
+	var cur_img;
+	function loadimg(id) {
+		var o = imageurls[id];
+
+		o.wscale = o.portw / o.basew;
+		o.hscale = o.porth / o.baseh;
+		o.min_scale = Math.max(o.wscale, o.hscale);
+		o.max_scale = Math.max(o.min_scale * 3);
+		o.s = Math.max(o.min_scale, o.s);
+		o.s = Math.min(o.max_scale, o.s);
+
+		$("#imgslider").slider("destroy");
+		$("#imgslider").slider({
+			orientation: "vertical",
+			min: o.min_scale,
+			max: o.max_scale,
+			step: (o.max_scale - o.min_scale) / 100,
+			slide: resize,
+			value: o.s,
+		});
+	}
+
+	function resize(event, ui) {
+		var o = imageurls[cur_img];
+		var wscale = o.wscale;
+		var hscale = o.hscale;
+		var min_scale = o.min_scale;
+		var max_scale = o.max_scale;
+		var size = Math.max(o.min_scale, ui.value);
+		size = Math.min(o.max_scale, size);
+
+		var w = o.basew * size;
+		var h = o.baseh * size;
+		var portw = o.portw;
+		var porth = o.porth;
+		var basetop = o.basetop;
+		var baseleft = o.baseleft;
+		var f = 0.8;
+
+		$("#containerimg").css({height: h, width: w});
+		$("#leftcontainer").css({width: w - portw, height: porth, top: h - porth});
+		$("#rightcontainer").css({width: w - portw, height: porth, top: h - porth});
+		$("#topcontainer").css({width: 2 * w - portw, height: h - porth});
+		$("#bottomcontainer").css({width: 2 * w - portw, height: h - porth});
+		$("#imgslider").css({top: h - porth * (f + 1) / 2, left: w - 20, height: porth * f});
+		$("#imgcontainer").css({
+			width: 2 * w - portw,
+			height: 2 * h - porth,
+			top: basetop + porth - h,
+			left: baseleft + portw - w,
+		});
+
+		var pos = $("#containerimg").position();
+		if(pos.left + w > 2 * w - portw)
+			$("#containerimg").css({left: w - portw});
+		if(pos.top + h > 2 * h - porth)
+			$("#containerimg").css({top: h - porth});
+
+		o.x = pos.left;
+		o.y = pos.top;
+		o.s = size;
 	}
 
 	$(function() {
@@ -232,7 +308,6 @@
 		};
 		{% endfor %}
 
-		var cur_img;
 		$(".editable.image").each(function() {
 			var f = this.id + "_file";
 			var d = this.id + "_div";
@@ -243,74 +318,17 @@
 			var h = '<div class="modal" id="' + d + '">' +
 				'<p>Upload (' + o['portw'] + 'x' + o['porth'] + '): <form method="POST" id="' + form + '" target="' + r + '" enctype="multipart/form-data"><input type="file" id="' + f + '" name="' + f + '"></form><a class="upload image" href="#">upload</a></p>' +
 				'<iframe id="' + r + '" src="#" style="width: 0; height: 0; border: 0px solid #fff;"></iframe>' +
+				'<p>Existing: <select id="' + this.id + '_select">' +
+					{% for i in all_images %}
+					'<option value="{{ i.key.id() }}">{{ i.name }} ({{ i.width }}x{{ i.height }})</option>' +
+					{% endfor %}
+				'</select> <a href="#" class="imgselect">use</a></p>' +
 				'<p><a class="close image" href="#">save</a>' +
 				' <a href="#" class="imgclear">clear</a>' +
 				' <a href="#" class="cancel">cancel</a>' +
 				'</p></div>';
 			$(this).after(h);
 		});
-
-		function loadimg(id) {
-			var o = imageurls[id];
-
-			o.wscale = o.portw / o.basew;
-			o.hscale = o.porth / o.baseh;
-			o.min_scale = Math.max(o.wscale, o.hscale);
-			o.max_scale = Math.max(o.min_scale * 3);
-			o.s = Math.max(o.min_scale, o.s);
-			o.s = Math.min(o.max_scale, o.s);
-
-			$("#imgslider").slider("destroy");
-			$("#imgslider").slider({
-				orientation: "vertical",
-				min: o.min_scale,
-				max: o.max_scale,
-				step: (o.max_scale - o.min_scale) / 100,
-				slide: resize,
-				value: o.s,
-			});
-		}
-
-		function resize(event, ui) {
-			var o = imageurls[cur_img];
-			var wscale = o.wscale;
-			var hscale = o.hscale;
-			var min_scale = o.min_scale;
-			var max_scale = o.max_scale;
-			var size = Math.max(o.min_scale, ui.value);
-			size = Math.min(o.max_scale, size);
-
-			var w = o.basew * size;
-			var h = o.baseh * size;
-			var portw = o.portw;
-			var porth = o.porth;
-			var basetop = o.basetop;
-			var baseleft = o.baseleft;
-			var f = 0.8;
-
-			$("#containerimg").css({height: h, width: w});
-			$("#leftcontainer").css({width: w - portw, height: porth, top: h - porth});
-			$("#rightcontainer").css({width: w - portw, height: porth, top: h - porth});
-			$("#topcontainer").css({width: 2 * w - portw, height: h - porth});
-			$("#bottomcontainer").css({width: 2 * w - portw, height: h - porth});
-			$("#imgslider").css({top: h - porth * (f + 1) / 2, left: w - 20, height: porth * f});
-			$("#imgcontainer").css({
-				width: 2 * w - portw,
-				height: 2 * h - porth,
-				top: basetop + porth - h,
-				left: baseleft + portw - w,
-			});
-
-			var pos = $("#containerimg").position();
-			if(pos.left + w > 2 * w - portw)
-				$("#containerimg").css({left: w - portw});
-			if(pos.top + h > 2 * h - porth)
-				$("#containerimg").css({top: h - porth});
-
-			o.x = pos.left;
-			o.y = pos.top;
-			o.s = size;
-		}
 
 		$(document).on("click", ".close.image", function() {
 			var d = $(this).parents("div").first();
@@ -397,6 +415,21 @@
 			stopImageEdit();
 			savemap[i[0].id + "_c"] = true;
 			save();
+			return false;
+		});
+
+		$(document).on("click", ".imgselect", function() {
+			var d = $(this).parents("div").first();
+			var i = d.prev();
+			var o = imageurls[i[0].id];
+
+			savemap[i[0].id + "_b"] = $("#" + i[0].id + "_select")[0].value;
+			save();
+
+
+
+			// either do ajax request, or set url, orig, w, h here
+
 			return false;
 		});
 

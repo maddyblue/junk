@@ -323,7 +323,9 @@ class Edit(BaseHandler):
 		basedir = 'themes/%s/' %site.theme
 		page = pages[site.pages[0]]
 		images = ndb.get_multi(page.images)
+		all_images = models.ImageBlob.query(ancestor=site.key)
 		self.render('edit.html', {
+			'all_images': all_images,
 			'base': '/static/' + basedir,
 			'edit': True,
 			'images': images,
@@ -387,7 +389,8 @@ class Save(BaseHandler):
 
 		for i in range(len(spec['images'])):
 			k = '_image_%i_' %i
-			kx, ky, ks, kc = k + 'x', k + 'y', k + 's', k + 'c'
+			kx, ky, ks, kc, kb = k + 'x', k + 'y', k + 's', k + 'c', k + 'b'
+
 			if kx in self.request.POST and ky in self.request.POST and ks in self.request.POST:
 				img = p.images[i].get()
 				img.x = int(self.request.POST[kx].partition('.')[0])
@@ -395,12 +398,25 @@ class Save(BaseHandler):
 				img.s = float(self.request.POST[ks])
 				img.set_blob()
 				img.put_async()
-				r['_image_%i' %i] = img.url
+				r['_image_%i' %i] = {'url': img.url}
 			elif kc in self.request.POST:
 				img = p.images[i].get()
 				img.set_type(models.IMAGE_TYPE_HOLDER)
 				img.put_async()
-				r['_image_%i' %i] = img.url
+				r['_image_%i' %i] = {'url': img.url}
+			elif kb in self.request.POST:
+				blob = ndb.Key('ImageBlob', long(self.request.POST[kb]), parent=s.key).get()
+				if blob:
+					img = p.images[i].get()
+					img.set_type(models.IMAGE_TYPE_BLOB, blob)
+					img.set_blob()
+					img.put_async()
+					r['_image_%i' %i] = {
+						'baseh': img.oh,
+						'basew': img.ow,
+						'orig': img.orig,
+						'url': img.url,
+					}
 
 		self.response.out.write(json.dumps(dict(r)))
 
