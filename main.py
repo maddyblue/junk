@@ -317,11 +317,18 @@ class Checkout(BaseHandler):
 		self.redirect(webapp2.uri_for('checkout'))
 
 class Edit(BaseHandler):
-	def get(self):
+	def get(self, pagename=None):
 		user, site = self.us()
 		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 		basedir = 'themes/%s/' %site.theme
+
 		page = pages[site.pages[0]]
+		if pagename:
+			for k, v in pages.items():
+				if v.name == pagename:
+					page = v
+					break
+
 		images = ndb.get_multi(page.images)
 		all_images = models.ImageBlob.query(ancestor=site.key)
 		self.render('edit.html', {
@@ -335,7 +342,7 @@ class Edit(BaseHandler):
 			'pagetemplate': basedir + page.type + '.html',
 			'publish_url': webapp2.uri_for('publish', sitename=site.name),
 			'published_url': 'http://commondatastorage.googleapis.com/' + settings.BUCKET_NAME + '/' + site.key.id() + '/' + page.name,
-			'rel': webapp2.uri_for('edit'),
+			'rel': webapp2.uri_for('edit-home') + '/',
 			'site': site,
 			'template': basedir + 'index.html',
 			'upload_url': webapp2.uri_for('upload-url', sitename=site.name, pageid=page.key.id()),
@@ -595,24 +602,25 @@ config = {
 }
 
 app = webapp2.WSGIApplication([
-	webapp2.Route(r'/', handler=MainPage, name='main'),
-	webapp2.Route(r'/checkout', handler=Checkout, name='checkout'),
-	webapp2.Route(r'/edit', handler=Edit, name='edit'),
-	webapp2.Route(r'/facebook', handler=FacebookCallback, name='facebook'),
-	webapp2.Route(r'/login/facebook', handler=LoginFacebook, name='login-facebook'),
-	webapp2.Route(r'/login/google', handler=LoginGoogle, name='login-google'),
-	webapp2.Route(r'/logout', handler=Logout, name='logout'),
-	webapp2.Route(r'/publish/<sitename>', handler=Publish, name='publish'),
-	webapp2.Route(r'/register', handler=Register, name='register'),
-	webapp2.Route(r'/save/<siteid>/<pageid>', handler=Save, name='save'),
-	webapp2.Route(r'/social', handler=Social, name='social'),
-	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler=UploadHandler, name='upload-file'),
-	webapp2.Route(r'/upload/success', handler=UploadSuccess, name='upload-success'),
-	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler=GetUploadURL, name='upload-url'),
-	webapp2.Route(r'/view/<sitename>', handler=View, name='view-home', defaults={'pagename': None}),
-	webapp2.Route(r'/view/<sitename>/<pagename>', handler=View, name='view'),
+	webapp2.Route(r'/', handler='main.MainPage', name='main'),
+	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
+	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
+	webapp2.Route(r'/edit/<pagename>', handler='main.Edit', name='edit'),
+	webapp2.Route(r'/facebook', handler='main.FacebookCallback', name='facebook'),
+	webapp2.Route(r'/login/facebook', handler='main.LoginFacebook', name='login-facebook'),
+	webapp2.Route(r'/login/google', handler='main.LoginGoogle', name='login-google'),
+	webapp2.Route(r'/logout', handler='main.Logout', name='logout'),
+	webapp2.Route(r'/publish/<sitename>', handler='main.Publish', name='publish'),
+	webapp2.Route(r'/register', handler='main.Register', name='register'),
+	webapp2.Route(r'/save/<siteid>/<pageid>', handler='main.Save', name='save'),
+	webapp2.Route(r'/social', handler='main.Social', name='social'),
+	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler='main.UploadHandler', name='upload-file'),
+	webapp2.Route(r'/upload/success', handler='main.UploadSuccess', name='upload-success'),
+	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler='main.GetUploadURL', name='upload-url'),
+	webapp2.Route(r'/view/<sitename>', handler='main.View', name='view-home', defaults={'pagename': None}),
+	webapp2.Route(r'/view/<sitename>/<pagename>', handler='main.View', name='view'),
 
-# google site verification
-	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler=GoogleSiteVerification),
+	# google site verification
+	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),
 
 	], debug=True, config=config)
