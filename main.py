@@ -544,6 +544,17 @@ class View(BaseHandler):
 			'site': site,
 		})
 
+class Reset(BaseHandler):
+	def get(self):
+		user, site = self.us()
+		pages = ndb.get_multi(site.pages)
+		for n, p in enumerate(pages):
+			pages[n] = models.Page.new(p.name, site, p.type)
+		site.pages = [i.key for i in pages]
+		ndb.put_multi(pages)
+		site.put()
+		self.redirect(webapp2.uri_for('edit-home'))
+
 class Publish(BaseHandler):
 	def get(self, sitename):
 		site = ndb.Key('Site', sitename).get()
@@ -612,6 +623,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/logout', handler='main.Logout', name='logout'),
 	webapp2.Route(r'/publish/<sitename>', handler='main.Publish', name='publish'),
 	webapp2.Route(r'/register', handler='main.Register', name='register'),
+	webapp2.Route(r'/reset', handler='main.Reset', name='reset'),
 	webapp2.Route(r'/save/<siteid>/<pageid>', handler='main.Save', name='save'),
 	webapp2.Route(r'/social', handler='main.Social', name='social'),
 	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler='main.UploadHandler', name='upload-file'),
