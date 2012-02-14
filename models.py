@@ -85,6 +85,8 @@ class Page(ndb.Expando):
 	images = ndb.KeyProperty('i', repeated=True)
 	links = ndb.StringProperty('l', repeated=True)
 	linktext = ndb.StringProperty('e', repeated=True)
+	text = ndb.TextProperty('x', repeated=True)
+	lines = ndb.StringProperty('s', repeated=True)
 
 	def link(self, idx, rel):
 		url = self.links[idx]
@@ -108,6 +110,8 @@ class Page(ndb.Expando):
 		specs = spec(site.theme, p.type, p.layout)
 		p.links = [''] * specs.get('links', 0)
 		p.linktext = ['link'] * specs.get('links', 0)
+		p.text = [''] * specs.get('text', 0)
+		p.lines = [''] * specs.get('lines', 0)
 
 		p.put()
 

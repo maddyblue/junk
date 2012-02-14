@@ -47,6 +47,15 @@ SPECS = {
 				'text': 2,
 			},
 		},
+		PAGE_TYPE_TEXT: {
+			1: {
+				'images': [
+					(310, 450),
+				],
+				'text': 1,
+				'lines': 1,
+			},
+		},
 	},
 }
 

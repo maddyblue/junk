@@ -153,18 +153,32 @@ $(function() {
 
 	// text
 
-	$(".editable.text").each(function() {
+	$(".editable.text").hallo({
+		plugins: {
+			'halloformat': {},
+			'hallolink': {},
+		}
+	});
+
+	$(document).on("hallodeactivated", "#.editable.text", function() {
+		savemap[this.id] = $(this).html();
+		save();
+	});
+
+	// line
+
+	$(".editable.line").each(function() {
 		var i = this.id + "_text";
 		var f = this.id + "_focus";
 		var d = this.id + "_div";
 		var h = '<div class="modal" id="' + d + '">' +
 			'<p><label for="text">Text</label>' +
 			'<input type="text" size="30" class="' + f + '" name="' + i + '" id="' + i + '" value="' + $(this).text() + '" /></p>' +
-			'<p><a class="close text" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
+			'<p><a class="close line" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
 		$(this).after(h);
 	});
 
-	$(document).on("click", ".close.text", function() {
+	$(document).on("click", ".close.line", function() {
 		var i = $(this).parents("div").first().prev();
 		var t = $("#" + i[0].id + "_text");
 

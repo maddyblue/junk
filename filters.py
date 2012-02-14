@@ -13,13 +13,25 @@ def editlink(page, i, rel):
 		page.link(i, rel), page.links[i], i, page.linktext[i]
 	)
 
+def edittext(page, i, elem):
+	return '<%s class="editable text" id="_text_%i">%s</%s>' %(
+		elem, i, page.text[i], elem
+	)
+
+def editline(page, i, elem):
+	return '<%s class="editable line" id="_line_%i">%s</%s>' %(
+		elem, i, page.lines[i], elem
+	)
+
 def linkmap(link):
 	if link.startswith('page:'):
 		return link
 	return 'url'
 
 filters = dict([(i, globals()[i]) for i in [
+	'editline',
 	'editlink',
+	'edittext',
 	'linkmap',
 	'url',
 ]])

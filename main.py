@@ -319,6 +319,10 @@ class Checkout(BaseHandler):
 class Edit(BaseHandler):
 	def get(self, pagename=None):
 		user, site = self.us()
+
+		if not user or not site:
+			return
+
 		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 		basedir = 'themes/%s/' %site.theme
 
@@ -369,6 +373,8 @@ class Save(BaseHandler):
 
 		def callback():
 			s, p = ndb.get_multi([skey, pkey])
+			sc, pc = False, False
+
 			if not s or not p or p.key.parent() != s.key:
 				return
 
@@ -376,18 +382,34 @@ class Save(BaseHandler):
 				v = self.request.POST.get('_%s' %k)
 				if v:
 					setattr(s, k, v)
-			s.put_async()
+					sc = True
+			if sc:
+				s.put_async()
 
 			spec = p.spec()
 
-			for i in range(spec['links']):
+			for i in range(spec.get('links', 0)):
 				k = '_link_%i_' %i
 				kt, ku = k + 'text', k + 'url'
 				if kt in self.request.POST and ku in self.request.POST:
 					p.links[i] = self.request.POST[ku]
 					p.linktext[i] = self.request.POST[kt]
+					pc = True
 
-			p.put_async()
+			for i in range(spec.get('text', 0)):
+				k = '_text_%i' %i
+				if k in self.request.POST:
+					p.text[i] = self.request.POST[k]
+					pc = True
+
+			for i in range(spec.get('lines', 0)):
+				k = '_line_%i' %i
+				if k in self.request.POST:
+					p.lines[i] = self.request.POST[k]
+					pc = True
+
+			if pc:
+				p.put_async()
 
 			return [s, p]
 
