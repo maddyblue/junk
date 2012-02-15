@@ -596,7 +596,7 @@ def publish_site(sitename):
 	basedir = 'themes/%s/' %site.theme
 
 	for page in pages.values():
-		if page.type != 'home':
+		if page.type not in [models.PAGE_TYPE_HOME, models.PAGE_TYPE_TEXT]:
 			continue
 
 		images = ndb.get_multi(page.images)
