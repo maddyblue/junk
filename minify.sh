@@ -1,7 +1,5 @@
-minjs="static/js/site.min.js"
-rm -f $minjs
-cat static/js/*.js | uglifyjs > $minjs
-#cat static/js/*.js > $minjs
+cat static/js/jquery.*.js static/js/hallo.js | uglifyjs > static/js/site.min.js
+cat static/js/edit.js | uglifyjs > static/js/edit.min.js
 
 for f in `ffind static/themes -name "*.js" | grep -v ".min.js"`
 do
