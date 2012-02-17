@@ -76,6 +76,12 @@ class Site(ndb.Model):
 	twitter = ndb.StringProperty('t', indexed=False)
 	youtube = ndb.StringProperty('y', indexed=False)
 
+	@property
+	def twitter_name(self):
+		if self.twitter:
+			return self.twitter.rpartition('/')[2]
+		return None
+
 class Page(ndb.Expando):
 	_default_indexed = False
 
@@ -87,6 +93,11 @@ class Page(ndb.Expando):
 	linktext = ndb.StringProperty('e', repeated=True)
 	text = ndb.TextProperty('x', repeated=True)
 	lines = ndb.StringProperty('s', repeated=True)
+
+	@property
+	def layouts(self):
+		site = self.key.parent().get()
+		return layouts(site.theme, self.type)
 
 	def link(self, idx, rel):
 		url = self.links[idx]
@@ -106,24 +117,41 @@ class Page(ndb.Expando):
 	@classmethod
 	def new(cls, name, site, pagetype):
 		p = Page(parent=site.key, type=pagetype, name=name)
-
-		specs = spec(site.theme, p.type, p.layout)
-		p.links = [''] * specs.get('links', 0)
-		p.linktext = ['link'] * specs.get('links', 0)
-		p.text = [''] * specs.get('text', 0)
-		p.lines = [''] * specs.get('lines', 0)
-
 		p.put()
+		p = Page.set_layout(p, p.layout)
+		return p
 
-		images = []
-		for n, i in enumerate(specs.get('images', [])):
-			images.append(Image(key=ndb.Key('Image', str(n), parent=p.key), width=i[0], height=i[1]))
+	@classmethod
+	def set_layout(cls, page, layoutid):
+		site = page.key.parent().get()
+		layout = spec(site.theme, page.type, layoutid)
+		t = {'linktext': 'link'}
+		f = {'linktext': 'links'}
+		if not layout:
+			return page
 
-		if images:
-			p.images = [i.key for i in images]
-			images.append(p)
-			ndb.put_multi(images)
+		def callback():
+			p = page.key.get()
 
+			images = ndb.get_multi(p.images)
+			for n, i in enumerate(layout.get('images', [])):
+				if n < len(images):
+					images[n].set_type(IMAGE_TYPE_HOLDER)
+					images[n].width = i[0]
+					images[n].height = i[1]
+				else:
+					images.append(Image(key=ndb.Key('Image', str(n), parent=p.key), width=i[0], height=i[1]))
+					p.images.append(images[-1].key)
+			ndb.put_multi_async(images)
+
+			for d in ['links', 'text', 'lines', 'linktext']:
+				a = getattr(p, d)
+				a.extend([t.get(d, d)] * (layout.get(f.get(d, d), 0) - len(a)))
+			p.layout = layoutid
+			p.put()
+			return p
+
+		p = ndb.transaction(callback)
 		return p
 
 IMAGE_TYPE_BLOB = 'blob'

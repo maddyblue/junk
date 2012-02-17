@@ -34,7 +34,7 @@
 	<div class="post">
 		<a href="{{ page.link(3, rel) }}" class="thumb">{{ images[4].render() }}</a>
 		<h3>{{ page|editlink(4, rel) }}</h3>
-		<p>{{ page.text[1] }}</p>
+		{{ page|edittext(0, 'div') }}
 	</div>
 {% endif %}
 </div>

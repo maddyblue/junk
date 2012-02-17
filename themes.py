@@ -55,9 +55,29 @@ SPECS = {
 				'text': 1,
 				'lines': 1,
 			},
+			2: {
+				'images': [
+					(660, 165),
+					(310, 180),
+					(310, 180),
+				],
+				'text': 4,
+				'lines': 2,
+			},
+			3: {
+				'images': [
+					(1000, 250),
+					(310, 336),
+				],
+				'text': 4,
+				'lines': 4,
+			},
 		},
 	},
 }
 
 def spec(theme, pagetype, layout):
 	return SPECS.get(theme, {}).get(pagetype, {}).get(layout, {})
+
+def layouts(theme, pagetype):
+	return len(SPECS.get(theme, {}).get(pagetype, {}))

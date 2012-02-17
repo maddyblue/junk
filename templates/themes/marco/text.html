@@ -1,5 +1,84 @@
+{% if page.layout == 1 %}
+
 <div class="fullpage">
 	<span class="left">{{ images[0].render() }}</span>
 	{{ page|editline(0, 'h1') }}
 	{{ page|edittext(0, 'div') }}
 </div>
+
+{% elif page.layout == 2 %}
+
+<div class="left-cont">
+	<span class="thumb">{{ images[0].render() }}</span>
+	{{ page|editline(0, 'h1') }}
+	{{ page|edittext(0, 'div') }}
+
+	<div class="column">
+		<ul class="double">
+		<li>
+			{{ images[1].render() }}
+			{{ page|edittext(1, 'div') }}
+		</li>
+		<li>
+			{{ images[2].render() }}
+			{{ page|edittext(2, 'div') }}
+		</li>
+		</ul>
+	</div>
+	</div>
+
+<aside>
+	<ul>
+		<li class="events">
+			{{ page|editline(1, 'h3') }}
+			{{ page|edittext(3, 'div') }}
+		</li>
+		{% if site.twitter %}
+		<li class="twitter">
+			<h3>Latest tweets!</h3>
+				<script type="text/javascript">
+					$(function() {
+							$.getJSON('http://search.twitter.com/search.json?callback=?&rpp=5&q={{ site.twitter_name }}', function(data) {
+							$.each(data.results, function(key, val) {
+								$("#li_twitter").before('<li>' + val.text + '</li>');
+							});
+						});
+					});
+				</script>
+			<ul id="ul_twitter">
+				<li class="follow" id="li_twitter">follow me on <a href="{{ site.twitter }}">twitter</a></li>
+			</ul>
+		</li>
+		{% endif %}
+	</ul>
+</aside>
+
+{% elif page.layout == 3 %}
+
+<div id="slider">
+	{{ images[0].render() }}
+</div>
+<div class="fullpage">
+	<span class="left">{{ images[1].render() }}</span>
+	{{ page|editline(0, 'h1') }}
+	{{ page|edittext(0, 'div') }}
+</div>
+
+<div class="column">
+	<ul>
+		<li>
+			{{ page|editline(1, 'h3') }}
+			{{ page|edittext(1, 'div') }}
+		</li>
+		<li class="middle">
+			{{ page|editline(2, 'h3') }}
+			{{ page|edittext(2, 'div') }}
+		</li>
+		<li>
+			{{ page|editline(3, 'h3') }}
+			{{ page|edittext(3, 'div') }}
+		</li>
+	</ul>
+</div>
+
+{% endif %}

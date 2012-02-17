@@ -333,7 +333,7 @@ class Edit(BaseHandler):
 					page = v
 					break
 
-		images = ndb.get_multi(page.images)
+		images = ndb.get_multi(page.images[:len(page.spec().get('images', []))])
 		all_images = models.ImageBlob.query(ancestor=site.key)
 		self.render('edit.html', {
 			'all_images': all_images,
@@ -586,6 +586,20 @@ class Publish(BaseHandler):
 
 		deferred.defer(publish_site, sitename)
 
+class Layout(BaseHandler):
+	def get(self, siteid, pageid, layoutid):
+		user, site = self.us()
+
+		if site.key.id() != siteid:
+			return
+
+		page = ndb.Key('Page', long(pageid), parent=site.key).get()
+		if not page:
+			return
+
+		page = models.Page.set_layout(page, long(layoutid))
+		self.redirect(webapp2.uri_for('edit', pagename=page.name))
+
 def publish_site(sitename):
 	site = ndb.Key('Site', sitename).get()
 	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
@@ -640,6 +654,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
 	webapp2.Route(r'/edit/<pagename>', handler='main.Edit', name='edit'),
 	webapp2.Route(r'/facebook', handler='main.FacebookCallback', name='facebook'),
+	webapp2.Route(r'/layout/<siteid>/<pageid>/<layoutid>', handler='main.Layout', name='layout'),
 	webapp2.Route(r'/login/facebook', handler='main.LoginFacebook', name='login-facebook'),
 	webapp2.Route(r'/login/google', handler='main.LoginGoogle', name='login-google'),
 	webapp2.Route(r'/logout', handler='main.Logout', name='logout'),

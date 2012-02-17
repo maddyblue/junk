@@ -63,6 +63,16 @@ $(function() {
 		'';
 	{% endfor %}
 
+	$.tnm.layouts =
+		{% for i in range(1, page.layouts + 1) %}
+			{% if i == page.layout %}
+				' {{ i }}' +
+			{% else %}
+				' <a href="{{ "layout"|url(siteid=site.key.id(), pageid=page.key.id(), layoutid=i) }}">{{ i }}</a>' +
+			{% endif %}
+		{% endfor %}
+		'';
+
 	$.tnm.publishedurl = '{{ published_url }}';
 	$.tnm.publishurl = '{{ publish_url }}';
 	$.tnm.saveurl = '{{ "save"|url(siteid=site.key.id(), pageid=page.key.id()) }}';

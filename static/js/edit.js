@@ -134,6 +134,9 @@ $(function() {
 			' <a id="publish" href="#">publish</a>' +
 			' <a href="' + $.tnm.publishedurl + '">published</a>' +
 			' <span id="publishing" style="display: none">publishing...</span>' +
+			' <span id="layouts" style="border: 1px solid black">page layout:'+
+			$.tnm.layouts +
+			'</span>' +
 		'</div>'
 	);
 
