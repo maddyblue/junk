@@ -31,23 +31,28 @@ function save() {
 
 		$.post($.tnm.saveurl, m, function(data, textStatus, jqXHR) {
 			var j = jQuery.parseJSON(data);
-			$.each(j, function(imgkey, imgdata) {
-				var setimg = false;
 
-				$.each(imgdata, function(k, v) {
-					$.tnm.imageurls[imgkey][k] = v;
-					if(k == 'url')
-						$("#" + imgkey)[0].src = v;
-					if(k == 'orig')
-						setimg = true;
+			if(j.errors.length > 0) {
+				alert(j.errors);
+			} else {
+				$.each(j, function(imgkey, imgdata) {
+					var setimg = false;
+
+					$.each(imgdata, function(k, v) {
+						$.tnm.imageurls[imgkey][k] = v;
+						if(k == 'url')
+							$("#" + imgkey)[0].src = v;
+						if(k == 'orig')
+							setimg = true;
+					});
+
+					if(setimg) {
+						$("#containerimg").css('background-image', 'url(' + $.tnm.imageurls[imgkey].orig + ')');
+						loadimg(imgkey);
+						resize(0, {'value': 0});
+					}
 				});
-
-				if(setimg) {
-					$("#containerimg").css('background-image', 'url(' + $.tnm.imageurls[imgkey].orig + ')');
-					loadimg(imgkey);
-					resize(0, {'value': 0});
-				}
-			});
+			}
 
 			$('#save').html('&nbsp;');
 			$('#saved').show().fadeOut(1000);
@@ -156,6 +161,7 @@ $(function() {
 
 	// text
 
+	/*
 	$(".editable.text").hallo({
 		plugins: {
 			'halloformat': {},
@@ -167,6 +173,7 @@ $(function() {
 		savemap[this.id] = $(this).html();
 		save();
 	});
+	//*/
 
 	// line
 

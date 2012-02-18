@@ -30,7 +30,7 @@
 		<nav>
 			<ul>
 				{% for p in site.pages %}
-				<li><a href="{{ rel }}{{ pages[p].name }}"{% if page.key == p %} class="current"{% endif %}>{{ pages[p].name }}</a></li>
+				<li><a href="{{ rel }}{{ pages[p].name }}"{% if page.key == p %} class="current editable line" id="current_menu"{% endif %}>{{ pages[p].name }}</a></li>
 				{% endfor %}
 				<li class="search"><a href="#">Search</a></li>
 				<li class="audio"><a href="#">Audio</a></li>

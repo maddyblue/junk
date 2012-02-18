@@ -369,7 +369,7 @@ class Save(BaseHandler):
 			'youtube',
 		]
 
-		r = {}
+		r = {'errors': []}
 
 		def callback():
 			s, p = ndb.get_multi([skey, pkey])
@@ -407,6 +407,18 @@ class Save(BaseHandler):
 				if k in self.request.POST:
 					p.lines[i] = self.request.POST[k]
 					pc = True
+
+			cm = self.request.POST.get('current_menu')
+			if cm:
+				if cm.lower() != p.name_lower and models.Page.pagename_exists(s, cm):
+					r['errors'].append('%s is already the name of another page' %cm)
+				elif re.search(r'[^\w -]+', cm):
+					r['errors'].append('Page names can only contain letters, numbers, spaces, dashes (-), and underscores (_)')
+				else:
+					p.name = cm
+					pc = True
+			elif 'current_menu' in self.request.POST:
+				r['errors'].append('Page names may not be blank')
 
 			if pc:
 				p.put_async()

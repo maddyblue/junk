@@ -88,6 +88,7 @@ class Page(ndb.Expando):
 	type = ndb.StringProperty('t', required=True, choices=PAGE_TYPES, indexed=True)
 	layout = ndb.IntegerProperty('y', default=1, indexed=True)
 	name = ndb.StringProperty('n', required=True)
+	name_lower = ndb.ComputedProperty(lambda self: self.name.lower())
 	images = ndb.KeyProperty('i', repeated=True)
 	links = ndb.StringProperty('l', repeated=True)
 	linktext = ndb.StringProperty('e', repeated=True)
@@ -113,6 +114,10 @@ class Page(ndb.Expando):
 	def spec(self):
 		site = self.key.parent().get()
 		return spec(site.theme, self.type, self.layout)
+
+	@classmethod
+	def pagename_exists(cls, site, name):
+		return cls.query(ancestor=site.key).filter(cls.name_lower == name.lower()).get(keys_only=True) != None
 
 	@classmethod
 	def new(cls, name, site, pagetype):
