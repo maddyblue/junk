@@ -579,9 +579,11 @@ class View(BaseHandler):
 		})
 
 class Reset(BaseHandler):
+	@ndb.toplevel
 	def get(self):
 		user, site = self.us()
 		pages = ndb.get_multi(site.pages)
+		ndb.delete_multi_async(site.pages)
 		for n, p in enumerate(pages):
 			pages[n] = models.Page.new(p.name, site, p.type)
 		site.pages = [i.key for i in pages]
