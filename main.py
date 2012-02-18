@@ -321,6 +321,8 @@ class Edit(BaseHandler):
 		user, site = self.us()
 
 		if not user or not site:
+			self.add_message('error', 'Not logged in')
+			self.redirect(webapp2.uri_for('main'))
 			return
 
 		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
@@ -582,6 +584,12 @@ class Reset(BaseHandler):
 	@ndb.toplevel
 	def get(self):
 		user, site = self.us()
+
+		if not user or not site:
+			self.add_message('error', 'Not logged in')
+			self.redirect(webapp2.uri_for('main'))
+			return
+
 		pages = ndb.get_multi(site.pages)
 		ndb.delete_multi_async(site.pages)
 		for n, p in enumerate(pages):
