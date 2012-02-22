@@ -159,9 +159,21 @@ $(function() {
 		$('#publishing').show().fadeOut(4000);
 	});
 
+	// page menu
+
+	$('.sortable').sortable({
+		items: ".menu_item",
+		stop: function(event, ui) {
+			savemap["pos"] = '';
+			$(".menu_item").each(function() {
+				savemap["pos"] += this.id + ",";
+			});
+			save();
+		}
+	});
+
 	// text
 
-	/*
 	$(".editable.text").hallo({
 		plugins: {
 			'halloformat': {},
@@ -173,7 +185,6 @@ $(function() {
 		savemap[this.id] = $(this).html();
 		save();
 	});
-	//*/
 
 	// line
 

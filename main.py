@@ -385,6 +385,17 @@ class Save(BaseHandler):
 				if v:
 					setattr(s, k, v)
 					sc = True
+
+			pos = self.request.POST.get('pos')
+			if pos:
+				pages = []
+				for p_pos in pos.split(','):
+					if not p_pos.startswith('p_'):
+						continue
+					pages.append(ndb.Key('Page', long(p_pos[2:]), parent=skey))
+				s.pages = pages
+				sc = True
+
 			if sc:
 				s.put_async()
 
@@ -410,7 +421,7 @@ class Save(BaseHandler):
 					p.lines[i] = self.request.POST[k]
 					pc = True
 
-			cm = self.request.POST.get('current_menu')
+			cm = self.request.POST.get('p_%s_name' %p.key.id())
 			if cm:
 				if cm.lower() != p.name_lower and models.Page.pagename_exists(s, cm):
 					r['errors'].append('%s is already the name of another page' %cm)
