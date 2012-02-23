@@ -28,7 +28,7 @@
 	<header id="top">
 		<h1><a href="{{ rel }}" class="editable line" id="_headline">{{ site.headline }}</a></h1>
 		<nav>
-			<ul id="menu" class="editable">
+			<ul id="menu" style="border: 2px solid yellow">
 				{% for p in site.pages %}
 				<li id="p_{{ p.id() }}" class="menu_item"><a href="{{ rel }}{{ pages[p].name }}" id="p_{{ p.id() }}_name" {% if page.key == p %} class="editable line current_menu"{% endif %}>{{ pages[p].name }}</a></li>
 				{% endfor %}
