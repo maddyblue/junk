@@ -161,13 +161,10 @@ $(function() {
 
 	// page menu
 
-	$('.sortable').sortable({
+	$('#menu').sortable({
 		items: ".menu_item",
 		stop: function(event, ui) {
-			savemap["pos"] = '';
-			$(".menu_item").each(function() {
-				savemap["pos"] += this.id + ",";
-			});
+			savemap["pos"] = $(this).sortable('toArray').join(',');
 			save();
 		}
 	});
