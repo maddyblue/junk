@@ -633,6 +633,44 @@ class Layout(BaseHandler):
 		page = models.Page.set_layout(page, long(layoutid))
 		self.redirect(webapp2.uri_for('edit', pagename=page.name))
 
+class Clear(BaseHandler):
+	@ndb.toplevel
+	def get(self):
+		if not self.request.get('sure'):
+			self.response.write('<html><body><form>clear everything<input type="checkbox" name="sure"><input type="submit"></form></body></html>')
+		else:
+			MODELS = [
+				'Image',
+				'ImageBlob',
+				'Page',
+				'Site',
+				'User',
+			]
+
+			for m in MODELS:
+				i = 0
+				qry = getattr(models, m).query()
+				for ms in qry.iter(keys_only=True):
+					ms.delete_async()
+					i += 1
+				logging.critical('deleted %i %s entities', i, m)
+
+			i = 0
+			bd = []
+			for b in blobstore.BlobInfo.all():
+				bd.append(blobstore.delete_async(b.key()))
+				i += 1
+			for b in bd:
+				b.get_result()
+
+			logging.critical('deleted %i blobs', i)
+
+			from google.appengine.api import memcache
+			memcache.flush_all()
+			logging.critical('flushed memcache')
+
+			self.redirect(webapp2.uri_for('main'))
+
 def publish_site(sitename):
 	site = ndb.Key('Site', sitename).get()
 	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
@@ -701,6 +739,9 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler='main.GetUploadURL', name='upload-url'),
 	webapp2.Route(r'/view/<sitename>', handler='main.View', name='view-home', defaults={'pagename': None}),
 	webapp2.Route(r'/view/<sitename>/<pagename>', handler='main.View', name='view'),
+
+	# admin
+	webapp2.Route(r'/admin/clear', handler='main.Clear', name='clear'),
 
 	# google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),
