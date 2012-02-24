@@ -76,6 +76,15 @@ class Site(ndb.Model):
 	twitter = ndb.StringProperty('t', indexed=False)
 	youtube = ndb.StringProperty('y', indexed=False)
 
+	social_media = [
+		('facebook', 'Facebook'),
+		('flickr', 'flickr'),
+		('google', 'Google+'),
+		('linkedin', 'Linkedin'),
+		('twitter', 'Twitter'),
+		('youtube', 'YouTube'),
+	]
+
 	@property
 	def twitter_name(self):
 		if self.twitter:
