@@ -2,7 +2,6 @@
 
 {% block head %}
 
-{{ jquery }}
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css">
@@ -25,6 +24,7 @@ $(function() {
 	$.tnm.socialmap["linkedin"] = "{{ site.linkedin|default('', true) }}";
 	$.tnm.socialmap["google"] = "{{ site.google|default('', true) }}";
 
+	{% if page.type != 'gallery' %}
 	$.tnm.imageurls = {};
 	{% for i in images %}
 	$.tnm.imageurls["_image_{{ loop.index0 }}"] = {
@@ -45,6 +45,7 @@ $(function() {
 		max_scale: 0,
 	};
 	{% endfor %}
+	{% endif %}
 
 	$.tnm.existingimgs =
 	{% for i in all_images %}

@@ -15,7 +15,14 @@
 
 	<link rel="stylesheet" href="{{ base }}css/style.css">
 
-	{% block head %}{{ jquery }}{% endblock %}
+	{{ jquery }}
+
+	{% block head %}{% endblock %}
+
+	{% if page.type == 'gallery' and page.layout == 1 %}
+		<script src="{{ base }}js/jquery.jcarousel.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="{{ base }}css/carousel/skin.css">
+	{% endif %}
 
 	<!--[if lt IE 9]>
 	<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>

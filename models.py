@@ -215,7 +215,7 @@ class Image(ndb.Expando):
 			if not self.orig:
 				os = max(self.ow, self.oh)
 				os = min(os, images.IMG_SERVING_SIZES_LIMIT, max(self.w * 3, self.h * 3))
-				self.orig = get_serving_url(self.blob_key.get().blob, os)
+				self.orig = self.blob_key.get().url
 
 	def set_type(self, type, *args):
 		self.type = type
@@ -264,6 +264,20 @@ class ImageBlob(ndb.Model):
 	name = ndb.StringProperty('n', indexed=False, required=True)
 	width = ndb.IntegerProperty('w', indexed=False, required=True)
 	height = ndb.IntegerProperty('h', indexed=False, required=True)
+	url = ndb.StringProperty('u', indexed=False)
+	desc = ndb.StringProperty('d', indexed=False)
+
+	def urls(self, size=0):
+		if not size:
+			size = max(self.width, self.height)
+		return self.url + '=s%i' %min(size, images.IMG_SERVING_SIZES_LIMIT)
+
+	def render(self, size=0):
+		return '<img src="%s">' %self.urls(size)
+
+	def _pre_put_hook(self):
+		if not self.url:
+			self.url = get_serving_url(self.blob)
 
 def delete_blob(k):
 	blobstore.delete(k)

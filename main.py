@@ -335,8 +335,12 @@ class Edit(BaseHandler):
 					page = v
 					break
 
-		images = ndb.get_multi(page.images[:len(page.spec().get('images', []))])
-		all_images = models.ImageBlob.query(ancestor=site.key)
+		if page.type == models.PAGE_TYPE_GALLERY:
+			images = ndb.get_multi(page.images)
+		else:
+			images = ndb.get_multi(page.images[:len(page.spec().get('images', []))])
+
+		all_images = models.ImageBlob.query(ancestor=site.key).fetch()
 		self.render('edit.html', {
 			'all_images': all_images,
 			'base': '/static/' + basedir,
@@ -433,6 +437,13 @@ class Save(BaseHandler):
 			elif 'current_menu' in self.request.POST:
 				r['errors'].append('Page names may not be blank')
 
+			if 'gal' in self.request.POST and p.type == models.PAGE_TYPE_GALLERY:
+				p.images = []
+				for i in self.request.POST.get('gal').split(','):
+					imgid = long(i.partition('_')[2])
+					p.images.append(ndb.Key('ImageBlob', imgid, parent=skey))
+				pc = True
+
 			if pc:
 				p.put_async()
 
@@ -441,7 +452,7 @@ class Save(BaseHandler):
 		s, p = ndb.transaction(callback)
 		spec = p.spec()
 
-		for i in range(len(spec['images'])):
+		for i in range(len(spec.get('images', []))):
 			k = '_image_%i_' %i
 			kx, ky, ks, kc, kb = k + 'x', k + 'y', k + 's', k + 'c', k + 'b'
 
@@ -681,7 +692,11 @@ def publish_site(sitename):
 	basedir = 'themes/%s/' %site.theme
 
 	for page in pages.values():
-		if page.type not in [models.PAGE_TYPE_HOME, models.PAGE_TYPE_TEXT]:
+		if page.type not in [
+				models.PAGE_TYPE_GALLERY,
+				models.PAGE_TYPE_HOME,
+				models.PAGE_TYPE_TEXT,
+			]:
 			continue
 
 		images = ndb.get_multi(page.images)

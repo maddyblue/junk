@@ -1,0 +1,103 @@
+{% if edit %}
+<div class="fullpage">
+	<table>
+		<tr>
+			<th>available</th><th>using</th>
+		</tr>
+		<tr>
+			<td>
+				<ul id="gal_all" class="gal_sortable" style="border: 1px solid black">
+				{% for i in all_images %}
+					{% if i not in images %}
+					<li id="gal_{{ i.key.id() }}">{{ i.render(100) }}</li>
+					{% endif %}
+				{% endfor %}
+				</ul>
+			</td><td>
+				<ul id="gal_imgs" class="gal_sortable" style="border: 1px solid black">
+				{% for i in images %}
+					<li id="gal_{{ i.key.id() }}">{{ i.render(100) }}</li>
+				{% endfor %}
+				</ul>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	$('#gal_all, #gal_imgs').sortable({
+		connectWith: ".gal_sortable",
+		stop: function(event, ui) {
+			savemap["gal"] = $("#gal_imgs").sortable('toArray').join(',');
+			save();
+		}
+	});
+});
+</script>
+
+{% endif %}
+
+<div class="fullpage">
+
+	<div class="media">
+		<img id="gallery-img">
+		<div class="pics-note">
+			<h2 id="gallery-img-title"></h2>
+			<p id="gallery-img-desc"></p>
+		</div>
+	</div>
+
+	<ul id="mycarousel" class="jcarousel-skin-marcos">
+		{% for i in images %}
+		<li id="gimg_{{ i.key.id() }}">{{ i.render(75) }}</li>
+		{% endfor %}
+	</ul>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	$('#mycarousel').jcarousel({
+	});
+
+	$(document).on('click', '#mycarousel li', function() {
+		setImg(this.id);
+	});
+});
+
+$.gallery = {};
+{% for i in images %}
+$.gallery["gimg_{{ i.key.id() }}"] = {
+	url: "{{ i.urls(1000) }}",
+	thumb: "{{ i.urls(75) }}",
+	name: "{{ i.name }}",
+	desc: "{{ i.desc|default('', True) }}",
+};
+{% endfor %}
+
+{% if all_images %}
+$.allimgs = {};
+{% for i in all_images %}
+$.allimgs["gimg_{{ i.key.id() }}"] = {
+	url: "{{ i.urls(1000) }}",
+	thumb: "{{ i.urls(75) }}",
+	name: "{{ i.name }}",
+	desc: "{{ i.desc|default('', True) }}",
+};
+{% endfor %}
+{% endif %}
+
+function setImg(id) {
+	$("#gallery-img")[0].src = $.gallery[id]['url'];
+	$("#gallery-img-title").html($.gallery[id]['name']);
+	$("#gallery-img-desc").html($.gallery[id]['desc']);
+
+	$("#mycarousel li.current").removeClass("current");
+	$("#" + id).addClass("current");
+}
+
+{% if images %}
+setImg("gimg_{{ images[0].key.id() }}");
+{% endif %}
+
+</script>
