@@ -440,6 +440,8 @@ class Save(BaseHandler):
 			if 'gal' in self.request.POST and p.type == models.PAGE_TYPE_GALLERY:
 				p.images = []
 				for i in self.request.POST.get('gal').split(','):
+					if not i:
+						continue
 					imgid = long(i.partition('_')[2])
 					p.images.append(ndb.Key('ImageBlob', imgid, parent=skey))
 				pc = True
