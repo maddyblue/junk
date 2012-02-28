@@ -559,7 +559,7 @@ class UploadHandler(BaseUploadHandler):
 			i.set_type(models.IMAGE_TYPE_BLOB, blob)
 			i.set_blob()
 			i.put_async()
-			self.redirect(webapp2.uri_for('upload-success', url=i.url, orig=i.orig, w=i.ow, h=i.oh))
+			self.redirect(webapp2.uri_for('upload-success', url=i.url, orig=i.orig, w=i.ow, h=i.oh, s=i.s))
 		else:
 			for upload in uploads:
 				upload.delete()

@@ -355,6 +355,7 @@ $(function() {
 						o.orig = j.orig;
 						o.basew = j.w;
 						o.baseh = j.h;
+						o.s = j.s;
 						$("#containerimg").css('background-image', 'url(' + o.orig + ')');
 						loadimg(i[0].id);
 						resize(0, {'value': o.s});

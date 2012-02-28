@@ -226,9 +226,12 @@ class Image(ndb.Expando):
 			self.b = args[0].key.id()
 			self.x = 0 # x offset
 			self.y = 0 # y offset
-			self.s = 1 # size scale
 			self.ow = args[0].width # original image width
 			self.oh = args[0].height # original image height
+
+			wscale = float(self.width) / float(self.ow)
+			hscale = float(self.height) / float(self.oh)
+			self.s = max(wscale, hscale)
 
 	# must not be called within a transaction; not sure why
 	def set_blob(self):
