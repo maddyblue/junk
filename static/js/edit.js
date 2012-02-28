@@ -84,6 +84,9 @@ function loadimg(id) {
 		slide: resize,
 		value: o.s,
 	});
+
+	$("#containerimg").css('left', o.x);
+	$("#containerimg").css('top', o.y);
 }
 
 function resize(event, ui) {
