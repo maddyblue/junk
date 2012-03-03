@@ -145,6 +145,14 @@ $(function() {
 			' <span id="layouts" style="border: 1px solid black">page layout:'+
 			$.tnm.layouts +
 			'</span>' +
+			' <a id="new_page" href="#">new page</a>' +
+			'<div class="modal" id="new_page_modal"><form method="POST" action="' + $.tnm.newpageurl + '">' +
+			'title: <input type="text" name="title">' +
+			'type: <select name="type">' + $.tnm.newpagetypes + '</select>' +
+			'<input type="submit" value="create">' +
+			'<a href="#" class="cancel">cancel</a>' +
+			'</form></div>' +
+			' <a id="del_page" href="#">del page</a>' +
 		'</div>'
 	);
 
@@ -160,6 +168,12 @@ $(function() {
 		});
 
 		$('#publishing').show().fadeOut(4000);
+		return false;
+	});
+
+	$(document).on("click", "#new_page", function() {
+		$("#new_page_modal").show();
+		return false;
 	});
 
 	// page menu
