@@ -181,7 +181,7 @@ $(function() {
 		}
 	});
 
-	$(document).on("hallodeactivated", "#.editable.text", function() {
+	$(document).on("hallodeactivated", ".editable.text", function() {
 		savemap[this.id] = $(this).html();
 		save();
 	});
