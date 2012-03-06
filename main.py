@@ -366,6 +366,7 @@ class Save(BaseHandler):
 		pkey = ndb.Key('Page', long(pageid), parent=skey)
 		keys = [
 			'headline',
+			'domain',
 
 			'facebook',
 			'flickr',

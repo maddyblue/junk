@@ -141,6 +141,10 @@ $(function() {
 			' <a id="view" href="' + $.tnm.viewurl + '">view</a>' +
 			' <a id="publish" href="#">publish</a>' +
 			' <a href="' + $.tnm.publishedurl + '">published</a>' +
+			' <span style="border: 1px solid black">' +
+			'domain: <input type="text" id="domain" value="' + $.tnm.domain + '">' +
+			' <a id="save_domain">save</a>' +
+			'</span>' +
 			' <span id="publishing" style="display: none">publishing...</span>' +
 			' <span id="layouts" style="border: 1px solid black">page layout:'+
 			$.tnm.layouts +
@@ -160,6 +164,11 @@ $(function() {
 		});
 
 		$('#publishing').show().fadeOut(4000);
+	});
+
+	$(document).on('click', '#save_domain', function() {
+		savemap['_domain'] = $("#domain").val();
+		save();
 	});
 
 	// page menu

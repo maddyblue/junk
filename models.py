@@ -61,6 +61,7 @@ class Site(ndb.Model):
 	plan = ndb.StringProperty('p', default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
 	headline = ndb.StringProperty('h', indexed=False)
 	subheader = ndb.StringProperty('s', indexed=False)
+	domain = ndb.StringProperty('d', indexed=False)
 
 	size = ndb.IntegerProperty('z', indexed=False, default=0)
 

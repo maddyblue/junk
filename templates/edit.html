@@ -79,6 +79,7 @@ $(function() {
 	$.tnm.saveurl = '{{ "save"|url(siteid=site.key.id(), pageid=page.key.id()) }}';
 	$.tnm.viewurl = '{{ view_url }}';
 	$.tnm.uploadurl = '{{ upload_url }}';
+	$.tnm.domain = '{{ site.domain|default('', True) }}';
 });
 
 </script>
