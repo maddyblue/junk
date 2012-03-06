@@ -92,6 +92,10 @@ class Site(ndb.Model):
 			return self.twitter.rpartition('/')[2]
 		return None
 
+	@property
+	def types(self):
+		return types(self.theme)
+
 class Page(ndb.Expando):
 	_default_indexed = False
 
@@ -130,8 +134,8 @@ class Page(ndb.Expando):
 		return cls.query(ancestor=site.key).filter(cls.name_lower == name.lower()).get(keys_only=True) != None
 
 	@classmethod
-	def new(cls, name, site, pagetype):
-		p = Page(parent=site.key, type=pagetype, name=name)
+	def new(cls, name, site, pagetype, layout=1):
+		p = Page(parent=site.key, type=pagetype, name=name, layout=layout)
 		p.put()
 		p = Page.set_layout(p, p.layout)
 		return p

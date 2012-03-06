@@ -647,6 +647,22 @@ class Layout(BaseHandler):
 		page = models.Page.set_layout(page, long(layoutid))
 		self.redirect(webapp2.uri_for('edit', pagename=page.name))
 
+class NewPage(BaseHandler):
+	def post(self):
+		user, site = self.us()
+		sp = self.request.get('type').split(':')
+		layout = int(sp[1])
+		page = models.Page.new(self.request.get('title'), site, sp[0], layout)
+
+		def callback():
+			s = site.key.get()
+			s.pages.append(page.key)
+			s.put()
+			return s
+
+		s = ndb.transaction(callback)
+		self.redirect(webapp2.uri_for('edit', pagename=page.name))
+
 class Clear(BaseHandler):
 	@ndb.toplevel
 	def get(self):
@@ -747,6 +763,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/login/facebook', handler='main.LoginFacebook', name='login-facebook'),
 	webapp2.Route(r'/login/google', handler='main.LoginGoogle', name='login-google'),
 	webapp2.Route(r'/logout', handler='main.Logout', name='logout'),
+	webapp2.Route(r'/new/page', handler='main.NewPage', name='new-page'),
 	webapp2.Route(r'/publish/<sitename>', handler='main.Publish', name='publish'),
 	webapp2.Route(r'/register', handler='main.Register', name='register'),
 	webapp2.Route(r'/reset', handler='main.Reset', name='reset'),

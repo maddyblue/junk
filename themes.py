@@ -73,6 +73,9 @@ SPECS = {
 				'lines': 4,
 			},
 		},
+		PAGE_TYPE_GALLERY: {
+			1: {},
+		},
 	},
 }
 
@@ -81,3 +84,6 @@ def spec(theme, pagetype, layout):
 
 def layouts(theme, pagetype):
 	return len(SPECS.get(theme, {}).get(pagetype, {}))
+
+def types(theme):
+	return SPECS.get(theme, {})

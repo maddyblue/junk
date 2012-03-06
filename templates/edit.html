@@ -74,6 +74,16 @@ $(function() {
 		{% endfor %}
 		'';
 
+	$.tnm.newpagetypes =
+		{% for t, layouts in site.types|dictsort %}
+			{% for l in layouts %}
+				'<option value="{{ t }}:{{ l }}">{{ t }} ({{ l }})</option>' +
+			{% endfor %}
+		{% endfor %}
+		'';
+
+	$.tnm.newpageurl = '{{ "new-page"|url }}';
+
 	$.tnm.publishedurl = '{{ published_url }}';
 	$.tnm.publishurl = '{{ publish_url }}';
 	$.tnm.saveurl = '{{ "save"|url(siteid=site.key.id(), pageid=page.key.id()) }}';
