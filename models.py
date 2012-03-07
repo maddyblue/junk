@@ -95,6 +95,12 @@ class Site(ndb.Model):
 	def types(self):
 		return types(self.theme)
 
+	@property
+	def archived_pages(self):
+		pages = Page.query(ancestor=self.key).fetch()
+		pages.sort(cmp=lambda x,y: cmp(x.name_lower, y.name_lower))
+		return [i for i in pages if i.key not in self.pages]
+
 class Page(ndb.Expando):
 	_default_indexed = False
 

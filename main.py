@@ -662,6 +662,44 @@ class NewPage(BaseHandler):
 		s = ndb.transaction(callback)
 		self.redirect(webapp2.uri_for('edit', pagename=page.name))
 
+class UnpublishPage(BaseHandler):
+	def get(self, pageid):
+		user, site = self.us()
+		self.redirect(webapp2.uri_for('edit-home'))
+
+		if not user or not site:
+			return
+
+		pkey = ndb.Key('Page', long(pageid), parent=site.key)
+		if pkey in site.pages:
+			def callback():
+				s = site.key.get()
+				s.pages.remove(pkey)
+				s.put()
+				return s
+
+			s = ndb.transaction(callback)
+
+class ArchivePage(BaseHandler):
+	def post(self):
+		user, site = self.us()
+		self.redirect(webapp2.uri_for('edit-home'))
+
+		if not user or not site or 'pageid' not in self.request.POST:
+			return
+
+		pkey = ndb.Key('Page', long(self.request.get('pageid')), parent=site.key)
+		p = pkey.get()
+		if p:
+			def callback():
+				s = site.key.get()
+				s.pages.append(pkey)
+				s.put()
+				return s
+
+			ndb.transaction(callback)
+			self.redirect(webapp2.uri_for('edit', pagename=p.name))
+
 class Clear(BaseHandler):
 	@ndb.toplevel
 	def get(self):
@@ -754,6 +792,7 @@ config = {
 
 app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler='main.MainPage', name='main'),
+	webapp2.Route(r'/archive', handler='main.ArchivePage', name='archive-page'),
 	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
 	webapp2.Route(r'/edit/<pagename>', handler='main.Edit', name='edit'),
@@ -768,6 +807,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/reset', handler='main.Reset', name='reset'),
 	webapp2.Route(r'/save/<siteid>/<pageid>', handler='main.Save', name='save'),
 	webapp2.Route(r'/social', handler='main.Social', name='social'),
+	webapp2.Route(r'/unpublish/<pageid>', handler='main.UnpublishPage', name='unpublish-page'),
 	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler='main.UploadHandler', name='upload-file'),
 	webapp2.Route(r'/upload/success', handler='main.UploadSuccess', name='upload-success'),
 	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler='main.GetUploadURL', name='upload-url'),
