@@ -345,6 +345,7 @@ class Edit(BaseHandler):
 			'all_images': all_images,
 			'base': '/static/' + basedir,
 			'edit': True,
+			'get': self.request.GET,
 			'images': images,
 			'jquery': JQUERY,
 			'page': page,
@@ -595,6 +596,7 @@ class View(BaseHandler):
 
 		self.render(basedir + 'index.html', {
 			'base': '/static/' + basedir,
+			'get': self.request.GET,
 			'images': images,
 			'jquery': JQUERY,
 			'rel': webapp2.uri_for('view-home', sitename=sitename) + '/',
@@ -760,6 +762,7 @@ def publish_site(sitename):
 			'base': settings.TNM_URL + '/static/' + basedir,
 			'images': images,
 			'jquery': JQUERY,
+			'get': {},
 			'page': page,
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
