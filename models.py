@@ -61,7 +61,7 @@ class Site(ndb.Model):
 	plan = ndb.StringProperty('p', default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
 	headline = ndb.StringProperty('h', indexed=False)
 	subheader = ndb.StringProperty('s', indexed=False)
-	domain = ndb.StringProperty('d', indexed=False)
+	domain = ndb.StringProperty('d')
 
 	size = ndb.IntegerProperty('z', indexed=False, default=0)
 
@@ -101,6 +101,10 @@ class Site(ndb.Model):
 		pages = Page.query(ancestor=self.key).fetch()
 		pages.sort(cmp=lambda x,y: cmp(x.name_lower, y.name_lower))
 		return [i for i in pages if i.key not in self.pages]
+
+	@classmethod
+	def domain_exists(cls, domain):
+		return cls.query(cls.domain == domain).get(keys_only=True)
 
 class Page(ndb.Expando):
 	_default_indexed = False

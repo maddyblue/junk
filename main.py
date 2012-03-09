@@ -368,7 +368,6 @@ class Save(BaseHandler):
 		pkey = ndb.Key('Page', long(pageid), parent=skey)
 		keys = [
 			'headline',
-			'domain',
 
 			'facebook',
 			'flickr',
@@ -379,6 +378,24 @@ class Save(BaseHandler):
 		]
 
 		r = {'errors': []}
+
+		set_domain = False
+		if '_domain' in self.request.POST:
+			v = self.request.POST.get('_domain')
+
+			if not v:
+				domain = None
+				set_domain = True
+			else:
+				# A race condition exists here: after this check and before the transaction
+				# completes another site could switch to this domain. However, we can't run
+				# an ancestor-less query in a transaction, so just ignore it.
+				d = models.Site.domain_exists(v)
+				if not d:
+					domain = v
+					set_domain = True
+				elif d != skey:
+					r['errors'].append('The domain %s is already being used' %v)
 
 		def callback():
 			s, p = ndb.get_multi([skey, pkey])
@@ -392,6 +409,10 @@ class Save(BaseHandler):
 				if v:
 					setattr(s, k, v)
 					sc = True
+
+			if set_domain:
+				s.domain = domain
+				sc = True
 
 			pos = self.request.POST.get('pos')
 			if pos:
