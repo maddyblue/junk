@@ -113,7 +113,7 @@ setImg("gimg_{{ images[0].key.id() }}");
 {% set rowsz = page.spec().rowsz %}
 {% set rows = page.spec().rows %}
 {% set pgsz = rowsz * rows %}
-{% set pg = get.get('p')|int(1) %}
+{% set pg = pagenum if pagenum else 1 %}
 {% set pgs = (images|length / pgsz)|int + 1 %}
 {% set imgs = images[(pg - 1) * pgsz:pg * pgsz] %}
 {% set pu = rel + page.name %}
@@ -131,11 +131,11 @@ setImg("gimg_{{ images[0].key.id() }}");
 {% endfor %}
 
 	<ul class="item-nav">
-		<li>{% if pg > 1 %}<a href="{{ pu }}?p={{ pg - 1 }}">&larr;</a>{% else %}<a href="{{ pu }}?p={{ pg }}">&larr;</a>{% endif %}</li>
+		<li>{% if pg > 1 %}<a href="{{ pu }}/{{ pg - 1 }}">&larr;</a>{% else %}<a href="{{ pu }}/{{ pg }}">&larr;</a>{% endif %}</li>
 		{% for i in range(1, pgs + 1) %}
-			<li{% if i == pg %} class="current"{% endif %}>{% if i != pg %}<a href="{{ pu }}?p={{ i }}">{{ i }}</a>{% else %}{{ i }}{% endif %}</li>
+			<li{% if i == pg %} class="current"{% endif %}>{% if i != pg %}<a href="{{ pu }}/{{ i }}">{{ i }}</a>{% else %}{{ i }}{% endif %}</li>
 		{% endfor %}
-		<li>{% if pg < pgs %}<a href="{{ pu }}?p={{ pg + 1}}">&rarr;</a>{% else %}<a href="{{ pu }}?p={{ pg }}">&rarr;</a>{% endif %}</li>
+		<li>{% if pg < pgs %}<a href="{{ pu }}/{{ pg + 1}}">&rarr;</a>{% else %}<a href="{{ pu }}/{{ pg }}">&rarr;</a>{% endif %}</li>
 	</ul>
 </div>
 

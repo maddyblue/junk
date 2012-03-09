@@ -317,7 +317,7 @@ class Checkout(BaseHandler):
 		self.redirect(webapp2.uri_for('checkout'))
 
 class Edit(BaseHandler):
-	def get(self, pagename=None):
+	def get(self, pagename=None, pagenum=0):
 		user, site = self.us()
 
 		if not user or not site:
@@ -349,6 +349,7 @@ class Edit(BaseHandler):
 			'images': images,
 			'jquery': JQUERY,
 			'page': page,
+			'pagenum': int(pagenum),
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
 			'publish_url': webapp2.uri_for('publish', sitename=site.name),
@@ -574,7 +575,7 @@ class GoogleSiteVerification(webapp2.RequestHandler):
 		self.response.out.write('google-site-verification: %s.html' %settings.GOOGLE_SITE_VERIFICATION)
 
 class View(BaseHandler):
-	def get(self, sitename, pagename):
+	def get(self, sitename, pagename=None, pagenum=0):
 		site = ndb.Key('Site', sitename).get()
 		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 
@@ -599,10 +600,11 @@ class View(BaseHandler):
 			'get': self.request.GET,
 			'images': images,
 			'jquery': JQUERY,
-			'rel': webapp2.uri_for('view-home', sitename=sitename) + '/',
 			'page': page,
+			'pagenum': int(pagenum),
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
+			'rel': webapp2.uri_for('view-home', sitename=sitename) + '/',
 			'site': site,
 		})
 
@@ -748,6 +750,25 @@ def publish_site(sitename):
 		return
 
 	basedir = 'themes/%s/' %site.theme
+	rel = settings.BUCKET_NAME + '/' + site.key.id() + '/'
+
+	def write_page(pagenum=0):
+		c = utils.render(basedir + 'index.html', {
+			'base': settings.TNM_URL + '/static/' + basedir,
+			'images': images,
+			'jquery': JQUERY,
+			'page': page,
+			'pagenum': pagenum,
+			'pages': pages,
+			'pagetemplate': basedir + page.type + '.html',
+			'rel': '/' + rel,
+			'site': site,
+		})
+
+		name = '/%i' %pagenum if pagenum else ''
+
+		oname = rel + page.name + name
+		gs_write(oname, 'text/html', c)
 
 	for page in pages.values():
 		if page.type not in [
@@ -758,20 +779,18 @@ def publish_site(sitename):
 			continue
 
 		images = ndb.get_multi(page.images)
-		c = utils.render(basedir + 'index.html', {
-			'base': settings.TNM_URL + '/static/' + basedir,
-			'images': images,
-			'jquery': JQUERY,
-			'get': {},
-			'page': page,
-			'pages': pages,
-			'pagetemplate': basedir + page.type + '.html',
-			'rel': '',
-			'site': site,
-		})
 
-		oname = settings.BUCKET_NAME + '/' + site.key.id() + '/' + page.name
-		gs_write(oname, 'text/html', c)
+		write_page()
+
+		# Some pages need to support multiple pages, must hard code all such pages
+		# and generate them here.
+
+		if site.theme == models.THEME_MARCO and page.type == models.PAGE_TYPE_GALLERY and page.layout == 2:
+			rows = page.spec()['rows']
+			rowsz = page.spec()['rows']
+			pgs = len(images) / (rows * rowsz) + 1
+			for i in range(1, pgs + 1):
+				write_page(i)
 
 def gs_write(name, mime, content):
 	fn = files.gs.create(
@@ -799,6 +818,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
 	webapp2.Route(r'/edit/<pagename>', handler='main.Edit', name='edit'),
+	webapp2.Route(r'/edit/<pagename>/<pagenum>', handler='main.Edit', name='edit-page'),
 	webapp2.Route(r'/facebook', handler='main.FacebookCallback', name='facebook'),
 	webapp2.Route(r'/layout/<siteid>/<pageid>/<layoutid>', handler='main.Layout', name='layout'),
 	webapp2.Route(r'/login/facebook', handler='main.LoginFacebook', name='login-facebook'),
@@ -814,8 +834,9 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler='main.UploadHandler', name='upload-file'),
 	webapp2.Route(r'/upload/success', handler='main.UploadSuccess', name='upload-success'),
 	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler='main.GetUploadURL', name='upload-url'),
-	webapp2.Route(r'/view/<sitename>', handler='main.View', name='view-home', defaults={'pagename': None}),
+	webapp2.Route(r'/view/<sitename>', handler='main.View', name='view-home'),
 	webapp2.Route(r'/view/<sitename>/<pagename>', handler='main.View', name='view'),
+	webapp2.Route(r'/view/<sitename>/<pagename>/<pagenum>', handler='main.View', name='view-page'),
 
 	# admin
 	webapp2.Route(r'/admin/clear', handler='main.Clear', name='clear'),
