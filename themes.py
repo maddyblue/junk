@@ -75,6 +75,11 @@ SPECS = {
 		},
 		PAGE_TYPE_GALLERY: {
 			1: {},
+			2: {
+				'lines': 2,
+				'rowsz': 3,
+				'rows': 3,
+			},
 		},
 	},
 }

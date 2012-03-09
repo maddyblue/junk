@@ -34,9 +34,33 @@ $(function() {
 		}
 	});
 });
+
+{% if all_images %}
+$.allimgs = {};
+{% for i in all_images %}
+$.allimgs["gimg_{{ i.key.id() }}"] = {
+	url: "{{ i.urls(1000) }}",
+	thumb: "{{ i.urls(75) }}",
+	name: "{{ i.name }}",
+	desc: "{{ i.desc|default('', True) }}",
+};
+{% endfor %}
+{% endif %}
+
+$.gallery = {};
+{% for i in images %}
+$.gallery["gimg_{{ i.key.id() }}"] = {
+	url: "{{ i.urls(1000) }}",
+	thumb: "{{ i.urls(75) }}",
+	name: "{{ i.name }}",
+	desc: "{{ i.desc|default('', True) }}",
+};
+{% endfor %}
 </script>
 
 {% endif %}
+
+{% if page.layout == 1 %}
 
 <div class="fullpage">
 
@@ -65,28 +89,6 @@ $(function() {
 	});
 });
 
-$.gallery = {};
-{% for i in images %}
-$.gallery["gimg_{{ i.key.id() }}"] = {
-	url: "{{ i.urls(1000) }}",
-	thumb: "{{ i.urls(75) }}",
-	name: "{{ i.name }}",
-	desc: "{{ i.desc|default('', True) }}",
-};
-{% endfor %}
-
-{% if all_images %}
-$.allimgs = {};
-{% for i in all_images %}
-$.allimgs["gimg_{{ i.key.id() }}"] = {
-	url: "{{ i.urls(1000) }}",
-	thumb: "{{ i.urls(75) }}",
-	name: "{{ i.name }}",
-	desc: "{{ i.desc|default('', True) }}",
-};
-{% endfor %}
-{% endif %}
-
 function setImg(id) {
 	$("#gallery-img")[0].src = $.gallery[id]['url'];
 	$("#gallery-img-title").html($.gallery[id]['name']);
@@ -101,3 +103,40 @@ setImg("gimg_{{ images[0].key.id() }}");
 {% endif %}
 
 </script>
+
+{% elif page.layout == 2%}
+
+<div id="gallery" class="big">
+	{{ page|editline(1, 'p', 'notes') }}
+	{{ page|editline(0, 'h1') }}
+
+{% set rowsz = page.spec().rowsz %}
+{% set rows = page.spec().rows %}
+{% set pgsz = rowsz * rows %}
+{% set pg = pagenum if pagenum else 1 %}
+{% set pgs = (images|length / pgsz)|int + 1 %}
+{% set imgs = images[(pg - 1) * pgsz:pg * pgsz] %}
+{% set pu = rel + page.name %}
+{% for i in imgs %}
+	<article class="item">
+		<a href="{{ i.urls() }}">
+			{{ i.render(320) }}
+			<p><em>{{ i.desc if i.desc else i.name }}</em></p>
+		</a>
+	</article>
+{% endfor %}
+
+{% for i in range((rowsz - (imgs|length % rowsz)) % rowsz) %}
+	<article class="item"></article>
+{% endfor %}
+
+	<ul class="item-nav">
+		<li>{% if pg > 1 %}<a href="{{ pu }}/{{ pg - 1 }}">&larr;</a>{% else %}<a href="{{ pu }}/{{ pg }}">&larr;</a>{% endif %}</li>
+		{% for i in range(1, pgs + 1) %}
+			<li{% if i == pg %} class="current"{% endif %}>{% if i != pg %}<a href="{{ pu }}/{{ i }}">{{ i }}</a>{% else %}{{ i }}{% endif %}</li>
+		{% endfor %}
+		<li>{% if pg < pgs %}<a href="{{ pu }}/{{ pg + 1}}">&rarr;</a>{% else %}<a href="{{ pu }}/{{ pg }}">&rarr;</a>{% endif %}</li>
+	</ul>
+</div>
+
+{% endif %}

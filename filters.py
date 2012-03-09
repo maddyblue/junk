@@ -18,9 +18,9 @@ def edittext(page, i, elem):
 		elem, i, page.text[i], elem
 	)
 
-def editline(page, i, elem):
-	return '<%s class="editable line" id="_line_%i">%s</%s>' %(
-		elem, i, page.lines[i], elem
+def editline(page, i, elem, cls=None):
+	return '<%s class="editable line%s" id="_line_%i">%s</%s>' %(
+		elem, (' ' + cls if cls else ''), i, page.lines[i], elem
 	)
 
 def linkmap(link):

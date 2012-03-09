@@ -82,7 +82,15 @@ $(function() {
 		{% endfor %}
 		'';
 
+	$.tnm.archivepages =
+		{% for p in site.archived_pages %}
+			'<option value="{{ p.key.id() }}">{{ p.name }}</option>' +
+		{% endfor %}
+		'';
+
 	$.tnm.newpageurl = '{{ "new-page"|url }}';
+	$.tnm.archivepageurl = '{{ "archive-page"|url }}';
+	$.tnm.unpublishpageurl = '{{ "unpublish-page"|url(pageid=page.key.id()) }}';
 
 	$.tnm.publishedurl = '{{ published_url }}';
 	$.tnm.publishurl = '{{ publish_url }}';

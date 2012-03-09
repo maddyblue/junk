@@ -154,9 +154,19 @@ $(function() {
 			'title: <input type="text" name="title">' +
 			'type: <select name="type">' + $.tnm.newpagetypes + '</select>' +
 			'<input type="submit" value="create">' +
-			'<a href="#" class="cancel">cancel</a>' +
-			'</form></div>' +
-			' <a id="del_page" href="#">del page</a>' +
+			'</form>' +
+			'<br><form method="POST" action="' + $.tnm.archivepageurl + '">' +
+			'archived: <select name="pageid">' + $.tnm.archivepages + '</select>' +
+			'<input type="submit" value="unarchive">' +
+			'</form>' +
+			'<br><a href="#" class="cancel">cancel</a>' +
+			'</div>' +
+			' <a id="unpublish_page" href="#">archive page</a>' +
+			'<div class="modal" id="unpublish_page_modal">' +
+			'Sure you want to archive this page? It will be removed from public view, but maintained in your archive.' +
+			'<br><a href="' + $.tnm.unpublishpageurl + '">yes, archive</a>' +
+			' <a href="#" class="cancel">cancel</a>' +
+			'</div>' +
 		'</div>'
 	);
 
@@ -177,6 +187,11 @@ $(function() {
 
 	$(document).on("click", "#new_page", function() {
 		$("#new_page_modal").show();
+		return false;
+	});
+
+	$(document).on("click", "#unpublish_page", function() {
+		$("#unpublish_page_modal").show();
 		return false;
 	});
 
