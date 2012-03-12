@@ -15,6 +15,7 @@ $(function() {
 		$("#speech").bind('webkitspeechchange', function() {
 			text = $("#text");
 			speech = $("#speech").val() + ".";
+			$("#speech").val('');
 			speech = speech.substr(0, 1).toUpperCase() + speech.substr(1);
 			if(text.val() != "")
 				text.val(text.val() + " " + speech);
