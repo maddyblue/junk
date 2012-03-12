@@ -17,7 +17,7 @@
 				<tr>
 					<td>avatar</td>
 					<td>
-						<img src="{{ u.gravatar() }}&amp;s=50" alt="{{ u.name }}">
+						<img src="{{ u.gravatar(50) }}" alt="{{ u.name }}">
 						<p>Change your avatar at <a href="http://gravatar.com/emails">gravatar.com</a>
 						<br><small>
 							{% if u.email %}
