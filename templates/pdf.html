@@ -15,10 +15,6 @@
 		</h2>
 
 		{{ content.rendered|safe }}
-
-		{% for b in blobs %}
-			<p><img src="{{ b.key }}"/></p>
-		{% endfor %}
 	{% endfor %}
 </body>
 </html>

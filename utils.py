@@ -133,12 +133,6 @@ def convert_html(f, title, entries, output_type='application/pdf'):
 		asset = conversion.Asset('text/html', deunicode(html))
 		conversion_request = conversion.Conversion(asset, output_type)
 
-		for entry, content, blobs in entries:
-			for b in blobs:
-				if b.type == models.BLOB_TYPE_IMAGE:
-					data = blobstore.BlobReader(b.blob, buffer_size=1048576).read()
-					conversion_request.add_asset(conversion.Asset(b.blob.content_type, data, str(b.key())))
-
 		result = conversion.convert(conversion_request)
 
 		if result and result.assets:
