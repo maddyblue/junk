@@ -7,12 +7,15 @@ threadsafe: true
 builtins:
 - admin_redirect: on
 - appstats: on
-- datastore_admin: on
 - deferred: on
 - remote_api: on
 
 libraries:
 - name: django
+  version: latest
+- name: jinja2
+  version: latest
+- name: markupsafe
   version: latest
 
 handlers:

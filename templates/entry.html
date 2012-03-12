@@ -4,78 +4,76 @@
 	<div>
 		<h1>
 			<ul class="breadcrumb">
-				<li><a href="{{ "user"|url:username }}">{{ username }}</a> <span class="divider">/</span></li>
-				<li><a href="{{ username|user_journal_url:journal_name }}">{{ journal_name }}</a> <span class="divider">/</span></li>
-				<li class="active"><a href="{{ entry.url }}">{{ content.subject|entry_subject:entry.date }}</a></li>
+				<li><a href="{{ "user"|url(username) }}">{{ username }}</a> <span class="divider">/</span></li>
+				<li><a href="{{ username|user_journal_url(journal_name) }}">{{ journal_name }}</a> <span class="divider">/</span></li>
+				<li class="active"><a href="{{ entry.url }}">{{ content.subject|entry_subject(entry.date) }}</a></li>
 			</ul>
 		</h1>
 	</div>
 
 	<div class="row">
-		<div class="span16">
-			<form id="form" method="POST" action="{{ "entry-save"|url }}">
+		<div class="span12">
+			<form class="form-horizontal" id="form" method="POST" action="{{ "entry-save"|url }}">
 			<input type="hidden" name="journal_name" value="{{ journal_name }}">
 			<input type="hidden" name="username" value="{{ username }}">
-			<input type="hidden" name="entry_id" value="{{ entry.key.id }}">
+			<input type="hidden" name="entry_id" value="{{ entry.key().id() }}">
 				<fieldset>
-					<div class="clearfix">
-						<label for="subject">subject</label>
-						<div class="input">
-							<input class="xxlarge" id="subject" name="subject" type="text" value="{{ content.subject|default:"" }}" />
+					<div class="control-group">
+						<label class="control-label" for="subject">subject</label>
+						<div class="controls">
+							<input class="input-xxlarge" id="subject" name="subject" type="text" value="{{ content.subject|default('', True) }}" />
 						</div>
 					</div>
-					<div class="clearfix">
-						<label for="date">date</label>
-						<div class="input">
-							<input class="small" id="date" name="date" type="text" value="{{ entry.date|date:"m/d/Y" }}" />
-							<input class="mini" id="time" name="time" type="text" value="{{ entry.time }}" />
+					<div class="control-group">
+						<label class="control-label" for="date">date</label>
+						<div class="controls">
+							<input class="input-small" id="date" name="date" type="text" value="{{ entry.date|date("%m/%d/%Y") }}" />
+							<input class="input-mini" id="time" name="time" type="text" value="{{ entry.time }}" />
 							<span class="help-inline">date format: MM/DD/YYYY; time is optional, format is HH:MM AM/PM</span>
 						</div>
 					</div>
-					<div class="clearfix post-speech">
-						<label for="text">text</label>
-						<div class="input">
-							<textarea class="xxlarge" id="text" name="text">{{ content.text|default:"" }}</textarea>
+					<div class="control-group post-speech">
+						<label class="control-label" for="text">text</label>
+						<div class="controls">
+							<textarea class="input-xxlarge" id="text" name="text">{{ content.text|default('', True) }}</textarea>
 						</div>
 					</div>
-					<div class="clearfix">
-						<label for="markup">markup</label>
-						<div class="input">
+					<div class="control-group">
+						<label class="control-label" for="markup">markup</label>
+						<div class="controls">
 							<select id="markup" name="markup">{{ markup_options|safe }}</select>
 							<span class="help-inline">we have a <a href="{{ "markup"|url }}" target="#_blank">brief explanation</a> about markups</span>
 						</div>
 					</div>
-					<div class="clearfix">
-						<label for="tags">tags</label>
-						<div class="input">
-							<input class="xlarge" id="tags" name="tags" type="text" value="{{ content.tags|join:", " }}" />
+					<div class="control-group">
+						<label class="control-label" for="tags">tags</label>
+						<div class="controls">
+							<input class="input-xlarge" id="tags" name="tags" type="text" value="{{ content.tags|join(", ") }}" />
 							<span class="help-inline">comma separated (ex: kids, funny story, park)</span>
 						</div>
 					</div>
 					{% for b in blobs %}
-					<div class="clearfix">
-						<div class="input">
-							<input type="checkbox" name="blob" value="{{ b.key.id }}" checked>
-							{{ b.size|filesizeformat }}, <a href="{{ b.get_url }}">{{ b.name }}</a>
+					<div class="control-group">
+						<div class="controls">
+							<input type="checkbox" name="blob" value="{{ b.key().id }}" checked>
+							{{ b.size|filesizeformat }}, <a href="{{ b.get_url() }}">{{ b.name }}</a>
 						</div>
 					</div>
 					{% endfor %}
+					<div class="form-actions post-attach">
+						<button id="save" class="btn btn-primary">Save</button>
+						<a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='https://encipher.it/javascripts/inject.v2.js';})();" class="btn btn-info" rel="tooltip" title="Click on the security link at the top to learn more about this.">Encipher It</a>
+						<button id="delete" class="btn btn-danger disabled show-tooltip" disabled="disabled" title="This will delete all files attached to this entry, too.">Delete entry</button>
+						<input id="sure" type="checkbox" name="sure">
+						<span>I'm sure</span>
+					</div>
 				</fieldset>
 			</form>
-
-			<div class="actions post-attach">
-				<button id="save" class="btn primary">Save</button>
-				<a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='https://encipher.it/javascripts/inject.v2.js';})();" class="btn info" rel="twipsy" title="Click on the security link at the top to learn more about this.">Encipher It</a>
-				<button id="delete" class="btn danger disabled" disabled="disabled">Delete entry</button>
-				<input id="sure" type="checkbox" name="sure">
-				<span>I'm sure</span>
-				<span class="help-inline">this will delete all files attached to this entry, too</span>
-			</div>
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="span16">
+		<div class="span12">
 			<p>Download as: <a href="?pdf" class="btn">PDF</a></p>
 		</div>
 	</div>
@@ -98,11 +96,11 @@
 	// file attaching
 	$(function() {
 		var attach = '\
-			<div class="clearfix"> \
-				<label for="attach" class="label-attach">attach a file</label> \
+			<div class="control-group"> \
+				<label class="control-label" for="attach" class="label-attach">attach a file</label> \
 					<form method="POST" enctype="multipart/form-data"> \
-						<div class="input"> \
-							<input class="xlarge file-attach" id="attach" name="attach" type="file" /> \
+						<div class="controls"> \
+							<input class="input-xlarge file-attach" id="attach" name="attach" type="file" /> \
 							<span id="span-attach" class="help-block">we currently only support images, up to 4MB</span> \
 						</div> \
 					</form> \
@@ -110,8 +108,8 @@
 		';
 
 		var full_text = '\
-			<div class="clearfix"> \
-				<div class="input"> \
+			<div class="control-group"> \
+				<div class="controls"> \
 					your account has reached its upload limit: you cannot upload any more files \
 				</div> \
 			</div> \

@@ -6,25 +6,25 @@
 	</div>
 
 	<div class="row">
-		<div class="span16">
+		<div class="span12">
 			<p>Welcome. You aren't yet registered with us.</p>
-			<form method="POST" action="{{ "register"|url }}">
+			<form class="form-horizontal" method="POST" action="{{ "register"|url }}">
 				<fieldset>
-					<div class="clearfix{% if errors.username %} error{% endif %}">
-						<label for="username">username</label>
-						<div class="input">
-							<input class="{% if errors.username %}error{% endif %}" id="username" name="username" type="text" value="{{ username }}">
+					<div class="control-group{% if errors.username %} error{% endif %}">
+						<label class="control-label" for="username">username</label>
+						<div class="controls">
+							<input class="input-large" id="username" name="username" type="text" value="{{ username }}">
 							{% if errors.username %}<span class="help-inline">{{ errors.username }}</span>{% endif %}
 						</div>
 					</div>
-					<div class="clearfix">
-						<label for="email">email address</label>
-						<div class="input">
+					<div class="control-group">
+						<label class="control-label" for="email">email address</label>
+						<div class="controls">
 							<input id="email" name="email" type="text" value="{{ email }}">
 						</div>
 					</div>
-					<div class="actions">
-						<input type="submit" class="btn primary" name="submit" value="Register">
+					<div class="form-actions">
+						<input type="submit" class="btn btn-primary" name="submit" value="Register">
 					</div>
 				</fieldset>
 			</form>

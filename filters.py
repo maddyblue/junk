@@ -12,15 +12,11 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+import datetime
 import logging
-
-from google.appengine.ext.webapp import template
 
 import webapp2
 
-register = template.create_template_register()
-
-@register.filter
 def url(ob, name=''):
 	if ob == 'feeds':
 		return webapp2.uri_for(ob, feed=name)
@@ -41,37 +37,29 @@ def url(ob, name=''):
 	else:
 		return webapp2.uri_for(ob)
 
-@register.filter
 def user_journal_url(username, journal_name):
 	return webapp2.uri_for('view-journal', username=username, journal_name=journal_name)
 
-@register.filter
 def journal_url(journal, page=1):
 	return journal.url(page)
 
-@register.filter
 def journal_prev(ob, page):
 	return journal_url(ob, str(page - 1))
 
-@register.filter
 def journal_next(ob, page):
 	return journal_url(ob, str(page + 1))
 
-@register.filter
 def blog_url(page=1):
 	return webapp2.uri_for('blog', page=page)
 
-@register.filter
 def blog_prev(page):
 	return blog_url(page - 1)
 
-@register.filter
 def blog_next(page):
 	return blog_url(page + 1)
 
 JDATE_FMT = '%A, %b %d, %Y %I:%M %p'
 JDATE_NOTIME_FMT = '%A, %b %d, %Y'
-@register.filter
 def jdate(date):
 	if not date.hour and not date.minute and not date.second:
 		fmt = JDATE_NOTIME_FMT
@@ -81,13 +69,55 @@ def jdate(date):
 	return date.strftime(fmt)
 
 SDATE_FMT = '%B %d, %Y'
-@register.filter
 def sdate(date):
 	return date.strftime(SDATE_FMT)
 
-@register.filter
 def entry_subject(sub, date):
 	if sub:
 		return sub
 
 	return date.strftime(JDATE_FMT)
+
+def timesince(value, default='just now'):
+	now = datetime.datetime.utcnow()
+	diff = now - value
+	periods = (
+		(diff.days / 365, 'year', 'years'),
+		(diff.days / 30, 'month', 'months'),
+		(diff.days / 7, 'week', 'weeks'),
+		(diff.days, 'day', 'days'),
+		(diff.seconds / 3600, 'hour', 'hours'),
+		(diff.seconds / 60, 'minute', 'minutes'),
+		(diff.seconds, 'second', 'seconds'),
+	)
+	for period, singular, plural in periods:
+		if period:
+			return '%d %s ago' % (period, singular if period == 1 else plural)
+	return default
+
+def floatformat(value):
+	return '%.1f' %value
+
+def pluralize(value, ext='s'):
+	return ext if value != 1 else ''
+
+def date(value, fmt):
+	return value.strftime(fmt)
+
+filters = dict([(i, globals()[i]) for i in [
+	'blog_next',
+	'blog_prev',
+	'blog_url',
+	'date',
+	'entry_subject',
+	'floatformat',
+	'jdate',
+	'journal_next',
+	'journal_prev',
+	'journal_url',
+	'pluralize',
+	'sdate',
+	'timesince',
+	'url',
+	'user_journal_url',
+]])

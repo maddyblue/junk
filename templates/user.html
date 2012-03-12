@@ -4,14 +4,14 @@
 	<div>
 		<h1>
 			<ul class="breadcrumb">
-				<li class="active"><a href="{{ "user"|url:u.name }}">{{ u }}</a></li>
+				<li class="active"><a href="{{ "user"|url(u.name) }}">{{ u }}</a></li>
 			</ul>
 		</h1>
 	</div>
 
 	<div class="row">
-		<div class="span8">
-			<table>
+		<div class="span6">
+			<table class="table">
 				<tr><td>member since</td><td>{{ u.register_date|sdate }}</td></tr>
 				<tr><td>journals</td><td>{{ u.journal_count }}</td></tr>
 				<tr><td>entries</td><td>{{ u.entry_count }}</td></tr>
@@ -28,28 +28,28 @@
 			</table>
 		</div>
 
-		<div class="span8">
+		<div class="span6">
 			<div class="row">
 				<div class="span2">
-					<img src="{{ u.gravatar }}&amp;s=50" alt="{{ u }}">
+					<img src="{{ u.gravatar(50) }}" alt="{{ u }}">
 				</div>
 
-				<div class="span4 offset2">
+				<div class="span2 offset2">
 					{% if user and not thisuser %}
 						{% if not is_following %}
-							<a href="{{ "follow"|url:u.name }}" class="btn">follow</a>
+							<a href="{{ "follow"|url(u.name) }}" class="btn">follow</a>
 						{% else %}
-							<a href="{{ "follow"|url:u.name }}?unfollow" class="btn">unfollow</a>
+							<a href="{{ "follow"|url(u.name) }}?unfollow" class="btn">unfollow</a>
 						{% endif %}
 					{% endif %}
 					{% if thisuser %}
-						<a href="{{ "new-journal"|url }}" class="btn primary">new journal</a>
+						<a href="{{ "new-journal"|url }}" class="btn btn-primary">new journal</a>
 					{% endif %}
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="span8">
+				<div class="span6">
 					<h1></h1>
 				</div>
 			</div>
@@ -70,14 +70,14 @@
 			</div>
 
 			<div class="row">
-				<div class="span8">
+				<div class="span6">
 					<h1></h1>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="span8">
-					<h3><a href="{{ "following"|url:u.name }}">{{ u.name }}'s following</a></h3>
+				<div class="span6">
+					<h3><a href="{{ "following"|url(u.name) }}">{{ u.name }}'s following</a></h3>
 				</div>
 			</div>
 
@@ -87,16 +87,16 @@
 	<hr>
 
 	<div class="row">
-		<div class="span8">
+		<div class="span6">
 			<h2>{{ u }}'s journals</h2>
 
 			{% include "journals.html" %}
 		</div>
 
-		<div class="span8">
-			<h2>activity <small><a href="{{ "user-feeds"|url:u.name }}"><img src="/static/images/feed.png" class="feed-img" alt="feed">rss feed</a></small></h2>
+		<div class="span6">
+			<h2>activity <small><a href="{{ "user-feeds"|url(u.name) }}"><img src="/static/images/feed.png" class="feed-img" alt="feed">rss feed</a></small></h2>
 			{% for a in activities %}
-				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.user }}"> {% endif %}<a href="{{ "user"|url:a.user }}">{{ a.user }}</a> {{ a.get_action|safe }} {{ a.date|timesince }} ago</p>
+				<p>{% if a.img %}<img src="{{ a.img }}" alt="{{ a.user }}"> {% endif %}<a href="{{ "user"|url(a.user) }}">{{ a.user }}</a> {{ a.get_action()|safe }} {{ a.date|timesince }}</p>
 			{% endfor %}
 		</div>
 	</div>

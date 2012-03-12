@@ -25,12 +25,14 @@ from google.appengine.api import conversion
 from google.appengine.ext import blobstore
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
+import jinja2
+import webapp2
 
 import cache
 import facebook
+import filters
 import models
 import settings
-import webapp2
 
 # Fix sys.path
 import fix_path
@@ -47,6 +49,9 @@ import markdown
 import rst_directive
 import textile
 
+env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
+env.filters.update(filters.filters)
+
 def prefetch_refprops(entities, *props):
 	fields = [(entity, prop) for entity in entities for prop in props]
 	ref_keys_with_none = [prop.get_value_for_datastore(x) for x, prop in fields]
@@ -57,10 +62,8 @@ def prefetch_refprops(entities, *props):
 			prop.__set__(entity, ref_entities[ref_key])
 	return entities
 
-def render(tname, d={}):
-	path = os.path.join(os.path.dirname(__file__), 'templates', tname)
-
-	return template.render(path, d)
+def render(_template, context):
+	return env.get_template(_template).render(**context)
 
 NUM_PAGE_DISP = 5
 def page_list(page, pages):
@@ -128,7 +131,7 @@ def convert_html(f, title, entries, output_type='application/pdf'):
 	try:
 		html = render('pdf.html', {'title': title, 'entries': entries})
 		asset = conversion.Asset('text/html', deunicode(html))
-		conversion_request = conversion.ConversionRequest(asset, output_type)
+		conversion_request = conversion.Conversion(asset, output_type)
 
 		for entry, content, blobs in entries:
 			for b in blobs:

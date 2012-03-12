@@ -6,9 +6,9 @@
 	</div>
 
 	<div class="row">
-		<div class="span16">
+		<div class="span12">
 			<div class="row">
-				<div class="span10">
+				<div class="span7">
 					{% if entries %}
 
 					{% include "blog-entries.html" %}
@@ -23,7 +23,7 @@
 							{% endif %}
 
 							{% for p in pagelist %}
-								<li{% ifequal p page %} class="active"{% endifequal %}><a href="{{ p|blog_url }}">{{ p }}</a></li>
+								<li{% if p == page %} class="active"{% endif %}><a href="{{ p|blog_url }}">{{ p }}</a></li>
 							{% endfor %}
 
 							{% if page == pages %}
@@ -39,7 +39,7 @@
 					{% else %}
 
 					<div class="row">
-						<div class="span10">
+						<div class="span7">
 							<p>No entries in the blog.</p>
 						</div>
 					</div>

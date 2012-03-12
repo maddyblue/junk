@@ -6,14 +6,15 @@
 	</div>
 
 	<div class="row">
-		<div class="span10">
+		<div class="span7">
 			{% include "activities.html" %}
 		</div>
 
-		<div class="span6">
-			<div id="rss" class="alert-message block-message info">
-				<a href="{{ "feeds"|url:"activity" }}"><img src="/static/images/feed-large.png" class="feed-img" alt="feed"></a>
-				<h4><a href="{{ "feeds"|url:"activity" }}">Subscribe to journalr activity</a></h4>
+		<div class="span5">
+			<div id="rss" class="alert alert-block alert-info">
+				<a href="{{ "feeds"|url("activity") }}"><img src="/static/images/feed-large.png" class="feed-img" alt="feed"></a>
+				<h4><a href="{{ "feeds"|url("activity") }}">Subscribe to journalr activity</a></h4>
+				<br>
 				<p>See what others are doing on journalr.</p>
 			</div>
 		</div>

@@ -134,7 +134,7 @@ class User(db.Model):
 
 	def gravatar(self, size=''):
 		if size:
-			size = '&s=' + size
+			size = '&s=%s' %size
 
 		if not self.email:
 			email = ''

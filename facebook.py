@@ -12,11 +12,11 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+import json
 import logging
 import os
 import urllib
 
-from django.utils import simplejson
 from google.appengine.api import urlfetch
 
 import settings
@@ -78,7 +78,7 @@ def graph_request(access_token, method=urlfetch.GET, path='', payload_dict={}):
 	)
 
 	if result.status_code == 200:
-		return simplejson.loads(result.content)
+		return json.loads(result.content)
 	else:
 		logging.error('facebook graph request error: %s, %s', result.status_code, result.content)
 		return False

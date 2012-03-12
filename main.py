@@ -18,6 +18,7 @@ import base64
 import datetime
 import logging
 import re
+import os
 
 from django.utils import html
 from google.appengine.api import files
@@ -35,35 +36,29 @@ import webapp2
 import cache
 import counters
 import facebook
+import filters
 import models
 import settings
-import templatefilters.filters
 import twitter
 import utils
 
-def rendert(s, p, d={}):
-	session = s.session
-	d['session'] = session
-
-	if 'user' in session:
-		d['user'] = session['user']
-	# this is still set after logout (i'm not sure why it's set at all), so use this workaround
-	elif 'user' in d:
-		del d['user']
-
-	for k in ['login_source']:
-		if k in session:
-			d[k] = session[k]
-
-	d['messages'] = s.get_messages()
-	d['active'] = p.partition('.')[0]
-
-	if settings.GOOGLE_ANALYTICS:
-		d['google_analytics'] = settings.GOOGLE_ANALYTICS
-
-	s.response.out.write(utils.render(p, d))
-
 class BaseHandler(webapp2.RequestHandler):
+	def render(self, _template, context={}):
+		context['session'] = self.session
+		context['user'] = self.session.get('user')
+		context['messages'] = self.get_messages()
+		context['active'] = _template.partition('.')[0]
+
+		for k in ['login_source']:
+			if k in self.session:
+				context[k] = self.session[k]
+
+		if settings.GOOGLE_ANALYTICS:
+			context['google_analytics'] = settings.GOOGLE_ANALYTICS
+
+		rv = utils.render(_template, context)
+		self.response.write(rv)
+
 	def dispatch(self):
 		self.session_store = sessions.get_store(request=self.request)
 
@@ -143,7 +138,7 @@ class MainPage(BaseHandler):
 			following = cache.get_by_keys(cache.get_following(self.session['user']['name']), 'User')
 			followers = cache.get_by_keys(cache.get_followers(self.session['user']['name']), 'User')
 			journals = cache.get_journals(db.Key(self.session['user']['key']))
-			rendert(self, 'index-user.html', {
+			self.render('index-user.html', {
 				'activities': cache.get_activities_follower(self.session['user']['name']),
 				'journals': journals,
 				'thisuser': True,
@@ -152,7 +147,7 @@ class MainPage(BaseHandler):
 				'followers': followers,
 			})
 		else:
-			rendert(self, 'index.html')
+			self.render('index.html')
 
 class FacebookCallback(BaseHandler):
 	def get(self):
@@ -243,7 +238,7 @@ class Register(BaseHandler):
 				username = ''
 				email = self.session['register']['email']
 
-			rendert(self, 'register.html', {'username': username, 'email': email, 'errors': errors})
+			self.render('register.html', {'username': username, 'email': email, 'errors': errors})
 		else:
 			self.redirect(webapp2.uri_for('main'))
 
@@ -317,7 +312,7 @@ class AccountHandler(BaseHandler):
 			u.put()
 			cache.set_keys([u])
 
-		rendert(self, 'account.html', {
+		self.render('account.html', {
 			'u': u,
 			'backup':
 			{
@@ -394,7 +389,7 @@ class AccountHandler(BaseHandler):
 
 class NewJournal(BaseHandler):
 	def get(self):
-		rendert(self, 'new-journal.html')
+		self.render('new-journal.html')
 
 	def post(self):
 		name = self.request.get('name')
@@ -426,7 +421,7 @@ class NewJournal(BaseHandler):
 				self.redirect(webapp2.uri_for('new-entry', username=self.session['user']['name'], journal_name=journal.name))
 				return
 
-		rendert(self, 'new-journal.html')
+		self.render('new-journal.html')
 
 class ViewJournal(BaseHandler):
 	def get(self, username, journal_name):
@@ -440,7 +435,7 @@ class ViewJournal(BaseHandler):
 		if not journal:
 			self.error(404)
 		else:
-			rendert(self, 'view-journal.html', {
+			self.render('view-journal.html', {
 				'username': username,
 				'journal': journal,
 				'entries': cache.get_entries_page(username, journal_name, page, journal.key()),
@@ -450,15 +445,15 @@ class ViewJournal(BaseHandler):
 
 class AboutHandler(BaseHandler):
 	def get(self):
-		rendert(self, 'about.html')
+		self.render('about.html')
 
 class StatsHandler(BaseHandler):
 	def get(self):
-		rendert(self, 'stats.html', {'stats': cache.get_stats()})
+		self.render('stats.html', {'stats': cache.get_stats()})
 
 class ActivityHandler(BaseHandler):
 	def get(self):
-		rendert(self, 'activity.html', {'activities': cache.get_activities()})
+		self.render('activity.html', {'activities': cache.get_activities()})
 
 class FeedsHandler(BaseHandler):
 	def get(self, feed):
@@ -490,7 +485,7 @@ class UserHandler(BaseHandler):
 			is_following = False
 			thisuser = False
 
-		rendert(self, 'user.html', {
+		self.render('user.html', {
 			'u': u,
 			'journals': journals,
 			'activities': activities,
@@ -639,7 +634,7 @@ class ViewEntryHandler(BaseHandler):
 					pdf_blob.blob.delete()
 
 				file_name = files.blobstore.create(mime_type='application/pdf')
-				subject = content.subject if content.subject else templatefilters.filters.jdate(entry.date)
+				subject = content.subject if content.subject else filters.jdate(entry.date)
 				with files.open(file_name, 'a') as f:
 					error = utils.convert_html(f, subject, [(entry, content, blobs)])
 				files.finalize(file_name)
@@ -662,7 +657,9 @@ class ViewEntryHandler(BaseHandler):
 				self.redirect(pdf_blob.get_url(name=True))
 				return
 
-		rendert(self, 'entry.html', {
+		logging.error('%s', entry.key)
+
+		self.render('entry.html', {
 			'blobs': blobs,
 			'content': content,
 			'entry': entry,
@@ -988,7 +985,7 @@ class UploadSuccess(BaseHandler):
 class FlushMemcache(BaseHandler):
 	def get(self):
 		cache.flush()
-		rendert(self, 'admin.html', {'msg': 'memcache flushed'})
+		self.render('admin.html', {'msg': 'memcache flushed'})
 
 class NewBlogHandler(BaseHandler):
 	def get(self):
@@ -1004,7 +1001,7 @@ class EditBlogHandler(BaseHandler):
 			self.error(404)
 			return
 
-		rendert(self, 'edit-blog.html', {
+		self.render('edit-blog.html', {
 			'b': b,
 			'markup_options': utils.render_options(models.RENDER_TYPE_CHOICES, b.markup),
 		})
@@ -1092,7 +1089,7 @@ class BlogHandler(BaseHandler):
 			self.error(404)
 			return
 
-		rendert(self, 'blog.html', {
+		self.render('blog.html', {
 			'entries': entries,
 			'page': page,
 			'pages': pages,
@@ -1105,7 +1102,7 @@ class BlogEntryHandler(BaseHandler):
 		blog_id = long(entry.partition('-')[0])
 		entry = models.BlogEntry.get_by_id(blog_id)
 
-		rendert(self, 'blog-entry.html', {
+		self.render('blog-entry.html', {
 			'entry': entry,
 			'top': cache.get_blog_top(),
 		})
@@ -1113,17 +1110,17 @@ class BlogEntryHandler(BaseHandler):
 class BlogDraftsHandler(BaseHandler):
 	def get(self):
 		entries = models.BlogEntry.all().filter('draft', True).order('-date').fetch(500)
-		rendert(self, 'blog-drafts.html', {
+		self.render('blog-drafts.html', {
 			'entries': entries,
 		})
 
 class MarkupHandler(BaseHandler):
 	def get(self):
-		rendert(self, 'markup.html')
+		self.render('markup.html')
 
 class SecurityHandler(BaseHandler):
 	def get(self):
-		rendert(self, 'security.html')
+		self.render('security.html')
 
 class UpdateUsersHandler(BaseHandler):
 	def get(self):
@@ -1136,10 +1133,7 @@ class UpdateUsersHandler(BaseHandler):
 		def txn(user_key):
 			u = db.get(user_key)
 
-			if u.source == models.USER_SOURCE_GOOGLE:
-				u.google_id = u.uid
-			elif u.source == models.USER_SOURCE_FACEBOOK:
-				u.facebook_id = u.uid
+			# custom update code here
 
 			u.put()
 			return u
@@ -1251,7 +1245,7 @@ class FollowingHandler(BaseHandler):
 		following = cache.get_by_keys(cache.get_following(username), 'User')
 		followers = cache.get_by_keys(cache.get_followers(username), 'User')
 
-		rendert(self, 'following.html', {'u': u, 'following': following, 'followers': followers})
+		self.render('following.html', {'u': u, 'following': following, 'followers': followers})
 
 class DownloadJournalHandler(BaseHandler):
 	def get(self, username, journal_name):
@@ -1322,7 +1316,7 @@ class DownloadJournalHandler(BaseHandler):
 				self.redirect(pdf_blob.get_url(name=True))
 				return
 
-		rendert(self, 'download-journal.html', {
+		self.render('download-journal.html', {
 			'journal': journal,
 			'username': username,
 			'errors': errors,
@@ -1556,5 +1550,3 @@ for i in app.router.build_routes.values():
 		logging.critical('%s not in RESERVED_NAMES', name)
 		print '%s not in RESERVED_NAMES' %name
 		sys.exit(1)
-
-webapp.template.register_template_library('templatefilters.filters')
