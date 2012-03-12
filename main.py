@@ -657,8 +657,6 @@ class ViewEntryHandler(BaseHandler):
 				self.redirect(pdf_blob.get_url(name=True))
 				return
 
-		logging.error('%s', entry.key)
-
 		self.render('entry.html', {
 			'blobs': blobs,
 			'content': content,
