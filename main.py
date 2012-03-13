@@ -613,6 +613,8 @@ class NewEntryHandler(BaseHandler):
 
 class ViewEntryHandler(BaseHandler):
 	def get(self, username, journal_name, entry_id):
+		journal_name = journal_name.decode('utf-8')
+
 		if self.session['user']['name'] != username:
 			self.error(404) # should probably be change to 401 or 403
 			return
@@ -643,7 +645,7 @@ class ViewEntryHandler(BaseHandler):
 					parent=entry,
 					blob=files.blobstore.get_blob_key(file_name),
 					type=models.BLOB_TYPE_PDF,
-					name='%s - %s - %s' %(username, utils.deunicode(journal_name.decode('utf-8')), subject),
+					name='%s - %s - %s' %(username, utils.deunicode(journal_name), subject),
 					date=entry.last_edited,
 				)
 
