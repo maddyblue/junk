@@ -74,7 +74,9 @@ SPECS = {
 			},
 		},
 		PAGE_TYPE_GALLERY: {
-			1: {},
+			1: {
+				'pass': True,
+			},
 			2: {
 				'lines': 2,
 				'rowsz': 3,
