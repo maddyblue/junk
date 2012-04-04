@@ -303,7 +303,7 @@ class Checkout(BaseHandler):
 			token = self.request.get('stripeToken')
 			plan = self.request.get('plan')
 
-			user, site = self.us
+			user, site = self.us()
 			if not user or not site or plan not in models.USER_PLAN_CHOICES:
 				return
 
