@@ -11,6 +11,8 @@ libraries:
   version: latest
 - name: PIL
   version: latest
+- name: webapp2
+  version: latest
 
 builtins:
 - admin_redirect: on
