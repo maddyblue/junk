@@ -12,9 +12,8 @@ import filters
 import models
 import settings
 
-# Fix sys.path
-import fix_path
-fix_path.fix_sys_path()
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
 
 import stripe
 
