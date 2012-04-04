@@ -7,10 +7,10 @@ from google.appengine.api import files
 from google.appengine.api import images
 from google.appengine.ext import blobstore
 from google.appengine.ext import deferred
+from google.appengine.ext import ndb
 from google.appengine.runtime import DeadlineExceededError
 
 from themes import *
-import ndb
 
 USER_SOURCE_FACEBOOK = 'facebook'
 USER_SOURCE_GOOGLE = 'google'

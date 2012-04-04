@@ -10,6 +10,7 @@ from google.appengine.api import images
 from google.appengine.api import users
 from google.appengine.ext import blobstore
 from google.appengine.ext import deferred
+from google.appengine.ext import ndb
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import blobstore_handlers
 from webapp2_extras import sessions
@@ -17,7 +18,6 @@ import webapp2
 
 import facebook
 import models
-import ndb
 import settings
 import utils
 

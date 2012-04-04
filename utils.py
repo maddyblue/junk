@@ -3,13 +3,13 @@
 import logging
 import os
 
+from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 import jinja2
 import webapp2
 
 import filters
 import models
-import ndb
 import settings
 
 # Fix sys.path
