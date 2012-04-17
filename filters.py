@@ -38,12 +38,20 @@ def linkmap(link):
 		return link
 	return 'url'
 
+def date(d, fmt):
+	return d.strftime(fmt)
+
+def fdate(d):
+	return date(d, '%B %d, %Y')
+
 filters = dict([(i, globals()[i]) for i in [
+	'date',
 	'editline',
 	'editlink',
 	'editposttext',
 	'editposttitle',
 	'edittext',
+	'fdate',
 	'linkmap',
 	'url',
 ]])

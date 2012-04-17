@@ -2,6 +2,7 @@
 
 import logging
 import math
+import re
 
 from google.appengine.api import files
 from google.appengine.api import images
@@ -142,8 +143,27 @@ class Page(ndb.Expando):
 	def get_blogpost(self, postid):
 		return BlogPost.get_by_id(postid, parent=self.key)
 
+	def posts_query(self, drafts):
+		query = BlogPost.query(ancestor=self.key).order(-BlogPost.date)
+		if not drafts:
+			query = query.filter(BlogPost.draft == False)
+		return query
+
 	def recent_posts(self):
-		return BlogPost.query(ancestor=self.key).order(-BlogPost.date).fetch(3)
+		return self.posts_query(False).fetch(3)
+
+	POSTS_PER_PAGE = 5
+	# pagenum starts at 1
+	def get_blogposts(self, pagenum, drafts):
+		# todo: better solution than using offset. page cursor in session cache?
+
+		post_keys = self.posts_query(drafts).fetch(
+			keys_only=True,
+			offset=(pagenum - 1) * self.POSTS_PER_PAGE,
+			limit=self.POSTS_PER_PAGE
+		)
+
+		return ndb.get_multi(post_keys)
 
 	@classmethod
 	def pagename_exists(cls, site, name):
@@ -327,12 +347,10 @@ class BlogPost(ndb.Model):
 	author = ndb.TextProperty('a')
 	draft = ndb.BooleanProperty('f', default=True)
 
-	SLEN = 100
+	def short(self, length=50):
+		s = re.sub(r'<.+?>', ' ', self.text)[:length].strip()
 
-	@property
-	def short(self):
-		s = self.text[:SLEN]
-		if len(s) == SLEN:
+		if len(s) == length:
 			s += '...'
 
 		return s
@@ -345,4 +363,8 @@ class BlogPost(ndb.Model):
 		if not height:
 			height = img.height
 
-		return '<img width="%i" height="%i" src="%s">' %(width, height, img)
+		return '<img width="%i" height="%i" src="%s">' %(width, height, img.url)
+
+	@property
+	def url(self):
+		return str(self.key.id())

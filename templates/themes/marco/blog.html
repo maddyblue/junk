@@ -3,24 +3,27 @@
 		{{ page|editline(0, 'h1') }}
 
 		{% if not pagenum %}
-			<a href="{{ 'new-blog-post'|url(pageid=page.key.id()) }}">new blog post</a>
+			{% if edit %}
+				<a href="{{ 'new-blog-post'|url(pageid=page.key.id()) }}">new blog post</a>
+			{% endif %}
 
+			{% for b in page.get_blogposts(1, edit) %}
 			<div class="blogPost">
-				<img src="./blog_files/blog-img1.png" width="634" height="172" alt="Blog">
+				{{ b.imagesz(width=634, height=172) }}
 				<div class="postInfo">
-					<h3>Post title goes here</h3>
-					<span class="date">September 19, 2011</span>
-					<span>by <a href="http://dl.dropbox.com/u/3261026/Muse/blog.html#">user name</a>
-						<span>in <a href="http://dl.dropbox.com/u/3261026/Muse/blog.html#">category name</a>
-						</span>
+					<h3>{{ b.title }}</h3>
+					<span class="date">{{ b.date|fdate }}</span>
+					{% if b.author %}<span>by {{ b.author }}{% endif %}
+					{% if b.tags %}<span>in {{ b.tags|join(', ') }}</span>{% endif %}
 					</span>
 				</div>
 				<div class="postIntro">
-					<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas faucibus mollis interdum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.</p>
-					<span class="more"><a href="http://dl.dropbox.com/u/3261026/Muse/blog.html#">More</a></span>
+					<p>{{ b.short(250) }}</p>
+					<span class="more"><a href="{{ rel }}{{ page.name }}/{{ b.url }}">More</a></span>
 				</div>
 				<div class="clr"></div>
 			</div>
+			{% endfor %}
 		{% else %}
 			{{ page.get_blogpost(pagenum).image.get().render(postid=pagenum) }}
 			{{ page|editposttitle(pagenum, 'h2') }}
@@ -59,12 +62,12 @@
 				<h3>Recent Posts</h3>
 				<ul>
 					{% for b in page.recent_posts() %}
-					<li>
-						<img src="./blog_files/recent01.png" width="109" height="94" alt="Recent Post">
-						<h4>b.title</h4>
-						<p>b.short</p>
+					<li><a href="{{ rel }}{{ page.name }}/{{ b.url }}">
+						{{ b.imagesz(width=109, height=94) }}
+						<h4>{{ b.title }}</h4>
+						<p>{{ b.short }}</p>
 						<div class="clr"></div>
-					</li>
+					</a></li>
 					{% endfor %}
 				</ul>
 			</li>
