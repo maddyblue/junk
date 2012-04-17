@@ -21,7 +21,9 @@ import models
 import settings
 import utils
 
-JQUERY = '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>'
+JQUERY_VERSION = '1.7.2'
+JQUERY = """<script src="//ajax.googleapis.com/ajax/libs/jquery/%s/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/static/js/jquery-%s.min.js"><\/script>')</script>""" %(JQUERY_VERSION, JQUERY_VERSION)
 
 class BaseHandler(webapp2.RequestHandler):
 	def render(self, template, context={}):
