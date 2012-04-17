@@ -343,6 +343,8 @@ class Edit(BaseHandler):
 			images = ndb.get_multi(page.images[:len(page.spec().get('images', []))])
 
 		all_images = models.ImageBlob.query(ancestor=site.key).fetch()
+		pagenum = int(pagenum)
+
 		self.render('edit.html', {
 			'all_images': all_images,
 			'base': '/static/' + basedir,
@@ -351,7 +353,7 @@ class Edit(BaseHandler):
 			'images': images,
 			'jquery': JQUERY,
 			'page': page,
-			'pagenum': int(pagenum),
+			'pagenum': pagenum,
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
 			'publish_url': webapp2.uri_for('publish', sitename=site.name),
@@ -360,7 +362,7 @@ class Edit(BaseHandler):
 			'site': site,
 			'template': basedir + 'index.html',
 			'upload_url': webapp2.uri_for('upload-url', sitename=site.name, pageid=page.key.id()),
-			'view_url': webapp2.uri_for('view', sitename=site.name, pagename=page.name),
+			'view_url': webapp2.uri_for('view-page', sitename=site.name, pagename=page.name, pagenum=pagenum),
 		})
 
 class Save(BaseHandler):
