@@ -142,6 +142,9 @@ class Page(ndb.Expando):
 	def get_blogpost(self, postid):
 		return BlogPost.get_by_id(postid, parent=self.key)
 
+	def recent_posts(self):
+		return BlogPost.query(ancestor=self.key).order(-BlogPost.date).fetch(3)
+
 	@classmethod
 	def pagename_exists(cls, site, name):
 		return cls.query(ancestor=site.key).filter(cls.name_lower == name.lower()).get(keys_only=True) != None
