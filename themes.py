@@ -83,6 +83,17 @@ SPECS = {
 				'rows': 3,
 			},
 		},
+		PAGE_TYPE_BLOG: {
+			1: {
+				'lines': 1,
+				'text': 1,
+				'images': [
+					(109, 92), # chrome says 96, 92; but could even be 92, 92
+				],
+				# todo: support image resizing on page layout change
+				'postimagesz': (634, 172),
+			},
+		},
 	},
 }
 

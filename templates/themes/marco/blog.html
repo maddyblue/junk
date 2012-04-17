@@ -1,0 +1,75 @@
+<div class="fullpage">
+	<div class="blogContent">
+		{{ page|editline(0, 'h1') }}
+
+		{% if not pagenum %}
+			<a href="{{ 'new-blog-post'|url(pageid=page.key.id()) }}">new blog post</a>
+
+			<div class="blogPost">
+				<img src="./blog_files/blog-img1.png" width="634" height="172" alt="Blog">
+				<div class="postInfo">
+					<h3>Post title goes here</h3>
+					<span class="date">September 19, 2011</span>
+					<span>by <a href="http://dl.dropbox.com/u/3261026/Muse/blog.html#">user name</a>
+						<span>in <a href="http://dl.dropbox.com/u/3261026/Muse/blog.html#">category name</a>
+						</span>
+					</span>
+				</div>
+				<div class="postIntro">
+					<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas faucibus mollis interdum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.</p>
+					<span class="more"><a href="http://dl.dropbox.com/u/3261026/Muse/blog.html#">More</a></span>
+				</div>
+				<div class="clr"></div>
+			</div>
+		{% else %}
+			{{ page.get_blogpost(pagenum).image.get().render(postid=pagenum) }}
+			{{ page|editposttitle(pagenum, 'h2') }}
+			{{ page|editposttext(pagenum, 'div') }}
+			<div class="tags">
+				<ul>
+					<li><h4>TAGS:</h4></li>
+					<li><a href="http://dl.dropbox.com/u/3261026/Muse/blog-single.html#">lorem ipsum</a></li>
+					<li><a href="http://dl.dropbox.com/u/3261026/Muse/blog-single.html#">keyword</a></li>
+					<li><a href="http://dl.dropbox.com/u/3261026/Muse/blog-single.html#">music</a></li>
+					<li><a href="http://dl.dropbox.com/u/3261026/Muse/blog-single.html#">Opera</a></li>
+				</ul>
+			</div>
+		{% endif %}
+	</div>
+
+	<aside>
+		<ul>
+			<li>
+				<h3>About Me</h3>
+				{{ images[0].render('left') }}
+				{{ page|edittext(0, 'div') }}
+			</li>
+			<li>
+				<h3>Tags</h3>
+				<ul>
+					<li class="tag1">Tag 1</li>
+					<li class="tag4">Lorem Ipsum</li>
+					<li class="tag2">Dolor sit</li>
+					<li class="tag3">Soloist</li>
+					<li class="tag2">Opera</li>
+					<li class="tag4">Notes</li>
+				</ul>
+			</li>
+			<li class="recent">
+				<h3>Recent Posts</h3>
+				<ul>
+					{% for b in page.recent_posts() %}
+					<li>
+						<img src="./blog_files/recent01.png" width="109" height="94" alt="Recent Post">
+						<h4>b.title</h4>
+						<p>b.short</p>
+						<div class="clr"></div>
+					</li>
+					{% endfor %}
+				</ul>
+			</li>
+		</ul>
+	</aside>
+
+	<div class="clr"></div>
+</div>

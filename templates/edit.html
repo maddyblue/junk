@@ -47,6 +47,28 @@ $(function() {
 	{% endfor %}
 	{% endif %}
 
+	{% if page.type == 'blog' and pagenum %}
+	{% set i = page.get_blogpost(pagenum).image.get() %}
+	{% set id = '_postimage_%s' %pagenum %}
+	$.tnm.imageurls["{{ id }}"] = {
+		orig: "{{ i.orig|default('', true) }}",
+		url: "{{ i.url|default('', true) }}",
+		portw: {{ i.width }},
+		porth: {{ i.height }},
+		basew: {{ i.ow|default(0) }},
+		baseh: {{ i.oh|default(0) }},
+		x: {{ i.x|default(0) }},
+		y: {{ i.y|default(0) }},
+		s: {{ i.s|default(0) }},
+		basetop: $("#{{ id }}").position().top,
+		baseleft: $("#{{ id }}").position().left,
+		wscale: 0,
+		hscale: 0,
+		min_scale: 0,
+		max_scale: 0,
+	};
+	{% endif %}
+
 	$.tnm.existingimgs =
 	{% for i in all_images %}
 		'<option value="{{ i.key.id() }}">{{ i.name }} ({{ i.width }}x{{ i.height }})</option>' +

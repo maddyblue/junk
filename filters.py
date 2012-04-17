@@ -23,6 +23,16 @@ def editline(page, i, elem, cls=None):
 		elem, (' ' + cls if cls else ''), i, page.lines[i], elem
 	)
 
+def editposttitle(page, postid, elem):
+	return '<%s class="editable line" id="_posttitle_%i">%s</%s>' %(
+		elem, postid, page.get_blogpost(postid).title, elem
+	)
+
+def editposttext(page, postid, elem):
+	return '<%s class="editable text" id="_posttext_%i">%s</%s>' %(
+		elem, postid, page.get_blogpost(postid).text, elem
+	)
+
 def linkmap(link):
 	if link.startswith('page:'):
 		return link
@@ -31,6 +41,8 @@ def linkmap(link):
 filters = dict([(i, globals()[i]) for i in [
 	'editline',
 	'editlink',
+	'editposttext',
+	'editposttitle',
 	'edittext',
 	'linkmap',
 	'url',

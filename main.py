@@ -379,6 +379,8 @@ class Save(BaseHandler):
 			'youtube',
 		]
 
+		logging.error(self.request.POST)
+
 		r = {'errors': []}
 
 		set_domain = False
@@ -472,6 +474,21 @@ class Save(BaseHandler):
 					p.images.append(ndb.Key('ImageBlob', imgid, parent=skey))
 				pc = True
 
+			if p.type == models.PAGE_TYPE_BLOG:
+				# what if we have multiple puts on the same entity here? race condition?
+				for k in self.request.POST.keys():
+					if k.startswith('_posttitle_'):
+						name = 'title'
+					elif k.startswith('_posttext_'):
+						name = 'text'
+					else:
+						continue
+
+					bpid = long(k.rpartition('_')[2])
+					bp = models.BlogPost.get_by_id(bpid, parent=p.key)
+					setattr(bp, name, self.request.POST[k])
+					bp.put_async()
+
 			if pc:
 				p.put_async()
 
@@ -480,36 +497,60 @@ class Save(BaseHandler):
 		s, p = ndb.transaction(callback)
 		spec = p.spec()
 
-		for i in range(len(spec.get('images', []))):
-			k = '_image_%i_' %i
+		def proc_img(k, imkey):
+			k += '_'
 			kx, ky, ks, kc, kb = k + 'x', k + 'y', k + 's', k + 'c', k + 'b'
 
 			if kx in self.request.POST and ky in self.request.POST and ks in self.request.POST:
-				img = p.images[i].get()
+				img = imkey.get()
 				img.x = int(self.request.POST[kx].partition('.')[0])
 				img.y = int(self.request.POST[ky].partition('.')[0])
 				img.s = float(self.request.POST[ks])
 				img.set_blob()
 				img.put_async()
-				r['_image_%i' %i] = {'url': img.url}
+				return {'url': img.url}
 			elif kc in self.request.POST:
-				img = p.images[i].get()
+				img = imkey.get()
 				img.set_type(models.IMAGE_TYPE_HOLDER)
 				img.put_async()
-				r['_image_%i' %i] = {'url': img.url}
+				return {'url': img.url}
 			elif kb in self.request.POST:
 				blob = ndb.Key('ImageBlob', long(self.request.POST[kb]), parent=s.key).get()
 				if blob:
-					img = p.images[i].get()
+					img = imkey.get()
+					logging.error(img)
 					img.set_type(models.IMAGE_TYPE_BLOB, blob)
+					logging.error("blob key: %s", blob)
+					logging.error("bk: %s", img.b)
 					img.set_blob()
 					img.put_async()
-					r['_image_%i' %i] = {
+					return {
 						'baseh': img.oh,
 						'basew': img.ow,
 						'orig': img.orig,
 						'url': img.url,
 					}
+
+		for i in range(len(spec.get('images', []))):
+			k = '_image_%i' %i
+			ret = proc_img(k, p.images[i])
+			if ret:
+				r[k] = ret
+
+		proc_imgs = set()
+		for k in self.request.POST.keys():
+			if k.startswith('_postimage_'):
+				proc_imgs.add(long(k.split('_')[2]))
+
+		logging.error('proc imgs: %s', proc_imgs)
+
+		for img in proc_imgs:
+			k = '_postimage_%i' %img
+			ret = proc_img(k, p.get_blogpost(img).image)
+			if ret:
+				r[k] = ret
+
+		logging.error('RET: %s', r)
 
 		self.response.out.write(json.dumps(dict(r)))
 
@@ -690,6 +731,34 @@ class NewPage(BaseHandler):
 		s = ndb.transaction(callback)
 		self.redirect(webapp2.uri_for('edit', pagename=page.name))
 
+class NewBlogPost(BaseHandler):
+	@ndb.toplevel
+	def get(self, pageid):
+		user, site = self.us()
+		page = ndb.Key('Page', long(pageid), parent=site.key).get()
+
+		if not user or not page:
+			return
+
+		spec = page.spec()
+
+		bpid = models.BlogPost.allocate_ids(size=1, parent=page.key)[0]
+		bpkey = ndb.Key('BlogPost', bpid, parent=page.key)
+
+		imkey = ndb.Key('Image', '0', parent=bpkey)
+		im = models.Image(key=imkey, width=spec['postimagesz'][0], height=spec['postimagesz'][1])
+
+		bp = models.BlogPost(
+			key=bpkey,
+			title='Post Title',
+			author=user.first_name,
+			image=imkey
+		)
+
+		im.put_async()
+		bp.put_async()
+		self.redirect(webapp2.uri_for('edit-page', pagename=page.name, pagenum=bpid))
+
 class UnpublishPage(BaseHandler):
 	def get(self, pageid):
 		user, site = self.us()
@@ -849,6 +918,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/login/google', handler='main.LoginGoogle', name='login-google'),
 	webapp2.Route(r'/logout', handler='main.Logout', name='logout'),
 	webapp2.Route(r'/new/page', handler='main.NewPage', name='new-page'),
+	webapp2.Route(r'/new/blogpost/<pageid>', handler='main.NewBlogPost', name='new-blog-post'),
 	webapp2.Route(r'/publish/<sitename>', handler='main.Publish', name='publish'),
 	webapp2.Route(r'/register', handler='main.Register', name='register'),
 	webapp2.Route(r'/reset', handler='main.Reset', name='reset'),

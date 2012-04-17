@@ -139,6 +139,9 @@ class Page(ndb.Expando):
 		site = self.key.parent().get()
 		return spec(site.theme, self.type, self.layout)
 
+	def get_blogpost(self, postid):
+		return BlogPost.get_by_id(postid, parent=self.key)
+
 	@classmethod
 	def pagename_exists(cls, site, name):
 		return cls.query(ancestor=site.key).filter(cls.name_lower == name.lower()).get(keys_only=True) != None
@@ -217,7 +220,10 @@ class Image(ndb.Expando):
 
 	@property
 	def blob_key(self):
-		return ndb.Key('ImageBlob', self.b, parent=self.key.parent().parent())
+		skey = self.key.parent()
+		while skey.kind() != 'Site':
+			skey = skey.parent()
+		return ndb.Key('ImageBlob', self.b, parent=skey)
 
 	def _pre_put_hook(self):
 		if self.type == IMAGE_TYPE_HOLDER:
@@ -228,6 +234,7 @@ class Image(ndb.Expando):
 				self.url = get_serving_url(self.i, max(self.width, self.height))
 
 			if not self.orig:
+				# why are these two lines here?
 				os = max(self.ow, self.oh)
 				os = min(os, images.IMG_SERVING_SIZES_LIMIT, max(self.w * 3, self.h * 3))
 				self.orig = self.blob_key.get().url
@@ -273,8 +280,16 @@ class Image(ndb.Expando):
 		self.i = files.blobstore.get_blob_key(fn)
 		self.url = None
 
-	def render(self):
-		return '<img width="%i" height="%i" src="%s" class="editable image" id="_image_%s">' %(self.width, self.height, self.url, self.key.id())
+	# todo: don't output editable classes in non edit mode
+	def render(self, cls='', postid=None):
+		return '<img width="%i" height="%i" src="%s" class="editable image %s" id="_%s_%s">' %(
+			self.width,
+			self.height,
+			self.url,
+			cls,
+			'postimage' if postid else 'image',
+			postid if postid else self.key.id()
+		)
 
 class ImageBlob(ndb.Model):
 	blob = ndb.BlobKeyProperty('b', indexed=False, required=True)
@@ -299,3 +314,32 @@ class ImageBlob(ndb.Model):
 
 def delete_blob(k):
 	blobstore.delete(k)
+
+class BlogPost(ndb.Model):
+	title = ndb.StringProperty('l', indexed=False, required=True)
+	image = ndb.KeyProperty('i', indexed=False, required=True)
+	text = ndb.TextProperty('t', default='')
+	tags = ndb.StringProperty('g', repeated=True)
+	date = ndb.DateTimeProperty('d', required=True, auto_now_add=True)
+	author = ndb.TextProperty('a')
+	draft = ndb.BooleanProperty('f', default=True)
+
+	SLEN = 100
+
+	@property
+	def short(self):
+		s = self.text[:SLEN]
+		if len(s) == SLEN:
+			s += '...'
+
+		return s
+
+	def imagesz(self, width=0, height=0):
+		img = self.image.get()
+
+		if not width:
+			width = img.width
+		if not height:
+			height = img.height
+
+		return '<img width="%i" height="%i" src="%s">' %(width, height, img)
