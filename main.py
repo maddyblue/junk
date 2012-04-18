@@ -643,7 +643,7 @@ class View(BaseHandler):
 		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 
 		if not pagename:
-			page = pages[0]
+			page = pages[site.pages[0]]
 		else:
 			for p in pages.values():
 				if p.name == pagename:
@@ -927,6 +927,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/upload/success', handler='main.UploadSuccess', name='upload-success'),
 	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler='main.GetUploadURL', name='upload-url'),
 	webapp2.Route(r'/view/<sitename>', handler='main.View', name='view-home'),
+	webapp2.Route(r'/view/<sitename>/', handler='main.View', name='view-home'),
 	webapp2.Route(r'/view/<sitename>/<pagename>', handler='main.View', name='view'),
 	webapp2.Route(r'/view/<sitename>/<pagename>/<pagenum>', handler='main.View', name='view-page'),
 
