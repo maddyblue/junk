@@ -377,8 +377,6 @@ class Save(BaseHandler):
 			'youtube',
 		]
 
-		logging.error(self.request.POST)
-
 		r = {'errors': []}
 
 		set_domain = False
@@ -516,10 +514,7 @@ class Save(BaseHandler):
 				blob = ndb.Key('ImageBlob', long(self.request.POST[kb]), parent=s.key).get()
 				if blob:
 					img = imkey.get()
-					logging.error(img)
 					img.set_type(models.IMAGE_TYPE_BLOB, blob)
-					logging.error("blob key: %s", blob)
-					logging.error("bk: %s", img.b)
 					img.set_blob()
 					img.put_async()
 					return {
@@ -540,15 +535,11 @@ class Save(BaseHandler):
 			if k.startswith('_postimage_'):
 				proc_imgs.add(long(k.split('_')[2]))
 
-		logging.error('proc imgs: %s', proc_imgs)
-
 		for img in proc_imgs:
 			k = '_postimage_%i' %img
 			ret = proc_img(k, p.get_blogpost(img).image)
 			if ret:
 				r[k] = ret
-
-		logging.error('RET: %s', r)
 
 		self.response.out.write(json.dumps(dict(r)))
 
