@@ -19,14 +19,17 @@
 
 <div class="blog">
 {% if page.layout == 1 %}
-<h2><a href="#">Latest from blog</a></h2>
-	<div class="post">
-		<a href="#" class="thumb"><img src="{{ base }}imgs/home-blog.png" alt="Bio"></a>
-		<h3><a href="#">Post title goes here</a></h3>
-		<p>Cras mattis consectetur purus sit amet fermentum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Nullam id dolor id nibh ultricies vehicula ut id elit.
-	Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec sed odio dui ...</p>
-		<span class="more"><a href="#">More</a></span>
-	</div>
+{% set b = site.blog_post %}
+	{% if b %}
+		{% set url = b.url %}
+		<h2><a href="{{ url }}">Latest from blog</a></h2>
+		<div class="post">
+			<a href="{{ url }}" class="thumb">{{ b.imagesz(width=310, height=205) }}</a>
+			<h3><a href="{{ url }}">{{ b.title }}</a></h3>
+			<p>{{ b.short(250) }}</p>
+			<span class="more"><a href="{{ url }}">More</a></span>
+		</div>
+	{% endif %}
 {% elif page.layout == 2 %}
 <h2>{{ page|editlink(3, rel) }}</h2>
 	<div class="post">

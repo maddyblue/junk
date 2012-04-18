@@ -19,7 +19,7 @@
 				</div>
 				<div class="postIntro">
 					<p>{{ b.short(250) }}</p>
-					<span class="more"><a href="{{ rel }}{{ page.name }}/{{ b.url }}">More</a></span>
+					<span class="more"><a href="{{ rel }}{{ b.url }}">More</a></span>
 				</div>
 				<div class="clr"></div>
 			</div>
@@ -61,14 +61,15 @@
 			<li class="recent">
 				<h3>Recent Posts</h3>
 				<ul>
-					{% for b in page.recent_posts() %}
-					<li><a href="{{ rel }}{{ page.name }}/{{ b.url }}">
-						{{ b.imagesz(width=109, height=94) }}
-						<h4>{{ b.title }}</h4>
-						<p>{{ b.short }}</p>
+				{% for b in page.recent_posts() %}
+					{% set url = b.url %}
+					<li>
+						<a href="{{ rel }}{{ url }}">{{ b.imagesz(width=109, height=94) }}</a>
+						<h4><a href="{{ url }}">{{ b.title }}</a></h4>
+						<p>{{ b.short() }}</p>
 						<div class="clr"></div>
-					</a></li>
-					{% endfor %}
+					</li>
+				{% endfor %}
 				</ul>
 			</li>
 		</ul>

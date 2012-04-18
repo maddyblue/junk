@@ -103,6 +103,14 @@ class Site(ndb.Model):
 		pages.sort(cmp=lambda x,y: cmp(x.name_lower, y.name_lower))
 		return [i for i in pages if i.key not in self.pages]
 
+	@property
+	# returns the most recent, non-draft blog post of the first blog-type page
+	def blog_post(self):
+		for k in self.pages:
+			p = k.get()
+			if p.type == PAGE_TYPE_BLOG:
+				return p.recent_posts(1)
+
 	@classmethod
 	def domain_exists(cls, domain):
 		return cls.query(cls.domain == domain).get(keys_only=True)
@@ -149,8 +157,13 @@ class Page(ndb.Expando):
 			query = query.filter(BlogPost.draft == False)
 		return query
 
-	def recent_posts(self):
-		return self.posts_query(False).fetch(3)
+	def recent_posts(self, num=3):
+		q = self.posts_query(False)
+
+		if num == 1:
+			return q.get()
+		else:
+			return q.fetch(num)
 
 	POSTS_PER_PAGE = 5
 	# pagenum starts at 1
@@ -367,4 +380,5 @@ class BlogPost(ndb.Model):
 
 	@property
 	def url(self):
-		return str(self.key.id())
+		p = self.key.parent().get()
+		return '%s/%s' %(p.name, self.key.id())
