@@ -12,3 +12,7 @@ STRIPE_SECRET = ''
 GOOGLE_SITE_VERIFICATION = ''
 BUCKET_NAME = ''
 TNM_URL = 'http://application-id.appspot.com'
+
+JQUERY_VERSION = '1.7.2'
+JQUERY = """<script src="//ajax.googleapis.com/ajax/libs/jquery/%s/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/static/js/jquery-%s.min.js"><\/script>')</script>""" %(JQUERY_VERSION, JQUERY_VERSION)

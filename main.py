@@ -21,10 +21,6 @@ import models
 import settings
 import utils
 
-JQUERY_VERSION = '1.7.2'
-JQUERY = """<script src="//ajax.googleapis.com/ajax/libs/jquery/%s/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="/static/js/jquery-%s.min.js"><\/script>')</script>""" %(JQUERY_VERSION, JQUERY_VERSION)
-
 class BaseHandler(webapp2.RequestHandler):
 	def render(self, template, context={}):
 		context['session'] = self.session
@@ -351,7 +347,7 @@ class Edit(BaseHandler):
 			'edit': True,
 			'get': self.request.GET,
 			'images': images,
-			'jquery': JQUERY,
+			'jquery': settings.JQUERY,
 			'page': page,
 			'pagenum': pagenum,
 			'pages': pages,
@@ -666,7 +662,7 @@ class View(BaseHandler):
 			'base': '/static/' + basedir,
 			'get': self.request.GET,
 			'images': images,
-			'jquery': JQUERY,
+			'jquery': settings.JQUERY,
 			'page': page,
 			'pagenum': int(pagenum),
 			'pages': pages,
@@ -851,7 +847,7 @@ def publish_site(sitename):
 		c = utils.render(basedir + 'index.html', {
 			'base': settings.TNM_URL + '/static/' + basedir,
 			'images': images,
-			'jquery': JQUERY,
+			'jquery': settings.JQUERY,
 			'page': page,
 			'pagenum': pagenum,
 			'pages': pages,
