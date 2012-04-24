@@ -462,16 +462,16 @@ $(function() {
 		$("#imgcontainer").remove();
 	}
 
-	$(document).on("click", ".editable", function() {
+	$(document).on("click", ".editable", function(event) {
 		$('#' + this.id + '_div').show();
 		$("." + this.id + "_focus").focus();
-		return false;
+		event.preventDefault();
 	});
 
-	$(document).on("click", ".cancel", function() {
+	$(document).on("click", ".cancel", function(event) {
 		$(this).parents(".modal").hide();
 		stopImageEdit();
-		return false;
+		event.preventDefault();
 	});
 
 	$(document).keyup(function(e){
