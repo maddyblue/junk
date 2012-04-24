@@ -252,6 +252,44 @@ $(function() {
 		return false;
 	});
 
+	// date
+
+	$(".editable.date").each(function() {
+		var i = this.id + "_datepicker";
+		var d = this.id + "_div";
+		var h = '<div class="modal" id="' + d + '">' +
+			'<div type="text" id="' + i + '"></div>' +
+			'<p><a class="close date" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
+		$(this).after(h);
+		$("#" + i).datepicker({
+			dateFormat: 'MM dd, yy',
+			defaultDate: $.tnm.postdate
+		});
+	});
+
+	$(document).on("click", ".close.date", function() {
+		var i = $(this).parents("div").first().prev();
+		var t = $("#" + i[0].id + "_datepicker");
+
+		if(t[0].value)
+		{
+			i.text(t[0].value);
+			var d = t.datepicker('getDate');
+			savemap[i[0].id] = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+			$(this).parents(".modal").hide();
+			save();
+		}
+
+		return false;
+	});
+
+	// checkbox
+
+	$(document).on("click", ".checkbox", function() {
+		savemap[this.id] = this.checked;
+		save();
+	});
+
 	// social
 
 	$(".editable.social").each(function() {

@@ -48,7 +48,10 @@ $(function() {
 	{% endif %}
 
 	{% if page.type == 'blog' and pagenum %}
-	{% set i = page.get_blogpost(pagenum).image.get() %}
+	{% set b = page.get_blogpost(pagenum) %}
+	$.tnm.postdate = new Date('{{ b.date }}');
+
+	{% set i = b.image.get() %}
 	{% set id = '_postimage_%s' %pagenum %}
 	$.tnm.imageurls["{{ id }}"] = {
 		orig: "{{ i.orig|default('', true) }}",

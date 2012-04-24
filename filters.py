@@ -23,14 +23,29 @@ def editline(page, i, elem, cls=None):
 		elem, (' ' + cls if cls else ''), i, page.lines[i], elem
 	)
 
-def editposttitle(page, postid, elem):
+def editposttitle(post, elem):
 	return '<%s class="editable line" id="_posttitle_%i">%s</%s>' %(
-		elem, postid, page.get_blogpost(postid).title, elem
+		elem, post.key.id(), post.title, elem
 	)
 
-def editposttext(page, postid, elem):
+def editpostauthor(post, elem='span'):
+	return '<%s class="editable line" id="_postauthor_%i">%s</%s>' %(
+		elem, post.key.id(), post.author, elem
+	)
+
+def editpostdate(post, elem='span'):
+	return '<%s class="editable date" id="_postdate_%i">%s</%s>' %(
+		elem, post.key.id(), fdate(post.date), elem
+	)
+
+def editpostdraft(post):
+	return '<input class="checkbox" id="_postdraft_%i" type="checkbox" %s> draft' %(
+		post.key.id(), 'checked' if post.draft else ''
+	)
+
+def editposttext(post, elem):
 	return '<%s class="editable text" id="_posttext_%i">%s</%s>' %(
-		elem, postid, page.get_blogpost(postid).text, elem
+		elem, post.key.id(), post.text, elem
 	)
 
 def linkmap(link):
@@ -48,6 +63,9 @@ filters = dict([(i, globals()[i]) for i in [
 	'date',
 	'editline',
 	'editlink',
+	'editpostauthor',
+	'editpostdate',
+	'editpostdraft',
 	'editposttext',
 	'editposttitle',
 	'edittext',

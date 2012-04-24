@@ -1,5 +1,6 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
+import datetime
 import json
 import logging
 import re
@@ -473,16 +474,31 @@ class Save(BaseHandler):
 			if p.type == models.PAGE_TYPE_BLOG:
 				# what if we have multiple puts on the same entity here? race condition?
 				for k in self.request.POST.keys():
+					value = None
+
 					if k.startswith('_posttitle_'):
 						name = 'title'
 					elif k.startswith('_posttext_'):
 						name = 'text'
+					elif k.startswith('_postauthor_'):
+						name = 'author'
+					elif k.startswith('_postdate_'):
+						name = 'date'
+						d = self.request.POST[k].split('-')
+						value = datetime.datetime(int(d[0]), int(d[1]) + 1, int(d[2]))
+					elif k.startswith('_postdraft_'):
+						name = 'draft'
+						value = self.request.POST[k] == 'true'
 					else:
 						continue
 
 					bpid = long(k.rpartition('_')[2])
 					bp = models.BlogPost.get_by_id(bpid, parent=p.key)
-					setattr(bp, name, self.request.POST[k])
+
+					if value is None:
+						value = self.request.POST[k]
+
+					setattr(bp, name, value)
 					bp.put_async()
 
 			if pc:
