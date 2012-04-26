@@ -32,7 +32,11 @@
 				<ul>
 					<li class="date">Published on {{ b|editpostdate }}</li>
 					<li class="author">Created by {{ b|editpostauthor }}</li>
-					{% if edit %}<li class="draft">{{ b|editpostdraft }}</li>{% endif %}
+					{% if edit %}
+						<li class="draft">{{ b|editpostdraft }}</li>
+					{% elif b.draft %}
+						<li class="draft">DRAFT</li>
+					{% endif %}
 				</ul>
 				<div class="clr"></div>
 			</div>
