@@ -20,6 +20,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace re2net
 {
@@ -34,6 +36,70 @@ namespace re2net
             Re = re;
             Post = re2post(re);
             Start = post2nfa(Post);
+        }
+
+        private class SList
+        {
+            public HashSet<State> States { get; set; }
+
+            public SList()
+            {
+                States = new HashSet<State>();
+            }
+
+            public void Addstate(IEnumerable<State> states)
+            {
+                foreach (var s in states)
+                    Addstate(s);
+            }
+
+            public void Addstate(State s)
+            {
+                if (s.Type == StateType.Split)
+                {
+                    s.Out.ForEach(x => Addstate(x));
+                    return;
+                }
+
+                States.Add(s);
+            }
+
+            public SList Step(char c)
+            {
+                var nl = new SList();
+
+                foreach (var s in States)
+                {
+                    if (c == s.C)
+                        nl.Addstate(s.Out);
+                }
+
+                return nl;
+            }
+
+            public bool IsMatch()
+            {
+                return States.Any(x => x.Type == StateType.Match);
+            }
+        }
+
+        public bool Match(string s)
+        {
+            var sl = Startlist();
+
+            foreach (var c in s)
+            {
+                sl = sl.Step(c);
+            }
+
+            return sl.IsMatch();
+        }
+
+        private SList Startlist()
+        {
+            var sl = new SList();
+            sl.Addstate(Start);
+            return sl;
         }
 
         private class paren
@@ -256,7 +322,36 @@ namespace re2net
 
         static void Main(string[] args)
         {
-            var re = new RE2("ab+");
+            for (int i = 1; i < 30; i++)
+            {
+                var resb = new StringBuilder();
+                var ssb = new StringBuilder();
+                for (int j = 1; j <= i; j++)
+                {
+                    resb.Append("a?");
+                    ssb.Append("a");
+                }
+                resb.Append(ssb);
+
+                var re = new RE2(resb.ToString());
+                var cre = new Regex(resb.ToString());
+                var s = ssb.ToString();
+
+                var swre = new Stopwatch();
+                swre.Start();
+                var reb = re.Match(s);
+                swre.Stop();
+
+                var swcre = new Stopwatch();
+                swcre.Start();
+                var creb = cre.IsMatch(s);
+                swcre.Stop();
+
+                if (reb == false || creb == false)
+                    throw new Exception("false RE");
+
+                Console.WriteLine("{0:00}: {1}, {2}", i, swre.Elapsed, swcre.Elapsed);
+            }
         }
     }
 }
