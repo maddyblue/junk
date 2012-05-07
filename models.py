@@ -12,30 +12,7 @@ from google.appengine.ext import ndb
 from google.appengine.runtime import DeadlineExceededError
 
 from themes import *
-
-USER_SOURCE_FACEBOOK = 'facebook'
-USER_SOURCE_GOOGLE = 'google'
-
-USER_PLAN_FREE = 'free'
-USER_PLAN_BASIC = 'basic'
-USER_PLAN_DOMAIN = 'domain'
-USER_PLAN_PRO = 'pro'
-
-USER_PLAN_CHOICES = [
-	USER_PLAN_FREE,
-	USER_PLAN_BASIC,
-	USER_PLAN_DOMAIN,
-	USER_PLAN_PRO,
-]
-
-PLAN_COSTS = {
-	USER_PLAN_FREE: 0,
-	USER_PLAN_BASIC: 5,
-	USER_PLAN_DOMAIN: 10,
-	USER_PLAN_PRO: 20,
-}
-
-PLAN_COSTS_DESC = ['%s ($%i/month)' %(i.title(), PLAN_COSTS[i]) for i in USER_PLAN_CHOICES]
+from settings import *
 
 class User(ndb.Model):
 	first_name = ndb.StringProperty('f', required=True, indexed=False)
@@ -63,6 +40,10 @@ class Site(ndb.Model):
 	headline = ndb.StringProperty('h', indexed=False)
 	subheader = ndb.StringProperty('s', indexed=False)
 	domain = ndb.StringProperty('d')
+	last_published = ndb.DateTimeProperty('b', auto_now_add=True)
+	last_edited = ndb.DateTimeProperty('e', auto_now=True)
+	do_publish = ndb.BooleanProperty('o', default=False)
+	last_published_num = ndb.IntegerProperty('i', default=0, indexed=False)
 
 	size = ndb.IntegerProperty('z', indexed=False, default=0)
 
@@ -115,6 +96,10 @@ class Site(ndb.Model):
 	def domain_exists(cls, domain):
 		return cls.query(cls.domain == domain).get(keys_only=True)
 
+class Publish(ndb.Model):
+	manifest = ndb.JsonProperty('m', indexed=False)
+	date = ndb.DateTimeProperty('d', auto_now=True, indexed=False)
+
 class Page(ndb.Expando):
 	_default_indexed = False
 
@@ -127,6 +112,7 @@ class Page(ndb.Expando):
 	linktext = ndb.StringProperty('e', repeated=True)
 	text = ndb.TextProperty('x', repeated=True)
 	lines = ndb.StringProperty('s', repeated=True)
+	last_edited = ndb.DateTimeProperty('d', indexed=True, auto_now=True)
 
 	@property
 	def layouts(self):
@@ -178,6 +164,12 @@ class Page(ndb.Expando):
 
 		return ndb.get_multi(post_keys)
 
+	def gs_write(self, name, mimetype, content):
+		import utils
+		rel = BUCKET_NAME + '/' + self.key.parent().id() + '/'
+		oname = rel + self.name + name
+		utils.gs_write(oname, mimetype, content)
+
 	@classmethod
 	def pagename_exists(cls, site, name):
 		return cls.query(ancestor=site.key).filter(cls.name_lower == name.lower()).get(keys_only=True) != None
@@ -221,13 +213,6 @@ class Page(ndb.Expando):
 
 		p = ndb.transaction(callback)
 		return p
-
-IMAGE_TYPE_BLOB = 'blob'
-IMAGE_TYPE_HOLDER = 'holder'
-IMAGE_TYPES = [
-	IMAGE_TYPE_BLOB,
-	IMAGE_TYPE_HOLDER,
-]
 
 # app engine is seeing high failure rates here, so retry a few times
 # this should be removed once they fix it
@@ -316,15 +301,46 @@ class Image(ndb.Expando):
 		self.i = files.blobstore.get_blob_key(fn)
 		self.url = None
 
-	# todo: don't output editable classes in non edit mode
-	def render(self, cls='', postid=None):
-		return '<img width="%i" height="%i" src="%s" class="editable image %s" id="_%s_%s">' %(
-			self.width,
-			self.height,
-			self.url,
+	def render(self, mode, cls='', postid=None, width=None, height=None):
+		if mode == 'publish' and self.type == IMAGE_TYPE_BLOB:
+			name = '/%s.png' %self.key.id()
+			pagek = self.key.parent()
+			page = pagek.get()
+			sitek = pagek.parent()
+			url = 'http://commondatastorage.googleapis.com/%s/%s/%s/%s' %(
+				BUCKET_NAME,
+				sitek.id(),
+				page.name,
+				name
+			)
+			page.gs_write(name, 'image/png', self.blob_key.get().blob)
+		else:
+			url = self.url
+
+		if mode == 'edit':
+			cls += ' editable image'
+			iid = ' id="_%s_%s"' %(
+				'postimage' if postid else 'image', postid if postid else self.key.id())
+		else:
+			iid = ''
+
+		if cls:
+			cls = ' class="%s"' %cls.strip()
+
+		if width is None:
+			width = self.width
+		if height is None:
+			height = self.height
+
+		width = ' width="%i"' %width if width else ''
+		height = ' height="%i"' %height if height else ''
+
+		return '<img%s%s src="%s"%s%s>' %(
+			width,
+			height,
+			url,
 			cls,
-			'postimage' if postid else 'image',
-			postid if postid else self.key.id()
+			iid,
 		)
 
 class ImageBlob(ndb.Model):

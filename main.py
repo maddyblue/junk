@@ -6,7 +6,6 @@ import logging
 import re
 
 from PIL import Image
-from google.appengine.api import files
 from google.appengine.api import images
 from google.appengine.api import users
 from google.appengine.ext import blobstore
@@ -345,10 +344,10 @@ class Edit(BaseHandler):
 		self.render('edit.html', {
 			'all_images': all_images,
 			'base': '/static/' + basedir,
-			'edit': True,
 			'get': self.request.GET,
 			'images': images,
 			'jquery': settings.JQUERY,
+			'mode': 'edit',
 			'page': page,
 			'pagenum': pagenum,
 			'pages': pages,
@@ -670,6 +669,7 @@ class View(BaseHandler):
 			'get': self.request.GET,
 			'images': images,
 			'jquery': settings.JQUERY,
+			'mode': 'view',
 			'page': page,
 			'pagenum': int(pagenum),
 			'pages': pages,
@@ -701,10 +701,17 @@ class Publish(BaseHandler):
 	def get(self, sitename):
 		site = ndb.Key('Site', sitename).get()
 
-		if not site or site.user.urlsafe() != self.session['user']['key']:
+		if not site or site.user.urlsafe() != self.session['user']['key'] or site.do_publish:
 			return
 
-		deferred.defer(publish_site, sitename)
+		def callback():
+			s = site.key.get()
+			if not s.do_publish:
+				s.do_publish = True
+				deferred.defer(publish_site, sitename)
+				s.put()
+
+		ndb.transaction(callback)
 
 class Layout(BaseHandler):
 	def get(self, siteid, pageid, layoutid):
@@ -844,7 +851,22 @@ def publish_site(sitename):
 	site = ndb.Key('Site', sitename).get()
 	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 
-	if not site or not pages:
+	if not site or not pages or not site.do_publish:
+		return
+
+	def callback():
+		s = site.key.get()
+		if not s.do_publish:
+			return None
+
+		s.do_publish = False
+		s.last_published = datetime.datetime.now()
+		s.last_published_num += 1
+		s.put()
+		return s
+
+	site = ndb.transaction(callback)
+	if not site:
 		return
 
 	basedir = 'themes/%s/' %site.theme
@@ -855,6 +877,7 @@ def publish_site(sitename):
 			'base': settings.TNM_URL + '/static/' + basedir,
 			'images': images,
 			'jquery': settings.JQUERY,
+			'mode': 'publish',
 			'page': page,
 			'pagenum': pagenum,
 			'pages': pages,
@@ -864,9 +887,7 @@ def publish_site(sitename):
 		})
 
 		name = '/%i' %pagenum if pagenum else ''
-
-		oname = rel + page.name + name
-		gs_write(oname, 'text/html', c)
+		page.gs_write(name, 'text/html', c)
 
 	for page in pages.values():
 		if page.type not in [
@@ -890,16 +911,8 @@ def publish_site(sitename):
 			for i in range(1, pgs + 1):
 				write_page(i)
 
-def gs_write(name, mime, content):
-	fn = files.gs.create(
-		'/gs/' + name,
-		mime_type=mime,
-		acl='public-read',
-		cache_control='no-cache'
-	)
-	with files.open(fn, 'a') as f:
-		f.write(content)
-	files.finalize(fn)
+	p = models.Publish(id=site.last_published_num, parent=site.key)
+	p.put()
 
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {

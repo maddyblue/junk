@@ -1,7 +1,7 @@
 {% if page.layout == 1 %}
 
 <div class="fullpage">
-	<span class="left">{{ images[0].render() }}</span>
+	<span class="left">{{ images[0].render(mode) }}</span>
 	{{ page|editline(0, 'h1') }}
 	{{ page|edittext(0, 'div') }}
 </div>
@@ -9,18 +9,18 @@
 {% elif page.layout == 2 %}
 
 <div class="left-cont">
-	<span class="thumb">{{ images[0].render() }}</span>
+	<span class="thumb">{{ images[0].render(mode) }}</span>
 	{{ page|editline(0, 'h1') }}
 	{{ page|edittext(0, 'div') }}
 
 	<div class="column">
 		<ul class="double">
 		<li>
-			{{ images[1].render() }}
+			{{ images[1].render(mode) }}
 			{{ page|edittext(1, 'div') }}
 		</li>
 		<li>
-			{{ images[2].render() }}
+			{{ images[2].render(mode) }}
 			{{ page|edittext(2, 'div') }}
 		</li>
 		</ul>
@@ -55,11 +55,10 @@
 
 {% elif page.layout == 3 %}
 
-<div id="slider">
-	{{ images[0].render() }}
-</div>
+{{ images[0].render(mode) }}
+
 <div class="fullpage">
-	<span class="left">{{ images[1].render() }}</span>
+	<span class="left">{{ images[1].render(mode) }}</span>
 	{{ page|editline(0, 'h1') }}
 	{{ page|edittext(0, 'div') }}
 </div>

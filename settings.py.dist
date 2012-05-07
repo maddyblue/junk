@@ -16,3 +16,36 @@ TNM_URL = 'http://application-id.appspot.com'
 JQUERY_VERSION = '1.7.2'
 JQUERY = """<script src="//ajax.googleapis.com/ajax/libs/jquery/%s/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="/static/js/jquery-%s.min.js"><\/script>')</script>""" %(JQUERY_VERSION, JQUERY_VERSION)
+
+# constants
+
+USER_SOURCE_FACEBOOK = 'facebook'
+USER_SOURCE_GOOGLE = 'google'
+
+USER_PLAN_FREE = 'free'
+USER_PLAN_BASIC = 'basic'
+USER_PLAN_DOMAIN = 'domain'
+USER_PLAN_PRO = 'pro'
+
+USER_PLAN_CHOICES = [
+	USER_PLAN_FREE,
+	USER_PLAN_BASIC,
+	USER_PLAN_DOMAIN,
+	USER_PLAN_PRO,
+]
+
+PLAN_COSTS = {
+	USER_PLAN_FREE: 0,
+	USER_PLAN_BASIC: 5,
+	USER_PLAN_DOMAIN: 10,
+	USER_PLAN_PRO: 20,
+}
+
+PLAN_COSTS_DESC = ['%s ($%i/month)' %(i.title(), PLAN_COSTS[i]) for i in USER_PLAN_CHOICES]
+
+IMAGE_TYPE_BLOB = 'blob'
+IMAGE_TYPE_HOLDER = 'holder'
+IMAGE_TYPES = [
+	IMAGE_TYPE_BLOB,
+	IMAGE_TYPE_HOLDER,
+]

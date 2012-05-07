@@ -3,11 +3,11 @@
 		{{ page|editline(0, 'h1') }}
 
 		{% if not pagenum %}
-			{% if edit %}
+			{% if mode == 'edit' %}
 				<a href="{{ 'new-blog-post'|url(pageid=page.key.id()) }}">new blog post</a>
 			{% endif %}
 
-			{% for b in page.get_blogposts(1, edit) %}
+			{% for b in page.get_blogposts(1, mode == 'edit') %}
 			<div class="blogPost">
 				{{ b.imagesz(width=634, height=172) }}
 				<div class="postInfo">
@@ -26,13 +26,13 @@
 			{% endfor %}
 		{% else %}
 			{% set b = page.get_blogpost(pagenum) %}
-			{{ b.image.get().render(postid=pagenum) }}
+			{{ b.image.get().render(mode, postid=pagenum) }}
 			{{ b|editposttitle('h2') }}
 			<div class="postDetails">
 				<ul>
 					<li class="date">Published on {{ b|editpostdate }}</li>
 					<li class="author">Created by {{ b|editpostauthor }}</li>
-					{% if edit %}
+					{% if mode == 'edit' %}
 						<li class="draft">{{ b|editpostdraft }}</li>
 					{% elif b.draft %}
 						<li class="draft">DRAFT</li>
@@ -50,6 +50,7 @@
 					<li>opera</li>
 				</ul>
 			</div>
+			URL: /{{ page.name }}/<span class="editable line">{{ b.url }}</span>
 		{% endif %}
 	</div>
 
@@ -57,7 +58,7 @@
 		<ul>
 			<li>
 				<h3>About Me</h3>
-				{{ images[0].render('left') }}
+				{{ images[0].render(mode, 'left') }}
 				{{ page|edittext(0, 'div') }}
 				<div class="clr"></div>
 			</li>

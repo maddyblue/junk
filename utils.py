@@ -3,21 +3,21 @@
 import logging
 import os
 
+from google.appengine.api import files
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 import jinja2
 import webapp2
 
 import filters
-import models
-import settings
+from settings import *
 
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
 
 import stripe
 
-stripe.api_key = settings.STRIPE_SECRET
+stripe.api_key = STRIPE_SECRET
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 env.filters.update(filters.filters)
@@ -87,4 +87,18 @@ def make_options(options, default=None):
 	return ret
 
 def make_plan_options(default=None):
-	return make_options(zip(models.USER_PLAN_CHOICES, models.PLAN_COSTS_DESC), default)
+	return make_options(zip(USER_PLAN_CHOICES, PLAN_COSTS_DESC), default)
+
+def gs_write(name, mime, content):
+	if os.environ.get('SERVER_SOFTWARE').startswith('Google App Engine'):
+		fn = files.gs.create(
+			'/gs/' + name,
+			mime_type=mime,
+			acl='public-read',
+			cache_control='no-cache'
+		)
+		with files.open(fn, 'a') as f:
+			f.write(content)
+		files.finalize(fn)
+	else:
+		logging.info('gs write: %s, %s', mime, name)

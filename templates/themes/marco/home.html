@@ -1,18 +1,18 @@
-{{ images[0].render() }}
+{{ images[0].render(mode) }}
 
 <div class="column">
 <ul>
 	<li>
 	<h2>{{ page|editlink(0, rel) }}</h2>
-	<a href="{{ page.link(0, rel) }}">{{ images[1].render() }}</a>
+	<a href="{{ page.link(0, rel) }}">{{ images[1].render(mode) }}</a>
 	</li>
 	<li class="middle">
 	<h2>{{ page|editlink(1, rel) }}</h2>
-	<a href="{{ page.link(1, rel) }}">{{ images[2].render() }}</a>
+	<a href="{{ page.link(1, rel) }}">{{ images[2].render(mode) }}</a>
 	</li>
 	<li>
 	<h2>{{ page|editlink(2, rel) }}</h2>
-	<a href="{{ page.link(2, rel) }}">{{ images[3].render() }}</a>
+	<a href="{{ page.link(2, rel) }}">{{ images[3].render(mode) }}</a>
 	</li>
 </ul>
 </div>
@@ -33,7 +33,7 @@
 {% elif page.layout == 2 %}
 <h2>{{ page|editlink(3, rel) }}</h2>
 	<div class="post">
-		<a href="{{ page.link(3, rel) }}" class="thumb">{{ images[4].render() }}</a>
+		<a href="{{ page.link(3, rel) }}" class="thumb">{{ images[4].render(mode) }}</a>
 		<h3>{{ page|editlink(4, rel) }}</h3>
 		{{ page|edittext(0, 'div') }}
 	</div>
