@@ -314,7 +314,9 @@ class Image(ndb.Expando):
 				page.name,
 				name
 			)
-			page.gs_write(name, 'image/png', self.blob_key.get().blob)
+
+			br = blobstore.BlobInfo.get(self.blob_key.get().blob).open()
+			page.gs_write(name, 'image/png', br.read())
 		else:
 			url = self.url
 
