@@ -816,6 +816,7 @@ class Clear(BaseHandler):
 			self.response.write('<html><body><form>clear everything<input type="checkbox" name="sure"><input type="submit"></form></body></html>')
 		else:
 			MODELS = [
+				'BlogPost',
 				'Image',
 				'ImageBlob',
 				'Page',
