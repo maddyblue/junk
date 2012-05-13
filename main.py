@@ -847,6 +847,89 @@ class Clear(BaseHandler):
 
 			self.redirect(webapp2.uri_for('main'))
 
+class Blog(BaseHandler):
+	def get(self, pagenum=1):
+		POSTS_PER_PAGE = 10
+		pagenum = int(pagenum)
+
+		if pagenum < 1:
+			pagenum = 1
+
+		posts = models.SiteBlogPost.posts(pagenum, POSTS_PER_PAGE)
+
+		self.render('blog.html', {
+			'jquery': settings.JQUERY,
+			'posts': posts,
+			'nextpage': pagenum + 1 if posts else 0,
+		})
+
+class BlogPost(BaseHandler):
+	def get(self, link):
+		p = models.SiteBlogPost.link_key(link)
+
+		if not p:
+			self.error(404)
+			return
+
+		self.render('blog-post.html', {
+			'jquery': settings.JQUERY,
+			'p': p.get(),
+		})
+
+class Admin(BaseHandler):
+	def get(self):
+		self.render('admin.html', {
+			'drafts': models.SiteBlogPost.drafts(),
+			'posts': models.SiteBlogPost.posts(pagenum=1, per_page=100),
+		})
+
+class AdminNewPost(BaseHandler):
+	def get(self):
+		sbpid = models.SiteBlogPost.allocate_ids(size=1)[0]
+		sbpkey = ndb.Key('SiteBlogPost', sbpid)
+
+		im = models.Image(parent=sbpkey, width=620, height=412)
+		im.put()
+
+		p = models.SiteBlogPost(
+			key=sbpkey,
+			title='Title',
+			author=users.get_current_user().nickname(),
+			image=im.key
+		)
+		p.put()
+		self.redirect(webapp2.uri_for('admin-edit-post', postid=p.key.id()))
+
+class AdminEditPost(BaseHandler):
+	DATE_FMT = '%Y-%m-%d %H:%M'
+
+	def get(self, postid):
+		self.render('admin-edit-post.html', {
+			'p': models.SiteBlogPost.get_by_id(long(postid)),
+			'fmt': self.DATE_FMT,
+		})
+
+	def post(self, postid):
+		p = models.SiteBlogPost.get_by_id(long(postid))
+
+		for k in ['author', 'title', 'text', 'link']:
+			v = self.request.get(k)
+			if v:
+				if k == 'link':
+					v = models.link_filter(None, v)
+					if p.link != v and models.SiteBlogPost.link_key(v):
+						raise ValueError('link %s already in use' %v)
+
+				setattr(p, k, self.request.get(k))
+
+		p.date = datetime.datetime.strptime(self.request.get('date'), self.DATE_FMT)
+		p.tags = [t.strip() for t in self.request.get('tags').split(',')]
+		p.draft = self.request.get('draft') == 'on'
+		p.autolink = self.request.get('autolink') == 'on'
+
+		p.put()
+		self.redirect(webapp2.uri_for('admin-edit-post', postid=postid))
+
 def publish_site(sitename):
 	site = ndb.Key('Site', sitename).get()
 	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
@@ -924,8 +1007,11 @@ config = {
 }
 
 app = webapp2.WSGIApplication([
-	webapp2.Route(r'/', handler='main.MainPage', name='main'),
+	webapp2.Route(r'/', handler='main.Blog', name='blog'),
 	webapp2.Route(r'/archive', handler='main.ArchivePage', name='archive-page'),
+	webapp2.Route(r'/blog', handler='main.Blog'),
+	webapp2.Route(r'/blog/<pagenum:\d+>', handler='main.Blog', name='site-blog-page'),
+	webapp2.Route(r'/blog/<link>', handler='main.BlogPost', name='site-blog-post'),
 	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
 	webapp2.Route(r'/edit/<pagename>', handler='main.Edit', name='edit'),
@@ -935,8 +1021,9 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/login/facebook', handler='main.LoginFacebook', name='login-facebook'),
 	webapp2.Route(r'/login/google', handler='main.LoginGoogle', name='login-google'),
 	webapp2.Route(r'/logout', handler='main.Logout', name='logout'),
-	webapp2.Route(r'/new/page', handler='main.NewPage', name='new-page'),
+	webapp2.Route(r'/main', handler='main.MainPage', name='main'),
 	webapp2.Route(r'/new/blogpost/<pageid>', handler='main.NewBlogPost', name='new-blog-post'),
+	webapp2.Route(r'/new/page', handler='main.NewPage', name='new-page'),
 	webapp2.Route(r'/publish/<sitename>', handler='main.Publish', name='publish'),
 	webapp2.Route(r'/register', handler='main.Register', name='register'),
 	webapp2.Route(r'/reset', handler='main.Reset', name='reset'),
@@ -952,7 +1039,11 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/view/<sitename>/<pagename>/<pagenum>', handler='main.View', name='view-page'),
 
 	# admin
+	webapp2.Route(r'/admin', handler='main.Admin', name='admin'),
+	webapp2.Route(r'/admin/', handler='main.Admin'),
 	webapp2.Route(r'/admin/clear', handler='main.Clear', name='clear'),
+	webapp2.Route(r'/admin/edit-post/<postid>', handler='main.AdminEditPost', name='admin-edit-post'),
+	webapp2.Route(r'/admin/new-post', handler='main.AdminNewPost', name='admin-new-post'),
 
 	# google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),

@@ -1,0 +1,14 @@
+<html>
+<body>
+	<p><a href="{{ 'admin-new-post'|url }}">new blog post</a></p>
+	<hr>
+	<h3>drafts</h3>
+	{% for p in drafts %}
+	<p><a href="{{ 'admin-edit-post'|url(postid=p.key.id()) }}">{{ p.date|fdate }} - {{ p.title }}</a></p>
+	{% endfor %}
+	<h3>posts</h3>
+	{% for p in posts %}
+	<p><a href="{{ 'admin-edit-post'|url(postid=p.key.id()) }}">{{ p.date|fdate }} - {{ p.title }}</a></p>
+	{% endfor %}
+</body>
+</html>

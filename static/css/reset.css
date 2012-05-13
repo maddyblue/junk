@@ -1,0 +1,59 @@
+/* =================================================
+	Project Name
+	Copyright 2010 
+	Written for - 
+	Developed and designed by 
+	Description - reset all browser styles
+	
+color guide
+-----------
+
+#333333		| dark gray		| used for text
+#ffffff		| white			| generic white color
+
+================================================= */
+
+/* ---------- @Global Reset ------------------*/  
+
+html, body {
+	border:0;
+	margin:0;
+	padding:0;
+}
+
+body, div, dl, dt, dd, ul, ol, li, pre, form, fieldset, input, textarea, p, blockquote {  
+	    margin:0; 
+	    padding:0; 
+	} 
+
+/* ---------- @Headings ----------------------*/  
+
+h1, h2, h3, h4, h5, h6 {
+margin:0;
+padding:0;
+font-weight:normal;
+}
+
+/* ---------- @Lists reset  ------------------*/  
+
+ol, ul {
+	list-style: none;
+}
+
+/* ---------- @Quote  ------------------------*/  
+
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/* ---------- @Image border reset  -----------*/  
+
+img {  
+	    border:0; 
+	} 
+	

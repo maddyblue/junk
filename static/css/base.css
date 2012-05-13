@@ -1,0 +1,59 @@
+/* =================================================
+	Project Name
+	Copyright 2010 
+	Written for - 
+	Developed and designed by 
+	Description - have basic classes and import css
+	
+color guide
+-----------
+
+#333333		| dark gray		| used for text
+#ffffff		| white			| generic white color
+
+================================================= */
+
+ 
+/* ---------- @import other stylesheets -----------*/  
+
+@import "reset.css";
+@import "structure.css";
+@import "typography.css";
+@import "blog.css";
+@import "jquery.jtweetsanywhere-1.3.1.css";
+
+/* ---------- @HTML tags  -------------------------*/ 
+
+body {
+	font-family:"Segoe UI", Arial, Helvetica, sans-serif;
+	color:#666666;
+}
+
+html {
+}
+
+
+/* ---------- @Global Classes --------------------*/ 
+
+.clear         { clear:both; }
+.float-left    { float:left; }
+.float-right   { float:right; }
+
+.text-left     { text-align:left; }
+.text-right    { text-align:right; }
+.text-center   { text-align:center; }
+.text-justify  { text-align:justify; }
+
+.bold          { font-weight:bold; }
+.italic        { font-style:italic; }
+.underline     { border-bottom:1px solid; }
+.highlight     { background:#ffc; }
+
+.wrapper       { width:960px;margin:0 auto; }
+
+.img-left      { float:left;margin:4px 10px 4px 0; }
+.img-right     { float:right;margin:4px 0 4px 10px; }
+
+.nopadding     { padding:0; }
+.noindent      { margin-left:0;padding-left:0; }
+.nobullet      { list-style:none;list-style-image:none; }

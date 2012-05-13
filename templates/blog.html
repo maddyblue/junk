@@ -1,0 +1,92 @@
+{% extends "blog-base.html" %}
+
+{% block title %} - Blog {% endblock %}
+
+{% block content %}
+	<!--div id="sliderBlog" class="carousel slide">
+		<div class="carousel-inner" style="width: 670px; height: 300px; overflow: hidden;">
+			<div id="post-350" class="post-350 slide type-slide status-publish hentry item" style="position: absolute; top: 0px; left: -670px; display: none; z-index: 2; opacity: 1; width: 670px; height: 300px;">
+				<div class="image">
+					<img class="attachment-endless-slide wp-post-image" width="670" height="300" title="slide1" alt="slide1" src="http://themes.sneekdigital.co.uk/endless/wp-content/uploads/2012/03/slide14.png">
+				</div>
+				<div class="carousel-caption">
+					<h4>This is a slide title &ndash; you can <a href="http://themes.sneekdigital.co.uk/endless/?page_id=86" title="Features">link a page</a> to any URL.</h4>
+				</div>
+			</div>
+			<div id="post-354" class="post-354 slide type-slide status-publish hentry item" style="position: absolute; top: 0px; left: 0px; display: block; z-index: 3; opacity: 1; width: 670px; height: 300px;">
+				<div class="image">
+					<img class="attachment-endless-slide wp-post-image" width="670" height="300" title="slide2" alt="slide2" src="http://themes.sneekdigital.co.uk/endless/wp-content/uploads/2012/03/slide22.png">
+				</div>
+				<div class="carousel-caption">
+					<h4>Why not <a href="http://themes.sneekdigital.co.uk/endless/?page_id=86" title="Features">take a look</a> at all these styles you can use within Endless</h4>
+				</div>
+			</div>
+		</div>
+		<a class="carousel-control left" data-slide="prev" href="#slider" style="display: inline;">‹</a>
+		<a class="carousel-control right" data-slide="next" href="#slider" style="display: inline;">›</a>
+	</div-->
+
+	<h1 id="title">The Next Muse Blog</h1>
+
+	<div id="endless" class="staggered clearfix masonry">
+
+		<div id="endless-pad">
+			<a href="#" class="rss"></a> Subscribe to our RSS Feed
+			<!--div class="btn-group">
+				<a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">
+					Categories
+					<span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li class="cat-item cat-item-1">
+						<a title="View all posts filed under Uncategorized" href="http://127.0.0.1/endless/?cat=1">Uncategorized</a>
+						<a title="View all posts filed under Uncategorized" href="http://127.0.0.1/endless/?cat=2">General</a>
+						<a title="View all posts filed under Uncategorized" href="http://127.0.0.1/endless/?cat=3">Inspiring</a>
+						<a title="View all posts filed under Uncategorized" href="http://127.0.0.1/endless/?cat=4">Lifestyle</a>
+					</li>
+				</ul>
+			</div-->
+		</div>
+
+		{% for p in posts %}
+		<div class="post type-post status-publish format-standard hentry category-uncategorized clearfix masonry-brick" style="position: absolute; top: 0px; left: 0px;">
+			<div class="feature-image">
+				<a title="{{ p.title }}" href="{{ p.url }}">
+					<span class="overlay" style="display: none;"></span>
+					{{ p.imagesz(width=297, height=198, class='attachment-endless-thumbnail-staggered wp-post-image') }}
+				</a>
+			</div>
+			<div class="excerpt clearfix">
+				<h2 class="title"><a title="{{ p.title }}" href="{{ p.url }}">{{ p.title }}</a></h2>
+				<p>{{ p.short() }}</p>
+				<p class="meta">
+				<span class="date">{{ p.date|fdate }}</span>
+					<span class="comments"><a href="{{ p.url }}#comments">comments</a></span>
+					<span class="categories"><!--a rel="category" title="View all posts in Uncategorized" href="http://127.0.0.1/endless/?cat=1">Uncategorized</a-->{{ p.tags[:1]|join('') }}</span>
+				</p>
+			</div>
+		</div>
+		{% endfor %}
+
+	</div>
+
+	{% if nextpage %}
+	<a id="endless-pager" class="nextPage btn btn-large" href="{{ 'site-blog-page'|url(pagenum=nextpage) }}">Load More Posts</a>
+	{% endif %}
+
+	<script type="text/javascript" src="/static/js/jquery.infinitescroll.min.js"></script>
+	<script type="text/javascript">
+		var jQuerycontainer = $('#endless');
+		jQuerycontainer.infinitescroll({
+			navSelector: "a#endless-pager:last",
+			nextSelector: "a#endless-pager:last",
+			itemSelector: ".post",
+			finishedMsg: "No more posts."
+			},
+			function( newElements ) {
+				var jQuerynewElems = jQuery( newElements );
+				jQuerycontainer.masonry( 'appended', jQuerynewElems );
+			}
+		);
+	</script>
+{% endblock %}

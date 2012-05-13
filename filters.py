@@ -59,6 +59,10 @@ def date(d, fmt):
 def fdate(d):
 	return date(d, '%B %d, %Y')
 
+def markdown(text):
+	import utils
+	return utils.markdown(text)
+
 filters = dict([(i, globals()[i]) for i in [
 	'date',
 	'editline',
@@ -71,5 +75,6 @@ filters = dict([(i, globals()[i]) for i in [
 	'edittext',
 	'fdate',
 	'linkmap',
+	'markdown',
 	'url',
 ]])

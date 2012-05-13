@@ -32,7 +32,7 @@ handlers:
   script: main.app
   login: required
 
-- url: /admin/.*
+- url: /admin.*
   script: main.app
   login: admin
 

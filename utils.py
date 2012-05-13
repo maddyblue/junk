@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 
 from google.appengine.api import files
 from google.appengine.ext import ndb
@@ -102,3 +103,12 @@ def gs_write(name, mime, content):
 		files.finalize(fn)
 	else:
 		logging.info('gs write: %s, %s', mime, name)
+
+def slugify(value):
+	value = value.strip().lower()
+	words = re.findall('[a-z0-9]+', value)
+	return '-'.join(words)
+
+def markdown(text):
+	import markdown2
+	return markdown2.markdown(text)

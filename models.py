@@ -10,9 +10,11 @@ from google.appengine.ext import blobstore
 from google.appengine.ext import deferred
 from google.appengine.ext import ndb
 from google.appengine.runtime import DeadlineExceededError
+import webapp2
 
-from themes import *
 from settings import *
+from themes import *
+import utils
 
 class User(ndb.Model):
 	first_name = ndb.StringProperty('f', required=True, indexed=False)
@@ -165,7 +167,6 @@ class Page(ndb.Expando):
 		return ndb.get_multi(post_keys)
 
 	def gs_write(self, name, mimetype, content):
-		import utils
 		rel = BUCKET_NAME + '/' + self.key.parent().id() + '/'
 		oname = rel + self.name + name
 		utils.gs_write(oname, mimetype, content)
@@ -367,24 +368,50 @@ class ImageBlob(ndb.Model):
 def delete_blob(k):
 	blobstore.delete(k)
 
+def link_filter(prop, value):
+	if value is None:
+		return
+
+	value = utils.slugify(value)
+	try:
+		long(value)
+	except ValueError:
+		return value
+
+	raise ValueError('link cannot be a valid number')
+
 class BlogPost(ndb.Model):
 	title = ndb.StringProperty('l', indexed=False, required=True)
 	image = ndb.KeyProperty('i', indexed=False, required=True)
-	text = ndb.TextProperty('t', default='')
+	text = ndb.TextProperty('t', default='', compressed=True)
 	tags = ndb.StringProperty('g', repeated=True)
 	date = ndb.DateTimeProperty('d', required=True, auto_now_add=True)
 	author = ndb.TextProperty('a')
 	draft = ndb.BooleanProperty('f', default=True)
+	link = ndb.StringProperty('k', validator=link_filter)
+	autolink = ndb.BooleanProperty('n', default=True)
+
+	def _pre_put_hook(self):
+		if self.autolink or not self.link:
+			link = link_filter(None, self.title)
+
+			if self.__class__.link_key(link, self.key.parent()):
+				i = 2
+				while self.__class__.link_key('%s-%s' %(link, i), self.key.parent()):
+					i += 1
+				link = '%s-%s' %(link, i)
+
+			self.link = link
 
 	def short(self, length=50):
-		s = re.sub(r'<.+?>', ' ', self.text)[:length].strip()
+		s = re.sub(r'<.+?>', ' ', self.text)[:length]
 
 		if len(s) == length:
-			s += '...'
+			s = s.strip() + '...'
 
-		return s
+		return s.strip()
 
-	def imagesz(self, width=0, height=0):
+	def imagesz(self, width=0, height=0, **kwargs):
 		img = self.image.get()
 
 		if not width:
@@ -392,9 +419,42 @@ class BlogPost(ndb.Model):
 		if not height:
 			height = img.height
 
-		return '<img width="%i" height="%i" src="%s">' %(width, height, img.url)
+		return '<img width="%i" height="%i" src="%s"%s>' %(
+			width, height, img.url, ''.join([' %s="%s"' %(k, v) for k, v in kwargs.iteritems()]))
 
 	@property
 	def url(self):
 		p = self.key.parent().get()
 		return '%s/%s' %(p.name, self.key.id())
+
+	@classmethod
+	def posts(cls, pagenum, per_page=5, parent=None):
+		keys = cls.query(ancestor=parent).filter(cls.draft == False).order(-cls.date).fetch(per_page,
+			keys_only=True, offset=(pagenum - 1) * per_page, prefetch_size=per_page)
+		return ndb.get_multi(keys)
+
+	@classmethod
+	def drafts(cls, parent=None):
+		return cls.query(ancestor=parent).filter(cls.draft == True).order(-cls.date).iter()
+
+	@classmethod
+	def link_key(cls, link, parent=None):
+		return cls.query(ancestor=parent).filter(cls.link == link).get(keys_only=True)
+
+class SiteBlogPost(BlogPost):
+	html = ndb.TextProperty('h', compressed=True)
+
+	def _pre_put_hook(self):
+		self.html = utils.markdown(self.text)
+
+	def short(self, length=200):
+		s = re.sub(r'<.+?>', ' ', self.html)[:length]
+
+		if len(s) == length:
+			s = s.strip() + '...'
+
+		return s.strip()
+
+	@property
+	def url(self):
+		return webapp2.uri_for('site-blog-post', link=self.link)

@@ -22,3 +22,9 @@ indexes:
   - name: f
   - name: d
     direction: desc
+
+- kind: SiteBlogPost
+  properties:
+  - name: f
+  - name: d
+    direction: desc

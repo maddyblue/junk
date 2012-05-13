@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>The Next Muse{% block title %}{% endblock %}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<style type="text/css" media="screen">
+	@import url("/static/css/base.css");
+	</style>
+	<link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/static/css/coda-slider-2.0.css" type="text/css" media="screen" />
+	{{ jquery }}
+	<script type="text/javascript" src="/static/js/modernizr.js"></script>
+</head>
+<body>
+
+<!--div id="header">
+	<div class="wrapper">
+		<div id="logo">
+			<a href="index.html">The Next Muse</a>
+		</div>
+		<div id="topMenu">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="#">How It Works</a></li>
+				<li><a href="blog.html">Blog</a></li>
+				<li class="login"><a href="#">Login</a></li>
+			</ul>
+		</div>
+	</div>
+</div-->
+
+<div id="body">
+
+	<div id="primary" class="maxheight">
+		{% block content %}{% endblock %}
+	</div>
+	<div id="secondary" role="secondary">
+
+		<div id="bigLogo">
+			<a href="blog.html" title="The Next Muse Blog">
+				<img src="/static/images/logo.png" />
+			</a>
+		</div>
+		<div id="tagline">A performer's guide to building a robust and (above&nbsp;all) RELEVANT Personal Brand.<br>Tips and Tricks included…</div>
+		<div class="widgets">
+
+			<div id="social-networks" class="widget clearfix">
+				<ul class="clearfix">
+					<li class="youtube">
+						<a href="http://www.youtube.com/user/thenextmuse"><span class="assistive-text">dribbble</span></a>
+					</li>
+					<!--li class="facebook">
+						<a href="http://facebook.com"><span class="assistive-text">facebook</span></a>
+					</li-->
+					<!--li class="linkedin">
+						<a href="http://linkedin.com"><span class="assistive-text">linkedin</span></a>
+					</li-->
+					<li class="twitter">
+						<a href="https://twitter.com/#!/thenextmuse"><span class="assistive-text">twitter</span></a>
+					</li>
+					<li class="pintrest">
+						<a href="http://pinterest.com/thenextmuse/"><span class="assistive-text">pintrest</span></a>
+					</li>
+				</ul>
+			</div>
+
+			<!--div id="search-2" class="widget widget_search">
+				<form id="searchform" action="http://127.0.0.1/endless" method="get" role="search">
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input id="s" type="text" placeholder="Search…" name="s" value="">
+					<input id="searchsubmit" type="submit" value="Search">
+				</form>
+			</div-->
+
+			<div id="sneek-twitter-2" class="widget sneek-widget-twitter">
+
+			</div>
+
+			<!--div id="sneek-taxonomy-2" class="widget sneek-widget-taxonomy">
+				<div class="btn-group">
+					<a class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">Portfolio Categories<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li class="cat-item cat-item-13">
+							<a title="View all posts filed under Photography" href="http://themes.sneekdigital.co.uk/endless/portfolio/category/photograpy">Photography</a>
+						</li>
+						<li class="cat-item cat-item-14">
+							<a title="View all posts filed under Web Design" href="http://themes.sneekdigital.co.uk/endless/portfolio/category/web-design">Web Design</a>
+						</li>
+						<li class="cat-item cat-item-15">
+							<a title="View all posts filed under Web Elements" href="http://themes.sneekdigital.co.uk/endless/portfolio/category/web-elements">Web Elements</a>
+						</li>
+					</ul>
+				</div>
+			</div-->
+
+			<!--div id="archives-2" class="widget widget_archive">
+				<h3 class="title">Archives</h3>
+				<ul>
+					<li>
+						<a title="April 2012" href="http://127.0.0.1/endless/?m=201204">April 2012</a>
+					</li>
+				</ul>
+			</div-->
+		</div>
+		<!--a class="scrollup" href="#" style="display: inline;">Scroll Up</a-->
+
+	</div>
+	<div class="clear"></div>
+
+</div>
+<div id="footer">
+	<div class="wrapper">
+
+		<!--div id="footerMenu">
+			<ul>
+				<li><a href="#">Privacy Policy</a></li>
+				<li><a href="#">Terms of Service</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Contact Us</a></li>
+			</ul>
+		</div-->
+		<!--div id="social">
+			<ul>
+				<li><a class="rss" href="#">RSS Feed</a></li>
+				<li><a class="twitter" href="#">Twitter</a></li>
+				<li><a class="facebook" href="#">Facebook</a></li>
+			</ul>
+		</div>
+		<div class="clear"></div-->
+
+		<div id="copyright">
+			<p>Copyright &copy; 2012 <a href="index.html">TheNextMuse</a> - All Rights Reserved.</p>
+		</div>
+	</div></div>
+		<script type="text/javascript" src="/static/js/plugins.js"></script>
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		var Sneek = {"cycle":{"fx":"scrollHorz","speed":1000,"timeout":4000}};
+		/* ]]> */
+	</script>
+	<script type="text/javascript" src="/static/js/global.js"></script>
+
+	<script type="text/javascript" src="/static/js/jquery.jtweetsanywhere-1.3.1.js"></script>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			jQuery('#sneek-twitter-2').jTweetsAnywhere({
+				username: '@thenextmuse',
+				count: 2,
+				showTweetFeed: {
+					showProfileImages: false,
+					showUserFullNames: false,
+					showSource: false,
+					showActionReply: false,
+					showActionRetweet: false,
+					showActionFavorite: false,
+					showTimestamp: false,
+					showTwitterBird: false,
+					showInReplyTo: false,
+					paging: {
+						mode: 'none'
+					}
+				}
+			});
+		});
+	</script>
+
+</body>
+</html>
