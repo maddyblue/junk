@@ -447,6 +447,8 @@ class SiteBlogPost(BlogPost):
 	html = ndb.TextProperty('h', compressed=True)
 
 	def _pre_put_hook(self):
+		super(SiteBlogPost, self)._pre_put_hook()
+
 		self.html = utils.markdown(self.text)
 
 	def short(self, length=200):
