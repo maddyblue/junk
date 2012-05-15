@@ -8,7 +8,7 @@
 		<p>title: <input type="text" name="title" value="{{ p.title }}"></p>
 		<p>author: <input type="text" name="author" value="{{ p.author }}"></p>
 		<p>date: <input type="text" name="date" value="{{ p.date|date(fmt) }}"> (format: <strong>YYYY-MM-DD HH:MM</strong>, 24-hour clock)</p>
-		<p>text (markdown format, see below): <textarea name="text">{{ p.text }}</textarea></p>
+		<p>text (markdown format, see below): <textarea name="text" rows="30" cols="100">{{ p.text }}</textarea></p>
 		<p>tags, comma separated: <input type="text" name="tags" value="{{ p.tags|join(', ') }}"></p>
 		<p>draft: <input type="checkbox" name="draft" {% if p.draft %}checked{% endif %}></p>
 		<p>link (optional): <input type="text" name="link" value="{{ p.link|default('', True) }}"></p>
