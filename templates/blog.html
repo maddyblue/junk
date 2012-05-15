@@ -32,20 +32,6 @@
 
 		<div id="endless-pad">
 			<a href="#" class="rss"></a> Subscribe to our RSS Feed
-			<!--div class="btn-group">
-				<a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">
-					Categories
-					<span class="caret"></span>
-				</a>
-				<ul class="dropdown-menu">
-					<li class="cat-item cat-item-1">
-						<a title="View all posts filed under Uncategorized" href="http://127.0.0.1/endless/?cat=1">Uncategorized</a>
-						<a title="View all posts filed under Uncategorized" href="http://127.0.0.1/endless/?cat=2">General</a>
-						<a title="View all posts filed under Uncategorized" href="http://127.0.0.1/endless/?cat=3">Inspiring</a>
-						<a title="View all posts filed under Uncategorized" href="http://127.0.0.1/endless/?cat=4">Lifestyle</a>
-					</li>
-				</ul>
-			</div-->
 		</div>
 
 		{% for p in posts %}
@@ -73,20 +59,4 @@
 	{% if nextpage %}
 	<a id="endless-pager" class="nextPage btn btn-large" href="{{ 'site-blog-page'|url(pagenum=nextpage) }}">Load More Posts</a>
 	{% endif %}
-
-	<script type="text/javascript" src="/static/js/jquery.infinitescroll.min.js"></script>
-	<script type="text/javascript">
-		var jQuerycontainer = $('#endless');
-		jQuerycontainer.infinitescroll({
-			navSelector: "a#endless-pager:last",
-			nextSelector: "a#endless-pager:last",
-			itemSelector: ".post",
-			finishedMsg: "No more posts."
-			},
-			function( newElements ) {
-				var jQuerynewElems = jQuery( newElements );
-				jQuerycontainer.masonry( 'appended', jQuerynewElems );
-			}
-		);
-	</script>
 {% endblock %}

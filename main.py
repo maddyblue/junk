@@ -860,8 +860,8 @@ class Blog(BaseHandler):
 
 		self.render('blog.html', {
 			'jquery': settings.JQUERY,
+			'nextpage': pagenum + 1 if len(posts) == POSTS_PER_PAGE else 0,
 			'posts': posts,
-			'nextpage': pagenum + 1 if posts else 0,
 		})
 
 class BlogPost(BaseHandler):
