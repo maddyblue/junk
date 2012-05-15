@@ -1,0 +1,14 @@
+<html>
+<body>
+
+	<p>Image for blog post {{ p.title }}</p>
+	<p>Size: {{ i.width }} x {{ i.height }}</p>
+	<p>Currently: {{ i.render() }}</p>
+
+	<form method="POST" enctype="multipart/form-data" action="{{ url }}">
+		<input type="file" name="file">
+		<input type="submit">
+	</form>
+
+</body>
+</html>

@@ -16,6 +16,8 @@
 		<input type="submit" value="save">
 	</form>
 
+	<p><a href="{{ 'admin-blog-image'|url(postid=p.key.id()) }}">upload main blog image</a></p>
+	<p>current main image: {{ i.render() }}
 	<p>Edit your post <a href="http://daringfireball.net/projects/markdown/dingus">here</a> then paste above.
 
 	<hr>

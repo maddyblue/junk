@@ -462,3 +462,22 @@ class SiteBlogPost(BlogPost):
 	@property
 	def url(self):
 		return webapp2.uri_for('site-blog-post', link=self.link)
+
+class SiteImage(Image):
+	@property
+	def blob_key(self):
+		skey = self.key.parent()
+		return ndb.Key('SiteImageBlob', self.b, parent=skey)
+
+	def render(self):
+		return super(SiteImage, self).render('site')
+
+	def set_blob(self):
+		if hasattr(self, 'i'):
+			deferred.defer(delete_blob, self.i)
+
+		self.i = self.blob_key.get().blob
+		self.url = None
+
+class SiteImageBlob(ImageBlob):
+	pass
