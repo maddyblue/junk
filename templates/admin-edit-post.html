@@ -19,7 +19,7 @@
 	<p>Edit your post <a href="http://daringfireball.net/projects/markdown/dingus">here</a> then paste above.
 
 	<hr>
-	<h3>preview</h3>
+	<h3><a href="{{ 'site-blog-post'|url(link=p.link) }}">preview</a></h3>
 	{{ p.text|markdown }}
 </body>
 </html>
