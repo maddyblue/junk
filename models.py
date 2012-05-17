@@ -480,4 +480,8 @@ class SiteImage(Image):
 		self.url = None
 
 class SiteImageBlob(ImageBlob):
-	pass
+	date = ndb.DateTimeProperty('t', auto_now_add=True)
+
+	@classmethod
+	def images(cls):
+		return cls.query().order(-cls.date).fetch(100)

@@ -946,31 +946,59 @@ class AdminBlogImage(BaseHandler):
 class AdminUploadImage(BaseUploadHandler):
 	@ndb.toplevel
 	def post(self, postid):
-		p = models.SiteBlogPost.get_by_id(long(postid))
+		postid = long(postid)
+
+		if postid:
+			p = models.SiteBlogPost.get_by_id(postid)
+
 		uploads = self.get_uploads()
 
 		if uploads[0].content_type.startswith('image/') and len(uploads) == 1:
 			upload = uploads[0]
 			i = Image.open(upload.open())
 			w, h = i.size
-			blob = models.SiteImageBlob(
-				parent=p.key,
-				blob=upload.key(),
-				size=upload.size,
-				name=upload.filename,
-				width=w,
-				height=h
-			)
-			blob.put()
 
-			im = p.image.get()
-			im.set_type(models.IMAGE_TYPE_BLOB, blob)
-			im.set_blob()
-			im.put_async()
-			self.redirect(webapp2.uri_for('admin-edit-post', postid=postid))
+			if postid:
+				blob = models.SiteImageBlob(
+					parent=p.key,
+					blob=upload.key(),
+					size=upload.size,
+					name=upload.filename,
+					width=w,
+					height=h
+				)
+				blob.put()
+
+				im = p.image.get()
+				im.set_type(models.IMAGE_TYPE_BLOB, blob)
+				im.set_blob()
+				im.put_async()
+				self.redirect(webapp2.uri_for('admin-edit-post', postid=postid))
+			else:
+				blob = models.SiteImageBlob(
+					blob=upload.key(),
+					size=upload.size,
+					name=upload.filename,
+					width=w,
+					height=h
+				)
+				blob.put()
+				self.redirect(webapp2.uri_for('admin-images'))
 		else:
 			for upload in uploads:
 				upload.delete()
+
+class AdminNewImage(BaseHandler):
+	def get(self):
+		self.render('admin-new-image.html', {
+			'url': blobstore.create_upload_url(webapp2.uri_for('admin-upload-image')),
+		})
+
+class AdminImages(BaseHandler):
+	def get(self):
+		self.render('admin-images.html', {
+			'images': models.SiteImageBlob.images(),
+		})
 
 def publish_site(sitename):
 	site = ndb.Key('Site', sitename).get()
@@ -1086,8 +1114,10 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/blog-image/<postid>', handler='main.AdminBlogImage', name='admin-blog-image'),
 	webapp2.Route(r'/admin/clear', handler='main.Clear', name='clear'),
 	webapp2.Route(r'/admin/edit-post/<postid>', handler='main.AdminEditPost', name='admin-edit-post'),
+	webapp2.Route(r'/admin/images', handler='main.AdminImages', name='admin-images'),
+	webapp2.Route(r'/admin/new-image', handler='main.AdminNewImage', name='admin-new-image'),
 	webapp2.Route(r'/admin/new-post', handler='main.AdminNewPost', name='admin-new-post'),
-	webapp2.Route(r'/admin/upload-image/<postid>', handler='main.AdminUploadImage', name='admin-upload-image'),
+	webapp2.Route(r'/admin/upload-image/<postid>', handler='main.AdminUploadImage', name='admin-upload-image', defaults={'postid': 0}),
 
 	# google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),

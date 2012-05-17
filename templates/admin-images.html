@@ -1,0 +1,21 @@
+<html>
+<body>
+	<p><a href="{{ 'admin'|url }}">back</a></p>
+	<p>To change the size of an image, modify the number at the end of a URL. The size will be the image scaled (retaining aspect ratio) to the largest size it can fit in a square of that size.</p>
+	<p><a href="{{ 'admin-new-image'|url }}">upload new image</a></p>
+
+	<table>
+		{% for i in images %}
+		<tr>
+			<td><a href="{{ i.urls() }}">{{ i.render(200) }}</a></td>
+			<td>
+				markdown: <code>![{{ i.name }}]({{ i.urls() }})</code>
+				<br>URL: <a href="{{ i.urls() }}">{{ i.urls() }}</a>
+				<br>size: {{ i.width }} x {{ i.height }}
+				<br>ratio: {{ i.width / i.height }}
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+</body>
+</html>

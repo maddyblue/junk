@@ -1,6 +1,10 @@
 <html>
 <body>
-	<p><a href="{{ 'admin-new-post'|url }}">new blog post</a></p>
+	<p>
+		<a href="{{ 'admin-images'|url }}">image list</a>
+		<a href="{{ 'admin-new-post'|url }}">new blog post</a>
+		<a href="{{ 'admin-new-image'|url }}">upload image</a>
+	</p>
 	<hr>
 	<h3>drafts</h3>
 	{% for p in drafts %}
