@@ -6,6 +6,7 @@ import re
 
 from google.appengine.api import files
 from google.appengine.api import images
+from google.appengine.api import memcache
 from google.appengine.ext import blobstore
 from google.appengine.ext import deferred
 from google.appengine.ext import ndb
@@ -462,6 +463,23 @@ class SiteBlogPost(BlogPost):
 	@property
 	def url(self):
 		return webapp2.uri_for('site-blog-post', link=self.link)
+
+	@classmethod
+	def prev(cls, pkey):
+		kname = 'prev-%s' %pkey.urlsafe()
+		prev = memcache.get(kname)
+		if prev is None:
+			p = pkey.get()
+			q = cls.query().filter(cls.date < p.date).get(keys_only=True)
+
+			if not q:
+				return None
+
+			memcache.set(kname, q.urlsafe())
+			prev = q.urlsafe()
+
+		k = ndb.Key(urlsafe=prev)
+		return k.get()
 
 class SiteImage(Image):
 	@property

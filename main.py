@@ -875,6 +875,7 @@ class BlogPost(BaseHandler):
 		self.render('blog-post.html', {
 			'jquery': settings.JQUERY,
 			'p': p.get(),
+			'prev': models.SiteBlogPost.prev(p),
 		})
 
 class Admin(BaseHandler):
