@@ -313,7 +313,7 @@ code {
 	margin: 0 0 20px;
 }
 
-#body h1, #body h2, #body h3 {
+#body h1, #body h2, #body h3.title {
 	border-bottom: 1px solid #E0E0E0;
 	padding-bottom: 10px;
 	text-align: center;
