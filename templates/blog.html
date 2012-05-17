@@ -60,3 +60,21 @@
 	<a id="endless-pager" class="nextPage btn btn-large" href="{{ 'site-blog-page'|url(pagenum=nextpage) }}">Load More Posts</a>
 	{% endif %}
 {% endblock %}
+
+{% block bodyend %}
+	<script type="text/javascript" src="/static/js/jquery.infinitescroll.min.js"></script>
+	<script type="text/javascript">
+		var jQuerycontainer = $('#endless');
+		jQuerycontainer.infinitescroll({
+			navSelector: "a#endless-pager",
+			nextSelector: "a#endless-pager",
+			itemSelector: ".post",
+			finishedMsg: "No more posts."
+			},
+			function( newElements ) {
+				var jQuerynewElems = jQuery( newElements );
+				jQuerycontainer.masonry( 'appended', jQuerynewElems );
+			}
+		);
+	</script>
+{% endblock %}
