@@ -399,7 +399,7 @@ class BlogPost(ndb.Model):
 		if self.autolink or not self.link:
 			link = link_filter(None, self.title)
 
-			if self.__class__.link_key(link, self.key.parent()) != self.key:
+			if self.__class__.link_key(link, self.key.parent()) not in (self.key, None):
 				i = 2
 				while self.__class__.link_key('%s-%s' %(link, i), self.key.parent()):
 					i += 1
