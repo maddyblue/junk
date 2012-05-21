@@ -849,18 +849,35 @@ class Clear(BaseHandler):
 			self.redirect(webapp2.uri_for('main'))
 
 class Blog(BaseHandler):
-	def get(self, pagenum=1):
-		POSTS_PER_PAGE = 10
-		pagenum = int(pagenum)
+	def get(self, year=0, month=0):
+		if year and month:
+			year = int(year)
+			month = int(month)
+		else:
+			today = datetime.date.today()
+			year = today.year
+			month = today.month
 
-		if pagenum < 1:
-			pagenum = 1
+		posts = models.SiteBlogPost.posts(year, month)
+		months = models.SiteBlogPost.months()
+		d = datetime.date(year=year, month=month, day=1)
 
-		posts = models.SiteBlogPost.posts(pagenum, POSTS_PER_PAGE)
+		if d not in months.dates:
+			self.error(404)
+			return
+
+		mi = months.dates.index(d)
+		next = mi + 1
+		if next >= len(months.dates):
+			next = None
+		else:
+			next = months.dates[next]
 
 		self.render('blog.html', {
+			'archive': months.values,
 			'jquery': settings.JQUERY,
-			'nextpage': pagenum + 1 if len(posts) == POSTS_PER_PAGE else 0,
+			'months': months,
+			'nextpage': next,
 			'posts': posts,
 		})
 
@@ -874,6 +891,7 @@ class BlogPost(BaseHandler):
 
 		self.render('blog-post.html', {
 			'jquery': settings.JQUERY,
+			'months': models.SiteBlogPost.months(),
 			'p': p.get(),
 			'prev': models.SiteBlogPost.prev(p),
 		})
@@ -882,7 +900,7 @@ class Admin(BaseHandler):
 	def get(self):
 		self.render('admin.html', {
 			'drafts': models.SiteBlogPost.drafts(),
-			'posts': models.SiteBlogPost.posts(pagenum=1, per_page=100),
+			'posts': models.SiteBlogPost.published(),
 		})
 
 class AdminNewPost(BaseHandler):
@@ -1081,7 +1099,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler='main.Blog', name='blog'),
 	webapp2.Route(r'/archive', handler='main.ArchivePage', name='archive-page'),
 	webapp2.Route(r'/blog', handler='main.Blog'),
-	webapp2.Route(r'/blog/<pagenum:\d+>', handler='main.Blog', name='site-blog-page'),
+	webapp2.Route(r'/blog/<year:\d+>/<month:\d+>', handler='main.Blog', name='site-blog-month'),
 	webapp2.Route(r'/blog/<link>', handler='main.BlogPost', name='site-blog-post'),
 	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),

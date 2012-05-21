@@ -1,5 +1,6 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
+import datetime
 import logging
 import math
 import re
@@ -431,9 +432,14 @@ class BlogPost(ndb.Model):
 		return '%s/%s' %(p.name, self.key.id())
 
 	@classmethod
-	def posts(cls, pagenum, per_page=5, parent=None):
-		keys = cls.query(ancestor=parent).filter(cls.draft == False).order(-cls.date).fetch(per_page,
-			keys_only=True, offset=(pagenum - 1) * per_page, prefetch_size=per_page)
+	def posts(cls, year, month, parent=None):
+		nextyear = year if month < 12 else year + 1
+		nextmonth = month + 1 if month < 12 else 1
+
+		keys = list(cls.query(ancestor=parent).filter(cls.draft == False).filter(
+			cls.date >= datetime.datetime(year, month, 1)).filter(
+			cls.date < datetime.datetime(nextyear, nextmonth, 1)).order(
+			-cls.date).iter(keys_only=True))
 		return ndb.get_multi(keys)
 
 	@classmethod
@@ -451,6 +457,9 @@ class SiteBlogPost(BlogPost):
 		super(SiteBlogPost, self)._pre_put_hook()
 
 		self.html = utils.markdown(self.text)
+
+	def _post_put_hook(self, future):
+		deferred.defer(SiteBlogPost.sync_dates)
 
 	def short(self, length=200):
 		s = re.sub(r'<.+?>', ' ', self.html)[:length]
@@ -481,6 +490,37 @@ class SiteBlogPost(BlogPost):
 		k = ndb.Key(urlsafe=prev)
 		return k.get()
 
+	MONTHS_CONFIG = 'months'
+	@classmethod
+	def sync_dates(cls):
+		dates = [i.date for i in cls.query().iter()]
+		months = sorted(set([datetime.date(i.year, i.month, 1) for i in dates]), reverse=True)
+
+		c = Config(
+			id=cls.MONTHS_CONFIG,
+			dates=months
+		)
+		c.put()
+
+	@classmethod
+	@ndb.toplevel
+	def months(cls):
+		m = Config.get_by_id(cls.MONTHS_CONFIG)
+
+		if not m.values:
+			m.values = ['<a href="%s">%s</a>' %(
+				webapp2.uri_for('site-blog-month', year=i.year, month=i.month),
+				i.strftime('%B %Y'))
+				for i in m.dates]
+			m.put_async()
+
+		return m
+
+	@classmethod
+	def published(cls):
+		keys = list(cls.query().filter(cls.draft == False).order(-cls.date).iter(keys_only=True))
+		return ndb.get_multi(keys)
+
 class SiteImage(Image):
 	@property
 	def blob_key(self):
@@ -503,3 +543,9 @@ class SiteImageBlob(ImageBlob):
 	@classmethod
 	def images(cls):
 		return cls.query().order(-cls.date).fetch(100)
+
+class Config(ndb.Expando):
+	_default_indexed = False
+
+	values = ndb.TextProperty('v', repeated=True)
+	dates = ndb.DateProperty('d', repeated=True)

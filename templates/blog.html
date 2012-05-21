@@ -78,7 +78,7 @@
 	</div>
 
 	{% if nextpage %}
-	<a id="endless-pager" class="nextPage btn btn-large" href="{{ 'site-blog-page'|url(pagenum=nextpage) }}">Load More Posts</a>
+	<a id="endless-pager" class="nextPage btn btn-large" href="{{ 'site-blog-month'|url(year=nextpage.year, month=nextpage.month) }}">Load More Posts</a>
 	{% endif %}
 {% endblock %}
 

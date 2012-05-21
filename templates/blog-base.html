@@ -66,15 +66,14 @@
 			<div id="sneek-twitter-2" class="widget sneek-widget-twitter">
 			</div>
 
-
-			<!--div id="archives-2" class="widget widget_archive">
+			<div id="archives-2" class="widget widget_archive">
 				<h3 class="title">Archives</h3>
 				<ul>
-					<li>
-						<a title="April 2012" href="http://127.0.0.1/endless/?m=201204">April 2012</a>
-					</li>
+				{%- for i in months.values %}
+					<li>{{ i }}</li>
+				{% endfor -%}
 				</ul>
-			</div-->
+			</div>
 		</div>
 
 	</div>
