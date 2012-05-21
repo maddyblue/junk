@@ -68,8 +68,8 @@
 				<p>{{ p.short() }}</p>
 				<p class="meta">
 				<span class="date">{{ p.date|fdate }}</span>
-					<span class="comments"><a href="{{ p.url }}#comments">comments</a></span>
-					<span class="categories"><!--a rel="category" title="View all posts in Uncategorized" href="http://127.0.0.1/endless/?cat=1">Uncategorized</a-->{{ p.tags[:1]|join('') }}</span>
+					<span class="comments"><a href="{{ p.url }}#disqus_thread">comments</a></span>
+					<span class="categories">{{ p.tags[:1]|join('') }}</span>
 				</p>
 			</div>
 		</div>
