@@ -390,6 +390,7 @@ class BlogPost(ndb.Model):
 	text = ndb.TextProperty('t', default='', compressed=True)
 	tags = ndb.StringProperty('g', repeated=True)
 	date = ndb.DateTimeProperty('d', required=True, auto_now_add=True)
+	updated = ndb.DateTimeProperty('u', auto_now=True)
 	author = ndb.TextProperty('a')
 	draft = ndb.BooleanProperty('f', default=True)
 	link = ndb.StringProperty('k', validator=link_filter)
@@ -517,8 +518,8 @@ class SiteBlogPost(BlogPost):
 		return m
 
 	@classmethod
-	def published(cls):
-		keys = list(cls.query().filter(cls.draft == False).order(-cls.date).iter(keys_only=True))
+	def published(cls, **kwargs):
+		keys = list(cls.query().filter(cls.draft == False).order(-cls.date).iter(keys_only=True, **kwargs))
 		return ndb.get_multi(keys)
 
 class SiteImage(Image):

@@ -51,8 +51,10 @@
 
 	<div id="endless" class="staggered clearfix masonry">
 
+		<!-- todo: fix this -->
 		<div id="endless-pad">
-			<a href="#" class="rss"></a> Subscribe to our RSS Feed
+			<div style="display: inline-block"><a href="{{ rss }}" class="rss"></a></div>
+			<div style="display: inline-block"><a href="{{ rss }}">Subscribe to our RSS feed</a></div>
 		</div>
 
 		{% for p in posts %}

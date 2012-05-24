@@ -59,6 +59,9 @@ def date(d, fmt):
 def fdate(d):
 	return date(d, '%B %d, %Y')
 
+def rss_date(d):
+	return date(d, '%Y-%m-%dT%H:%M:%SZ')
+
 def markdown(text):
 	import utils
 	return utils.markdown(text)
@@ -76,5 +79,6 @@ filters = dict([(i, globals()[i]) for i in [
 	'fdate',
 	'linkmap',
 	'markdown',
+	'rss_date',
 	'url',
 ]])

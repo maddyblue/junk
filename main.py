@@ -3,6 +3,7 @@
 import datetime
 import json
 import logging
+import os
 import re
 
 from PIL import Image
@@ -879,6 +880,7 @@ class Blog(BaseHandler):
 			'months': months,
 			'nextpage': next,
 			'posts': posts,
+			'rss': webapp2.uri_for('blog-rss'),
 		})
 
 class BlogPost(BaseHandler):
@@ -1019,6 +1021,16 @@ class AdminImages(BaseHandler):
 			'images': models.SiteImageBlob.images(),
 		})
 
+class Feed(BaseHandler):
+	def get(self):
+		posts = models.SiteBlogPost.published(limit=5)
+
+		self.render('atom.xml', {
+			'host': os.environ['HTTP_HOST'],
+			'posts': posts,
+			'title': 'The Next Muse Blog',
+		})
+
 def publish_site(sitename):
 	site = ndb.Key('Site', sitename).get()
 	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
@@ -1099,13 +1111,14 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler='main.Blog', name='blog'),
 	webapp2.Route(r'/archive', handler='main.ArchivePage', name='archive-page'),
 	webapp2.Route(r'/blog', handler='main.Blog'),
-	webapp2.Route(r'/blog/<year:\d+>/<month:\d+>', handler='main.Blog', name='site-blog-month'),
 	webapp2.Route(r'/blog/<link>', handler='main.BlogPost', name='site-blog-post'),
+	webapp2.Route(r'/blog/<year:\d+>/<month:\d+>', handler='main.Blog', name='site-blog-month'),
 	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
 	webapp2.Route(r'/edit/<pagename>', handler='main.Edit', name='edit'),
 	webapp2.Route(r'/edit/<pagename>/<pagenum>', handler='main.Edit', name='edit-page'),
 	webapp2.Route(r'/facebook', handler='main.FacebookCallback', name='facebook'),
+	webapp2.Route(r'/feed/blog.xml', handler='main.Feed', name='blog-rss'),
 	webapp2.Route(r'/layout/<siteid>/<pageid>/<layoutid>', handler='main.Layout', name='layout'),
 	webapp2.Route(r'/login/facebook', handler='main.LoginFacebook', name='login-facebook'),
 	webapp2.Route(r'/login/google', handler='main.LoginGoogle', name='login-google'),
