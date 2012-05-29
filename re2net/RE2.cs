@@ -30,10 +30,18 @@ namespace re2net
         public string Re { get; set; }
         public string Post { get; set; }
         public State Start { get; set; }
+        public Methods Method { get; set; }
 
-        public RE2(string re)
+        public enum Methods {
+            NFA,
+            DFA,
+        };
+
+        public RE2(string re, Methods method = Methods.DFA)
         {
             Re = re;
+            Method = method;
+
             Post = re2post(re);
             Start = post2nfa(Post);
         }
@@ -81,18 +89,54 @@ namespace re2net
             {
                 return States.Any(x => x.Type == StateType.Match);
             }
+
+            public override bool Equals(object obj)
+            {
+                var o = obj as SList;
+                return States.SetEquals(o.States);
+            }
+
+            public override int GetHashCode()
+            {
+                /* HashSet equivalency is not obvious. Two identical (i.e., SetEquals() returns true)
+                 * HashSets have different values for GetHashCode(), so use this simple workaround for now.
+                 */
+                return States.Count;
+            }
         }
 
         public bool Match(string s)
         {
-            var sl = Startlist();
-
-            foreach (var c in s)
+            if (Method == Methods.NFA)
             {
-                sl = sl.Step(c);
+                var sl = Startlist();
+
+                foreach (var c in s)
+                {
+                    sl = sl.Step(c);
+                }
+
+                return sl.IsMatch();
+            }
+            else if (Method == Methods.DFA)
+            {
+                var ds = Startdstate();
+
+                foreach (var c in s)
+                {
+                    if (!ds.next.ContainsKey(c))
+                    {
+                        var sl = ds.l.Step(c);
+                        ds.next[c] = DState.Get(sl);
+                    }
+
+                    ds = ds.next[c];
+                }
+
+                return ds.l.IsMatch();
             }
 
-            return sl.IsMatch();
+            throw new System.ArgumentException("Unknown method type");
         }
 
         private SList Startlist()
@@ -320,6 +364,42 @@ namespace re2net
             return e.Start;
         }
 
+        private class DState
+        {
+            private static Dictionary<SList, DState> states { get; set; }
+
+            static DState()
+            {
+                states = new Dictionary<SList, DState>();
+            }
+
+            public SList l { get; set; }
+            public Dictionary<char, DState> next { get; set; }
+
+            public DState()
+            {
+                next = new Dictionary<char, DState>();
+            }
+
+            public static DState Get(SList sl)
+            {
+                if (!states.ContainsKey(sl))
+                {
+                    states.Add(sl, new DState
+                    {
+                        l = sl,
+                    });
+                }
+
+                return states[sl];
+            }
+        }
+
+        private DState Startdstate()
+        {
+            return DState.Get(Startlist());
+        }
+
         static void Main(string[] args)
         {
             for (int i = 1; i < 30; i++)
@@ -333,24 +413,35 @@ namespace re2net
                 }
                 resb.Append(ssb);
 
-                var re = new RE2(resb.ToString());
+                var dfa = new RE2(resb.ToString(), Methods.DFA);
+                var nfa = new RE2(resb.ToString(), Methods.NFA);
                 var cre = new Regex(resb.ToString());
                 var s = ssb.ToString();
 
-                var swre = new Stopwatch();
-                swre.Start();
-                var reb = re.Match(s);
-                swre.Stop();
+                var swnfa = new Stopwatch();
+                swnfa.Start();
+                var nfab = nfa.Match(s);
+                swnfa.Stop();
+
+                var swdfa = new Stopwatch();
+                swdfa.Start();
+                var dfab = dfa.Match(s);
+                swdfa.Stop();
+
+                var swdfa2 = new Stopwatch();
+                swdfa2.Start();
+                var dfab2 = dfa.Match(s);
+                swdfa2.Stop();
 
                 var swcre = new Stopwatch();
                 swcre.Start();
                 var creb = cre.IsMatch(s);
                 swcre.Stop();
 
-                if (reb == false || creb == false)
+                if (nfab == false || dfab == false || dfab2 == false || creb == false)
                     throw new Exception("false RE");
 
-                Console.WriteLine("{0:00}: {1}, {2}", i, swre.Elapsed, swcre.Elapsed);
+                Console.WriteLine("{0:00}: {1}, {2}, {3}, {4}", i, swnfa.Elapsed, swdfa.Elapsed, swdfa2.Elapsed, swcre.Elapsed);
             }
         }
     }
