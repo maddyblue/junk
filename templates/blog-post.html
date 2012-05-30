@@ -22,7 +22,7 @@
 				</div>
 				<span class="author">{{ p.author }}</span>
 				<span class="date">{{ p.date|fdate }}</span>
-				<!--span class="comments"><a href="#comments">0 Comments</a></span-->
+				<span class="comments"><a href="#disqus_thread" data-disqus-identifier="{{ p.key.id() }}">comments</a></span>
 				<span class="categories">{{ p.tags[:1]|join('') }}</span>
 			</div>
 	</div>
