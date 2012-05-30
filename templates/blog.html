@@ -70,7 +70,7 @@
 				<p>{{ p.short() }}</p>
 				<p class="meta">
 				<span class="date">{{ p.date|fdate }}</span>
-					<span class="comments"><a href="{{ p.url }}#disqus_thread">comments</a></span>
+					<span class="comments"><a href="{{ p.url }}#disqus_thread" data-disqus-identifier="{{ p.key.id() }}">comments</a></span>
 					<span class="categories">{{ p.tags[:1]|join('') }}</span>
 				</p>
 			</div>
@@ -85,6 +85,19 @@
 {% endblock %}
 
 {% block bodyend %}
+	<script type="text/javascript">
+		/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+		var disqus_shortname = 'thenextmuse'; // required: replace example with your forum shortname
+
+		/* * * DON'T EDIT BELOW THIS LINE * * */
+		(function () {
+			var s = document.createElement('script'); s.async = true;
+			s.type = 'text/javascript';
+			s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+			(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+		}());
+	</script>
+
 	<script type="text/javascript" src="/static/js/jquery.infinitescroll.min.js"></script>
 	<script type="text/javascript">
 		var jQuerycontainer = $('#endless');
