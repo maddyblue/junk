@@ -24,6 +24,7 @@ env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 env.filters.update(filters.filters)
 
 def render(_template, context):
+	context['jquery'] = JQUERY
 	return env.get_template(_template).render(**context)
 
 def stripe_set_plan(user, site, token=None, plan=None):

@@ -347,7 +347,6 @@ class Edit(BaseHandler):
 			'base': '/static/' + basedir,
 			'get': self.request.GET,
 			'images': images,
-			'jquery': settings.JQUERY,
 			'mode': 'edit',
 			'page': page,
 			'pagenum': pagenum,
@@ -669,7 +668,6 @@ class View(BaseHandler):
 			'base': '/static/' + basedir,
 			'get': self.request.GET,
 			'images': images,
-			'jquery': settings.JQUERY,
 			'mode': 'view',
 			'page': page,
 			'pagenum': int(pagenum),
@@ -876,7 +874,6 @@ class Blog(BaseHandler):
 
 		self.render('blog.html', {
 			'archive': months.values,
-			'jquery': settings.JQUERY,
 			'months': months,
 			'nextpage': next,
 			'posts': posts,
@@ -893,7 +890,6 @@ class BlogPost(BaseHandler):
 			return
 
 		self.render('blog-post.html', {
-			'jquery': settings.JQUERY,
 			'months': models.SiteBlogPost.months(),
 			'p': p.get(),
 			'prev': models.SiteBlogPost.prev(p),
@@ -1062,7 +1058,6 @@ def publish_site(sitename):
 		c = utils.render(basedir + 'index.html', {
 			'base': settings.TNM_URL + '/static/' + basedir,
 			'images': images,
-			'jquery': settings.JQUERY,
 			'mode': 'publish',
 			'page': page,
 			'pagenum': pagenum,
