@@ -881,6 +881,7 @@ class Blog(BaseHandler):
 			'nextpage': next,
 			'posts': posts,
 			'rss': webapp2.uri_for('blog-rss'),
+			'tags': models.SiteTag.get(),
 		})
 
 class BlogPost(BaseHandler):
@@ -896,6 +897,7 @@ class BlogPost(BaseHandler):
 			'months': models.SiteBlogPost.months(),
 			'p': p.get(),
 			'prev': models.SiteBlogPost.prev(p),
+			'tags': models.SiteTag.get(),
 		})
 
 class Admin(BaseHandler):

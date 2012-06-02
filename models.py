@@ -384,6 +384,21 @@ def link_filter(prop, value):
 
 	raise ValueError('link cannot be a valid number')
 
+class Tag(ndb.Model):
+	count = ndb.IntegerProperty('c', indexed=False)
+
+	@classmethod
+	def get(cls, parent=None):
+		tags = list(cls.query(ancestor=parent))
+		m = float(max([i.count for i in tags]))
+		return [(i.key.id(), i.count / m) for i in tags if i.count > 0]
+
+class SiteTag(Tag):
+	pass
+
+class TagIndex(ndb.Model):
+	keys = ndb.KeyProperty('k', repeated=True)
+
 class BlogPost(ndb.Model):
 	title = ndb.StringProperty('l', indexed=False, required=True)
 	image = ndb.KeyProperty('i', indexed=False, required=True)
@@ -407,6 +422,8 @@ class BlogPost(ndb.Model):
 				link = '%s-%s' %(link, i)
 
 			self.link = link
+
+		deferred.defer(update_tags, self.key)
 
 	def short(self, length=50):
 		s = re.sub(r'<.+?>', ' ', self.text)[:length]
@@ -432,6 +449,10 @@ class BlogPost(ndb.Model):
 		p = self.key.parent().get()
 		return '%s/%s' %(p.name, self.key.id())
 
+	@property
+	def has_tags(self):
+		return self.tags and self.tags[0]
+
 	@classmethod
 	def posts(cls, year, month, parent=None):
 		nextyear = year if month < 12 else year + 1
@@ -453,6 +474,12 @@ class BlogPost(ndb.Model):
 
 class SiteBlogPost(BlogPost):
 	html = ndb.TextProperty('h', compressed=True)
+
+	@property
+	def tag_index_keys(self):
+		return [ndb.Key('SiteTag', i, 'TagIndex', i) for i in self.tags if i]
+
+	tag_kind = SiteTag
 
 	def _pre_put_hook(self):
 		super(SiteBlogPost, self)._pre_put_hook()
@@ -540,6 +567,8 @@ class SiteImage(Image):
 
 class SiteImageBlob(ImageBlob):
 	date = ndb.DateTimeProperty('t', auto_now_add=True)
+	attrib_link = ndb.TextProperty('k', indexed=False)
+	attrib_name = ndb.TextProperty('m', indexed=False)
 
 	@classmethod
 	def images(cls):
@@ -550,3 +579,33 @@ class Config(ndb.Expando):
 
 	values = ndb.TextProperty('v', repeated=True)
 	dates = ndb.DateProperty('d', repeated=True)
+
+def update_tags(key):
+	p = key.get()
+
+	tis = dict([(i.key, i) for i in TagIndex.query().filter(TagIndex.keys == key)])
+
+	for i in p.tag_index_keys:
+		if i not in tis:
+			tis[i] = i.get()
+
+	for k, v in tis.items():
+		if not v:
+			m = TagIndex(key=k, keys=[key])
+			m.put()
+			tis[k] = m
+		elif k.id() in p.tags and key not in v.keys:
+			v.keys.append(key)
+			v.put()
+		elif k.id() not in p.tags and key in v.keys:
+			v.keys.remove(key)
+			v.put()
+
+	for k, v in tis.iteritems():
+		t = k.parent().get()
+
+		if not t:
+			t = p.tag_kind(key=k.parent())
+
+		t.count = len(v.keys)
+		t.put()

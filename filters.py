@@ -66,6 +66,9 @@ def markdown(text):
 	import utils
 	return utils.markdown(text)
 
+def tags(t):
+	return ['<span style="font-size: %i%%">%s</span>' %(c * 175 + 25, v) for v, c in t]
+
 filters = dict([(i, globals()[i]) for i in [
 	'date',
 	'editline',
@@ -80,5 +83,6 @@ filters = dict([(i, globals()[i]) for i in [
 	'linkmap',
 	'markdown',
 	'rss_date',
+	'tags',
 	'url',
 ]])

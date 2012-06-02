@@ -71,7 +71,9 @@
 				<p class="meta">
 				<span class="date">{{ p.date|fdate }}</span>
 					<span class="comments"><a href="{{ p.url }}#disqus_thread" data-disqus-identifier="{{ p.key.id() }}">comments</a></span>
-					<span class="categories">{{ p.tags[:1]|join('') }}</span>
+					{% if p.has_tags -%}
+						<span class="categories">{{ p.tags|join(', ') }}</span>
+					{%- endif %}
 				</p>
 			</div>
 		</div>
