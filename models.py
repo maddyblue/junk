@@ -590,7 +590,11 @@ def update_tags(key):
 			tis[i] = i.get()
 
 	for k, v in tis.items():
-		if not v:
+		if p.draft:
+			if key in v.keys:
+				v.keys.remove(key)
+				v.put()
+		elif not v:
 			m = TagIndex(key=k, keys=[key])
 			m.put()
 			tis[k] = m
