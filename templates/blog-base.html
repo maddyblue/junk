@@ -70,7 +70,10 @@
 
 			<div class="widget">
 				<h3 class="title">Tags</h3>
-				{{ tags|tags|join(', ') }}
+				{% for name, size in tags %}
+					<a href="{{ 'site-blog-tag'|url(tag=name) }}" style="font-size: {{ size }}%">{{ name }}</a>
+					{%- if not loop.last %},{% endif %}
+				{% endfor %}
 			</div>
 
 			<div id="archives-2" class="widget widget_archive">

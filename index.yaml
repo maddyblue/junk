@@ -28,3 +28,9 @@ indexes:
   - name: f
   - name: d
     direction: desc
+
+- kind: SiteBlogPost
+  properties:
+  - name: g
+  - name: d
+    direction: desc

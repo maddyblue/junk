@@ -877,6 +877,18 @@ class Blog(BaseHandler):
 			'months': months,
 			'nextpage': next,
 			'posts': posts,
+			'tags': models.SiteTag.get(),
+		})
+
+class BlogTag(BaseHandler):
+	def get(self, tag):
+		months = models.SiteBlogPost.months()
+
+		self.render('blog.html', {
+			'archive': months.values,
+			'months': months,
+			'posts': models.SiteBlogPost.posts_by_tag(tag),
+			'tag': tag,
 			'rss': webapp2.uri_for('blog-rss'),
 			'tags': models.SiteTag.get(),
 		})
@@ -1110,6 +1122,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/blog', handler='main.Blog'),
 	webapp2.Route(r'/blog/<link>', handler='main.BlogPost', name='site-blog-post'),
 	webapp2.Route(r'/blog/<year:\d+>/<month:\d+>', handler='main.Blog', name='site-blog-month'),
+	webapp2.Route(r'/blog/tag/<tag>', handler='main.BlogTag', name='site-blog-tag'),
 	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
 	webapp2.Route(r'/edit/<pagename>', handler='main.Edit', name='edit'),

@@ -387,11 +387,15 @@ def link_filter(prop, value):
 class Tag(ndb.Model):
 	count = ndb.IntegerProperty('c', indexed=False)
 
+	MAX_SIZE = 200
+	START = 100
+
 	@classmethod
 	def get(cls, parent=None):
-		tags = list(cls.query(ancestor=parent))
-		m = float(max([i.count for i in tags]))
-		return [(i.key.id(), i.count / m) for i in tags if i.count > 0]
+		tags = [i for i in cls.query(ancestor=parent) if i.count]
+		m = max([i.count for i in tags])
+		high = cls.MAX_SIZE / (m - 1) if m > 1 else 0
+		return [(i.key.id(), cls.START + high * (i.count - 1)) for i in tags]
 
 class SiteTag(Tag):
 	pass
@@ -461,6 +465,12 @@ class BlogPost(ndb.Model):
 		keys = list(cls.query(ancestor=parent).filter(cls.draft == False).filter(
 			cls.date >= datetime.datetime(year, month, 1)).filter(
 			cls.date < datetime.datetime(nextyear, nextmonth, 1)).order(
+			-cls.date).iter(keys_only=True))
+		return ndb.get_multi(keys)
+
+	@classmethod
+	def posts_by_tag(cls, tag, parent=None):
+		keys = list(cls.query(ancestor=parent).filter(cls.tags == tag).order(
 			-cls.date).iter(keys_only=True))
 		return ndb.get_multi(keys)
 
