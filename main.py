@@ -849,16 +849,16 @@ class Clear(BaseHandler):
 
 class Blog(BaseHandler):
 	def get(self, year=0, month=0):
+		months = models.SiteBlogPost.months()
+
 		if year and month:
 			year = int(year)
 			month = int(month)
 		else:
-			today = datetime.date.today()
-			year = today.year
-			month = today.month
+			year = months.dates[0].year
+			month = months.dates[0].month
 
 		posts = models.SiteBlogPost.posts(year, month)
-		months = models.SiteBlogPost.months()
 		d = datetime.date(year=year, month=month, day=1)
 
 		if d not in months.dates:
