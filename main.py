@@ -889,7 +889,6 @@ class BlogTag(BaseHandler):
 			'months': months,
 			'posts': models.SiteBlogPost.posts_by_tag(tag),
 			'tag': tag,
-			'rss': webapp2.uri_for('blog-rss'),
 			'tags': models.SiteTag.get(),
 		})
 
