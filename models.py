@@ -531,7 +531,7 @@ class SiteBlogPost(BlogPost):
 	MONTHS_CONFIG = 'months'
 	@classmethod
 	def sync_dates(cls):
-		dates = [i.date for i in cls.query().iter()]
+		dates = [i.date for i in cls.query().filter(cls.draft == False).iter()]
 		months = sorted(set([datetime.date(i.year, i.month, 1) for i in dates]), reverse=True)
 
 		c = Config(
