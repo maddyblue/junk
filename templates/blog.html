@@ -72,7 +72,10 @@
 				<span class="date">{{ p.date|fdate }}</span>
 					<span class="comments"><a href="{{ p.url }}#disqus_thread" data-disqus-identifier="{{ p.key.id() }}">comments</a></span>
 					{% if p.has_tags -%}
-						<span class="categories">{{ p.tags|join(', ') }}</span>
+						{% for t in p.tags %}
+							<a href="{{ 'site-blog-tag'|url(tag=t) }}"><span class="categories">{{ t }}</span></a>
+							{%- if not loop.last %},{% endif %}
+						{% endfor %}
 					{%- endif %}
 				</p>
 			</div>
