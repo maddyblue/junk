@@ -74,10 +74,10 @@ class GetEvents(BaseHandler):
 	def get(self, lat, lng):
 		pos = Position(float(lat), float(lng))
 
-		#fs = utils.foursquare_trending(pos)
+		fs = utils.foursquare_trending(pos)
 		nyt = utils.nyt_events(pos)
-		#yipit = utils.yipit_deals(pos)
-		#street_activities = utils.socrata_street_activities()
+		yipit = utils.yipit_deals(pos)
+		street_activities = utils.socrata_street_activities()
 
 		all_events = []
 
