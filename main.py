@@ -62,64 +62,76 @@ class Main(BaseHandler):
 
 		all_events = []
 
-		events = []
-		r = fs.get_result()
-		j = json.loads(r.content)
-		for e in j['response']['venues']:
-			location = e['location'].get('address')
-			if not location:
-				location = '%s,%s' %(e['location']['lat'], e['location']['lng'])
-			events.append(Event(
-				e['name'],
-				location,
-				e['categories'][0]['name'],
-				e['hereNow']['count'],
-				'foursquare',
-				e.get('url')
-			))
-		all_events.append(events)
+		try:
+			events = []
+			r = fs.get_result()
+			j = json.loads(r.content)
+			for e in j['response']['venues']:
+				location = e['location'].get('address')
+				if not location:
+					location = '%s,%s' %(e['location']['lat'], e['location']['lng'])
+				events.append(Event(
+					e['name'],
+					location,
+					e['categories'][0]['name'],
+					e['hereNow']['count'],
+					'foursquare',
+					e.get('url')
+				))
+			all_events.append(events)
+		except:
+			pass
 
-		events = []
-		r = nyt.get_result()
-		j = json.loads(r.content)
-		for e in j['results']:
-			events.append(Event(
-				e['event_name'],
-				e['street_address'],
-				e['category'],
-				20 if e['times_pick'] else 0,
-				'new york times',
-				e['event_detail_url']
-			))
-		all_events.append(events)
+		try:
+			events = []
+			r = nyt.get_result()
+			j = json.loads(r.content)
+			for e in j['results']:
+				events.append(Event(
+					e['event_name'],
+					e['street_address'],
+					e['category'],
+					20 if e['times_pick'] else 0,
+					'new york times',
+					e['event_detail_url']
+				))
+			all_events.append(events)
+		except:
+			pass
 
-		events = []
-		r = yipit.get_result()
-		j = json.loads(r.content)
-		for e in j['response']['deals']:
-			events.append(Event(
-				e['title'],
-				e['business']['locations'][0]['address'],
-				e['tags'][0]['name'],
-				e['discount']['raw'],
-				'yipit',
-				e['yipit_url']
-			))
-		all_events.append(events)
+		try:
+			events = []
+			r = yipit.get_result()
+			j = json.loads(r.content)
+			for e in j['response']['deals']:
+				events.append(Event(
+					e['title'],
+					e['business']['locations'][0]['address'],
+					e['tags'][0]['name'],
+					e['discount']['raw'],
+					'yipit',
+					e['yipit_url']
+				))
+			all_events.append(events)
+		except:
+			pass
 
-		events = []
-		r = street_activities.get_result()
-		j = json.loads(r.content)
-		for e in j['data']:
-			events.append(Event(
-				e[8],
-				e[18].strip().title() + ', ' + e[19],
-				e[9],
-				0,
-				'street events',
-				None
-			))
-		all_events.append(events)
+		try:
+			events = []
+			r = street_activities.get_result()
+			j = json.loads(r.content)
+			for e in j['data']:
+				events.append(Event(
+					e[8],
+					e[18].strip().title() + ', ' + e[19],
+					e[9],
+					0,
+					'street events',
+					None
+				))
+			all_events.append(events)
+		except:
+			pass
 
 		# aggregate all event groups
 		while [] in all_events:
