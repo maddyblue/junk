@@ -67,6 +67,8 @@ function refresh_map(lat, lng) {
 
 		markers = [];
 
+		map.setCenter(pos);
+
 		$(data).each(function() {
 			$('#events').append(this.html);
 
