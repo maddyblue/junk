@@ -12,7 +12,7 @@
 
 	<div id="events"></div>
 
-	<script src="//maps.googleapis.com/maps/api/js?key={{ settings.GOOGLE_API_KEY }}&sensor=true" type="text/javascript"></script>
+	<script src="//maps.googleapis.com/maps/api/js?key={{ settings.GOOGLE_API_KEY }}&sensor=false" type="text/javascript"></script>
 
 	<script src="/static/js/site.js" type="text/javascript"></script>
 
@@ -31,6 +31,12 @@
 		google.maps.event.addListener(map, 'click', function(e) {
 			refresh_map(e.latLng.lat(), e.latLng.lng());
 		});
+
+		if(navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function (l) {
+				refresh_map(l.coords.latitude, l.coords.longitude);
+			})
+		}
 	});
 	</script>
 

@@ -176,7 +176,11 @@ class GetEvents(BaseHandler):
 
 class Main(BaseHandler):
 	def get(self):
-		pos = Position(settings.TEST_LL[0], settings.TEST_LL[1])
+		if 'X-AppEngine-CityLatLong' in self.request.headers:
+			ll = self.request.headers['X-AppEngine-CityLatLong'].split(',')
+			pos = Position(float(ll[0]), float(ll[1]))
+		else:
+			pos = Position(settings.TEST_LL[0], settings.TEST_LL[1])
 
 		self.render('index.html', {
 			'pos': pos,
