@@ -43,12 +43,13 @@ class Position:
 		return '%f,%f' %(self.lat, self.lng)
 
 class Event:
-	def __init__(self, name, address, category, activity, source):
+	def __init__(self, name, address, category, activity, source, url):
 		self.name = name
 		self.address = address
 		self.category = category
 		self.activity = activity
 		self.source = source
+		self.url = url
 
 class Main(BaseHandler):
 	def get(self):
@@ -57,20 +58,46 @@ class Main(BaseHandler):
 		fs = utils.foursquare_trending(pos)
 		nyt = utils.nyt_events(pos)
 
-		events = []
+		all_events = []
 
+		events = []
 		r = fs.get_result()
 		j = json.loads(r.content)
 		for e in j['response']['venues']:
 			location = e['location'].get('address')
 			if not location:
 				location = '%s,%s' %(e['location']['lat'], e['location']['lng'])
-			events.append(Event(e['name'], location, e['categories'][0]['name'], e['hereNow']['count'], 'foursquare'))
+			events.append(Event(
+				e['name'],
+				location,
+				e['categories'][0]['name'],
+				e['hereNow']['count'],
+				'foursquare',
+				e['url']
+			))
+		all_events.append(events)
 
+		events = []
 		r = nyt.get_result()
 		j = json.loads(r.content)
 		for e in j['results']:
-			events.append(Event(e['event_name'], e['street_address'], e['category'], 20 if e['times_pick'] else 0, 'new york times'))
+			events.append(Event(
+				e['event_name'],
+				e['street_address'],
+				e['category'],
+				20 if e['times_pick'] else 0,
+				'new york times',
+				e['event_detail_url']
+			))
+		all_events.append(events)
+
+		events = []
+		while all_events:
+			for e in all_events:
+				events.append(e.pop(0))
+
+			while [] in all_events:
+				all_events.remove([])
 
 		self.render('index.html', {
 			'events': events,
