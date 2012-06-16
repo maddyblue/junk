@@ -3,18 +3,20 @@
 {% block content %}
 
 {% for e in events %}
-	<div class="row">
+	<div class="row event">
 		<div class="span2">
-			<h4>{{ e.category }}</h4>
+			<h4 class="title">{{ e.category }}</h4>
 		</div>
 		<div class="span8">
-			<h2>{% if e.url %}<a href="{{ e.url }}">{{ e.name }}</a>{% else %}{{ e.name }}{% endif %}</h2>
+			<h2 class="title">{% if e.url %}<a href="{{ e.url }}">{{ e.name }}</a>{% else %}{{ e.name }}{% endif %}</h2>
 			{{ e.address }}
 		</div>
-		<div class="span2">
+		<div class="span2 title">
 			{{ e.source }}
 		</div>
 	</div>
 {% endfor %}
+
+<script src="/static/js/site.js"></script>
 
 {% endblock %}
