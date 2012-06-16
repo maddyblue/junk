@@ -14,6 +14,7 @@ DISTANCE_MILES = DISTANCE_METERS * 0.000621371192
 LIMIT = 10
 
 def render(_template, context):
+	context['settings'] = settings
 	return env.get_template(_template).render(**context)
 
 def fetch(url):

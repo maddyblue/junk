@@ -135,6 +135,7 @@ class Main(BaseHandler):
 
 		self.render('index.html', {
 			'events': events,
+			'pos': pos,
 		})
 
 config = {

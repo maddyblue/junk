@@ -33,4 +33,12 @@ $(function() {
 		var d = $(this).data('del');
 		$(map[d]).remove();
 	});
+
+	$('.map_show').on("click", function() {
+		$('.map').show();
+	});
+
+	$('.map_hide').on("click", function() {
+		$('.map').hide();
+	});
 });
