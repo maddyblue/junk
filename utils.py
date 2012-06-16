@@ -9,6 +9,10 @@ import settings
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 
+DISTANCE_METERS = 1000
+DISTANCE_MILES = DISTANCE_METERS * 0.000621371192
+LIMIT = 10
+
 def render(_template, context):
 	return env.get_template(_template).render(**context)
 
@@ -28,7 +32,7 @@ def foursquare_url(api, **kwargs):
 	return FOURSQUARE_ENDPOINT + api + '?' + urllib.urlencode(params)
 
 def foursquare_trending(pos):
-	return fetch(foursquare_url(FOURSQUARE_TRENDING, ll=pos, limit=5))
+	return fetch(foursquare_url(FOURSQUARE_TRENDING, ll=pos, limit=LIMIT, radius=DISTANCE_METERS))
 
 NYT_ENDPOINT = 'http://api.nytimes.com/'
 NYT_EVENTS = 'svc/events/v2/listings.json'
@@ -40,7 +44,7 @@ def nyt_url(api, **kwargs):
 	return NYT_ENDPOINT + api + '?' + urllib.urlencode(params)
 
 def nyt_events(pos):
-	return fetch(nyt_url(NYT_EVENTS, ll=pos, limit=5))
+	return fetch(nyt_url(NYT_EVENTS, ll=pos, limit=LIMIT, radius=DISTANCE_METERS))
 
 YIPIT_ENDPOINT = 'http://api.yipit.com/v1/'
 YIPIT_DEALS = 'deals/'
@@ -52,7 +56,7 @@ def yipit_url(api, **kwargs):
 	return YIPIT_ENDPOINT + api + '?' + urllib.urlencode(params)
 
 def yipit_deals(pos):
-	return fetch(yipit_url(YIPIT_DEALS, lat=pos.lat, lon=pos.lng, division='new-york', radius=0.5, limit=5))
+	return fetch(yipit_url(YIPIT_DEALS, lat=pos.lat, lon=pos.lng, division='new-york', radius=DISTANCE_MILES, limit=LIMIT))
 
 SOCRATA_ENDPOINT = 'http://nycopendata.socrata.com/api/views/'
 SOCRATA_STREET_ACTIVITIES = 'xenu-5qjw'
