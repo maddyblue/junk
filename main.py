@@ -43,13 +43,16 @@ class Position:
 		return '%f,%f' %(self.lat, self.lng)
 
 class Event:
-	def __init__(self, name, address, category, activity, source, url):
+	def __init__(self, name, address, category, activity, source, url, lat=None, lng=None):
 		self.name = name
 		self.address = address
 		self.category = category
 		self.activity = activity
 		self.source = source
 		self.url = url
+		self.lat = lat
+		self.lng = lng
+		self.pos = Position(lat, lng) if lat and lng else None
 
 class Main(BaseHandler):
 	def get(self):
@@ -76,7 +79,9 @@ class Main(BaseHandler):
 					e['categories'][0]['name'],
 					e['hereNow']['count'],
 					'foursquare',
-					e.get('url')
+					e.get('url'),
+					lat=e['location']['lat'],
+					lng=e['location']['lng']
 				))
 			all_events.append(events)
 		except:
@@ -93,7 +98,9 @@ class Main(BaseHandler):
 					e['category'],
 					20 if e['times_pick'] else 0,
 					'new york times',
-					e['event_detail_url']
+					e['event_detail_url'],
+					lat=float(e['geocode_latitude']),
+					lng=float(e['geocode_longitude'])
 				))
 			all_events.append(events)
 		except:
@@ -104,13 +111,16 @@ class Main(BaseHandler):
 			r = yipit.get_result()
 			j = json.loads(r.content)
 			for e in j['response']['deals']:
+				loc = e['business']['locations'][0]
 				events.append(Event(
 					e['title'],
-					e['business']['locations'][0]['address'],
+					loc['address'],
 					e['tags'][0]['name'],
 					e['discount']['raw'],
 					'yipit',
-					e['yipit_url']
+					e['yipit_url'],
+					loc.get('lat'),
+					loc.get('lng')
 				))
 			all_events.append(events)
 		except:

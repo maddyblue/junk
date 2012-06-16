@@ -30,7 +30,7 @@
 <script src="//maps.googleapis.com/maps/api/js?key={{ settings.GOOGLE_API_KEY }}&sensor=true" type="text/javascript"></script>
 <script type"text/javascript">
 $(function() {
-	var pos = new google.maps.LatLng({{ pos.lat }}, {{ pos.lng }});
+	var pos = new google.maps.LatLng({{ pos }});
 
 	var myOptions = {
 		center: pos,
@@ -46,12 +46,22 @@ $(function() {
 		new google.maps.Point(0, 0),
 		new google.maps.Point(10, 34));
 
-	var marker = new google.maps.Marker({
+	new google.maps.Marker({
 		position: pos,
 		map: map,
 		icon: icon,
 		title: "You"
 	});
+
+	{% for e in events %}
+		{% if e.pos %}
+			new google.maps.Marker({
+				position: new google.maps.LatLng({{ e.pos }}),
+				map: map,
+				title: "{{ e.name }}"
+			});
+		{% endif %}
+	{% endfor %}
 });
 </script>
 
