@@ -113,7 +113,7 @@ class Main(BaseHandler):
 		for e in j['data']:
 			events.append(Event(
 				e[8],
-				e[18],
+				e[18].strip().title() + ', ' + e[19],
 				e[9],
 				0,
 				'street events',
