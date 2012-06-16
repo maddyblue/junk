@@ -47,12 +47,20 @@ function showDels() {
 
 var map;
 var markers = [];
+var pins = {};
 
-var pinColor = "75FE69";
-var icon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-	new google.maps.Size(21, 34),
-	new google.maps.Point(0, 0),
-	new google.maps.Point(10, 34));
+function makePin(color) {
+	return new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + color,
+		new google.maps.Size(21, 34),
+		new google.maps.Point(0, 0),
+		new google.maps.Point(10, 34));
+}
+
+pins['you'] = makePin("5BB75B");
+pins['foursquare'] = makePin("DA4F49");
+pins['yipit'] = makePin("FAA732");
+pins['new york times'] = makePin("0074CC");
+pins['street events'] = makePin("49AFCD");
 
 function refresh_map(lat, lng) {
 	var pos = new google.maps.LatLng(lat, lng);
@@ -76,7 +84,7 @@ function refresh_map(lat, lng) {
 			markers.push(new google.maps.Marker({
 				position: pos,
 				map: map,
-				icon: icon,
+				icon: pins['you'],
 				title: "You"
 			}));
 
@@ -85,6 +93,7 @@ function refresh_map(lat, lng) {
 				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(this.lat, this.lng),
 					map: map,
+					icon: pins[marker_event.source],
 					title: this.name
 				});
 				markers.push(marker);
