@@ -28,4 +28,16 @@ def foursquare_url(api, **kwargs):
 	return FOURSQUARE_ENDPOINT + api + '?' + urllib.urlencode(params)
 
 def foursquare_trending(pos):
-	return fetch(foursquare_url(FOURSQUARE_TRENDING, ll=pos))
+	return fetch(foursquare_url(FOURSQUARE_TRENDING, ll=pos, limit=5))
+
+NYT_ENDPOINT = 'http://api.nytimes.com/'
+NYT_EVENTS = 'svc/events/v2/listings.json'
+
+def nyt_url(api, **kwargs):
+	params = dict(kwargs)
+	params['api-key'] = settings.NYT_API_KEY
+
+	return NYT_ENDPOINT + api + '?' + urllib.urlencode(params)
+
+def nyt_events(pos):
+	return fetch(nyt_url(NYT_EVENTS, ll=pos, limit=5))

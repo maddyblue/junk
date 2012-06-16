@@ -4,12 +4,15 @@
 
 {% for e in events %}
 	<div class="row">
-		<div class="span3">
+		<div class="span2">
 			<h4>{{ e.category }}</h4>
 		</div>
 		<div class="span8">
 			<h2>{{ e.name }}</h2>
 			{{ e.address }}
+		</div>
+		<div class="span2">
+			{{ e.source }}
 		</div>
 	</div>
 {% endfor %}

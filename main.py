@@ -43,17 +43,19 @@ class Position:
 		return '%f,%f' %(self.lat, self.lng)
 
 class Event:
-	def __init__(self, name, address, category, activity):
+	def __init__(self, name, address, category, activity, source):
 		self.name = name
 		self.address = address
 		self.category = category
 		self.activity = activity
+		self.source = source
 
 class Main(BaseHandler):
 	def get(self):
 		pos = Position(settings.TEST_LL[0], settings.TEST_LL[1])
 
 		fs = utils.foursquare_trending(pos)
+		nyt = utils.nyt_events(pos)
 
 		events = []
 
@@ -63,8 +65,12 @@ class Main(BaseHandler):
 			location = e['location'].get('address')
 			if not location:
 				location = '%s,%s' %(e['location']['lat'], e['location']['lng'])
+			events.append(Event(e['name'], location, e['categories'][0]['name'], e['hereNow']['count'], 'foursquare'))
 
-			events.append(Event(e['name'], location, e['categories'][0]['name'], e['hereNow']['count']))
+		r = nyt.get_result()
+		j = json.loads(r.content)
+		for e in j['results']:
+			events.append(Event(e['event_name'], e['street_address'], e['category'], 20 if e['times_pick'] else 0, 'new york times'))
 
 		self.render('index.html', {
 			'events': events,
