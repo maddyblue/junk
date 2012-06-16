@@ -70,23 +70,32 @@ function refresh_map(lat, lng) {
 		map.setCenter(pos);
 
 		$(data).each(function() {
-			$('#events').append(this.html);
+			this.element = $(this.html);
+			$('#events').append(this.element);
 
-			var marker = new google.maps.Marker({
+			markers.push(new google.maps.Marker({
 				position: pos,
 				map: map,
 				icon: icon,
 				title: "You"
-			});
-			markers.push(marker);
+			}));
 
 			if(this.pos) {
-				marker = new google.maps.Marker({
+				var marker_event = this;
+				var marker = new google.maps.Marker({
 					position: new google.maps.LatLng(this.lat, this.lng),
 					map: map,
 					title: this.name
 				});
 				markers.push(marker);
+
+				google.maps.event.addListener(marker, 'mouseover', function() {
+					marker_event.element.addClass('highlight');
+				});
+
+				google.maps.event.addListener(marker, 'mouseout', function() {
+					marker_event.element.removeClass('highlight');
+				});
 			}
 		});
 
