@@ -8,7 +8,7 @@ function findEvent(n) {
 var HIGHLIGHT = 'highlight';
 var labels = {};
 
-$(function() {
+function showDels() {
 	var DEL = '<a href="#" class="del"><i class="icon-remove"></i></a>';
 	$('.title').each(function() {
 		var d = $(DEL);
@@ -41,7 +41,7 @@ $(function() {
 	$('.map_hide').on("click", function() {
 		$('.map').hide();
 	});
-});
+}
 
 // map handling
 
@@ -89,5 +89,7 @@ function refresh_map(lat, lng) {
 				markers.push(marker);
 			}
 		});
+
+		showDels();
 	});
 }
