@@ -32,6 +32,7 @@ function showDels() {
 	$('.del').on("click", function() {
 		var d = $(this).data('del');
 		$(labels[d]).remove();
+		refreshMarkers();
 	});
 
 	$('.map_show').on("click", function() {
@@ -48,6 +49,7 @@ function showDels() {
 var map;
 var markers = [];
 var pins = {};
+var map_pos;
 
 function makePin(color) {
 	return new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + color,
@@ -70,50 +72,59 @@ function refresh_map(lat, lng) {
 		$('#current_position').html('Current Position: ' + lat + ', ' + lng);
 		$('#events').empty();
 
-		for(var i = 0; i < markers.length; i++)
-			markers[i].setMap(null);
-
-		markers = [];
-
 		map.setCenter(pos);
+		map_pos = pos;
 
 		$(data).each(function() {
 			this.element = $(this.html);
+			this.element.data('marker', this);
 			$('#events').append(this.element);
-
-			markers.push(new google.maps.Marker({
-				position: pos,
-				map: map,
-				icon: pins['you'],
-				title: "You"
-			}));
-
-			if(this.pos) {
-				var marker_event = this;
-				var marker = new google.maps.Marker({
-					position: new google.maps.LatLng(this.lat, this.lng),
-					map: map,
-					icon: pins[marker_event.source],
-					title: this.name
-				});
-				markers.push(marker);
-
-				google.maps.event.addListener(marker, 'mouseover', function() {
-					marker_event.element.addClass('highlight');
-				});
-
-				google.maps.event.addListener(marker, 'mouseout', function() {
-					marker_event.element.removeClass('highlight');
-				});
-
-				marker_event.element.hover(function() {
-					marker.setAnimation(google.maps.Animation.BOUNCE);
-				}, function() {
-					marker.setAnimation(null);
-				});
-			}
 		});
 
 		showDels();
+		refreshMarkers();
+	});
+}
+
+function refreshMarkers() {
+	for(var i = 0; i < markers.length; i++)
+		markers[i].setMap(null);
+
+	markers = [];
+
+	markers.push(new google.maps.Marker({
+		position: map_pos,
+		map: map,
+		icon: pins['you'],
+		title: "You"
+	}));
+
+	$('.event').each(function() {
+		var e = $(this).data('marker');
+
+		if(e.pos) {
+			var marker_event = $(this);
+			var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(e.lat, e.lng),
+				map: map,
+				icon: pins[e.source],
+				title: e.name
+			});
+			markers.push(marker);
+
+			google.maps.event.addListener(marker, 'mouseover', function() {
+				marker_event.addClass('highlight');
+			});
+
+			google.maps.event.addListener(marker, 'mouseout', function() {
+				marker_event.removeClass('highlight');
+			});
+
+			marker_event.hover(function() {
+				marker.setAnimation(google.maps.Animation.BOUNCE);
+			}, function() {
+				marker.setAnimation(null);
+			});
+		}
 	});
 }
