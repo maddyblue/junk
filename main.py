@@ -158,7 +158,7 @@ class GetEvents(BaseHandler):
 			j = json.loads(r.content)
 			for e in j['data']:
 				events.append(Event(
-					e[8],
+					e[8].title(),
 					e[18].title() + ', ' + e[19],
 					e[9],
 					'street events',
