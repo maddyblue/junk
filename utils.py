@@ -25,7 +25,6 @@ def foursquare_url(api, **kwargs):
 	params['client_id'] = settings.FOURSQUARE_CLIENT_ID
 	params['client_secret'] = settings.FOURSQUARE_CLIENT_SECRET
 
-	#return ENDPOINT + api + '?' + '&'.join(['%s=%s' %(k, v) for k, v in params.iteritems()])
 	return FOURSQUARE_ENDPOINT + api + '?' + urllib.urlencode(params)
 
 def foursquare_trending(pos):
