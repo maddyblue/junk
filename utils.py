@@ -1,3 +1,4 @@
+import datetime
 import jinja2
 import logging
 import urllib
@@ -41,3 +42,28 @@ def nyt_url(api, **kwargs):
 
 def nyt_events(pos):
 	return fetch(nyt_url(NYT_EVENTS, ll=pos, limit=5))
+
+YIPIT_ENDPOINT = 'http://api.yipit.com/v1/'
+YIPIT_DEALS = 'deals/'
+
+def yipit_url(api, **kwargs):
+	params = dict(kwargs)
+	params['key'] = settings.YIPIT_API_KEY
+
+	return YIPIT_ENDPOINT + api + '?' + urllib.urlencode(params)
+
+def yipit_deals(pos):
+	return fetch(yipit_url(YIPIT_DEALS, lat=pos.lat, lon=pos.lng, division='new-york', radius=0.5, limit=5))
+
+SOCRATA_ENDPOINT = 'http://nycopendata.socrata.com/api/views/'
+SOCRATA_STREET_ACTIVITIES = 'xenu-5qjw'
+
+def socrata_url(api, **kwargs):
+	params = dict(kwargs)
+
+	logging.error( SOCRATA_ENDPOINT + api + '/rows.json?' + '&'.join(['%s=%s' %(k, v) for k, v in params.iteritems()]))
+	return SOCRATA_ENDPOINT + api + '/rows.json?' + '&'.join(['%s=%s' %(k, v) for k, v in params.iteritems()])
+
+def socrata_street_activities():
+	t = datetime.date.today()
+	return fetch(socrata_url(SOCRATA_STREET_ACTIVITIES, search='%i/%i/%i' %(t.month, t.day, t.year % 100)))

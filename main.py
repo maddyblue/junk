@@ -57,6 +57,8 @@ class Main(BaseHandler):
 
 		fs = utils.foursquare_trending(pos)
 		nyt = utils.nyt_events(pos)
+		yipit = utils.yipit_deals(pos)
+		street_activities = utils.socrata_street_activities()
 
 		all_events = []
 
@@ -90,6 +92,38 @@ class Main(BaseHandler):
 				e['event_detail_url']
 			))
 		all_events.append(events)
+
+		events = []
+		r = yipit.get_result()
+		j = json.loads(r.content)
+		for e in j['response']['deals']:
+			events.append(Event(
+				e['title'],
+				e['business']['locations'][0]['address'],
+				e['tags'][0]['name'],
+				e['discount']['raw'],
+				'yipit',
+				e['yipit_url']
+			))
+		all_events.append(events)
+
+		events = []
+		r = street_activities.get_result()
+		j = json.loads(r.content)
+		for e in j['data']:
+			events.append(Event(
+				e[8],
+				e[18],
+				e[9],
+				0,
+				'street events',
+				None
+			))
+		all_events.append(events)
+
+		# aggregate all event groups
+		while [] in all_events:
+			all_events.remove([])
 
 		events = []
 		while all_events:
