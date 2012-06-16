@@ -60,8 +60,6 @@ class Main(BaseHandler):
 		r = fs.get_result()
 		j = json.loads(r.content)
 		for e in j['response']['venues']:
-			logging.error(e)
-
 			location = e['location'].get('address')
 			if not location:
 				location = '%s,%s' %(e['location']['lat'], e['location']['lng'])
