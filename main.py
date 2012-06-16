@@ -57,11 +57,10 @@ class Position:
 		return '%f,%f' %(self.lat, self.lng)
 
 class Event:
-	def __init__(self, name, address, category, activity, source, url, lat=None, lng=None):
+	def __init__(self, name, address, category, source, url, lat=None, lng=None):
 		self.name = name.strip()
 		self.address = address.strip()
 		self.category = category.strip()
-		self.activity = activity
 		self.source = source
 		self.url = url
 		self.lat = lat
@@ -107,7 +106,6 @@ class GetEvents(BaseHandler):
 					e['name'],
 					location,
 					e['categories'][0]['name'],
-					e['hereNow']['count'],
 					'foursquare',
 					e.get('url'),
 					lat=e['location']['lat'],
@@ -126,7 +124,6 @@ class GetEvents(BaseHandler):
 					e['event_name'],
 					e['street_address'],
 					e['category'],
-					20 if e['times_pick'] else 0,
 					'new york times',
 					e['event_detail_url'],
 					lat=float(e['geocode_latitude']),
@@ -146,7 +143,6 @@ class GetEvents(BaseHandler):
 					e['title'],
 					loc['address'],
 					e['tags'][0]['name'],
-					e['discount']['raw'],
 					'yipit',
 					e['yipit_url'],
 					loc.get('lat'),
@@ -165,7 +161,6 @@ class GetEvents(BaseHandler):
 					e[8],
 					e[18].title() + ', ' + e[19],
 					e[9],
-					0,
 					'street events',
 					None
 				))
