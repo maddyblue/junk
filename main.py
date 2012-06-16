@@ -200,6 +200,10 @@ class Main(BaseHandler):
 			'pos': pos,
 		})
 
+class About(BaseHandler):
+	def get(self):
+		self.render('about.html')
+
 config = {
 	'webapp2_extras.sessions': {
 			'secret_key': settings.COOKIE_KEY,
@@ -208,6 +212,7 @@ config = {
 
 app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=Main, name='main'),
+	webapp2.Route(r'/about', handler=About, name='about'),
 	webapp2.Route(r'/events/<lat>/<lng>', handler=GetEvents, name='events'),
 
 	], debug=True, config=config)
