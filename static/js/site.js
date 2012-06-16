@@ -96,6 +96,12 @@ function refresh_map(lat, lng) {
 				google.maps.event.addListener(marker, 'mouseout', function() {
 					marker_event.element.removeClass('highlight');
 				});
+
+				marker_event.element.hover(function() {
+					marker.setAnimation(google.maps.Animation.BOUNCE);
+				}, function() {
+					marker.setAnimation(null);
+				});
 			}
 		});
 
