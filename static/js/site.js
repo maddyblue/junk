@@ -56,8 +56,10 @@ var icon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=
 
 function refresh_map(lat, lng) {
 	var pos = new google.maps.LatLng(lat, lng);
+	$('#current_position').html('Loading...');
 
 	$.getJSON('/events/' + lat + '/' + lng, function(data) {
+		$('#current_position').html('Current Position: ' + lat + ', ' + lng);
 		$('#events').empty();
 
 		for(var i = 0; i < markers.length; i++)
