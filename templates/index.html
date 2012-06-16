@@ -8,7 +8,7 @@
 			<h4>{{ e.category }}</h4>
 		</div>
 		<div class="span8">
-			<h2><a href="{{ e.url }}">{{ e.name }}</a></h2>
+			<h2>{% if e.url %}<a href="{{ e.url }}">{{ e.name }}</a>{% else %}{{ e.name }}{% endif %}</h2>
 			{{ e.address }}
 		</div>
 		<div class="span2">

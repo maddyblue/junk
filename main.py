@@ -73,7 +73,7 @@ class Main(BaseHandler):
 				e['categories'][0]['name'],
 				e['hereNow']['count'],
 				'foursquare',
-				e['url']
+				e.get('url')
 			))
 		all_events.append(events)
 
