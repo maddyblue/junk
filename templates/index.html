@@ -10,59 +10,28 @@
 		</div>
 	</div>
 
-{% for e in events %}
-	<div class="row event">
-		<div class="span2">
-			<h4 class="title">{{ e.category }}</h4>
-		</div>
-		<div class="span8">
-			<h2 class="title">{% if e.url %}<a href="{{ e.url }}">{{ e.name }}</a>{% else %}{{ e.name }}{% endif %}</h2>
-			{{ e.address }}
-		</div>
-		<div class="span2 title">
-			{{ e.source }}
-		</div>
-	</div>
-{% endfor %}
+	<div id="events"></div>
 
-<script src="/static/js/site.js" type="text/javascript"></script>
+	<script src="//maps.googleapis.com/maps/api/js?key={{ settings.GOOGLE_API_KEY }}&sensor=true" type="text/javascript"></script>
 
-<script src="//maps.googleapis.com/maps/api/js?key={{ settings.GOOGLE_API_KEY }}&sensor=true" type="text/javascript"></script>
-<script type"text/javascript">
-$(function() {
-	var pos = new google.maps.LatLng({{ pos }});
+	<script src="/static/js/site.js" type="text/javascript"></script>
 
-	var myOptions = {
-		center: pos,
-		zoom: 14,
-		mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
+	<script type"text/javascript">
+	$(function() {
+		var myOptions = {
+			center: new google.maps.LatLng({{ pos }}),
+			zoom: 14,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
 
-	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-	var pinColor = "75FE69";
-	var icon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-		new google.maps.Size(21, 34),
-		new google.maps.Point(0, 0),
-		new google.maps.Point(10, 34));
+		refresh_map({{ pos }});
 
-	new google.maps.Marker({
-		position: pos,
-		map: map,
-		icon: icon,
-		title: "You"
+		google.maps.event.addListener(map, 'click', function(e) {
+			refresh_map(e.latLng.lat(), e.latLng.lng());
+		});
 	});
-
-	{% for e in events %}
-		{% if e.pos %}
-			new google.maps.Marker({
-				position: new google.maps.LatLng({{ e.pos }}),
-				map: map,
-				title: "{{ e.name }}"
-			});
-		{% endif %}
-	{% endfor %}
-});
-</script>
+	</script>
 
 {% endblock %}

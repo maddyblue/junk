@@ -44,9 +44,9 @@ class Position:
 
 class Event:
 	def __init__(self, name, address, category, activity, source, url, lat=None, lng=None):
-		self.name = name
-		self.address = address
-		self.category = category
+		self.name = name.strip()
+		self.address = address.strip()
+		self.category = category.strip()
 		self.activity = activity
 		self.source = source
 		self.url = url
@@ -54,14 +54,30 @@ class Event:
 		self.lng = lng
 		self.pos = Position(lat, lng) if lat and lng else None
 
-class Main(BaseHandler):
-	def get(self):
-		pos = Position(settings.TEST_LL[0], settings.TEST_LL[1])
+	def json(self):
+		r = dict([(k, getattr(self, k)) for k in [
+			'name',
+			'address',
+			'category',
+			'source',
+			'url',
+			'lat',
+			'lng',
+		]])
 
-		fs = utils.foursquare_trending(pos)
+		r['pos'] = str(self.pos) if self.pos else None
+		r['html'] = utils.render('event.html', {'e': self})
+
+		return r
+
+class GetEvents(BaseHandler):
+	def get(self, lat, lng):
+		pos = Position(float(lat), float(lng))
+
+		#fs = utils.foursquare_trending(pos)
 		nyt = utils.nyt_events(pos)
-		yipit = utils.yipit_deals(pos)
-		street_activities = utils.socrata_street_activities()
+		#yipit = utils.yipit_deals(pos)
+		#street_activities = utils.socrata_street_activities()
 
 		all_events = []
 
@@ -133,7 +149,7 @@ class Main(BaseHandler):
 			for e in j['data']:
 				events.append(Event(
 					e[8],
-					e[18].strip().title() + ', ' + e[19],
+					e[18].title() + ', ' + e[19],
 					e[9],
 					0,
 					'street events',
@@ -150,13 +166,19 @@ class Main(BaseHandler):
 		events = []
 		while all_events:
 			for e in all_events:
-				events.append(e.pop(0))
+				ev = e.pop(0)
+				events.append(ev.json())
 
 			while [] in all_events:
 				all_events.remove([])
 
+		self.response.write(json.dumps(events))
+
+class Main(BaseHandler):
+	def get(self):
+		pos = Position(settings.TEST_LL[0], settings.TEST_LL[1])
+
 		self.render('index.html', {
-			'events': events,
 			'pos': pos,
 		})
 
@@ -168,5 +190,6 @@ config = {
 
 app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=Main, name='main'),
+	webapp2.Route(r'/events/<lat>/<lng>', handler=GetEvents, name='events'),
 
 	], debug=True, config=config)

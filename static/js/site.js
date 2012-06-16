@@ -6,7 +6,7 @@ function findEvent(n) {
 }
 
 var HIGHLIGHT = 'highlight';
-var map = {};
+var labels = {};
 
 $(function() {
 	var DEL = '<a href="#" class="del"><i class="icon-remove"></i></a>';
@@ -16,22 +16,22 @@ $(function() {
 		d.data('del', label);
 
 		d.hover(function() {
-			$(map[label]).addClass(HIGHLIGHT);
+			$(labels[label]).addClass(HIGHLIGHT);
 		}, function() {
-			$(map[label]).removeClass(HIGHLIGHT);
+			$(labels[label]).removeClass(HIGHLIGHT);
 		});
 
 		$(this).append(d);
 
-		if(!$(map).attr(label))
-			map[label] = new Array();
+		if(!$(labels).attr(label))
+			labels[label] = new Array();
 
-		map[label].push(findEvent(this)[0]);
+		labels[label].push(findEvent(this)[0]);
 	});
 
 	$('.del').on("click", function() {
 		var d = $(this).data('del');
-		$(map[d]).remove();
+		$(labels[d]).remove();
 	});
 
 	$('.map_show').on("click", function() {
@@ -42,3 +42,48 @@ $(function() {
 		$('.map').hide();
 	});
 });
+
+// map handling
+
+var map;
+var markers = [];
+
+var pinColor = "75FE69";
+var icon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+	new google.maps.Size(21, 34),
+	new google.maps.Point(0, 0),
+	new google.maps.Point(10, 34));
+
+function refresh_map(lat, lng) {
+	var pos = new google.maps.LatLng(lat, lng);
+
+	$.getJSON('/events/' + lat + '/' + lng, function(data) {
+		$('#events').empty();
+
+		for(var i = 0; i < markers.length; i++)
+			markers[i].setMap(null);
+
+		markers = [];
+
+		$(data).each(function() {
+			$('#events').append(this.html);
+
+			var marker = new google.maps.Marker({
+				position: pos,
+				map: map,
+				icon: icon,
+				title: "You"
+			});
+			markers.push(marker);
+
+			if(this.pos) {
+				marker = new google.maps.Marker({
+					position: new google.maps.LatLng(this.lat, this.lng),
+					map: map,
+					title: this.name
+				});
+				markers.push(marker);
+			}
+		});
+	});
+}

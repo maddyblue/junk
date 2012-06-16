@@ -1,0 +1,12 @@
+<div class="row event">
+	<div class="span2">
+		<h4 class="title">{{ e.category }}</h4>
+	</div>
+	<div class="span8">
+		<h2 class="title">{% if e.url %}<a href="{{ e.url }}">{{ e.name }}</a>{% else %}{{ e.name }}{% endif %}</h2>
+		{{ e.address }}
+	</div>
+	<div class="span2 title">
+		{{ e.source }}
+	</div>
+</div>
