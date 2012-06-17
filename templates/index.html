@@ -36,9 +36,17 @@
 		if(navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function (l) {
 				refresh_map(l.coords.latitude, l.coords.longitude);
-			})
+			});
 		}
 		{% endif %}
+
+		if(navigator.geolocation) {
+			$('#my_location').on("click", function() {
+				navigator.geolocation.getCurrentPosition(function (l) {
+					refresh_map(l.coords.latitude, l.coords.longitude);
+				});
+			});
+		}
 	});
 	</script>
 
