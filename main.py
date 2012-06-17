@@ -184,14 +184,20 @@ class GetEvents(BaseHandler):
 		self.response.write(json.dumps(events))
 
 class Main(BaseHandler):
-	def get(self):
-		if 'X-AppEngine-CityLatLong' in self.request.headers:
+	def get(self, lat=None, lng=None):
+		autoset = True
+
+		if lat and lng:
+			pos = Position(float(lat), float(lng))
+			autoset = False
+		elif 'X-AppEngine-CityLatLong' in self.request.headers:
 			ll = self.request.headers['X-AppEngine-CityLatLong'].split(',')
 			pos = Position(float(ll[0]), float(ll[1]))
 		else:
 			pos = Position(settings.TEST_LL[0], settings.TEST_LL[1])
 
 		self.render('index.html', {
+			'autoset': autoset,
 			'pos': pos,
 		})
 
@@ -207,6 +213,7 @@ config = {
 
 app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=Main, name='main'),
+	webapp2.Route(r'/<lat>/<lng>', handler=Main, name='main-latlng'),
 	webapp2.Route(r'/about', handler=About, name='about'),
 	webapp2.Route(r'/events/<lat>/<lng>', handler=GetEvents, name='events'),
 

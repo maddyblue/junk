@@ -32,11 +32,13 @@
 			refresh_map(e.latLng.lat(), e.latLng.lng());
 		});
 
+		{% if autoset %}
 		if(navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function (l) {
 				refresh_map(l.coords.latitude, l.coords.longitude);
 			})
 		}
+		{% endif %}
 	});
 	</script>
 

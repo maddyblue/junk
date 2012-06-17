@@ -64,25 +64,36 @@ pins['yipit'] = makePin("FAA732");
 pins['new york times'] = makePin("0074CC");
 pins['street events'] = makePin("49AFCD");
 
-function refresh_map(lat, lng) {
+function setMap(lat, lng, data) {
+	$('#current_position').html('Current Position: ' + lat + ', ' + lng);
+	document.title = 'NYC Now @ ' + lat + ', ' + lng;
+	$('#events').empty();
+
 	var pos = new google.maps.LatLng(lat, lng);
+	map.setCenter(pos);
+	map_pos = pos;
+
+	$(data).each(function() {
+		this.element = $(this.html);
+		this.element.data('marker', this);
+		$('#events').append(this.element);
+	});
+
+	showDels();
+	refreshMarkers();
+}
+
+function refresh_map(lat, lng) {
 	$('#current_position').html('Loading...');
 
 	$.getJSON('/events/' + lat + '/' + lng, function(data) {
-		$('#current_position').html('Current Position: ' + lat + ', ' + lng);
-		$('#events').empty();
+			history.pushState({
+					lat: lat,
+					lng: lng,
+					data: data
+				}, null, '/' + lat + '/' + lng);
 
-		map.setCenter(pos);
-		map_pos = pos;
-
-		$(data).each(function() {
-			this.element = $(this.html);
-			this.element.data('marker', this);
-			$('#events').append(this.element);
-		});
-
-		showDels();
-		refreshMarkers();
+			setMap(lat, lng, data);
 	});
 }
 
@@ -128,3 +139,8 @@ function refreshMarkers() {
 		}
 	});
 }
+
+window.addEventListener("popstate", function(e) {
+	if(e.state)
+		setMap(e.state.lat, e.state.lng, e.state.data);
+});
