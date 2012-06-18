@@ -123,7 +123,7 @@ class GetEvents(BaseHandler):
 					'yipit',
 					e['yipit_url'],
 					loc.get('lat'),
-					loc.get('lng')
+					loc.get('lon')
 				))
 			all_events.append(events)
 		except:
