@@ -1,9 +1,9 @@
 <div class="row event">
 	<div class="span2">
-		<h4 class="title">{{ e.category }}</h4>
+		<h5 class="title">{{ e.category }}</h5>
 	</div>
 	<div class="span8">
-		<h2 class="title">{% if e.url %}<a href="{{ e.url }}">{{ e.name }}</a>{% else %}{{ e.name }}{% endif %}</h2>
+		<h3 class="title">{% if e.url %}<a href="{{ e.url }}">{{ e.name }}</a>{% else %}{{ e.name }}{% endif %}</h3>
 		{{ e.address }}
 	</div>
 	<div class="span2 title">
