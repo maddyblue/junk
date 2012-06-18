@@ -81,7 +81,6 @@ SOCRATA_STREET_ACTIVITIES = 'xenu-5qjw'
 def socrata_url(api, **kwargs):
 	params = dict(kwargs)
 
-	logging.error( SOCRATA_ENDPOINT + api + '/rows.json?' + '&'.join(['%s=%s' %(k, v) for k, v in params.iteritems()]))
 	return SOCRATA_ENDPOINT + api + '/rows.json?' + '&'.join(['%s=%s' %(k, v) for k, v in params.iteritems()])
 
 def socrata_street_activities():
