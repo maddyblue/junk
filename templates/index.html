@@ -26,28 +26,28 @@
 
 		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-		refresh_map({{ pos }});
-
 		google.maps.event.addListener(map, 'click', function(e) {
-			refresh_map(e.latLng.lat(), e.latLng.lng());
+			refresh_map(e.latLng.lat(), e.latLng.lng(), true);
 		});
 
-		{% if autoset %}
-		if(navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function (l) {
-				refresh_map(l.coords.latitude, l.coords.longitude);
-			});
-		}
-		{% endif %}
+		if("geolocation" in navigator) {
+			refresh_map({{ pos }}, false);
 
-		if(navigator.geolocation) {
+			{% if autoset %}
+				navigator.geolocation.getCurrentPosition(function (l) {
+					refresh_map(l.coords.latitude, l.coords.longitude, true);
+				});
+			{% endif %}
+
 			$('#right-nav').prepend('<li><button id="my_location" class="btn btn-inverse">my location</button></li>');
 
 			$('#my_location').on("click", function() {
 				navigator.geolocation.getCurrentPosition(function (l) {
-					refresh_map(l.coords.latitude, l.coords.longitude);
+					refresh_map(l.coords.latitude, l.coords.longitude, true);
 				});
 			});
+		} else {
+			refresh_map({{ pos }}, true);
 		}
 	});
 	</script>

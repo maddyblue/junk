@@ -83,15 +83,17 @@ function setMap(lat, lng, data) {
 	refreshMarkers();
 }
 
-function refresh_map(lat, lng) {
+function refresh_map(lat, lng, set_history) {
 	$('#current_position').html('Loading...');
 
 	$.getJSON('/events/' + lat + '/' + lng, function(data) {
-			history.pushState({
-					lat: lat,
-					lng: lng,
-					data: data
-				}, null, '/' + lat + '/' + lng);
+			if(set_history) {
+				history.pushState({
+						lat: lat,
+						lng: lng,
+						data: data
+					}, null, '/' + lat + '/' + lng);
+			}
 
 			setMap(lat, lng, data);
 	});
