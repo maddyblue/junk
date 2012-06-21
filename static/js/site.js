@@ -73,7 +73,7 @@ function setMap(lat, lng, data) {
 	map.setCenter(pos);
 	map_pos = pos;
 
-	$(data).each(function() {
+	$(data.events).each(function() {
 		this.element = $(this.html);
 		this.element.data('marker', this);
 		$('#events').append(this.element);

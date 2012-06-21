@@ -162,7 +162,11 @@ class GetEvents(BaseHandler):
 			while [] in all_events:
 				all_events.remove([])
 
-		self.response.write(json.dumps(events))
+		self.response.write(json.dumps({
+			'events': events,
+			'lat': pos.lat,
+			'lng': pos.lng,
+		}))
 
 class Main(BaseHandler):
 	def get(self, lat=None, lng=None):
