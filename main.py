@@ -61,8 +61,12 @@ class Event:
 		return r
 
 class GetEvents(BaseHandler):
-	def get(self, lat, lng):
-		pos = Position(float(lat), float(lng))
+	def get(self, lat=None, lng=None):
+		if (not lat or not lng) and 'X-AppEngine-CityLatLong' in self.request.headers:
+			ll = self.request.headers['X-AppEngine-CityLatLong'].split(',')
+			pos = Position(float(ll[0]), float(ll[1]))
+		else:
+			pos = Position(float(lat), float(lng))
 
 		fs = utils.foursquare_trending(pos)
 		nyt = utils.nyt_events(pos)
@@ -186,6 +190,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler=Main, name='main'),
 	webapp2.Route(r'/<lat>/<lng>', handler=Main, name='main-latlng'),
 	webapp2.Route(r'/about', handler=About, name='about'),
+	webapp2.Route(r'/events', handler=GetEvents, name='events'),
 	webapp2.Route(r'/events/<lat>/<lng>', handler=GetEvents, name='events'),
 
 	], debug=True)
