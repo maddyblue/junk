@@ -39,8 +39,6 @@
 				{% for p in site.pages %}
 				<li id="p_{{ p.id() }}" class="menu_item"><a href="{{ rel }}{{ pages[p].name }}" id="p_{{ p.id() }}_name" {% if page.key == p %} class="editable line current_menu"{% endif %}>{{ pages[p].name }}</a></li>
 				{% endfor %}
-				<li class="search"><a href="#">Search</a></li>
-				<li class="audio"><a href="#">Audio</a></li>
 			</ul>
 		</nav>
 	</header>
@@ -50,31 +48,6 @@
 		{% include pagetemplate %}
 
 	</div>
-
-	<div id="audio">
-		<div class="player">
-		<ol>
-			<li class="current"><a href="#">The Song Title <span>4:50</span></a></li>
-			<li><a href="#">This is the template <span>7:18</span></a></li>
-			<li><a href="#">The Song Title <span>4:50</span></a></li>
-			<li><a href="#">This is the template <span>7:18</span></a></li>
-			<li><a href="#">The Song Title <span>4:50</span></a></li>
-			<li><a href="#">This is the template <span>7:18</span></a></li>
-		</ol>
-			<span class="control">
-			<a href="#" class="rew">Rewind</a>
-			<a href="#" class="play">Play</a>
-			<a href="#" class="pause">Pause</a>
-			<a href="#" class="stop">Stop</a>
-			<a href="#" class="forw">Forward</a>
-		</span>
-		<p><small>Song:</small> Song Title</p>
-		<p><small>Album:</small> Album Title</p>
-		<p><small>Duration:</small> 4:32 </p>
-		</div>
-		<span class="close"><a href="#">X</a></span>
-	</div>
-
 
 </div> <!--! end of #container -->
 
