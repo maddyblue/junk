@@ -866,16 +866,16 @@ class Blog(BaseHandler):
 			return
 
 		mi = months.dates.index(d)
-		next = mi + 1
-		if next >= len(months.dates):
-			next = None
+		n = mi + 1
+		if n >= len(months.dates):
+			n = None
 		else:
-			next = months.dates[next]
+			n = months.dates[n]
 
 		self.render('blog.html', {
 			'archive': months.values,
 			'months': months,
-			'nextpage': next,
+			'nextpage': n,
 			'posts': posts,
 			'tags': models.SiteTag.get(),
 		})
