@@ -1,28 +1,77 @@
-<html>
-<head>
-	<title>Admin Blog Post</title>
-</head>
-<body>
-	<a href="{{ 'admin'|url }}">back</a>
-	<form method="POST">
-		<p>title: <input type="text" name="title" value="{{ p.title }}"></p>
-		<p>author: <input type="text" name="author" value="{{ p.author }}"></p>
-		<p>date: <input type="text" name="date" value="{{ p.date|date(fmt) }}"> (format: <strong>YYYY-MM-DD HH:MM</strong>, 24-hour clock)</p>
-		<p>text (markdown format, see below): <textarea name="text" rows="30" cols="100">{{ p.text }}</textarea></p>
-		<p>tags, comma separated: <input type="text" name="tags" value="{{ p.tags|join(', ') }}"></p>
-		<p>draft: <input type="checkbox" name="draft" {% if p.draft %}checked{% endif %}></p>
-		<p>link (optional): <input type="text" name="link" value="{{ p.link|default('', True) }}"></p>
-		<p>automatically set link? <input type="checkbox" name="autolink" {% if p.autolink %}checked{% endif %}></p>
-		<input type="submit" value="save">
-	</form>
+{% extends "admin.html" %}
 
-	<p><a href="{{ 'admin-images'|url }}">image list</a></p>
-	<p><a href="{{ 'admin-blog-image'|url(postid=p.key.id()) }}">upload main blog image</a></p>
-	<p>current main image: {{ i.render() }}
-	<p>Edit your post <a href="http://daringfireball.net/projects/markdown/dingus">here</a> then paste above.
+{% block content %}
+<div class="span12">
+	<div class="row">
+		<div class="span12">
+			<form class="form-horizontal" method="POST">
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label" for="title">title</label>
+						<div class="controls">
+							<input id="title" type="text" name="title" value="{{ p.title }}" class="span6"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="author">author</label>
+						<div class="controls">
+							<input id="author" type="text" name="author" value="{{ p.author }}" class="span6"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="date">date</label>
+						<div class="controls">
+							<input id="date" type="text" name="date" value="{{ p.date|date(fmt) }}"/> (format: <strong>YYYY-MM-DD HH:MM</strong>, 24-hour clock)
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="text">text</label>
+						<div class="controls">
+							<textarea id="text" name="text" class="span8" rows="14">{{ p.text }}</textarea>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="tags">tags</label>
+						<div class="controls">
+							<input id="tags" type="text" name="tags" value="{{ p.tags|join(', ') }}"class="span6"/> (comma separated)
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="draft">draft</label>
+						<div class="controls">
+							<input id="draft" type="checkbox" name="draft" {% if p.draft %}checked{% endif %}/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="link">link</label>
+						<div class="controls">
+							<input id="link" type="text" name="link" value="{{ p.link|default('', True) }}" class="span6"/> (optional)
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="autolink">autolink</label>
+						<div class="controls">
+							<input id="autolink" type="checkbox" name="autolink" {% if p.autolink %}checked{% endif %}/>
+						</div>
+					</div>
+					<div class="form-actions">
+						<input type="submit" value="save" class="btn btn-primary"/>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="offset2 span10">
+			<p><a href="{{ 'admin-images'|url }}">image list</a></p>
+			<p><a href="{{ 'admin-blog-image'|url(postid=p.key.id()) }}">upload main blog image</a></p>
+			<p>current main image:
+			<p>{{ i.render() }}
+			<p>Edit your post <a href="http://daringfireball.net/projects/markdown/dingus">here</a> then paste above.
 
-	<hr>
-	<h3><a href="{{ 'site-blog-post'|url(link=p.link) }}">preview</a></h3>
-	{{ p.text|markdown }}
-</body>
-</html>
+			<h3><a href="{{ 'site-blog-post'|url(link=p.link) }}">preview</a></h3>
+			{{ p.text|markdown }}
+		</div>
+	</div>
+</div>
+{% endblock %}

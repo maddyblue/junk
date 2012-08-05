@@ -1,21 +1,26 @@
-<html>
-<body>
-	<p><a href="{{ 'admin'|url }}">back</a></p>
-	<p>To change the size of an image, modify the number at the end of a URL. The size will be the image scaled (retaining aspect ratio) to the largest size it can fit in a square of that size.</p>
-	<p><a href="{{ 'admin-new-image'|url }}">upload new image</a></p>
+{% extends "admin.html" %}
 
-	<table>
-		{% for i in images %}
-		<tr>
-			<td><a href="{{ i.urls() }}">{{ i.render(200) }}</a></td>
-			<td>
-				markdown: <code>![{{ i.name }}]({{ i.urls() }})</code>
-				<br>URL: <a href="{{ i.urls() }}">{{ i.urls() }}</a>
-				<br>size: {{ i.width }} x {{ i.height }}
-				<br>ratio: {{ i.width / i.height }}
-			</td>
-		</tr>
-		{% endfor %}
-	</table>
-</body>
-</html>
+{% block content %}
+<div class="span12">
+	<div class="row">
+		<div class="offset2 span8">
+			<p>To change the size of an image, modify the number at the end of a URL. The size will be the image scaled (retaining aspect ratio) to the largest size it can fit in a square of that size.</p>
+			<p><a href="{{ 'admin-new-image'|url }}">upload new image</a></p>
+		</div>
+	</div>
+
+	{% for i in images %}
+	<div class="row">
+		<div class="span3">
+			<a href="{{ i.urls() }}">{{ i.render(220) }}</a>
+		</div>
+		<div class="span9">
+			<p>markdown: <strong>![{{ i.name }}]({{ i.urls() }})</strong>
+			<p>URL: <a href="{{ i.urls() }}">{{ i.urls() }}</a>
+			<p>size: {{ i.width }} x {{ i.height }}
+			<p>ratio: {{ i.width / i.height }}
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

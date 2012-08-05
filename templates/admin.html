@@ -1,18 +1,41 @@
 <html>
+<head>
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+</head>
 <body>
-	<p>
-		<a href="{{ 'admin-images'|url }}">image list</a>
-		<a href="{{ 'admin-new-post'|url }}">new blog post</a>
-		<a href="{{ 'admin-new-image'|url }}">upload image</a>
-	</p>
-	<hr>
-	<h3>drafts</h3>
-	{% for p in drafts %}
-	<p><a href="{{ 'admin-edit-post'|url(postid=p.key.id()) }}">{{ p.date|fdate }} - {{ p.title }}</a></p>
-	{% endfor %}
-	<h3>posts</h3>
-	{% for p in posts %}
-	<p><a href="{{ 'admin-edit-post'|url(postid=p.key.id()) }}">{{ p.date|fdate }} - {{ p.title }}</a></p>
-	{% endfor %}
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container">
+				<a href="{{ 'admin'|url }}" class="brand">thenextmuse admin</a>
+				<ul class="nav">
+					<li><a href="{{ 'admin-images'|url }}">image list</a></li>
+					<li><a href="{{ 'admin-new-post'|url }}">new blog post</a></li>
+					<li><a href="{{ 'admin-new-image'|url }}">upload image</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+		{% block content %}
+			<div class="offset2 span10">
+				{% if drafts %}
+					<h2>drafts</h2>
+					{% for p in drafts %}
+						<p><a href="{{ 'admin-edit-post'|url(postid=p.key.id()) }}">{{ p.date|fdate }} - {{ p.title }}</a></p>
+					{% endfor %}
+				{% endif %}
+
+				{% if posts %}
+					<h2>posts</h2>
+					{% for p in posts %}
+						<p><a href="{{ 'admin-edit-post'|url(postid=p.key.id()) }}">{{ p.date|fdate }} - {{ p.title }}</a></p>
+					{% endfor %}
+				{% endif %}
+			</div>
+		{% endblock %}
+		</div>
+	</div>
 </body>
 </html>

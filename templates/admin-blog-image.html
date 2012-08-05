@@ -1,7 +1,8 @@
-<html>
-<body>
+{% extends "admin.html" %}
 
-	<p>Image for blog post {{ p.title }}</p>
+{% block content %}
+<div class="offset2 span10">
+	<p>Image for blog post: {{ p.title }}</p>
 	<p>Size: {{ i.width }} x {{ i.height }}</p>
 	<p>Currently: {{ i.render() }}</p>
 
@@ -9,6 +10,5 @@
 		<input type="file" name="file">
 		<input type="submit">
 	</form>
-
-</body>
-</html>
+</div>
+{% endblock %}

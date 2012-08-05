@@ -910,8 +910,8 @@ class BlogPost(BaseHandler):
 class Admin(BaseHandler):
 	def get(self):
 		self.render('admin.html', {
-			'drafts': models.SiteBlogPost.drafts(),
-			'posts': models.SiteBlogPost.published(),
+			'drafts': list(models.SiteBlogPost.drafts()),
+			'posts': list(models.SiteBlogPost.published()),
 		})
 
 class AdminNewPost(BaseHandler):
