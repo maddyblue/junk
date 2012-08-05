@@ -47,7 +47,10 @@
 		<a class="carousel-control right" data-slide="next" href="#slider" style="display: inline;">›</a>
 	</div>
 
-	<h1 id="title">The Next Muse Blog{% if tag %} - {{ tag }}{% endif %}</h1>
+	<h1 id="title">The Next Muse Blog
+		{%- if tag %} - {{ tag }}{% endif -%}
+		{%- if contributor %} - {{ contributor }}{% endif -%}
+	</h1>
 
 	<div id="endless" class="staggered clearfix masonry">
 

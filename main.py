@@ -874,9 +874,23 @@ class Blog(BaseHandler):
 
 		self.render('blog.html', {
 			'archive': months.values,
+			'authors': models.Config.authors(),
 			'months': months,
 			'nextpage': n,
 			'posts': posts,
+			'tags': models.SiteTag.get(),
+		})
+
+class BlogAuthor(BaseHandler):
+	def get(self, author):
+		months = models.SiteBlogPost.months()
+
+		self.render('blog.html', {
+			'archive': months.values,
+			'author': author,
+			'authors': models.Config.authors(),
+			'months': months,
+			'posts': models.SiteBlogPost.posts_by_author(author),
 			'tags': models.SiteTag.get(),
 		})
 
@@ -886,6 +900,7 @@ class BlogTag(BaseHandler):
 
 		self.render('blog.html', {
 			'archive': months.values,
+			'authors': models.Config.authors(),
 			'months': months,
 			'posts': models.SiteBlogPost.posts_by_tag(tag),
 			'tag': tag,
@@ -901,6 +916,8 @@ class BlogPost(BaseHandler):
 			return
 
 		self.render('blog-post.html', {
+			'archive': months.values,
+			'authors': models.Config.authors,
 			'months': models.SiteBlogPost.months(),
 			'p': p.get(),
 			'prev': models.SiteBlogPost.prev(p),
@@ -945,7 +962,7 @@ class AdminEditPost(BaseHandler):
 	def post(self, postid):
 		p = models.SiteBlogPost.get_by_id(long(postid))
 
-		for k in ['author', 'title', 'text', 'link']:
+		for k in ['title', 'text', 'link']:
 			v = self.request.get(k)
 			if v:
 				if k == 'link':
@@ -957,10 +974,37 @@ class AdminEditPost(BaseHandler):
 
 		p.date = datetime.datetime.strptime(self.request.get('date'), self.DATE_FMT)
 		p.tags = [t.strip() for t in self.request.get('tags').split(',')]
-		p.draft = self.request.get('draft') == 'on'
 		p.autolink = self.request.get('autolink') == 'on'
 
-		p.put()
+		d = self.request.get('draft') == 'on'
+		a = self.request.get('author').strip()
+
+		c = models.Config.get_by_id(models.CONFIG_AUTHORS)
+		if not c:
+			c = models.Config(id=models.CONFIG_AUTHORS, data={})
+
+		if d and not p.draft:
+			c.data[a] -= 1
+		elif not d and p.draft:
+			c.data.setdefault(a, 0)
+			c.data[a] += 1
+		elif not p.draft and a != p.author:
+			if p.author in c.data:
+				c.data[p.author] -= 1
+
+			if a not in c.data:
+				c.data[a] = 0
+
+			c.data[a] += 1
+
+		p.author = a
+		p.draft = d
+
+		for k, v in c.data.items():
+			if not v:
+				del c.data[k]
+
+		ndb.put_multi([p, c])
 		self.redirect(webapp2.uri_for('admin-edit-post', postid=postid))
 
 class AdminBlogImage(BaseHandler):
@@ -1106,6 +1150,16 @@ def publish_site(sitename):
 	p = models.Publish(id=site.last_published_num, parent=site.key)
 	p.put()
 
+class AdminSyncAuthors(BaseHandler):
+	def get(self):
+		c = models.Config(id=models.CONFIG_AUTHORS, data={})
+		for p in models.SiteBlogPost.published():
+			c.data.setdefault(p.author, 0)
+			c.data[p.author] += 1
+		c.put()
+
+		self.redirect(webapp2.uri_for('admin'))
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -1121,6 +1175,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/blog', handler='main.Blog'),
 	webapp2.Route(r'/blog/<link>', handler='main.BlogPost', name='site-blog-post'),
 	webapp2.Route(r'/blog/<year:\d+>/<month:\d+>', handler='main.Blog', name='site-blog-month'),
+	webapp2.Route(r'/blog/author/<author>', handler='main.BlogAuthor', name='site-blog-author'),
 	webapp2.Route(r'/blog/tag/<tag>', handler='main.BlogTag', name='site-blog-tag'),
 	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
@@ -1159,6 +1214,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/new-image', handler='main.AdminNewImage', name='admin-new-image'),
 	webapp2.Route(r'/admin/new-post', handler='main.AdminNewPost', name='admin-new-post'),
 	webapp2.Route(r'/admin/upload-image/<postid>', handler='main.AdminUploadImage', name='admin-upload-image', defaults={'postid': 0}),
+	webapp2.Route(r'/admin/sync-authors', handler='main.AdminSyncAuthors', name='admin-sync-authors'),
 
 	# google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),

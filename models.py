@@ -400,6 +400,12 @@ class Tag(ndb.Model):
 class SiteTag(Tag):
 	pass
 
+class Author(ndb.Model):
+	count = ndb.IntegerProperty('c', indexed=False)
+
+class SiteAuthor(Author):
+	pass
+
 class TagIndex(ndb.Model):
 	keys = ndb.KeyProperty('k', repeated=True)
 
@@ -410,7 +416,7 @@ class BlogPost(ndb.Model):
 	tags = ndb.StringProperty('g', repeated=True)
 	date = ndb.DateTimeProperty('d', required=True, auto_now_add=True)
 	updated = ndb.DateTimeProperty('u', auto_now=True)
-	author = ndb.TextProperty('a')
+	author = ndb.StringProperty('a')
 	draft = ndb.BooleanProperty('f', default=True)
 	link = ndb.StringProperty('k', validator=link_filter)
 	autolink = ndb.BooleanProperty('n', default=True)
@@ -474,6 +480,13 @@ class BlogPost(ndb.Model):
 			-cls.date).iter(keys_only=True))
 		return ndb.get_multi(keys)
 
+
+	@classmethod
+	def posts_by_author(cls, author, parent=None):
+		keys = list(cls.query(ancestor=parent).filter(cls.author == author).order(
+			-cls.date).iter(keys_only=True))
+		return ndb.get_multi(keys)
+
 	@classmethod
 	def drafts(cls, parent=None):
 		return cls.query(ancestor=parent).filter(cls.draft == True).order(-cls.date).iter()
@@ -490,6 +503,7 @@ class SiteBlogPost(BlogPost):
 		return [ndb.Key('SiteTag', i, 'TagIndex', i) for i in self.tags if i]
 
 	tag_kind = SiteTag
+	author_kind = SiteAuthor
 
 	def _pre_put_hook(self):
 		super(SiteBlogPost, self)._pre_put_hook()
@@ -584,11 +598,20 @@ class SiteImageBlob(ImageBlob):
 	def images(cls):
 		return cls.query().order(-cls.date).fetch(100)
 
+CONFIG_AUTHORS = 'authors'
 class Config(ndb.Expando):
 	_default_indexed = False
 
 	values = ndb.TextProperty('v', repeated=True)
 	dates = ndb.DateProperty('d', repeated=True)
+	data = ndb.JsonProperty('j')
+
+	@classmethod
+	def authors(cls):
+		a = [(k, v) for k, v in cls.get_by_id(CONFIG_AUTHORS).data.items()]
+		a.sort(cmp=lambda x,y: cmp(y[1], x[1]))
+		logging.error(a)
+		return a
 
 def update_tags(key):
 	p = key.get()

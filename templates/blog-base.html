@@ -65,7 +65,12 @@
 				</ul>
 			</div>
 
-			<div id="sneek-twitter-2" class="widget sneek-widget-twitter">
+			<div class="widget">
+				<h3 class="title">Contributors</h3>
+				{% for a in authors %}
+					<a href="{{ 'site-blog-author'|url(author=a[0]) }}">{{ a[0] }}</a> ({{ a[1] }})
+					{%- if not loop.last %}<br />{% endif %}
+				{% endfor %}
 			</div>
 
 			<div class="widget">
@@ -74,6 +79,9 @@
 					<a href="{{ 'site-blog-tag'|url(tag=name) }}" style="font-size: {{ size }}%">{{ name }}</a>
 					{%- if not loop.last %},{% endif %}
 				{% endfor %}
+			</div>
+
+			<div id="sneek-twitter-2" class="widget sneek-widget-twitter">
 			</div>
 
 			<div id="archives-2" class="widget widget_archive">
