@@ -915,9 +915,11 @@ class BlogPost(BaseHandler):
 			self.error(404)
 			return
 
+		months = models.SiteBlogPost.months()
+
 		self.render('blog-post.html', {
 			'archive': months.values,
-			'authors': models.Config.authors,
+			'authors': models.Config.authors(),
 			'months': models.SiteBlogPost.months(),
 			'p': p.get(),
 			'prev': models.SiteBlogPost.prev(p),
