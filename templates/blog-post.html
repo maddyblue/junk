@@ -24,10 +24,12 @@
 				<span class="date">{{ p.date|fdate }}</span>
 				<span class="comments"><a href="#disqus_thread" data-disqus-identifier="{{ p.key.id() }}">comments</a></span>
 				{% if p.has_tags -%}
+					<span class="categories">
 					{% for t in p.tags %}
-						<a href="{{ 'site-blog-tag'|url(tag=t) }}"><span class="categories">{{ t }}</span></a>
+						<a href="{{ 'site-blog-tag'|url(tag=t) }}">{{ t }}</a>
 						{%- if not loop.last %},{% endif %}
 					{% endfor %}
+					</span>
 				{%- endif %}
 			</div>
 	</div>
