@@ -7,3 +7,5 @@ do
 	echo $ext
 	uglifyjs $f > $ext
 done
+
+lessc -x static/css/base.less > static/css/base.css
