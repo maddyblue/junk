@@ -525,6 +525,10 @@ class SiteBlogPost(BlogPost):
 	def url(self):
 		return webapp2.uri_for('site-blog-post', link=self.link)
 
+	@property
+	def permalink(self):
+		return 'http://www.thenextmuse.com' + self.url
+
 	@classmethod
 	def prev(cls, pkey):
 		kname = 'prev-%s' %pkey.urlsafe()

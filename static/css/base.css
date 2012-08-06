@@ -57,3 +57,10 @@ html {
 .nopadding     { padding:0; }
 .noindent      { margin-left:0;padding-left:0; }
 .nobullet      { list-style:none;list-style-image:none; }
+
+/* --- TNM specific stuff */
+span.comments span.fb_comments_count
+{
+	padding-left: 0;
+	margin-left: 0;
+}

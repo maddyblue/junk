@@ -22,7 +22,7 @@
 				</div>
 				<span class="author">{{ p.author }}</span>
 				<span class="date">{{ p.date|fdate }}</span>
-				<span class="comments"><a href="#disqus_thread" data-disqus-identifier="{{ p.key.id() }}">comments</a></span>
+				<span class="comments"><a href="#comments"><fb:comments-count href="{{ p.permalink }}"></fb:comments-count> comments</a></span>
 				{% if p.has_tags -%}
 					<span class="categories">
 					{% for t in p.tags %}
@@ -35,23 +35,6 @@
 	</div>
 
 	<div id="comments" class="have-comments">
-		<div id="disqus_thread"></div>
+		<div class="fb-comments" data-href="{{ p.permalink }}" data-width="670"></div>
 	</div>
-{% endblock %}
-
-{% block bodyend %}
-	<script type="text/javascript">
-			/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-			var disqus_shortname = 'thenextmuse'; // required: replace example with your forum shortname
-			var disqus_identifier = '{{ p.key.id() }}';
-
-			/* * * DON'T EDIT BELOW THIS LINE * * */
-			(function() {
-					var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-					dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-					(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-			})();
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-	<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 {% endblock %}

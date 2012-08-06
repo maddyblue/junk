@@ -73,7 +73,7 @@
 				<p>{{ p.short() }}</p>
 				<p class="meta">
 				<span class="date">{{ p.date|fdate }}</span>
-					<span class="comments"><a href="{{ p.url }}#disqus_thread" data-disqus-identifier="{{ p.key.id() }}">comments</a></span>
+					<span class="comments"><a href="{{ p.url }}#comments"><fb:comments-count href="{{ p.permalink }}"></fb:comments-count> comments</a></span>
 					{% if p.has_tags -%}
 						<span class="categories">
 						{% for t in p.tags %}
