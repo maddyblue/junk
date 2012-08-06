@@ -930,7 +930,7 @@ class Admin(BaseHandler):
 	def get(self):
 		self.render('admin.html', {
 			'drafts': list(models.SiteBlogPost.drafts()),
-			'posts': list(models.SiteBlogPost.published()),
+			'posts': models.SiteBlogPost.published(),
 		})
 
 class AdminNewPost(BaseHandler):
