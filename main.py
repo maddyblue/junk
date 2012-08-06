@@ -847,6 +847,12 @@ class Clear(BaseHandler):
 
 			self.redirect(webapp2.uri_for('main'))
 
+class Home(BaseHandler):
+	def get(self):
+		self.render('home.html', {
+			'posts': models.SiteBlogPost.published(limit=2),
+		})
+
 class Blog(BaseHandler):
 	def get(self, year=0, month=0):
 		months = models.SiteBlogPost.months()
@@ -1185,6 +1191,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/edit/<pagename>/<pagenum>', handler='main.Edit', name='edit-page'),
 	webapp2.Route(r'/facebook', handler='main.FacebookCallback', name='facebook'),
 	webapp2.Route(r'/feed/blog.xml', handler='main.Feed', name='blog-rss'),
+	webapp2.Route(r'/home', handler='main.Home', name='home'),
 	webapp2.Route(r'/layout/<siteid>/<pageid>/<layoutid>', handler='main.Layout', name='layout'),
 	webapp2.Route(r'/login/facebook', handler='main.LoginFacebook', name='login-facebook'),
 	webapp2.Route(r'/login/google', handler='main.LoginGoogle', name='login-google'),
