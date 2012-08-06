@@ -948,7 +948,7 @@ nav .sub-menu {
 	margin-top: -10px;
 }
 
-#endless-pad { float: right; width: 305px;}
+#endless-pad { float: right; width: 305px; text-align: center; }
 	#endless-pad .dropdown-toggle { display: block; float: none; color: #999999; border-radius: 0 0 0 0;}
 	#endless-pad .dropdown-toggle .caret { float: right; }
 		#endless-pad .dropdown-menu { width: 99%; }
@@ -1530,6 +1530,11 @@ nav .sub-menu {
 	border-bottom: 1px solid #e0e0e0;
 	padding: 20px 20px 20px 40px;
 	position: relative;
+}
+
+#social-networks {
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .widgets:before,
