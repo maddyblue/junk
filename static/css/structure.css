@@ -374,10 +374,10 @@ color guide
 	height:34px;
 	text-indent:-999em;
 }
-#footer #social ul li a.rss, a.rss, #social-networks li a.rss {
+#footer #social ul li a.rss, a.rss {
 	background:url(../images/social-icons.png) 0 0 no-repeat;
 }
-#footer #social ul li a.rss:hover, a.rss:hover, #social-networks li a.rss:hover {
+#footer #social ul li a.rss:hover, a.rss:hover {
 	background:url(../images/social-icons.png) 0 -34px no-repeat;
 }
 #footer #social ul li a.twitter {

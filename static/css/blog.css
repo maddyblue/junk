@@ -1532,11 +1532,6 @@ nav .sub-menu {
 	position: relative;
 }
 
-#social-networks {
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
 .widgets:before,
 .widget:before {
 	content: url(../images/icon/bullet-grey.png);
