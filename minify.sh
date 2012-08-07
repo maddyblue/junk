@@ -9,3 +9,4 @@ do
 done
 
 lessc -x static/css/base.less > static/css/base.css
+lessc -x static/css/blog.less > static/css/blog.css
