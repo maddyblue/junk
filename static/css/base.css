@@ -9,22 +9,7 @@ blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
 img{border:0;}
 body{font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:#666666;}
 .clear{clear:both;}
-.float-left{float:left;}
-.float-right{float:right;}
-.text-left{text-align:left;}
-.text-right{text-align:right;}
-.text-center{text-align:center;}
-.text-justify{text-align:justify;}
-.bold{font-weight:bold;}
-.italic{font-style:italic;}
-.underline{border-bottom:1px solid;}
-.highlight{background:#ffffcc;}
 .wrapper{width:960px;margin:0 auto;}
-.img-left{float:left;margin:4px 10px 4px 0;}
-.img-right{float:right;margin:4px 0 4px 10px;}
-.nopadding{padding:0;}
-.noindent{margin-left:0;padding-left:0;}
-.nobullet{list-style:none;list-style-image:none;}
 span.comments span.fb_comments_count{padding-left:0;margin-left:0;}
 #header{background:url(../images/header-bg.png) center 0 repeat-x;height:88px;}#header #logo{width:261px;height:68px;float:left;position:relative;top:10px;}#header #logo a{display:block;width:261px;height:68px;background:url(../images/tnm-logo.png) 0 0 no-repeat;text-indent:-999em;}
 #header #topMenu{width:600px;float:right;text-align:right;}#header #topMenu ul{line-height:88px;padding:0;margin:0;}#header #topMenu ul li{padding:0 22px;display:inline;}
@@ -83,8 +68,7 @@ span.comments span.fb_comments_count{padding-left:0;margin-left:0;}
 #footer #social ul li a.twitter:hover{background:url(../images/social-icons.png) -35px -34px no-repeat;}
 #footer #social ul li a.facebook{background:url(../images/social-icons.png) -70px 0 no-repeat;}
 #footer #social ul li a.facebook:hover{background:url(../images/social-icons.png) -70px -34px no-repeat;}
-#footer a{color:#800000;text-decoration:none;}
-#footer a:hover{color:#000000;}
+#footer a{color:#800000;text-decoration:none;}#footer a:hover{color:#000000;}
 #footer #copyright p{text-align:center;line-height:48px;}
 a.rss{background:url(../images/social-icons.png) 0 0 no-repeat;display:block;width:35px;height:34px;}
 #footer #social ul li a.rss:hover,a.rss:hover{background:url(../images/social-icons.png) 0 -34px no-repeat;}
