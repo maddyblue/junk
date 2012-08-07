@@ -62,16 +62,15 @@ span.comments span.fb_comments_count{padding-left:0;margin-left:0;}
 #main .blogItem a:hover{color:#800000;}
 #footer{background:#ffffff url(../images/footer-bg.png) center 0 repeat-x;min-height:88px;font-family:'Oxygen',sans-serif;font-size:13px;line-height:14px;padding-top:26px;}#footer #footerMenu ul{float:left;width:700px;padding:0;margin:0;list-style:none;}#footer #footerMenu ul li{float:left;padding:0 22px;border-left:1px solid #a2a2a2;}
 #footer #footerMenu ul li:first-child{padding-left:0;border-left:none;}
-#footer #social{float:right;width:200px;}#footer #social ul{padding:0;margin:0;}#footer #social ul li{display:inline-block;zoom:1;*display:inline;margin-right:6px;}#footer #social ul li a{display:block;width:35px;height:34px;text-indent:-999em;}
-#footer #social ul li a.rss{background:url(../images/social-icons.png) 0 0 no-repeat;}
-#footer #social ul li a.twitter{background:url(../images/social-icons.png) -35px 0 no-repeat;}
-#footer #social ul li a.twitter:hover{background:url(../images/social-icons.png) -35px -34px no-repeat;}
-#footer #social ul li a.facebook{background:url(../images/social-icons.png) -70px 0 no-repeat;}
-#footer #social ul li a.facebook:hover{background:url(../images/social-icons.png) -70px -34px no-repeat;}
+#footer #social{float:right;width:231px;}#footer #social ul{padding:0;margin:0;}#footer #social ul li{display:inline-block;zoom:1;*display:inline;margin-right:1px;}#footer #social ul li a{display:block;width:35px;height:34px;text-indent:-999em;}
+#footer #social ul li a.rss{background:url(../images/social-icons.png) 0 0 no-repeat;}#footer #social ul li a.rss:hover{background:url(../images/social-icons.png) 0 -34px no-repeat;}
+#footer #social ul li a.twitter{background:url(../images/social-icons.png) -35px 0 no-repeat;}#footer #social ul li a.twitter:hover{background:url(../images/social-icons.png) -35px -34px no-repeat;}
+#footer #social ul li a.facebook{background:url(../images/social-icons.png) -70px 0 no-repeat;}#footer #social ul li a.facebook:hover{background:url(../images/social-icons.png) -70px -34px no-repeat;}
+#footer #social ul li a.pintrest{background:url(../images/social-icons.png) -175px 0 no-repeat;}#footer #social ul li a.pintrest:hover{background:url(../images/social-icons.png) -175px -34px no-repeat;}
+#footer #social ul li a.linkedin{background:url(../images/social-icons.png) -140px 0 no-repeat;}#footer #social ul li a.linkedin:hover{background:url(../images/social-icons.png) -140px -34px no-repeat;}
+#footer #social ul li a.youtube{background:url(../images/social-icons.png) -210px 0 no-repeat;}#footer #social ul li a.youtube:hover{background:url(../images/social-icons.png) -210px -34px no-repeat;}
 #footer a{color:#800000;text-decoration:none;}#footer a:hover{color:#000000;}
 #footer #copyright p{text-align:center;line-height:48px;}
-a.rss{background:url(../images/social-icons.png) 0 0 no-repeat;display:block;width:35px;height:34px;}
-#footer #social ul li a.rss:hover,a.rss:hover{background:url(../images/social-icons.png) 0 -34px no-repeat;}
 h2{font-size:28px;font-weight:bold;color:#333333;line-height:42px;margin:34px 0 24px 0;}
 h3,#main .blogItem h3 a{font-size:16px;font-weight:bold;color:#333333;line-height:24px;margin-bottom:5px;}
 h4{font-size:48px;font-weight:300;color:#333333;line-height:72px;margin:0 0 24px 0;letter-spacing:-1px;}h4 span{color:#800000;}

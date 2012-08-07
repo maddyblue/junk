@@ -494,7 +494,7 @@ span.comments span.fb_comments_count {
 
 	#social {
 		float:right;
-		width:200px;
+		width:231px;
 
 		ul {
 			padding:0;
@@ -504,7 +504,7 @@ span.comments span.fb_comments_count {
 				display:inline-block;
 				zoom:1;
 				*display:inline;
-				margin-right:6px;
+				margin-right:1px;
 
 				a {
 					display:block;
@@ -515,22 +515,50 @@ span.comments span.fb_comments_count {
 
 				a.rss {
 					background:url(../images/social-icons.png) 0 0 no-repeat;
+
+					&:hover {
+						background:url(../images/social-icons.png) 0 -34px no-repeat;
+					}
 				}
 
 				a.twitter {
 					background:url(../images/social-icons.png) -35px 0 no-repeat;
-				}
 
-				a.twitter:hover {
-					background:url(../images/social-icons.png) -35px -34px no-repeat;
+					&:hover {
+						background:url(../images/social-icons.png) -35px -34px no-repeat;
+					}
 				}
 
 				a.facebook {
 					background:url(../images/social-icons.png) -70px 0 no-repeat;
+
+					&:hover {
+						background:url(../images/social-icons.png) -70px -34px no-repeat;
+					}
 				}
 
-				a.facebook:hover {
-					background:url(../images/social-icons.png) -70px -34px no-repeat;
+				a.pintrest {
+					background:url(../images/social-icons.png) -175px 0 no-repeat;
+
+					&:hover {
+						background:url(../images/social-icons.png) -175px -34px no-repeat;
+					}
+				}
+
+				a.linkedin {
+					background:url(../images/social-icons.png) -140px 0 no-repeat;
+
+					&:hover {
+						background:url(../images/social-icons.png) -140px -34px no-repeat;
+					}
+				}
+
+				a.youtube {
+					background:url(../images/social-icons.png) -210px 0 no-repeat;
+
+					&:hover {
+						background:url(../images/social-icons.png) -210px -34px no-repeat;
+					}
 				}
 			}
 		}
@@ -549,17 +577,6 @@ span.comments span.fb_comments_count {
 		text-align:center;
 		line-height:48px;
 	}
-}
-
-a.rss {
-	background:url(../images/social-icons.png) 0 0 no-repeat;
-	display:block;
-	width:35px;
-	height:34px;
-}
-
-#footer #social ul li a.rss:hover, a.rss:hover {
-	background:url(../images/social-icons.png) 0 -34px no-repeat;
 }
 
 h2 {
