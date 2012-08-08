@@ -118,9 +118,6 @@ nav.primary li{float:left;}
 .widget{border-bottom:1px solid #e0e0e0;padding:20px 20px 20px 40px;position:relative;}.widget .title{border:none;font-size:18px;line-height:0.85em;margin-bottom:20px;padding:0;text-align:left;font-family:'Oxygen',sans-serif;}
 .widgets:before{content:url(../images/icon/bullet-grey.png);bottom:-4px;bottom:auto;height:7px;font-size:7px;line-height:7px;left:0;position:absolute;width:7px;z-index:100;top:-4px;}
 .widget:before{content:url(../images/icon/bullet-grey.png);bottom:-4px;height:7px;font-size:7px;line-height:7px;left:0;position:absolute;width:7px;z-index:100;}
-.sneek-widget-twitter{padding-right:40px;}.sneek-widget-twitter .tweets{list-style:none;margin:0;}.sneek-widget-twitter .tweets li{border-bottom:1px dotted #e0e0e0;margin-bottom:10px;margin-left:-20px;padding-left:20px;padding-bottom:10px;}
-.sneek-widget-twitter .tweets li.last{border:0;padding:0;margin:0;}
-.sneek-widget-taxonomy{color:#999999;}
 #social-networks ul{list-style:none;margin:0;padding:0;text-align:center;}
 #social-networks li{display:inline-block;margin:0 1px 3px 0;}
 #social-networks a{background:scroll no-repeat center center #666666;display:block;height:34px;width:35px;-webkit-transition:background-color 0.3s ease-in-out;-moz-transition:background-color 0.3s ease-in-out;-ms-transition:background-color 0.3s ease-in-out;-o-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out;}
@@ -136,6 +133,5 @@ nav.primary li{float:left;}
 #social-networks .twitter a:hover{background:url(../images/social-icons.png) -35px -34px;}
 #social-networks .youtube a{background:url(../images/social-icons.png) -210px 0;}
 #social-networks .youtube a:hover{background:url(../images/social-icons.png) -210px -34px;}
-#sneek-widget-credit{padding:20px 20px 20px 40px;}#sneek-widget-credit p{font-size:11px;margin:0;}
 .hentry{-webkit-box-shadow:0 0 2px 0 #b8b8b8;-moz-box-shadow:0 0 2px 0 #b8b8b8;box-shadow:0 0 2px 0 #b8b8b8;}
 *{-webkit-transition:color 0.1s ease-in-out;-moz-transition:color 0.1s ease-in-out;-ms-transition:color 0.1s ease-in-out;-o-transition:color 0.1s ease-in-out;transition:color 0.1s ease-in-out;}

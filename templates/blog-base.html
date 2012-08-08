@@ -80,7 +80,9 @@
 				{% endfor %}
 			</div>
 
-			<div id="sneek-twitter-2" class="widget sneek-widget-twitter">
+			<div class="widget">
+				<h3 class="title"><a href="https://twitter.com/thenextmuse">@thenextmuse</a></h3>
+				<ul id="tweet-list"></ul>
 			</div>
 
 			<div id="archives-2" class="widget widget_archive">
@@ -100,38 +102,6 @@
 
 {% include "footer.html" %}
 
-	<script type="text/javascript" src="/static/js/plugins.js"></script>
-	<script type="text/javascript">
-		/* <![CDATA[ */
-		var Sneek = {"cycle":{"fx":"scrollHorz","speed":1000,"timeout":5500}};
-		/* ]]> */
-	</script>
-	<script type="text/javascript" src="/static/js/global.js"></script>
-
-	<script type="text/javascript" src="/static/js/jquery.jtweetsanywhere-1.3.1.js"></script>
-	<script type="text/javascript">
-		jQuery(document).ready(function() {
-			jQuery('#sneek-twitter-2').jTweetsAnywhere({
-				username: '@thenextmuse',
-				count: 4,
-				showTweetFeed: {
-					showProfileImages: false,
-					showUserFullNames: false,
-					showSource: false,
-					showActionReply: false,
-					showActionRetweet: false,
-					showActionFavorite: false,
-					showTimestamp: false,
-					showTwitterBird: false,
-					showInReplyTo: false,
-					paging: {
-						mode: 'none'
-					}
-				}
-			});
-		});
-	</script>
-
 	{% block bodyend %}{% endblock %}
 
 	<div id="fb-root"></div>
@@ -142,6 +112,9 @@
 		js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=181722038554000";
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));</script>
+
+	<script type="text/javascript" src="/static/js/plugins.js"></script>
+	<script type="text/javascript" src="/static/js/blog.js"></script>
 
 	<script type="text/javascript">var switchTo5x=true;</script>
 	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
