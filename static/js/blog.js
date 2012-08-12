@@ -64,7 +64,7 @@ jQuery(function($){
 			var t = val.text;
 			for(var i = 0; i < val.entities.urls.length; i++) {
 				var u = val.entities.urls[i];
-				var link = '<a href="' + u.expanded_url + '">' + u.display_url + '</a>';
+				var link = '<a href="' + u.expanded_url + '">' + u.url + '</a>';
 				t = t.replace(u.url, link);
 			}
 
