@@ -103,7 +103,7 @@ def gs_write(name, mime, content):
 			f.write(content)
 		files.finalize(fn)
 	else:
-		logging.info('gs write: %s, %s', mime, name)
+		logging.info('gs write: %s, %s, %s', mime, name, len(content))
 
 def slugify(value):
 	value = value.strip().lower()
