@@ -1,3 +1,6 @@
+.wysiwyg-text-align-center{text-align:center;}
+.wysiwyg-text-align-left{text-align:left;}
+.wysiwyg-text-align-right{text-align:right;}
 .clearfix{*zoom:1;zoom:1;}
 .clearfix:before{display:table;display:table;content:"";content:"";}
 .clearfix:after{display:table;display:table;content:"";content:"";clear:both;clear:both;}

@@ -25,9 +25,9 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="text">text</label>
+						<label class="control-label" for="wysihtml5-textarea">text</label>
 						<div class="controls">
-							<textarea id="text" name="text" class="span8" rows="14">{{ p.text }}</textarea>
+							<textarea name="text" id="text" class="span8 editable" rows="14">{{ p.text }}</textarea>
 						</div>
 					</div>
 					<div class="control-group">
@@ -74,4 +74,11 @@
 		</div>
 	</div>
 </div>
+
+<link rel="stylesheet" href="/static/xing-wysihtml5/css/stylesheet.css">
+
+<script src="/static/xing-wysihtml5/wysihtml5-parser_rules-advanced.js" type="text/javascript"></script>
+<script src="/static/xing-wysihtml5/wysihtml5-0.3.0.min.js" type="text/javascript"></script>
+<script src="/static/js/xing.js" type="text/javascript"></script>
+
 {% endblock %}
