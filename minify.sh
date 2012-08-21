@@ -9,6 +9,8 @@ do
 	uglifyjs $f > $ext
 done
 
+lessc -x static/themes/marco/css/style.less > static/themes/marco/css/style.css
+
 lessc -x static/css/base.less > static/css/base.css
 lessc -x static/css/blog.less > static/css/blog.css
 lessc -x static/xing-wysihtml5/css/editor.less > static/xing-wysihtml5/css/editor.css
