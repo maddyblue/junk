@@ -44,5 +44,30 @@ $(function() {
 			stylesheets: ['http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css', '/static/xing-wysihtml5/css/editor.css'],
 			parserRules: wysihtml5ParserRules
 		});
+
+		var timeout;
+
+		clear = function() {
+			clearTimeout(timeout);
+			toolbardiv.show();
+		};
+
+		set = function() {
+			clear();
+			timeout = setTimeout(function() {
+					toolbardiv.hide();
+				}, 1000);
+		};
+
+		var c = toolbardiv.children();
+		c.focus(clear);
+		c.blur(set);
+
+		editor
+			.on("load", function() {
+				toolbardiv.hide();
+			})
+			.on("focus", clear)
+			.on("blur", set);
 	});
 });
