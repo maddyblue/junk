@@ -23,8 +23,21 @@ stripe.api_key = STRIPE_SECRET
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 env.filters.update(filters.filters)
 
-def render(_template, context):
-	context['jquery'] = JQUERY
+JQUERY_VERSION = '1.7.2'
+JQUERY = """<script src="//ajax.googleapis.com/ajax/libs/jquery/%s/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/static/js/jquery-%s.min.js"><\/script>')</script>""" %(JQUERY_VERSION, JQUERY_VERSION)
+
+JQUERY_UI_VERSION = '1.8.23'
+JQUERY_UI = """<script src="//ajax.googleapis.com/ajax/libs/jqueryui/%s/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/%s/themes/base/jquery.ui.all.css">
+""" %(JQUERY_UI_VERSION, JQUERY_UI_VERSION)
+
+def render(_template, c):
+	context = {
+		'jquery': JQUERY,
+		'jquery_ui': JQUERY_UI,
+	}
+	context.update(c)
 	return env.get_template(_template).render(**context)
 
 def stripe_set_plan(user, site, token=None, plan=None):
