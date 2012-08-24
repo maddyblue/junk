@@ -1,0 +1,419 @@
+@import "tnm.less";
+
+@toolbar-bg: #cfcfcf;
+@toolbar-distance: 6px;
+
+@dialog-close-color: #a3a3a3;
+@dialog-content-bg: #ebebeb;
+@dialog-content-color: #535353;
+@dialog-save-bg: @tnm-bg-dark;
+@dialog-save-color: #efefef;
+@dialog-header-color: #6f6f6f;
+@dialog-header-line: #b8b8b8;
+@dialog-title-color: @tnm-bg-dark;
+
+.btn
+{
+	background-color: @tnm-bg-dark;
+	color: #FFFFFF;
+	text-decoration: none;
+	text-transform: lowercase;
+	top: 8px;
+	padding: 5px 15px 7px;
+
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+
+	&:visited {
+		color: #FFFFFF;
+	}
+
+	&.active
+	{
+		background: white;
+		color: black;
+
+		&:hover {
+			background: white;
+			color: @tnm-red;
+		}
+	}
+
+	&.save
+	{
+		background: @tnm-bg-dark url(toolbar-save.png) 10px 8px no-repeat;
+		padding-left: 35px;
+	}
+
+	&.close {
+		color: @dialog-close-color;
+		background-color: @dialog-content-bg;
+
+		&:hover {
+			background-color: @dialog-content-bg;
+			color: @tnm-red;
+		}
+	}
+
+	&.publish
+	{
+		background: @tnm-bg-dark url(toolbar-publish.png) 10px 8px no-repeat;
+		padding-left: 35px;
+	}
+
+	&.images
+	{
+		background: @tnm-bg-dark url(toolbar-images.png) 10px 8px no-repeat;
+		padding-left: 35px;
+	}
+
+	&.navigation
+	{
+		background: @tnm-bg-dark url(toolbar-navigation.png) 10px 8px no-repeat;
+		padding-left: 35px;
+	}
+
+	&.layout
+	{
+		background: @tnm-bg-dark url(toolbar-layout.png) 10px 8px no-repeat;
+		padding-left: 35px;
+	}
+
+	&.themes
+	{
+		background: @tnm-bg-dark url(toolbar-themes.png) 10px 8px no-repeat;
+		padding-left: 35px;
+	}
+
+	&:hover {
+		background-color: @tnm-red;
+	}
+}
+
+#toolbar
+{
+	background: url(toolbar-bg.png) 0 0 repeat-x;
+	height: 52px;
+	display: none;
+
+	nav
+	{
+		float: left;
+		height: 50px;
+		padding: 0 25px;
+		font-size: 14px;
+
+		&.divider
+		{
+			padding: 0px;
+			width: 2px;
+			background: url(nav-border.png);
+		}
+
+		ul
+		{
+			li
+			{
+				float: left;
+				margin: 0 @toolbar-distance;
+
+				&#saved
+				{
+					padding: 5px 15px 7px;
+					position: relative;
+					top: 8px;
+					display: block;
+					width: 60px;
+					color: #727272;
+				}
+			}
+
+			a
+			{
+				top: 8px;
+				position: relative;
+				display: block;
+
+				&.logo
+				{
+					padding: 0px;
+					background-color: @toolbar-bg;
+
+					&:hover
+					{
+						background-color: @toolbar-bg !important;
+					}
+				}
+			}
+
+			&.user-actions li
+			{
+				margin-right: @toolbar-distance;
+				margin-left: 0;
+
+				&.user-info
+				{
+					padding-top: 5px;
+
+					.hello
+					{
+						font-weight: normal;
+						font-style: italic;
+
+						color: #8d8d8d;
+						text-shadow: 1px 1px 1px #ffffff;
+						padding-top: 3px;
+						width: 220px;
+
+						.name
+						{
+							font-style: normal;
+							font-weight: bold;
+						}
+					}
+				}
+
+				a
+				{
+					background: none;
+					display: block;
+					font-size: 14px;
+					padding: 0;
+					text-decoration: underline;
+					text-transform: lowercase;
+					text-shadow: 1px 1px 1px #ffffff;
+					font-weight: bold;
+					position: relative;
+					top: 0;
+					line-height: 14px;
+				}
+
+				a.my-account
+				{
+					color: #1a1a1a;
+					background: url(myaccount.png) 0 2px no-repeat;
+					padding-left: 15px;
+				}
+
+				a.logout
+				{
+					color: #d81515;
+					background: url(logout.png) 0 2px no-repeat;
+					padding-left: 15px;
+				}
+
+				a:hover
+				{
+					background-color: transparent !important;
+					text-decoration: none;
+				}
+			}
+		}
+
+		&.right
+		{
+			float: right;
+			padding-right: @toolbar-distance;
+			background: url(nav-border.png) 0 0 repeat-y;
+		}
+
+		&.left
+		{
+			padding-left: @toolbar-distance;
+		}
+
+		img
+		{
+			height: 33px;
+			width: 33px;
+
+			&.avatar
+			{
+				position: relative;
+				top: 8px;
+			}
+		}
+	}
+
+	span.imageNumber
+	{
+		background: #83b64c;
+		border-radius: 10px;
+		color: #FFFFFF;
+		display: block;
+		font-size: 12px;
+		height: 20px;
+		left: 15px;
+		line-height: 19px;
+		position: relative;
+		text-align: center;
+		top: -5px;
+		width: 20px;
+	}
+
+	img.user
+	{
+		position: relative;
+		top: 5px;
+		float: left;
+		margin-right: 10px;
+	}
+}
+
+//.editable, .editable-nojs
+.edithover
+{
+	outline: 5px solid @tnm-red-alpha;
+	z-index: 5000;
+	position: absolute;
+	display: none;
+
+	.img-hover {
+		position: absolute;
+		width: 75px;
+		height: 50px;
+		background-color: @toolbar-bg;
+		text-align: center;
+	}
+
+	.img-edit {
+		right: 150px;
+	}
+
+	.img-link {
+		right: 75px;
+	}
+
+	.img-change {
+		right: 0;
+	}
+}
+
+.modal {
+	background: white;
+	z-index: 1000;
+	border: 2px solid red;
+	display: none;
+	position: absolute;
+}
+
+#imgcontainer
+{
+	position:absolute;
+	z-index:1;
+	margin:0 auto;
+	overflow: visible;
+}
+
+#imgslider
+{
+	position: relative;
+	z-index:15;
+	width: 4px;
+
+	a
+	{
+		width: 15px;
+		height: 15px;
+	}
+}
+
+#rightcontainer
+{
+	right:0;
+}
+
+#bottomcontainer
+{
+	bottom:0;
+}
+
+#containerimg
+{
+	display:block;
+	position:absolute;
+	z-index:10;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	cursor: move;
+}
+
+.containerdiv
+{
+	content: "";
+	display: block;
+	position: absolute;
+	z-index: 15;
+	opacity: 0.6;
+	background: #dddddd;
+}
+
+.dialog
+{
+	display: hidden;
+	position: fixed;
+	top: 15%;
+	min-width: 50%;
+	z-index: 6000;
+
+	background-color: @dialog-content-bg;
+	border: 10px solid rgba(150, 150, 150, 0.3);
+
+	-moz-background-clip: padding;     /* Firefox 3.6 */
+	-webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
+	background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+	.inner {
+		box-shadow: 0 0 3px 0px black;
+
+		.header {
+			color: @dialog-header-color;
+			border-bottom: 1px solid @dialog-header-line;
+			padding: 5px 10px;
+			line-height: 1;
+
+			@header-gradient: #dcdcdc;
+
+			background: #ffffff; /* Old browsers */
+			background: -moz-linear-gradient(top, #ffffff 0%, @header-gradient 100%); /* FF3.6+ */
+			background: -webkit-linear-gradient(top, #ffffff 0%, @header-gradient 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top, #ffffff 0%, @header-gradient 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top, #ffffff 0%, @header-gradient 100%); /* IE10+ */
+			background: linear-gradient(to bottom, #ffffff 0%, @header-gradient 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='@header-gradient',GradientType=0 ); /* IE6-9 */
+		}
+
+		.content {
+			padding: 28px;
+			color: @dialog-content-color;
+
+			.title {
+				font-size: 200%;
+				font-weight: bold;
+				text-transform: uppercase;
+				color: @dialog-title-color;
+			}
+
+			input {
+				//font-size: 13pt;
+				padding: 9px 8px;
+				margin-bottom: 6px;
+				border: 1px solid #d0d0d0;
+				width: 80%;
+			}
+		}
+
+		.buttons {
+			padding-right: 30px;
+			padding-bottom: 40px;
+			text-align: right;
+		}
+	}
+}

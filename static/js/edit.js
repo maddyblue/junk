@@ -20,11 +20,17 @@ function linkCheck(v, i) {
 	return '';
 }
 
+var saves = 0;
+function refreshSave(){
+	$('#saved').text(saves > 0 ? 'saving...' : 'saved');
+}
+
 var savemap = {};
 function save() {
 	if(!$.isEmptyObject(savemap))
 	{
-		$("#save").text('saving...');
+		saves++;
+		refreshSave();
 		var m = savemap;
 		backup = m;
 		savemap = {};
@@ -54,13 +60,9 @@ function save() {
 				});
 			}
 
-			$('#save').html('&nbsp;');
-			$('#saved').show().fadeOut(1000);
+			saves--;
+			refreshSave();
 		});
-	}
-	else
-	{
-		$('#saved').show().fadeOut(1000);
 	}
 }
 
@@ -130,9 +132,40 @@ function resize(event, ui) {
 	o.s = size;
 }
 
+function make_dialog(id, header, title, contents, onsave) {
+	var d = $(
+		'<div class="dialog">' +
+			'<div class="inner">' +
+				'<div class="header">' +
+					header +
+				'</div>' +
+				'<div class="content">' +
+					'<div class="title">' +
+						title +
+					'</div>' +
+						contents +
+				'</div>' +
+				'<div class="buttons">' +
+					'<a href="#" class="btn save">save</a>' +
+					'<a href="#" class="btn close">close</a>' +
+				'</div>' +
+			'</div>' +
+		'</div>'
+	);
+
+	$('.btn.save', d).click(onsave);
+	$('.btn.close', d).click(function() {
+		d.hide();
+	});
+
+	d.hide();
+	return d;
+}
+
 $(function() {
 	var backup;
 
+	/*
 	$('body').prepend(
 		'<div class="toolbar">' +
 			'<span id="save">&nbsp;</span>' +
@@ -169,6 +202,36 @@ $(function() {
 			'</div>' +
 		'</div>'
 	);
+	//*/
+
+	$('body').prepend(
+		'<div id="toolbar">' +
+			'<nav class="left"><ul>' +
+				'<li><a class="logo" href="/"><img src="/static/images/icon.png" /></a></li>' +
+				'<li><a href="#" class="active btn">edit</a></li>' +
+				'<li><a href="#" class="btn">live view</a></li>' +
+				'<li id="saved">saved</li>' +
+			'</ul></nav>' +
+			'<nav class="divider"></nav>' +
+			'<nav><ul>' +
+				'<li><a class="publish btn" href="#">publish</a></li>' +
+				'<li><a class="images btn" href="#">media</a></li>' +
+			'</ul></nav>' +
+			'<nav class="divider"></nav>' +
+			'<nav class="right"><ul class="user-actions">' +
+				'<li><a href=""><img class="avatar" src=' + $.tnm.gravatar + '" /></a></li>' +
+				'<li class="user-info">' +
+					'<span class="hello">Hello <span class="name">' + $.tnm.name + '</span></span>' +
+					'<ul>' +
+						'<li><a class="my-account" href="#">my account</a></li>' +
+						'<li><a class="logout" href="/logout">logout</a></li>' +
+					'</ul>' +
+				'</li>' +
+			'</ul></nav>' +
+		'</div>'
+	);
+
+	$('#toolbar').show();
 
 	$('#save').ajaxError(function() {
 		$(this).text('save');
@@ -212,6 +275,7 @@ $(function() {
 
 	// text
 
+	/*
 	$(".editable.text").hallo({
 		plugins: {
 			'halloformat': {},
@@ -223,6 +287,7 @@ $(function() {
 		savemap[this.id] = $(this).html();
 		save();
 	});
+	*/
 
 	// line
 
@@ -292,6 +357,7 @@ $(function() {
 
 	// social
 
+	/*
 	$(".editable.social").each(function() {
 		var i = "social";
 		var d = "social_div";
@@ -319,6 +385,7 @@ $(function() {
 		save();
 		return false;
 	});
+	*/
 
 	// link
 
@@ -517,6 +584,91 @@ $(function() {
 		{
 			$(".modal").hide();
 			stopImageEdit();
+		}
+	});
+
+	$('.editable').each(function() {
+		var d = $('<div class="edithover"></div>');
+		d.attr('id', this.id + '_edit');
+		d.offset($(this).offset());
+		d.width($(this).outerWidth());
+		d.height($(this).outerHeight());
+		$('body').append(d);
+
+		d.mouseout(function() {
+			d.hide();
+		});
+
+		d.mouseover(function() {
+			d.show();
+		});
+
+		$(this).mouseover(function() {
+			d.show();
+		});
+
+		if($(this).hasClass('line'))
+		{
+			var i = $('<input type="text" value="' + $(this).html() + '" />');
+			i.width($(this).width());
+			i.height($(this).height());
+			i.css('background', $(this).css('background'));
+			i.css('background-color', $(this).css('background-color'));
+			i.css('border', $(this).css('border'));
+			i.css('color', $(this).css('color'));
+			i.css('font-family', $(this).css('font-family'));
+			i.css('font-size', $(this).css('font-size'));
+			i.css('font-weight', $(this).css('font-weight'));
+			i.css('margin', $(this).css('margin'));
+			i.css('padding', $(this).css('padding'));
+			i.css('text-transform', $(this).css('text-transform'));
+
+			d.append(i);
+		}
+		else if($(this).hasClass('image'))
+		{
+			d.append('<div class="img-hover img-edit">edit</div>')
+			d.append('<div class="img-hover img-change">change</div>')
+			d.append('<div class="img-hover img-link">link</div>')
+		}
+		else if($(this).hasClass('social'))
+		{
+			var i = this.id;
+			var dialog = make_dialog(
+				this.id + '_dialog',
+				'Add/edit social networks',
+				'Social Networks',
+				'<input type="text" value="' + $.tnm.socialmap["facebook"] + '" id="' + i + '_facebook" placeholder="Facebook Profile URL"/><br/>' +
+				'<input type="text" value="' + $.tnm.socialmap["twitter"] + '" id="' + i + '_twitter" placeholder="Twitter Profile URL"/><br/>' +
+				'<input type="text" value="' + $.tnm.socialmap["youtube"] + '" id="' + i + '_youtube" placeholder="YouTube Profile URL"/><br/>' +
+				'<input type="text" value="' + $.tnm.socialmap["flickr"] + '" id="' + i + '_flickr" placeholder="Flickr Profile URL"/><br/>' +
+				'<input type="text" value="' + $.tnm.socialmap["linkedin"] + '" id="' + i + '_linkedin" placeholder="LinkedIn Profile URL"/><br/>' +
+				'<input type="text" value="' + $.tnm.socialmap["google"] + '" id="' + i + '_google" placeholder="Google+ Profile URL"/><br/>',
+				function(event) {
+					$.each($.tnm.socialmap, function(k, v) {
+						var i = $("#social_" + k)[0];
+						if(!i.value || checkURL(i.value))
+						{
+							savemap["_" + k] = i.value;
+						}
+						if(i.value)
+							$('#disp_' + k).show();
+						else
+							$('#disp_' + k).hide();
+					});
+
+					dialog.hide();
+					save();
+					event.preventDefault();
+				}
+			);
+
+			$('body').append(dialog);
+			$(d).click(function () {
+				dialog.show();
+			});
+
+			dialog.offset({left: dialog.outerWidth() / 2});
 		}
 	});
 });
