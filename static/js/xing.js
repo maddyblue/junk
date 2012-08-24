@@ -20,14 +20,14 @@ $(function() {
 				'<div data-wysihtml5-dialog="createLink" style="display: none;">' +
 					'<label>' +
 						'Link: ' +
-						'<input data-wysihtml5-dialog-field="href" value="http://">' +
+						'<input class="xing-input" data-wysihtml5-dialog-field="href" value="http://">' +
 					'</label>' +
 					'<a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>' +
 				'</div>' +
 				'<div data-wysihtml5-dialog="insertImage" style="display: none;">' +
 					'<label>' +
 						'Image: ' +
-						'<input data-wysihtml5-dialog-field="src" value="http://">' +
+						'<input class="xing-input" data-wysihtml5-dialog-field="src" value="http://">' +
 					'</label>' +
 					'<a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>' +
 				'</div>' +
