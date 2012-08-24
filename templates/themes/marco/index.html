@@ -1,8 +1,4 @@
 <!doctype html>
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>		<html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>		<html class="no-js ie8 oldie" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -23,10 +19,6 @@
 		<script src="{{ base }}js/jquery.jcarousel.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="{{ base }}css/carousel/skin.css">
 	{% endif %}
-
-	<!--[if lt IE 9]>
-	<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
 </head>
 <body>
 
@@ -48,35 +40,29 @@
 		{% include pagetemplate %}
 
 	</div>
+</div>
 
-</div> <!--! end of #container -->
-
-			<div id="search">
-			<form action="/search" method="get">
-				<label>Search Keywords:</label>
-				<input type="text" name="q" value="" class="query"/>
-				<input type="submit" value="Search" class="btn"/>
-				<span class="close"><a href="#">X</a></span>
-			</form>
-			</div>
+<div id="search">
+	<form action="/search" method="get">
+		<label>Search Keywords:</label>
+		<input type="text" name="q" value="" class="query"/>
+		<input type="submit" value="Search" class="btn"/>
+		<span class="close"><a href="#">X</a></span>
+	</form>
+</div>
 
 <footer class="bottom">
- <div class="inner">
-	<ul class="sn editable social" id="social">
-		{% for k, n in site.social_media %}
-			{% if mode == 'edit' or site[k] %}<li class="{{ k }}"><a href="{{ site[k]|default('', True) }}" value="{{ site[k]|default('', True) }}" target="_blank" id="_{{ k }}">{{ n }}</a></li>{% endif %}
-		{% endfor %}
-	</ul>
-	<p>&copy; 2011 <a href="http://www.thenextmuse.com">thenextmuse.com</a></p>
- </div>
+	<div class="inner">
+		<ul class="sn editable social" id="social">
+			{% for k, n in site.social_media %}
+				{% if mode == 'edit' or site[k] %}<li class="{{ k }}" id="disp_{{ k }}"><a href="{{ site[k]|default('', True) }}" value="{{ site[k]|default('', True) }}" target="_blank" id="_{{ k }}">{{ n }}</a></li>{% endif %}
+			{% endfor %}
+		</ul>
+		<p>&copy; 2011 <a href="http://www.thenextmuse.com">thenextmuse.com</a></p>
+	</div>
 </footer>
 
 <script src="{{ base }}js/script.min.js"></script>
-
-<!--[if lt IE 7 ]>
-	<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
-	<script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
-<![endif]-->
 
 </body>
 </html>
