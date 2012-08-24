@@ -1,8 +1,12 @@
+@import "tnm.less";
+
 @import "reset.less";
+
+@font: 'Oxygen', sans-serif;
 
 body {
 	font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-	color: #666666;
+	color: @tnm-color;
 }
 
 .clear {
@@ -59,13 +63,13 @@ span.comments span.fb_comments_count {
 			}
 
 			li.login a {
-				background: #800000;
-				background: -moz-linear-gradient(top, #800000 35%, #000000 100%);
-				background: -webkit-gradient(linear, left top, left bottom, color-stop(35%, #800000), color-stop(100%, #000000));
-				background: -webkit-linear-gradient(top, #800000 35%, #000000 100%);
-				background: -o-linear-gradient(top, #800000 35%, #000000 100%);
-				background: -ms-linear-gradient(top, #800000 35%, #000000 100%);
-				background: linear-gradient(top, #800000 35%, #000000 100%);
+				background: @tnm-red;
+				background: -moz-linear-gradient(top, @tnm-red 35%, #000000 100%);
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(35%, @tnm-red), color-stop(100%, #000000));
+				background: -webkit-linear-gradient(top, @tnm-red 35%, #000000 100%);
+				background: -o-linear-gradient(top, @tnm-red 35%, #000000 100%);
+				background: -ms-linear-gradient(top, @tnm-red 35%, #000000 100%);
+				background: linear-gradient(top, @tnm-red 35%, #000000 100%);
 				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#800000', endColorstr='#000000', GradientType=0);
 				-moz-box-shadow: 1px 1px 0px #ffffff;
 				-webkit-box-shadow: 1px 1px 0px #ffffff;
@@ -80,26 +84,26 @@ span.comments span.fb_comments_count {
 
 			li.login a:hover {
 				background: #000000;
-				background: -moz-linear-gradient(top, #000000 2%, #800000 77%);
-				background: -webkit-gradient(linear, left top, left bottom, color-stop(2%, #000000), color-stop(77%, #800000));
-				background: -webkit-linear-gradient(top, #000000 2%, #800000 77%);
-				background: -o-linear-gradient(top, #000000 2%, #800000 77%);
-				background: -ms-linear-gradient(top, #000000 2%, #800000 77%);
-				background: linear-gradient(top, #000000 2%, #800000 77%);
+				background: -moz-linear-gradient(top, #000000 2%, @tnm-red 77%);
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(2%, #000000), color-stop(77%, @tnm-red));
+				background: -webkit-linear-gradient(top, #000000 2%, @tnm-red 77%);
+				background: -o-linear-gradient(top, #000000 2%, @tnm-red 77%);
+				background: -ms-linear-gradient(top, #000000 2%, @tnm-red 77%);
+				background: linear-gradient(top, #000000 2%, @tnm-red 77%);
 				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#800000', GradientType=0);
 			}
 		}
 
 		a {
-			font-family: 'Oxygen', sans-serif;
+			font-family: @font;
 			font-size: 18px;
-			color: #555555;
+			color: @tnm-color-dark;
 			text-decoration: none;
 			text-shadow: 1px 1px 0 #ffffff;
 		}
 
 		a:hover {
-			color: #800000;
+			color: @tnm-red;
 		}
 	}
 }
@@ -246,7 +250,7 @@ span.comments span.fb_comments_count {
 				border-left: 1px solid #d0d0d0;
 				border-top: 1px solid #d0d0d0;
 				font-size: 21px;
-				color: #800000;
+				color: @tnm-red;
 				font-weight: bold;
 				line-height: 21px;
 
@@ -300,7 +304,7 @@ span.comments span.fb_comments_count {
 			padding: 3px 0;
 			border-left: 1px solid #d0d0d0;
 			font-size: 13px;
-			color: #666666;
+			color: @tnm-color;
 			font-weight: bold;
 			line-height: 21px;
 			text-transform: uppercase;
@@ -460,7 +464,7 @@ span.comments span.fb_comments_count {
 		}
 
 		a:hover {
-			color: #800000;
+			color: @tnm-red;
 		}
 	}
 }
@@ -468,7 +472,7 @@ span.comments span.fb_comments_count {
 #footer {
 	background: #ffffff url(../images/footer-bg.png) center 0 repeat-x;
 	min-height: 88px;
-	font-family: 'Oxygen', sans-serif;
+	font-family: @font;
 	font-size: 13px;
 	line-height: 14px;
 	padding-top: 26px;
@@ -565,7 +569,7 @@ span.comments span.fb_comments_count {
 	}
 
 	a {
-		color: #800000;
+		color: @tnm-red;
 		text-decoration: none;
 
 		&:hover {
@@ -604,7 +608,7 @@ h4 {
 	letter-spacing: -1px;
 
 	span {
-		color: #800000;
+		color: @tnm-red;
 	}
 }
 
