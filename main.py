@@ -61,6 +61,7 @@ class BaseHandler(webapp2.RequestHandler):
 
 		self.session['user'] = {
 			'email': user.email,
+			'gravatar': user.gravatar(33),
 			'key': user.key.urlsafe(),
 			'name': user.first_name,
 			'site': user.sites[0].urlsafe(),

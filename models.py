@@ -1,6 +1,7 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
 import datetime
+import hashlib
 import logging
 import math
 import re
@@ -32,6 +33,17 @@ class User(ndb.Model):
 
 	stripe_id = ndb.StringProperty('i', indexed=False)
 	stripe_last4 = ndb.StringProperty('t', indexed=False)
+
+	def gravatar(self, size=''):
+		if size:
+				size = '&s=%s' %size
+
+		if not self.email:
+			email = ''
+		else:
+			email = self.email.lower()
+
+		return 'http://www.gravatar.com/avatar/' + hashlib.md5(email).hexdigest() + '?d=mm%s' %size
 
 	@classmethod
 	def find(cls, source, uid):
