@@ -861,23 +861,26 @@ class Blog(BaseHandler):
 		if year and month:
 			year = int(year)
 			month = int(month)
+
+			posts = models.SiteBlogPost.posts(year, month)
+			d = datetime.date(year=year, month=month, day=1)
+
+			if d not in months.dates:
+				self.error(404)
+				return
+
+			mi = months.dates.index(d)
+			n = mi + 1
+			if n >= len(months.dates):
+				n = None
+			else:
+				# todo: fix this
+				n = None
+				#n = months.dates[n]
 		else:
-			year = months.dates[0].year
-			month = months.dates[0].month
-
-		posts = models.SiteBlogPost.posts(year, month)
-		d = datetime.date(year=year, month=month, day=1)
-
-		if d not in months.dates:
-			self.error(404)
-			return
-
-		mi = months.dates.index(d)
-		n = mi + 1
-		if n >= len(months.dates):
+			# todo: fix this
+			posts = models.SiteBlogPost.published(limit=100)
 			n = None
-		else:
-			n = months.dates[n]
 
 		self.render('blog.html', {
 			'archive': months.values,
