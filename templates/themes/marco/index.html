@@ -61,7 +61,7 @@
 			</div>
 			{% endif %}
 			{% for k, n in site.social_media %}
-				{% if mode == 'edit' or site[k] %}<li class="{{ k }}" id="disp_{{ k }}" ng-show="socialmap['{{ k }}']"><a href="{{ site[k]|default('', True) }}" value="{{ site[k]|default('', True) }}" target="_blank" id="_{{ k }}">{{ n }}</a></li>{% endif %}
+			{% if mode == 'edit' or site[k] %}<li class="{{ k }}" id="disp_{{ k }}"{% if mode =='edit' %} ng-show="socialmap['{{ k }}']"{% endif %}><a href="{{ site[k]|default('', True) }}" value="{{ site[k]|default('', True) }}" target="_blank" id="_{{ k }}">{{ n }}</a></li>{% endif %}
 			{% endfor %}
 		</ul>
 		<p>&copy; 2011 <a href="http://www.thenextmuse.com">thenextmuse.com</a></p>
