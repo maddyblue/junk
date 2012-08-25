@@ -406,8 +406,8 @@ class Save(BaseHandler):
 				return
 
 			for k in keys:
-				v = self.request.POST.get('_%s' %k)
-				if v:
+				v = self.request.POST.get('_%s' %k, None)
+				if v is not None:
 					setattr(s, k, v)
 					sc = True
 
