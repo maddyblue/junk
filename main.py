@@ -369,14 +369,9 @@ class Save(BaseHandler):
 		pkey = ndb.Key('Page', long(pageid), parent=skey)
 		keys = [
 			'headline',
-
-			'facebook',
-			'flickr',
-			'google',
-			'linkedin',
-			'twitter',
-			'youtube',
 		]
+
+		keys.extend([i[0] for i in models.Site.social_media])
 
 		r = {'errors': []}
 

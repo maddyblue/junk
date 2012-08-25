@@ -74,14 +74,16 @@ class Site(ndb.Model):
 	linkedin = ndb.StringProperty('l', indexed=False)
 	twitter = ndb.StringProperty('t', indexed=False)
 	youtube = ndb.StringProperty('y', indexed=False)
+	pintrest = ndb.StringProperty('t', indexed=False)
 
 	social_media = [
 		('facebook', 'Facebook'),
-		('flickr', 'flickr'),
+		('flickr', 'Flickr'),
 		('google', 'Google+'),
-		('linkedin', 'Linkedin'),
+		('linkedin', 'LinkedIn'),
 		('twitter', 'Twitter'),
 		('youtube', 'YouTube'),
+		('pintrest', 'Pintrest'),
 	]
 
 	@property

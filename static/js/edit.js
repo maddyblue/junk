@@ -553,17 +553,22 @@ $(function() {
 		else if($(this).hasClass('social'))
 		{
 			var i = this.id;
+
+			var s = '';
+			for (var j = 0; j < $.tnm.social_media.length; j++)
+			{
+				var k = $.tnm.social_media[j][0];
+				var p = $.tnm.social_media[j][1];
+				s += '<li><input type="text" ng-model="socialmap[\'' + k + '\']" " id="' + i + '_' + k + '" placeholder="' + p + ' Profile URL"/><div class="social_icon ' + k + '"></div></li>';
+			}
+
 			var dialog = make_dialog(
 				this.id + '_dialog',
 				'Add/edit social networks',
 				'Social Networks',
-				'<input type="text" ng-model="socialmap[\'facebook\']" " id="' + i + '_facebook" placeholder="Facebook Profile URL"/><br/>' +
-				'<input type="text" ng-model="socialmap[\'flickr\']" " id="' + i + '_flickr" placeholder="Flickr Profile URL"/><br/>' +
-				'<input type="text" ng-model="socialmap[\'google\']" " id="' + i + '_google" placeholder="Google+ Profile URL"/><br/>' +
-				'<input type="text" ng-model="socialmap[\'linkedin\']" " id="' + i + '_linkedin" placeholder="LinkedIn Profile URL"/><br/>' +
-				'<input type="text" ng-model="socialmap[\'twitter\']" " id="' + i + '_twitter" placeholder="Twitter Profile URL"/><br/>' +
-				'<input type="text" ng-model="socialmap[\'youtube\']" " id="' + i + '_youtube" placeholder="YouTube Profile URL"/><br/>'
-				,
+				'<ul>' +
+					s +
+				'</ul>',
 				'save_social'
 			);
 

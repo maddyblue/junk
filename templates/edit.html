@@ -20,12 +20,12 @@ $(function() {
 	{% endfor %}
 
 	$.tnm.socialmap = {};
-	$.tnm.socialmap["facebook"] = "{{ site.facebook|default('', true) }}";
-	$.tnm.socialmap["twitter"] = "{{ site.twitter|default('', true) }}";
-	$.tnm.socialmap["youtube"] = "{{ site.youtube|default('', true) }}";
-	$.tnm.socialmap["flickr"] = "{{ site.flickr|default('', true) }}";
-	$.tnm.socialmap["linkedin"] = "{{ site.linkedin|default('', true) }}";
-	$.tnm.socialmap["google"] = "{{ site.google|default('', true) }}";
+	$.tnm.social_media = [];
+
+	{% for k, n in site.social_media %}
+	$.tnm.socialmap["{{ k }}"] = "{{ site[k]|default('', true) }}";
+	$.tnm.social_media.push(["{{ k }}", "{{ n }}"]);
+	{% endfor %}
 
 	{% if page.type != 'gallery' %}
 	$.tnm.imageurls = {};
