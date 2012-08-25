@@ -1,4 +1,5 @@
 <!doctype html>
+<html {%- block html %}{% endblock %}>
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -55,7 +56,7 @@
 	<div class="inner">
 		<ul class="sn editable social" id="social">
 			{% for k, n in site.social_media %}
-				{% if mode == 'edit' or site[k] %}<li class="{{ k }}" id="disp_{{ k }}"><a href="{{ site[k]|default('', True) }}" value="{{ site[k]|default('', True) }}" target="_blank" id="_{{ k }}">{{ n }}</a></li>{% endif %}
+				{% if mode == 'edit' or site[k] %}<li class="{{ k }}" id="disp_{{ k }}" ng-show="socialmap['{{ k }}']"><a href="{{ site[k]|default('', True) }}" value="{{ site[k]|default('', True) }}" target="_blank" id="_{{ k }}">{{ n }}</a></li>{% endif %}
 			{% endfor %}
 		</ul>
 		<p>&copy; 2011 <a href="http://www.thenextmuse.com">thenextmuse.com</a></p>

@@ -20,52 +20,6 @@ function linkCheck(v, i) {
 	return '';
 }
 
-var saves = 0;
-function refreshSave(){
-	$('#saved').text(saves > 0 ? 'saving...' : 'saved');
-}
-
-var savemap = {};
-function save() {
-	if(!$.isEmptyObject(savemap))
-	{
-		saves++;
-		refreshSave();
-		var m = savemap;
-		backup = m;
-		savemap = {};
-
-		$.post($.tnm.saveurl, m, function(data, textStatus, jqXHR) {
-			var j = jQuery.parseJSON(data);
-
-			if(j.errors.length > 0) {
-				alert(j.errors);
-			} else {
-				$.each(j, function(imgkey, imgdata) {
-					var setimg = false;
-
-					$.each(imgdata, function(k, v) {
-						$.tnm.imageurls[imgkey][k] = v;
-						if(k == 'url')
-							$("#" + imgkey)[0].src = v;
-						if(k == 'orig')
-							setimg = true;
-					});
-
-					if(setimg) {
-						$("#containerimg").css('background-image', 'url(' + $.tnm.imageurls[imgkey].orig + ')');
-						loadimg(imgkey);
-						resize(0, {'value': 0});
-					}
-				});
-			}
-
-			saves--;
-			refreshSave();
-		});
-	}
-}
-
 var cur_img;
 function loadimg(id) {
 	var o = $.tnm.imageurls[id];
@@ -146,14 +100,17 @@ function make_dialog(id, header, title, contents, onsave) {
 						contents +
 				'</div>' +
 				'<div class="buttons">' +
-					'<a href="#" class="btn save">save</a>' +
-					'<a href="#" class="btn close">close</a>' +
+					'<a href="" class="btn save" ng-click="' + onsave + '()">save</a>' +
+					'<a href="" class="btn close">close</a>' +
 				'</div>' +
 			'</div>' +
 		'</div>'
 	);
 
-	$('.btn.save', d).click(onsave);
+	$('.btn.save', d).click(function() {
+		d.hide();
+	});
+
 	$('.btn.close', d).click(function() {
 		d.hide();
 	});
@@ -210,7 +167,7 @@ $(function() {
 				'<li><a class="logo" href="/"><img src="/static/images/icon.png" /></a></li>' +
 				'<li><a href="#" class="active btn">edit</a></li>' +
 				'<li><a href="#" class="btn">live view</a></li>' +
-				'<li id="saved">saved</li>' +
+				'<li id="saved">{{ saved() }}</li>' +
 			'</ul></nav>' +
 			'<nav class="divider"></nav>' +
 			'<nav><ul>' +
@@ -233,12 +190,6 @@ $(function() {
 
 	$('#toolbar').show();
 
-	$('#save').ajaxError(function() {
-		$(this).text('save');
-		$('#error').show().fadeOut(4000);
-		$.extend(savemap, backup);
-	});
-
 	$(document).on("click", "#publish", function() {
 		$.ajax({
 			url: $.tnm.publishurl,
@@ -260,7 +211,7 @@ $(function() {
 
 	$(document).on('click', '#save_domain', function() {
 		savemap['_domain'] = $("#domain").val();
-		save();
+		//save();
 	});
 
 	// page menu
@@ -269,7 +220,7 @@ $(function() {
 		items: ".menu_item",
 		stop: function(event, ui) {
 			savemap["pos"] = $(this).sortable('toArray').join(',');
-			save();
+			//save();
 		}
 	});
 
@@ -311,7 +262,7 @@ $(function() {
 			i.text(t[0].value);
 			savemap[i[0].id] = i.html();
 			$(this).parents(".modal").hide();
-			save();
+			//save();
 		}
 
 		return false;
@@ -342,7 +293,7 @@ $(function() {
 			var d = t.datepicker('getDate');
 			savemap[i[0].id] = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
 			$(this).parents(".modal").hide();
-			save();
+			//save();
 		}
 
 		return false;
@@ -352,40 +303,8 @@ $(function() {
 
 	$(document).on("click", ".checkbox", function() {
 		savemap[this.id] = this.checked;
-		save();
+		//save();
 	});
-
-	// social
-
-	/*
-	$(".editable.social").each(function() {
-		var i = "social";
-		var d = "social_div";
-		var h = '<div class="modal" style="color: black" id="' + d + '">' +
-			'<p>Facebook: <input type="text" size="45" id="' + i + '_facebook" value="' + $.tnm.socialmap["facebook"] + '" /></p>' +
-			'<p>Twitter: <input type="text" size="45" id="' + i + '_twitter" value="' + $.tnm.socialmap["twitter"] + '" /></p>' +
-			'<p>YouTube: <input type="text" size="45" id="' + i + '_youtube" value="' + $.tnm.socialmap["youtube"] + '" /></p>' +
-			'<p>flickr: <input type="text" size="45" id="' + i + '_flickr" value="' + $.tnm.socialmap["flickr"] + '" /></p>' +
-			'<p>Linkedin: <input type="text" size="45" id="' + i + '_linkedin" value="' + $.tnm.socialmap["linkedin"] + '" /></p>' +
-			'<p>Google+: <input type="text" size="45" id="' + i + '_google" value="' + $.tnm.socialmap["google"] + '" /></p>' +
-			'<p><a class="close social" style="color: black" href="#">save</a> <a href="#" style="color: black" class="cancel">cancel</a></p></div>';
-		$(this).after(h);
-	});
-
-	$(document).on("click", ".close.social", function() {
-		$.each($.tnm.socialmap, function(k, v) {
-			var i = $("#social_" + k)[0];
-			if(!i.value || checkURL(i.value))
-			{
-				savemap["_" + k] = i.value;
-			}
-		});
-
-		$(this).parents(".modal").hide();
-		save();
-		return false;
-	});
-	*/
 
 	// link
 
@@ -428,7 +347,7 @@ $(function() {
 			savemap[t[0].id] = i.html();
 			savemap[i[0].id + "_url"] = url;
 			$(this).parents(".modal").hide();
-			save();
+			//save();
 		}
 
 		return false;
@@ -472,7 +391,7 @@ $(function() {
 		savemap[i[0].id + "_s"] = o.s;
 		$(this).parents(".modal").hide();
 		stopImageEdit();
-		save();
+		//save();
 
 		return false;
 	});
@@ -544,7 +463,7 @@ $(function() {
 		$(this).parents(".modal").hide();
 		stopImageEdit();
 		savemap[i[0].id + "_c"] = true;
-		save();
+		//save();
 		return false;
 	});
 
@@ -554,7 +473,7 @@ $(function() {
 		var o = $.tnm.imageurls[i[0].id];
 
 		savemap[i[0].id + "_b"] = $("#" + i[0].id + "_select")[0].value;
-		save();
+		//save();
 
 		// either do ajax request, or set url, orig, w, h here
 
@@ -638,29 +557,14 @@ $(function() {
 				this.id + '_dialog',
 				'Add/edit social networks',
 				'Social Networks',
-				'<input type="text" value="' + $.tnm.socialmap["facebook"] + '" id="' + i + '_facebook" placeholder="Facebook Profile URL"/><br/>' +
-				'<input type="text" value="' + $.tnm.socialmap["twitter"] + '" id="' + i + '_twitter" placeholder="Twitter Profile URL"/><br/>' +
-				'<input type="text" value="' + $.tnm.socialmap["youtube"] + '" id="' + i + '_youtube" placeholder="YouTube Profile URL"/><br/>' +
-				'<input type="text" value="' + $.tnm.socialmap["flickr"] + '" id="' + i + '_flickr" placeholder="Flickr Profile URL"/><br/>' +
-				'<input type="text" value="' + $.tnm.socialmap["linkedin"] + '" id="' + i + '_linkedin" placeholder="LinkedIn Profile URL"/><br/>' +
-				'<input type="text" value="' + $.tnm.socialmap["google"] + '" id="' + i + '_google" placeholder="Google+ Profile URL"/><br/>',
-				function(event) {
-					$.each($.tnm.socialmap, function(k, v) {
-						var i = $("#social_" + k)[0];
-						if(!i.value || checkURL(i.value))
-						{
-							savemap["_" + k] = i.value;
-						}
-						if(i.value)
-							$('#disp_' + k).show();
-						else
-							$('#disp_' + k).hide();
-					});
-
-					dialog.hide();
-					save();
-					event.preventDefault();
-				}
+				'<input type="text" ng-model="socialmap[\'facebook\']" " id="' + i + '_facebook" placeholder="Facebook Profile URL"/><br/>' +
+				'<input type="text" ng-model="socialmap[\'flickr\']" " id="' + i + '_flickr" placeholder="Flickr Profile URL"/><br/>' +
+				'<input type="text" ng-model="socialmap[\'google\']" " id="' + i + '_google" placeholder="Google+ Profile URL"/><br/>' +
+				'<input type="text" ng-model="socialmap[\'linkedin\']" " id="' + i + '_linkedin" placeholder="LinkedIn Profile URL"/><br/>' +
+				'<input type="text" ng-model="socialmap[\'twitter\']" " id="' + i + '_twitter" placeholder="Twitter Profile URL"/><br/>' +
+				'<input type="text" ng-model="socialmap[\'youtube\']" " id="' + i + '_youtube" placeholder="YouTube Profile URL"/><br/>'
+				,
+				'save_social'
 			);
 
 			$('body').append(dialog);
@@ -672,3 +576,64 @@ $(function() {
 		}
 	});
 });
+
+function TNMCtrl($scope, $http) {
+	$scope.saves = 0;
+	$scope.savemap = {};
+
+	$scope.socialmap = $.tnm.socialmap;
+
+	$scope.saved = function() {
+		return $scope.saves ? 'saving...' : 'saved';
+	};
+
+	$scope.save = function(o) {
+		$scope.saves++;
+		$.extend(o, $scope.savemap);
+
+		$http({
+			method: 'POST',
+			url: $.tnm.saveurl,
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			data: $.param(o)
+		}).success(function(result) {
+			if(result.errors.length > 0) {
+				alert(result.errors);
+			} else {
+				$.each(result, function(imgkey, imgdata) {
+					var setimg = false;
+
+					$.each(imgdata, function(k, v) {
+						$.tnm.imageurls[imgkey][k] = v;
+						if(k == 'url')
+							$("#" + imgkey)[0].src = v;
+						if(k == 'orig')
+							setimg = true;
+					});
+
+					if(setimg) {
+						$("#containerimg").css('background-image', 'url(' + $.tnm.imageurls[imgkey].orig + ')');
+						loadimg(imgkey);
+						resize(0, {'value': 0});
+					}
+				});
+			}
+			$scope.saves--;
+		}).error(function() {
+			$.extend($scope.savemap, o);
+			alert('error');
+			$scope.saves--;
+		});
+	};
+
+	$scope.save_social = function() {
+		var o = {};
+		$.each($scope.socialmap, function(k, v) {
+			var i = $('#social_' + k)[0];
+			if(!i.value || checkURL(i.value))
+				o["_" + k] = i.value;
+		});
+
+		$scope.save(o);
+	};
+}
