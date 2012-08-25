@@ -166,7 +166,7 @@ $(function() {
 			'<nav class="left"><ul>' +
 				'<li><a class="logo" href="/"><img src="/static/images/icon.png" /></a></li>' +
 				'<li><a href="#" class="active btn">edit</a></li>' +
-				'<li><a href="#" class="btn">live view</a></li>' +
+				'<li><a href="' + $.tnm.viewurl + '" class="btn">live view</a></li>' +
 				'<li id="saved">{{ saved() }}</li>' +
 			'</ul></nav>' +
 			'<nav class="divider"></nav>' +
