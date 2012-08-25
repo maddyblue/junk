@@ -21,9 +21,7 @@
 	top: 8px;
 	padding: 5px 15px 7px;
 
-	-webkit-border-radius: 12px;
-	-moz-border-radius: 12px;
-	border-radius: 12px;
+	.border-radius(12px);
 
 	&:visited {
 		color: #FFFFFF;
@@ -334,10 +332,7 @@
 	display:block;
 	position:absolute;
 	z-index:10;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+	.background-size(cover);
 	cursor: move;
 }
 
@@ -362,13 +357,8 @@
 	background-color: @dialog-content-bg;
 	border: 10px solid rgba(150, 150, 150, 0.3);
 
-	-moz-background-clip: padding;     /* Firefox 3.6 */
-	-webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
-	background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
-
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
+	.background-clip(padding);
+	.border-radius(5px);
 
 	.inner {
 		box-shadow: 0 0 3px 0px black;
@@ -379,15 +369,7 @@
 			padding: 5px 10px;
 			line-height: 1;
 
-			@header-gradient: #dcdcdc;
-
-			background: #ffffff; /* Old browsers */
-			background: -moz-linear-gradient(top, #ffffff 0%, @header-gradient 100%); /* FF3.6+ */
-			background: -webkit-linear-gradient(top, #ffffff 0%, @header-gradient 100%); /* Chrome10+,Safari5.1+ */
-			background: -o-linear-gradient(top, #ffffff 0%, @header-gradient 100%); /* Opera 11.10+ */
-			background: -ms-linear-gradient(top, #ffffff 0%, @header-gradient 100%); /* IE10+ */
-			background: linear-gradient(to bottom, #ffffff 0%, @header-gradient 100%); /* W3C */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='@header-gradient',GradientType=0 ); /* IE6-9 */
+			#gradient > .vertical(#ffffff, #dcdcdc);
 		}
 
 		.content {
