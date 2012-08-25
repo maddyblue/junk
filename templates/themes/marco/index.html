@@ -55,6 +55,11 @@
 <footer class="bottom">
 	<div class="inner">
 		<ul class="sn editable social" id="social">
+			{% if mode == 'edit' %}
+			<div ng-show="no_social()">
+				No social media links
+			</div>
+			{% endif %}
 			{% for k, n in site.social_media %}
 				{% if mode == 'edit' or site[k] %}<li class="{{ k }}" id="disp_{{ k }}" ng-show="socialmap['{{ k }}']"><a href="{{ site[k]|default('', True) }}" value="{{ site[k]|default('', True) }}" target="_blank" id="_{{ k }}">{{ n }}</a></li>{% endif %}
 			{% endfor %}

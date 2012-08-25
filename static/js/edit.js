@@ -636,4 +636,14 @@ function TNMCtrl($scope, $http) {
 
 		$scope.save(o);
 	};
+
+	$scope.no_social = function() {
+		var r = true;
+		$.each($scope.socialmap, function(k, v) {
+			if(v)
+				r = false;
+		});
+
+		return r;
+	};
 }
