@@ -105,10 +105,6 @@
 	background: #222222;
 	background: url(../images/nav-sprite.png) scroll no-repeat left center;
 	border: 0px solid #ffffff;
-	-webkit-border-radius: 23px;
-	-moz-border-radius: 23px;
-	border-radius: 23px;
-	border-radius: 0px;
 	opacity: 0.5;
 	filter: alpha(opacity=50);
 	display: none;
@@ -300,9 +296,7 @@ code {
 	}
 
 	select {
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
+		.box-sizing(border-box);
 		width: 100%;
 	}
 }
@@ -598,9 +592,7 @@ nav.primary {
 	background: #ffffff;
 	margin: 10px;
 	padding: 10px;
-	-webkit-box-shadow: 0 0 2px 0 #b8b8b8;
-	-moz-box-shadow: 0 0 2px 0 #b8b8b8;
-	box-shadow: 0 0 2px 0 #b8b8b8;
+	.box-shadow(0 0 2px 0 #b8b8b8);
 }
 
 #endless-pager {
@@ -613,9 +605,7 @@ nav.primary {
 	font-family: 'Patua One', cursive;
 	border-radius: 0 0 0 0;
 	border: none;
-	-webkit-box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.3);
-	box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.3);
+	.box-shadow(2px 2px 0px 0px rgba(0, 0, 0, 0.3));
 }
 
 #infscr-loading {
@@ -745,9 +735,7 @@ nav.primary {
 	background: #ffffff;
 	margin: 10px 10px 25px;
 	padding: 25px;
-	-webkit-box-shadow: 0 0 2px 0 #b8b8b8;
-	-moz-box-shadow: 0 0 2px 0 #b8b8b8;
-	box-shadow: 0 0 2px 0 #b8b8b8;
+	.box-shadow(0 0 2px 0 #b8b8b8);
 
 	.title {
 		position: relative;
@@ -861,11 +849,7 @@ nav.primary {
 			height: 27px;
 			width: 27px;
 			z-index: 100;
-			-webkit-transition: all 0.3s ease-in-out;
-			-moz-transition: all 0.3s ease-in-out;
-			-ms-transition: all 0.3s ease-in-out;
-			-o-transition: all 0.3s ease-in-out;
-			transition: all 0.3s ease-in-out;
+			.transition(all 0.3s ease-in-out);
 
 			span {
 				visibility: hidden;
@@ -917,14 +901,8 @@ nav.primary {
 	position: fixed;
 	text-indent: -9999px;
 	width: 50px;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
-	-webkit-transition: opacity 0.2s ease-in-out;
-	-moz-transition: opacity 0.2s ease-in-out;
-	-ms-transition: opacity 0.2s ease-in-out;
-	-o-transition: opacity 0.2s ease-in-out;
-	transition: opacity 0.2s ease-in-out;
+	.border-radius(50%);
+	.transition(opacity 0.2s ease-in-out);
 }
 
 .scrollup:hover {
@@ -996,11 +974,7 @@ nav.primary {
 		display: block;
 		height: 34px;
 		width: 35px;
-		-webkit-transition: background-color 0.3s ease-in-out;
-		-moz-transition: background-color 0.3s ease-in-out;
-		-ms-transition: background-color 0.3s ease-in-out;
-		-o-transition: background-color 0.3s ease-in-out;
-		transition: background-color 0.3s ease-in-out;
+		.transition(background-color 0.3s ease-in-out);
 	}
 
 	.facebook a {
@@ -1053,15 +1027,9 @@ nav.primary {
 }
 
 .hentry {
-	-webkit-box-shadow: 0 0 2px 0 #b8b8b8;
-	-moz-box-shadow: 0 0 2px 0 #b8b8b8;
-	box-shadow: 0 0 2px 0 #b8b8b8;
+	.box-shadow(0 0 2px 0 #b8b8b8);
 }
 
 * {
-	-webkit-transition: color 0.1s ease-in-out;
-	-moz-transition: color 0.1s ease-in-out;
-	-ms-transition: color 0.1s ease-in-out;
-	-o-transition: color 0.1s ease-in-out;
-	transition: color 0.1s ease-in-out;
+	.transition(color 0.1s ease-in-out);
 }

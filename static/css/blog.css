@@ -1,3 +1,7 @@
+.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:"";line-height:0;}
+.clearfix:after{clear:both;}
+.hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
+.input-block-level{display:block;width:100%;min-height:30px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
 .wysiwyg-text-align-center{text-align:center;}
 .wysiwyg-text-align-left{text-align:left;}
 .wysiwyg-text-align-right{text-align:right;}
@@ -13,7 +17,7 @@
 .carousel .active.right{left:100%;}
 .carousel .slide{padding:0;margin:0;}
 .carousel-inner{overflow:hidden;width:670px;position:relative;margin-left:10px;border:3px solid rgba(0, 0, 0, 0.2);box-shadow:0 0 2px 0 #b8b8b8;}
-.carousel-control{position:absolute;top:126px;top:50%;left:21px;width:36px;width:27px;height:36px;height:27px;margin-top:0px;margin-top:-13px;font-size:36px;font-weight:100;line-height:30px;color:#ffffff;text-align:center;background:#222222;background:url(../images/nav-sprite.png) scroll no-repeat left center;border:0px solid #ffffff;-webkit-border-radius:23px;-moz-border-radius:23px;border-radius:23px;border-radius:0px;opacity:0.5;filter:alpha(opacity=50);display:none;text-indent:-9999em;z-index:100;}
+.carousel-control{position:absolute;top:126px;top:50%;left:21px;width:36px;width:27px;height:36px;height:27px;margin-top:0px;margin-top:-13px;font-size:36px;font-weight:100;line-height:30px;color:#ffffff;text-align:center;background:#222222;background:url(../images/nav-sprite.png) scroll no-repeat left center;border:0px solid #ffffff;opacity:0.5;filter:alpha(opacity=50);display:none;text-indent:-9999em;z-index:100;}
 .carousel-control.right{left:auto;right:17px;background-position:right center;}
 .carousel-control:hover{color:#ffffff;text-decoration:none;opacity:0.9;filter:alpha(opacity=90);}
 .carousel-caption{position:absolute;left:0;right:0;bottom:0;padding:10px 15px 5px;padding:10px 15px;background:#333333;background:rgba(0, 0, 0, 0.75);}.carousel-caption h4{color:#ffffff;color:#ffffff !important;font-weight:bold !important;}.carousel-caption h4 a{color:#cacaca !important;}
@@ -108,14 +112,14 @@ nav.primary li{float:left;}
 .entry-date span{color:#f6f6f5;display:block;line-height:1;text-align:center;}
 .entry-date .day{font-size:28px;font-weight:bold;}
 .entry-date .month{margin-top:8px;}
-.posts-navigation{float:left;}.posts-navigation div{float:left;}.posts-navigation div a{background:url(../images/nav-sprite.png) scroll no-repeat left center;display:block;overflow:hidden;height:27px;width:27px;z-index:100;-webkit-transition:all 0.3s ease-in-out;-moz-transition:all 0.3s ease-in-out;-ms-transition:all 0.3s ease-in-out;-o-transition:all 0.3s ease-in-out;transition:all 0.3s ease-in-out;}.posts-navigation div a span{visibility:hidden;}
+.posts-navigation{float:left;}.posts-navigation div{float:left;}.posts-navigation div a{background:url(../images/nav-sprite.png) scroll no-repeat left center;display:block;overflow:hidden;height:27px;width:27px;z-index:100;-webkit-transition:all 0.3s ease-in-out;-moz-transition:all 0.3s ease-in-out;-o-transition:all 0.3s ease-in-out;transition:all 0.3s ease-in-out;}.posts-navigation div a span{visibility:hidden;}
 .posts-navigation div a:hover{background-color:#222222;opacity:0.5;}
 .posts-navigation div.nav-next a{background-position:right center;}
 .posts-navigation span{padding:0;margin:0;}
 #comments{margin:25px 10px;}
 .portfolio .carousel-inner{border:4px solid #d7d7d7;box-shadow:none;margin:0 0 30px;width:auto;}
 .portfolio .carousel-caption p{font-size:18px;margin:5px 0;}
-.scrollup{background:url(../images/icon/scrolltop.png) scroll no-repeat center center;border:0px solid #999999;bottom:130px;display:none;height:50px;right:15%;margin-left:-310px;opacity:0.8;outline:none !important;position:fixed;text-indent:-9999px;width:50px;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;-webkit-transition:opacity 0.2s ease-in-out;-moz-transition:opacity 0.2s ease-in-out;-ms-transition:opacity 0.2s ease-in-out;-o-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out;}
+.scrollup{background:url(../images/icon/scrolltop.png) scroll no-repeat center center;border:0px solid #999999;bottom:130px;display:none;height:50px;right:15%;margin-left:-310px;opacity:0.8;outline:none !important;position:fixed;text-indent:-9999px;width:50px;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;-webkit-transition:opacity 0.2s ease-in-out;-moz-transition:opacity 0.2s ease-in-out;-o-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out;}
 .scrollup:hover{opacity:1;}
 .widgets{border-top:1px solid #e0e0e0;position:relative;}
 .widget{border-bottom:1px solid #e0e0e0;padding:20px 20px 20px 40px;position:relative;}.widget .title{border:none;font-size:18px;line-height:0.85em;margin-bottom:20px;padding:0;text-align:left;font-family:'Oxygen',sans-serif;}
@@ -123,7 +127,7 @@ nav.primary li{float:left;}
 .widget:before{content:url(../images/icon/bullet-grey.png);bottom:-4px;height:7px;font-size:7px;line-height:7px;left:0;position:absolute;width:7px;z-index:100;}
 #social-networks ul{list-style:none;margin:0;padding:0;text-align:center;}
 #social-networks li{display:inline-block;margin:0 1px 3px 0;}
-#social-networks a{background:scroll no-repeat center center #666666;display:block;height:34px;width:35px;-webkit-transition:background-color 0.3s ease-in-out;-moz-transition:background-color 0.3s ease-in-out;-ms-transition:background-color 0.3s ease-in-out;-o-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out;}
+#social-networks a{background:scroll no-repeat center center #666666;display:block;height:34px;width:35px;-webkit-transition:background-color 0.3s ease-in-out;-moz-transition:background-color 0.3s ease-in-out;-o-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out;}
 #social-networks .facebook a{background:url(../images/social-icons.png) -70px 0;}
 #social-networks .facebook a:hover{background:url(../images/social-icons.png) -70px -34px;}
 #social-networks .linkedin a{background:url(../images/social-icons.png) -140px 0;}
@@ -137,4 +141,4 @@ nav.primary li{float:left;}
 #social-networks .youtube a{background:url(../images/social-icons.png) -210px 0;}
 #social-networks .youtube a:hover{background:url(../images/social-icons.png) -210px -34px;}
 .hentry{-webkit-box-shadow:0 0 2px 0 #b8b8b8;-moz-box-shadow:0 0 2px 0 #b8b8b8;box-shadow:0 0 2px 0 #b8b8b8;}
-*{-webkit-transition:color 0.1s ease-in-out;-moz-transition:color 0.1s ease-in-out;-ms-transition:color 0.1s ease-in-out;-o-transition:color 0.1s ease-in-out;transition:color 0.1s ease-in-out;}
+*{-webkit-transition:color 0.1s ease-in-out;-moz-transition:color 0.1s ease-in-out;-o-transition:color 0.1s ease-in-out;transition:color 0.1s ease-in-out;}
