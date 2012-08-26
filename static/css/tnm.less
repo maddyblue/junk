@@ -6,3 +6,29 @@
 @tnm-red-alpha: fade(@tnm-red, 65%);
 @tnm-bg: #e6e6e6;
 @tnm-bg-dark: #323232;
+
+// like #gradient > .vertical, but with percentage support
+// some other minor differences
+#gradient {
+	.verticalp(@startColor, @endColor, @startPct: 0%, @endPct: 100%) {
+		background-color: @startColor;
+		background-image: -moz-linear-gradient(top, @startColor @startPct, @endColor @endPct); // FF 3.6+
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(@startPct, @startColor), color-stop(@endPct, @endColor));
+		background-image: -webkit-linear-gradient(top, @startColor @startPct, @endColor @endPct); // Safari 5.1+, Chrome 10+
+		background-image: -o-linear-gradient(top, @startColor @startPct, @endColor @endPct); // Opera 11.10
+		background-image: linear-gradient(to bottom, @startColor @startPct, @endColor @endPct); // Standard, IE10
+		background-repeat: repeat-x;
+		filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
+	}
+
+	.verticalp-three(@startColor, @midColor, @endColor, @startPct: 0%, @midPct: 50%, @endPct: 100%) {
+		background-color: @startColor;
+		background-image: -moz-linear-gradient(top, @startColor @startPct, @midColor @midPct, @endColor @endPct); // FF 3.6+
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(@startPct, @startColor), color-stop(@midPct, @midColor), color-stop(@endPct, @endColor));
+		background-image: -webkit-linear-gradient(top, @startColor @startPct, @midColor @midPct, @endColor @endPct); // Safari 5.1+, Chrome 10+
+		background-image: -o-linear-gradient(top, @startColor @startPct, @midColor @midPct, @endColor @endPct); // Opera 11.10
+		background-image: linear-gradient(to bottom, @startColor @startPct, @midColor @midPct, @endColor @endPct); // Standard, IE10
+		background-repeat: repeat-x;
+		filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
+	}
+}
