@@ -13,7 +13,7 @@
 .btn.themes{background:#323232 url(toolbar-themes.png) 10px 8px no-repeat;padding-left:35px;}
 .btn:hover{background-color:#800000;}
 #toolbar{background:url(toolbar-bg.png) 0 0 repeat-x;height:52px;display:none;}#toolbar nav{float:left;height:50px;padding:0 25px;font-size:14px;}#toolbar nav.divider{padding:0px;width:2px;background:url(nav-border.png);}
-#toolbar nav ul li{float:left;margin:0 6px;}#toolbar nav ul li#saved{padding:5px 15px 7px;position:relative;top:8px;display:block;width:60px;color:#727272;}
+#toolbar nav ul li{float:left;margin:0 6px;}#toolbar nav ul li#saved{padding:5px 15px 7px;position:relative;top:8px;display:block;width:60px;color:#727272;}#toolbar nav ul li#saved.saving{color:#800000;}
 #toolbar nav ul a{top:8px;position:relative;display:block;}#toolbar nav ul a.logo{padding:0px;background-color:#cfcfcf;}#toolbar nav ul a.logo:hover{background-color:#cfcfcf !important;}
 #toolbar nav ul.user-actions li{margin-right:6px;margin-left:0;}#toolbar nav ul.user-actions li.user-info{padding-top:5px;}#toolbar nav ul.user-actions li.user-info .hello{font-weight:normal;font-style:italic;color:#8d8d8d;text-shadow:1px 1px 1px #ffffff;padding-top:3px;width:220px;}#toolbar nav ul.user-actions li.user-info .hello .name{font-style:normal;font-weight:bold;}
 #toolbar nav ul.user-actions li a{background:none;display:block;font-size:14px;padding:0;text-decoration:underline;text-transform:lowercase;text-shadow:1px 1px 1px #ffffff;font-weight:bold;position:relative;top:0;line-height:14px;}
