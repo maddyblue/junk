@@ -56,7 +56,7 @@ $(function() {
 			clear();
 			timeout = setTimeout(function() {
 					toolbardiv.hide();
-				}, 1000);
+				}, 100000);
 		};
 
 		var c = toolbardiv.children();
