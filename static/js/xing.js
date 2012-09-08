@@ -56,10 +56,10 @@ $(function() {
 			clear();
 			timeout = setTimeout(function() {
 					toolbardiv.hide();
-				}, 100000);
+				}, 200);
 		};
 
-		var c = toolbardiv.children();
+		var c = toolbardiv.find('*');
 		c.focus(clear);
 		c.blur(set);
 
