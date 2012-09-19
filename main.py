@@ -980,7 +980,7 @@ class AdminEditPost(BaseHandler):
 				setattr(p, k, self.request.get(k))
 
 		p.date = datetime.datetime.strptime(self.request.get('date'), self.DATE_FMT)
-		p.tags = [t.strip() for t in self.request.get('tags').split(',')]
+		p.tags = [t.strip() for t in self.request.get('tags').split(',') if t.strip()]
 		p.autolink = self.request.get('autolink') == 'on'
 
 		d = self.request.get('draft') == 'on'
