@@ -15,6 +15,7 @@ $(function() {
 						'<li data-wysihtml5-command="justifyLeft" title="Left justify text" class="command"></li>' +
 						'<li data-wysihtml5-command="justifyCenter" title="Center justify text" class="command"></li>' +
 						'<li data-wysihtml5-command="justifyRight" title="Right justify text" class="command"></li>' +
+						'<li data-wysihtml5-action="change_view" title="Show HTML class="action"></li>' +
 					'</ul>' +
 				'</header>' +
 				'<div data-wysihtml5-dialog="createLink" style="display: none;">' +

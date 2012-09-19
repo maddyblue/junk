@@ -8,7 +8,7 @@
 	display: inline-block;
 	cursor: pointer;
 	height: 30px;
-	width: 50px;
+	width: 44px;
 }
 
 [data-wysihtml5-command]::after,
@@ -61,47 +61,51 @@
 }
 
 [data-wysihtml5-command="bold"]::after {
-	background-position: 0px center;
+	background-position: 5px center;
 }
 
 [data-wysihtml5-command="italic"]::after {
-	background-position: -50px center;
+	background-position: -24px center;
 }
 
 [data-wysihtml5-command="insertUnorderedList"]::after {
-	background-position: -100px center;
+	background-position: -58px center;
 }
 
 [data-wysihtml5-command="insertOrderedList"]::after {
-	background-position: -150px center;
+	background-position: -100px center;
 }
 
 [data-wysihtml5-command="formatBlock"][data-wysihtml5-command-value="h1"]::after {
-	background-position: -200px center;
+	background-position: -138px center;
 }
 
 [data-wysihtml5-command="formatBlock"][data-wysihtml5-command-value="h2"]::after {
-	background-position: -250px center;
+	background-position: -182 center;
 }
 
 [data-wysihtml5-command="createLink"]::after {
-	background-position: -300px center;
+	background-position: -223px center;
 }
 
 [data-wysihtml5-command="insertImage"]::after {
-	background-position: -350px center;
+	background-position: -259px center;
 }
 
 [data-wysihtml5-command="justifyLeft"]::after {
-	background-position: -400px center;
+	background-position: -297px center;
 }
 
 [data-wysihtml5-command="justifyCenter"]::after {
-	background-position: -450px center;
+	background-position: -337px center;
 }
 
 [data-wysihtml5-command="justifyRight"]::after {
-	background-position: -500px center;
+	background-position: -378px center;
+}
+
+[data-wysihtml5-action="change_view"]::after {
+	background-position: -421px center;
 }
 
 .wysihtml5-action-active,
@@ -154,16 +158,5 @@
 
 [data-wysihtml5-dialog-action] {
 	padding: 4px;
-	/*color: #fff;*/
 	cursor: pointer;
 }
-
-/*
-[data-wysihtml5-dialog-action="save"] {
-	background: #007200;
-}
-
-[data-wysihtml5-dialog-action="cancel"] {
-	background: #999;
-}
-*/
