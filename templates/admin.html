@@ -3,6 +3,7 @@
 <head>
 	<link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
 	{{ jquery }}
+	<script src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div class="navbar">
@@ -14,6 +15,14 @@
 					<li><a href="{{ 'admin-new-post'|url }}">new blog post</a></li>
 					<li><a href="{{ 'admin-new-image'|url }}">upload image</a></li>
 					<li><a href="{{ 'admin-sync-authors'|url }}">sync authors</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">colors <b class="caret"></b></a>
+						<ul class="dropdown-menu" role="menu">
+							{% for t in themes %}
+								<li><a href="{{ 'admin-colors'|url(theme=t) }}">{{ t }}</a></li>
+							{% endfor %}
+						</ul>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -40,5 +49,11 @@
 		{% endblock %}
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		$(function() {
+			$('.dropdown-toggle').dropdown()
+		});
+	</script>
 </body>
 </html>

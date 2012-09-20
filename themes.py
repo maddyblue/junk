@@ -3,6 +3,12 @@ THEMES = [
 	THEME_MARCO,
 ]
 
+COLORS = {
+	THEME_MARCO: [
+		'marco',
+	],
+}
+
 NAV_LEFT = 'left'
 NAV_RIGHT = 'right'
 NAV_TOP = 'top'

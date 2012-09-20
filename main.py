@@ -936,6 +936,7 @@ class Admin(BaseHandler):
 		self.render('admin.html', {
 			'drafts': list(models.SiteBlogPost.drafts()),
 			'posts': models.SiteBlogPost.published(),
+			'themes': models.THEMES,
 		})
 
 class AdminNewPost(BaseHandler):
@@ -1167,6 +1168,101 @@ class AdminSyncAuthors(BaseHandler):
 
 		self.redirect(webapp2.uri_for('admin'))
 
+class Colors(BaseHandler):
+	def get(self, theme, pagename=''):
+		if theme not in models.THEMES:
+			return
+
+		user, site = self.us()
+		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
+
+		if not pagename:
+			page = pages[site.pages[0]]
+		else:
+			for p in pages.values():
+				if p.name == pagename:
+					page = p
+					break
+			else:
+				page = None
+
+		images = ndb.get_multi(page.images)
+		basedir = 'themes/%s/' %site.theme
+		colors = models.Color.get(theme)
+
+		self.render(basedir + 'index.html', {
+			'base': '/static/' + basedir,
+			'colors': colors,
+			'get': self.request.GET,
+			'images': images,
+			'mode': 'colors',
+			'page': page,
+			'pagenum': 0,
+			'pages': pages,
+			'pagetemplate': basedir + page.type + '.html',
+			'rel': webapp2.uri_for('admin-colors', theme=theme) + '/',
+			'site': site,
+			'theme': theme,
+		})
+
+class ColorsLess(BaseHandler):
+	@ndb.toplevel
+	def get(self, theme):
+		if theme not in models.THEMES:
+			return
+
+		color = models.Color.get(theme)
+
+		for k, v in color.data.iteritems():
+			self.response.write('@%s: #%s;\n' %(k, hex(v)[2:]))
+
+		f = open(os.path.join('styles', theme + '.less')).read()
+		self.response.write(f)
+
+		self.response.write("""
+			#color_editor {
+				background: white;
+				position: absolute;
+				top: 100px;
+				font-size: 12px;
+				border: 1px solid black;
+				color: black;
+				ul {
+					list-style: none;
+					margin: 0;
+					padding: 0;
+
+					li {
+						padding: 1px;
+
+						.miniColors-triggerWrap {
+							border: 1px solid black;
+						}
+					}
+				}
+				input {
+					width: 50px;
+					color: black;
+				}
+			}
+		""")
+
+class ColorSave(BaseHandler):
+	def get(self, theme):
+		if theme not in models.THEMES:
+			return
+
+		name = self.request.get('name')
+		color = int(self.request.get('color')[1:], 16)
+
+		def callback():
+			c = models.Color.get_by_id(theme)
+			if name in c.data:
+				c.data[name] = color
+			c.put()
+
+		ndb.transaction(callback)
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -1215,6 +1311,7 @@ app = webapp2.WSGIApplication([
 	# admin
 	webapp2.Route(r'/admin', handler='main.Admin', name='admin'),
 	webapp2.Route(r'/admin/', handler='main.Admin'),
+	webapp2.Route(r'/admin/colors/<theme>', handler='main.Colors', name='admin-colors'),
 	webapp2.Route(r'/admin/blog-image/<postid>', handler='main.AdminBlogImage', name='admin-blog-image'),
 	webapp2.Route(r'/admin/clear', handler='main.Clear', name='clear'),
 	webapp2.Route(r'/admin/edit-post/<postid>', handler='main.AdminEditPost', name='admin-edit-post'),
@@ -1223,6 +1320,10 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/new-post', handler='main.AdminNewPost', name='admin-new-post'),
 	webapp2.Route(r'/admin/upload-image/<postid>', handler='main.AdminUploadImage', name='admin-upload-image', defaults={'postid': 0}),
 	webapp2.Route(r'/admin/sync-authors', handler='main.AdminSyncAuthors', name='admin-sync-authors'),
+
+	# colors
+	webapp2.Route(r'/admin/colors/styles/<theme>.less', handler='main.ColorsLess', name='colors-less'),
+	webapp2.Route(r'/admin/colors/save/<theme>', handler='main.ColorSave', name='color-save'),
 
 	# google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),

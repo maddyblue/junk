@@ -10,8 +10,9 @@ from google.appengine.ext.webapp import template
 import jinja2
 import webapp2
 
-import filters
 from settings import *
+import filters
+import themes
 
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
@@ -126,3 +127,14 @@ def slugify(value):
 def markdown(text):
 	import markdown2
 	return markdown2.markdown(text)
+
+def style_colors(theme):
+	c = themes.COLORS[theme][0]
+	f = open(os.path.join('styles', theme, c + '.less')).read()
+	colors = {}
+	for c in f.splitlines():
+		m = re.match('@([-a-z]+): ?#([0-9a-f]{6});', c, re.I)
+		if m:
+			colors[m.group(1)] = int(m.group(2), 16)
+
+	return colors

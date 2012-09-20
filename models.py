@@ -664,3 +664,19 @@ def update_tags(key):
 
 		t.count = len(v.keys)
 		t.put()
+
+class Color(ndb.Model):
+	data = ndb.JsonProperty('j', indexed=False)
+
+	@classmethod
+	def get(cls, theme):
+		if theme not in THEMES:
+			return
+
+		color = Color.get_by_id(theme)
+		if not color:
+			color = Color(id=theme)
+			color.data = utils.style_colors(theme)
+			color.put_async()
+
+		return color

@@ -5,11 +5,12 @@ var less = require('./less');
 var jsp = require('./uglify-js/uglify-js.js').parser;
 var pro = require('./uglify-js/uglify-js.js').uglify;
 
-function lessc(fpath) {
+function lessc(fpath, foutput) {
+	foutput = typeof foutput !== 'undefined' ? foutput : fpath + '.css';
 	var dir = path.dirname(fpath);
 	var fname = path.basename(fpath);
 
-	console.log('lessc: ' + fpath);
+	console.log('lessc: ' + fpath + '.less -> ' + foutput);
 
 	try
 	{
@@ -23,7 +24,7 @@ function lessc(fpath) {
 		});
 
 		parser.parse(data, function (e, tree) {
-			tree.toCSS({ compress: true }).to(fpath + '.css'); // Minify CSS output
+			tree.toCSS({ compress: true }).to(foutput);
 		});
 	}
 	catch(err)
@@ -65,20 +66,35 @@ function run(command) {
 	shell.exec(command);
 }
 
+// compile less
+
 lessc('static/css/base');
 lessc('static/css/blog');
 lessc('static/css/edit');
 lessc('static/xing-wysihtml5/css/editor');
 
-lessc('static/themes/marco/css/style');
+// minify js
 
 uglifyc('static/js/jquery.*.js', 'static/js/site.min.js');
 uglifyc('static/js/edit.js');
 uglifyc('static/js/blog.js');
 
-var f = shell.find('static/themes').filter(function(file) { return file.match(/[^.min]\.js$/); });
+f = shell.find('static/themes').filter(function(file) { return file.match(/[^.min]\.js$/); });
 for(var i = 0; i < f.length; i++) {
 	uglifyc(f[i]);
+}
+
+// themes
+
+f = shell.ls('styles/*.less');
+for(var i = 0; i < f.length; i++) {
+	t = path.basename(f[i], '.less');
+
+	themes = shell.ls('styles/' + t + '/*.less');
+	for(var j = 0; j < themes.length; j++) {
+		color = path.basename(themes[j], '.less');
+		lessc(path.join('styles', t, color), path.join('static', 'themes', t, 'css', color + '.css'));
+	}
 }
 
 // images
