@@ -1190,7 +1190,8 @@ class Colors(BaseHandler):
 		basedir = 'themes/%s/' %site.theme
 		colors = models.Color.get(theme)
 
-		self.render(basedir + 'index.html', {
+		self.render('colors.html', {
+			'basetemplate': basedir + 'index.html',
 			'base': '/static/' + basedir,
 			'colors': colors,
 			'get': self.request.GET,
@@ -1218,34 +1219,6 @@ class ColorsLess(BaseHandler):
 
 		f = open(os.path.join('styles', theme + '.less')).read()
 		self.response.write(f)
-
-		self.response.write("""
-			#color_editor {
-				background: white;
-				position: absolute;
-				top: 100px;
-				font-size: 12px;
-				border: 1px solid black;
-				color: black;
-				ul {
-					list-style: none;
-					margin: 0;
-					padding: 0;
-
-					li {
-						padding: 1px;
-
-						.miniColors-triggerWrap {
-							border: 1px solid black;
-						}
-					}
-				}
-				input {
-					width: 50px;
-					color: black;
-				}
-			}
-		""")
 
 class ColorSave(BaseHandler):
 	def get(self, theme):

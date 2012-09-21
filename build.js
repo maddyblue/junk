@@ -70,6 +70,7 @@ function run(command) {
 
 lessc('static/css/base');
 lessc('static/css/blog');
+lessc('static/css/colors');
 lessc('static/css/edit');
 lessc('static/xing-wysihtml5/css/editor');
 
