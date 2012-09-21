@@ -21,8 +21,21 @@
 				d += '<li>' + k + ': <input type="text" class="colorpicker" value="#' + TNMcolors[k] + '" data-color-name="' + k + '"></li>';
 			}
 
+			d += '<li>' +
+				'<input type="text" name="name" id="color-name"> ' +
+				'<a href="#" id="color-commit">save</a> ' +
+				'<span id="color-saved">saved</span>' +
+				'</li>';
+			d += '<li><select id="color-names">' +
+			{% for n in saved|sort %}
+				'<option>{{ n }}</option>' +
+			{% endfor %}
+				'</select> ' +
+				'<a href="#" id="color-load">load</a> ' +
+				'<a href="#" id="color-delete">delete</a>' +
+				'</li>';
+			d += '<li><a href="{{ 'color-reset'|url(theme=theme) }}">reset to default colors</a></li>';
 			d += '</ul>';
-			d += '<a href="{{ 'color-reset'|url(theme=theme) }}">reset</a>';
 			d += '</div>';
 			$('body').append(d);
 
@@ -34,6 +47,47 @@
 						data: {name: name, color: hex}
 					}).done(function() { less.refresh(); });
 				}
+			});
+
+			$('#color-commit').click(function() {
+				var c = {};
+				$('.colorpicker').each(function(k, v) {
+					var d = $(v);
+					c[d.attr('data-color-name')] = d.val();
+				});
+				c['_name'] = $('#color-name').val();
+
+				if(!c['_name']) {
+					alert('No name');
+					return;
+				}
+
+				$.ajax({
+					url: "{{ 'color-commit'|url(theme=theme) }}",
+					data: c
+				}).done(function() {
+					$('#color-saved').show().fadeOut(2000);
+					$('#color-name').val('');
+					$('#color-names').prepend('<option>' + c['_name'] + '</option>');
+				});
+			});
+
+			$('#color-load').click(function() {
+				$.ajax({
+					url: "{{ 'color-load'|url(theme=theme) }}",
+					data: {name: $('#color-names').val()}
+				}).done(function() {
+					window.location.reload(false);
+				});
+			});
+
+			$('#color-delete').click(function() {
+				$.ajax({
+					url: "{{ 'color-delete'|url(theme=theme) }}",
+					data: {name: $('#color-names').val()}
+				}).done(function() {
+					window.location.reload(false);
+				});
 			});
 		});
 	</script>

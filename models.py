@@ -680,3 +680,16 @@ class Color(ndb.Model):
 			color.put_async()
 
 		return color
+
+class ColorSaved(Color):
+	created = ndb.DateTimeProperty('c', auto_now_add=True)
+
+	@classmethod
+	def theme(cls, theme):
+		k = ndb.Key('Color', theme)
+		keys = cls.query(ancestor=k).iter(keys_only=True)
+		names = []
+		for k in keys:
+			names.append(k.id())
+
+		return names

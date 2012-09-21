@@ -1190,6 +1190,8 @@ class Colors(BaseHandler):
 		basedir = 'themes/%s/' %site.theme
 		colors = models.Color.get(theme)
 
+		saved = models.ColorSaved.theme(theme)
+
 		self.render('colors.html', {
 			'basetemplate': basedir + 'index.html',
 			'base': '/static/' + basedir,
@@ -1202,6 +1204,7 @@ class Colors(BaseHandler):
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
 			'rel': webapp2.uri_for('admin-colors', theme=theme) + '/',
+			'saved': saved,
 			'site': site,
 			'theme': theme,
 		})
@@ -1244,6 +1247,53 @@ class ColorReset(BaseHandler):
 		color = models.Color.get(theme)
 		color.key.delete()
 		self.redirect(webapp2.uri_for('admin-colors', theme=theme))
+
+class ColorCommit(BaseHandler):
+	def get(self, theme):
+		if theme not in models.THEMES:
+			return
+
+		color = models.Color.get(theme)
+		name = self.request.get('_name')
+		if not name:
+			return
+
+		c = models.ColorSaved(id=name, parent=color.key)
+		c.data = {}
+
+		for k, v in color.data.iteritems():
+			d = self.request.get(k)
+			if not d:
+				return
+
+			c.data[k] = int(d[1:], 16)
+
+		c.put()
+
+class ColorLoad(BaseHandler):
+	def get(self, theme):
+		if theme not in models.THEMES:
+			return
+
+		p = ndb.Key('Color', theme)
+		color = models.ColorSaved.get_by_id(self.request.get('name'), parent=p)
+		if not color:
+			return
+
+		c = models.Color.get(theme)
+		c.data = color.data
+		c.put()
+
+class ColorDelete(BaseHandler):
+	def get(self, theme):
+		if theme not in models.THEMES:
+			return
+
+		p = ndb.Key('Color', theme)
+		color = models.ColorSaved.get_by_id(self.request.get('name'), parent=p)
+		if not color:
+			return
+		color.key.delete()
 
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
@@ -1304,9 +1354,12 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/sync-authors', handler='main.AdminSyncAuthors', name='admin-sync-authors'),
 
 	# colors
-	webapp2.Route(r'/admin/colors/styles/<theme>.less', handler='main.ColorsLess', name='colors-less'),
-	webapp2.Route(r'/admin/colors/save/<theme>', handler='main.ColorSave', name='color-save'),
+	webapp2.Route(r'/admin/colors/commit/<theme>', handler='main.ColorCommit', name='color-commit'),
+	webapp2.Route(r'/admin/colors/delete/<theme>', handler='main.ColorDelete', name='color-delete'),
+	webapp2.Route(r'/admin/colors/load/<theme>', handler='main.ColorLoad', name='color-load'),
 	webapp2.Route(r'/admin/colors/reset/<theme>', handler='main.ColorReset', name='color-reset'),
+	webapp2.Route(r'/admin/colors/save/<theme>', handler='main.ColorSave', name='color-save'),
+	webapp2.Route(r'/admin/colors/styles/<theme>.less', handler='main.ColorsLess', name='colors-less'),
 
 	# google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),
