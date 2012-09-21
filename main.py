@@ -1344,6 +1344,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin', handler='main.Admin', name='admin'),
 	webapp2.Route(r'/admin/', handler='main.Admin'),
 	webapp2.Route(r'/admin/colors/<theme>', handler='main.Colors', name='admin-colors'),
+	webapp2.Route(r'/admin/colors/<theme>/<pagename>', handler='main.Colors', name='admin-colors-page'),
 	webapp2.Route(r'/admin/blog-image/<postid>', handler='main.AdminBlogImage', name='admin-blog-image'),
 	webapp2.Route(r'/admin/clear', handler='main.Clear', name='clear'),
 	webapp2.Route(r'/admin/edit-post/<postid>', handler='main.AdminEditPost', name='admin-edit-post'),
@@ -1354,12 +1355,12 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/sync-authors', handler='main.AdminSyncAuthors', name='admin-sync-authors'),
 
 	# colors
-	webapp2.Route(r'/admin/colors/commit/<theme>', handler='main.ColorCommit', name='color-commit'),
-	webapp2.Route(r'/admin/colors/delete/<theme>', handler='main.ColorDelete', name='color-delete'),
-	webapp2.Route(r'/admin/colors/load/<theme>', handler='main.ColorLoad', name='color-load'),
-	webapp2.Route(r'/admin/colors/reset/<theme>', handler='main.ColorReset', name='color-reset'),
-	webapp2.Route(r'/admin/colors/save/<theme>', handler='main.ColorSave', name='color-save'),
-	webapp2.Route(r'/admin/colors/styles/<theme>.less', handler='main.ColorsLess', name='colors-less'),
+	webapp2.Route(r'/admin/color/commit/<theme>', handler='main.ColorCommit', name='color-commit'),
+	webapp2.Route(r'/admin/color/delete/<theme>', handler='main.ColorDelete', name='color-delete'),
+	webapp2.Route(r'/admin/color/load/<theme>', handler='main.ColorLoad', name='color-load'),
+	webapp2.Route(r'/admin/color/reset/<theme>', handler='main.ColorReset', name='color-reset'),
+	webapp2.Route(r'/admin/color/save/<theme>', handler='main.ColorSave', name='color-save'),
+	webapp2.Route(r'/admin/color/styles/<theme>.less', handler='main.ColorsLess', name='colors-less'),
 
 	# google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),
