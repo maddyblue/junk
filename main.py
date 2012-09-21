@@ -1236,6 +1236,15 @@ class ColorSave(BaseHandler):
 
 		ndb.transaction(callback)
 
+class ColorReset(BaseHandler):
+	def get(self, theme):
+		if theme not in models.THEMES:
+			return
+
+		color = models.Color.get(theme)
+		color.key.delete()
+		self.redirect(webapp2.uri_for('admin-colors', theme=theme))
+
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
 	'webapp2_extras.sessions': {
@@ -1297,6 +1306,7 @@ app = webapp2.WSGIApplication([
 	# colors
 	webapp2.Route(r'/admin/colors/styles/<theme>.less', handler='main.ColorsLess', name='colors-less'),
 	webapp2.Route(r'/admin/colors/save/<theme>', handler='main.ColorSave', name='color-save'),
+	webapp2.Route(r'/admin/colors/reset/<theme>', handler='main.ColorReset', name='color-reset'),
 
 	# google site verification
 	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='main.GoogleSiteVerification'),

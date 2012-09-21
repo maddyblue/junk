@@ -21,7 +21,9 @@
 				d += '<li>' + k + ': <input type="text" class="colorpicker" value="#' + TNMcolors[k] + '" data-color-name="' + k + '"></li>';
 			}
 
-			d += '</ul></div>';
+			d += '</ul>';
+			d += '<a href="{{ 'color-reset'|url(theme=theme) }}">reset</a>';
+			d += '</div>';
 			$('body').append(d);
 
 			$('.colorpicker').miniColors({
