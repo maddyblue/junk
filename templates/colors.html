@@ -77,7 +77,7 @@
 					url: "{{ 'color-load'|url(theme=theme) }}",
 					data: {name: $('#color-names').val()}
 				}).done(function() {
-					window.location.reload(false);
+					window.location.reload(true);
 				});
 			});
 
@@ -86,7 +86,7 @@
 					url: "{{ 'color-delete'|url(theme=theme) }}",
 					data: {name: $('#color-names').val()}
 				}).done(function() {
-					window.location.reload(false);
+					window.location.reload(true);
 				});
 			});
 		});
