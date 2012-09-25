@@ -983,6 +983,7 @@ class AdminEditPost(BaseHandler):
 		p.date = datetime.datetime.strptime(self.request.get('date'), self.DATE_FMT)
 		p.tags = [t.strip() for t in self.request.get('tags').split(',') if t.strip()]
 		p.autolink = self.request.get('autolink') == 'on'
+		p.no_editor = self.request.get('no_editor') == 'on'
 
 		d = self.request.get('draft') == 'on'
 		a = self.request.get('author').strip()

@@ -31,6 +31,20 @@
 						</div>
 					</div>
 					<div class="control-group">
+						<label class="control-label" for="no_editor">disable editor</label>
+						<div class="controls">
+							<input id="editor" type="checkbox" name="no_editor" {% if p.no_editor %}checked{% endif %}/>
+							<span class="help-inline">
+								<span class="label label-important">WARNING:</span>
+								{% if p.no_editor %}
+									unchecking this and saving will remove any weird HTML (like youtube.com iframes) from the post
+								{% else %}
+									after checking this, you cannot return to using the editor for this post without it removing any HTML you insert that it does not support (like youtube.com iframes)
+								{% endif %}
+							</span>
+						</div>
+					</div>
+					<div class="control-group">
 						<label class="control-label" for="tags">tags</label>
 						<div class="controls">
 							<input id="tags" type="text" name="tags" value="{{ p.tags|join(', ') }}" class="span6"/> (comma separated)
@@ -75,10 +89,12 @@
 	</div>
 </div>
 
+{% if not p.no_editor %}
 <link rel="stylesheet" href="/static/xing-wysihtml5/css/stylesheet.css">
 
 <script src="/static/xing-wysihtml5/wysihtml5-parser_rules-advanced.js" type="text/javascript"></script>
 <script src="/static/xing-wysihtml5/wysihtml5-0.3.0.min.js" type="text/javascript"></script>
 <script src="/static/js/xing.js" type="text/javascript"></script>
+{% endif %}
 
 {% endblock %}
