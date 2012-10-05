@@ -20,7 +20,6 @@ function linkCheck(v, i) {
 	return '';
 }
 
-var cur_img;
 function loadimg(id) {
 	var o = $.tnm.imageurls[id];
 
@@ -46,7 +45,7 @@ function loadimg(id) {
 }
 
 function resize(event, ui) {
-	var o = $.tnm.imageurls[cur_img];
+	var o = $.tnm.imageurls[$.tnm.edit_image_id];
 	var wscale = o.wscale;
 	var hscale = o.hscale;
 	var min_scale = o.min_scale;
@@ -61,6 +60,7 @@ function resize(event, ui) {
 	var basetop = o.basetop;
 	var baseleft = o.baseleft;
 	var f = 0.8;
+	basetop += 52; // admin toolbar height
 
 	$("#containerimg").css({height: h, width: w});
 	$("#leftcontainer").css({width: w - portw, height: porth, top: h - porth});
@@ -74,6 +74,7 @@ function resize(event, ui) {
 		top: basetop + porth - h,
 		left: baseleft + portw - w,
 	});
+	$('#imgsave').css({top: h - porth + 5, right: w - portw + 3});
 
 	var pos = $("#containerimg").position();
 	if(pos.left + w > 2 * w - portw)
@@ -86,9 +87,11 @@ function resize(event, ui) {
 	o.s = size;
 }
 
-function make_dialog(id, header, title, contents, onsave) {
+function make_dialog(id, header, title, contents, onsave, savename) {
+	savename = savename ? savename : 'save';
+
 	var d = $(
-		'<div class="dialog">' +
+		'<div class="dialog" id="' + id + '">' +
 			'<div class="inner">' +
 				'<div class="header">' +
 					header +
@@ -100,7 +103,7 @@ function make_dialog(id, header, title, contents, onsave) {
 						contents +
 				'</div>' +
 				'<div class="buttons">' +
-					'<a href="" class="btn save" ng-click="' + onsave + '()">save</a>' +
+					'<a href="" class="btn save" ng-click="' + onsave + '()">' + savename + '</a>' +
 					'<a href="" class="btn close">close</a>' +
 				'</div>' +
 			'</div>' +
@@ -116,12 +119,18 @@ function make_dialog(id, header, title, contents, onsave) {
 	});
 
 	d.hide();
+
+	$('body').append(d);
+	d.offset({left: d.outerWidth() / 2});
+
 	return d;
 }
 
-$(function() {
-	var backup;
+function stopImageEdit() {
+	$('#imgcontainer').hide();
+}
 
+$(function() {
 	/*
 	$('body').prepend(
 		'<div class="toolbar">' +
@@ -185,6 +194,18 @@ $(function() {
 					'</ul>' +
 				'</li>' +
 			'</ul></nav>' +
+		'</div>'
+	);
+
+	$('body').append(
+		'<div id="imgcontainer">' +
+			'<div id="imgsave" ng-click="imgsave()">save</div>' +
+			'<div id="topcontainer" class="containerdiv"></div>' +
+			'<div id="leftcontainer" class="containerdiv"></div>' +
+			'<span id="containerimg"></span>' +
+			'<div id="imgslider"></div>' +
+			'<div id="rightcontainer" class="containerdiv"></div>' +
+			'<div id="bottomcontainer" class="containerdiv"></div>' +
 		'</div>'
 	);
 
@@ -358,104 +379,6 @@ $(function() {
 	// remove <a> from around images
 	$("a:has(img)").find(".editable.image").unwrap();
 
-	$(".editable.image").each(function() {
-		var f = this.id + "_file";
-		var d = this.id + "_div";
-		var r = this.id + "_iframe";
-		var form = this.id + "_form";
-		var o = $.tnm.imageurls[this.id];
-
-		var h = '<div class="modal" id="' + d + '">' +
-			'<p>Upload (' + o['portw'] + 'x' + o['porth'] + '): <form method="POST" id="' + form + '" target="' + r + '" enctype="multipart/form-data"><input type="file" id="' + f + '" name="' + f + '"></form><a class="upload image" href="#">upload</a></p>' +
-			'<iframe id="' + r + '" src="#" style="width: 0; height: 0; border: 0px solid #fff;"></iframe>' +
-			'<p>Existing: <select id="' + this.id + '_select">' +
-			$.tnm.existingimgs +
-			'</select> <a href="#" class="imgselect">use</a></p>' +
-			'<p><a class="close image" href="#">save</a>' +
-			' <a href="#" class="imgclear">clear</a>' +
-			' <a href="#" class="cancel">cancel</a>' +
-			'</p></div>';
-		$(this).after(h);
-	});
-
-	$(document).on("click", ".close.image", function() {
-		var d = $(this).parents("div").first();
-		var i = d.prev();
-		var o = $.tnm.imageurls[i[0].id];
-
-		// resize isn't called if the image is only dragged around, so call it now
-		resize(0, {'value': o.s});
-
-		savemap[i[0].id + "_x"] = o.x;
-		savemap[i[0].id + "_y"] = o.y;
-		savemap[i[0].id + "_s"] = o.s;
-		$(this).parents(".modal").hide();
-		stopImageEdit();
-		//save();
-
-		return false;
-	});
-
-	$(document).on("click", ".upload.image", function() {
-		var d = $(this).parents("div").first();
-		var i = d.prev();
-		var form = $("#" + i[0].id + "_form");
-
-		$.ajax({
-			url: $.tnm.uploadurl + '?image=' + i[0].id,
-			success: function(data) {
-				form.attr('action', data);
-				form.ajaxSubmit({
-					success: function(data, stat, xhr) {
-						if(data == '')
-						{
-							alert("error during upload");
-							return
-						}
-
-						var j = jQuery.parseJSON(data);
-						i[0].src = j.url;
-						var o = $.tnm.imageurls[i[0].id];
-						o.url = j.url;
-						o.orig = j.orig;
-						o.basew = j.w;
-						o.baseh = j.h;
-						o.s = j.s;
-						$("#containerimg").css('background-image', 'url(' + o.orig + ')');
-						loadimg(i[0].id);
-						resize(0, {'value': o.s});
-					}
-				});
-			}
-		});
-	});
-
-	$(document).on("click", ".editable.image", function() {
-		stopImageEdit();
-		$(".modal").hide();
-
-		var h = '<div id="imgcontainer">' +
-			'<div id="topcontainer" class="containerdiv"></div>' +
-			'<div id="leftcontainer" class="containerdiv"></div>' +
-			'<span id="containerimg"></span>' +
-			'<div id="imgslider"></div>' +
-			'<div id="rightcontainer" class="containerdiv"></div>' +
-			'<div id="bottomcontainer" class="containerdiv"></div>' +
-			'</div>';
-		$(this).before(h);
-
-		cur_img = this.id;
-		var o = $.tnm.imageurls[this.id];
-
-		$("#containerimg").draggable({ containment: 'parent' });
-		$("#containerimg").css('background-image', 'url(' + o.orig + ')');
-
-		loadimg(this.id);
-		resize(0, {'value': o.s});
-
-		return false;
-	});
-
 	$(document).on("click", ".imgclear", function() {
 		var d = $(this).parents("div").first();
 		var i = d.prev();
@@ -482,37 +405,23 @@ $(function() {
 
 	// all
 
-	function stopImageEdit() {
-		$("#imgcontainer").remove();
-	}
-
-	$(document).on("click", ".editable", function(event) {
-		$('#' + this.id + '_div').show();
-		$("." + this.id + "_focus").focus();
-		event.preventDefault();
-	});
-
-	$(document).on("click", ".cancel", function(event) {
-		$(this).parents(".modal").hide();
-		stopImageEdit();
-		event.preventDefault();
-	});
-
 	$(document).keyup(function(e){
 		if(e.keyCode == 27)
 		{
-			$(".modal").hide();
+			$(".dialog").hide();
 			stopImageEdit();
 		}
 	});
 
 	$('.editable').each(function() {
 		var d = $('<div class="edithover"></div>');
+		var t = $(this);
 		d.attr('id', this.id + '_edit');
-		d.offset($(this).offset());
-		d.width($(this).outerWidth());
-		d.height($(this).outerHeight());
+		d.offset(t.offset());
+		d.width(t.outerWidth());
+		d.height(t.outerHeight());
 		$('body').append(d);
+		$.data(d[0], 'id', this.id)
 
 		d.mouseout(function() {
 			d.hide();
@@ -522,35 +431,35 @@ $(function() {
 			d.show();
 		});
 
-		$(this).mouseover(function() {
+		t.mouseover(function() {
 			d.show();
 		});
 
-		if($(this).hasClass('line'))
+		if(t.hasClass('line'))
 		{
-			var i = $('<input type="text" value="' + $(this).html() + '" />');
-			i.width($(this).width());
-			i.height($(this).height());
-			i.css('background', $(this).css('background'));
-			i.css('background-color', $(this).css('background-color'));
-			i.css('border', $(this).css('border'));
-			i.css('color', $(this).css('color'));
-			i.css('font-family', $(this).css('font-family'));
-			i.css('font-size', $(this).css('font-size'));
-			i.css('font-weight', $(this).css('font-weight'));
-			i.css('margin', $(this).css('margin'));
-			i.css('padding', $(this).css('padding'));
-			i.css('text-transform', $(this).css('text-transform'));
+			var i = $('<input type="text" value="' + t.html() + '" />');
+			i.width(t.width());
+			i.height(t.height());
+			i.css('background', t.css('background'));
+			i.css('background-color', t.css('background-color'));
+			i.css('border', t.css('border'));
+			i.css('color', t.css('color'));
+			i.css('font-family', t.css('font-family'));
+			i.css('font-size', t.css('font-size'));
+			i.css('font-weight', t.css('font-weight'));
+			i.css('margin', t.css('margin'));
+			i.css('padding', t.css('padding'));
+			i.css('text-transform', t.css('text-transform'));
 
 			d.append(i);
 		}
-		else if($(this).hasClass('image'))
+		else if(t.hasClass('image'))
 		{
-			d.append('<div class="img-hover img-edit">edit</div>')
-			d.append('<div class="img-hover img-change">change</div>')
-			d.append('<div class="img-hover img-link">link</div>')
+			d.append('<a class="img-hover img-edit">edit</a>')
+			d.append('<a class="img-hover img-change" href="#">change</a>')
+			d.append('<a class="img-hover img-link">link</a>')
 		}
-		else if($(this).hasClass('social'))
+		else if(t.hasClass('social'))
 		{
 			var i = this.id;
 
@@ -572,13 +481,46 @@ $(function() {
 				'save_social'
 			);
 
-			$('body').append(dialog);
 			$(d).click(function () {
 				dialog.show();
 			});
-
-			dialog.offset({left: dialog.outerWidth() / 2});
 		}
+	});
+
+	var d = make_dialog(
+		'image_change_dialog',
+		'Upload/change image',
+		'Change Image',
+		'<iframe id="image_upload_iframe" src="#" style="visibility: hidden; display: none"></iframe>' +
+		'<form method="POST" id="image_upload_form" target="image_upload_iframe" enctype="multipart/form-data">' +
+		'<input type="file" id="image_upload_file" name="file">' +
+		'</form>',
+		'upload_image',
+		'upload'
+	);
+
+	$('.img-hover.img-edit').click(function(e) {
+		var id = $.data($(this).parent()[0], 'id');
+		$(e.target).parent().hide();
+
+		$.tnm.edit_image_id = id;
+		var o = $.tnm.imageurls[id];
+
+		$("#containerimg").draggable({ containment: 'parent' })
+			.css('background-image', 'url(' + o.orig + ')');
+		$("#imgcontainer").show();
+
+		loadimg(id);
+		resize(0, {'value': o.s});
+
+		e.preventDefault();
+	});
+
+	$('.img-hover.img-change').click(function(e) {
+		var id = $.data($(this).parent()[0], 'id');
+		$.tnm.upload_image_id = id;
+		$('#image_change_dialog').show();
+		e.preventDefault();
 	});
 });
 
@@ -654,5 +596,52 @@ function TNMCtrl($scope, $http) {
 		});
 
 		return r;
+	};
+
+	$scope.upload_image = function() {
+		var form = $('#image_upload_form');
+		var id = $.tnm.upload_image_id;
+		var i = $('#' + id)[0];
+
+		$.ajax({
+			url: $.tnm.uploadurl + '?image=' + id
+		}).done(function(data) {
+			form.attr('action', data);
+			form.ajaxSubmit({
+				success: function(data, stat, xhr) {
+					if(!data)
+					{
+						alert("error during upload");
+						return;
+					}
+
+					var j = $.parseJSON(data);
+					i.src = j.url;
+
+					var o = $.tnm.imageurls[id];
+					o.url = j.url;
+					o.orig = j.orig;
+					o.basew = j.w;
+					o.baseh = j.h;
+					o.s = j.s;
+
+					form[0].reset();
+				}
+			});
+		});
+	};
+
+	$scope.imgsave = function() {
+		var id = $.tnm.edit_image_id;
+		var i = $.tnm.imageurls[id];
+		resize(0, {'value': i.s});
+		var o = {};
+
+		o[id + '_x'] = i.x;
+		o[id + '_y'] = i.y;
+		o[id + '_s'] = i.s;
+
+		$scope.save(o);
+		stopImageEdit();
 	};
 }
