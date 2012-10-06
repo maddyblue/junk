@@ -47,3 +47,6 @@
 .social_icon.pintrest{background:url(../images/social-icons.png) -175px -34px no-repeat;}
 .social_icon.linkedin{background:url(../images/social-icons.png) -140px -34px no-repeat;}
 .social_icon.youtube{background:url(../images/social-icons.png) -210px -34px no-repeat;}
+#layout_dialog img{margin-right:15px;}
+#layout_dialog img.current{outline:2px solid black;}
+#layout_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}

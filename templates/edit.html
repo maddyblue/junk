@@ -91,15 +91,14 @@ $(function() {
 		'';
 	{% endfor %}
 
-	$.tnm.layouts =
-		{% for i in range(1, page.layouts + 1) %}
-			{% if i == page.layout %}
-				' {{ i }}' +
-			{% else %}
-				' <a href="{{ "layout"|url(siteid=site.key.id(), pageid=page.key.id(), layoutid=i) }}">{{ i }}</a>' +
-			{% endif %}
-		{% endfor %}
-		'';
+	$.tnm.current_layout = '{{ page.layout }}';
+	$.tnm.layouts = {};
+	{% for i in range(1, page.layouts + 1) %}
+		$.tnm.layouts['{{ i }}'] = {
+			url: "{{ "layout"|url(siteid=site.key.id(), pageid=page.key.id(), layoutid=i) }}",
+			img: "/static/images/layouts/{{ site.theme }}/{{ page.type }}-{{ i }}.png"
+		};
+	{% endfor %}
 
 	$.tnm.newpagetypes =
 		{% for t, layouts in site.types|dictsort %}

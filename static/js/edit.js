@@ -89,6 +89,7 @@ function resize(event, ui) {
 
 function make_dialog(id, header, title, contents, onsave, savename) {
 	savename = savename ? savename : 'save';
+	savebtn = onsave ? '<a href="" class="btn save" ng-click="' + onsave + '()">' + savename + '</a>' : '';
 
 	var d = $(
 		'<div class="dialog" id="' + id + '">' +
@@ -103,7 +104,7 @@ function make_dialog(id, header, title, contents, onsave, savename) {
 						contents +
 				'</div>' +
 				'<div class="buttons">' +
-					'<a href="" class="btn save" ng-click="' + onsave + '()">' + savename + '</a>' +
+					savebtn +
 					'<a href="" class="btn close">close</a>' +
 				'</div>' +
 			'</div>' +
@@ -184,6 +185,9 @@ $(function() {
 				'<li><a class="images btn" href="#">media</a></li>' +
 			'</ul></nav>' +
 			'<nav class="divider"></nav>' +
+			'<nav><ul>' +
+				'<li><a class="layout btn">layout</a></li>' +
+			'</ul></nav>' +
 			'<nav class="right"><ul class="user-actions">' +
 				'<li><a href=""><img class="avatar" src=' + $.tnm.gravatar + '" /></a></li>' +
 				'<li class="user-info">' +
@@ -196,6 +200,28 @@ $(function() {
 			'</ul></nav>' +
 		'</div>'
 	);
+
+	var layouts = '';
+	for (var layout in $.tnm.layouts) {
+		if(layout == $.tnm.current_layout) {
+			layouts += '<img src="' + $.tnm.layouts[layout].img + '" class="current"/>';
+		} else {
+			layouts += '<a href="' + $.tnm.layouts[layout].url + '">';
+			layouts += '<img src="' + $.tnm.layouts[layout].img + '"/>';
+			layouts += '</a></li>';
+		}
+	}
+
+	var dialog = make_dialog(
+		'layout_dialog',
+		'Page Layout',
+		'Choose page layout',
+		layouts
+	);
+
+	$('#toolbar a.layout').click(function () {
+		dialog.show();
+	});
 
 	$('body').append(
 		'<div id="imgcontainer">' +
