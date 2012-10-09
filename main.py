@@ -1219,7 +1219,7 @@ class ColorsLess(BaseHandler):
 		color = models.Color.get(theme)
 
 		for k, v in color.data.iteritems():
-			self.response.write('@%s: #%s;\n' %(k, hex(v)[2:]))
+			self.response.write('@%s: #%06x;\n' %(k, v))
 
 		f = open(os.path.join('styles', theme + '.less')).read()
 		self.response.write(f)
