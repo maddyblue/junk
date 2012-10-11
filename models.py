@@ -63,8 +63,9 @@ class Site(ndb.Model):
 
 	size = ndb.IntegerProperty('z', indexed=False, default=0)
 
-	theme = ndb.StringProperty('m', default=THEME_MARCO, choices=THEMES)
+	theme = ndb.StringProperty('m', choices=THEMES)
 	nav = ndb.StringProperty('v', default=NAV_TOP, choices=NAVS)
+	color = ndb.StringProperty('c')
 
 	pages = ndb.KeyProperty('a', repeated=True, indexed=False)
 
@@ -109,6 +110,10 @@ class Site(ndb.Model):
 			p = k.get()
 			if p.type == PAGE_TYPE_BLOG:
 				return p.recent_posts(1)
+
+	@property
+	def colors(self):
+		return colors(self.theme)
 
 	@classmethod
 	def domain_exists(cls, domain):

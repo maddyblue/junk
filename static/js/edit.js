@@ -187,6 +187,7 @@ $(function() {
 			'<nav class="divider"></nav>' +
 			'<nav><ul>' +
 				'<li><a class="layout btn">layout</a></li>' +
+				'<li><a class="colors btn">colors</a></li>' +
 			'</ul></nav>' +
 			'<nav class="right"><ul class="user-actions">' +
 				'<li><a href=""><img class="avatar" src=' + $.tnm.gravatar + '" /></a></li>' +
@@ -208,11 +209,11 @@ $(function() {
 		} else {
 			layouts += '<a href="' + $.tnm.layouts[layout].url + '">';
 			layouts += '<img src="' + $.tnm.layouts[layout].img + '"/>';
-			layouts += '</a></li>';
+			layouts += '</a>';
 		}
 	}
 
-	var dialog = make_dialog(
+	var layout_dialog = make_dialog(
 		'layout_dialog',
 		'Page Layout',
 		'Choose page layout',
@@ -220,7 +221,29 @@ $(function() {
 	);
 
 	$('#toolbar a.layout').click(function () {
-		dialog.show();
+		layout_dialog.show();
+	});
+
+	var colors = '';
+	for (var i = 0; i < $.tnm.colors.length; i++) {
+		if($.tnm.colors[i].name == $.tnm.current_color) {
+			colors += '<img src="' + $.tnm.colors[i].img + '" class="current"/>';
+		} else {
+			colors += '<a href="' + $.tnm.colors[i].url + '">';
+			colors += '<img src="' + $.tnm.colors[i].img + '"/>';
+			colors += '</a>';
+		}
+	}
+
+	var colors_dialog = make_dialog(
+		'colors_dialog',
+		'Colors',
+		'Choose color scheme',
+		colors
+	);
+
+	$('#toolbar a.colors').click(function () {
+		colors_dialog.show();
 	});
 
 	$('body').append(

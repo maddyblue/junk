@@ -54,34 +54,40 @@
 		}
 	}
 
+	.toolbar-btn (@imgurl)
+	{
+		background: @tnm-bg-dark url(@imgurl) 10px 8px no-repeat;
+		padding-left: 35px;
+	}
+
 	&.publish
 	{
-		background: @tnm-bg-dark url(toolbar-publish.png) 10px 8px no-repeat;
-		padding-left: 35px;
+		.toolbar-btn('toolbar-publish.png');
 	}
 
 	&.images
 	{
-		background: @tnm-bg-dark url(toolbar-images.png) 10px 8px no-repeat;
-		padding-left: 35px;
+		.toolbar-btn('toolbar-images.png');
 	}
 
 	&.navigation
 	{
-		background: @tnm-bg-dark url(toolbar-navigation.png) 10px 8px no-repeat;
-		padding-left: 35px;
+		.toolbar-btn('toolbar-navigation.png');
 	}
 
 	&.layout
 	{
-		background: @tnm-bg-dark url(toolbar-layout.png) 10px 8px no-repeat;
-		padding-left: 35px;
+		.toolbar-btn('toolbar-layout.png');
 	}
 
 	&.themes
 	{
-		background: @tnm-bg-dark url(toolbar-themes.png) 10px 8px no-repeat;
-		padding-left: 35px;
+		.toolbar-btn('toolbar-themes.png');
+	}
+
+	&.colors
+	{
+		.toolbar-btn('toolbar-colors.png');
 	}
 
 	&:hover {
@@ -456,7 +462,7 @@
 	}
 }
 
-#layout_dialog {
+#layout_dialog, #colors_dialog {
 	img {
 		margin-right: 15px;
 	}

@@ -220,11 +220,14 @@ class Register(BaseHandler):
 					)
 					user.put()
 
+					default_theme = models.THEME_MARCO
 					site = models.Site.get_or_insert(lsitename,
 						name=sitename,
 						user=user.key,
 						headline=headline,
 						subheader=subheader,
+						theme=default_theme,
+						color=models.COLORS[default_theme][0],
 					)
 
 					if site.user != user.key:
@@ -721,6 +724,24 @@ class Layout(BaseHandler):
 
 		page = models.Page.set_layout(page, long(layoutid))
 		self.redirect(webapp2.uri_for('edit', pagename=page.name))
+
+class SetColors(BaseHandler):
+	def get(self, siteid, color):
+		user, site = self.us()
+
+		if site.key.id() != siteid:
+			return
+
+		if color in models.COLORS[site.theme]:
+
+			def callback():
+				s = site.key.get()
+				s.color = color
+				s.put()
+
+			ndb.transaction(callback)
+
+		self.redirect(webapp2.uri_for('edit-home'))
 
 class NewPage(BaseHandler):
 	def post(self):
@@ -1314,6 +1335,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/blog/author/<author>', handler='main.BlogAuthor', name='site-blog-author'),
 	webapp2.Route(r'/blog/tag/<tag>', handler='main.BlogTag', name='site-blog-tag'),
 	webapp2.Route(r'/checkout', handler='main.Checkout', name='checkout'),
+	webapp2.Route(r'/colors/<siteid>/<color>', handler='main.SetColors', name='colors'),
 	webapp2.Route(r'/edit', handler='main.Edit', name='edit-home'),
 	webapp2.Route(r'/edit/<pagename>', handler='main.Edit', name='edit'),
 	webapp2.Route(r'/edit/<pagename>/<pagenum>', handler='main.Edit', name='edit-page'),

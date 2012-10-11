@@ -6,11 +6,12 @@
 .btn.active{background:white;color:black;}.btn.active:hover{background:white;color:#800000;}
 .btn.save{background:#323232 url(toolbar-save.png) 10px 8px no-repeat;padding-left:35px;}
 .btn.close{color:#a3a3a3;background-color:#ebebeb;}.btn.close:hover{background-color:#ebebeb;color:#800000;}
-.btn.publish{background:#323232 url(toolbar-publish.png) 10px 8px no-repeat;padding-left:35px;}
-.btn.images{background:#323232 url(toolbar-images.png) 10px 8px no-repeat;padding-left:35px;}
-.btn.navigation{background:#323232 url(toolbar-navigation.png) 10px 8px no-repeat;padding-left:35px;}
-.btn.layout{background:#323232 url(toolbar-layout.png) 10px 8px no-repeat;padding-left:35px;}
-.btn.themes{background:#323232 url(toolbar-themes.png) 10px 8px no-repeat;padding-left:35px;}
+.btn.publish{background:#323232 url('toolbar-publish.png') 10px 8px no-repeat;padding-left:35px;}
+.btn.images{background:#323232 url('toolbar-images.png') 10px 8px no-repeat;padding-left:35px;}
+.btn.navigation{background:#323232 url('toolbar-navigation.png') 10px 8px no-repeat;padding-left:35px;}
+.btn.layout{background:#323232 url('toolbar-layout.png') 10px 8px no-repeat;padding-left:35px;}
+.btn.themes{background:#323232 url('toolbar-themes.png') 10px 8px no-repeat;padding-left:35px;}
+.btn.colors{background:#323232 url('toolbar-colors.png') 10px 8px no-repeat;padding-left:35px;}
 .btn:hover{background-color:#800000;}
 #toolbar{background:url(toolbar-bg.png) 0 0 repeat-x;height:52px;display:none;}#toolbar nav{float:left;height:50px;padding:0 25px;font-size:14px;}#toolbar nav.divider{padding:0px;width:2px;background:url(nav-border.png);}
 #toolbar nav ul li{float:left;margin:0 6px;}#toolbar nav ul li#saved{padding:5px 15px 7px;position:relative;top:8px;display:block;width:60px;color:#727272;}#toolbar nav ul li#saved.saving{color:#800000;}
@@ -47,6 +48,6 @@
 .social_icon.pintrest{background:url(../images/social-icons.png) -175px -34px no-repeat;}
 .social_icon.linkedin{background:url(../images/social-icons.png) -140px -34px no-repeat;}
 .social_icon.youtube{background:url(../images/social-icons.png) -210px -34px no-repeat;}
-#layout_dialog img{margin-right:15px;}
-#layout_dialog img.current{outline:2px solid black;}
-#layout_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}
+#layout_dialog img,#colors_dialog img{margin-right:15px;}
+#layout_dialog img.current,#colors_dialog img.current{outline:2px solid black;}
+#layout_dialog a:hover img,#colors_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}

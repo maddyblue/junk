@@ -6,6 +6,7 @@ THEMES = [
 COLORS = {
 	THEME_MARCO: [
 		'marco',
+		'ugly-brown',
 	],
 }
 
@@ -111,3 +112,6 @@ def layouts(theme, pagetype):
 
 def types(theme):
 	return SPECS.get(theme, {})
+
+def colors(theme):
+	return COLORS.get(theme, {})

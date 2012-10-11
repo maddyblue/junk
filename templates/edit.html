@@ -100,6 +100,16 @@ $(function() {
 		};
 	{% endfor %}
 
+	$.tnm.current_color = '{{ site.color }}';
+	$.tnm.colors = [];
+	{% for i in site.colors %}
+		$.tnm.colors.push({
+			name: "{{ i }}",
+			url: "{{ "colors"|url(siteid=site.key.id(), color=i) }}",
+			img: "/static/images/colors/{{ site.theme }}/{{ i }}.png"
+		});
+	{% endfor %}
+
 	$.tnm.newpagetypes =
 		{% for t, layouts in site.types|dictsort %}
 			{% for l in layouts %}
