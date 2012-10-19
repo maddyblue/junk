@@ -48,7 +48,10 @@ def from_fieldstorage(cls, fs):
 multidict.MultiDict.from_fieldstorage = classmethod(from_fieldstorage)
 
 import gae_mini_profiler.profiler
-gae_mini_profiler_ENABLED_PROFILER_EMAILS = ['matt.jibson@gmail.com']
+gae_mini_profiler_ENABLED_PROFILER_EMAILS = [
+	'matt.jibson@gmail.com',
+	'test@example.com',
+]
 
 def webapp_add_wsgi_middleware(app):
 	from google.appengine.ext.appstats import recording
