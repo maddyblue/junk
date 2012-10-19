@@ -198,6 +198,9 @@ $(function() {
 		$(this).parents('.dialog').hide();
 	});
 
+	// remove <a> from around images
+	$("a:has(img)").find(".editable.image").unwrap();
+
 	var layouts = '';
 	for (var layout in TNM.layouts) {
 		if(layout == TNM.current_layout) {
@@ -391,35 +394,6 @@ $(function() {
 		return false;
 	});
 
-	// image
-
-	// remove <a> from around images
-	$("a:has(img)").find(".editable.image").unwrap();
-
-	$(document).on("click", ".imgclear", function() {
-		var d = $(this).parents("div").first();
-		var i = d.prev();
-
-		$(this).parents(".modal").hide();
-		stopImageEdit();
-		savemap[i[0].id + "_c"] = true;
-		//save();
-		return false;
-	});
-
-	$(document).on("click", ".imgselect", function() {
-		var d = $(this).parents("div").first();
-		var i = d.prev();
-		var o = TNM.imageurls[i[0].id];
-
-		savemap[i[0].id + "_b"] = $("#" + i[0].id + "_select")[0].value;
-		//save();
-
-		// either do ajax request, or set url, orig, w, h here
-
-		return false;
-	});
-
 	// all
 
 	$(document).keyup(function(e){
@@ -514,10 +488,15 @@ $(function() {
 		'<iframe id="image_upload_iframe" src="#" style="visibility: hidden; display: none"></iframe>' +
 		'<form method="POST" id="image_upload_form" target="image_upload_iframe" enctype="multipart/form-data">' +
 		'<input type="file" id="image_upload_file" name="file">' +
+		'<a class="btn save" ng-click="upload_image()">upload</a>' +
 		'</form>' +
-		'<a ng-click="clear_image()">Clear image</a>',
-		'upload_image',
-		'upload'
+		'<hr/>' +
+		'Or use an existing image:' +
+		'<p ng-repeat="i in existingimgs">' +
+			'{{ i.name }} ({{ i.width }}x{{ i.height }}):<br/>' +
+			'<a ng-click="choose_image(i.id)"><img ng-src="{{ i.url}}=s350"></a>' +
+		'</p>' +
+		'<a ng-click="clear_image()">Clear image</a>'
 	);
 
 	$('.img-hover.img-edit').click(function(e) {
@@ -540,6 +519,7 @@ $(function() {
 	$('.img-hover.img-change').click(function(e) {
 		var id = $.data($(this).parent()[0], 'id');
 		TNM.upload_image_id = id;
+		TNM.edit_image_id = id;
 		$('#image_change_dialog').show();
 		e.preventDefault();
 	});
@@ -550,6 +530,7 @@ function TNMCtrl($scope, $http) {
 	$scope.savemap = {};
 
 	$scope.socialmap = TNM.socialmap;
+	$scope.existingimgs = TNM.existingimgs;
 
 	$scope.saved = function() {
 		return $scope.saves ? 'saving...' : 'saved';
@@ -650,6 +631,13 @@ function TNMCtrl($scope, $http) {
 				}
 			});
 		});
+	};
+
+	$scope.choose_image = function(key) {
+		var id = TNM.upload_image_id;
+		var o = {};
+		o[id + '_b'] = key;
+		$scope.save(o);
 	};
 
 	$scope.imgsave = function() {

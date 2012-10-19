@@ -74,11 +74,16 @@ $(function() {
 	};
 	{% endif %}
 
-	TNM.existingimgs =
+	TNM.existingimgs = {};
 	{% for i in all_images %}
-		'<option value="{{ i.key.id() }}">{{ i.name }} ({{ i.width }}x{{ i.height }})</option>' +
+	TNM.existingimgs['{{ i.key.id() }}'] = {
+		name: '{{ i.name }}',
+		url: '{{ i.url }}',
+		width: {{ i.width }},
+		height: {{ i.height }},
+		id: {{ i.key.id() }}
+	};
 	{% endfor %}
-	'';
 
 	TNM.pagelinks = {};
 	{% for i in page.links %}
