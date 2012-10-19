@@ -11,25 +11,25 @@
 <script type="text/javascript">
 
 $(function() {
-	$.tnm = {};
+	TNM = {};
 
-	$.tnm.linkmap = {};
+	TNM.linkmap = {};
 	{% for i in page.links %}
-	$.tnm.linkmap["_link_{{ loop.index0 }}_url"] = '{{ i|linkmap }}';
+	TNM.linkmap["_link_{{ loop.index0 }}_url"] = '{{ i|linkmap }}';
 	{% endfor %}
 
-	$.tnm.socialmap = {};
-	$.tnm.social_media = [];
+	TNM.socialmap = {};
+	TNM.social_media = [];
 
 	{% for k, n in site.social_media %}
-	$.tnm.socialmap["{{ k }}"] = "{{ site[k]|default('', true) }}";
-	$.tnm.social_media.push(["{{ k }}", "{{ n }}"]);
+	TNM.socialmap["{{ k }}"] = "{{ site[k]|default('', true) }}";
+	TNM.social_media.push(["{{ k }}", "{{ n }}"]);
 	{% endfor %}
 
 	{% if page.type != 'gallery' %}
-	$.tnm.imageurls = {};
+	TNM.imageurls = {};
 	{% for i in images %}
-	$.tnm.imageurls["_image_{{ loop.index0 }}"] = {
+	TNM.imageurls["_image_{{ loop.index0 }}"] = {
 		orig: "{{ i.orig|default('', true) }}",
 		url: "{{ i.url|default('', true) }}",
 		portw: {{ i.width }},
@@ -51,11 +51,11 @@ $(function() {
 
 	{% if page.type == 'blog' and pagenum %}
 	{% set b = page.get_blogpost(pagenum) %}
-	$.tnm.postdate = new Date('{{ b.date }}');
+	TNM.postdate = new Date('{{ b.date }}');
 
 	{% set i = b.image.get() %}
 	{% set id = '_postimage_%s' %pagenum %}
-	$.tnm.imageurls["{{ id }}"] = {
+	TNM.imageurls["{{ id }}"] = {
 		orig: "{{ i.orig|default('', true) }}",
 		url: "{{ i.url|default('', true) }}",
 		portw: {{ i.width }},
@@ -74,43 +74,43 @@ $(function() {
 	};
 	{% endif %}
 
-	$.tnm.existingimgs =
+	TNM.existingimgs =
 	{% for i in all_images %}
 		'<option value="{{ i.key.id() }}">{{ i.name }} ({{ i.width }}x{{ i.height }})</option>' +
 	{% endfor %}
 	'';
 
-	$.tnm.pagelinks = {};
+	TNM.pagelinks = {};
 	{% for i in page.links %}
 		{% set key = '_link_' + '%i'|format(loop.index0) %}
 		{% set idx = loop.index0 %}
-		$.tnm.pagelinks['{{ key }}'] =
+		TNM.pagelinks['{{ key }}'] =
 		{% for k, v in pages.items() %}
 			'<br><input type="radio" name="{{ key }}" value="page:{{ k.id() }}" ' + linkCheck('page:{{ k.id() }}', {{ idx }}) + '> {{ v.name }}' +
 		{% endfor %}
 		'';
 	{% endfor %}
 
-	$.tnm.current_layout = '{{ page.layout }}';
-	$.tnm.layouts = {};
+	TNM.current_layout = '{{ page.layout }}';
+	TNM.layouts = {};
 	{% for i in range(1, page.layouts + 1) %}
-		$.tnm.layouts['{{ i }}'] = {
+		TNM.layouts['{{ i }}'] = {
 			url: "{{ "layout"|url(siteid=site.key.id(), pageid=page.key.id(), layoutid=i) }}",
 			img: "/static/images/layouts/{{ site.theme }}/{{ page.type }}-{{ i }}.png"
 		};
 	{% endfor %}
 
-	$.tnm.current_color = '{{ site.color }}';
-	$.tnm.colors = [];
+	TNM.current_color = '{{ site.color }}';
+	TNM.colors = [];
 	{% for i in site.colors %}
-		$.tnm.colors.push({
+		TNM.colors.push({
 			name: "{{ i }}",
 			url: "{{ "colors"|url(siteid=site.key.id(), color=i) }}",
 			img: "/static/images/colors/{{ site.theme }}/{{ i }}.png"
 		});
 	{% endfor %}
 
-	$.tnm.newpagetypes =
+	TNM.newpagetypes =
 		{% for t, layouts in site.types|dictsort %}
 			{% for l in layouts %}
 				'<option value="{{ t }}:{{ l }}">{{ t }} ({{ l }})</option>' +
@@ -118,24 +118,24 @@ $(function() {
 		{% endfor %}
 		'';
 
-	$.tnm.archivepages =
+	TNM.archivepages =
 		{% for p in site.archived_pages %}
 			'<option value="{{ p.key.id() }}">{{ p.name }}</option>' +
 		{% endfor %}
 		'';
 
-	$.tnm.newpageurl = '{{ "new-page"|url }}';
-	$.tnm.archivepageurl = '{{ "archive-page"|url }}';
-	$.tnm.unpublishpageurl = '{{ "unpublish-page"|url(pageid=page.key.id()) }}';
+	TNM.newpageurl = '{{ "new-page"|url }}';
+	TNM.archivepageurl = '{{ "archive-page"|url }}';
+	TNM.unpublishpageurl = '{{ "unpublish-page"|url(pageid=page.key.id()) }}';
 
-	$.tnm.publishedurl = '{{ published_url }}';
-	$.tnm.publishurl = '{{ publish_url }}';
-	$.tnm.saveurl = '{{ "save"|url(siteid=site.key.id(), pageid=page.key.id()) }}';
-	$.tnm.viewurl = '{{ view_url }}';
-	$.tnm.uploadurl = '{{ upload_url }}';
-	$.tnm.domain = '{{ site.domain|default('', True) }}';
-	$.tnm.gravatar = '{{ user.gravatar }}';
-	$.tnm.name = '{{ user.name }}';
+	TNM.publishedurl = '{{ published_url }}';
+	TNM.publishurl = '{{ publish_url }}';
+	TNM.saveurl = '{{ "save"|url(siteid=site.key.id(), pageid=page.key.id()) }}';
+	TNM.viewurl = '{{ view_url }}';
+	TNM.uploadurl = '{{ upload_url }}';
+	TNM.domain = '{{ site.domain|default('', True) }}';
+	TNM.gravatar = '{{ user.gravatar }}';
+	TNM.name = '{{ user.name }}';
 });
 
 </script>

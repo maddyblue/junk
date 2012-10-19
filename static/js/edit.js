@@ -15,13 +15,13 @@ function checkURL(u) {
 }
 
 function linkCheck(v, i) {
-	if($.tnm.linkmap[i] == v)
+	if(TNM.linkmap[i] == v)
 		return 'checked';
 	return '';
 }
 
 function loadimg(id) {
-	var o = $.tnm.imageurls[id];
+	var o = TNM.imageurls[id];
 
 	o.wscale = o.portw / o.basew;
 	o.hscale = o.porth / o.baseh;
@@ -45,7 +45,7 @@ function loadimg(id) {
 }
 
 function resize(event, ui) {
-	var o = $.tnm.imageurls[$.tnm.edit_image_id];
+	var o = TNM.imageurls[TNM.edit_image_id];
 	var wscale = o.wscale;
 	var hscale = o.hscale;
 	var min_scale = o.min_scale;
@@ -138,25 +138,25 @@ $(function() {
 			'<span id="save">&nbsp;</span>' +
 			' <span id="saved" style="display: none">saved</span>' +
 			' <span id="error" style="display: none"><b>error</b></span>' +
-			' <a id="view" href="' + $.tnm.viewurl + '">view</a>' +
+			' <a id="view" href="' + TNM.viewurl + '">view</a>' +
 			' <a id="publish" href="#">publish</a>' +
-			' <a href="' + $.tnm.publishedurl + '">published</a>' +
+			' <a href="' + TNM.publishedurl + '">published</a>' +
 			' <span style="border: 1px solid black">' +
-			'domain: <input type="text" id="domain" value="' + $.tnm.domain + '">' +
+			'domain: <input type="text" id="domain" value="' + TNM.domain + '">' +
 			' <a id="save_domain">save</a>' +
 			'</span>' +
 			' <span id="publishing" style="display: none">publishing...</span>' +
 			' <span id="layouts" style="border: 1px solid black">page layout:'+
-			$.tnm.layouts +
+			TNM.layouts +
 			'</span>' +
 			' <a id="new_page" href="#">new page</a>' +
-			'<div class="modal" id="new_page_modal"><form method="POST" action="' + $.tnm.newpageurl + '">' +
+			'<div class="modal" id="new_page_modal"><form method="POST" action="' + TNM.newpageurl + '">' +
 			'title: <input type="text" name="title">' +
-			'type: <select name="type">' + $.tnm.newpagetypes + '</select>' +
+			'type: <select name="type">' + TNM.newpagetypes + '</select>' +
 			'<input type="submit" value="create">' +
 			'</form>' +
-			'<br><form method="POST" action="' + $.tnm.archivepageurl + '">' +
-			'archived: <select name="pageid">' + $.tnm.archivepages + '</select>' +
+			'<br><form method="POST" action="' + TNM.archivepageurl + '">' +
+			'archived: <select name="pageid">' + TNM.archivepages + '</select>' +
 			'<input type="submit" value="unarchive">' +
 			'</form>' +
 			'<br><a href="#" class="cancel">cancel</a>' +
@@ -164,7 +164,7 @@ $(function() {
 			' <a id="unpublish_page" href="#">archive page</a>' +
 			'<div class="modal" id="unpublish_page_modal">' +
 			'Sure you want to archive this page? It will be removed from public view, but maintained in your archive.' +
-			'<br><a href="' + $.tnm.unpublishpageurl + '">yes, archive</a>' +
+			'<br><a href="' + TNM.unpublishpageurl + '">yes, archive</a>' +
 			' <a href="#" class="cancel">cancel</a>' +
 			'</div>' +
 		'</div>'
@@ -176,7 +176,7 @@ $(function() {
 			'<nav class="left"><ul>' +
 				'<li><a class="logo" href="/"><img src="/static/images/icon.png" /></a></li>' +
 				'<li><a href="#" class="active btn">edit</a></li>' +
-				'<li><a href="' + $.tnm.viewurl + '" class="btn">live view</a></li>' +
+				'<li><a href="' + TNM.viewurl + '" class="btn">live view</a></li>' +
 				'<li id="saved" ng-class="saveclass()">{{ saved() }}</li>' +
 			'</ul></nav>' +
 			'<nav class="divider"></nav>' +
@@ -190,9 +190,9 @@ $(function() {
 				'<li><a class="colors btn">colors</a></li>' +
 			'</ul></nav>' +
 			'<nav class="right"><ul class="user-actions">' +
-				'<li><a href=""><img class="avatar" src=' + $.tnm.gravatar + '" /></a></li>' +
+				'<li><a href=""><img class="avatar" src=' + TNM.gravatar + '" /></a></li>' +
 				'<li class="user-info">' +
-					'<span class="hello">Hello <span class="name">' + $.tnm.name + '</span></span>' +
+					'<span class="hello">Hello <span class="name">' + TNM.name + '</span></span>' +
 					'<ul>' +
 						'<li><a class="my-account" href="#">my account</a></li>' +
 						'<li><a class="logout" href="/logout">logout</a></li>' +
@@ -203,12 +203,12 @@ $(function() {
 	);
 
 	var layouts = '';
-	for (var layout in $.tnm.layouts) {
-		if(layout == $.tnm.current_layout) {
-			layouts += '<img src="' + $.tnm.layouts[layout].img + '" class="current"/>';
+	for (var layout in TNM.layouts) {
+		if(layout == TNM.current_layout) {
+			layouts += '<img src="' + TNM.layouts[layout].img + '" class="current"/>';
 		} else {
-			layouts += '<a href="' + $.tnm.layouts[layout].url + '">';
-			layouts += '<img src="' + $.tnm.layouts[layout].img + '"/>';
+			layouts += '<a href="' + TNM.layouts[layout].url + '">';
+			layouts += '<img src="' + TNM.layouts[layout].img + '"/>';
 			layouts += '</a>';
 		}
 	}
@@ -225,12 +225,12 @@ $(function() {
 	});
 
 	var colors = '';
-	for (var i = 0; i < $.tnm.colors.length; i++) {
-		if($.tnm.colors[i].name == $.tnm.current_color) {
-			colors += '<img src="' + $.tnm.colors[i].img + '" class="current"/>';
+	for (var i = 0; i < TNM.colors.length; i++) {
+		if(TNM.colors[i].name == TNM.current_color) {
+			colors += '<img src="' + TNM.colors[i].img + '" class="current"/>';
 		} else {
-			colors += '<a href="' + $.tnm.colors[i].url + '">';
-			colors += '<img src="' + $.tnm.colors[i].img + '"/>';
+			colors += '<a href="' + TNM.colors[i].url + '">';
+			colors += '<img src="' + TNM.colors[i].img + '"/>';
 			colors += '</a>';
 		}
 	}
@@ -262,7 +262,7 @@ $(function() {
 
 	$(document).on("click", "#publish", function() {
 		$.ajax({
-			url: $.tnm.publishurl,
+			url: TNM.publishurl,
 		});
 
 		$('#publishing').show().fadeOut(4000);
@@ -321,7 +321,7 @@ $(function() {
 		$(this).after(h);
 		$("#" + i).datepicker({
 			dateFormat: 'MM dd, yy',
-			defaultDate: $.tnm.postdate
+			defaultDate: TNM.postdate
 		});
 	});
 
@@ -365,7 +365,7 @@ $(function() {
 			'<input type="text" size="45" class="' + f + '" name="' + t + '" id="' + t + '" value="' + $(this).text() + '" /></p>' +
 			'<p>Link:</p>' +
 			'<br><input type="radio" name="' + i + '" value="url" ' + linkCheck('url', i) + '><input type="text" id="' + i + '_val" value="' + v + '">' +
-			$.tnm.pagelinks[this.id] +
+			TNM.pagelinks[this.id] +
 			'<p><a class="close link" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
 		$(this).after(h);
 	});
@@ -414,7 +414,7 @@ $(function() {
 	$(document).on("click", ".imgselect", function() {
 		var d = $(this).parents("div").first();
 		var i = d.prev();
-		var o = $.tnm.imageurls[i[0].id];
+		var o = TNM.imageurls[i[0].id];
 
 		savemap[i[0].id + "_b"] = $("#" + i[0].id + "_select")[0].value;
 		//save();
@@ -445,7 +445,7 @@ $(function() {
 		'<input type="text">',
 		'edit_text'
 	);
-	$.tnm.edit_line_input = $('input', edit_line_dialog);
+	TNM.edit_line_input = $('input', edit_line_dialog);
 
 	$('.editable').each(function() {
 		var d = $('<div class="edithover"></div>');
@@ -473,8 +473,8 @@ $(function() {
 		{
 			d.click(function() {
 				$('#edit_line_dialog').show();
-				$.tnm.edit_line_input.val(t.text()).focus();
-				$.tnm.edit_line_id = t.attr('id');
+				TNM.edit_line_input.val(t.text()).focus();
+				TNM.edit_line_id = t.attr('id');
 			});
 		}
 		else if(t.hasClass('image'))
@@ -488,10 +488,10 @@ $(function() {
 			var i = this.id;
 
 			var s = '';
-			for (var j = 0; j < $.tnm.social_media.length; j++)
+			for (var j = 0; j < TNM.social_media.length; j++)
 			{
-				var k = $.tnm.social_media[j][0];
-				var p = $.tnm.social_media[j][1];
+				var k = TNM.social_media[j][0];
+				var p = TNM.social_media[j][1];
 				s += '<li><input type="text" ng-model="socialmap[\'' + k + '\']" " id="' + i + '_' + k + '" placeholder="' + p + ' Profile URL"/><div class="social_icon ' + k + '"></div></li>';
 			}
 
@@ -527,8 +527,8 @@ $(function() {
 		var id = $.data($(this).parent()[0], 'id');
 		$(e.target).parent().hide();
 
-		$.tnm.edit_image_id = id;
-		var o = $.tnm.imageurls[id];
+		TNM.edit_image_id = id;
+		var o = TNM.imageurls[id];
 
 		$("#containerimg").draggable({ containment: 'parent' })
 			.css('background-image', 'url(' + o.orig + ')');
@@ -542,7 +542,7 @@ $(function() {
 
 	$('.img-hover.img-change').click(function(e) {
 		var id = $.data($(this).parent()[0], 'id');
-		$.tnm.upload_image_id = id;
+		TNM.upload_image_id = id;
 		$('#image_change_dialog').show();
 		e.preventDefault();
 	});
@@ -552,7 +552,7 @@ function TNMCtrl($scope, $http) {
 	$scope.saves = 0;
 	$scope.savemap = {};
 
-	$scope.socialmap = $.tnm.socialmap;
+	$scope.socialmap = TNM.socialmap;
 
 	$scope.saved = function() {
 		return $scope.saves ? 'saving...' : 'saved';
@@ -568,7 +568,7 @@ function TNMCtrl($scope, $http) {
 
 		$http({
 			method: 'POST',
-			url: $.tnm.saveurl,
+			url: TNM.saveurl,
 			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 			data: $.param(o)
 		}).success(function(result) {
@@ -579,7 +579,7 @@ function TNMCtrl($scope, $http) {
 					var setimg = false;
 
 					$.each(imgdata, function(k, v) {
-						$.tnm.imageurls[imgkey][k] = v;
+						TNM.imageurls[imgkey][k] = v;
 						if(k == 'url')
 							$("#" + imgkey)[0].src = v;
 						if(k == 'orig')
@@ -587,7 +587,7 @@ function TNMCtrl($scope, $http) {
 					});
 
 					if(setimg) {
-						$("#containerimg").css('background-image', 'url(' + $.tnm.imageurls[imgkey].orig + ')');
+						$("#containerimg").css('background-image', 'url(' + TNM.imageurls[imgkey].orig + ')');
 						loadimg(imgkey);
 						resize(0, {'value': 0});
 					}
@@ -624,11 +624,11 @@ function TNMCtrl($scope, $http) {
 
 	$scope.upload_image = function() {
 		var form = $('#image_upload_form');
-		var id = $.tnm.upload_image_id;
+		var id = TNM.upload_image_id;
 		var i = $('#' + id)[0];
 
 		$.ajax({
-			url: $.tnm.uploadurl + '?image=' + id
+			url: TNM.uploadurl + '?image=' + id
 		}).done(function(data) {
 			form.attr('action', data);
 			form.ajaxSubmit({
@@ -642,7 +642,7 @@ function TNMCtrl($scope, $http) {
 					var j = $.parseJSON(data);
 					i.src = j.url;
 
-					var o = $.tnm.imageurls[id];
+					var o = TNM.imageurls[id];
 					o.url = j.url;
 					o.orig = j.orig;
 					o.basew = j.w;
@@ -656,8 +656,8 @@ function TNMCtrl($scope, $http) {
 	};
 
 	$scope.imgsave = function() {
-		var id = $.tnm.edit_image_id;
-		var i = $.tnm.imageurls[id];
+		var id = TNM.edit_image_id;
+		var i = TNM.imageurls[id];
 		resize(0, {'value': i.s});
 		var o = {};
 
@@ -670,9 +670,9 @@ function TNMCtrl($scope, $http) {
 	};
 
 	$scope.edit_text = function() {
-		var id = $.tnm.edit_line_id;
+		var id = TNM.edit_line_id;
 		var o = {};
-		o[id] = $.tnm.edit_line_input.val();
+		o[id] = TNM.edit_line_input.val();
 
 		if(!o[id]) {
 			return;
