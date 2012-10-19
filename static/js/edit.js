@@ -111,14 +111,6 @@ function make_dialog(id, header, title, contents, onsave, savename) {
 		'</div>'
 	);
 
-	$('.btn.save', d).click(function() {
-		d.hide();
-	});
-
-	$('.btn.close', d).click(function() {
-		d.hide();
-	});
-
 	d.hide();
 
 	$('body').append(d);
@@ -201,6 +193,10 @@ $(function() {
 			'</ul></nav>' +
 		'</div>'
 	);
+
+	$('body').on('click', '.dialog a', function() {
+		$(this).parents('.dialog').hide();
+	});
 
 	var layouts = '';
 	for (var layout in TNM.layouts) {
