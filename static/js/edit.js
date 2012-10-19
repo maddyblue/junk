@@ -310,34 +310,6 @@ $(function() {
 	});
 	*/
 
-	// line
-
-	$(".editable.line").each(function() {
-		var i = this.id + "_text";
-		var f = this.id + "_focus";
-		var d = this.id + "_div";
-		var h = '<div class="modal" id="' + d + '">' +
-			'<p><label for="text">Text</label>' +
-			'<input type="text" size="30" class="' + f + '" name="' + i + '" id="' + i + '" value="' + $(this).text() + '" /></p>' +
-			'<p><a class="close line" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
-		$(this).after(h);
-	});
-
-	$(document).on("click", ".close.line", function() {
-		var i = $(this).parents("div").first().prev();
-		var t = $("#" + i[0].id + "_text");
-
-		if(t[0].value)
-		{
-			i.text(t[0].value);
-			savemap[i[0].id] = i.html();
-			$(this).parents(".modal").hide();
-			//save();
-		}
-
-		return false;
-	});
-
 	// date
 
 	$(".editable.date").each(function() {
@@ -466,6 +438,15 @@ $(function() {
 		}
 	});
 
+	var edit_line_dialog = make_dialog(
+		'edit_line_dialog',
+		'Edit text',
+		'Edit text',
+		'<input type="text">',
+		'edit_text'
+	);
+	$.tnm.edit_line_input = $('input', edit_line_dialog);
+
 	$('.editable').each(function() {
 		var d = $('<div class="edithover"></div>');
 		var t = $(this);
@@ -490,21 +471,11 @@ $(function() {
 
 		if(t.hasClass('line'))
 		{
-			var i = $('<input type="text" value="' + t.html() + '" />');
-			i.width(t.width());
-			i.height(t.height());
-			i.css('background', t.css('background'));
-			i.css('background-color', t.css('background-color'));
-			i.css('border', t.css('border'));
-			i.css('color', t.css('color'));
-			i.css('font-family', t.css('font-family'));
-			i.css('font-size', t.css('font-size'));
-			i.css('font-weight', t.css('font-weight'));
-			i.css('margin', t.css('margin'));
-			i.css('padding', t.css('padding'));
-			i.css('text-transform', t.css('text-transform'));
-
-			d.append(i);
+			d.click(function() {
+				$('#edit_line_dialog').show();
+				$.tnm.edit_line_input.val(t.text()).focus();
+				$.tnm.edit_line_id = t.attr('id');
+			});
 		}
 		else if(t.hasClass('image'))
 		{
@@ -696,5 +667,20 @@ function TNMCtrl($scope, $http) {
 
 		$scope.save(o);
 		stopImageEdit();
+	};
+
+	$scope.edit_text = function() {
+		var id = $.tnm.edit_line_id;
+		var o = {};
+		o[id] = $.tnm.edit_line_input.val();
+
+		if(!o[id]) {
+			return;
+		}
+
+		$scope.save(o);
+		var i = $('#' + id);
+		i.text(o[id]);
+		$('#' + id + '_edit').width(i.width());
 	};
 }
