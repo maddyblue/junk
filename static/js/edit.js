@@ -514,7 +514,8 @@ $(function() {
 		'<iframe id="image_upload_iframe" src="#" style="visibility: hidden; display: none"></iframe>' +
 		'<form method="POST" id="image_upload_form" target="image_upload_iframe" enctype="multipart/form-data">' +
 		'<input type="file" id="image_upload_file" name="file">' +
-		'</form>',
+		'</form>' +
+		'<a ng-click="clear_image()">Clear image</a>',
 		'upload_image',
 		'upload'
 	);
@@ -663,6 +664,14 @@ function TNMCtrl($scope, $http) {
 
 		$scope.save(o);
 		stopImageEdit();
+	};
+
+	$scope.clear_image = function() {
+		var id = TNM.upload_image_id;
+		var i = $('#' + id)[0];
+		var o = {};
+		o[id + '_c'] = true;
+		$scope.save(o);
 	};
 
 	$scope.edit_text = function() {
