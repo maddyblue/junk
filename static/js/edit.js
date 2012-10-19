@@ -455,10 +455,14 @@ $(function() {
 	// all
 
 	$(document).keyup(function(e){
-		if(e.keyCode == 27)
+		if(e.keyCode == 27) // esc
 		{
 			$(".dialog").hide();
 			stopImageEdit();
+		}
+		else if(e.keyCode == 13) // enter
+		{
+			$('.dialog:visible a.save').click();
 		}
 	});
 
