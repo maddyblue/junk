@@ -37,7 +37,7 @@ function loadimg(id) {
 		max: o.max_scale,
 		step: (o.max_scale - o.min_scale) / 100,
 		slide: resize,
-		value: o.s,
+		value: o.s
 	});
 
 	$("#containerimg").css('left', o.x);
@@ -72,7 +72,7 @@ function resize(event, ui) {
 		width: 2 * w - portw,
 		height: 2 * h - porth,
 		top: basetop + porth - h,
-		left: baseleft + portw - w,
+		left: baseleft + portw - w
 	});
 	$('#imgsave').css({top: h - porth + 5, right: w - portw + 3});
 
