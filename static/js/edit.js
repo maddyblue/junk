@@ -413,7 +413,7 @@ $(function() {
 		'Edit text',
 		'Edit text',
 		'<input type="text">',
-		'edit_text'
+		'edit_line'
 	);
 	TNM.edit_line_input = $('input', edit_line_dialog);
 
@@ -662,7 +662,7 @@ function TNMCtrl($scope, $http) {
 		$scope.save(o);
 	};
 
-	$scope.edit_text = function() {
+	$scope.edit_line = function() {
 		var id = TNM.edit_line_id;
 		var o = {};
 		o[id] = TNM.edit_line_input.val();
