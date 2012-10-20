@@ -462,6 +462,10 @@
 	}
 }
 
+.img-hover () {
+	outline: 5px solid @tnm-red-alpha;
+}
+
 #layout_dialog, #colors_dialog {
 	img {
 		margin-right: 15px;
@@ -472,6 +476,10 @@
 	}
 
 	a:hover img {
-		outline: 5px solid @tnm-red-alpha;
+		.img-hover
 	}
+}
+
+#image_change_dialog a:hover img {
+	.img-hover
 }
