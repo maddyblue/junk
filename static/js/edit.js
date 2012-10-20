@@ -674,6 +674,8 @@ function TNMCtrl($scope, $http) {
 		$scope.save(o);
 		var i = $('#' + id);
 		i.text(o[id]);
-		$('#' + id + '_edit').width(i.width());
+		var e = $('#' + id + '_edit');
+		e.offset(i.offset());
+		e.width(i.outerWidth());
 	};
 }
