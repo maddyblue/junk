@@ -283,16 +283,6 @@ $(function() {
 		//save();
 	});
 
-	// page menu
-
-	$('#menu').sortable({
-		items: ".menu_item",
-		stop: function(event, ui) {
-			savemap["pos"] = $(this).sortable('toArray').join(',');
-			//save();
-		}
-	});
-
 	// text
 
 	/*
@@ -531,6 +521,19 @@ function TNMCtrl($scope, $http) {
 
 	$scope.socialmap = TNM.socialmap;
 	$scope.existingimgs = TNM.existingimgs;
+
+	$('#menu').sortable({
+		items: ".menu_item",
+		stop: function() {
+			o = {
+				pos: $(this).sortable('toArray').join(',')
+			};
+
+			$scope.$apply(function() {
+				$scope.save(o);
+			});
+		}
+	});
 
 	$scope.saved = function() {
 		return $scope.saves ? 'saving...' : 'saved';
