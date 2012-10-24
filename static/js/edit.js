@@ -630,6 +630,16 @@ function TNMCtrl($scope, $http) {
 					o.baseh = j.h;
 					o.s = j.s;
 
+					$scope.$apply(function() {
+						$scope.existingimgs[j.id.toString()] = {
+							name: j.name,
+							url: j.orig,
+							width: j.w,
+							height: j.h,
+							id: j.id
+						};
+					});
+
 					form[0].reset();
 				}
 			});
