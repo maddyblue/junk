@@ -212,7 +212,7 @@ $(function() {
 		}
 	}
 
-	var layout_dialog = make_dialog(
+	TNM.layout_dialog = make_dialog(
 		'layout_dialog',
 		'Page Layout',
 		'Choose page layout',
@@ -220,7 +220,7 @@ $(function() {
 	);
 
 	$('#toolbar a.layout').click(function () {
-		layout_dialog.show();
+		TNM.layout_dialog.show();
 	});
 
 	var colors = '';
@@ -234,7 +234,7 @@ $(function() {
 		}
 	}
 
-	var colors_dialog = make_dialog(
+	TNM.colors_dialog = make_dialog(
 		'colors_dialog',
 		'Colors',
 		'Choose color scheme',
@@ -242,7 +242,7 @@ $(function() {
 	);
 
 	$('#toolbar a.colors').click(function () {
-		colors_dialog.show();
+		TNM.colors_dialog.show();
 	});
 
 	$('body').append(
@@ -398,14 +398,14 @@ $(function() {
 		}
 	});
 
-	var edit_line_dialog = make_dialog(
+	TNM.edit_line_dialog = make_dialog(
 		'edit_line_dialog',
 		'Edit text',
 		'Edit text',
 		'<input type="text">',
 		'edit_line'
 	);
-	TNM.edit_line_input = $('input', edit_line_dialog);
+	TNM.edit_line_input = $('input', TNM.edit_line_dialog);
 
 	$('.editable').each(function() {
 		var d = $('<div class="edithover"></div>');
@@ -471,7 +471,7 @@ $(function() {
 		}
 	});
 
-	var d = make_dialog(
+	TNM.image_change_dialog = make_dialog(
 		'image_change_dialog',
 		'Upload/change image',
 		'Change Image',
