@@ -422,12 +422,15 @@ $(function() {
 		});
 
 		d.mouseover(function() {
+			TNM.edithover.hide();
 			d.show();
 		});
 
 		t.mouseover(function() {
+			TNM.edithover.hide();
 			d.show();
 		});
+		TNM.edithover = $('.edithover');
 
 		if(t.hasClass('line'))
 		{
