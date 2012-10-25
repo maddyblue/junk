@@ -34,7 +34,7 @@ SPECS = {
 	THEME_MARCO: {
 		PAGE_TYPE_HOME: {
 			1: { # blog section at bottom
-				'links': 3,
+				'lines': 3,
 				'images': [
 					(1000, 370),
 					(310, 180),
@@ -43,7 +43,7 @@ SPECS = {
 				],
 			},
 			2: { # pic and text at bottom
-				'links': 5,
+				'lines': 4,
 				'images': [
 					(1000, 370),
 					(310, 180),
@@ -105,7 +105,9 @@ SPECS = {
 }
 
 def spec(theme, pagetype, layout):
-	return SPECS.get(theme, {}).get(pagetype, {}).get(layout, {})
+	r = SPECS.get(theme, {}).get(pagetype, {}).get(layout, {})
+	r['links'] = len(r.get('images', []))
+	return r
 
 def layouts(theme, pagetype):
 	return len(SPECS.get(theme, {}).get(pagetype, {}))

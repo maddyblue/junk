@@ -13,10 +13,12 @@
 $(function() {
 	TNM = {};
 
-	TNM.linkmap = {};
-	{% for i in page.links %}
-	TNM.linkmap["_link_{{ loop.index0 }}_url"] = '{{ i|linkmap }}';
-	{% endfor %}
+	TNM.pages = {
+	{% for p in site.pages %}
+		'{{ p.id() }}': "{{ pages[p].name }}"
+		{%- if not loop.last %},{% endif %}
+	{%- endfor %}
+	};
 
 	TNM.socialmap = {};
 	TNM.social_media = [];
@@ -85,16 +87,20 @@ $(function() {
 	};
 	{% endfor %}
 
-	TNM.pagelinks = {};
+	TNM.pagelinks = {
 	{% for i in page.links %}
-		{% set key = '_link_' + '%i'|format(loop.index0) %}
 		{% set idx = loop.index0 %}
-		TNM.pagelinks['{{ key }}'] =
-		{% for k, v in pages.items() %}
-			'<br><input type="radio" name="{{ key }}" value="page:{{ k.id() }}" ' + linkCheck('page:{{ k.id() }}', {{ idx }}) + '> {{ v.name }}' +
-		{% endfor %}
-		'';
+		'_link_{{ idx }}': "{{ i }}"
+		{%- if not loop.last %},{% endif %}
 	{% endfor %}
+	};
+
+	TNM.image_to_link = {
+	{% for i in page.links %}
+		'_image_{{ loop.index0 }}': '_link_{{ loop.index0 }}'
+		{%- if not loop.last %},{% endif %}
+	{% endfor %}
+	};
 
 	TNM.current_layout = '{{ page.layout }}';
 	TNM.layouts = {};

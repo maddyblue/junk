@@ -66,6 +66,14 @@ def markdown(text):
 	import utils
 	return utils.markdown(text)
 
+def link(text, page, i, rel):
+	url = page.link(i, rel)
+
+	if url:
+		text = '<a href="%s">%s</a>' %(url, text)
+
+	return text
+
 filters = dict([(i, globals()[i]) for i in [
 	'date',
 	'editline',
@@ -77,6 +85,7 @@ filters = dict([(i, globals()[i]) for i in [
 	'editposttitle',
 	'edittext',
 	'fdate',
+	'link',
 	'linkmap',
 	'markdown',
 	'rss_date',

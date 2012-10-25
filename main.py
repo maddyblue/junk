@@ -429,11 +429,9 @@ class Save(BaseHandler):
 			spec = p.spec()
 
 			for i in range(spec.get('links', 0)):
-				k = '_link_%i_' %i
-				kt, ku = k + 'text', k + 'url'
-				if kt in self.request.POST and ku in self.request.POST:
-					p.links[i] = self.request.POST[ku]
-					p.linktext[i] = self.request.POST[kt]
+				k = '_link_%i' %i
+				if k in self.request.POST:
+					p.links[i] = self.request.POST[k]
 					pc = True
 
 			for i in range(spec.get('text', 0)):

@@ -132,7 +132,6 @@ class Page(ndb.Expando):
 	name_lower = ndb.ComputedProperty(lambda self: self.name.lower())
 	images = ndb.KeyProperty('i', repeated=True)
 	links = ndb.StringProperty('l', repeated=True)
-	linktext = ndb.StringProperty('e', repeated=True)
 	text = ndb.TextProperty('x', repeated=True)
 	lines = ndb.StringProperty('s', repeated=True)
 	last_edited = ndb.DateTimeProperty('d', indexed=True, auto_now=True)
@@ -148,7 +147,7 @@ class Page(ndb.Expando):
 			kid = long(url.partition(':')[2])
 			page = ndb.Key('Page', kid, parent=self.key.parent()).get()
 			return rel + page.name
-		elif ':/' not in url:
+		elif url and ':/' not in url:
 			url = 'http://' + url
 
 		return url
@@ -207,8 +206,7 @@ class Page(ndb.Expando):
 	def set_layout(cls, page, layoutid):
 		site = page.key.parent().get()
 		layout = spec(site.theme, page.type, layoutid)
-		t = {'linktext': 'link'}
-		f = {'linktext': 'links'}
+		t = {'links': ''}
 		if not layout:
 			return page
 
@@ -226,9 +224,9 @@ class Page(ndb.Expando):
 					p.images.append(images[-1].key)
 			ndb.put_multi_async(images)
 
-			for d in ['links', 'text', 'lines', 'linktext']:
+			for d in ['links', 'text', 'lines']:
 				a = getattr(p, d)
-				a.extend([t.get(d, d)] * (layout.get(f.get(d, d), 0) - len(a)))
+				a.extend([t.get(d, d)] * (layout.get(d, 0) - len(a)))
 			p.layout = layoutid
 			p.put()
 			return p

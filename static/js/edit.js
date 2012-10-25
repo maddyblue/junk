@@ -1,3 +1,9 @@
+if (typeof String.prototype.startsWith != 'function') {
+	String.prototype.startsWith = function (str){
+		return this.slice(0, str.length) == str;
+	};
+}
+
 function validURL(u) {
 	if(u.match("^[-A-Za-z0-9._~:/?#@!$&'()*+,;=% \\[\\]]+$"))
 		return true;
@@ -12,12 +18,6 @@ function checkURL(u) {
 	}
 
 	return true;
-}
-
-function linkCheck(v, i) {
-	if(TNM.linkmap[i] == v)
-		return 'checked';
-	return '';
 }
 
 function loadimg(id) {
@@ -444,7 +444,7 @@ $(function() {
 		{
 			d.append('<a class="img-hover img-edit">edit</a>')
 			d.append('<a class="img-hover img-change" href="#">change</a>')
-			d.append('<a class="img-hover img-link">link</a>')
+			d.append('<a class="img-hover img-link" ng-click="set_link_id(\'' + this.id + '\')">link</a>')
 		}
 		else if(t.hasClass('social'))
 		{
@@ -516,6 +516,18 @@ $(function() {
 		$('#image_change_dialog').show();
 		e.preventDefault();
 	});
+
+	TNM.link_dialog = make_dialog(
+		'link_dialog',
+		'Change link',
+		'Change Link',
+		'<p ng-repeat="(k, v) in pages"><label>' +
+		'<input type="radio" name="link" value="page:{{ k }}"> {{ v }}' +
+		'</label></p>' +
+		'<p><label><input type="radio" name="link" value="url"> URL: <input type="text" name="url"></label></p>' +
+		'<p><label><input type="radio" name="link" value="no" checked="checked"> [no link]</label></p>',
+		'save_link'
+	);
 });
 
 function TNMCtrl($scope, $http) {
@@ -524,6 +536,8 @@ function TNMCtrl($scope, $http) {
 
 	$scope.socialmap = TNM.socialmap;
 	$scope.existingimgs = TNM.existingimgs;
+	$scope.pagelinks = TNM.pagelinks;
+	$scope.pages = TNM.pages;
 
 	$('#menu').sortable({
 		items: ".menu_item",
@@ -692,5 +706,37 @@ function TNMCtrl($scope, $http) {
 		i.text(o[id]);
 		var e = $('#' + id + '_edit');
 		e.width(i.outerWidth());
+	};
+
+	$scope.set_link_id = function(id) {
+		id = TNM.image_to_link[id];
+		$scope.link_id = id;
+		var v = TNM.pagelinks[id];
+		var u = '';
+
+		if (v === '') {
+			v = 'no';
+		} else if (!v.startsWith('page:')) {
+			u = v;
+			v = 'url';
+		}
+
+		$('input:radio[name="link"]', TNM.link_dialog).filter('[value="' + v + '"]').attr('checked', true);
+		$('input:text', TNM.link_dialog).val(u);
+		TNM.link_dialog.show();
+	};
+
+	$scope.save_link = function() {
+		var o = {};
+
+		v = $('input[name="link"]:checked', TNM.link_dialog).val();
+		if(v == 'url')
+			v = $('input[name="url"]', TNM.link_dialog).val();
+		else if(v == 'no')
+			v = '';
+
+		TNM.pagelinks[$scope.link_id] = v;
+		o[$scope.link_id] = v;
+		$scope.save(o);
 	};
 }
