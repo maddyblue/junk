@@ -337,53 +337,6 @@ $(function() {
 		//save();
 	});
 
-	// link
-
-	$(".editable.link").each(function() {
-		var i = this.id + "_url";
-		var t = this.id + "_text";
-		var f = this.id + "_focus";
-		var d = this.id + "_div";
-
-		var v = '';
-		if(linkCheck('url', i))
-			v = this.name;
-
-		var h = '<div class="modal" id="' + d + '">' +
-			'<p>Text: ' +
-			'<input type="text" size="45" class="' + f + '" name="' + t + '" id="' + t + '" value="' + $(this).text() + '" /></p>' +
-			'<p>Link:</p>' +
-			'<br><input type="radio" name="' + i + '" value="url" ' + linkCheck('url', i) + '><input type="text" id="' + i + '_val" value="' + v + '">' +
-			TNM.pagelinks[this.id] +
-			'<p><a class="close link" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
-		$(this).after(h);
-	});
-
-	$(document).on("click", ".close.link", function() {
-		var d = $(this).parents("div").first();
-		var i = d.prev();
-		var v = $("#" + i[0].id + "_url_val");
-		var t = $("#" + i[0].id + "_text");
-		var c = $('input[name=' + i[0].id + '_url]:radio:checked');
-
-		if(c[0].value != 'url' || checkURL(v[0].value))
-		{
-			var url;
-			if(c[0].value == 'url')
-				url = v[0].value;
-			else
-				url = c[0].value;
-
-			i.text(t[0].value);
-			savemap[t[0].id] = i.html();
-			savemap[i[0].id + "_url"] = url;
-			$(this).parents(".modal").hide();
-			//save();
-		}
-
-		return false;
-	});
-
 	// all
 
 	$(document).keyup(function(e){
