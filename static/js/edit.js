@@ -466,7 +466,7 @@ $(function() {
 		var id = $.data($(this).parent()[0], 'id');
 		TNM.upload_image_id = id;
 		TNM.edit_image_id = id;
-		$('#image_change_dialog').show();
+		TNM.image_change_dialog.show();
 		e.preventDefault();
 	});
 
