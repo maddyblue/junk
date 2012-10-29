@@ -4,6 +4,7 @@ var shell = require('./shell.js');
 var less = require('./less');
 var jsp = require('./uglify-js/uglify-js.js').parser;
 var pro = require('./uglify-js/uglify-js.js').uglify;
+var jshint = require('jshint');
 
 function lessc(fpath, foutput) {
 	foutput = typeof foutput !== 'undefined' ? foutput : fpath + '.css';
@@ -33,8 +34,8 @@ function lessc(fpath, foutput) {
 	}
 }
 
-function uglifyc(fpath, fpathmin) {
-	if(fpathmin == null)
+function uglifyc(fpath, fpathmin, hint) {
+	if(!fpathmin)
 	{
 		var dir = path.dirname(fpath);
 		var fname = path.basename(fpath, '.js');
@@ -54,6 +55,15 @@ function uglifyc(fpath, fpathmin) {
 		ast = pro.ast_squeeze(ast);
 		var final_code = pro.gen_code(ast);
 		final_code.to(fpathmin);
+
+		if(hint && !jshint.JSHINT(data))
+		{
+			var errors = jshint.JSHINT.errors;
+			for(var i = 0; i < errors.length; i++)
+			{
+				console.log('\tjshint: ' + fpath + ':' + errors[i].line + ': ' + errors[i].reason);
+			}
+		}
 	}
 	catch(err)
 	{
@@ -77,12 +87,12 @@ lessc('static/xing-wysihtml5/css/editor');
 // minify js
 
 uglifyc('static/js/jquery.*.js', 'static/js/site.min.js');
-uglifyc('static/js/edit.js');
-uglifyc('static/js/blog.js');
+uglifyc('static/js/edit.js', null, 1);
+uglifyc('static/js/blog.js', null, 1);
 
 f = shell.find('static/themes').filter(function(file) { return file.match(/[^.min]\.js$/); });
 for(var i = 0; i < f.length; i++) {
-	uglifyc(f[i]);
+	uglifyc(f[i], null, 1);
 }
 
 // themes
