@@ -38,7 +38,7 @@ jQuery(function($){
 			prev: $('.carousel-control.left', p), // Slider nav control, please leave!
 			timeout: Number(Sneek.cycle.timeout), // Slide timeout
 			speed: Number(Sneek.cycle.speed) // Animation speed
-		}
+		};
 
 		// Load slideshow
 		$(this).show().cycle(cycle_settings);
@@ -57,7 +57,7 @@ jQuery(function($){
 			cornerStampSelector: ( $('#endless-pad').length == 1 ) ? '#endless-pad' : '',
 			isAnimated: true
 		});
-	})
+	});
 
 	$.getJSON('http://api.twitter.com/1/statuses/user_timeline.json?callback=?&include_entities=true&screen_name=thenextmuse&count=5&trim_user=1', function(data) {
 		$.each(data, function(key, val) {

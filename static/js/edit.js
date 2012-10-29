@@ -8,7 +8,7 @@ function validURL(u) {
 	if(u.match("^[-A-Za-z0-9._~:/?#@!$&'()*+,;=% \\[\\]]+$"))
 		return true;
 	return false;
-};
+}
 
 function checkURL(u) {
 	if(!validURL(u))
@@ -261,7 +261,7 @@ $(function() {
 
 	$(document).on("click", "#publish", function() {
 		$.ajax({
-			url: TNM.publishurl,
+			url: TNM.publishurl
 		});
 
 		$('#publishing').show().fadeOut(4000);
@@ -279,7 +279,7 @@ $(function() {
 	});
 
 	$(document).on('click', '#save_domain', function() {
-		savemap['_domain'] = $("#domain").val();
+		savemap._domain = $("#domain").val();
 		//save();
 	});
 
@@ -395,9 +395,9 @@ $(function() {
 		}
 		else if(t.hasClass('image'))
 		{
-			d.append('<a class="img-hover img-edit">edit</a>')
-			d.append('<a class="img-hover img-change" href="#">change</a>')
-			d.append('<a class="img-hover img-link" ng-click="set_link_id(\'' + this.id + '\')">link</a>')
+			d.append('<a class="img-hover img-edit">edit</a>');
+			d.append('<a class="img-hover img-change" href="#">change</a>');
+			d.append('<a class="img-hover img-link" ng-click="set_link_id(\'' + this.id + '\')">link</a>');
 		}
 		else if(t.hasClass('social'))
 		{
