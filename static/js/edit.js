@@ -123,6 +123,20 @@ function stopImageEdit() {
 	$('#imgcontainer').hide();
 }
 
+function edit_resize(t, d) {
+	d.offset(t.offset());
+	d.width(t.outerWidth());
+	d.height(t.outerHeight());
+}
+
+$(window).resize(function() {
+	$('.edithover:visible').each(function() {
+		var d = $(this);
+		var t = d.data('orig');
+		edit_resize(t, d);
+	});
+});
+
 $(function() {
 	/*
 	$('body').prepend(
@@ -364,24 +378,18 @@ $(function() {
 		var d = $('<div class="edithover"></div>');
 		var t = $(this);
 		d.attr('id', this.id + '_edit');
-		d.offset(t.offset());
-		d.width(t.outerWidth());
-		d.height(t.outerHeight());
+		d.data('orig', t);
 		$('body').append(d);
-		$.data(d[0], 'id', this.id)
+		$.data(d[0], 'id', this.id);
 
 		d.mouseout(function() {
 			d.hide();
 		});
 
-		d.mouseover(function() {
-			TNM.edithover.hide();
-			d.show();
-		});
-
 		t.mouseover(function() {
 			TNM.edithover.hide();
 			d.show();
+			edit_resize(t, d);
 		});
 		TNM.edithover = $('.edithover');
 
@@ -658,7 +666,7 @@ function TNMCtrl($scope, $http) {
 		var i = $('#' + id);
 		i.text(o[id]);
 		var e = $('#' + id + '_edit');
-		e.width(i.outerWidth());
+		edit_resize(i, e);
 	};
 
 	$scope.set_link_id = function(id) {
