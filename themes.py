@@ -43,7 +43,7 @@ SPECS = {
 				],
 			},
 			2: { # pic and text at bottom
-				'lines': 4,
+				'lines': 5,
 				'images': [
 					(1000, 370),
 					(310, 180),
