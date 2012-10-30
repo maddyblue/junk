@@ -25,23 +25,9 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="wysihtml5-textarea">text</label>
+						<label class="control-label" for="text">text</label>
 						<div class="controls">
-							<textarea name="text" id="text" class="span8 editable" rows="14">{{ p.text }}</textarea>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="no_editor">disable editor</label>
-						<div class="controls">
-							<input id="editor" type="checkbox" name="no_editor" {% if p.no_editor %}checked{% endif %}/>
-							<span class="help-inline">
-								<span class="label label-important">WARNING:</span>
-								{% if p.no_editor %}
-									unchecking this and saving will remove any weird HTML (like youtube.com iframes) from the post
-								{% else %}
-									after checking this, you cannot return to using the editor for this post without it removing any HTML you insert that it does not support (like youtube.com iframes)
-								{% endif %}
-							</span>
+							<textarea name="text" id="text" class="span8 redactor" rows="14">{{ p.text }}</textarea>
 						</div>
 					</div>
 					<div class="control-group">
@@ -89,12 +75,13 @@
 	</div>
 </div>
 
-{% if not p.no_editor %}
-<link rel="stylesheet" href="/static/xing-wysihtml5/css/stylesheet.css">
+<link rel="stylesheet" href="/static/redactor/redactor.css" type="text/css">
+<script src="/static/redactor/redactor.min.js"></script>
 
-<script src="/static/xing-wysihtml5/wysihtml5-parser_rules-advanced.js" type="text/javascript"></script>
-<script src="/static/xing-wysihtml5/wysihtml5-0.3.0.min.js" type="text/javascript"></script>
-<script src="/static/js/xing.js" type="text/javascript"></script>
-{% endif %}
+<script type="text/javascript">
+	$(function() {
+		$('.redactor').redactor();
+	});
+</script>
 
 {% endblock %}

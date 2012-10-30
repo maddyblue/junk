@@ -514,7 +514,6 @@ class BlogPost(ndb.Model):
 
 class SiteBlogPost(BlogPost):
 	html = ndb.TextProperty('h', compressed=True)
-	no_editor = ndb.BooleanProperty('e', default=False)
 
 	@property
 	def tag_index_keys(self):

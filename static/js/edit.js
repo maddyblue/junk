@@ -297,22 +297,6 @@ $(function() {
 		//save();
 	});
 
-	// text
-
-	/*
-	$(".editable.text").hallo({
-		plugins: {
-			'halloformat': {},
-			'hallolink': {},
-		}
-	});
-
-	$(document).on("hallodeactivated", ".editable.text", function() {
-		savemap[this.id] = $(this).html();
-		save();
-	});
-	*/
-
 	// date
 
 	$(".editable.date").each(function() {
@@ -353,7 +337,7 @@ $(function() {
 
 	// all
 
-	$(document).keyup(function(e){
+	$(document).on('keyup', function(e) {
 		if(e.keyCode == 27) // esc
 		{
 			$(".dialog").hide();
@@ -361,7 +345,7 @@ $(function() {
 		}
 		else if(e.keyCode == 13) // enter
 		{
-			$('.dialog:visible a.save').click();
+			$('.dialog:visible:not(#edit_text_dialog) a.save').click();
 		}
 	});
 
@@ -373,6 +357,18 @@ $(function() {
 		'edit_line'
 	);
 	TNM.edit_line_input = $('input', TNM.edit_line_dialog);
+
+	TNM.edit_text_dialog = make_dialog(
+		'edit_text_dialog',
+		'Edit text',
+		'Edit text',
+		'<textarea style="height: 400px"></textarea>',
+		'edit_text'
+	);
+	TNM.edit_text_area = $('textarea', TNM.edit_text_dialog);
+	TNM.edit_text_area.redactor({
+		autoresize: false
+	});
 
 	$('.editable').each(function() {
 		var d = $('<div class="edithover"></div>');
@@ -431,6 +427,14 @@ $(function() {
 
 			$(d).click(function () {
 				dialog.show();
+			});
+		}
+		else if(t.hasClass('text'))
+		{
+			d.click(function() {
+				TNM.edit_text_dialog.show();
+				TNM.edit_text_area.focus().setCode(t.html());
+				TNM.edit_text_id = t.attr('id');
 			});
 		}
 	});
@@ -667,6 +671,20 @@ function TNMCtrl($scope, $http) {
 		i.text(o[id]);
 		var e = $('#' + id + '_edit');
 		edit_resize(i, e);
+	};
+
+	$scope.edit_text = function() {
+		var id = TNM.edit_text_id;
+		var o = {};
+		o[id] = TNM.edit_text_area.getCode();
+
+		if(!o[id]) {
+			return;
+		}
+
+		$scope.save(o);
+		var i = $('#' + id);
+		i.html(o[id]);
 	};
 
 	$scope.set_link_id = function(id) {
