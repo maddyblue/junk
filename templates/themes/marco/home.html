@@ -3,15 +3,15 @@
 <div class="column">
 <ul>
 	<li>
-	{{ page|editline(0, 'h2') }}
+	{{ page|editline(0, 'h2', link=1, rel=rel) }}
 	{{ images[1].render(mode) | link(page, 1, rel) }}
 	</li>
 	<li class="middle">
-	{{ page|editline(1, 'h2') }}
+	{{ page|editline(1, 'h2', link=2, rel=rel) }}
 	{{ images[2].render(mode) | link(page, 2, rel) }}
 	</li>
 	<li>
-	{{ page|editline(2, 'h2') }}
+	{{ page|editline(2, 'h2', link=3, rel=rel) }}
 	{{ images[3].render(mode) | link(page, 3, rel) }}
 	</li>
 </ul>

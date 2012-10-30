@@ -18,9 +18,12 @@ def edittext(page, i, elem):
 		elem, i, page.text[i], elem
 	)
 
-def editline(page, i, elem, cls=None):
+def editline(page, i, elem, cls=None, link=None, rel=None):
+	v = page.lines[i]
+	if link and rel:
+		v = '<a href="%s">%s</a>' %(page.link(link, rel), v)
 	return '<%s class="editable line%s" id="_line_%i">%s</%s>' %(
-		elem, (' ' + cls if cls else ''), i, page.lines[i], elem
+		elem, (' ' + cls if cls else ''), i, v, elem
 	)
 
 def editposttitle(post, elem):
