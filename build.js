@@ -86,7 +86,7 @@ lessc('static/css/edit');
 // minify js
 
 uglifyc('static/js/jquery.*.js', 'static/js/site.min.js');
-uglifyc('static/js/edit.js', null, 1);
+//uglifyc('static/js/edit.js', null, 1);
 uglifyc('static/js/blog.js', null, 1);
 
 f = shell.find('static/themes').filter(function(file) { return file.match(/[^.min]\.js$/); });
