@@ -392,7 +392,7 @@ $(function() {
 		if(t.hasClass('line'))
 		{
 			d.click(function() {
-				$('#edit_line_dialog').show();
+				TNM.edit_line_dialog.show();
 				TNM.edit_line_input.val(t.text()).focus();
 				TNM.edit_line_id = t.attr('id');
 			});
