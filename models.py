@@ -308,6 +308,7 @@ class Image(ndb.Expando):
 			self.s = max(wscale, hscale)
 
 	# must not be called within a transaction; not sure why
+	@ndb.non_transactional(allow_existing=False)
 	def set_blob(self):
 		w = int(math.ceil(self.ow * self.s))
 		h = int(math.ceil(self.oh * self.s))
