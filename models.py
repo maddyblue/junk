@@ -203,6 +203,7 @@ class Page(ndb.Expando):
 		return p
 
 	@classmethod
+	@ndb.toplevel
 	def set_layout(cls, page, layoutid):
 		site = page.key.parent().get()
 		layout = spec(site.theme, page.type, layoutid)
@@ -213,13 +214,9 @@ class Page(ndb.Expando):
 		def callback():
 			p = page.key.get()
 
-			images = ndb.get_multi(p.images)
+			images = []
 			for n, i in enumerate(layout.get('images', [])):
-				if n < len(images):
-					images[n].set_type(IMAGE_TYPE_HOLDER)
-					images[n].width = i[0]
-					images[n].height = i[1]
-				else:
+				if n >= len(p.images):
 					images.append(Image(key=ndb.Key('Image', str(n), parent=p.key), width=i[0], height=i[1]))
 					p.images.append(images[-1].key)
 			ndb.put_multi_async(images)
@@ -232,6 +229,20 @@ class Page(ndb.Expando):
 			return p
 
 		p = ndb.transaction(callback)
+
+		images = ndb.get_multi(p.images)
+		for n, i in enumerate(layout.get('images', [])):
+			images[n].width = i[0]
+			images[n].height = i[1]
+
+			if images[n].type == IMAGE_TYPE_BLOB:
+				images[n].set_type(IMAGE_TYPE_BLOB, images[n].blob_key.get())
+				images[n].set_blob()
+			else:
+				images[n].set_type(IMAGE_TYPE_HOLDER)
+
+		ndb.put_multi_async(images)
+
 		return p
 
 # app engine is seeing high failure rates here, so retry a few times
