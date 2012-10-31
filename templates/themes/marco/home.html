@@ -1,3 +1,7 @@
+{% if page.layout == 2 %}
+<div class="left-cont">
+{% endif %}
+
 {{ images[0].render(mode) | link(page, 0, rel) }}
 
 <div class="column">
@@ -18,7 +22,6 @@
 </div>
 
 <div class="blog">
-{% if page.layout == 1 %}
 {% set b = site.blog_post %}
 	{% if b %}
 		{% set url = b.url %}
@@ -30,12 +33,28 @@
 			<span class="more"><a href="{{ url }}">More</a></span>
 		</div>
 	{% endif %}
-{% elif page.layout == 2 %}
-{{ page|editline(3, 'h2') }}
-	<div class="post">
-		<a href="{{ page.link(3, rel) }}" class="thumb">{{ images[4].render(mode) }}</a>
-		{{ page|editline(4, 'h3') }}
-		{{ page|edittext(0, 'div') }}
-	</div>
-{% endif %}
 </div>
+
+{% if page.layout == 2 %}
+</div>
+
+<aside>
+	<ul>
+	{% if site.twitter_name %}
+		<li class="twitter">
+			<h3>@{{ site.twitter_name }}</h3>
+			<ul id="tweet-list">
+				<li class="follow">
+					follow me on <a href="{{ site.twitter }}">twitter</a>
+				</li>
+			</ul>
+		</li>
+	{% endif %}
+	</ul>
+</aside>
+
+<script type="text/javascript">
+	{{ site.twitter_name|tweets('#tweet-list') }}
+</script>
+
+{% endif %}

@@ -33,7 +33,7 @@ PAGE_TYPES = [
 SPECS = {
 	THEME_MARCO: {
 		PAGE_TYPE_HOME: {
-			1: { # blog section at bottom
+			1: { # no sidebar
 				'lines': 3,
 				'images': [
 					(1000, 370),
@@ -42,16 +42,14 @@ SPECS = {
 					(310, 180),
 				],
 			},
-			2: { # pic and text at bottom
-				'lines': 5,
+			2: { # sidebar
+				'lines': 3,
 				'images': [
-					(1000, 370),
-					(310, 180),
-					(310, 180),
-					(310, 180),
-					(310, 180),
+					(654, 243),
+					(200, 116),
+					(200, 116),
+					(200, 116),
 				],
-				'text': 2,
 			},
 		},
 		PAGE_TYPE_TEXT: {

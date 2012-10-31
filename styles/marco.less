@@ -174,7 +174,6 @@ dd {
 }
 
 nav {
-
 	ul, ol {
 		list-style: none;
 		margin: 0;
@@ -258,7 +257,6 @@ header#top {
 	}
 
 	nav {
-
 		ul {
 			margin: 50px 0 0 0;
 			list-style: none;
@@ -340,6 +338,9 @@ div#main {
 		}
 	}
 
+
+
+
 	div.left-cont {
 		float: left;
 		width: 650px;
@@ -372,7 +373,23 @@ div#main {
 				p {
 					margin-top: 10px;
 				}
+
+				img {
+					width: 200px;
+				}
 			}
+		}
+
+		.blog img {
+			width: 200px;
+			margin-bottom: 50px;
+		}
+
+		h2 {
+			font-size: 18px;
+			font-weight: normal;
+			margin: 0 0 5px 10px;
+			text-transform: uppercase;
 		}
 	}
 
@@ -385,6 +402,9 @@ div#main {
 		}
 
 		ul {
+			margin: 0 0 30px 0;
+			list-style: none;
+			padding: 0;
 
 			li ul {
 				margin: 0 0 30px 0;
@@ -425,12 +445,12 @@ div#main {
 				padding: 5px 0;
 				border-bottom: dotted 1px @sidebar-divider;
 				line-height: 24px;
-			}
 
-			li.twitter ul li.follow {
-				text-align: right;
-				border-bottom: none;
-				background: url(twitter.png) 130px 6px no-repeat;
+				&.follow {
+					text-align: right;
+					border-bottom: none;
+					background: url(twitter.png) 130px 6px no-repeat;
+				}
 			}
 
 			li.events ul li.calendar {
@@ -871,22 +891,6 @@ div#gallery.small article {
 
 div#gallery.small article.end {
 	margin: 0 0 30px 0;
-}
-
-body#index2 div#main div.left-cont .column img {
-	width: 200px;
-}
-
-body#index2 div#main div.left-cont .blog img {
-	width: 200px;
-	margin-bottom: 50px;
-}
-
-body#index2 div#main div.left-cont h2 {
-	font-size: 18px;
-	font-weight: normal;
-	margin: 0 0 5px 10px;
-	text-transform: uppercase;
 }
 
 footer.bottom {

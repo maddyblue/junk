@@ -77,6 +77,22 @@ def link(text, page, i, rel):
 
 	return text
 
+def tweets(handle, el):
+	return """
+	$.getJSON('http://api.twitter.com/1/statuses/user_timeline.json?callback=?&include_entities=true&screen_name=%s&count=5&trim_user=1', function(data) {
+		for(var j = data.length - 1; j >= 0; j--) {
+			val = data[j];
+			var t = val.text;
+			for(var i = 0; i < val.entities.urls.length; i++) {
+				var u = val.entities.urls[i];
+				var link = '<a href="' + u.expanded_url + '">' + u.url + '</a>';
+				t = t.replace(u.url, link);
+			}
+
+			$("%s").prepend('<li>' + t + '</li>');
+		}
+	});""" %(handle, el)
+
 filters = dict([(i, globals()[i]) for i in [
 	'date',
 	'editline',
@@ -92,5 +108,6 @@ filters = dict([(i, globals()[i]) for i in [
 	'linkmap',
 	'markdown',
 	'rss_date',
+	'tweets',
 	'url',
 ]])

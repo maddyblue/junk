@@ -52,13 +52,15 @@ div#main div.left-cont{float:left;width:650px;}div#main div.left-cont span.thumb
 div#main div.left-cont h1{font-size:24px;}
 div#main div.left-cont div.column{margin:30px 0;}div#main div.left-cont div.column ul.double li{float:left;width:48%;}div#main div.left-cont div.column ul.double li+li{margin-left:4%;}
 div#main div.left-cont div.column ul.double li p{margin-top:10px;}
+div#main div.left-cont div.column ul.double li img{width:200px;}
+div#main div.left-cont .blog img{width:200px;margin-bottom:50px;}
+div#main div.left-cont h2{font-size:18px;font-weight:normal;margin:0 0 5px 10px;text-transform:uppercase;}
 div#main aside{width:30%;float:right;}div#main aside a{color:#000000;}
-div#main aside ul li ul{margin:0 0 30px 0;list-style:none;padding:0;}
+div#main aside ul{margin:0 0 30px 0;list-style:none;padding:0;}div#main aside ul li ul{margin:0 0 30px 0;list-style:none;padding:0;}
 div#main aside ul li{margin:0 0 25px 0;padding-bottom:10px;border-bottom:1px dotted #999999;}div#main aside ul li h3{font-size:18px;margin:0;}
 div#main aside ul li ul li{font-size:14px;font-style:italic;margin:0;}div#main aside ul li ul li strong{font-weight:bold;font-style:normal;}
 div#main aside ul li:last-child{border-bottom:none;}
-div#main aside ul li.twitter ul li{font-size:16px;font-style:normal;margin:0;padding:5px 0;border-bottom:dotted 1px #999999;line-height:24px;}
-div#main aside ul li.twitter ul li.follow{text-align:right;border-bottom:none;background:url(twitter.png) 130px 6px no-repeat;}
+div#main aside ul li.twitter ul li{font-size:16px;font-style:normal;margin:0;padding:5px 0;border-bottom:dotted 1px #999999;line-height:24px;}div#main aside ul li.twitter ul li.follow{text-align:right;border-bottom:none;background:url(twitter.png) 130px 6px no-repeat;}
 div#main aside ul li.events ul li.calendar{background:url("calendar.png") no-repeat scroll 170px 6px transparent;border-bottom:medium none;text-align:right;font-style:normal;font-size:16px;line-height:32px;}
 div#main .right aside{width:30%;float:left;}
 div#search{display:none;position:absolute;background:#453022;width:100%;top:0px;left:0px;text-align:right;color:#ffffff;}div#search form{max-width:1000px;padding:7px 0;margin:0 auto;}div#search form label{text-transform:uppercase;font-size:14px;}
@@ -107,9 +109,6 @@ div#gallery.big article{float:left;width:32%;overflow:hidden;height:240px;positi
 div#gallery.big article.end{margin:0 0 30px 0;}
 div#gallery.small article{float:left;width:19%;overflow:hidden;height:142px;position:relative;margin:0 8px 30px 8px;}
 div#gallery.small article.end{margin:0 0 30px 0;}
-body#index2 div#main div.left-cont .column img{width:200px;}
-body#index2 div#main div.left-cont .blog img{width:200px;margin-bottom:50px;}
-body#index2 div#main div.left-cont h2{font-size:18px;font-weight:normal;margin:0 0 5px 10px;text-transform:uppercase;}
 footer.bottom{clear:both;background:#453022;color:#b99c26;padding:20px 0;height:100px;}footer.bottom div.inner{max-width:1000px;margin:0 auto;}
 footer.bottom ul.sn{margin:0;padding:0;list-style:none;float:left;}footer.bottom ul.sn li{float:left;width:50px;height:50px;}footer.bottom ul.sn li a{display:block;width:50px;height:50px;text-indent:-9999px;opacity:0.6;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";filter:alpha(opacity=60);-moz-opacity:0.6;-khtml-opacity:0.6;}
 footer.bottom ul.sn li a:hover{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";filter:alpha(opacity=100);-moz-opacity:1;-khtml-opacity:1;}
