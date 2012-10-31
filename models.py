@@ -291,12 +291,12 @@ class Image(ndb.Expando):
 				os = min(os, images.IMG_SERVING_SIZES_LIMIT, max(self.w * 3, self.h * 3))
 				self.orig = self.blob_key.get().url
 
-	def set_type(self, type, *args):
-		self.type = type
+	def set_type(self, t, *args):
+		self.type = t
 		self.orig = None
 		self.url = None
 
-		if type == IMAGE_TYPE_BLOB:
+		if t == IMAGE_TYPE_BLOB:
 			self.b = args[0].key.id()
 			self.x = 0 # x offset
 			self.y = 0 # y offset
