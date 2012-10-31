@@ -1,5 +1,5 @@
 {% if page.layout == 2 %}
-<div class="left-cont">
+<div class="left-cont home2">
 {% endif %}
 
 {{ images[0].render(mode) | link(page, 0, rel) }}
@@ -38,23 +38,6 @@
 {% if page.layout == 2 %}
 </div>
 
-<aside>
-	<ul>
-	{% if site.twitter_name %}
-		<li class="twitter">
-			<h3>@{{ site.twitter_name }}</h3>
-			<ul id="tweet-list">
-				<li class="follow">
-					follow me on <a href="{{ site.twitter }}">twitter</a>
-				</li>
-			</ul>
-		</li>
-	{% endif %}
-	</ul>
-</aside>
-
-<script type="text/javascript">
-	{{ site.twitter_name|tweets('#tweet-list') }}
-</script>
+{% include 'themes/marco/aside.html' %}
 
 {% endif %}

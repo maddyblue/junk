@@ -27,31 +27,7 @@
 	</div>
 	</div>
 
-<aside>
-	<ul>
-		<li class="events">
-			{{ page|editline(1, 'h3') }}
-			{{ page|edittext(3, 'div') }}
-		</li>
-		{% if site.twitter %}
-		<li class="twitter">
-			<h3>Latest tweets!</h3>
-				<script type="text/javascript">
-					$(function() {
-							$.getJSON('http://search.twitter.com/search.json?callback=?&rpp=5&q={{ site.twitter_name }}', function(data) {
-							$.each(data.results, function(key, val) {
-								$("#li_twitter").before('<li>' + val.text + '</li>');
-							});
-						});
-					});
-				</script>
-			<ul id="ul_twitter">
-				<li class="follow" id="li_twitter">follow me on <a href="{{ site.twitter }}">twitter</a></li>
-			</ul>
-		</li>
-		{% endif %}
-	</ul>
-</aside>
+{% include 'themes/marco/aside.html' %}
 
 {% elif page.layout == 3 %}
 

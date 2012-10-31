@@ -52,9 +52,6 @@ div#main div.left-cont{float:left;width:650px;}div#main div.left-cont span.thumb
 div#main div.left-cont h1{font-size:24px;}
 div#main div.left-cont div.column{margin:30px 0;}div#main div.left-cont div.column ul.double li{float:left;width:48%;}div#main div.left-cont div.column ul.double li+li{margin-left:4%;}
 div#main div.left-cont div.column ul.double li p{margin-top:10px;}
-div#main div.left-cont div.column ul.double li img{width:200px;}
-div#main div.left-cont .blog img{width:200px;margin-bottom:50px;}
-div#main div.left-cont h2{font-size:18px;font-weight:normal;margin:0 0 5px 10px;text-transform:uppercase;}
 div#main aside{width:30%;float:right;}div#main aside a{color:#000000;}
 div#main aside ul{margin:0 0 30px 0;list-style:none;padding:0;}div#main aside ul li ul{margin:0 0 30px 0;list-style:none;padding:0;}
 div#main aside ul li{margin:0 0 25px 0;padding-bottom:10px;border-bottom:1px dotted #999999;}div#main aside ul li h3{font-size:18px;margin:0;}
@@ -109,6 +106,9 @@ div#gallery.big article{float:left;width:32%;overflow:hidden;height:240px;positi
 div#gallery.big article.end{margin:0 0 30px 0;}
 div#gallery.small article{float:left;width:19%;overflow:hidden;height:142px;position:relative;margin:0 8px 30px 8px;}
 div#gallery.small article.end{margin:0 0 30px 0;}
+.home2 .column img{width:200px;}
+.home2 .blog img{width:200px;margin-bottom:50px;}
+.home2 h2{font-size:18px;font-weight:normal;margin:0 0 5px 10px;text-transform:uppercase;}
 footer.bottom{clear:both;background:#453022;color:#b99c26;padding:20px 0;height:100px;}footer.bottom div.inner{max-width:1000px;margin:0 auto;}
 footer.bottom ul.sn{margin:0;padding:0;list-style:none;float:left;}footer.bottom ul.sn li{float:left;width:50px;height:50px;}footer.bottom ul.sn li a{display:block;width:50px;height:50px;text-indent:-9999px;opacity:0.6;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";filter:alpha(opacity=60);-moz-opacity:0.6;-khtml-opacity:0.6;}
 footer.bottom ul.sn li a:hover{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";filter:alpha(opacity=100);-moz-opacity:1;-khtml-opacity:1;}
