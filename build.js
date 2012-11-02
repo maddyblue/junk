@@ -24,13 +24,18 @@ function lessc(fpath, foutput) {
 			filename: fname + '.less'
 		});
 
-		parser.parse(data, function (e, tree) {
+		parser.parse(data, function (err, tree) {
+			if (err) {
+				console.log('lessc error in ' + fpath + ': ' + err);
+				return;
+			}
+
 			tree.toCSS({ compress: true }).to(foutput);
 		});
 	}
 	catch(err)
 	{
-		console.log(err);
+		console.log('error in ' + fpath + ':' + err);
 	}
 }
 
