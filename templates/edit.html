@@ -110,7 +110,7 @@ $(function() {
 	{% for i in range(1, page.layouts + 1) %}
 		TNM.layouts['{{ i }}'] = {
 			url: "{{ "layout"|url(siteid=site.key.id(), pageid=page.key.id(), layoutid=i) }}",
-			img: "/static/images/layouts/{{ site.theme }}/{{ page.type }}-{{ i }}.png"
+			img: "{{ site.theme|layoutimg(page.type, i) }}"
 		};
 	{% endfor %}
 
@@ -124,13 +124,21 @@ $(function() {
 		});
 	{% endfor %}
 
-	TNM.newpagetypes =
+	TNM.newpagetypes = [];
 		{% for t, layouts in site.types|dictsort %}
-			{% for l in layouts %}
-				'<option value="{{ t }}:{{ l }}">{{ t }} ({{ l }})</option>' +
-			{% endfor %}
+			TNM.newpagetypes.push({
+				name: "{{ t }}",
+				layouts: [
+					{%- for i in layouts %}
+					{
+						img: "{{ site.theme|layoutimg(t, i) }}",
+						url: "{{ 'new-page'|url(pagetype=t, layoutid=i) }}",
+						id: {{ i }}
+					}{% if not loop.last %},{% endif %}
+					{%- endfor %}
+				]
+			});
 		{% endfor %}
-		'';
 
 	TNM.archivepages =
 		{% for p in site.archived_pages %}
@@ -138,9 +146,8 @@ $(function() {
 		{% endfor %}
 		'';
 
-	TNM.newpageurl = '{{ "new-page"|url }}';
-	TNM.archivepageurl = '{{ "archive-page"|url }}';
-	TNM.unpublishpageurl = '{{ "unpublish-page"|url(pageid=page.key.id()) }}';
+	TNM.archivepageurl = '{{ "archive-page"|url(pageid=page.key.id()) }}';
+	TNM.unarchivepageurl = '{{ "unarchive-page"|url }}';
 
 	TNM.publishedurl = '{{ published_url }}';
 	TNM.publishurl = '{{ publish_url }}';

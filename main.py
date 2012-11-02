@@ -448,10 +448,9 @@ class Save(BaseHandler):
 
 			cm = self.request.POST.get('p_%s_name' %p.key.id())
 			if cm:
-				if cm.lower() != p.name_lower and models.Page.pagename_exists(s, cm):
-					r['errors'].append('%s is already the name of another page' %cm)
-				elif re.search(r'[^\w -]+', cm):
-					r['errors'].append('Page names can only contain letters, numbers, spaces, dashes (-), and underscores (_)')
+				errors = models.Page.pagename_isvalid(s, cm)
+				if cm.lower() != p.name_lower and errors:
+					r['errors'].append(errors)
 				else:
 					p.name = cm
 					pc = True
@@ -750,11 +749,22 @@ class SetColors(BaseHandler):
 		self.redirect(webapp2.uri_for('edit-home'))
 
 class NewPage(BaseHandler):
-	def post(self):
+	def post(self, pagetype, layoutid):
 		user, site = self.us()
-		sp = self.request.get('type').split(':')
-		layout = int(sp[1])
-		page = models.Page.new(self.request.get('title'), site, sp[0], layout)
+
+		title = self.request.get('title').strip()
+		if not title:
+			title = pagetype
+
+		error = models.Page.pagename_isvalid(site, title)
+		if error:
+			self.response.out.write(json.dumps({
+				'error': error,
+			}))
+			return
+
+		layout = int(layoutid)
+		page = models.Page.new(title, site, pagetype, layout)
 
 		def callback():
 			s = site.key.get()
@@ -763,7 +773,9 @@ class NewPage(BaseHandler):
 			return s
 
 		s = ndb.transaction(callback)
-		self.redirect(webapp2.uri_for('edit', pagename=page.name))
+		self.response.out.write(json.dumps({
+			'success': webapp2.uri_for('edit', pagename=page.name),
+		}))
 
 class NewBlogPost(BaseHandler):
 	@ndb.toplevel
@@ -793,7 +805,7 @@ class NewBlogPost(BaseHandler):
 		bp.put_async()
 		self.redirect(webapp2.uri_for('edit-page', pagename=page.name, pagenum=bpid))
 
-class UnpublishPage(BaseHandler):
+class ArchivePage(BaseHandler):
 	def get(self, pageid):
 		user, site = self.us()
 		self.redirect(webapp2.uri_for('edit-home'))
@@ -811,7 +823,7 @@ class UnpublishPage(BaseHandler):
 
 			s = ndb.transaction(callback)
 
-class ArchivePage(BaseHandler):
+class UnarchivePage(BaseHandler):
 	def post(self):
 		user, site = self.us()
 		self.redirect(webapp2.uri_for('edit-home'))
@@ -1333,7 +1345,7 @@ config = {
 
 app = webapp2.WSGIApplication([
 	webapp2.Route(r'/', handler='main.Blog', name='blog'),
-	webapp2.Route(r'/archive', handler='main.ArchivePage', name='archive-page'),
+	webapp2.Route(r'/archive/<pageid>', handler='main.ArchivePage', name='archive-page'),
 	webapp2.Route(r'/blog', handler='main.Blog'),
 	webapp2.Route(r'/blog/<link>', handler='main.BlogPost', name='site-blog-post'),
 	webapp2.Route(r'/blog/<year:\d+>/<month:\d+>', handler='main.Blog', name='site-blog-month'),
@@ -1353,13 +1365,13 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/logout', handler='main.Logout', name='logout'),
 	webapp2.Route(r'/main', handler='main.MainPage', name='main'),
 	webapp2.Route(r'/new/blogpost/<pageid>', handler='main.NewBlogPost', name='new-blog-post'),
-	webapp2.Route(r'/new/page', handler='main.NewPage', name='new-page'),
+	webapp2.Route(r'/new/page/<pagetype>/<layoutid:\d+>', handler='main.NewPage', name='new-page'),
 	webapp2.Route(r'/publish/<sitename>', handler='main.Publish', name='publish'),
 	webapp2.Route(r'/register', handler='main.Register', name='register'),
 	webapp2.Route(r'/reset', handler='main.Reset', name='reset'),
 	webapp2.Route(r'/save/<siteid>/<pageid>', handler='main.Save', name='save'),
 	webapp2.Route(r'/social', handler='main.Social', name='social'),
-	webapp2.Route(r'/unpublish/<pageid>', handler='main.UnpublishPage', name='unpublish-page'),
+	webapp2.Route(r'/unarchive', handler='main.UnarchivePage', name='unarchive-page'),
 	webapp2.Route(r'/upload/file/<sitename>/<pageid>/<image>', handler='main.UploadHandler', name='upload-file'),
 	webapp2.Route(r'/upload/success', handler='main.UploadSuccess', name='upload-success'),
 	webapp2.Route(r'/upload/url/<sitename>/<pageid>', handler='main.GetUploadURL', name='upload-url'),

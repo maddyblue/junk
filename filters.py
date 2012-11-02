@@ -93,6 +93,9 @@ def tweets(handle, el):
 		}
 	});""" %(handle, el)
 
+def layoutimg(theme, pagetype, layout):
+	return "/static/images/layouts/%s/%s-%i.png" %(theme, pagetype, layout)
+
 filters = dict([(i, globals()[i]) for i in [
 	'date',
 	'editline',
@@ -104,6 +107,7 @@ filters = dict([(i, globals()[i]) for i in [
 	'editposttitle',
 	'edittext',
 	'fdate',
+	'layoutimg',
 	'link',
 	'linkmap',
 	'markdown',

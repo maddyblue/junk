@@ -19,7 +19,7 @@
 	text-decoration: none;
 	text-transform: lowercase;
 	top: 8px;
-	padding: 5px 15px 7px;
+	padding: 5px 12px 7px;
 
 	.border-radius(12px);
 
@@ -38,12 +38,6 @@
 		}
 	}
 
-	&.save
-	{
-		background: @tnm-bg-dark url(toolbar-save.png) 10px 8px no-repeat;
-		padding-left: 35px;
-	}
-
 	&.close {
 		color: @dialog-close-color;
 		background-color: @dialog-content-bg;
@@ -56,8 +50,13 @@
 
 	.toolbar-btn (@imgurl)
 	{
-		background: @tnm-bg-dark url(@imgurl) 10px 8px no-repeat;
-		padding-left: 35px;
+		background: @tnm-bg-dark url(@imgurl) 12px 8px no-repeat;
+		padding-left: 33px;
+	}
+
+	&.save
+	{
+		.toolbar-btn('toolbar-save.png');
 	}
 
 	&.publish
@@ -105,7 +104,7 @@
 	{
 		float: left;
 		height: 50px;
-		padding: 0 25px;
+		padding: 0 10px;
 		font-size: 14px;
 
 		&.divider
@@ -431,6 +430,10 @@
 			text-align: right;
 		}
 	}
+
+	.error {
+		color: @tnm-red;
+	}
 }
 
 .social_icon {
@@ -466,7 +469,7 @@
 	outline: 5px solid @tnm-red-alpha;
 }
 
-#layout_dialog, #colors_dialog {
+#layout_dialog, #colors_dialog, #add_page_dialog {
 	img {
 		margin-right: 15px;
 	}

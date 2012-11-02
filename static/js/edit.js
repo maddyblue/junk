@@ -195,6 +195,11 @@ $(function() {
 				'<li><a class="layout btn">layout</a></li>' +
 				'<li><a class="colors btn">colors</a></li>' +
 			'</ul></nav>' +
+			'<nav class="divider"></nav>' +
+			'<nav><ul>' +
+				'<li><a class="addpage btn">add</a></li>' +
+				'<li><a class="archivepage btn">archive</a></li>' +
+			'</ul></nav>' +
 			'<nav class="right"><ul class="user-actions">' +
 				'<li><a href=""><img class="avatar" src=' + TNM.gravatar + '" /></a></li>' +
 				'<li class="user-info">' +
@@ -208,7 +213,7 @@ $(function() {
 		'</div>'
 	);
 
-	$('body').on('click', '.dialog a', function() {
+	$('body').on('click', '.dialog a:not(.noclose)', function() {
 		$(this).parents('.dialog').hide();
 	});
 
@@ -279,11 +284,6 @@ $(function() {
 		});
 
 		$('#publishing').show().fadeOut(4000);
-		return false;
-	});
-
-	$(document).on("click", "#new_page", function() {
-		$("#new_page_modal").show();
 		return false;
 	});
 
@@ -493,6 +493,42 @@ $(function() {
 		'<p><label><input type="radio" name="link" value="no" checked="checked"> [no link]</label></p>',
 		'save_link'
 	);
+
+	layouts = 'page title: <input type="text" id="add_page_name"><br/><span id="add_page_error" class="error"></span>';
+	for (i in TNM.newpagetypes) {
+		var page = TNM.newpagetypes[i];
+		layouts += '<h3>' + page.name + '</h3>';
+
+		for (var j = 0; j < page.layouts.length; j++) {
+			var p = page.layouts[j];
+			layouts += '<a class="noclose" ng-click="add_page(\'' + p.url + '\')">';
+			layouts += '<img src="' + p.img + '"></a>';
+		}
+	}
+
+	TNM.add_page_dialog = make_dialog(
+		'add_page_dialog',
+		'Add page',
+		'Add Page',
+		layouts
+	);
+
+	$('#toolbar a.addpage').click(function () {
+		TNM.add_page_dialog.show();
+	});
+
+	TNM.archive_page_dialog = make_dialog(
+		'archive_page_dialog',
+		'Archive page',
+		'Archive Page',
+		'This will archive the current page. It will no longer be viewable when published, and you can recover it at any time. All its data will remain safe.',
+		'archive_page',
+		'archive'
+	);
+
+	$('#toolbar a.archivepage').click(function () {
+		TNM.archive_page_dialog.show();
+	});
 });
 
 function TNMCtrl($scope, $http) {
@@ -717,5 +753,29 @@ function TNMCtrl($scope, $http) {
 		TNM.pagelinks[$scope.link_id] = v;
 		o[$scope.link_id] = v;
 		$scope.save(o);
+	};
+
+	$scope.add_page = function(url) {
+		var error = $('#add_page_error');
+		error.empty();
+
+		$http({
+			method: 'POST',
+			url: url,
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			data: $.param({ title: $('#add_page_name').val() })
+		}).success(function(result) {
+			if(result.error) {
+				error.text(result.error);
+			} else {
+				window.location.replace(result.success);
+			}
+		}).error(function() {
+			error.text('Error on submit, try again.');
+		});
+	};
+
+	$scope.archive_page = function() {
+		window.location.href = TNM.archivepageurl;
 	};
 }

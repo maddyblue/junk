@@ -2,18 +2,18 @@
 .clearfix:after{clear:both;}
 .hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
 .input-block-level{display:block;width:100%;min-height:30px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
-.btn{background-color:#323232;color:#FFFFFF;text-decoration:none;text-transform:lowercase;top:8px;padding:5px 15px 7px;-webkit-border-radius:12px;-moz-border-radius:12px;border-radius:12px;}.btn:visited{color:#FFFFFF;}
+.btn{background-color:#323232;color:#FFFFFF;text-decoration:none;text-transform:lowercase;top:8px;padding:5px 12px 7px;-webkit-border-radius:12px;-moz-border-radius:12px;border-radius:12px;}.btn:visited{color:#FFFFFF;}
 .btn.active{background:white;color:black;}.btn.active:hover{background:white;color:#800000;}
-.btn.save{background:#323232 url(toolbar-save.png) 10px 8px no-repeat;padding-left:35px;}
 .btn.close{color:#a3a3a3;background-color:#ebebeb;}.btn.close:hover{background-color:#ebebeb;color:#800000;}
-.btn.publish{background:#323232 url('toolbar-publish.png') 10px 8px no-repeat;padding-left:35px;}
-.btn.images{background:#323232 url('toolbar-images.png') 10px 8px no-repeat;padding-left:35px;}
-.btn.navigation{background:#323232 url('toolbar-navigation.png') 10px 8px no-repeat;padding-left:35px;}
-.btn.layout{background:#323232 url('toolbar-layout.png') 10px 8px no-repeat;padding-left:35px;}
-.btn.themes{background:#323232 url('toolbar-themes.png') 10px 8px no-repeat;padding-left:35px;}
-.btn.colors{background:#323232 url('toolbar-colors.png') 10px 8px no-repeat;padding-left:35px;}
+.btn.save{background:#323232 url('toolbar-save.png') 12px 8px no-repeat;padding-left:33px;}
+.btn.publish{background:#323232 url('toolbar-publish.png') 12px 8px no-repeat;padding-left:33px;}
+.btn.images{background:#323232 url('toolbar-images.png') 12px 8px no-repeat;padding-left:33px;}
+.btn.navigation{background:#323232 url('toolbar-navigation.png') 12px 8px no-repeat;padding-left:33px;}
+.btn.layout{background:#323232 url('toolbar-layout.png') 12px 8px no-repeat;padding-left:33px;}
+.btn.themes{background:#323232 url('toolbar-themes.png') 12px 8px no-repeat;padding-left:33px;}
+.btn.colors{background:#323232 url('toolbar-colors.png') 12px 8px no-repeat;padding-left:33px;}
 .btn:hover{background-color:#800000;}
-#toolbar{background:url(toolbar-bg.png) 0 0 repeat-x;height:52px;display:none;}#toolbar nav{float:left;height:50px;padding:0 25px;font-size:14px;}#toolbar nav.divider{padding:0px;width:2px;background:url(nav-border.png);}
+#toolbar{background:url(toolbar-bg.png) 0 0 repeat-x;height:52px;display:none;}#toolbar nav{float:left;height:50px;padding:0 10px;font-size:14px;}#toolbar nav.divider{padding:0px;width:2px;background:url(nav-border.png);}
 #toolbar nav ul li{float:left;margin:0 6px;}#toolbar nav ul li#saved{padding:5px 15px 7px;position:relative;top:8px;display:block;width:60px;color:#727272;}#toolbar nav ul li#saved.saving{color:#800000;}
 #toolbar nav ul a{top:8px;position:relative;display:block;}#toolbar nav ul a.logo{padding:0px;background-color:#cfcfcf;}#toolbar nav ul a.logo:hover{background-color:#cfcfcf !important;}
 #toolbar nav ul.user-actions li{margin-right:6px;margin-left:0;}#toolbar nav ul.user-actions li.user-info{padding-top:5px;}#toolbar nav ul.user-actions li.user-info .hello{font-weight:normal;font-style:italic;color:#8d8d8d;text-shadow:1px 1px 1px #ffffff;padding-top:3px;width:220px;}#toolbar nav ul.user-actions li.user-info .hello .name{font-style:normal;font-weight:bold;}
@@ -43,12 +43,13 @@
 .dialog .inner .content ul{list-style:none;padding:0;margin:0;}
 .dialog .inner .content input[type=text]{padding:9px 8px;margin-bottom:6px;border:1px solid #d0d0d0;width:80%;}
 .dialog .inner .buttons{padding-right:30px;padding-bottom:40px;text-align:right;}
+.dialog .error{color:#800000;}
 .social_icon{display:inline;padding-left:35px;padding-bottom:20px;top:-8px;left:5px;position:relative;}.social_icon.twitter{background:url(../images/social-icons.png) -35px -34px no-repeat;}
 .social_icon.facebook{background:url(../images/social-icons.png) -70px -34px no-repeat;}
 .social_icon.pintrest{background:url(../images/social-icons.png) -175px -34px no-repeat;}
 .social_icon.linkedin{background:url(../images/social-icons.png) -140px -34px no-repeat;}
 .social_icon.youtube{background:url(../images/social-icons.png) -210px -34px no-repeat;}
-#layout_dialog img,#colors_dialog img{margin-right:15px;}
-#layout_dialog img.current,#colors_dialog img.current{outline:2px solid black;}
-#layout_dialog a:hover img,#colors_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}
+#layout_dialog img,#colors_dialog img,#add_page_dialog img{margin-right:15px;}
+#layout_dialog img.current,#colors_dialog img.current,#add_page_dialog img.current{outline:2px solid black;}
+#layout_dialog a:hover img,#colors_dialog a:hover img,#add_page_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}
 #image_change_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}

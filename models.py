@@ -196,6 +196,16 @@ class Page(ndb.Expando):
 		return cls.query(ancestor=site.key).filter(cls.name_lower == name.lower()).get(keys_only=True) != None
 
 	@classmethod
+	def pagename_isvalid(cls, site, name):
+		if cls.pagename_exists(site, name):
+			return "There's already a page named %s" %name
+
+		if re.search(r'[^\w -]+', name):
+			return 'Page names can only contain letters, numbers, spaces, dashes (-), and underscores (_)'
+
+		return None
+
+	@classmethod
 	def new(cls, name, site, pagetype, layout=1):
 		p = Page(parent=site.key, type=pagetype, name=name, layout=layout)
 		p.put()
