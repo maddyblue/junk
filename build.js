@@ -39,7 +39,7 @@ function lessc(fpath, foutput) {
 	}
 }
 
-function uglifyc(fpath, fpathmin, hint) {
+function uglifyc(fpath, fpathmin, hint, nomin) {
 	if(!fpathmin)
 	{
 		var dir = path.dirname(fpath);
@@ -51,15 +51,18 @@ function uglifyc(fpath, fpathmin, hint) {
 
 	try
 	{
-		var data = shell.cat(fpath);
-		if(data == null)
-			return;
+			var data = shell.cat(fpath);
+			if(data == null)
+				return;
 
-		var ast = jsp.parse(data);
-		ast = pro.ast_mangle(ast);
-		ast = pro.ast_squeeze(ast);
-		var final_code = pro.gen_code(ast);
-		final_code.to(fpathmin);
+		if(!nomin)
+		{
+			var ast = jsp.parse(data);
+			ast = pro.ast_mangle(ast);
+			ast = pro.ast_squeeze(ast);
+			var final_code = pro.gen_code(ast);
+			final_code.to(fpathmin);
+		}
 
 		if(hint && !jshint.JSHINT(data))
 		{
@@ -91,8 +94,8 @@ lessc('static/css/edit');
 // minify js
 
 uglifyc('static/js/jquery.*.js', 'static/js/site.min.js');
-//uglifyc('static/js/edit.js', null, 1);
-uglifyc('static/js/blog.js', null, 1);
+uglifyc('static/js/edit.js', null, true, true);
+uglifyc('static/js/blog.js', null, true);
 
 f = shell.find('static/themes').filter(function(file) { return file.match(/[^.min]\.js$/); });
 for(var i = 0; i < f.length; i++) {
