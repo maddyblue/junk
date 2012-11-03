@@ -24,7 +24,7 @@ class User(ndb.Model):
 	last_name = ndb.StringProperty('l', required=True, indexed=False)
 	email = ndb.StringProperty('e')
 	register_date = ndb.DateTimeProperty('r', auto_now_add=True)
-	last_active = ndb.DateTimeProperty('a', auto_now_add=True)
+	last_active = ndb.DateTimeProperty('a', auto_now=True)
 
 	google_id = ndb.StringProperty('g')
 	facebook_id = ndb.StringProperty('b')
