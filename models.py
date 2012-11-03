@@ -128,10 +128,10 @@ class Page(ndb.Expando):
 	type = ndb.StringProperty('t', required=True, choices=PAGE_TYPES, indexed=True)
 	layout = ndb.IntegerProperty('y', default=1, indexed=True)
 	name = ndb.StringProperty('n', required=True)
-	name_lower = ndb.ComputedProperty(lambda self: self.name.lower())
+	name_lower = ndb.ComputedProperty(lambda self: self.name.lower(), indexed=True)
 	images = ndb.KeyProperty('i', repeated=True)
 	links = ndb.StringProperty('l', repeated=True)
-	text = ndb.TextProperty('x', repeated=True)
+	text = ndb.TextProperty('x', repeated=True, compressed=True)
 	lines = ndb.StringProperty('s', repeated=True)
 	last_edited = ndb.DateTimeProperty('d', indexed=True, auto_now=True)
 
