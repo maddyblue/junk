@@ -82,7 +82,6 @@ class Register(BaseHandler):
 				sitename = self.request.get('sitename').strip()
 				lsitename = sitename.lower()
 				headline = self.request.get('headline').strip()
-				subheader = self.request.get('subheader').strip()
 
 				if not sitename:
 					errors['sitename'] = 'Website extension required.'
@@ -123,7 +122,6 @@ class Register(BaseHandler):
 						name=sitename,
 						user=user.key,
 						headline=headline,
-						subheader=subheader,
 						theme=default_theme,
 						color=models.COLORS[default_theme][0],
 					)
@@ -154,7 +152,6 @@ class Register(BaseHandler):
 				last_name = ''
 				sitename = ''
 				headline = ''
-				subheader = ''
 				email = self.session['register']['email']
 
 			self.render('register.html', {
@@ -163,7 +160,6 @@ class Register(BaseHandler):
 				'email': email,
 				'sitename': sitename,
 				'headline': headline,
-				'subheader': subheader,
 				'errors': errors,
 			})
 		else:

@@ -54,7 +54,6 @@ class Site(ndb.Model):
 	user = ndb.KeyProperty('u', required=True)
 	plan = ndb.StringProperty('p', default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
 	headline = ndb.StringProperty('h', indexed=False)
-	subheader = ndb.StringProperty('s', indexed=False)
 	domain = ndb.StringProperty('d')
 	last_published = ndb.DateTimeProperty('b', auto_now_add=True)
 	last_edited = ndb.DateTimeProperty('e', auto_now=True)
