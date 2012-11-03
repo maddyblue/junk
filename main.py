@@ -104,7 +104,7 @@ class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 	def session(self):
 		if not self.session_store:
 			self.session_store = sessions.get_store(request=self.request)
-		return self.session_store.get_session()
+		return self.session_store.get_session(backend='datastore')
 
 SECS_PER_WEEK = 60 * 60 * 24 * 7
 config = {
