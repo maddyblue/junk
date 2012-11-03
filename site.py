@@ -147,7 +147,7 @@ class Register(BaseHandler):
 						site.put()
 
 						self.populate_user_session(user)
-						self.redirect(webapp2.uri_for('social'))
+						self.redirect(webapp2.uri_for('edit-home'))
 						return
 			else:
 				first_name = ''
@@ -168,24 +168,6 @@ class Register(BaseHandler):
 			})
 		else:
 			self.redirect(webapp2.uri_for('main'))
-
-class Social(BaseHandler):
-	def get(self):
-		site = ndb.Key(urlsafe=self.session['user']['site']).get()
-		self.render('social.html', {'site': site})
-
-	def post(self):
-		site = ndb.Key(urlsafe=self.session['user']['site']).get()
-
-		site.facebook = self.request.get('facebook').strip()
-		site.flickr = self.request.get('flickr').strip()
-		site.linkedin = self.request.get('linkedin').strip()
-		site.twitter = self.request.get('twitter').strip()
-		site.google = self.request.get('google').strip()
-
-		site.put()
-		self.add_message('success', 'Social networks saved.')
-		self.render('social.html', {'site': site})
 
 class Checkout(BaseHandler):
 	def get(self):

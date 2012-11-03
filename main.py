@@ -132,7 +132,6 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/logout', handler='site.Logout', name='logout'),
 	webapp2.Route(r'/main', handler='site.MainPage', name='main'),
 	webapp2.Route(r'/register', handler='site.Register', name='register'),
-	webapp2.Route(r'/social', handler='site.Social', name='social'),
 
 	# edit
 	webapp2.Route(r'/archive/<pageid>', handler='edit.ArchivePage', name='archive-page'),
