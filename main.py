@@ -15,21 +15,21 @@ config = {
 
 app = webapp2.WSGIApplication([
 	# site
-	webapp2.Route(r'/', handler='site.Blog', name='blog'),
-	webapp2.Route(r'/blog', handler='site.Blog'),
-	webapp2.Route(r'/blog/<link>', handler='site.BlogPost', name='site-blog-post'),
-	webapp2.Route(r'/blog/<year:\d+>/<month:\d+>', handler='site.Blog', name='site-blog-month'),
-	webapp2.Route(r'/blog/author/<author>', handler='site.BlogAuthor', name='site-blog-author'),
-	webapp2.Route(r'/blog/tag/<tag>', handler='site.BlogTag', name='site-blog-tag'),
-	webapp2.Route(r'/checkout', handler='site.Checkout', name='checkout'),
-	webapp2.Route(r'/facebook', handler='site.FacebookCallback', name='facebook'),
-	webapp2.Route(r'/feed/blog.xml', handler='site.Feed', name='blog-rss'),
-	webapp2.Route(r'/home', handler='site.Home', name='home'),
-	webapp2.Route(r'/login/facebook', handler='site.LoginFacebook', name='login-facebook'),
-	webapp2.Route(r'/login/google', handler='site.LoginGoogle', name='login-google'),
-	webapp2.Route(r'/logout', handler='site.Logout', name='logout'),
-	webapp2.Route(r'/main', handler='site.MainPage', name='main'),
-	webapp2.Route(r'/register', handler='site.Register', name='register'),
+	webapp2.Route(r'/', handler='tnm.Blog', name='blog'),
+	webapp2.Route(r'/blog', handler='tnm.Blog'),
+	webapp2.Route(r'/blog/<link>', handler='tnm.BlogPost', name='site-blog-post'),
+	webapp2.Route(r'/blog/<year:\d+>/<month:\d+>', handler='tnm.Blog', name='site-blog-month'),
+	webapp2.Route(r'/blog/author/<author>', handler='tnm.BlogAuthor', name='site-blog-author'),
+	webapp2.Route(r'/blog/tag/<tag>', handler='tnm.BlogTag', name='site-blog-tag'),
+	webapp2.Route(r'/checkout', handler='tnm.Checkout', name='checkout'),
+	webapp2.Route(r'/facebook', handler='tnm.FacebookCallback', name='facebook'),
+	webapp2.Route(r'/feed/blog.xml', handler='tnm.Feed', name='blog-rss'),
+	webapp2.Route(r'/home', handler='tnm.Home', name='home'),
+	webapp2.Route(r'/login/facebook', handler='tnm.LoginFacebook', name='login-facebook'),
+	webapp2.Route(r'/login/google', handler='tnm.LoginGoogle', name='login-google'),
+	webapp2.Route(r'/logout', handler='tnm.Logout', name='logout'),
+	webapp2.Route(r'/main', handler='tnm.MainPage', name='main'),
+	webapp2.Route(r'/register', handler='tnm.Register', name='register'),
 
 	# edit
 	webapp2.Route(r'/archive/<pageid>', handler='edit.ArchivePage', name='archive-page'),
@@ -78,6 +78,6 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/color/styles/<theme>.less', handler='admin.ColorsLess', name='colors-less'),
 
 	# google site verification
-	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='site.GoogleSiteVerification'),
+	webapp2.Route(r'/%s.html' %settings.GOOGLE_SITE_VERIFICATION, handler='tnm.GoogleSiteVerification'),
 
 	], debug=True, config=config)
