@@ -45,9 +45,18 @@ class User(ndb.Model):
 
 		return 'http://www.gravatar.com/avatar/' + hashlib.md5(email).hexdigest() + '?d=mm%s' %size
 
+	def delete(self):
+		delete(self.key)
+		for i in self.sites:
+			delete(i)
+
 	@classmethod
 	def find(cls, source, uid):
 		return cls.query().filter(getattr(cls, '%s_id' %source) == uid)
+
+	@classmethod
+	def all(cls):
+		return cls.query().order(cls.email)
 
 class Site(ndb.Model):
 	name = ndb.StringProperty('n', required=True)
@@ -253,6 +262,12 @@ class Page(ndb.Expando):
 		ndb.put_multi_async(images)
 
 		return p
+
+	@classmethod
+	def site_pages(cls, sitekey):
+		pages = list(cls.query(ancestor=sitekey))
+		pages.sort(lambda x, y: cmp(x.name_lower, y.name_lower))
+		return pages
 
 # app engine is seeing high failure rates here, so retry a few times
 # this should be removed once they fix it
@@ -716,3 +731,23 @@ class ColorSaved(Color):
 			names.append(k.id())
 
 		return names
+
+# deletes key, all its children, and any blobs connected to the children
+def delete(key):
+	todel = [key]
+	blobdel = []
+
+	for i in ndb.Query(ancestor=key).iter(keys_only=True):
+		todel.append(i)
+
+		if i.kind() == 'ImageBlob':
+			e = i.get()
+			blobdel.append(e.blob)
+		elif i.kind() == 'Image':
+			e = i.get()
+			if hasattr(e, 'i'):
+				blobdel.append(e.i)
+
+	ndb.delete_multi(todel)
+	blobstore.delete(blobdel)
+	logging.error(blobdel)

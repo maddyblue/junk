@@ -167,7 +167,9 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/admin/new-post', handler='admin.AdminNewPost', name='admin-new-post'),
 	webapp2.Route(r'/admin/sync-authors', handler='admin.AdminSyncAuthors', name='admin-sync-authors'),
 	webapp2.Route(r'/admin/upload-image/<postid>', handler='admin.AdminUploadImage', name='admin-upload-image', defaults={'postid': 0}),
-	webapp2.Route(r'/admin/users', handler='admin.AdminUsers', name='admin-users'),
+	webapp2.Route(r'/admin/user-delete/<userid>', handler='admin.UserDelete', name='admin-user-delete'),
+	webapp2.Route(r'/admin/user/<userid>', handler='admin.User', name='admin-user'),
+	webapp2.Route(r'/admin/users', handler='admin.Users', name='admin-users'),
 
 	# colors
 	webapp2.Route(r'/admin/color/commit/<theme>', handler='admin.ColorCommit', name='color-commit'),

@@ -340,3 +340,37 @@ class ColorDelete(BaseHandler):
 		if not color:
 			return
 		color.key.delete()
+
+class Users(BaseHandler):
+	def get(self):
+		users = models.User.all()
+
+		self.render('admin-users.html', {
+			'users': users,
+		})
+
+class User(BaseHandler):
+	def get(self, userid):
+		user = models.User.get_by_id(int(userid))
+
+		sites = []
+		for site in ndb.get_multi(user.sites):
+			sites.append({
+				'site': site,
+				'pages': models.Page.site_pages(site.key),
+				'images': models.ImageBlob.query(ancestor=site.key),
+			})
+
+		self.render('admin-user.html', {
+			'u': user,
+			'sites': sites,
+		})
+
+class UserDelete(BaseHandler):
+	def post(self, userid):
+		user = models.User.get_by_id(int(userid))
+
+		if self.request.get('sure') == 'on':
+			user.delete()
+
+		self.redirect(webapp2.uri_for('admin-users'))
