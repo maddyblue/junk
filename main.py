@@ -157,10 +157,10 @@ app = webapp2.WSGIApplication([
 	# admin
 	webapp2.Route(r'/admin', handler='admin.Admin', name='admin'),
 	webapp2.Route(r'/admin/', handler='admin.Admin'),
-	webapp2.Route(r'/admin/colors/<theme>', handler='admin.Colors', name='admin-colors'),
-	webapp2.Route(r'/admin/colors/<theme>/<pagename>', handler='admin.Colors', name='admin-colors-page'),
 	webapp2.Route(r'/admin/blog-image/<postid>', handler='admin.AdminBlogImage', name='admin-blog-image'),
 	webapp2.Route(r'/admin/clear', handler='admin.Clear', name='clear'),
+	webapp2.Route(r'/admin/colors/<theme>', handler='admin.Colors', name='admin-colors'),
+	webapp2.Route(r'/admin/colors/<theme>/<pagename>', handler='admin.Colors', name='admin-colors-page'),
 	webapp2.Route(r'/admin/edit-post/<postid>', handler='admin.AdminEditPost', name='admin-edit-post'),
 	webapp2.Route(r'/admin/images', handler='admin.AdminImages', name='admin-images'),
 	webapp2.Route(r'/admin/new-image', handler='admin.AdminNewImage', name='admin-new-image'),
