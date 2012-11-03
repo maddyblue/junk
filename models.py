@@ -652,7 +652,6 @@ class Config(ndb.Expando):
 	def authors(cls):
 		a = [(k, v) for k, v in cls.get_by_id(CONFIG_AUTHORS).data.items()]
 		a.sort(cmp=lambda x,y: cmp(y[1], x[1]))
-		logging.error(a)
 		return a
 
 def update_tags(key):
