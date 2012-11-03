@@ -11,7 +11,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext import webapp
 import webapp2
 
-from main import BaseHandler, BaseUploadHandler
+from base import BaseHandler, BaseUploadHandler
 import models
 
 class Clear(BaseHandler):

@@ -9,7 +9,7 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 import webapp2
 
-from main import BaseHandler, BaseUploadHandler
+from base import BaseHandler, BaseUploadHandler
 import facebook
 import models
 import settings

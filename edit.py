@@ -10,7 +10,7 @@ from google.appengine.ext import deferred
 from google.appengine.ext import ndb
 import webapp2
 
-from main import BaseHandler, BaseUploadHandler
+from base import BaseHandler, BaseUploadHandler
 import models
 import settings
 import utils
