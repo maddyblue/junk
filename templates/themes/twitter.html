@@ -1,0 +1,14 @@
+{% if site.twitter_name %}
+<li class="twitter">
+	<h3>@{{ site.twitter_name }}</h3>
+	<ul id="tweet-list">
+		<li class="follow">
+			follow me on <a href="{{ site.twitter }}">twitter</a>
+		</li>
+	</ul>
+</li>
+
+<script type="text/javascript">
+	{{ site.twitter_name|tweets('#tweet-list') }}
+</script>
+{% endif %}

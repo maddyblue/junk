@@ -102,9 +102,26 @@ SPECS = {
 			},
 		},
 		PAGE_TYPE_CONTACT: {
-			1: {
+			1: { # right map
 				'lines': 3,
 				'maps': 1,
+				'text': 1,
+				'images': [
+					(1000, 165),
+				],
+			},
+			2: { # left map
+				'lines': 4,
+				'maps': 1,
+				'text': 2,
+			},
+			3: { # top map
+				'lines': 3,
+				'maps': 1,
+				'text': 1,
+			},
+			4: { # no map
+				'lines': 3,
 				'text': 1,
 				'images': [
 					(1000, 165),

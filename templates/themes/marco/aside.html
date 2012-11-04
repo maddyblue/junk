@@ -1,20 +1,5 @@
 <aside>
 	<ul>
-	{% if site.twitter_name %}
-		<li class="twitter">
-			<h3>@{{ site.twitter_name }}</h3>
-			<ul id="tweet-list">
-				<li class="follow">
-					follow me on <a href="{{ site.twitter }}">twitter</a>
-				</li>
-			</ul>
-		</li>
-	{% endif %}
+		{% include "themes/twitter.html" %}
 	</ul>
 </aside>
-
-{% if site.twitter_name %}
-<script type="text/javascript">
-	{{ site.twitter_name|tweets('#tweet-list') }}
-</script>
-{% endif %}
