@@ -72,8 +72,6 @@ class Save(BaseHandler):
 
 		keys.extend([i[0] for i in models.Site.social_media])
 
-		logging.error(self.request.POST)
-
 		r = {'errors': []}
 
 		set_domain = False
