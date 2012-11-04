@@ -138,7 +138,7 @@ class Register(BaseHandler):
 						p_bio = models.Page.new('bio', site, models.PAGE_TYPE_TEXT)
 						p_gallery = models.Page.new('gallery', site, models.PAGE_TYPE_GALLERY)
 						p_blog = models.Page.new('blog', site, models.PAGE_TYPE_BLOG)
-						p_contact = models.Page.new('contact', site, models.PAGE_TYPE_CONTACT)
+						p_contact = models.Page.new('contact', site, models.PAGE_TYPE_CONTACT, headers=self.request.headers)
 						pages = [p_home, p_bio, p_gallery, p_blog, p_contact]
 
 						site.pages = [i.key for i in pages]

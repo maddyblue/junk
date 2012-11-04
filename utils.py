@@ -37,6 +37,7 @@ def render(_template, c):
 	context = {
 		'jquery': JQUERY,
 		'jquery_ui': JQUERY_UI,
+		'google_api': GOOGLE_API,
 	}
 	context.update(c)
 	return env.get_template(_template).render(**context)

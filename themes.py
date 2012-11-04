@@ -20,11 +20,13 @@ NAVS = [
 ]
 
 PAGE_TYPE_BLOG = 'blog'
+PAGE_TYPE_CONTACT = 'contact'
 PAGE_TYPE_GALLERY = 'gallery'
 PAGE_TYPE_HOME = 'home'
 PAGE_TYPE_TEXT = 'text'
 PAGE_TYPES = [
 	PAGE_TYPE_BLOG,
+	PAGE_TYPE_CONTACT,
 	PAGE_TYPE_GALLERY,
 	PAGE_TYPE_HOME,
 	PAGE_TYPE_TEXT,
@@ -97,6 +99,16 @@ SPECS = {
 				],
 				# todo: support image resizing on page layout change
 				'postimagesz': (634, 172),
+			},
+		},
+		PAGE_TYPE_CONTACT: {
+			1: {
+				'lines': 3,
+				'maps': 1,
+				'text': 1,
+				'images': [
+					(1000, 165),
+				],
 			},
 		},
 	},

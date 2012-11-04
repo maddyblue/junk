@@ -214,7 +214,12 @@ $(function() {
 	);
 
 	$('body').on('click', '.dialog a:not(.noclose)', function() {
-		$(this).parents('.dialog').hide();
+		if (TNM.noclose) {
+			delete TNM.noclose;
+		}
+		else {
+			$(this).parents('.dialog').hide();
+		}
 	});
 
 	// remove <a> from around images
@@ -370,6 +375,17 @@ $(function() {
 		autoresize: false
 	});
 
+	TNM.edit_map_dialog = make_dialog(
+		'edit_map_dialog',
+		'Edit map',
+		'Edit Map',
+		'<p>Enter your address below. Be as vague as you like.</p>' +
+		'<input type="text" id="edit_map_text">' +
+		'<div class="error"></div>',
+		'edit_map'
+	);
+	TNM.edit_map_text = $('input', TNM.edit_map_dialog);
+
 	$('.editable').each(function() {
 		var d = $('<div class="edithover"></div>');
 		var t = $(this);
@@ -435,6 +451,14 @@ $(function() {
 				TNM.edit_text_dialog.show();
 				TNM.edit_text_area.focus().setCode(t.html());
 				TNM.edit_text_id = t.attr('id');
+			});
+		}
+		else if(t.hasClass('map'))
+		{
+			d.click(function() {
+				TNM.edit_map_dialog.show();
+				TNM.edit_map_id = t.attr('id');
+				TNM.edit_map_text.focus().val(t.attr('data-latlng'));
 			});
 		}
 	});
@@ -777,5 +801,37 @@ function TNMCtrl($scope, $http) {
 
 	$scope.archive_page = function() {
 		window.location.href = TNM.archivepageurl;
+	};
+
+	$scope.edit_map = function() {
+		var error;
+
+		d = TNM.edit_map_text.val().split(',');
+		var lat, lng;
+
+		if (d.length != 2) {
+			error = 'Must submit exactly two numbers separated by a comma.';
+		}
+		else if (!(lat = parseFloat(d[0]))) {
+			error = 'Bad latitude';
+		}
+		else if (!(lng = parseFloat(d[1]))) {
+			error = 'Bad longitude';
+		}
+		else {
+			var o = {};
+			var d = lat + ', ' + lng;
+			var id = TNM.edit_map_id;
+
+			o[id] = d;
+			$scope.save(o);
+			setMap(id, d);
+			$('#' + id).attr('data-latlng', d);
+		}
+
+		if (error) {
+			TNM.noclose = true;
+			$('.error', TNM.edit_map_dialog).text(error);
+		}
 	};
 }

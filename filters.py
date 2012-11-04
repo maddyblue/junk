@@ -26,6 +26,13 @@ def editline(page, i, elem, cls=None, link=None, rel=None):
 		elem, (' ' + cls if cls else ''), i, v, elem
 	)
 
+def editmap(page, i):
+	return '<%(elem)s class="editable map" id="_map_%(i)i" data-latlng="%(latlng)s"></%(elem)s>' %{
+		'elem': 'div',
+		'i': i,
+		'latlng': page.maps[i],
+	}
+
 def editposttitle(post, elem):
 	return '<%s class="editable line" id="_posttitle_%i">%s</%s>' %(
 		elem, post.key.id(), post.title, elem
@@ -130,6 +137,7 @@ filters = dict([(i, globals()[i]) for i in [
 	'date',
 	'editline',
 	'editlink',
+	'editmap',
 	'editpostauthor',
 	'editpostdate',
 	'editpostdraft',

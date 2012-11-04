@@ -142,6 +142,7 @@ class Page(ndb.Expando):
 	links = ndb.StringProperty('l', repeated=True)
 	text = ndb.TextProperty('x', repeated=True, compressed=True)
 	lines = ndb.StringProperty('s', repeated=True)
+	maps = ndb.StringProperty('m', repeated=True)
 	last_edited = ndb.DateTimeProperty('d', indexed=True, auto_now=True)
 
 	@property
@@ -214,18 +215,23 @@ class Page(ndb.Expando):
 		return None
 
 	@classmethod
-	def new(cls, name, site, pagetype, layout=1):
+	def new(cls, name, site, pagetype, layout=1, headers={}):
 		p = Page(parent=site.key, type=pagetype, name=name, layout=layout)
 		p.put()
-		p = Page.set_layout(p, p.layout)
+		p = Page.set_layout(p, p.layout, headers)
 		return p
 
 	@classmethod
 	@ndb.toplevel
-	def set_layout(cls, page, layoutid):
+	def set_layout(cls, page, layoutid, headers):
 		site = page.key.parent().get()
 		layout = spec(site.theme, page.type, layoutid)
-		t = {'links': ''}
+
+		t = {
+			'links': '',
+			'maps': headers.get('X-AppEngine-CityLatLong', ''),
+		}
+
 		if not layout:
 			return page
 
@@ -239,7 +245,7 @@ class Page(ndb.Expando):
 					p.images.append(images[-1].key)
 			ndb.put_multi_async(images)
 
-			for d in ['links', 'text', 'lines']:
+			for d in ['links', 'text', 'lines', 'maps']:
 				a = getattr(p, d)
 				a.extend([t.get(d, d)] * (layout.get(d, 0) - len(a)))
 			p.layout = layoutid

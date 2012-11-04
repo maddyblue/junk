@@ -14,6 +14,9 @@
 	{% if page.type == 'gallery' and page.layout == 1 %}
 		<script src="{{ base }}js/jquery.jcarousel.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="{{ base }}css/carousel/skin.css">
+	{% elif page.type == 'contact' %}
+		<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key={{ google_api }}&sensor=false"></script>
+		<script src="{{ base }}js/map.min.js"></script>
 	{% endif %}
 </head>
 <body>
@@ -31,7 +34,7 @@
 		</nav>
 	</header>
 
-	<div id="main" role="main"{% if page.type == 'blog' %} class="blog"{% endif %}>
+	<div id="main" role="main" class="{{ page.type }}_{{ page.layout }} {%- if page.type == 'blog' %} blog{% endif %}">
 
 		{% include pagetemplate %}
 

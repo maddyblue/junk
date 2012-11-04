@@ -142,6 +142,12 @@ class Save(BaseHandler):
 					p.lines[i] = self.request.POST[k]
 					pc = True
 
+			for i in range(spec.get('maps', 0)):
+				k = '_map_%i' %i
+				if k in self.request.POST:
+					p.maps[i] = self.request.POST[k]
+					pc = True
+
 			cm = self.request.POST.get('p_%s_name' %p.key.id())
 			if cm:
 				errors = models.Page.pagename_isvalid(s, cm)
@@ -389,7 +395,7 @@ class Layout(BaseHandler):
 		if not page:
 			return
 
-		page = models.Page.set_layout(page, long(layoutid))
+		page = models.Page.set_layout(page, long(layoutid), self.request.headers)
 		self.redirect(webapp2.uri_for('edit', pagename=page.name))
 
 class SetColors(BaseHandler):
@@ -426,7 +432,7 @@ class NewPage(BaseHandler):
 			return
 
 		layout = int(layoutid)
-		page = models.Page.new(title, site, pagetype, layout)
+		page = models.Page.new(title, site, pagetype, layout, headers=self.request.headers)
 
 		def callback():
 			s = site.key.get()
