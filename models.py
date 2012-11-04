@@ -309,7 +309,7 @@ class Image(ndb.Expando):
 
 	def _pre_put_hook(self):
 		if self.type == IMAGE_TYPE_HOLDER:
-			self.url = 'http://placehold.it/%ix%i' %(self.width, self.height)
+			self.url = '/static/images/placehold/%ix%i.gif' %(self.width, self.height)
 			self.orig = self.url
 		elif self.type == IMAGE_TYPE_BLOB and hasattr(self, 'i'):
 			if not self.url:

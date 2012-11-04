@@ -1,10 +1,13 @@
+var fs = require('fs');
+var cp = require('child_process');
 var path = require('path');
 
-var shell = require('./shell.js');
-var less = require('./less');
-var jsp = require('./uglify-js/uglify-js.js').parser;
-var pro = require('./uglify-js/uglify-js.js').uglify;
+var async = require('async');
 var jshint = require('jshint');
+var jsp = require('./uglify-js/uglify-js.js').parser;
+var less = require('./less');
+var pro = require('./uglify-js/uglify-js.js').uglify;
+var shell = require('./shell.js');
 
 function lessc(fpath, foutput) {
 	foutput = typeof foutput !== 'undefined' ? foutput : fpath + '.css';
@@ -82,6 +85,29 @@ function uglifyc(fpath, fpathmin, hint, nomin) {
 function run(command) {
 	console.log(command);
 	shell.exec(command);
+}
+
+// placehold.it
+
+var themes = shell.cat('themes.py');
+var images = themes.match(/\([0-9]+, [0-9]+\),/g);
+for(var i = 0; i < images.length; i++)
+{
+	async.series([
+		function() {
+			var im = images[i].match(/([0-9]+), ([0-9]+)/);
+			var fname = im[1] + 'x' + im[2];
+			var fpath = path.join('static', 'images', 'placehold', fname + '.gif');
+			var url = 'http://placehold.it/' + fname;
+
+			if (fs.existsSync(fpath)) {
+				return;
+			}
+
+			console.log('downloading: ' + url);
+			cp.spawn('curl', ['--create-dirs', '-o', fpath, url]);
+		}
+	]);
 }
 
 // compile less
