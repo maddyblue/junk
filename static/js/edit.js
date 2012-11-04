@@ -379,7 +379,7 @@ $(function() {
 		'edit_map_dialog',
 		'Edit map',
 		'Edit Map',
-		'<p>Enter your address below. Be as vague as you like.</p>' +
+		'<p>Enter your latitude and longitude ("40.123, -75.678"). Be as vague as you like.</p>' +
 		'<input type="text" id="edit_map_text">' +
 		'<div class="error"></div>',
 		'edit_map'
