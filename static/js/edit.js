@@ -820,7 +820,7 @@ function TNMCtrl($scope, $http) {
 		}
 		else {
 			var o = {};
-			var d = lat + ', ' + lng;
+			var d = lat + ',' + lng;
 			var id = TNM.edit_map_id;
 
 			o[id] = d;
