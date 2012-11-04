@@ -364,25 +364,6 @@ class View(BaseHandler):
 			'site': site,
 		})
 
-class Reset(BaseHandler):
-	@ndb.toplevel
-	def get(self):
-		user, site = self.us()
-
-		if not user or not site:
-			self.add_message('error', 'Not logged in')
-			self.redirect(webapp2.uri_for('main'))
-			return
-
-		pages = ndb.get_multi(site.pages)
-		ndb.delete_multi_async(site.pages)
-		for n, p in enumerate(pages):
-			pages[n] = models.Page.new(p.name, site, p.type)
-		site.pages = [i.key for i in pages]
-		ndb.put_multi(pages)
-		site.put()
-		self.redirect(webapp2.uri_for('edit-home'))
-
 class Publish(BaseHandler):
 	def get(self, sitename):
 		site = ndb.Key('Site', sitename).get()
