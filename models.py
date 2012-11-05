@@ -64,10 +64,9 @@ class Site(ndb.Model):
 	plan = ndb.StringProperty('p', default=USER_PLAN_FREE, choices=USER_PLAN_CHOICES)
 	headline = ndb.StringProperty('h', indexed=False)
 	domain = ndb.StringProperty('d')
-	last_published = ndb.DateTimeProperty('b', auto_now_add=True)
 	last_edited = ndb.DateTimeProperty('e', auto_now=True)
-	do_publish = ndb.BooleanProperty('o', default=False)
-	last_published_num = ndb.IntegerProperty('i', default=0, indexed=False)
+	publish = ndb.KeyProperty('o', indexed=False)
+	last_publish = ndb.KeyProperty('i', indexed=False)
 
 	size = ndb.IntegerProperty('z', indexed=False, default=0)
 
@@ -123,13 +122,31 @@ class Site(ndb.Model):
 	def colors(self):
 		return colors(self.theme)
 
+	@property
+	def is_publishing(self):
+		return self.publish is not None
+
 	@classmethod
 	def domain_exists(cls, domain):
 		return cls.query(cls.domain == domain).get(keys_only=True)
 
+	def generate_manifest(self):
+		m = {}
+		m['site'] = self
+
+		pages = dict([(i.key, i) for i in ndb.get_multi(self.pages)])
+		m['pages'] = pages
+
+		m['images'] = {}
+		for p in pages.itervalues():
+			for i in ndb.get_multi(p.images):
+				m['images'][i.key] = i
+
+		return m
+
 class Publish(ndb.Model):
-	manifest = ndb.JsonProperty('m', indexed=False)
-	date = ndb.DateTimeProperty('d', auto_now=True, indexed=False)
+	manifest = ndb.PickleProperty('m', compressed=True)
+	date = ndb.DateTimeProperty('d', auto_now_add=True, indexed=False)
 
 class Page(ndb.Expando):
 	_default_indexed = False
@@ -194,11 +211,6 @@ class Page(ndb.Expando):
 		)
 
 		return ndb.get_multi(post_keys)
-
-	def gs_write(self, name, mimetype, content):
-		rel = BUCKET_NAME + '/' + self.key.parent().id() + '/'
-		oname = rel + self.name + name
-		utils.gs_write(oname, mimetype, content)
 
 	@classmethod
 	def pagename_exists(cls, site, name):
@@ -364,20 +376,16 @@ class Image(ndb.Expando):
 		self.url = None
 
 	def render(self, mode, cls='', postid=None, width=None, height=None):
-		if mode == 'publish' and self.type == IMAGE_TYPE_BLOB:
-			name = '/%s.png' %self.key.id()
+		if mode == 'publish':
+			name = '%s.im' %self.key.id()
 			pagek = self.key.parent()
 			page = pagek.get()
 			sitek = pagek.parent()
-			url = 'http://commondatastorage.googleapis.com/%s/%s/%s/%s' %(
-				BUCKET_NAME,
+			url = '/%s/%s/%s' %(
 				sitek.id(),
 				page.name,
 				name
 			)
-
-			br = blobstore.BlobInfo.get(self.blob_key.get().blob).open()
-			page.gs_write(name, 'image/png', br.read())
 		else:
 			url = self.url
 

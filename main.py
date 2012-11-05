@@ -40,6 +40,7 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/layout/<siteid>/<pageid>/<layoutid>', handler='edit.Layout', name='layout'),
 	webapp2.Route(r'/new/blogpost/<pageid>', handler='edit.NewBlogPost', name='new-blog-post'),
 	webapp2.Route(r'/new/page/<pagetype>/<layoutid:\d+>', handler='edit.NewPage', name='new-page'),
+	webapp2.Route(r'/publish-state/<sitename>', handler='edit.PublishState', name='publish-status'),
 	webapp2.Route(r'/publish/<sitename>', handler='edit.Publish', name='publish'),
 	webapp2.Route(r'/save/<siteid>/<pageid>', handler='edit.Save', name='save'),
 	webapp2.Route(r'/unarchive', handler='edit.UnarchivePage', name='unarchive-page'),

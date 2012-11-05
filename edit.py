@@ -52,7 +52,6 @@ class Edit(BaseHandler):
 			'pagenum': pagenum,
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
-			'publish_url': webapp2.uri_for('publish', sitename=site.name),
 			'published_url': 'http://commondatastorage.googleapis.com/' + settings.BUCKET_NAME + '/' + site.key.id() + '/' + page.name,
 			'rel': webapp2.uri_for('edit-home') + '/',
 			'site': site,
@@ -368,22 +367,6 @@ class View(BaseHandler):
 			'site': site,
 		})
 
-class Publish(BaseHandler):
-	def get(self, sitename):
-		site = ndb.Key('Site', sitename).get()
-
-		if not site or site.user.urlsafe() != self.session['user']['key'] or site.do_publish:
-			return
-
-		def callback():
-			s = site.key.get()
-			if not s.do_publish:
-				s.do_publish = True
-				deferred.defer(publish_site, sitename)
-				s.put()
-
-		ndb.transaction(callback)
-
 class Layout(BaseHandler):
 	def get(self, siteid, pageid, layoutid):
 		user, site = self.us()
@@ -511,58 +494,82 @@ class UnarchivePage(BaseHandler):
 			ndb.transaction(callback)
 			self.redirect(webapp2.uri_for('edit', pagename=p.name))
 
+class Publish(BaseHandler):
+	def get(self, sitename):
+		site = ndb.Key('Site', sitename).get()
+
+		if not site or site.user.urlsafe() != self.session['user']['key'] or site.publish:
+			return
+
+		def callback():
+			s = site.key.get()
+			s.publish = None
+			if not s.publish:
+				p = models.Publish(parent=site.key)
+				p.manifest = s.generate_manifest()
+				p.put()
+				s.publish = p.key
+				s.put()
+				deferred.defer(publish_site, sitename)
+
+		ndb.transaction(callback)
+
 def publish_site(sitename):
-	site = ndb.Key('Site', sitename).get()
-	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
+	_s = ndb.Key('Site', sitename).get()
 
-	if not site or not pages or not site.do_publish:
+	if not _s or not _s.publish:
 		return
 
-	def callback():
-		s = site.key.get()
-		if not s.do_publish:
-			return None
+	_p = _s.publish.get()
 
-		s.do_publish = False
-		s.last_published = datetime.datetime.now()
-		s.last_published_num += 1
-		s.put()
-		return s
-
-	site = ndb.transaction(callback)
-	if not site:
+	if not _p:
 		return
+
+	m = _p.manifest
+
+	site = m['site']
+	pages = m['pages']
+	images = m['images']
 
 	basedir = 'themes/%s/' %site.theme
-	rel = settings.BUCKET_NAME + '/' + site.key.id() + '/'
+	rel = '/' + site.key.id() + '/'
+	gsname = '%s/%s' %(settings.BUCKET_NAME, sitename)
 
-	def write_page(pagenum=0):
+	def write_page(page, pagenum=0):
 		c = utils.render(basedir + 'index.html', {
 			'base': settings.TNM_URL + '/static/' + basedir,
-			'images': images,
+			'images': [images[i] for i in page.images],
 			'mode': 'publish',
 			'page': page,
 			'pagenum': pagenum,
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
-			'rel': '/' + rel,
+			'rel': rel,
 			'site': site,
 		})
 
 		name = '/%i' %pagenum if pagenum else ''
-		page.gs_write(name, 'text/html', c)
+		oname = '%s/%s%s' %(gsname, page.name, name)
+		utils.gs_write(oname, 'text/html', c)
 
-	for page in pages.values():
-		if page.type not in [
-				models.PAGE_TYPE_GALLERY,
-				models.PAGE_TYPE_HOME,
-				models.PAGE_TYPE_TEXT,
-			]:
-			continue
+	for page in pages.itervalues():
+		write_page(page)
 
-		images = ndb.get_multi(page.images)
+		for i in page.images:
+			image = images[i]
 
-		write_page()
+			if image.type == models.IMAGE_TYPE_BLOB:
+				f = blobstore.BlobInfo.get(image.i).open()
+				t = 'image/png'
+			elif image.type == models.IMAGE_TYPE_HOLDER:
+				f = open('placehold/%ix%i.gif' %(image.width, image.height))
+				t = 'image/gif'
+			else:
+				continue
+
+			utils.gs_write('%s/%s/%s.im' %(gsname, page.name, image.key.id()), t, f.read())
+
+		continue
 
 		# Some pages need to support multiple pages, must hard code all such pages
 		# and generate them here.
@@ -574,5 +581,23 @@ def publish_site(sitename):
 			for i in range(1, pgs + 1):
 				write_page(i)
 
-	p = models.Publish(id=site.last_published_num, parent=site.key)
-	p.put()
+	def callback():
+		s = site.key.get()
+		if not s.publish:
+			return None
+
+		s.last_publish = s.publish
+		s.publish = None
+		s.put()
+		return s
+
+	site = ndb.transaction(callback)
+
+class PublishState(BaseHandler):
+	def get(self, sitename):
+		user, site = self.us()
+
+		if site.key.id() != sitename:
+			return
+
+		self.response.out.write(json.dumps(site.is_publishing))

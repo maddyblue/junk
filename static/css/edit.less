@@ -27,27 +27,6 @@
 		color: #FFFFFF;
 	}
 
-	&.active
-	{
-		background: white;
-		color: black;
-
-		&:hover {
-			background: white;
-			color: @tnm-red;
-		}
-	}
-
-	&.close {
-		color: @dialog-close-color;
-		background-color: @dialog-content-bg;
-
-		&:hover {
-			background-color: @dialog-content-bg;
-			color: @tnm-red;
-		}
-	}
-
 	.toolbar-btn (@imgurl)
 	{
 		background: @tnm-bg-dark url(@imgurl) 12px 8px no-repeat;
@@ -91,6 +70,27 @@
 
 	&:hover {
 		background-color: @tnm-red;
+	}
+
+	&.active, &.publishing
+	{
+		background: white;
+		color: black;
+
+		&:hover {
+			background: white;
+			color: @tnm-red;
+		}
+	}
+
+	&.close {
+		color: @dialog-close-color;
+		background-color: @dialog-content-bg;
+
+		&:hover {
+			background-color: @dialog-content-bg;
+			color: @tnm-red;
+		}
 	}
 }
 

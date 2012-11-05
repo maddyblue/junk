@@ -187,7 +187,7 @@ $(function() {
 			'</ul></nav>' +
 			'<nav class="divider"></nav>' +
 			'<nav><ul>' +
-				'<li><a class="publish btn" href="#">publish</a></li>' +
+				'<li><a class="publish btn" ng-click="publish()" ng-class="publishing_c()" ng-init="publish_status()">publish</a></li>' +
 				'<li><a class="images btn" href="#">media</a></li>' +
 			'</ul></nav>' +
 			'<nav class="divider"></nav>' +
@@ -282,25 +282,6 @@ $(function() {
 	);
 
 	$('#toolbar').show();
-
-	$(document).on("click", "#publish", function() {
-		$.ajax({
-			url: TNM.publishurl
-		});
-
-		$('#publishing').show().fadeOut(4000);
-		return false;
-	});
-
-	$(document).on("click", "#unpublish_page", function() {
-		$("#unpublish_page_modal").show();
-		return false;
-	});
-
-	$(document).on('click', '#save_domain', function() {
-		savemap._domain = $("#domain").val();
-		//save();
-	});
 
 	// date
 
@@ -558,6 +539,7 @@ $(function() {
 function TNMCtrl($scope, $http) {
 	$scope.saves = 0;
 	$scope.savemap = {};
+	$scope.publishing = TNM.publishing;
 
 	$scope.socialmap = TNM.socialmap;
 	$scope.existingimgs = TNM.existingimgs;
@@ -833,5 +815,39 @@ function TNMCtrl($scope, $http) {
 			TNM.noclose = true;
 			$('.error', TNM.edit_map_dialog).text(error);
 		}
+	};
+
+	$scope.publish = function() {
+		$scope.publishing = true;
+
+		$http({
+			method: 'GET',
+			url: TNM.publishurl
+		}).success(function() {
+			$scope.publish_status();
+		});
+	};
+
+	$scope.publish_status = function() {
+		if (!$scope.publishing) {
+			return;
+		}
+
+		var interval = setInterval(function() {
+			$http({
+				method: 'GET',
+				url: TNM.publishstatusurl
+			}).success(function(data) {
+				data = $.parseJSON(data);
+				if (!data) {
+					$scope.publishing = false;
+					clearInterval(interval);
+				}
+			});
+		}, 2000);
+	};
+
+	$scope.publishing_c = function() {
+		return $scope.publishing ? 'publishing' : '';
 	};
 }

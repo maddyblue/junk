@@ -149,8 +149,10 @@ $(function() {
 	TNM.archivepageurl = '{{ "archive-page"|url(pageid=page.key.id()) }}';
 	TNM.unarchivepageurl = '{{ "unarchive-page"|url }}';
 
+	TNM.publishing = {% if site.is_publishing %}true{% else %}false{% endif %};
 	TNM.publishedurl = '{{ published_url }}';
-	TNM.publishurl = '{{ publish_url }}';
+	TNM.publishurl = '{{ "publish"|url(sitename=site.name) }}';
+	TNM.publishstatusurl = '{{ "publish-status"|url(sitename=site.name) }}';
 	TNM.saveurl = '{{ "save"|url(siteid=site.key.id(), pageid=page.key.id()) }}';
 	TNM.viewurl = '{{ view_url }}';
 	TNM.uploadurl = '{{ upload_url }}';

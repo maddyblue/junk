@@ -108,6 +108,9 @@ for(var i = 0; i < images.length; i++)
 			cp.spawn('curl', ['--create-dirs', '-o', fpath, url]);
 		}
 	]);
+
+	cp.spawn('rm', ['-rf', 'placehold']);
+	cp.spawn('cp', ['-R', 'static/images/placehold', 'placehold']);
 }
 
 // compile less
