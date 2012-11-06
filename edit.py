@@ -3,7 +3,6 @@
 import datetime
 import json
 import logging
-import re
 
 from PIL import Image
 from google.appengine.ext import blobstore
@@ -106,14 +105,9 @@ class Save(BaseHandler):
 				if v is None or v == getattr(s, k):
 					continue
 
-				if v and k in sm:
-					if re.search(r'[^\w.-]', v) is not None:
-						r['errors'].append('%s URL can only contain letters, numbers, dots (.), underscores (_), and dashes (-).' %sm[k]['name'])
-						continue
-
-					if not utils.check_url(sm[k]['url'] + v):
-						r['errors'].append("%s URL doesn't seem to be working." %sm[k]['name'])
-						continue
+				if v and k in sm and not utils.check_url(sm[k]['url'] + v):
+					r['errors'].append("%s URL doesn't seem to be working." %sm[k]['name'])
+					continue
 
 				setattr(s, k, v)
 				sc = True
