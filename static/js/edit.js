@@ -4,22 +4,6 @@ if (typeof String.prototype.startsWith != 'function') {
 	};
 }
 
-function validURL(u) {
-	if(u.match("^[-A-Za-z0-9._~:/?#@!$&'()*+,;=% \\[\\]]+$"))
-		return true;
-	return false;
-}
-
-function checkURL(u) {
-	if(!validURL(u))
-	{
-		alert('Invalid URL: ' + u);
-		return false;
-	}
-
-	return true;
-}
-
 function loadimg(id) {
 	var o = TNM.imageurls[id];
 
@@ -409,7 +393,8 @@ $(function() {
 			{
 				var k = TNM.social_media[j][0];
 				var p = TNM.social_media[j][1];
-				s += '<li><input type="text" ng-model="socialmap[\'' + k + '\']" " id="' + i + '_' + k + '" placeholder="' + p + ' Profile URL"/><div class="social_icon ' + k + '"></div></li>';
+				var u = TNM.social_media[j][2];
+				s += '<li>' + u + '<input type="text" ng-model="socialmap[\'' + k + '\']" " id="' + i + '_' + k + '" placeholder="' + p + ' Profile URL"/><div class="social_icon ' + k + '"></div></li>';
 			}
 
 			var dialog = make_dialog(
@@ -578,7 +563,7 @@ function TNMCtrl($scope, $http) {
 			data: $.param(o)
 		}).success(function(result) {
 			if(result.errors.length > 0) {
-				alert(result.errors);
+				alert(result.errors.join('\n'));
 			} else {
 				$.each(result, function(imgkey, imgdata) {
 					var setimg = false;
@@ -610,8 +595,7 @@ function TNMCtrl($scope, $http) {
 		var o = {};
 		$.each($scope.socialmap, function(k, v) {
 			var i = $('#social_' + k)[0];
-			if(!i.value || checkURL(i.value))
-				o["_" + k] = i.value;
+			o["_" + k] = i.value;
 		});
 
 		$scope.save(o);

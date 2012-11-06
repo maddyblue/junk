@@ -3,8 +3,10 @@
 import logging
 import os
 import re
+import urlparse
 
 from google.appengine.api import files
+from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 import jinja2
@@ -139,3 +141,21 @@ def style_colors(theme):
 			colors[m.group(1)] = int(m.group(2), 16)
 
 	return colors
+
+def check_url(url):
+	rpcs = []
+
+	up = urlparse.urlparse(url)
+
+	# facebook seems to require using graph.facebook.com - otherwise always returns 404
+	if up.hostname.endswith('facebook.com'):
+		url = url.replace(up.hostname, 'graph.facebook.com', 1)
+
+	rpc = urlfetch.create_rpc()
+	urlfetch.make_fetch_call(rpc, url, allow_truncated=True)
+
+	try:
+		result = rpc.get_result()
+		return result.status_code == 200
+	except urlfetch.DownloadError:
+		return False

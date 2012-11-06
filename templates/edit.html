@@ -26,9 +26,9 @@ $(function() {
 	TNM.socialmap = {};
 	TNM.social_media = [];
 
-	{% for k, n in site.social_media %}
+	{% for k, v in site.social_media.iteritems() %}
 	TNM.socialmap["{{ k }}"] = "{{ site[k]|default('', true) }}";
-	TNM.social_media.push(["{{ k }}", "{{ n }}"]);
+	TNM.social_media.push(["{{ k }}", "{{ v['name'] }}", "{{ v['url'] }}"]);
 	{% endfor %}
 
 	{% if page.type != 'gallery' %}

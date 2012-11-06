@@ -3,6 +3,7 @@
 import datetime
 import json
 import logging
+import re
 
 from PIL import Image
 from google.appengine.ext import blobstore
@@ -69,7 +70,8 @@ class Save(BaseHandler):
 			'headline',
 		]
 
-		keys.extend([i[0] for i in models.Site.social_media])
+		sm = models.Site.social_media
+		keys.extend(sm.keys())
 
 		r = {'errors': []}
 
@@ -100,9 +102,21 @@ class Save(BaseHandler):
 
 			for k in keys:
 				v = self.request.POST.get('_%s' %k, None)
-				if v is not None:
-					setattr(s, k, v)
-					sc = True
+
+				if v is None or v == getattr(s, k):
+					continue
+
+				if v and k in sm:
+					if re.search(r'[^\w.-]', v) is not None:
+						r['errors'].append('%s URL can only contain letters, numbers, dots (.), underscores (_), and dashes (-).' %sm[k]['name'])
+						continue
+
+					if not utils.check_url(sm[k]['url'] + v):
+						r['errors'].append("%s URL doesn't seem to be working." %sm[k]['name'])
+						continue
+
+				setattr(s, k, v)
+				sc = True
 
 			if set_domain:
 				s.domain = domain

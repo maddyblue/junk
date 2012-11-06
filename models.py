@@ -84,15 +84,15 @@ class Site(ndb.Model):
 	youtube = ndb.StringProperty('y', indexed=False)
 	pintrest = ndb.StringProperty('r', indexed=False)
 
-	social_media = [
-		('facebook', 'Facebook'),
-		('flickr', 'Flickr'),
-		('google', 'Google+'),
-		('linkedin', 'LinkedIn'),
-		('twitter', 'Twitter'),
-		('youtube', 'YouTube'),
-		('pintrest', 'Pintrest'),
-	]
+	social_media = {
+		'facebook': { 'name': 'Facebook', 'url': 'http://facebook.com/' },
+		'flickr': { 'name': 'Flickr', 'url': 'http://flickr.com/' },
+		'google': { 'name': 'Google+', 'url': 'https://plus.google.com/' },
+		'linkedin': { 'name': 'LinkedIn', 'url': 'http://linkedin.com/in/' },
+		'twitter': { 'name': 'Twitter', 'url': 'https://twitter.com/' },
+		'youtube': { 'name': 'YouTube', 'url': 'http://youtube.com/' },
+		'pintrest': { 'name': 'Pintrest', 'url': 'http://pinterest.com/' },
+	}
 
 	@property
 	def twitter_name(self):
