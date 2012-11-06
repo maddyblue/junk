@@ -381,10 +381,11 @@ class Image(ndb.Expando):
 			pagek = self.key.parent()
 			page = pagek.get()
 			sitek = pagek.parent()
-			url = '/%s/%s/%s' %(
+			url = '/%s/%s/%s?%x' %(
 				sitek.id(),
 				page.name,
-				name
+				name,
+				hash(self.url)
 			)
 		else:
 			url = self.url

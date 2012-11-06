@@ -569,7 +569,7 @@ def publish_site(sitename):
 			else:
 				continue
 
-			utils.gs_write('%s/%s/%s.im' %(gsname, page.name, image.key.id()), t, f.read())
+			utils.gs_write('%s/%s/%s.im' %(gsname, page.name, image.key.id()), t, f.read(), cache=None)
 
 		continue
 

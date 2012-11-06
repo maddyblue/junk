@@ -106,13 +106,13 @@ def make_options(options, default=None):
 def make_plan_options(default=None):
 	return make_options(zip(USER_PLAN_CHOICES, PLAN_COSTS_DESC), default)
 
-def gs_write(name, mime, content):
+def gs_write(name, mime, content, cache='no-cache'):
 	if os.environ.get('SERVER_SOFTWARE').startswith('Google App Engine'):
 		fn = files.gs.create(
 			'/gs/' + name,
 			mime_type=mime,
 			acl='public-read',
-			cache_control='no-cache'
+			cache_control=cache,
 		)
 		with files.open(fn, 'a') as f:
 			f.write(content)
