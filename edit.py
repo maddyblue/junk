@@ -548,8 +548,10 @@ def publish_site(sitename):
 			'site': site,
 		})
 
-		name = '/%i' %pagenum if pagenum else ''
-		oname = '%s/%s%s' %(gsname, page.name, name)
+		numname = '/%i' %pagenum if pagenum else ''
+		pagename = page.name if page.key != site.pages[0] else 'index.html'
+
+		oname = '%s/%s%s' %(gsname, pagename, numname)
 		utils.gs_write(oname, 'text/html', c)
 
 	for page in pages.itervalues():
