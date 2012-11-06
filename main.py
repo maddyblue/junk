@@ -34,8 +34,8 @@ app = webapp2.WSGIApplication([
 	# edit
 	webapp2.Route(r'/archive/<pageid>', handler='edit.ArchivePage', name='archive-page'),
 	webapp2.Route(r'/colors/<siteid>/<color>', handler='edit.SetColors', name='colors'),
-	webapp2.Route(r'/edit', handler='edit.Edit'),
-	webapp2.Route(r'/edit/', handler='edit.Edit', name='edit-home'),
+	webapp2.Route(r'/edit', handler='edit.Edit', name='edit-home'),
+	webapp2.Route(r'/edit/', handler='edit.Edit'),
 	webapp2.Route(r'/edit/<pagename>', handler='edit.Edit', name='edit'),
 	webapp2.Route(r'/edit/<pagename>/<pagenum>', handler='edit.Edit', name='edit-page'),
 	webapp2.Route(r'/layout/<siteid>/<pageid>/<layoutid>', handler='edit.Layout', name='layout'),
