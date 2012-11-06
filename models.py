@@ -95,12 +95,6 @@ class Site(ndb.Model):
 	}
 
 	@property
-	def twitter_name(self):
-		if self.twitter:
-			return self.twitter.rpartition('/')[2]
-		return None
-
-	@property
 	def types(self):
 		return types(self.theme)
 

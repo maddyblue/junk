@@ -1,6 +1,6 @@
-{% if site.twitter_name %}
+{% if site.twitter %}
 <li class="twitter">
-	<h3>@{{ site.twitter_name }}</h3>
+	<h3>@{{ site.twitter}}</h3>
 	<ul id="tweet-list">
 		<li class="follow">
 			follow me on <a href="{{ site.twitter }}">twitter</a>
@@ -9,6 +9,6 @@
 </li>
 
 <script type="text/javascript">
-	{{ site.twitter_name|tweets('#tweet-list') }}
+	{{ site.twitter|tweets('#tweet-list') }}
 </script>
 {% endif %}
