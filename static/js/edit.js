@@ -570,21 +570,11 @@ function TNMCtrl($scope, $http) {
 				}
 
 				$.each(result, function(imgkey, imgdata) {
-					var setimg = false;
-
 					$.each(imgdata, function(k, v) {
 						TNM.imageurls[imgkey][k] = v;
 						if(k == 'url')
 							$("#" + imgkey)[0].src = v;
-						if(k == 'orig')
-							setimg = true;
 					});
-
-					if(setimg) {
-						$("#containerimg").css('background-image', 'url(' + TNM.imageurls[imgkey].orig + ')');
-						loadimg(imgkey);
-						resize(0, {'value': 0});
-					}
 				});
 			}
 
