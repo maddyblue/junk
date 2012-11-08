@@ -552,7 +552,7 @@ function TNMCtrl($scope, $http) {
 		return $scope.saves ? 'saving' : '';
 	};
 
-	$scope.save = function(o) {
+	$scope.save = function(o, onsuccess) {
 		$scope.saves++;
 		$.extend(o, $scope.savemap);
 
@@ -565,6 +565,10 @@ function TNMCtrl($scope, $http) {
 			if(result.errors.length > 0) {
 				alert(result.errors.join('\n'));
 			} else {
+				if (onsuccess) {
+					onsuccess();
+				}
+
 				$.each(result, function(imgkey, imgdata) {
 					var setimg = false;
 
@@ -583,6 +587,7 @@ function TNMCtrl($scope, $http) {
 					}
 				});
 			}
+
 			$scope.saves--;
 		}).error(function() {
 			$.extend($scope.savemap, o);
@@ -692,11 +697,12 @@ function TNMCtrl($scope, $http) {
 			return;
 		}
 
-		$scope.save(o);
-		var i = $('#' + id);
-		i.text(o[id]);
-		var e = $('#' + id + '_edit');
-		edit_resize(i, e);
+		$scope.save(o, function() {
+			var i = $('#' + id);
+			i.text(o[id]);
+			var e = $('#' + id + '_edit');
+			edit_resize(i, e);
+		});
 	};
 
 	$scope.edit_text = function() {
@@ -708,9 +714,10 @@ function TNMCtrl($scope, $http) {
 			return;
 		}
 
-		$scope.save(o);
-		var i = $('#' + id);
-		i.html(o[id]);
+		$scope.save(o, function() {
+			var i = $('#' + id);
+			i.html(o[id]);
+		});
 	};
 
 	$scope.set_link_id = function(id) {
@@ -790,9 +797,10 @@ function TNMCtrl($scope, $http) {
 			var id = TNM.edit_map_id;
 
 			o[id] = d;
-			$scope.save(o);
-			setMap(id, d);
-			$('#' + id).attr('data-latlng', d);
+			$scope.save(o, function() {
+				setMap(id, d);
+				$('#' + id).attr('data-latlng', d);
+			});
 		}
 
 		if (error) {
