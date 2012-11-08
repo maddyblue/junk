@@ -27,8 +27,8 @@ function loadimg(id) {
 		value: o.s
 	});
 
-	$("#containerimg").css('left', o.x);
-	$("#containerimg").css('top', o.y);
+	TNM.containerimg.css('left', o.x);
+	TNM.containerimg.css('top', o.y);
 }
 
 function img_resize() {
@@ -52,13 +52,13 @@ function img_resize() {
 	var baseleft = offset.left;
 	var f = 0.8;
 
-	$("#containerimg").css({height: h, width: w});
+	TNM.containerimg.css({height: h, width: w});
 	$("#leftcontainer").css({width: w - portw, height: porth, top: h - porth});
 	$("#rightcontainer").css({width: w - portw, height: porth, top: h - porth});
 	$("#topcontainer").css({width: 2 * w - portw, height: h - porth});
 	$("#bottomcontainer").css({width: 2 * w - portw, height: h - porth});
 	$("#imgslider").css({top: h - porth * (f + 1) / 2, left: w - 20, height: porth * f});
-	$("#imgcontainer").css({
+	TNM.imgcontainer.css({
 		width: 2 * w - portw,
 		height: 2 * h - porth,
 		top: basetop + porth - h,
@@ -66,11 +66,11 @@ function img_resize() {
 	});
 	$('#imgsave').css({top: h - porth + 5, right: w - portw + 3});
 
-	var pos = $("#containerimg").position();
+	var pos = TNM.containerimg.position();
 	if(pos.left + w > 2 * w - portw)
-		$("#containerimg").css({left: w - portw});
+		TNM.containerimg.css({left: w - portw});
 	if(pos.top + h > 2 * h - porth)
-		$("#containerimg").css({top: h - porth});
+		TNM.containerimg.css({top: h - porth});
 
 	o.x = pos.left;
 	o.y = pos.top;
@@ -110,7 +110,7 @@ function make_dialog(id, header, title, contents, onsave, savename) {
 }
 
 function stopImageEdit() {
-	$('#imgcontainer').hide();
+	TNM.imgcontainer.hide();
 }
 
 function edit_resize(t, d) {
@@ -272,6 +272,9 @@ $(function() {
 			'<div id="bottomcontainer" class="containerdiv"></div>' +
 		'</div>'
 	);
+
+	TNM.imgcontainer = $('#imgcontainer');
+	TNM.containerimg = $('#containerimg');
 
 	$('#toolbar').show();
 
@@ -462,9 +465,9 @@ $(function() {
 		TNM.edit_image_id = id;
 		var o = TNM.imageurls[id];
 
-		$("#containerimg").draggable({ containment: 'parent' })
+		TNM.containerimg.draggable({ containment: 'parent' })
 			.css('background-image', 'url(' + o.orig + ')');
-		$("#imgcontainer").show();
+		TNM.imgcontainer.show();
 
 		loadimg(id);
 		TNM.edit_image_size = o.s;
