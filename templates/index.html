@@ -2,23 +2,12 @@
 
 {% block content %}
 
-<a href="javascript:void(0);" id="login">login</a>
+{% if not user %}
 
-<script type="text/javascript">
-$(function() {
-	$("#login").click(function() {
-		var $dialog = $(
-			'<div title="Login">' +
-			'<div style="margin: auto; width: 100%; text-align: center;">' +
-			'<a href="{{ "login-google"|url }}"><img src="/static/images/google.png" alt="google" /></a><br/>' +
-			'<a href="{{ "login-facebook"|url }}"><img src="/static/images/facebook.png" alt="facebook" /></a>' +
-			'</div></div>'
-			).dialog({
-				minWidth: 110,
-				width: 110
-		});
-	});
-});
-</script>
+login:
+<p><a href="{{ "login-google"|url }}"><img src="/static/images/google.png" alt="google" /></a><br/>
+<p><a href="{{ "login-facebook"|url }}"><img src="/static/images/facebook.png" alt="facebook" /></a>
+
+{% endif %}
 
 {% endblock %}
