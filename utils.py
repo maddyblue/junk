@@ -32,6 +32,7 @@ JQUERY = """<script src="//ajax.googleapis.com/ajax/libs/jquery/%(version)s/jque
 
 JQUERY_UI_VERSION = '1.8.23'
 JQUERY_UI = """<script src="//ajax.googleapis.com/ajax/libs/jqueryui/%(version)s/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/%(version)s/themes/base/jquery.ui.all.css">
 """ %{ 'version': JQUERY_UI_VERSION }
 
 def render(_template, c):
