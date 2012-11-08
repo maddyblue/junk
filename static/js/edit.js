@@ -20,7 +20,10 @@ function loadimg(id) {
 		min: o.min_scale,
 		max: o.max_scale,
 		step: (o.max_scale - o.min_scale) / 100,
-		slide: resize,
+		slide: function(e, u) {
+			TNM.edit_image_size = u.value;
+			img_resize();
+		},
 		value: o.s
 	});
 
@@ -28,23 +31,26 @@ function loadimg(id) {
 	$("#containerimg").css('top', o.y);
 }
 
-function resize(event, ui) {
+function img_resize() {
 	var o = TNM.imageurls[TNM.edit_image_id];
+	var e = $('#' + TNM.edit_image_id);
+
 	var wscale = o.wscale;
 	var hscale = o.hscale;
 	var min_scale = o.min_scale;
 	var max_scale = o.max_scale;
-	var size = Math.max(o.min_scale, ui.value);
+	var size = Math.max(o.min_scale, TNM.edit_image_size);
 	size = Math.min(o.max_scale, size);
 
 	var w = o.basew * size;
 	var h = o.baseh * size;
 	var portw = o.portw;
 	var porth = o.porth;
-	var basetop = o.basetop;
-	var baseleft = o.baseleft;
+
+	var offset = e.offset();
+	var basetop = offset.top;
+	var baseleft = offset.left;
 	var f = 0.8;
-	basetop += 52; // admin toolbar height
 
 	$("#containerimg").css({height: h, width: w});
 	$("#leftcontainer").css({width: w - portw, height: porth, top: h - porth});
@@ -119,6 +125,8 @@ $(window).resize(function() {
 		var t = d.data('orig');
 		edit_resize(t, d);
 	});
+
+	img_resize();
 });
 
 $(function() {
@@ -459,7 +467,8 @@ $(function() {
 		$("#imgcontainer").show();
 
 		loadimg(id);
-		resize(0, {'value': o.s});
+		TNM.edit_image_size = o.s;
+		img_resize();
 
 		e.preventDefault();
 	});
@@ -659,7 +668,8 @@ function TNMCtrl($scope, $http) {
 	$scope.imgsave = function() {
 		var id = TNM.edit_image_id;
 		var i = TNM.imageurls[id];
-		resize(0, {'value': i.s});
+		TNM.edit_image_size = i.s;
+		img_resize();
 		var o = {};
 
 		o[id + '_x'] = i.x;
