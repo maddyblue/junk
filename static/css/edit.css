@@ -13,19 +13,20 @@
 .btn:hover{background-color:#800000;}
 .btn.active,.btn.publishing{background:white;color:black;}.btn.active:hover,.btn.publishing:hover{background:white;color:#800000;}
 .btn.close{color:#a3a3a3;background-color:#ebebeb;}.btn.close:hover{background-color:#ebebeb;color:#800000;}
-#toolbar{background:url(toolbar-bg.png) 0 0 repeat-x;height:52px;display:none;}#toolbar nav{float:left;height:50px;padding:0 10px;font-size:14px;}#toolbar nav.divider{padding:0px;width:2px;background:url(nav-border.png);}
-#toolbar nav ul li{float:left;margin:0 6px;}#toolbar nav ul li#saved{padding:5px 15px 7px;position:relative;top:8px;display:block;width:60px;color:#727272;}#toolbar nav ul li#saved.saving{color:#800000;}
-#toolbar nav ul a{top:8px;position:relative;display:block;}#toolbar nav ul a.logo{padding:0px;background-color:#cfcfcf;}#toolbar nav ul a.logo:hover{background-color:#cfcfcf !important;}
-#toolbar nav ul.user-actions li{margin-right:6px;margin-left:0;}#toolbar nav ul.user-actions li.user-info{padding-top:5px;}#toolbar nav ul.user-actions li.user-info .hello{font-weight:normal;font-style:italic;color:#8d8d8d;text-shadow:1px 1px 1px #ffffff;padding-top:3px;width:220px;}#toolbar nav ul.user-actions li.user-info .hello .name{font-style:normal;font-weight:bold;}
-#toolbar nav ul.user-actions li a{background:none;display:block;font-size:14px;padding:0;text-decoration:underline;text-transform:lowercase;text-shadow:1px 1px 1px #ffffff;font-weight:bold;position:relative;top:0;line-height:14px;}
-#toolbar nav ul.user-actions li a.my-account{color:#1a1a1a;background:url(myaccount.png) 0 2px no-repeat;padding-left:15px;}
-#toolbar nav ul.user-actions li a.logout{color:#d81515;background:url(logout.png) 0 2px no-repeat;padding-left:15px;}
-#toolbar nav ul.user-actions li a:hover{background-color:transparent !important;text-decoration:none;}
-#toolbar nav.right{float:right;padding-right:6px;background:url(nav-border.png) 0 0 repeat-y;}
-#toolbar nav.left{padding-left:6px;}
-#toolbar nav img{height:33px;width:33px;}#toolbar nav img.avatar{position:relative;top:8px;}
-#toolbar span.imageNumber{background:#83b64c;border-radius:10px;color:#FFFFFF;display:block;font-size:12px;height:20px;left:15px;line-height:19px;position:relative;text-align:center;top:-5px;width:20px;}
-#toolbar img.user{position:relative;top:5px;float:left;margin-right:10px;}
+.toolbar{background:url(toolbar-bg.png) 0 0 repeat-x;height:52px;}.toolbar nav{float:left;height:50px;padding:0 10px;font-size:14px;}.toolbar nav.divider{padding:0px;width:2px;background:url(nav-border.png);}
+.toolbar nav ul li{float:left;margin:0 6px;}.toolbar nav ul li#saved{padding:5px 15px 7px;position:relative;top:8px;display:block;width:60px;color:#727272;}.toolbar nav ul li#saved.saving{color:#800000;}
+.toolbar nav ul a{top:8px;position:relative;display:block;}.toolbar nav ul a.logo{padding:0px;background-color:#cfcfcf;}.toolbar nav ul a.logo:hover{background-color:#cfcfcf !important;}
+.toolbar nav ul.user-actions li{margin-right:6px;margin-left:0;}.toolbar nav ul.user-actions li.user-info{padding-top:5px;}.toolbar nav ul.user-actions li.user-info .hello{font-weight:normal;font-style:italic;color:#8d8d8d;text-shadow:1px 1px 1px #ffffff;padding-top:3px;width:220px;}.toolbar nav ul.user-actions li.user-info .hello .name{font-style:normal;font-weight:bold;}
+.toolbar nav ul.user-actions li a{background:none;display:block;font-size:14px;padding:0;text-decoration:underline;text-transform:lowercase;text-shadow:1px 1px 1px #ffffff;font-weight:bold;position:relative;top:0;line-height:14px;}
+.toolbar nav ul.user-actions li a.my-account{color:#1a1a1a;background:url(myaccount.png) 0 2px no-repeat;padding-left:15px;}
+.toolbar nav ul.user-actions li a.logout{color:#d81515;background:url(logout.png) 0 2px no-repeat;padding-left:15px;}
+.toolbar nav ul.user-actions li a:hover{background-color:transparent !important;text-decoration:none;}
+.toolbar nav.right{float:right;padding-right:6px;background:url(nav-border.png) 0 0 repeat-y;}
+.toolbar nav.left{padding-left:6px;}
+.toolbar nav img{height:33px;width:33px;}.toolbar nav img.avatar{position:relative;top:8px;}
+.toolbar span.imageNumber{background:#83b64c;border-radius:10px;color:#FFFFFF;display:block;font-size:12px;height:20px;left:15px;line-height:19px;position:relative;text-align:center;top:-5px;width:20px;}
+.toolbar img.user{position:relative;top:5px;float:left;margin-right:10px;}
+.live_toolbar{float:left;background:rgba(255, 255, 255, 0.4);}.live_toolbar .logo{padding-top:8px;padding-left:12px;padding-right:6px;}
 .edithover{outline:5px solid rgba(128, 0, 0, 0.65);z-index:5000;position:absolute;display:none;}.edithover .img-hover{position:absolute;width:75px;height:50px;background-color:#cfcfcf;border:1px solid black;text-align:center;}
 .edithover .img-edit{right:150px;}
 .edithover .img-link{right:75px;}

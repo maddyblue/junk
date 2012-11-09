@@ -107,10 +107,15 @@ function make_dialog(id, header, title, contents, onsave, savename) {
 
 	d.hide();
 
-	$('body').append(d);
+	TNM.dialogs.append(d);
 	d.offset({left: d.outerWidth() / 2});
 
 	return d;
+}
+
+function stopEditing() {
+	stopImageEdit();
+	$(".dialog").hide();
 }
 
 function stopImageEdit() {
@@ -174,12 +179,11 @@ $(function() {
 	);
 	//*/
 
-	$('body').prepend(
-		'<div id="toolbar">' +
+	$(document.body).prepend(
+		'<div id="toolbar" class="toolbar" ng-show="mode==\'edit\'">' +
 			'<nav class="left"><ul>' +
 				'<li><a class="logo" href="/"><img src="/static/images/icon.png" /></a></li>' +
-				'<li><a href="#" class="active btn">edit</a></li>' +
-				'<li><a href="' + TNM.viewurl + '" class="btn">live view</a></li>' +
+				'<li><a ng-click="hide_toolbar()" class="btn">live view</a></li>' +
 				'<li id="saved" ng-class="saveclass()">{{ saved() }}</li>' +
 			'</ul></nav>' +
 			'<nav class="divider"></nav>' +
@@ -207,10 +211,16 @@ $(function() {
 					'</ul>' +
 				'</li>' +
 			'</ul></nav>' +
+		'</div>' +
+		'<div class="toolbar live_toolbar" ng-show="mode==\'live\'">' +
+			'<img class="logo" ng-click="show_toolbar()" src="/static/images/icon.png" title="Return to editing">' +
 		'</div>'
 	);
 
-	$('body').on('click', '.dialog a:not(.noclose)', function() {
+	TNM.dialogs = $('<div id="dialogs"/>');
+	$(document.body).append(TNM.dialogs);
+
+	TNM.dialogs.on('click', 'a:not(.noclose)', function() {
 		if (TNM.noclose) {
 			delete TNM.noclose;
 		}
@@ -263,7 +273,7 @@ $(function() {
 		TNM.colors_dialog.show();
 	});
 
-	$('body').append(
+	TNM.imgcontainer = $(
 		'<div id="imgcontainer">' +
 			'<div id="imgsave" ng-click="imgsave()">save</div>' +
 			'<div id="topcontainer" class="containerdiv"></div>' +
@@ -274,11 +284,9 @@ $(function() {
 			'<div id="bottomcontainer" class="containerdiv"></div>' +
 		'</div>'
 	);
+	$(document.body).append(TNM.imgcontainer);
 
-	TNM.imgcontainer = $('#imgcontainer');
 	TNM.containerimg = $('#containerimg');
-
-	$('#toolbar').show();
 
 	// date
 
@@ -323,8 +331,7 @@ $(function() {
 	$(document).on('keyup', function(e) {
 		if(e.keyCode == 27) // esc
 		{
-			$(".dialog").hide();
-			stopImageEdit();
+			stopEditing();
 		}
 		else if(e.keyCode == 13) // enter
 		{
@@ -364,12 +371,15 @@ $(function() {
 	);
 	TNM.edit_map_text = $('input', TNM.edit_map_dialog);
 
+	TNM.editables = $('<div id="editables"/>');
+	$(document.body).append(TNM.editables);
+
 	$('.editable').each(function() {
 		var d = $('<div class="edithover"></div>');
 		var t = $(this);
 		d.attr('id', this.id + '_edit');
 		d.data('orig', t);
-		$('body').append(d);
+		TNM.editables.append(d);
 		$.data(d[0], 'id', this.id);
 
 		d.mouseout(function() {
@@ -377,9 +387,11 @@ $(function() {
 		});
 
 		t.mouseover(function() {
-			TNM.edithover.hide();
-			d.show();
-			edit_resize(t, d);
+			if (!TNM.live_mode) {
+				TNM.edithover.hide();
+				d.show();
+				edit_resize(t, d);
+			}
 		});
 
 		if(t.hasClass('line'))
@@ -537,6 +549,7 @@ $(function() {
 });
 
 function TNMCtrl($scope, $http) {
+	$scope.mode = 'edit';
 	$scope.saves = 0;
 	$scope.savemap = {};
 	$scope.publishing = TNM.publishing;
@@ -558,6 +571,17 @@ function TNMCtrl($scope, $http) {
 			});
 		}
 	});
+
+	$scope.show_toolbar = function() {
+		$scope.mode = 'edit';
+		delete TNM.live_mode;
+	};
+
+	$scope.hide_toolbar = function() {
+		$scope.mode = 'live';
+		TNM.live_mode = true;
+		stopEditing();
+	};
 
 	$scope.saved = function() {
 		return $scope.saves ? 'saving...' : 'saved';

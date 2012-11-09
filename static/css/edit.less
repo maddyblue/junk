@@ -94,11 +94,10 @@
 	}
 }
 
-#toolbar
+.toolbar
 {
 	background: url(toolbar-bg.png) 0 0 repeat-x;
 	height: 52px;
-	display: none;
 
 	nav
 	{
@@ -266,6 +265,18 @@
 		top: 5px;
 		float: left;
 		margin-right: 10px;
+	}
+}
+
+.live_toolbar
+{
+	float: left;
+	background: rgba(255, 255, 255, .4);
+
+	.logo {
+		padding-top: 8px;
+		padding-left: @toolbar-distance + 6px;
+		padding-right: @toolbar-distance;
 	}
 }
 
