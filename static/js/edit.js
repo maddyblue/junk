@@ -380,7 +380,6 @@ $(function() {
 			d.show();
 			edit_resize(t, d);
 		});
-		TNM.edithover = $('.edithover');
 
 		if(t.hasClass('line'))
 		{
@@ -440,6 +439,8 @@ $(function() {
 			});
 		}
 	});
+
+	TNM.edithover = $('.edithover');
 
 	TNM.image_change_dialog = make_dialog(
 		'image_change_dialog',
