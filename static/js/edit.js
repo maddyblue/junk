@@ -116,6 +116,7 @@ function make_dialog(id, header, title, contents, onsave, savename) {
 function stopEditing() {
 	stopImageEdit();
 	$(".dialog").hide();
+	TNM.edithover.hide();
 }
 
 function stopImageEdit() {
