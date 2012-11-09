@@ -637,6 +637,10 @@ function TNMCtrl($scope, $http) {
 	};
 
 	$scope.no_social = function() {
+		if ($scope.mode != 'edit') {
+			return false;
+		}
+
 		var r = true;
 		$.each($scope.socialmap, function(k, v) {
 			if(v)
