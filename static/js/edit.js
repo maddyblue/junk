@@ -214,9 +214,6 @@ $(function() {
 		}
 	});
 
-	// remove <a> from around images
-	$("a:has(img)").find(".editable.image").unwrap();
-
 	var layouts = '';
 	for (var layout in TNM.layouts) {
 		if(layout == TNM.current_layout) {
