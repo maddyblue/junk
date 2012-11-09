@@ -32,6 +32,10 @@ function loadimg(id) {
 }
 
 function img_resize() {
+	if (!TNM.edit_image_id) {
+		return;
+	}
+
 	var o = TNM.imageurls[TNM.edit_image_id];
 	var e = $('#' + TNM.edit_image_id);
 
