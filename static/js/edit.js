@@ -115,6 +115,7 @@ function make_dialog(id, header, title, contents, onsave, savename) {
 
 function stopImageEdit() {
 	TNM.imgcontainer.hide();
+	delete TNM.edit_image_id;
 }
 
 function edit_resize(t, d) {
