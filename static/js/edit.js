@@ -376,7 +376,7 @@ $(function() {
 	$(document.body).append(TNM.editables);
 
 	$('.editable').each(function() {
-		var d = $('<div class="edithover"></div>');
+		var d = $('<div class="edithover"/>');
 		var t = $(this);
 		d.attr('id', this.id + '_edit');
 		d.data('orig', t);
