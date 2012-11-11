@@ -463,7 +463,7 @@ $(function() {
 		'<iframe id="image_upload_iframe" src="#" style="visibility: hidden; display: none"></iframe>' +
 		'<form method="POST" id="image_upload_form" target="image_upload_iframe" enctype="multipart/form-data">' +
 		'<input type="file" id="image_upload_file" name="file">' +
-		'<a class="btn save" ng-click="upload_image()">upload</a>' +
+		'<a class="btn save" ng-click="upload_image_iframe()" ng-hide="c_files">upload</a>' +
 		'</form>' +
 		'<hr/>' +
 		'Or use an existing image:' +
@@ -560,6 +560,9 @@ function TNMCtrl($scope, $http) {
 	$scope.pagelinks = TNM.pagelinks;
 	$scope.pages = TNM.pages;
 
+	// capabilities
+	$scope.c_files = (window.File && window.FileReader && window.FormData) !== undefined;
+
 	$('#menu').sortable({
 		items: ".menu_item",
 		stop: function() {
@@ -650,48 +653,89 @@ function TNMCtrl($scope, $http) {
 		return r;
 	};
 
-	$scope.upload_image = function() {
-		var form = $('#image_upload_form');
-		var id = TNM.upload_image_id;
-		var i = $('#' + id)[0];
-
+	$scope.upload_image_url = function(id, callback) {
 		$.ajax({
 			url: TNM.uploadurl + '?image=' + id
-		}).done(function(data) {
+		}).done(callback);
+	};
+
+	$scope.upload_image_process = function(id, data) {
+		if(!data)
+		{
+			alert("error during upload");
+			return;
+		}
+
+		var j = $.parseJSON(data);
+		var i = $('#' + id)[0];
+		i.src = j.url;
+
+		var o = TNM.imageurls[id];
+		o.url = j.url;
+		o.orig = j.orig;
+		o.basew = j.w;
+		o.baseh = j.h;
+		o.s = j.s;
+
+		$scope.$apply(function() {
+			$scope.existingimgs[j.id.toString()] = {
+				name: j.name,
+				url: j.orig,
+				width: j.w,
+				height: j.h,
+				id: j.id
+			};
+		});
+	};
+
+	$scope.upload_image_iframe = function() {
+		var form = $('#image_upload_form');
+		var id = TNM.upload_image_id;
+
+		$scope.upload_image_url(id, function(data) {
 			form.attr('action', data);
 			form.ajaxSubmit({
-				success: function(data, stat, xhr) {
-					if(!data)
-					{
-						alert("error during upload");
-						return;
-					}
-
-					var j = $.parseJSON(data);
-					i.src = j.url;
-
-					var o = TNM.imageurls[id];
-					o.url = j.url;
-					o.orig = j.orig;
-					o.basew = j.w;
-					o.baseh = j.h;
-					o.s = j.s;
-
-					$scope.$apply(function() {
-						$scope.existingimgs[j.id.toString()] = {
-							name: j.name,
-							url: j.orig,
-							width: j.w,
-							height: j.h,
-							id: j.id
-						};
-					});
-
+				success: function(data) {
+					$scope.upload_image_process(id, data);
 					form[0].reset();
 				}
 			});
 		});
 	};
+
+	if ($scope.c_files) {
+		$scope.upload_image_html5 = function(evt) {
+			var id = TNM.upload_image_id;
+			var file = evt.target.files[0];
+
+			TNM.image_change_dialog.hide();
+
+			$scope.upload_image_url(id, function(upload_url) {
+				var reader = new FileReader();
+
+				reader.onload = function(e) {
+					var formdata = new FormData();
+					formdata.append('file', file);
+
+					var xhr = new XMLHttpRequest();
+					xhr.upload.addEventListener('progress', function(e) {
+						console.log('p: ' + (e.loaded / e.total * 100));
+					});
+
+					xhr.onload = function() {
+						$scope.upload_image_process(id, xhr.response);
+					};
+
+					xhr.open('POST', upload_url, true);
+					xhr.send(formdata);
+				};
+
+				reader.readAsDataURL(file);
+			});
+		};
+
+		document.getElementById('image_upload_file').addEventListener('change', $scope.upload_image_html5, false);
+	}
 
 	$scope.choose_image = function(key) {
 		var id = TNM.upload_image_id;
