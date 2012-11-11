@@ -281,9 +281,7 @@ class GetUploadURL(BaseHandler):
 					image=str(image)
 				)
 			))
-			logging.error('YES')
 		else:
-			logging.error(r)
 			self.response.out.write('')
 
 class UploadHandler(BaseUploadHandler):
