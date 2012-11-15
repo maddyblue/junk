@@ -31,7 +31,7 @@
 .edithover .img-edit{right:150px;}
 .edithover .img-link{right:75px;}
 .edithover .img-change{right:0;}
-#savings .saving{display:none;z-index:6000;position:absolute;background:rgba(0, 0, 0, 0.7) url('/static/images/loader.gif') no-repeat center;}
+#savings .saving{display:none;z-index:6000;position:absolute;background:rgba(0, 0, 0, 0.7) url('/static/images/loader.gif') no-repeat center;}#savings .saving .progress{display:none;width:0;height:30px;position:absolute;top:5%;background:#800000;}
 #imgcontainer{position:absolute;z-index:1;margin:0 auto;overflow:visible;display:none;}
 #imgslider{position:relative;z-index:15;width:4px;}#imgslider a{width:16px;height:16px;left:-7px;}
 #rightcontainer{right:0;}

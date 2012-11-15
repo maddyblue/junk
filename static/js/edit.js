@@ -417,6 +417,7 @@ $(function() {
 			d.append('<a class="img-hover img-edit">edit</a>');
 			d.append('<a class="img-hover img-change" href="#">change</a>');
 			d.append('<a class="img-hover img-link" ng-click="set_link_id(\'' + this.id + '\')">link</a>');
+			v.append('<div class="progress"></div>');
 		}
 		else if(t.hasClass('social'))
 		{
@@ -741,6 +742,10 @@ function TNMCtrl($scope, $http) {
 			var id = TNM.upload_image_id;
 			var file = evt.target.files[0];
 			var s = $scope.show_saving(id);
+			var p = $('.progress', s)
+				.show()
+				.css('width', 0)
+			;
 
 			TNM.image_change_dialog.hide();
 
@@ -753,10 +758,12 @@ function TNMCtrl($scope, $http) {
 
 					var xhr = new XMLHttpRequest();
 					xhr.upload.addEventListener('progress', function(e) {
-						console.log('p: ' + (e.loaded / e.total * 100));
+						var pct = e.loaded / e.total * 100;
+						p.css('width', pct + '%');
 					});
 
 					xhr.onload = function() {
+						p.hide();
 						$scope.upload_image_process(id, xhr.response, s);
 					};
 
