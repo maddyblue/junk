@@ -131,7 +131,7 @@ function edit_resize(t, d) {
 }
 
 $(window).resize(function() {
-	$('.edithover:visible').each(function() {
+	$('#editables .edithover:visible, #savings .saving:visible').each(function() {
 		var d = $(this);
 		var t = d.data('orig');
 		edit_resize(t, d);
@@ -375,13 +375,22 @@ $(function() {
 	TNM.editables = $('<div id="editables"/>');
 	$(document.body).append(TNM.editables);
 
+	TNM.saving = $('<div id="savings"/>');
+	$(document.body).append(TNM.saving);
+
 	$('.editable').each(function() {
 		var d = $('<div class="edithover"/>');
+		var v = $('<div class="saving"/>');
 		var t = $(this);
+
 		d.attr('id', this.id + '_edit');
 		d.data('orig', t);
 		TNM.editables.append(d);
 		$.data(d[0], 'id', this.id);
+
+		v.attr('id', this.id + '_saving');
+		v.data('orig', t);
+		TNM.saving.append(v);
 
 		d.mouseout(function() {
 			d.hide();
@@ -595,7 +604,21 @@ function TNMCtrl($scope, $http) {
 		return $scope.saves ? 'saving' : '';
 	};
 
-	$scope.save = function(o, onsuccess) {
+	$scope.save = function(o, onsuccess, no_autohide, saving_id) {
+		var s = [];
+		var i;
+
+		if (saving_id) {
+			i = $scope.show_saving(saving_id);
+			s.push.apply(s, i);
+		}
+
+		for (var id in o) {
+			i = $scope.show_saving(id);
+			s.push.apply(s, i);
+		}
+
+		s = $(s);
 		$scope.saves++;
 
 		$http({
@@ -606,25 +629,31 @@ function TNMCtrl($scope, $http) {
 		}).success(function(result) {
 			if(result.errors.length > 0) {
 				alert(result.errors.join('\n'));
-			} else {
-				if (onsuccess) {
-					onsuccess();
-				}
+			} else if (onsuccess) {
+				onsuccess(result, s);
+			}
 
-				$.each(result, function(imgkey, imgdata) {
-					$.each(imgdata, function(k, v) {
-						TNM.imageurls[imgkey][k] = v;
-						if(k == 'url')
-							$("#" + imgkey)[0].src = v;
-					});
-				});
+			if (!no_autohide) {
+				s.hide();
 			}
 
 			$scope.saves--;
 		}).error(function() {
 			alert('error');
 			$scope.saves--;
+			s.hide();
 		});
+	};
+
+	$scope.show_saving = function(id) {
+		var i = $('#' + id + '_saving');
+
+		if (i[0]) {
+			i.show();
+			edit_resize($('#' + id), i);
+		}
+
+		return i;
 	};
 
 	$scope.save_social = function() {
@@ -657,7 +686,7 @@ function TNMCtrl($scope, $http) {
 		}).done(callback);
 	};
 
-	$scope.upload_image_process = function(id, data) {
+	$scope.upload_image_process = function(id, data, s) {
 		if(!data)
 		{
 			alert("error during upload");
@@ -665,8 +694,7 @@ function TNMCtrl($scope, $http) {
 		}
 
 		var j = $.parseJSON(data);
-		var i = $('#' + id)[0];
-		i.src = j.url;
+		$scope.image_set_src(id, j.url, s);
 
 		var o = TNM.imageurls[id];
 		o.url = j.url;
@@ -686,15 +714,22 @@ function TNMCtrl($scope, $http) {
 		});
 	};
 
+	$scope.image_set_src = function(id, src, s) {
+		$('#' + id).one('load', function() {
+			s.hide();
+		}).attr('src', src);
+	};
+
 	$scope.upload_image_iframe = function() {
 		var form = $('#image_upload_form');
 		var id = TNM.upload_image_id;
+		var s = $scope.show_saving(id);
 
 		$scope.upload_image_url(id, function(data) {
 			form.attr('action', data);
 			form.ajaxSubmit({
 				success: function(data) {
-					$scope.upload_image_process(id, data);
+					$scope.upload_image_process(id, data, s);
 					form[0].reset();
 				}
 			});
@@ -705,6 +740,7 @@ function TNMCtrl($scope, $http) {
 		$scope.upload_image_html5 = function(evt) {
 			var id = TNM.upload_image_id;
 			var file = evt.target.files[0];
+			var s = $scope.show_saving(id);
 
 			TNM.image_change_dialog.hide();
 
@@ -721,7 +757,7 @@ function TNMCtrl($scope, $http) {
 					});
 
 					xhr.onload = function() {
-						$scope.upload_image_process(id, xhr.response);
+						$scope.upload_image_process(id, xhr.response, s);
 					};
 
 					xhr.open('POST', upload_url, true);
@@ -735,11 +771,23 @@ function TNMCtrl($scope, $http) {
 		document.getElementById('image_upload_file').addEventListener('change', $scope.upload_image_html5, false);
 	}
 
+	$scope.post_upload_image = function(result, s) {
+		$.each(result, function(imgkey, imgdata) {
+			$.each(imgdata, function(k, v) {
+				TNM.imageurls[imgkey][k] = v;
+				if(k == 'url') {
+					$scope.image_set_src(imgkey, v, s);
+				}
+			});
+		});
+	};
+
 	$scope.choose_image = function(key) {
 		var id = TNM.upload_image_id;
 		var o = {};
 		o[id + '_b'] = key;
-		$scope.save(o);
+
+		$scope.save(o, $scope.post_upload_image, true, id);
 	};
 
 	$scope.imgsave = function() {
@@ -753,7 +801,7 @@ function TNMCtrl($scope, $http) {
 		o[id + '_y'] = i.y;
 		o[id + '_s'] = i.s;
 
-		$scope.save(o);
+		$scope.save(o, $scope.post_upload_image, true, id);
 		stopImageEdit();
 	};
 
@@ -762,7 +810,8 @@ function TNMCtrl($scope, $http) {
 		var i = $('#' + id)[0];
 		var o = {};
 		o[id + '_c'] = true;
-		$scope.save(o);
+
+		$scope.save(o, $scope.post_upload_image, true, id);
 	};
 
 	$scope.edit_line = function() {
