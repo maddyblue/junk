@@ -663,7 +663,7 @@ function TNMCtrl($scope, $http) {
 			o["_" + k] = i.value;
 		});
 
-		$scope.save(o);
+		$scope.save(o, false, false, 'social');
 	};
 
 	$scope.no_social = function() {
