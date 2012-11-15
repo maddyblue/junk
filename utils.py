@@ -28,7 +28,7 @@ env.filters.update(filters.filters)
 
 JQUERY_VERSION = '1.7.2'
 JQUERY_UI_VERSION = '1.8.20'
-ANGULAR_VERSION = '1.0.1'
+ANGULAR_VERSION = '1.0.2'
 
 if os.environ['SERVER_SOFTWARE'].startswith('Google'):
 	JQUERY_URL = "//ajax.googleapis.com/ajax/libs/jquery/%(version)s/jquery.min.js" %{ 'version': JQUERY_VERSION }
