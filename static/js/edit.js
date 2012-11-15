@@ -124,17 +124,17 @@ function stopImageEdit() {
 	delete TNM.edit_image_id;
 }
 
-function edit_resize(t, d) {
-	d.offset(t.offset());
-	d.width(t.outerWidth());
-	d.height(t.outerHeight());
+function edit_resize(e) {
+	var orig = e.data('orig');
+
+	e.offset(orig.offset());
+	e.width(orig.outerWidth());
+	e.height(orig.outerHeight());
 }
 
 $(window).resize(function() {
 	$('#editables .edithover:visible, #savings .saving:visible').each(function() {
-		var d = $(this);
-		var t = d.data('orig');
-		edit_resize(t, d);
+		edit_resize($(this));
 	});
 
 	img_resize();
@@ -400,7 +400,7 @@ $(function() {
 			if (!TNM.live_mode) {
 				TNM.edithover.hide();
 				d.show();
-				edit_resize(t, d);
+				edit_resize(d);
 			}
 		});
 
@@ -650,7 +650,7 @@ function TNMCtrl($scope, $http) {
 
 		if (i[0]) {
 			i.show();
-			edit_resize($('#' + id), i);
+			edit_resize(i);
 		}
 
 		return i;
@@ -827,7 +827,7 @@ function TNMCtrl($scope, $http) {
 			var i = $('#' + id);
 			i.text(o[id]);
 			var e = $('#' + id + '_edit');
-			edit_resize(i, e);
+			edit_resize(e);
 		});
 	};
 
