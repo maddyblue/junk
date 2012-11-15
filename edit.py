@@ -52,7 +52,7 @@ class Edit(BaseHandler):
 			'pagenum': pagenum,
 			'pages': pages,
 			'pagetemplate': basedir + page.type + '.html',
-			'published_url': 'http://commondatastorage.googleapis.com/' + settings.BUCKET_NAME + '/' + site.key.id() + '/' + page.name,
+			'published_url': 'http://' + settings.BUCKET_NAME + '/' + site.key.id(),
 			'rel': webapp2.uri_for('edit-home') + '/',
 			'site': site,
 			'template': basedir + 'index.html',
