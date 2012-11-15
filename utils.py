@@ -42,9 +42,7 @@ else:
 	ANGULAR_URL = "/static/js/angular-%(version)s.min.js" %{ 'version': ANGULAR_VERSION }
 
 JQUERY = """<script src="%s"></script>""" %JQUERY_URL
-JQUERY_UI = """<script src="%(js)s"></script>
-<link rel="stylesheet" href="%(css)s">
-""" %{ 'js': JQUERY_UI_URL, 'css': JQUERY_UI_CSS_URL }
+JQUERY_UI = """<script src="%(js)s"></script>""" %{ 'js': JQUERY_UI_URL }
 ANGULAR = """<script src="%s"></script>""" %ANGULAR_URL
 
 def render(_template, c):
