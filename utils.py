@@ -27,19 +27,32 @@ env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 env.filters.update(filters.filters)
 
 JQUERY_VERSION = '1.7.2'
-JQUERY = """<script src="//ajax.googleapis.com/ajax/libs/jquery/%(version)s/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="/static/js/jquery-%(version)s.min.js"><\/script>')</script>""" %{ 'version': JQUERY_VERSION }
+JQUERY_UI_VERSION = '1.8.20'
+ANGULAR_VERSION = '1.0.1'
 
-JQUERY_UI_VERSION = '1.8.23'
-JQUERY_UI = """<script src="//ajax.googleapis.com/ajax/libs/jqueryui/%(version)s/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/%(version)s/themes/base/jquery.ui.all.css">
-""" %{ 'version': JQUERY_UI_VERSION }
+if os.environ['SERVER_SOFTWARE'].startswith('Google'):
+	JQUERY_URL = "//ajax.googleapis.com/ajax/libs/jquery/%(version)s/jquery.min.js" %{ 'version': JQUERY_VERSION }
+	JQUERY_UI_URL = "//ajax.googleapis.com/ajax/libs/jqueryui/%(version)s/jquery-ui.min.js" %{ 'version': JQUERY_UI_VERSION }
+	JQUERY_UI_CSS_URL = "//ajax.googleapis.com/ajax/libs/jqueryui/%(version)s/themes/base/jquery.ui.all.css" %{ 'version': JQUERY_UI_VERSION }
+	ANGULAR_URL = "//ajax.googleapis.com/ajax/libs/angularjs/%(version)s/angular.min.js" %{ 'version': ANGULAR_VERSION }
+else:
+	JQUERY_URL = "/static/js/jquery-%(version)s.min.js" %{ 'version': JQUERY_VERSION }
+	JQUERY_UI_URL = "/static/js/jquery-ui-%(version)s.min.js" %{ 'version': JQUERY_UI_VERSION }
+	JQUERY_UI_CSS_URL = "/static/css/jquery-ui/jquery-ui-%(version)s.css" %{ 'version': JQUERY_UI_VERSION }
+	ANGULAR_URL = "/static/js/angular-%(version)s.min.js" %{ 'version': ANGULAR_VERSION }
+
+JQUERY = """<script src="%s"></script>""" %JQUERY_URL
+JQUERY_UI = """<script src="%(js)s"></script>
+<link rel="stylesheet" href="%(css)s">
+""" %{ 'js': JQUERY_UI_URL, 'css': JQUERY_UI_CSS_URL }
+ANGULAR = """<script src="%s"></script>""" %ANGULAR_URL
 
 def render(_template, c):
 	context = {
+		'angular': ANGULAR,
+		'google_api': GOOGLE_API,
 		'jquery': JQUERY,
 		'jquery_ui': JQUERY_UI,
-		'google_api': GOOGLE_API,
 	}
 	context.update(c)
 	return env.get_template(_template).render(**context)
