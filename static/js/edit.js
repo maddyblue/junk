@@ -597,7 +597,6 @@ function TNMCtrl($scope, $http) {
 
 	$scope.save = function(o, onsuccess) {
 		$scope.saves++;
-		$.extend(o, $scope.savemap);
 
 		$http({
 			method: 'POST',
@@ -623,7 +622,6 @@ function TNMCtrl($scope, $http) {
 
 			$scope.saves--;
 		}).error(function() {
-			$.extend($scope.savemap, o);
 			alert('error');
 			$scope.saves--;
 		});
