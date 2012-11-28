@@ -11,6 +11,7 @@
 @dialog-header-color: #6f6f6f;
 @dialog-header-line: #b8b8b8;
 @dialog-title-color: @tnm-bg-dark;
+@dialog-text-color: @tnm-bg-dark;
 
 .btn
 {
@@ -400,6 +401,7 @@
 	max-height: 90%;
 	z-index: 10000;
 	overflow-y: scroll;
+	color: @dialog-text-color;
 
 	background-color: @dialog-content-bg;
 	border: 10px solid rgba(150, 150, 150, 0.3);
@@ -441,6 +443,7 @@
 				margin-bottom: 6px;
 				border: 1px solid #d0d0d0;
 				width: 80%;
+				color: @dialog-text-color;
 			}
 		}
 
