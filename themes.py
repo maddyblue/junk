@@ -1,11 +1,11 @@
-THEME_MARCO = 'marco'
+THEME_GENESIS = 'genesis'
 THEMES = [
-	THEME_MARCO,
+	THEME_GENESIS,
 ]
 
 COLORS = {
-	THEME_MARCO: [
-		'marco',
+	THEME_GENESIS: [
+		'genesis',
 		'ugly-brown',
 	],
 }
@@ -33,7 +33,7 @@ PAGE_TYPES = [
 ]
 
 SPECS = {
-	THEME_MARCO: {
+	THEME_GENESIS: {
 		PAGE_TYPE_HOME: {
 			1: { # no sidebar
 				'lines': 3,

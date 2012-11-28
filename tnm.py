@@ -117,7 +117,7 @@ class Register(BaseHandler):
 					)
 					user.put()
 
-					default_theme = models.THEME_MARCO
+					default_theme = models.THEME_GENESIS
 					site = models.Site.get_or_insert(lsitename,
 						name=sitename,
 						user=user.key,

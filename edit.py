@@ -582,7 +582,7 @@ def publish_site(sitename):
 		# Some pages need to support multiple pages, must hard code all such pages
 		# and generate them here.
 
-		if site.theme == models.THEME_MARCO and page.type == models.PAGE_TYPE_GALLERY and page.layout == 2:
+		if site.theme == models.THEME_GENESIS and page.type == models.PAGE_TYPE_GALLERY and page.layout == 2:
 			rows = page.spec()['rows']
 			rowsz = page.spec()['rows']
 			pgs = len(images) / (rows * rowsz) + 1
