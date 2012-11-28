@@ -9,6 +9,12 @@ var less = require('./less');
 var pro = require('./uglify-js/uglify-js.js').uglify;
 var shell = require('./shell.js');
 
+if (typeof String.prototype.startsWith != 'function') {
+	String.prototype.startsWith = function (str){
+		return this.indexOf(str) == 0;
+	};
+}
+
 function lessc(fpath, foutput) {
 	foutput = typeof foutput !== 'undefined' ? foutput : fpath + '.css';
 	var dir = path.dirname(fpath);
@@ -133,13 +139,59 @@ for(var i = 0; i < f.length; i++) {
 
 // themes
 
+THEME_COLOR_IMAGE = {
+	genesis: {
+		'background-color': '0,0, 99,99',
+		'link-color': '100,0 199,99',
+		'text-color': '0,100 99,149',
+		'nav-color': '100,100 199,149',
+		'nav-hover-bg': '0,150 99,199',
+		'footer-color': '99,150 199,199'
+	}
+};
+
 f = shell.ls('styles/*.less');
 for(var i = 0; i < f.length; i++) {
 	t = path.basename(f[i], '.less');
 
 	themes = shell.ls('styles/' + t + '/*.less');
 	for(var j = 0; j < themes.length; j++) {
-		color = path.basename(themes[j], '.less');
+		theme = themes[j];
+		color = path.basename(theme, '.less');
 		lessc(path.join('styles', t, color), path.join('static', 'themes', t, 'css', color + '.css'));
+
+		style = shell.cat(theme);
+		lines = style.split('\n');
+
+		cmd = [
+			'-size', '200x200',
+			'canvas:none',
+		];
+
+		for(var k = 0; k < lines.length; k++)
+		{
+			line = lines[k];
+
+			if (!line.startsWith('@')) {
+				continue;
+			}
+
+			s = line.split('@')[1].split(': ');
+
+			cname = s[0];
+
+			if (!(cname in THEME_COLOR_IMAGE[t])) {
+				continue;
+			}
+
+			cvalue = s[1].split(';')[0];
+			cmd.push('-fill');
+			cmd.push('"' + cvalue + '"');
+			cmd.push('-draw');
+			cmd.push("'rectangle " + THEME_COLOR_IMAGE[t][cname] + "'");
+		}
+
+		cmd.push(path.join('static', 'images', 'colors', t, color + '.png'));
+		cp.exec('convert ' + cmd.join(' '));
 	}
 }
