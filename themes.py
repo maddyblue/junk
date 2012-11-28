@@ -6,7 +6,6 @@ THEMES = [
 COLORS = {
 	THEME_GENESIS: [
 		'genesis',
-		'ugly-brown',
 	],
 }
 
