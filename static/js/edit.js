@@ -392,11 +392,11 @@ $(function() {
 		v.data('orig', t);
 		TNM.saving.append(v);
 
-		d.mouseout(function() {
+		d.mouseleave(function() {
 			d.hide();
 		});
 
-		t.mouseover(function() {
+		t.mouseenter(function() {
 			if (!TNM.live_mode) {
 				TNM.edithover.hide();
 				d.show();
