@@ -288,25 +288,14 @@
 	position: absolute;
 	display: none;
 
+	.img-buttons {
+		background-color: rgba(130, 130, 130, .4);
+		float: right;
+	}
+
 	.img-hover {
-		position: absolute;
-		width: 75px;
-		height: 50px;
-		background-color: @toolbar-bg;
-		border: 1px solid black;
-		text-align: center;
-	}
-
-	.img-edit {
-		right: 150px;
-	}
-
-	.img-link {
-		right: 75px;
-	}
-
-	.img-change {
-		right: 0;
+		float: right;
+		margin: 5px;
 	}
 }
 
@@ -521,6 +510,6 @@
 	margin-bottom: 10px;
 }
 
-#image_change_dialog a:hover img {
+#image_choose_dialog a:hover img {
 	.img-hover
 }

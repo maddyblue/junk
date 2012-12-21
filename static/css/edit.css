@@ -27,10 +27,8 @@
 .toolbar span.imageNumber{background:#83b64c;border-radius:10px;color:#FFFFFF;display:block;font-size:12px;height:20px;left:15px;line-height:19px;position:relative;text-align:center;top:-5px;width:20px;}
 .toolbar img.user{position:relative;top:5px;float:left;margin-right:10px;}
 .live_toolbar{float:left;background:rgba(255, 255, 255, 0.4);}.live_toolbar .logo{padding-top:8px;padding-left:12px;padding-right:6px;}
-.edithover{outline:5px solid rgba(128, 0, 0, 0.65);z-index:5000;position:absolute;display:none;}.edithover .img-hover{position:absolute;width:75px;height:50px;background-color:#cfcfcf;border:1px solid black;text-align:center;}
-.edithover .img-edit{right:150px;}
-.edithover .img-link{right:75px;}
-.edithover .img-change{right:0;}
+.edithover{outline:5px solid rgba(128, 0, 0, 0.65);z-index:5000;position:absolute;display:none;}.edithover .img-buttons{background-color:rgba(130, 130, 130, 0.4);float:right;}
+.edithover .img-hover{float:right;margin:5px;}
 #savings .saving{display:none;z-index:6000;position:absolute;background:rgba(0, 0, 0, 0.7) url('/static/images/loader.gif') no-repeat center;}#savings .saving .progress{display:none;width:0;height:30px;position:absolute;top:5%;background:#800000;}
 #imgcontainer{position:absolute;z-index:1;margin:0 auto;overflow:visible;display:none;}
 #imgslider{position:relative;z-index:15;width:4px;}#imgslider a{width:16px;height:16px;left:-7px;}
@@ -56,4 +54,4 @@
 #layout_dialog img.current,#colors_dialog img.current,#add_page_dialog img.current{outline:2px solid black;}
 #layout_dialog a:hover img,#colors_dialog a:hover img,#add_page_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}
 #colors_dialog img{margin-bottom:10px;}
-#image_change_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}
+#image_choose_dialog a:hover img{outline:5px solid rgba(128, 0, 0, 0.65);}

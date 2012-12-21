@@ -414,9 +414,13 @@ $(function() {
 		}
 		else if(t.hasClass('image'))
 		{
-			d.append('<a class="img-hover img-edit">edit</a>');
-			d.append('<a class="img-hover img-change" href="#">change</a>');
-			d.append('<a class="img-hover img-link" ng-click="set_link_id(\'' + this.id + '\')">link</a>');
+			var buttonsDiv = $('<div class="img-buttons"/>');
+			buttonsDiv.append('<a class="img-hover img-edit btn">edit</a>');
+			buttonsDiv.append('<a class="img-hover img-link btn" ng-click="set_link_id(\'' + this.id + '\')">link</a>');
+			buttonsDiv.append('<a class="img-hover img-choose btn" href="#">choose</a>');
+			buttonsDiv.append('<br style="clear:both"/>');
+			d.append(buttonsDiv);
+			d.append('</div>');
 			v.append('<div class="progress"></div>');
 		}
 		else if(t.hasClass('social'))
@@ -466,10 +470,10 @@ $(function() {
 
 	TNM.edithover = $('.edithover');
 
-	TNM.image_change_dialog = make_dialog(
-		'image_change_dialog',
-		'Upload/change image',
-		'Change Image',
+	TNM.image_choose_dialog = make_dialog(
+		'image_choose_dialog',
+		'Upload/choose image',
+		'Choose Image',
 		'<iframe id="image_upload_iframe" src="#" style="visibility: hidden; display: none"></iframe>' +
 		'<form method="POST" id="image_upload_form" target="image_upload_iframe" enctype="multipart/form-data">' +
 		'<input type="file" id="image_upload_file" name="file">' +
@@ -485,8 +489,8 @@ $(function() {
 	);
 
 	$('.img-hover.img-edit').click(function(e) {
-		var id = $.data($(this).parent()[0], 'id');
-		$(e.target).parent().hide();
+		var id = $.data($(this).parents('.edithover')[0], 'id');
+		$(e.target).parents('.edithover').hide();
 
 		TNM.edit_image_id = id;
 		var o = TNM.imageurls[id];
@@ -502,11 +506,11 @@ $(function() {
 		e.preventDefault();
 	});
 
-	$('.img-hover.img-change').click(function(e) {
-		var id = $.data($(this).parent()[0], 'id');
+	$('.img-hover.img-choose').click(function(e) {
+		var id = $.data($(this).parents('.edithover')[0], 'id');
 		TNM.upload_image_id = id;
 		TNM.edit_image_id = id;
-		TNM.image_change_dialog.show();
+		TNM.image_choose_dialog.show();
 		e.preventDefault();
 	});
 
@@ -747,7 +751,7 @@ function TNMCtrl($scope, $http) {
 				.css('width', 0)
 			;
 
-			TNM.image_change_dialog.hide();
+			TNM.image_choose_dialog.hide();
 
 			$scope.upload_image_url(id, function(upload_url) {
 				var reader = new FileReader();
