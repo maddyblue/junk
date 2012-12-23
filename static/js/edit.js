@@ -903,7 +903,7 @@ function TNMCtrl($scope, $http) {
 	$scope.edit_map = function() {
 		var error;
 
-		d = TNM.edit_map_text.val().split(',');
+		var d = TNM.edit_map_text.val().split(',');
 		var lat, lng;
 
 		if (d.length != 2) {
@@ -917,7 +917,7 @@ function TNMCtrl($scope, $http) {
 		}
 		else {
 			var o = {};
-			var d = lat + ',' + lng;
+			d = lat + ',' + lng;
 			var id = TNM.edit_map_id;
 
 			o[id] = d;
