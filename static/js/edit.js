@@ -289,37 +289,6 @@ $(function() {
 
 	TNM.containerimg = $('#containerimg');
 
-	// date
-
-	$(".editable.date").each(function() {
-		var i = this.id + "_datepicker";
-		var d = this.id + "_div";
-		var h = '<div class="modal" id="' + d + '">' +
-			'<div type="text" id="' + i + '"></div>' +
-			'<p><a class="close date" href="#">save</a> <a href="#" class="cancel">cancel</a></p></div>';
-		$(this).after(h);
-		$("#" + i).datepicker({
-			dateFormat: 'MM dd, yy',
-			defaultDate: TNM.postdate
-		});
-	});
-
-	$(document).on("click", ".close.date", function() {
-		var i = $(this).parents("div").first().prev();
-		var t = $("#" + i[0].id + "_datepicker");
-
-		if(t[0].value)
-		{
-			i.text(t[0].value);
-			var d = t.datepicker('getDate');
-			savemap[i[0].id] = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
-			$(this).parents(".modal").hide();
-			//save();
-		}
-
-		return false;
-	});
-
 	// checkbox
 
 	$(document).on("click", ".checkbox", function() {
@@ -371,6 +340,16 @@ $(function() {
 		'edit_map'
 	);
 	TNM.edit_map_text = $('input', TNM.edit_map_dialog);
+
+	TNM.edit_date_dialog = make_dialog(
+		'edit_date_dialog',
+		'Edit date',
+		'Edit Date',
+		'<div id="edit_date_date"></div>',
+		'edit_date'
+	);
+	TNM.edit_date_date = $('#edit_date_date');
+	TNM.edit_date_date.datepicker();
 
 	TNM.editables = $('<div id="editables"/>');
 	$(document.body).append(TNM.editables);
@@ -464,6 +443,14 @@ $(function() {
 				TNM.edit_map_dialog.show();
 				TNM.edit_map_id = t.attr('id');
 				TNM.edit_map_text.focus().val(t.attr('data-latlng'));
+			});
+		}
+		else if(t.hasClass('date'))
+		{
+			d.click(function() {
+				TNM.edit_date_dialog.show();
+				TNM.edit_date_id = t.attr('id');
+				//TNM.edit_date_date.datepicker('setDate', ...);
 			});
 		}
 	});
@@ -944,6 +931,16 @@ function TNMCtrl($scope, $http) {
 			TNM.noclose = true;
 			$('.error', TNM.edit_map_dialog).text(error);
 		}
+	};
+
+	$scope.edit_date = function() {
+		var d = TNM.edit_date_date.datepicker('getDate');
+		var id = TNM.edit_date_id;
+		var o = {};
+		o[id] = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+		$scope.save(o, function() {
+			$('#' + id).text(d.toDateString());
+		});
 	};
 
 	$scope.publish = function() {
