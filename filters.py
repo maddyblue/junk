@@ -49,9 +49,10 @@ def editpostdate(post, elem='span'):
 	)
 
 def editpostdraft(post):
-	return '<input class="checkbox" id="_postdraft_%i" type="checkbox" %s> draft' %(
-		post.key.id(), 'checked' if post.draft else ''
-	)
+	return '<div class="editable checkbox" id="_postdraft_%(id)i"><input type="checkbox" %(checked)s> draft</div>' %{
+		'id': post.key.id(),
+		'checked': 'checked' if post.draft else '',
+	}
 
 def editposttext(post, elem):
 	return '<%s class="editable text" id="_posttext_%i">%s</%s>' %(

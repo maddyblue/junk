@@ -289,13 +289,6 @@ $(function() {
 
 	TNM.containerimg = $('#containerimg');
 
-	// checkbox
-
-	$(document).on("click", ".checkbox", function() {
-		savemap[this.id] = this.checked;
-		//save();
-	});
-
 	// all
 
 	$(document).on('keyup', function(e) {
@@ -452,6 +445,10 @@ $(function() {
 				TNM.edit_date_id = t.attr('id');
 				//TNM.edit_date_date.datepicker('setDate', ...);
 			});
+		}
+		else if(t.hasClass('checkbox'))
+		{
+			d.attr('ng-click', "edit_checkbox('" + t.attr('id') + "')");
 		}
 	});
 
@@ -940,6 +937,22 @@ function TNMCtrl($scope, $http) {
 		o[id] = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
 		$scope.save(o, function() {
 			$('#' + id).text(d.toDateString());
+		});
+	};
+
+	$scope.edit_checkbox = function(id) {
+		var d = $('#' + id);
+		var i = $('input', d);
+		var c = i.attr('checked') != 'checked';
+
+		var o = {};
+		o[id] = c;
+		$scope.save(o, function() {
+			if(c) {
+				i.attr('checked', 'checked');
+			} else {
+				i.removeAttr('checked');
+			}
 		});
 	};
 
