@@ -483,20 +483,15 @@ class BlogPost(ndb.Model):
 	author = ndb.StringProperty('a')
 	draft = ndb.BooleanProperty('f', default=True)
 	link = ndb.StringProperty('k', validator=link_filter)
-	autolink = ndb.BooleanProperty('n', default=True)
+
+	@property
+	def tag_index_keys(self):
+		return [ndb.Key('Tag', i, 'TagIndex', i) for i in self.tags if i]
+
+	tag_kind = Tag
+	author_kind = Author
 
 	def _pre_put_hook(self):
-		if self.autolink or not self.link:
-			link = link_filter(None, self.title)
-
-			if self.__class__.link_key(link, self.key.parent()) not in (self.key, None):
-				i = 2
-				while self.__class__.link_key('%s-%s' %(link, i), self.key.parent()):
-					i += 1
-				link = '%s-%s' %(link, i)
-
-			self.link = link
-
 		deferred.defer(update_tags, self.key)
 
 	def short(self, length=50):
@@ -520,8 +515,10 @@ class BlogPost(ndb.Model):
 
 	@property
 	def url(self):
-		p = self.key.parent().get()
-		return '%s/%s' %(p.name, self.key.id())
+		if self.link:
+			return self.link
+
+		return utils.slugify(self.title)
 
 	@property
 	def has_tags(self):
@@ -561,6 +558,7 @@ class BlogPost(ndb.Model):
 
 class SiteBlogPost(BlogPost):
 	html = ndb.TextProperty('h', compressed=True)
+	autolink = ndb.BooleanProperty('n', default=True)
 
 	@property
 	def tag_index_keys(self):
@@ -570,8 +568,18 @@ class SiteBlogPost(BlogPost):
 	author_kind = SiteAuthor
 
 	def _pre_put_hook(self):
-		super(SiteBlogPost, self)._pre_put_hook()
+		if self.autolink or not self.link:
+			link = link_filter(None, self.title)
 
+			if self.__class__.link_key(link, self.key.parent()) not in (self.key, None):
+				i = 2
+				while self.__class__.link_key('%s-%s' %(link, i), self.key.parent()):
+					i += 1
+				link = '%s-%s' %(link, i)
+
+			self.link = link
+
+		deferred.defer(update_tags, self.key)
 		self.html = self.text
 
 	def _post_put_hook(self, future):
