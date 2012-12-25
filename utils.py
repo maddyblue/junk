@@ -142,10 +142,6 @@ def slugify(value):
 	words = re.findall('[a-z0-9]+', value)
 	return '-'.join(words)
 
-def markdown(text):
-	import markdown2
-	return markdown2.markdown(text)
-
 def style_colors(theme):
 	c = themes.COLORS[theme][0]
 	f = open(os.path.join('styles', theme, c + '.less')).read()

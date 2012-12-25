@@ -73,10 +73,6 @@ def fdate(d):
 def rss_date(d):
 	return date(d, '%Y-%m-%dT%H:%M:%SZ')
 
-def markdown(text):
-	import utils
-	return utils.markdown(text)
-
 def link(text, page, i, rel):
 	url = page.link(i, rel)
 
@@ -150,7 +146,6 @@ filters = dict([(i, globals()[i]) for i in [
 	'layoutimg',
 	'link',
 	'linkmap',
-	'markdown',
 	'rss_date',
 	'tweets',
 	'url',

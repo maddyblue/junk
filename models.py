@@ -570,7 +570,7 @@ class SiteBlogPost(BlogPost):
 	def _pre_put_hook(self):
 		super(SiteBlogPost, self)._pre_put_hook()
 
-		self.html = utils.markdown(self.text)
+		self.html = self.text
 
 	def _post_put_hook(self, future):
 		deferred.defer(SiteBlogPost.sync_dates)
