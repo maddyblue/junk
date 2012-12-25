@@ -2,7 +2,7 @@
 	<div class="blogContent">
 		{{ page|editline(0, 'h1') }}
 
-		{% if not pagenum %}
+		{% if not v1 or v1 == 'page' %}
 			{% if mode == 'edit' %}
 				<a href="{{ 'new-blog-post'|url(pageid=page.key.id()) }}">new blog post</a>
 			{% endif %}
@@ -19,14 +19,14 @@
 				</div>
 				<div class="postIntro">
 					<p>{{ b.short(250) }}</p>
-					<span class="more"><a href="{{ rel }}{{ b.url }}">More</a></span>
+					<span class="more"><a href="{{ rel }}{{ page.name }}/{{ b.key.id() }}/{{ b.url }}">More</a></span>
 				</div>
 				<div class="clr"></div>
 			</div>
 			{% endfor %}
 		{% else %}
-			{% set b = page.get_blogpost(pagenum) %}
-			{{ b.image.get().render(mode, postid=pagenum) }}
+			{% set b = page.get_blogpost(v1) %}
+			{{ b.image.get().render(mode, postid=v1) }}
 			{{ b|editposttitle('h2') }}
 			<div class="postDetails">
 				<ul>

@@ -37,7 +37,8 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/edit', handler='edit.Edit', name='edit-home'),
 	webapp2.Route(r'/edit/', handler='edit.Edit'),
 	webapp2.Route(r'/edit/<pagename>', handler='edit.Edit', name='edit'),
-	webapp2.Route(r'/edit/<pagename>/<pagenum>', handler='edit.Edit', name='edit-page'),
+	webapp2.Route(r'/edit/<pagename>/<v1>', handler='edit.Edit', name='edit-page-v1'),
+	webapp2.Route(r'/edit/<pagename>/<v1>/<v2>', handler='edit.Edit', name='edit-page-v2'),
 	webapp2.Route(r'/layout/<siteid>/<pageid>/<layoutid>', handler='edit.Layout', name='layout'),
 	webapp2.Route(r'/new/blogpost/<pageid>', handler='edit.NewBlogPost', name='new-blog-post'),
 	webapp2.Route(r'/new/page/<pagetype>/<layoutid:\d+>', handler='edit.NewPage', name='new-page'),
@@ -51,7 +52,6 @@ app = webapp2.WSGIApplication([
 	webapp2.Route(r'/view/<sitename>', handler='edit.View', name='view-home'),
 	webapp2.Route(r'/view/<sitename>/', handler='edit.View'),
 	webapp2.Route(r'/view/<sitename>/<pagename>', handler='edit.View', name='view'),
-	webapp2.Route(r'/view/<sitename>/<pagename>/<pagenum>', handler='edit.View', name='view-page'),
 
 	# admin
 	webapp2.Route(r'/admin', handler='admin.Admin', name='admin'),

@@ -177,7 +177,7 @@ class Page(ndb.Expando):
 		return spec(site.theme, self.type, self.layout)
 
 	def get_blogpost(self, postid):
-		return BlogPost.get_by_id(postid, parent=self.key)
+		return BlogPost.get_by_id(long(postid), parent=self.key)
 
 	def posts_query(self, drafts):
 		query = BlogPost.query(ancestor=self.key).order(-BlogPost.date)
@@ -439,6 +439,8 @@ def link_filter(prop, value):
 		return
 
 	value = utils.slugify(value)
+
+	# this can be removed once site blog post urls use /page/N
 	try:
 		long(value)
 	except ValueError:

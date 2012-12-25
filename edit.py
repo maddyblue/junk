@@ -15,8 +15,45 @@ import models
 import settings
 import utils
 
+def render_page(self, template, site, pagename, v1, v2):
+	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
+	basedir = 'themes/%s/' %site.theme
+
+	page = pages[site.pages[0]]
+	if pagename:
+		for k, v in pages.items():
+			if v.name == pagename:
+				page = v
+				break
+
+	if page.type == models.PAGE_TYPE_GALLERY:
+		images = ndb.get_multi(page.images)
+	else:
+		images = ndb.get_multi(page.images[:len(page.spec().get('images', []))])
+
+	all_images = models.ImageBlob.query(ancestor=site.key).fetch()
+
+	self.render(template, {
+		'all_images': all_images,
+		'base': '/static/' + basedir,
+		'get': self.request.GET,
+		'images': images,
+		'mode': 'edit',
+		'page': page,
+		'pages': pages,
+		'pagetemplate': basedir + page.type + '.html',
+		'published_url': 'http://' + settings.BUCKET_NAME + '/' + site.key.id(),
+		'rel': webapp2.uri_for('edit-home') + '/',
+		'site': site,
+		'template': basedir + 'index.html',
+		'upload_url': webapp2.uri_for('upload-url', sitename=site.name, pageid=page.key.id()),
+		'v1': v1,
+		'v2': v2,
+		'view_url': webapp2.uri_for('view', sitename=site.name, pagename=page.name),
+	})
+
 class Edit(BaseHandler):
-	def get(self, pagename=None, pagenum=0):
+	def get(self, pagename=None, v1=None, v2=None):
 		user, site = self.us()
 
 		if not user or not site:
@@ -24,41 +61,7 @@ class Edit(BaseHandler):
 			self.redirect(webapp2.uri_for('main'))
 			return
 
-		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
-		basedir = 'themes/%s/' %site.theme
-
-		page = pages[site.pages[0]]
-		if pagename:
-			for k, v in pages.items():
-				if v.name == pagename:
-					page = v
-					break
-
-		if page.type == models.PAGE_TYPE_GALLERY:
-			images = ndb.get_multi(page.images)
-		else:
-			images = ndb.get_multi(page.images[:len(page.spec().get('images', []))])
-
-		all_images = models.ImageBlob.query(ancestor=site.key).fetch()
-		pagenum = int(pagenum)
-
-		self.render('edit.html', {
-			'all_images': all_images,
-			'base': '/static/' + basedir,
-			'get': self.request.GET,
-			'images': images,
-			'mode': 'edit',
-			'page': page,
-			'pagenum': pagenum,
-			'pages': pages,
-			'pagetemplate': basedir + page.type + '.html',
-			'published_url': 'http://' + settings.BUCKET_NAME + '/' + site.key.id(),
-			'rel': webapp2.uri_for('edit-home') + '/',
-			'site': site,
-			'template': basedir + 'index.html',
-			'upload_url': webapp2.uri_for('upload-url', sitename=site.name, pageid=page.key.id()),
-			'view_url': webapp2.uri_for('view-page', sitename=site.name, pagename=page.name, pagenum=pagenum),
-		})
+		render_page(self, 'edit.html', site, pagename, v1, v2)
 
 class Save(BaseHandler):
 	@ndb.toplevel
@@ -460,7 +463,7 @@ class NewBlogPost(BaseHandler):
 
 		im.put_async()
 		bp.put_async()
-		self.redirect(webapp2.uri_for('edit-page', pagename=page.name, pagenum=bpid))
+		self.redirect(webapp2.uri_for('edit-page-v1', pagename=page.name, v1=bpid))
 
 class ArchivePage(BaseHandler):
 	def get(self, pageid):
