@@ -15,6 +15,17 @@
 
 $(function() {
 	TNM = {};
+	TNM.data = {};
+
+	{% for t in page.text %}
+		TNM.data['_text_{{ loop.index0 }}'] = {{ t | json }};
+	{% endfor %}
+
+	{% for t in page.lines %}
+		TNM.data['_line_{{ loop.index0 }}'] = {{ t | json }};
+	{% endfor %}
+
+	TNM.defaults = {{ defaults | json }};
 
 	TNM.pages = {
 	{% for p in site.pages %}
@@ -52,12 +63,13 @@ $(function() {
 	{% endfor %}
 	{% endif %}
 
-	{% if page.type == 'blog' and pagenum %}
-	{% set b = page.get_blogpost(pagenum) %}
+	{% if page.type == 'blog' and v1 and v1 != 'page' %}
+	{% set b = page.get_blogpost(v1 | int) %}
 	TNM.postdate = new Date('{{ b.date }}');
 
 	{% set i = b.image.get() %}
-	{% set id = '_postimage_%s' %pagenum %}
+	{% set id = '_postimage_%s' %v1 %}
+	TNM.data["_posttext_{{ v1 }}"] = {{ b.text | json }};
 	TNM.imageurls["{{ id }}"] = {
 		orig: "{{ i.orig|default('', true) }}",
 		url: "{{ i.url|default('', true) }}",

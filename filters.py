@@ -6,6 +6,8 @@ import logging
 
 import webapp2
 
+import themes
+
 def url(name, **kwargs):
 	return webapp2.uri_for(name, **kwargs)
 
@@ -15,17 +17,24 @@ def editlink(page, i, rel):
 	)
 
 def edittext(page, i, elem):
-	return '<%s class="editable text" id="_text_%i">%s</%s>' %(
-		elem, i, page.text[i], elem
-	)
+	return '<%(elem)s class="editable text" id="%(id)s" ng-model="data[\'%(id)s\']" ng-bind-html-unsafe="get(\'%(id)s\', \'text\')">%(v)s</%(elem)s>' %{
+		'elem': elem,
+		'id': '_text_%i' %i,
+		'v': page.text[i],
+	}
 
 def editline(page, i, elem, cls=None, link=None, rel=None):
-	v = page.lines[i]
+	r = '<%(elem)s class="editable line%(class)s" id="%(id)s" ng-model="data[\'%(id)s\']" ng-bind="get(\'%(id)s\', \'lines\')">%(v)s</%(elem)s>' %{
+		'elem': elem,
+		'class': (' ' + cls if cls else ''),
+		'id': '_line_%i' %i,
+		'v': page.lines[i] or themes.TYPE_DEFAULTS['lines'],
+	}
+
 	if link and rel:
-		v = '<a href="%s">%s</a>' %(page.link(link, rel), v)
-	return '<%s class="editable line%s" id="_line_%i">%s</%s>' %(
-		elem, (' ' + cls if cls else ''), i, v, elem
-	)
+		r = '<a href="%s">%s</a>' %(page.link(link, rel), r)
+
+	return r
 
 def editmap(page, i):
 	return '<%(elem)s class="editable map" id="_map_%(i)i" data-latlng="%(latlng)s"></%(elem)s>' %{
@@ -56,9 +65,10 @@ def editpostdraft(post):
 	}
 
 def editposttext(post, elem):
-	return '<%(elem)s class="editable text" id="%(id)s" ng-model="data[\'%(id)s\']" ng-bind-html-unsafe="get(\'%(id)s\', \'text\')"></%(elem)s>' %{
+	return '<%(elem)s class="editable text" id="%(id)s" ng-model="data[\'%(id)s\']" ng-bind-html-unsafe="get(\'%(id)s\', \'text\')">%(v)s</%(elem)s>' %{
 		'elem': elem,
 		'id': '_posttext_%i' %post.key.id(),
+		'v': post.text,
 	}
 
 def linkmap(link):

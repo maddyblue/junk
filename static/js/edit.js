@@ -4,6 +4,12 @@ if (typeof String.prototype.startsWith != 'function') {
 	};
 }
 
+if(!String.prototype.trim) {
+	String.prototype.trim = function () {
+		return this.replace(/^\s+|\s+$/g,'');
+	};
+}
+
 function loadimg(id) {
 	var o = TNM.imageurls[id];
 
@@ -380,7 +386,7 @@ $(function() {
 		{
 			d.click(function() {
 				TNM.edit_line_dialog.show();
-				TNM.edit_line_input.val(t.text()).focus();
+				TNM.edit_line_input.val(TNM.data[t.attr('id')]).focus()
 				TNM.edit_line_id = t.attr('id');
 			});
 		}
@@ -426,7 +432,7 @@ $(function() {
 		{
 			d.click(function() {
 				TNM.edit_text_dialog.show();
-				TNM.edit_text_area.focus().setCode(t.html());
+				TNM.edit_text_area.focus().setCode(TNM.data[t.attr('id')]);
 				TNM.edit_text_id = t.attr('id');
 			});
 		}
@@ -552,6 +558,7 @@ function TNMCtrl($scope, $http) {
 	$scope.saves = 0;
 	$scope.savemap = {};
 	$scope.publishing = TNM.publishing;
+	$scope.data = TNM.data;
 
 	$scope.socialmap = TNM.socialmap;
 	$scope.existingimgs = TNM.existingimgs;
@@ -812,15 +819,10 @@ function TNMCtrl($scope, $http) {
 	$scope.edit_line = function() {
 		var id = TNM.edit_line_id;
 		var o = {};
-		o[id] = TNM.edit_line_input.val();
-
-		if(!o[id]) {
-			return;
-		}
+		o[id] = TNM.edit_line_input.val().trim();
 
 		$scope.save(o, function() {
-			var i = $('#' + id);
-			i.text(o[id]);
+			$scope.data[id] = o[id];
 			var e = $('#' + id + '_edit');
 			edit_resize(e);
 		});
@@ -829,15 +831,15 @@ function TNMCtrl($scope, $http) {
 	$scope.edit_text = function() {
 		var id = TNM.edit_text_id;
 		var o = {};
-		o[id] = TNM.edit_text_area.getCode();
 
-		if(!o[id]) {
-			return;
+		if(TNM.edit_text_area.getText().trim()) {
+			o[id] = TNM.edit_text_area.getCode().trim();
+		} else {
+			o[id] = '';
 		}
 
 		$scope.save(o, function() {
-			var i = $('#' + id);
-			i.html(o[id]);
+			$scope.data[id] = o[id];
 		});
 	};
 
@@ -988,5 +990,9 @@ function TNMCtrl($scope, $http) {
 
 	$scope.publishing_c = function() {
 		return $scope.publishing ? 'publishing' : '';
+	};
+
+	$scope.get = function(id, type) {
+		return $scope.data[id] || TNM.defaults[type];
 	};
 }
