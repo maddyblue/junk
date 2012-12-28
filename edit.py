@@ -15,7 +15,7 @@ import models
 import settings
 import utils
 
-def render_page(self, template, site, pagename, v1, v2):
+def render_page(self, template, mode, relname, site, pagename, v1, v2):
 	pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 	basedir = 'themes/%s/' %site.theme
 
@@ -36,14 +36,15 @@ def render_page(self, template, site, pagename, v1, v2):
 	self.render(template, {
 		'all_images': all_images,
 		'base': '/static/' + basedir,
+		'defaults': models.TYPE_DEFAULTS,
 		'get': self.request.GET,
 		'images': images,
-		'mode': 'edit',
+		'mode': mode,
 		'page': page,
 		'pages': pages,
 		'pagetemplate': basedir + page.type + '.html',
 		'published_url': 'http://' + settings.BUCKET_NAME + '/' + site.key.id(),
-		'rel': webapp2.uri_for('edit-home') + '/',
+		'rel': webapp2.uri_for(relname, sitename=site.name) + '/',
 		'site': site,
 		'template': basedir + 'index.html',
 		'upload_url': webapp2.uri_for('upload-url', sitename=site.name, pageid=page.key.id()),
@@ -53,15 +54,17 @@ def render_page(self, template, site, pagename, v1, v2):
 	})
 
 class Edit(BaseHandler):
-	def get(self, pagename=None, v1=None, v2=None):
+	def get(self, sitename, pagename=None, v1=None, v2=None):
 		user, site = self.us()
 
+		if site.name != sitename:
+			return
 		if not user or not site:
 			self.add_message('error', 'Not logged in')
 			self.redirect(webapp2.uri_for('main'))
 			return
 
-		render_page(self, 'edit.html', site, pagename, v1, v2)
+		render_page(self, 'edit.html', 'edit', 'edit', site, pagename, v1, v2)
 
 class Save(BaseHandler):
 	@ndb.toplevel
@@ -343,38 +346,13 @@ class UploadSuccess(BaseHandler):
 		self.response.out.write(json.dumps(dict(self.request.GET)))
 
 class View(BaseHandler):
-	def get(self, sitename, pagename=None, pagenum=0):
+	def get(self, sitename, pagename=None, v1=None, v2=None):
 		site = ndb.Key('Site', sitename).get()
-		pages = dict([(i.key, i) for i in ndb.get_multi(site.pages)])
 
-		if not pagename:
-			page = pages[site.pages[0]]
-		else:
-			for p in pages.values():
-				if p.name == pagename:
-					page = p
-					break
-			else:
-				page = None
-
-		if not site or not page or site.user.urlsafe() != self.session['user']['key']:
+		if not site or site.user.urlsafe() != self.session['user']['key']:
 			return
 
-		images = ndb.get_multi(page.images)
-		basedir = 'themes/%s/' %site.theme
-
-		self.render(basedir + 'index.html', {
-			'base': '/static/' + basedir,
-			'get': self.request.GET,
-			'images': images,
-			'mode': 'view',
-			'page': page,
-			'pagenum': int(pagenum),
-			'pages': pages,
-			'pagetemplate': basedir + page.type + '.html',
-			'rel': webapp2.uri_for('view-home', sitename=sitename) + '/',
-			'site': site,
-		})
+		render_page(self, 'themes/%s/index.html' %site.theme, 'view', 'view', site, pagename, v1, v2)
 
 class Layout(BaseHandler):
 	def get(self, siteid, pageid, layoutid):

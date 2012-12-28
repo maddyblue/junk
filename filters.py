@@ -1,5 +1,6 @@
 # Copyright (c) 2011 Matt Jibson <matt.jibson@gmail.com>
 
+from json import dumps
 import datetime
 import logging
 
@@ -55,9 +56,10 @@ def editpostdraft(post):
 	}
 
 def editposttext(post, elem):
-	return '<%s class="editable text" id="_posttext_%i">%s</%s>' %(
-		elem, post.key.id(), post.text, elem
-	)
+	return '<%(elem)s class="editable text" id="%(id)s" ng-model="data[\'%(id)s\']" ng-bind-html-unsafe="get(\'%(id)s\', \'text\')"></%(elem)s>' %{
+		'elem': elem,
+		'id': '_posttext_%i' %post.key.id(),
+	}
 
 def linkmap(link):
 	if link.startswith('page:'):
@@ -130,6 +132,9 @@ def filesizeformat(value, binary=False):
 				return '%.1f %s' % ((base * bytes / unit), prefix)
 		return '%.1f %s' % ((base * bytes / unit), prefix)
 
+def json(d):
+	return dumps(d)
+
 filters = dict([(i, globals()[i]) for i in [
 	'date',
 	'editline',
@@ -143,6 +148,7 @@ filters = dict([(i, globals()[i]) for i in [
 	'edittext',
 	'fdate',
 	'filesizeformat',
+	'json',
 	'layoutimg',
 	'link',
 	'linkmap',

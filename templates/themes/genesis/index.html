@@ -28,8 +28,8 @@
 		<nav>
 			<ul id="menu">
 				{% for p in site.pages %}
-				{% set link = pages[p].name if not loop.first else '' %}
-				<li id="p_{{ p.id() }}" class="menu_item"><a href="{{ rel }}{{ link }}" id="p_{{ p.id() }}_name" {% if page.key == p %} class="editable line current"{% endif %}>{{ pages[p].name }}</a></li>
+				{% set link = rel + pages[p].name if not loop.first else rel[:-1] %}
+				<li id="p_{{ p.id() }}" class="menu_item"><a href="{{ link }}" id="p_{{ p.id() }}_name" {% if page.key == p %} class="editable line current"{% endif %}>{{ pages[p].name }}</a></li>
 				{% endfor %}
 			</ul>
 		</nav>
