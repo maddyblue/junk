@@ -54,14 +54,17 @@ def render_page(self, template, mode, relname, site, pagename, v1, v2):
 	})
 
 class Edit(BaseHandler):
-	def get(self, sitename, pagename=None, v1=None, v2=None):
+	def get(self, sitename=None, pagename=None, v1=None, v2=None):
 		user, site = self.us()
 
-		if site.name != sitename:
-			return
 		if not user or not site:
 			self.add_message('error', 'Not logged in')
 			self.redirect(webapp2.uri_for('main'))
+			return
+
+		if not sitename:
+			sitename = site.name
+		elif site.name != sitename:
 			return
 
 		render_page(self, 'edit.html', 'edit', 'edit', site, pagename, v1, v2)
