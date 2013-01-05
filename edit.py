@@ -369,7 +369,7 @@ class Layout(BaseHandler):
 			return
 
 		page = models.Page.set_layout(page, long(layoutid), self.request.headers)
-		self.redirect(webapp2.uri_for('edit', pagename=page.name))
+		self.redirect(webapp2.uri_for('edit-page', sitename=site.name, pagename=page.name))
 
 class SetColors(BaseHandler):
 	def get(self, siteid, color):
@@ -415,7 +415,7 @@ class NewPage(BaseHandler):
 
 		s = ndb.transaction(callback)
 		self.response.out.write(json.dumps({
-			'success': webapp2.uri_for('edit', pagename=page.name),
+			'success': webapp2.uri_for('edit-page', sitename=site.name, pagename=page.name),
 		}))
 
 class NewBlogPost(BaseHandler):
@@ -444,7 +444,7 @@ class NewBlogPost(BaseHandler):
 
 		im.put_async()
 		bp.put_async()
-		self.redirect(webapp2.uri_for('edit-page-v1', pagename=page.name, v1=bpid))
+		self.redirect(webapp2.uri_for('edit-v1', sitename=site.name, pagename=page.name, v1=bpid))
 
 class ArchivePage(BaseHandler):
 	def get(self, pageid):
