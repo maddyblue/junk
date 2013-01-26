@@ -39,8 +39,11 @@ function SchalmeiCtrl($scope, $http) {
 			form.attr('action', url);
 			form.ajaxSubmit({
 				success: function(data) {
-					console.log(data);
-					form[0].reset();
+					$scope.rank = JSON.parse(data);
+					$scope.$digest();
+				},
+				error: function(data) {
+					alert("upload error");
 				}
 			});
 		});
@@ -52,3 +55,31 @@ function SchalmeiCtrl($scope, $http) {
 		}).done(callback);
 	};
 }
+
+angular.module('schalmei', [])
+	.directive('schGraph', function() {
+		return function(scope, element, attrs) {
+			var url;
+
+			function updateGraph() {
+				element.attr('id', '_' + Math.random()).empty();
+				var options = {
+					'width': 800,
+					'height': 500,
+					curveType: "function"
+				};
+				var wrapper = new google.visualization.ChartWrapper({
+					chartType: 'LineChart',
+					options: options,
+					dataSourceUrl: url,
+					containerId: element.attr('id')
+				});
+				wrapper.draw();
+			}
+
+			scope.$watch(attrs.schGraph, function(value) {
+				url = value;
+				updateGraph();
+			});
+		}
+	});

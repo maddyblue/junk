@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="schalmei">
 <head>
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 </head>
@@ -28,9 +28,13 @@
 				<ul>
 					<li ng-bind="'Id: ' + rank.Id"></li>
 					<li ng-bind="'Rank: ' + rank.Rank.Name"></li>
+					<li ng-repeat="note in rank.Notes">
+						<span ng-bind="'Note: ' + note.Note.Freq + ' Hz, ' + note.Note.Blob"></span>
+						<div sch-graph="note.GraphUrl"></div>
+						<div sch-graph="note.PwelchUrl"></div>
+					</li>
 				</ul>
-				<iframe id="file_iframe" style="visibility: hidden; display: none"></iframe>
-				<form id="file_form" enctype="multipart/form-data" target="file_iframe">
+				<form id="file_form" enctype="multipart/form-data" method="POST">
 					wav: <input type="file" name="file">
 					<p>frequency (Hz): <input type="number" name="freq">
 					<p><input type="submit" value="add note" ng-click="uploadNote()">
@@ -42,7 +46,12 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
-	<script src="/static/schalmei.js"></script>
 	<script src="/static/jquery.form.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="/static/schalmei.js"></script>
+
+	<script type="text/javascript">
+		google.load('visualization', '1.0', {'packages':['corechart']});
+	</script>
 </body>
 </html>
