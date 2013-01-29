@@ -31,6 +31,13 @@ On the line after each `appstats.NewContext`, add the line (assuming `c` is the 
 
 ```defer c.Save()```
 
+So you should end up with:
+
+```
+c := appstats.NewContext(r)
+defer c.Save()
+```
+
 ## usage
 
-View at [http://localhost:8080/_ah/stats/](http://localhost:8080/_ah/stats/) like normal.
+Do things and view at [http://localhost:8080/_ah/stats/](http://localhost:8080/_ah/stats/) like normal.
