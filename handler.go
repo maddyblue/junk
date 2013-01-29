@@ -35,7 +35,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requestStats := make(map[string][]*RequestStats)
+	requestStats := make(map[string]*RequestStats)
 	byCount := make(map[string]int)
 	byRPC := make(map[string]map[string]*StatByName)
 	byPath := make(map[string]map[string]*StatByName)
@@ -48,7 +48,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			continue
 		}
-		stats[k] = t
+		requestStats[k] = t
 
 		for _, r := range t.RPCStats {
 			rpc := r.Service + "." + r.Method
