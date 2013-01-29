@@ -212,6 +212,7 @@ const HTML_MAIN = `
             cost={{$r.combined_rpc_cost_micropennies}},
             billed_ops=[{{$r.combined_rpc_billed_ops}}])
           */}}
+          ({{$r.RequestStats.RPCStats | len}} RPCs)
         </td>
       </tr>
     </tbody>
