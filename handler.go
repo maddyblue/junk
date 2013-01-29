@@ -35,11 +35,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requestStats := make(map[string]*RequestStats)
-	byCount := make(map[string]int)
-	byRPC := make(map[string]map[string]*StatByName)
-	byPath := make(map[string]map[string]*StatByName)
-	for k, v := range items {
+	ars := new(AllRequestStats)
+	for _, v := range items {
 		var buf bytes.Buffer
 		_, _ = buf.Write(v.Value)
 		dec := gob.NewDecoder(&buf)
@@ -48,10 +45,48 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			continue
 		}
-		requestStats[k] = t
+		ars.Requests = append(ars.Requests, t)
+	}
+	sort.Sort(ars)
+
+	requestById := make(map[int]*RequestStats, len(ars.Requests))
+	idByRequest := make(map[*RequestStats]int, len(ars.Requests))
+	requests := make(map[int]*StatByName)
+	byRequest := make(map[int]map[string]*StatByName)
+	for i, v := range ars.Requests {
+		idx := i + 1
+		requestById[idx] = v
+		idByRequest[v] = idx
+		requests[idx] = &StatByName{
+			RequestStats: v,
+		}
+		byRequest[idx] = make(map[string]*StatByName)
+	}
+
+	requestByPath := make(map[string][]int)
+	byCount := make(map[string]int)
+	byRPC := make(map[string]map[string]*StatByName)
+	byPath := make(map[string]map[string]*StatByName)
+	for _, t := range ars.Requests {
+		id := idByRequest[t]
+
+		if _, present := requestByPath[t.Path]; !present {
+			requestByPath[t.Path] = make([]int, 0)
+		}
+		requestByPath[t.Path] = append(requestByPath[t.Path], id)
 
 		for _, r := range t.RPCStats {
 			rpc := r.Service + "." + r.Method
+
+			// byRequest
+			if _, present := byRequest[id][rpc]; !present {
+				byRequest[id][rpc] = &StatByName{
+					Name: rpc,
+				}
+			}
+			byRequest[id][rpc].Count++
+
+			// byCount
 			if _, present := byCount[rpc]; !present {
 				byCount[rpc] = 0
 			}
@@ -79,6 +114,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			}
 			byPath[t.Path][rpc].Count++
 		}
+	}
+
+	for k, v := range byRequest {
+		stats := &StatsByName{}
+		for _, s := range v {
+			stats.Stats = append(stats.Stats, s)
+		}
+		sort.Sort(stats)
+		requests[k].SubStats = stats.Stats
 	}
 
 	statsByRPC := make(map[string][]*StatByName)
@@ -112,23 +156,26 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		sort.Sort(stats)
 
 		pathStatsByCount.Stats = append(pathStatsByCount.Stats, &StatByName{
-			Name:     k,
-			Count:    count,
-			SubStats: stats.Stats,
+			Name:       k,
+			Count:      count,
+			SubStats:   stats.Stats,
+			Requests:   len(requestByPath[k]),
+			RecentReqs: requestByPath[k],
 		})
 	}
 	sort.Sort(pathStatsByCount)
 
 	v := struct {
-		Env              map[string]string
-		Requests         map[string]*RequestStats
-		AllStatsByCount  []*StatByName
-		PathStatsByCount []*StatByName
+		Env                 map[string]string
+		Requests            map[int]*StatByName
+		RequestStatsByCount map[int]*StatByName
+		AllStatsByCount     []*StatByName
+		PathStatsByCount    []*StatByName
 	}{
 		Env: map[string]string{
 			"APPLICATION_ID": appengine.AppID(c),
 		},
-		Requests:         requestStats,
+		Requests:         requests,
 		AllStatsByCount:  allStatsByCount.Stats,
 		PathStatsByCount: pathStatsByCount.Stats,
 	}
@@ -159,4 +206,5 @@ type StatByName struct {
 	SubStats      []*StatByName
 	Requests      int
 	RecentReqs    []int
+	RequestStats  *RequestStats
 }

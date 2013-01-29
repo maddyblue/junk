@@ -198,13 +198,13 @@ const HTML_MAIN = `
         <td colspan="4" class="ae-hanging-indent">
           <span class="goog-inline-block ae-zippy ae-zippy-expand" id="ae-path-requests-{{$index}}"></span>
           ({{$index}})
-          <a name="req-{{$index}}" href="details?time={{$r.Start.Nanosecond}}" class="ae-stats-request-link">
-            {{$r.Start}}
-            "{{$r.Method}}
-            {{$r.Path}}{{if $r.Query}}?{{$r.Query}}{{end}}"
-            {{if $r.Status}}{{$r.Status}}{{end}}
+          <a name="req-{{$index}}" href="details?time={{$r.RequestStats.Start.Nanosecond}}" class="ae-stats-request-link">
+            {{$r.RequestStats.Start}}
+            "{{$r.RequestStats.Method}}
+            {{$r.RequestStats.Path}}{{if $r.RequestStats.Query}}?{{$r.RequestStats.Query}}{{end}}"
+            {{if $r.RequestStats.Status}}{{$r.RequestStats.Status}}{{end}}
           </a>
-          real={{$r.Duration}}
+          real={{$r.RequestStats.Duration}}
           {{/*
           api={{$r.api_milliseconds}}
           overhead={{$r.overhead_walltime_milliseconds}}ms
@@ -216,17 +216,15 @@ const HTML_MAIN = `
       </tr>
     </tbody>
     <tbody class="reqon" id="ae-path-requests-{{$index}}-tbody">
-      {{/*
-      {{ range $item := $r.rpc_stats_list }}
+      {{ range $item := $r.SubStats }}
       <tr>
-        <td class="rpc-req">{{$item.service_call_name}}</td>
-        <td>{{$item.total_amount_of_calls}}</td>
+        <td class="rpc-req">{{$item.Name}}</td>
+        <td>{{$item.Count}}</td>
 
-        <td>{{$item.total_cost_of_calls_microdollars}}</td>
-        <td>{{$item.total_billed_ops_str}}</td>
+        <td>{{$item.Cost}}</td>
+        {{/*<td>{{$item.total_billed_ops_str}}</td>*/}}
       </tr>
       {{ end }}
-      */}}
     </tbody>
     {{ end }}
   </table>
