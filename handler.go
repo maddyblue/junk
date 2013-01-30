@@ -26,7 +26,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 func Index(w http.ResponseWriter, r *http.Request) {
 	keys := make([]string, MODULUS)
 	for i := range keys {
-		keys[i] = fmt.Sprintf(TMPL+KEY_PART, i*DISTANCE)
+		keys[i] = fmt.Sprintf(KEY_PART, i*DISTANCE)
 	}
 
 	c := appengine.NewContext(r)
@@ -40,12 +40,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		var buf bytes.Buffer
 		_, _ = buf.Write(v.Value)
 		dec := gob.NewDecoder(&buf)
-		t := new(RequestStats)
+		t := stats_part{}
 		err := dec.Decode(&t)
 		if err != nil {
 			continue
 		}
-		ars = append(ars, t)
+		r := RequestStats(t)
+		ars = append(ars, &r)
 	}
 	sort.Sort(ars)
 

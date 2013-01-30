@@ -54,18 +54,34 @@ func (c Context) FromContext(ctx appengine.Context) Context {
 func (c Context) Save() {
 	c.stats.Duration = time.Since(c.stats.Start)
 
-	var buf bytes.Buffer
-	enc := gob.NewEncoder(&buf)
-	err := enc.Encode(c.stats)
+	var buf_part, buf_full bytes.Buffer
+	enc_part := gob.NewEncoder(&buf_part)
+	part := c.stats
+	err := enc_part.Encode(&part)
+	if err != nil {
+		c.Errorf("appstats Save error: %v", err)
+		return
+	}
+	enc_full := gob.NewEncoder(&buf_full)
+	full := stats_full{
+		Header: c.req.Header,
+		Stats:  c.stats,
+	}
+	err = enc_full.Encode(&full)
 	if err != nil {
 		c.Errorf("appstats Save error: %v", err)
 		return
 	}
 
-	item := &memcache.Item{
-		Key:   c.stats.Key() + KEY_PART,
-		Value: buf.Bytes(),
+	item_part := &memcache.Item{
+		Key:   c.stats.PartKey(),
+		Value: buf_part.Bytes(),
 	}
 
-	memcache.Set(c.Context, item)
+	item_full := &memcache.Item{
+		Key:   c.stats.FullKey(),
+		Value: buf_full.Bytes(),
+	}
+
+	memcache.SetMulti(c.Context, []*memcache.Item{item_part, item_full})
 }

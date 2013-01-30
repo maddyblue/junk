@@ -2,7 +2,16 @@ package appstats
 
 import (
 	"fmt"
+	"net/http"
 	"time"
+)
+
+const (
+	KEY_PREFIX = "__appstats__:"
+	KEY_PART   = KEY_PREFIX + "%06d:part"
+	KEY_FULL   = KEY_PREFIX + "%v:full"
+	DISTANCE   = 100
+	MODULUS    = 1000
 )
 
 type RequestStats struct {
@@ -14,17 +23,20 @@ type RequestStats struct {
 	RPCStats    []RPCStat
 }
 
-const (
-	KEY_PREFIX = "__appstats__"
-	KEY_PART   = ":part"
-	TMPL       = KEY_PREFIX + ":%06d"
-	DISTANCE   = 100
-	MODULUS    = 1000
-)
+type stats_part RequestStats
 
-func (r RequestStats) Key() string {
+type stats_full struct {
+	Header http.Header
+	Stats  *RequestStats
+}
+
+func (r RequestStats) PartKey() string {
 	t := (r.Start.Nanosecond() / 1000 / DISTANCE) % MODULUS * DISTANCE
-	return fmt.Sprintf(TMPL, t)
+	return fmt.Sprintf(KEY_PART, t)
+}
+
+func (r RequestStats) FullKey() string {
+	return fmt.Sprintf(KEY_FULL, r.Start.Nanosecond())
 }
 
 type RPCStat struct {
