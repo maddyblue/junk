@@ -14,8 +14,8 @@ import (
 type Context struct {
 	appengine.Context
 
-	req     *http.Request
-	stats   *RequestStats
+	req   *http.Request
+	stats *RequestStats
 }
 
 func (c Context) Call(service, method string, in, out proto.Message, opts *appengine_internal.CallOptions) error {
