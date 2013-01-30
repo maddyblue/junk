@@ -47,6 +47,7 @@ func (c Context) FromContext(ctx appengine.Context) Context {
 	return Context{
 		Context: ctx,
 		req:     c.req,
+		stats:   c.stats,
 	}
 }
 
