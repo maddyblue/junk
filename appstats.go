@@ -12,29 +12,10 @@ import (
 )
 
 type Context struct {
-	context appengine.Context
+	appengine.Context
+
 	req     *http.Request
 	stats   *RequestStats
-}
-
-func (c Context) Debugf(format string, args ...interface{}) {
-	c.context.Debugf(format, args...)
-}
-
-func (c Context) Infof(format string, args ...interface{}) {
-	c.context.Infof(format, args...)
-}
-
-func (c Context) Warningf(format string, args ...interface{}) {
-	c.context.Warningf(format, args...)
-}
-
-func (c Context) Errorf(format string, args ...interface{}) {
-	c.context.Errorf(format, args...)
-}
-
-func (c Context) Criticalf(format string, args ...interface{}) {
-	c.context.Criticalf(format, args...)
 }
 
 func (c Context) Call(service, method string, in, out proto.Message, opts *appengine_internal.CallOptions) error {
@@ -43,23 +24,15 @@ func (c Context) Call(service, method string, in, out proto.Message, opts *appen
 		Method:  method,
 		Start:   time.Now(),
 	}
-	err := c.context.Call(service, method, in, out, opts)
+	err := c.Context.Call(service, method, in, out, opts)
 	stat.Duration = time.Since(stat.Start)
 	c.stats.RPCStats = append(c.stats.RPCStats, stat)
 	return err
 }
 
-func (c Context) FullyQualifiedAppID() string {
-	return c.context.FullyQualifiedAppID()
-}
-
-func (c Context) Request() interface{} {
-	return c.context.Request()
-}
-
 func NewContext(req *http.Request) Context {
 	return Context{
-		context: appengine.NewContext(req),
+		Context: appengine.NewContext(req),
 		req:     req,
 		stats: &RequestStats{
 			Method: req.Method,
@@ -73,7 +46,7 @@ func NewContext(req *http.Request) Context {
 // todo: pull these requests up to the parent context
 func (c Context) FromContext(ctx appengine.Context) Context {
 	return Context{
-		context: ctx,
+		Context: ctx,
 		req:     c.req,
 	}
 }
@@ -94,5 +67,5 @@ func (c Context) Save() {
 		Value: buf.Bytes(),
 	}
 
-	memcache.Set(c.context, item)
+	memcache.Set(c.Context, item)
 }
