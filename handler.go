@@ -182,27 +182,3 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	_ = templates.ExecuteTemplate(w, "main", v)
 }
-
-type StatsByName []*StatByName
-
-func (s StatsByName) Len() int {
-	return len(s)
-}
-
-func (s StatsByName) Less(i, j int) bool {
-	return s[i].Count < s[j].Count
-}
-
-func (s StatsByName) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
-}
-
-type StatByName struct {
-	Name          string
-	Count         int
-	Cost, CostPct int
-	SubStats      []*StatByName
-	Requests      int
-	RecentReqs    []int
-	RequestStats  *RequestStats
-}
