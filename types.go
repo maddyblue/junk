@@ -33,18 +33,16 @@ type RPCStat struct {
 	Duration        time.Duration
 }
 
-type AllRequestStats struct {
-	Requests []*RequestStats
+type AllRequestStats []*RequestStats
+
+func (s AllRequestStats) Len() int {
+	return len(s)
 }
 
-func (s *AllRequestStats) Len() int {
-	return len(s.Requests)
+func (s AllRequestStats) Less(i, j int) bool {
+	return s[i].Start.Sub(s[j].Start) > 0
 }
 
-func (s *AllRequestStats) Less(i, j int) bool {
-	return s.Requests[i].Start.Sub(s.Requests[j].Start) > 0
-}
-
-func (s *AllRequestStats) Swap(i, j int) {
-	s.Requests[i], s.Requests[j] = s.Requests[j], s.Requests[i]
+func (s AllRequestStats) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
 }
