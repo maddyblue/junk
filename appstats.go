@@ -43,7 +43,6 @@ func NewContext(req *http.Request) Context {
 	}
 }
 
-// todo: pull these requests up to the parent context
 func (c Context) FromContext(ctx appengine.Context) Context {
 	return Context{
 		Context: ctx,
