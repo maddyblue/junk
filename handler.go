@@ -7,8 +7,10 @@ import (
 	"encoding/gob"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -20,11 +22,14 @@ func init() {
 	templates.Parse(HTML_BASE)
 	templates.Parse(HTML_MAIN)
 	templates.Parse(HTML_DETAILS)
+	templates.Parse(HTML_FILE)
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	if strings.HasSuffix(r.URL.Path, "/details") {
 		Details(w, r)
+	} else if strings.HasSuffix(r.URL.Path, "/file") {
+		File(w, r)
 	} else {
 		Index(w, r)
 	}
@@ -255,4 +260,37 @@ func Details(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_ = templates.ExecuteTemplate(w, "details", v)
+}
+
+func File(w http.ResponseWriter, r *http.Request) {
+	fname := r.URL.Query().Get("f")
+	n := r.URL.Query().Get("n")
+	lineno, _ := strconv.Atoi(n)
+	c := appengine.NewContext(r)
+
+	f, err := ioutil.ReadFile(fname)
+	if err != nil {
+		return
+	}
+
+	fp := make(map[int]string)
+	for k, v := range strings.Split(string(f), "\n") {
+		fp[k+1] = v
+	}
+
+	v := struct {
+		Env             map[string]string
+		Filename string
+		Lineno   int
+		Fp       map[int]string
+	}{
+		Env: map[string]string{
+			"APPLICATION_ID": appengine.AppID(c),
+		},
+		Filename: fname,
+		Lineno:   lineno,
+		Fp:       fp,
+	}
+
+	_ = templates.ExecuteTemplate(w, "file", v)
 }

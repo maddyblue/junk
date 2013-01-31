@@ -3,6 +3,7 @@ package appstats
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -73,8 +74,11 @@ func (r RPCStat) Stack() Stack {
 			break
 		}
 
+		cidx := strings.LastIndex(lines[i], ":")
+		lineno, _ := strconv.Atoi(lines[i][cidx+1 : idx])
 		f := &Frame{
-			Location: lines[i][:idx],
+			Location: lines[i][:cidx],
+			Lineno:   lineno,
 		}
 
 		if i+1 < len(lines) && strings.HasPrefix(lines[i+1], "\t") {
@@ -93,6 +97,7 @@ type Stack []*Frame
 type Frame struct {
 	Location string
 	Call     string
+	Lineno   int
 }
 
 type AllRequestStats []*RequestStats

@@ -3,6 +3,8 @@ package appstats
 import (
 	"html/template"
 	"reflect"
+	"strconv"
+	"strings"
 )
 
 // eq reports whether the first argument is equal to
@@ -30,6 +32,17 @@ func eq(args ...interface{}) bool {
 	return false
 }
 
+func add(a, b int) int {
+	return a + b
+}
+
+func rjust(i, count int) string {
+	s := strconv.Itoa(i)
+	return strings.Repeat(" ", count-len(s)) + s
+}
+
 var funcs = template.FuncMap{
-	"eq": eq,
+	"add":   add,
+	"eq":    eq,
+	"rjust": rjust,
 }

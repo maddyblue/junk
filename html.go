@@ -340,9 +340,8 @@ const HTML_DETAILS = `
             {{ range $stackindex, $f := $t.Stack }}
               <tr>
                 <td style="padding-left: 40px">
-            <span  style="padding-left: 12px; text-indent: -12px" class="goog-inline-block ae-zippy-expand" id="ae-head-stack-{{$index}}-{{$stackindex}}">&nbsp;</span>
-                  {{ $f.Location }} <strong>{{ $f.Call }}</strong>
-                  {{/*{{ if file_url }}<a href="{{file_url}}?f={{f.class_or_file_name}}&n={{f.line_number}}#n{{f.line_number|add:"-10"}}">{{ end }} {{f.class_or_file_name}}:{{f.line_number}}{{ if file_url }}</a>{{ end }} {{f.function_name}}()*/}}
+                  <span  style="padding-left: 12px; text-indent: -12px" class="goog-inline-block ae-zippy-expand" id="ae-head-stack-{{$index}}-{{$stackindex}}">&nbsp;</span>
+                  <a href="file?f={{ $f.Location }}&n={{ $f.Lineno }}#n{{ add $f.Lineno -10 }}">{{ $f.Location }}:{{ $f.Lineno }}</a> {{ $f.Call }}
                 </td>
               </tr>
               {{/*
@@ -458,6 +457,26 @@ function renderChart() {
 renderChart();
 </script>
 
+{{ template "footer" . }}
+{{ end }}
+`
+const HTML_FILE = `
+{{ define "file" }}
+{{ template "top" . }}
+{{ template "body" . }}
+
+<h1>{{.Filename}}</h1>
+<a href="#n{{ add .Lineno -10 }}">Go to line {{.Lineno}}</a> |
+<a href="#bottom">Go to bottom</a>
+
+<pre>
+{{ range $index, $line := .Fp }}<span id="n{{$index}}"{{ if eq $index $.Lineno }} style="background-color: yellow;"{{ end }}>{{ rjust $index 4 }}: {{ $line }}</span>
+{{ end }}
+</pre>
+<a name="bottom" href="#">Back to top</a>
+</div>
+
+{{ template "end" . }}
 {{ template "footer" . }}
 {{ end }}
 `
