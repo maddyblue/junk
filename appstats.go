@@ -8,6 +8,7 @@ import (
 	"code.google.com/p/goprotobuf/proto"
 	"encoding/gob"
 	"net/http"
+	"runtime/debug"
 	"time"
 )
 
@@ -20,9 +21,11 @@ type Context struct {
 
 func (c Context) Call(service, method string, in, out proto.Message, opts *appengine_internal.CallOptions) error {
 	stat := RPCStat{
-		Service: service,
-		Method:  method,
-		Start:   time.Now(),
+		Service:   service,
+		Method:    method,
+		Start:     time.Now(),
+		Offset:    time.Since(c.stats.Start),
+		StackData: string(debug.Stack()),
 	}
 	err := c.Context.Call(service, method, in, out, opts)
 	stat.Duration = time.Since(stat.Start)

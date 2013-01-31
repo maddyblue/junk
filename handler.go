@@ -9,18 +9,25 @@ import (
 	"html/template"
 	"net/http"
 	"sort"
+	"strings"
+	"time"
 )
 
 var templates *template.Template
 
 func init() {
-	templates = template.New("appstats")
+	templates = template.New("appstats").Funcs(funcs)
 	templates.Parse(HTML_BASE)
 	templates.Parse(HTML_MAIN)
+	templates.Parse(HTML_DETAILS)
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	Index(w, r)
+	if strings.HasSuffix(r.URL.Path, "/details") {
+		Details(w, r)
+	} else {
+		Index(w, r)
+	}
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -77,7 +84,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		requestByPath[t.Path] = append(requestByPath[t.Path], id)
 
 		for _, r := range t.RPCStats {
-			rpc := r.Service + "." + r.Method
+			rpc := r.Name()
 
 			// byRequest
 			if _, present := byRequest[id][rpc]; !present {
@@ -126,7 +133,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		requests[k].SubStats = stats
 	}
 
-	statsByRPC := make(map[string][]*StatByName)
+	statsByRPC := make(map[string]StatsByName)
 	for k, v := range byRPC {
 		stats := StatsByName{}
 		for _, s := range v {
@@ -170,8 +177,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		Env                 map[string]string
 		Requests            map[int]*StatByName
 		RequestStatsByCount map[int]*StatByName
-		AllStatsByCount     []*StatByName
-		PathStatsByCount    []*StatByName
+		AllStatsByCount     StatsByName
+		PathStatsByCount    StatsByName
 	}{
 		Env: map[string]string{
 			"APPLICATION_ID": appengine.AppID(c),
@@ -182,4 +189,65 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_ = templates.ExecuteTemplate(w, "main", v)
+}
+
+func Details(w http.ResponseWriter, r *http.Request) {
+	qtime := r.URL.Query().Get("time")
+	key := fmt.Sprintf(KEY_FULL, qtime)
+
+	c := appengine.NewContext(r)
+	item, err := memcache.Get(c, key)
+	if err != nil {
+		return
+	}
+
+	var buf bytes.Buffer
+	_, _ = buf.Write(item.Value)
+	dec := gob.NewDecoder(&buf)
+	full := stats_full{}
+	err = dec.Decode(&full)
+	if err != nil {
+		// todo: send down an empty request
+		return
+	}
+
+	byCount := make(map[string]int)
+	durationCount := make(map[string]time.Duration)
+	for _, r := range full.Stats.RPCStats {
+		rpc := r.Name()
+
+		// byCount
+		if _, present := byCount[rpc]; !present {
+			byCount[rpc] = 0
+			durationCount[rpc] = 0
+		}
+		byCount[rpc] += 1
+		durationCount[rpc] += r.Duration
+	}
+
+	allStatsByCount := StatsByName{}
+	for k, v := range byCount {
+		allStatsByCount = append(allStatsByCount, &StatByName{
+			Name:     k,
+			Count:    v,
+			Duration: durationCount[k],
+		})
+	}
+	sort.Sort(allStatsByCount)
+
+	v := struct {
+		Env             map[string]string
+		Record          *RequestStats
+		Header          http.Header
+		AllStatsByCount StatsByName
+	}{
+		Env: map[string]string{
+			"APPLICATION_ID": appengine.AppID(c),
+		},
+		Record:          full.Stats,
+		Header:          full.Header,
+		AllStatsByCount: allStatsByCount,
+	}
+
+	_ = templates.ExecuteTemplate(w, "details", v)
 }

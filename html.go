@@ -252,3 +252,216 @@ const HTML_MAIN = `
 {{ template "footer" . }}
 {{ end }}
 `
+
+const HTML_DETAILS = `
+{{ define "details" }}
+{{ template "top" . }}
+{{ template "body" . }}
+
+{{ if not .Record }}
+  <p>Invalid or stale record key!</p>
+{{ else }}
+  <div class="g-section" id="ae-stats-summary">
+    <dl>
+      <dt>
+        <span class="ae-stats-date">{{.Record.Start}}</span><br>
+        <span class="ae-stats-response ae-stats-response-{{.Record.Status}}">
+          {{.Record.Status}}
+        </span>
+      </dt>
+      <dd>
+        <a {{ if eq .Record.Method "GET" }}target="_new" title="Resubmit the original request to the server" href="{{.Record.Path}}?{{.Record.Query}}" {{ end }}>
+          {{.Record.Method}}  {{.Record.Path}}{{if .Record.Query}}?{{.Record.Query}}{{end}}
+        </a>
+        <br>
+        {{/*.Record.user_email}}{{ if .Record.is_admin }}*{{ end */}}
+        real={{.Record.Duration}}
+        {{/*
+        api={{.Record.api_milliseconds}}ms
+        overhead={{.Record.overhead_walltime_milliseconds}}ms
+        cost={{.Record.combined_rpc_cost_micropennies}}
+        <br>
+        billed_ops={{.Record.combined_rpc_billed_ops}}
+        */}}
+      </dd>
+    </dl>
+  </div>
+
+  <div id="ae-stats-details-timeline">
+    <h2>Timeline</h2>
+    <div id="ae-body-timeline">
+      <div id="ae-rpc-chart">[Chart goes here]</div>
+    </div>
+    {{ if .Record.RPCStats }}
+      <div id="ae-rpc-traces">
+        <div class="ae-table-title">
+          <div class="g-section g-tpl-50-50 g-split">
+            <div class="g-unit g-first"><h2>RPC Call Traces</h2></div>
+            <div class="g-unit" id="ae-rpc-expand-all"></div>
+          </div>
+        </div>
+        <table cellspacing="0" cellpadding="0" class="ae-table" id="ae-table-rpc">
+          <thead>
+            <tr>
+              <th>RPC</th>
+            </tr>
+          </thead>
+          {{ range $index, $t := .Record.RPCStats }}
+          <tbody id="rpc{{$index}}">
+            <tr>
+              <td>
+                <span class="goog-inline-block ae-zippy ae-zippy-expand" id="ae-path-requests-{{$index}}"></span>
+                @{{$t.Offset}}
+                <b>{{$t.Name}}</b>
+                real={{$t.Duration}}
+                {{/*
+                api={{t.api_milliseconds}}ms
+                cost={{t.call_cost_microdollars}}
+                billed_ops=[{{t.billed_ops_str}}]
+                */}}
+              </td>
+            </tr>
+          </tbody>
+          <tbody>
+            {{/*
+            {{ if $t.Request }}
+            <tr>
+              <td style="padding-left: 20px"><b>Request:</b> {{t.request_data_summary}}</td>
+            </tr>
+            {{ end }}
+            {{ if $t.Response }}
+            <tr>
+              <td style="padding-left: 20px"><b>Response:</b> {{t.response_data_summary}}</td>
+            </tr>
+            {{ end }}
+            */}}
+            {{ if $t.StackData }}
+            <tr>
+              <td style="padding-left: 20px"><b>Stack:</b></td>
+            </tr>
+            {{ range $stackindex, $f := $t.Stack }}
+              <tr>
+                <td style="padding-left: 40px">
+            <span  style="padding-left: 12px; text-indent: -12px" class="goog-inline-block ae-zippy-expand" id="ae-head-stack-{{$index}}-{{$stackindex}}">&nbsp;</span>
+                  {{ $f.Location }} <strong>{{ $f.Call }}</strong>
+                  {{/*{{ if file_url }}<a href="{{file_url}}?f={{f.class_or_file_name}}&n={{f.line_number}}#n{{f.line_number|add:"-10"}}">{{ end }} {{f.class_or_file_name}}:{{f.line_number}}{{ if file_url }}</a>{{ end }} {{f.function_name}}()*/}}
+                </td>
+              </tr>
+              {{/*
+              {{ if $f.variables_size }}
+                <tr id="ae-body-stack-{{forloop.parentloop.counter}}-{{forloop.counter}}">
+                  <td style="padding-left: 60px">{{ for item in f.variables_list }}{{item.key}} = {{item.value}}<br>{{ end }}
+                  </td>
+                </tr>
+              {{ end }}{{# f.variables_size #}
+              */}}
+            {{ end }}{{/* t.call_stack_list */}}
+            {{ end }}{{/* t.call_stack_size */}}
+          </tbody>
+          {{ end }}{{/* .Record.individual_stats_list */}}
+        </table>
+      </div>
+    {{ end }}{{/* traces */}}
+  </div>
+
+  {{ if .AllStatsByCount }}
+    <div id="ae-stats-details-rpcstats">
+      <h2>RPC Stats</h2>
+      <table cellspacing="0" cellpadding="0" class="ae-table" id="ae-table-rpcstats">
+        <tbody>
+          <tr>
+            <td>service.call</td>
+            <td align="right">#RPCs</td>
+            <td align="right">real time</td>
+            <td align="right">api time</td>
+            <td align="right">Cost</td>
+            <td align="right">Billed Ops</td>
+          </tr>
+          {{ range $item := .AllStatsByCount }}
+          <tr>
+            <td>{{$item.Name}}</td>
+            <td align="right">{{$item.Count}}</td>
+            <td align="right">{{$item.Duration}}</td>
+            <td align="right"></td>
+            <td align="right"></td>
+            <td align="right"></td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  {{ end }}{{/* rpcstats_by_count */}}
+
+  {{ if .Header }}
+    <div id="ae-stats-details-cgienv">
+      <h2>CGI Environment</h2>
+      <table cellspacing="0" cellpadding="0" class="ae-table" id="ae-table-cgienv">
+        <tbody>
+          {{ range $key, $value := .Header }}
+          <tr>
+            <td align="right" valign="top">{{$key}}=</td>
+            <td valign="top">{{$value}}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  {{ end }}{{/* .Header */}}
+
+{{ end }}
+
+{{ template "end" . }}
+
+<script>
+var rpcZippyMaker = new ae.Stats.MakeZippys('ae-table-rpc',
+    'ae-rpc-expand-all');
+var rpcZippys = rpcZippyMaker.getZippys();
+{{ range $index, $t := .Record.RPCStats }}
+  {{ range $stackindex, $f := $t.Stack }}
+    {{/* if f.variables_size }}
+      new goog.ui.Zippy(
+          'ae-head-stack-{{forloop.parentloop.counter}}-{{forloop.counter}}',
+          'ae-body-stack-{{forloop.parentloop.counter}}-{{forloop.counter}}',
+          false);
+    {{ end */}}
+  {{ end }}
+{{ end }}
+</script>
+<script>
+var detailsTabs_ = new ae.Stats.Details.Tabs(['timeline', 'rpcstats',
+    'cgienv', 'syspath']);
+</script>
+<script>
+function timelineClickHandler(zippyIndex, hash) {
+  rpcZippyMaker.getExpandCollapse().setExpanded(false);
+  rpcZippys[zippyIndex].setExpanded(true);
+
+  var headlineIndex = parseInt(zippyIndex, 10) + 1;
+  var zippyLine = document.getElementById('ae-path-requests-' + headlineIndex);
+  zippyLine.scrollIntoView(true);
+}
+function renderChart() {
+  var chart = new Gantt();
+  {{ range $index, $t := .Record.RPCStats }}
+    chart.add_bar('{{$t.Name}}',
+        {{$t.Offset.Seconds}} * 1000, {{$t.Duration.Seconds}} * 1000,
+        {{/*$t.api_milliseconds*/}}0,
+        '{{$t.Duration}}{{/* if t.api_milliseconds }} ({{t.api_milliseconds}}ms api){{ end */}}',
+        'javascript:timelineClickHandler(\'{{$index}}\');');
+  {{ end }}
+
+  {{/*
+  chart.add_bar('<b>RPC Total</b>', 0, {{real_total}}, {{api_total}},
+      '{{real_total}}ms{{ if api_total }} ({{api_total}}ms api){{ end }}',
+      '');
+  chart.add_bar('<b>Grand Total</b>', 0, {{.Record.duration_milliseconds}}, 0,
+      '{{.Record.duration_milliseconds}}ms', '');
+  */}}
+  document.getElementById('ae-rpc-chart').innerHTML = chart.draw();
+}
+renderChart();
+</script>
+
+{{ template "footer" . }}
+{{ end }}
+`

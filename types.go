@@ -3,6 +3,7 @@ package appstats
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -42,7 +43,45 @@ func (r RequestStats) FullKey() string {
 type RPCStat struct {
 	Service, Method string
 	Start           time.Time
+	Offset          time.Duration
 	Duration        time.Duration
+	StackData       string
+}
+
+func (r RPCStat) Name() string {
+	return r.Service + "." + r.Method
+}
+
+func (r RPCStat) Stack() Stack {
+	s := Stack{}
+
+	lines := strings.Split(r.StackData, "\n")
+	for i := 0; i < len(lines); i++ {
+		idx := strings.LastIndex(lines[i], " ")
+		if idx == -1 {
+			break
+		}
+
+		f := &Frame{
+			Location: lines[i][:idx],
+		}
+
+		if i+1 < len(lines) && strings.HasPrefix(lines[i+1], "\t") {
+			f.Call = strings.TrimSpace(lines[i+1])
+			i++
+		}
+
+		s = append(s, f)
+	}
+
+	return s[2:]
+}
+
+type Stack []*Frame
+
+type Frame struct {
+	Location string
+	Call     string
 }
 
 type AllRequestStats []*RequestStats
@@ -81,4 +120,5 @@ type StatByName struct {
 	Requests      int
 	RecentReqs    []int
 	RequestStats  *RequestStats
+	Duration      time.Duration
 }
