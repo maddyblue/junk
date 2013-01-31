@@ -3,6 +3,7 @@ package appstats
 import (
 	"appengine"
 	"appengine/memcache"
+	"appengine/user"
 	"appengine_internal"
 	"bytes"
 	"code.google.com/p/goprotobuf/proto"
@@ -48,10 +49,14 @@ func (c Context) Call(service, method string, in, out proto.Message, opts *appen
 }
 
 func NewContext(req *http.Request) Context {
+	c := appengine.NewContext(req)
+	u := user.Current(c)
 	return Context{
-		Context: appengine.NewContext(req),
+		Context: c,
 		req:     req,
 		stats: &RequestStats{
+			User:   u.String(),
+			Admin:  u.Admin,
 			Method: req.Method,
 			Path:   req.URL.Path,
 			Query:  req.URL.RawQuery,

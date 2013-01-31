@@ -16,6 +16,8 @@ const (
 )
 
 type RequestStats struct {
+	User        string
+	Admin       bool
 	Method      string
 	Path, Query string
 	Status      int

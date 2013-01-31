@@ -274,7 +274,7 @@ const HTML_DETAILS = `
           {{.Record.Method}}  {{.Record.Path}}{{if .Record.Query}}?{{.Record.Query}}{{end}}
         </a>
         <br>
-        {{/*.Record.user_email}}{{ if .Record.is_admin }}*{{ end */}}
+        {{.Record.User}}{{ if .Record.Admin }}*{{ end }}
         real={{.Record.Duration}}
         {{/*
         api={{.Record.api_milliseconds}}ms
