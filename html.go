@@ -448,13 +448,11 @@ function renderChart() {
         'javascript:timelineClickHandler(\'{{$index}}\');');
   {{ end }}
 
-  {{/*
-  chart.add_bar('<b>RPC Total</b>', 0, {{real_total}}, {{api_total}},
-      '{{real_total}}ms{{ if api_total }} ({{api_total}}ms api){{ end }}',
+  chart.add_bar('<b>RPC Total</b>', 0, {{.Real.Seconds}} * 1000, {{.Api.Seconds}} * 1000,
+      '{{.Real}}{{ if .Api }} ({{.Api}} api){{ end }}',
       '');
-  chart.add_bar('<b>Grand Total</b>', 0, {{.Record.duration_milliseconds}}, 0,
-      '{{.Record.duration_milliseconds}}ms', '');
-  */}}
+  chart.add_bar('<b>Grand Total</b>', 0, {{.Record.Duration.Seconds}} * 1000, 0,
+      '{{.Record.Duration}}', '');
   document.getElementById('ae-rpc-chart').innerHTML = chart.draw();
 }
 renderChart();

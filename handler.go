@@ -213,6 +213,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 
 	byCount := make(map[string]int)
 	durationCount := make(map[string]time.Duration)
+	var _real, _api time.Duration
 	for _, r := range full.Stats.RPCStats {
 		rpc := r.Name()
 
@@ -223,6 +224,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 		}
 		byCount[rpc] += 1
 		durationCount[rpc] += r.Duration
+		_real += r.Duration
 	}
 
 	allStatsByCount := StatsByName{}
@@ -240,6 +242,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 		Record          *RequestStats
 		Header          http.Header
 		AllStatsByCount StatsByName
+		Real, Api       time.Duration
 	}{
 		Env: map[string]string{
 			"APPLICATION_ID": appengine.AppID(c),
@@ -247,6 +250,8 @@ func Details(w http.ResponseWriter, r *http.Request) {
 		Record:          full.Stats,
 		Header:          full.Header,
 		AllStatsByCount: allStatsByCount,
+		Real:            _real,
+		Api:             _api,
 	}
 
 	_ = templates.ExecuteTemplate(w, "details", v)
