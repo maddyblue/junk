@@ -12,6 +12,10 @@ import (
 	"time"
 )
 
+const (
+	PROTO_BUF_MAX = 150
+)
+
 type Context struct {
 	appengine.Context
 
@@ -29,6 +33,16 @@ func (c Context) Call(service, method string, in, out proto.Message, opts *appen
 	}
 	err := c.Context.Call(service, method, in, out, opts)
 	stat.Duration = time.Since(stat.Start)
+	stat.In = in.String()
+	stat.Out = out.String()
+
+	if len(stat.In) > PROTO_BUF_MAX {
+		stat.In = stat.In[:PROTO_BUF_MAX] + "..."
+	}
+	if len(stat.Out) > PROTO_BUF_MAX {
+		stat.Out = stat.Out[:PROTO_BUF_MAX] + "..."
+	}
+
 	c.stats.RPCStats = append(c.stats.RPCStats, stat)
 	return err
 }

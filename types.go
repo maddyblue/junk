@@ -46,10 +46,19 @@ type RPCStat struct {
 	Offset          time.Duration
 	Duration        time.Duration
 	StackData       string
+	In, Out         string
 }
 
 func (r RPCStat) Name() string {
 	return r.Service + "." + r.Method
+}
+
+func (r RPCStat) Request() string {
+	return r.In
+}
+
+func (r RPCStat) Response() string {
+	return r.Out
 }
 
 func (r RPCStat) Stack() Stack {

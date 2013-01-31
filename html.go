@@ -323,18 +323,16 @@ const HTML_DETAILS = `
             </tr>
           </tbody>
           <tbody>
-            {{/*
-            {{ if $t.Request }}
+            {{ if $t.In }}
             <tr>
-              <td style="padding-left: 20px"><b>Request:</b> {{t.request_data_summary}}</td>
+              <td style="padding-left: 20px"><b>Request:</b> {{$t.Request}}</td>
             </tr>
             {{ end }}
-            {{ if $t.Response }}
+            {{ if $t.Out }}
             <tr>
-              <td style="padding-left: 20px"><b>Response:</b> {{t.response_data_summary}}</td>
+              <td style="padding-left: 20px"><b>Response:</b> {{$t.Response}}</td>
             </tr>
             {{ end }}
-            */}}
             {{ if $t.StackData }}
             <tr>
               <td style="padding-left: 20px"><b>Stack:</b></td>
