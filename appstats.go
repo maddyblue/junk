@@ -66,13 +66,18 @@ func (c Context) Call(service, method string, in, out proto.Message, opts *appen
 
 func NewContext(req *http.Request) Context {
 	c := appengine.NewContext(req)
-	u := user.Current(c)
+	var uname string
+	var admin bool
+	if u := user.Current(c); u != nil {
+		uname = u.String()
+		admin = u.Admin
+	}
 	return Context{
 		Context: c,
 		req:     req,
 		stats: &RequestStats{
-			User:   u.String(),
-			Admin:  u.Admin,
+			User:   uname,
+			Admin:  admin,
 			Method: req.Method,
 			Path:   req.URL.Path,
 			Query:  req.URL.RawQuery,
