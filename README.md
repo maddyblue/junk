@@ -23,19 +23,32 @@ In your main `.go` file:
 
 Add to the handler section in `init()`:
 
-```http.HandleFunc("/_ah/stats/", appstats.Handler)```
+```http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)```
 
-Replace all instances of `appengine.NewContext` with `appstats.NewContext`.
+Change all handler functions to the following signature:
 
-On the line after each `appstats.NewContext`, add the line (assuming `c` is the result from `NewContext`):
+```func(http.ResponseWriter, *http.Request, appengine.Context)```
 
-```defer c.Save()```
+Wrap all calls to those functions in the `appstats.NewHandler` wrapper:
 
-So you should end up with:
+```http.Handle("/", appstats.NewHandler(Main))```
+
+## example
 
 ```
-c := appstats.NewContext(r)
-defer c.Save()
+import "appengine"
+import "appstats"
+import "net/http"
+
+func init() {
+	http.Handle("/", appstats.NewHandler(Main))
+	http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)
+}
+
+func Main (w http.ResponseWriter, r *http.Request, c appengine.Context) {
+	// do stuff with c: datastore.Get(c, key, entity)
+	w.Write([]byte("success"))
+}
 ```
 
 ## usage
