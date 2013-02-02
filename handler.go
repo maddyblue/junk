@@ -295,7 +295,7 @@ func File(w http.ResponseWriter, r *http.Request) {
 	}
 
 	v := struct {
-		Env             map[string]string
+		Env      map[string]string
 		Filename string
 		Lineno   int
 		Fp       map[int]string

@@ -162,7 +162,7 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := NewContext(r)
 	rw := responseWriter{
 		ResponseWriter: w,
-		c: c,
+		c:              c,
 	}
 	h.f(rw, r, c)
 	c.Save()
