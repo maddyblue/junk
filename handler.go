@@ -41,7 +41,7 @@ func init() {
 	templates.Parse(HTML_FILE)
 }
 
-func Handler(w http.ResponseWriter, r *http.Request) {
+func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
 	if strings.HasSuffix(r.URL.Path, "/details") {
 		Details(w, r)
 	} else if strings.HasSuffix(r.URL.Path, "/file") {

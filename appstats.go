@@ -128,3 +128,42 @@ func (c Context) Save() {
 
 	memcache.SetMulti(c.Context, []*memcache.Item{item_part, item_full})
 }
+
+type Handler struct {
+	f func(http.ResponseWriter, *http.Request, appengine.Context)
+}
+
+func NewHandler(f func(http.ResponseWriter, *http.Request, appengine.Context)) Handler {
+	return Handler{
+		f: f,
+	}
+}
+
+type responseWriter struct {
+	http.ResponseWriter
+
+	c Context
+}
+
+func (r responseWriter) Write(b []byte) (int, error) {
+	if r.c.stats.Status == 0 {
+		r.WriteHeader(http.StatusOK)
+	}
+
+	return r.ResponseWriter.Write(b)
+}
+
+func (r responseWriter) WriteHeader(i int) {
+	r.c.stats.Status = i
+	r.ResponseWriter.WriteHeader(i)
+}
+
+func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	c := NewContext(r)
+	rw := responseWriter{
+		ResponseWriter: w,
+		c: c,
+	}
+	h.f(rw, r, c)
+	c.Save()
+}
