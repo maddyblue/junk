@@ -48,9 +48,9 @@ const HTML_BASE = `
           <div class="g-unit g-first">
             <h1>Application Stats for {{.Env.APPLICATION_ID}}</h1>
           </div>
-          <div class="g-unit">
+          <!--div class="g-unit">
             All costs displayed in micropennies (1 dollar equals 100 pennies, 1 penny equals 1 million micropennies)
-          </div>
+          </div-->
         </div>
       </div>
     </div>
@@ -117,8 +117,8 @@ const HTML_MAIN = `
               {{$item.Name}}
             </td>
             <td>{{$item.Count}}</td>
-            <td title="">{{$item.Cost}}</td>
-            <td>{{$item.CostPct}}</td>
+            <td title="">{{/*$item.Cost*/}}</td>
+            <td>{{/*$item.CostPct*/}}</td>
           </tr>
         </tbody>
         <tbody class="ae-rpc-detail" id="ae-rpc-expand-{{$index}}-detail">
@@ -126,8 +126,8 @@ const HTML_MAIN = `
           <tr>
             <td class="rpc-req">{{$subitem.Name}}</td>
             <td>{{$subitem.Count}}</td>
-            <td title="">{{$subitem.Cost}}</td>
-            <td>{{$subitem.CostPct}}</td>
+            <td title="">{{/*$subitem.Cost*/}}</td>
+            <td>{{/*$subitem.CostPct*/}}</td>
           </tr>
           {{ end }}
         </tbody>
@@ -171,8 +171,8 @@ const HTML_MAIN = `
           <td>
             {{$item.Count}}
           </td>
-          <td title="">{{$item.Cost}}</td>
-          <td>{{$item.CostPct}}%</td>
+          <td title="">{{/*$item.Cost*/}}</td>
+          <td>{{/*$item.CostPct*/}}</td>
           <td>{{$item.Requests}}</td>
           <td>
             {{ range $index := $item.RecentReqs }}
@@ -184,8 +184,8 @@ const HTML_MAIN = `
             <tr>
               <td class="rpc-req">{{$subitem.Name}}</td>
               <td>{{$subitem.Count}}</td>
-              <td title="">{{$subitem.Cost}}</td>
-              <td>{{$subitem.CostPct}}%</td>
+              <td title="">{{/*$subitem.Cost*/}}</td>
+              <td>{{/*$subitem.CostPct*/}}</td>
               <td></td>
               <td></td>
             </tr>
@@ -244,7 +244,7 @@ const HTML_MAIN = `
         <td class="rpc-req">{{$item.Name}}</td>
         <td>{{$item.Count}}</td>
 
-        <td>{{$item.Cost}}</td>
+        <td>{{/*$item.Cost*/}}</td>
         {{/*<td>{{$item.total_billed_ops_str}}</td>*/}}
       </tr>
       {{ end }}
