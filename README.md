@@ -29,7 +29,7 @@ Add to the handler section in `init()`:
 
 Change all handler functions to the following signature:
 
-```func(http.ResponseWriter, *http.Request, appengine.Context)```
+```func(appengine.Context, http.ResponseWriter, *http.Request)```
 
 Wrap all calls to those functions in the `appstats.NewHandler` wrapper:
 
@@ -47,7 +47,7 @@ func init() {
 	http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)
 }
 
-func Main (w http.ResponseWriter, r *http.Request, c appengine.Context) {
+func Main (c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	// do stuff with c: datastore.Get(c, key, entity)
 	w.Write([]byte("success"))
 }
