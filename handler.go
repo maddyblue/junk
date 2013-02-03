@@ -32,6 +32,7 @@ import (
 )
 
 var templates *template.Template
+var staticFiles map[string][]byte
 
 func init() {
 	templates = template.New("appstats").Funcs(funcs)
@@ -39,6 +40,16 @@ func init() {
 	templates.Parse(HTML_MAIN)
 	templates.Parse(HTML_DETAILS)
 	templates.Parse(HTML_FILE)
+
+	staticFiles = map[string][]byte{
+		"app_engine_logo_sm.gif": static_app_engine_logo_sm_gif,
+		"appstats_css.css":       static_appstats_css_css,
+		"appstats_js.js":         static_appstats_js_js,
+		"gantt.js":               static_gantt_js,
+		"minus.gif":              static_minus_gif,
+		"pix.gif":                static_pix_gif,
+		"plus.gif":               static_plus_gif,
+	}
 }
 
 func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,6 +57,8 @@ func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
 		Details(w, r)
 	} else if strings.HasSuffix(r.URL.Path, "/file") {
 		File(w, r)
+	} else if strings.Contains(r.URL.Path, "/static/") {
+		Static(w, r)
 	} else {
 		Index(w, r)
 	}
@@ -309,4 +322,23 @@ func File(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_ = templates.ExecuteTemplate(w, "file", v)
+}
+
+func Static(w http.ResponseWriter, r *http.Request) {
+	fname := r.URL.Path[strings.LastIndex(r.URL.Path, "/")+1:]
+	if v, present := staticFiles[fname]; present {
+		h := w.Header()
+
+		if strings.HasSuffix(r.URL.Path, ".css") {
+			h.Set("Content-type", "text/css")
+		} else if strings.HasSuffix(r.URL.Path, ".js") {
+			h.Set("Content-type", "text/javascript")
+		}
+
+		h.Set("Cache-Control", "public, max-age=expiry")
+		expires := time.Now().Add(time.Hour)
+		h.Set("Expires", expires.Format(time.RFC1123))
+
+		w.Write(v)
+	}
 }
