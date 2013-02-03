@@ -15,6 +15,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/mjibson/goon"
+	"github.com/mjibson/appstats"
 )
 
 var router = new(mux.Router)
@@ -46,15 +47,16 @@ func init() {
 		return
 	}
 
-	router.HandleFunc("/", Main).Name("main")
-	router.HandleFunc("/rank/create", RankCreate).Name("create-rank")
-	router.HandleFunc("/rank/list", RankList).Name("list-ranks")
-	router.HandleFunc("/rank/get/{id:[0-9]+}", RankGet).Name("get-rank")
-	router.HandleFunc("/upload-url/{id:[0-9]+}", UploadUrl).Name("upload-url")
-	router.HandleFunc("/upload-success/{id:[0-9]+}", UploadSuccess).Name("upload-success")
-	router.HandleFunc("/note/graph/{key}", NoteGraph).Name("note-graph")
-	router.HandleFunc("/note/pwelch/{key}", NotePwelch).Name("note-pwelch")
+	router.Handle("/", appstats.NewHandler(Main)).Name("main")
+	router.Handle("/rank/create", appstats.NewHandler(RankCreate)).Name("create-rank")
+	router.Handle("/rank/list", appstats.NewHandler(RankList)).Name("list-ranks")
+	router.Handle("/rank/get/{id:[0-9]+}", appstats.NewHandler(RankGet)).Name("get-rank")
+	router.Handle("/upload-url/{id:[0-9]+}", appstats.NewHandler(UploadUrl)).Name("upload-url")
+	router.Handle("/upload-success/{id:[0-9]+}", appstats.NewHandler(UploadSuccess)).Name("upload-success")
+	router.Handle("/note/graph/{key}", appstats.NewHandler(NoteGraph)).Name("note-graph")
+	router.Handle("/note/pwelch/{key}", appstats.NewHandler(NotePwelch)).Name("note-pwelch")
 	http.Handle("/", router)
+	http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)
 }
 
 func serveError(w http.ResponseWriter, err error) {
@@ -62,7 +64,7 @@ func serveError(w http.ResponseWriter, err error) {
 	fmt.Println("serve error:", err)
 }
 
-func Main(w http.ResponseWriter, r *http.Request) {
+func Main(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	err := templates.ExecuteTemplate(w, "base.html", nil)
 
 	if err != nil {
@@ -70,12 +72,12 @@ func Main(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RankCreate(w http.ResponseWriter, r *http.Request) {
+func RankCreate(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	b, _ := ioutil.ReadAll(r.Body)
 
 	var g Rank
 
-	n := goon.NewGoon(r)
+	n := goon.ContextGoon(c)
 	e, err := n.NewEntity(nil, &g)
 
 	g.Name = string(b)
@@ -90,8 +92,8 @@ func RankCreate(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func RankList(w http.ResponseWriter, r *http.Request) {
-	g := goon.NewGoon(r)
+func RankList(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+	g := goon.ContextGoon(c)
 	q := datastore.NewQuery("Rank")
 	var gg []*Rank
 	es, _ := g.GetAll(q, &gg)
@@ -110,12 +112,13 @@ func RankList(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func RankGet(w http.ResponseWriter, r *http.Request) {
+func RankGet(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	s := vars["id"]
 	id, _ := strconv.ParseInt(s, 10, 64)
 
-	n := goon.NewGoon(r)
+	n := goon.ContextGoon(c)
+
 	g := &Rank{}
 	e, _ := n.GetById(g, "", id, nil)
 	q := datastore.NewQuery("Note").Ancestor(e.Key)
@@ -140,18 +143,16 @@ func RankGet(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func UploadUrl(w http.ResponseWriter, r *http.Request) {
+func UploadUrl(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	c := appengine.NewContext(r)
 	url, _ := router.Get("upload-success").URL("id", vars["id"])
 	url, _ = blobstore.UploadURL(c, url.String(), nil)
 	b, _ := json.Marshal(url.String())
 	w.Write(b)
 }
 
-func UploadSuccess(w http.ResponseWriter, r *http.Request) {
+func UploadSuccess(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	c := appengine.NewContext(r)
 
 	blobs, values, err := blobstore.ParseUpload(r)
 
@@ -169,7 +170,7 @@ func UploadSuccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	n := goon.NewGoon(r)
+	n := goon.ContextGoon(c)
 	var rp Rank
 	rid, _ := strconv.ParseInt(vars["id"], 10, 64)
 	rank, err := n.GetById(&rp, "", rid, nil)
@@ -212,12 +213,11 @@ func UploadSuccess(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, url.String(), http.StatusFound)
 }
 
-func NoteGraph(w http.ResponseWriter, r *http.Request) {
+func NoteGraph(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, _ := datastore.DecodeKey(vars["key"])
-	c := appengine.NewContext(r)
 	n := &Note{}
-	g := goon.NewGoon(r)
+	g := goon.ContextGoon(c)
 	_, _ = g.Get(n, key)
 	wv, _ := n.Wav(c)
 
@@ -226,12 +226,11 @@ func NoteGraph(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, n.Chart(wv, reqId))
 }
 
-func NotePwelch(w http.ResponseWriter, r *http.Request) {
+func NotePwelch(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, _ := datastore.DecodeKey(vars["key"])
-	c := appengine.NewContext(r)
 	n := &Note{}
-	g := goon.NewGoon(r)
+	g := goon.ContextGoon(c)
 	_, _ = g.Get(n, key)
 	wv, _ := n.Wav(c)
 
