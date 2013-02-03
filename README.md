@@ -8,22 +8,11 @@ Compatible with [`github.com/gorilla/mux`](http://www.gorillatoolkit.org/pkg/mux
 
 ## installation
 
-From your app engine project's directory, run:
-
-```git clone git://github.com/mjibson/appstats.git```
-
-Add to `app.yaml`:
-
-```
-- url: /_ah/stats/static
-  static_dir: appstats/static
-```
-
 In your main `.go` file:
 
-```import "appstats"```
+```import "github.com/mjibson/appstats"```
 
-Add to the handler section in `init()`:
+Add to the handler section in `init()` (other URLs will also function):
 
 ```http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)```
 
@@ -39,7 +28,7 @@ Wrap all calls to those functions in the `appstats.NewHandler` wrapper:
 
 ```
 import "appengine"
-import "appstats"
+import "github.com/mjibson/appstats"
 import "net/http"
 
 func init() {
