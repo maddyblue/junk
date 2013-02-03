@@ -146,6 +146,8 @@ type responseWriter struct {
 }
 
 func (r responseWriter) Write(b []byte) (int, error) {
+	// Emulate the behavior of http.ResponseWriter.Write since it doesn't
+	// call our WriteHeader implementation.
 	if r.c.stats.Status == 0 {
 		r.WriteHeader(http.StatusOK)
 	}
