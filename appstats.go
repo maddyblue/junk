@@ -130,10 +130,10 @@ func (c Context) Save() {
 }
 
 type Handler struct {
-	f func(http.ResponseWriter, *http.Request, appengine.Context)
+	f func(appengine.Context, http.ResponseWriter, *http.Request)
 }
 
-func NewHandler(f func(http.ResponseWriter, *http.Request, appengine.Context)) Handler {
+func NewHandler(f func(appengine.Context, http.ResponseWriter, *http.Request)) Handler {
 	return Handler{
 		f: f,
 	}
@@ -164,6 +164,6 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		ResponseWriter: w,
 		c:              c,
 	}
-	h.f(rw, r, c)
+	h.f(c, rw, r)
 	c.Save()
 }
