@@ -2,7 +2,9 @@
 
 A port of the python appstats implementation to the Go runtime on Google App Engine.
 
-Currently in early development: useful but possibly dangerous or wrong.
+Currently in early development: useful but possibly dangerous or wrong. **Does not run in production** due to appengine's implementation. This is being worked on.
+
+Compatible with [`github.com/gorilla/mux`](http://www.gorillatoolkit.org/pkg/mux) and [`github.com/mjibson/goon`](https://github.com/mjibson/goon).
 
 ## installation
 
