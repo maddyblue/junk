@@ -7,5 +7,8 @@ handlers:
 - url: /static
   static_dir: static
 
+- url: /_ah/stats/static
+  static_dir: appstats/static
+
 - url: /.*
   script: _go_app
