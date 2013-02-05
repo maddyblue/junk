@@ -60,7 +60,9 @@ func (c Context) Call(service, method string, in, out proto.Message, opts *appen
 		stat.Out = stat.Out[:PROTO_BUF_MAX] + "..."
 	}
 
+	c.stats.lock.Lock()
 	c.stats.RPCStats = append(c.stats.RPCStats, stat)
+	c.stats.lock.Unlock()
 	return err
 }
 

@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -41,6 +42,8 @@ type RequestStats struct {
 	Start       time.Time
 	Duration    time.Duration
 	RPCStats    []RPCStat
+
+	lock sync.Mutex
 }
 
 type stats_part RequestStats
