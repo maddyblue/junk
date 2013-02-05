@@ -41,6 +41,7 @@ type Context struct {
 }
 
 func (c Context) Call(service, method string, in, out proto.Message, opts *appengine_internal.CallOptions) error {
+	c.stats.wg.Add(1)
 	stat := RPCStat{
 		Service:   service,
 		Method:    method,
@@ -52,6 +53,7 @@ func (c Context) Call(service, method string, in, out proto.Message, opts *appen
 	stat.Duration = time.Since(stat.Start)
 	stat.In = in.String()
 	stat.Out = out.String()
+	c.stats.wg.Done()
 
 	if len(stat.In) > PROTO_BUF_MAX {
 		stat.In = stat.In[:PROTO_BUF_MAX] + "..."
@@ -97,6 +99,7 @@ func (c Context) FromContext(ctx appengine.Context) Context {
 }
 
 func (c Context) Save() {
+	c.stats.wg.Wait()
 	c.stats.Duration = time.Since(c.stats.Start)
 
 	var buf_part, buf_full bytes.Buffer

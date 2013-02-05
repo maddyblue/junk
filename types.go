@@ -44,6 +44,7 @@ type RequestStats struct {
 	RPCStats    []RPCStat
 
 	lock sync.Mutex
+	wg   sync.WaitGroup
 }
 
 type stats_part RequestStats
