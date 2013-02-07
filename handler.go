@@ -94,7 +94,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	requestById := make(map[int]*RequestStats, len(ars))
 	idByRequest := make(map[*RequestStats]int, len(ars))
 	requests := make(map[int]*StatByName)
-	byRequest := make(map[int]map[string]*StatByName)
+	byRequest := make(map[int]map[string]int)
 	for i, v := range ars {
 		idx := i + 1
 		requestById[idx] = v
@@ -102,13 +102,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		requests[idx] = &StatByName{
 			RequestStats: v,
 		}
-		byRequest[idx] = make(map[string]*StatByName)
+		byRequest[idx] = make(map[string]int)
 	}
 
 	requestByPath := make(map[string][]int)
 	byCount := make(map[string]int)
-	byRPC := make(map[string]map[string]*StatByName)
-	byPath := make(map[string]map[string]*StatByName)
+	byRPC := make(map[string]map[string]int)
+	byPath := make(map[string]map[string]int)
 	for _, t := range ars {
 		id := idByRequest[t]
 
@@ -117,45 +117,28 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		for _, r := range t.RPCStats {
 			rpc := r.Name()
 
-			// byRequest
-			if _, present := byRequest[id][rpc]; !present {
-				byRequest[id][rpc] = &StatByName{
-					Name: rpc,
-				}
-			}
-			byRequest[id][rpc].Count++
-
-			// byCount
+			byRequest[id][rpc]++
 			byCount[rpc]++
 
-			// byRPC
 			if _, present := byRPC[rpc]; !present {
-				byRPC[rpc] = make(map[string]*StatByName)
+				byRPC[rpc] = make(map[string]int)
 			}
-			if _, present := byRPC[rpc][t.Path]; !present {
-				byRPC[rpc][t.Path] = &StatByName{
-					Name: t.Path,
-				}
-			}
-			byRPC[rpc][t.Path].Count++
+			byRPC[rpc][t.Path]++
 
-			// byPath
 			if _, present := byPath[t.Path]; !present {
-				byPath[t.Path] = make(map[string]*StatByName)
+				byPath[t.Path] = make(map[string]int)
 			}
-			if _, present := byPath[t.Path][rpc]; !present {
-				byPath[t.Path][rpc] = &StatByName{
-					Name: rpc,
-				}
-			}
-			byPath[t.Path][rpc].Count++
+			byPath[t.Path][rpc]++
 		}
 	}
 
 	for k, v := range byRequest {
 		stats := StatsByName{}
-		for _, s := range v {
-			stats = append(stats, s)
+		for rpc, count := range v {
+			stats = append(stats, &StatByName{
+				Name:  rpc,
+				Count: count,
+			})
 		}
 		sort.Sort(stats)
 		requests[k].SubStats = stats
@@ -164,8 +147,11 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	statsByRPC := make(map[string]StatsByName)
 	for k, v := range byRPC {
 		stats := StatsByName{}
-		for _, s := range v {
-			stats = append(stats, s)
+		for path, count := range v {
+			stats = append(stats, &StatByName{
+				Name:  path,
+				Count: count,
+			})
 		}
 		sort.Sort(stats)
 		statsByRPC[k] = stats
@@ -184,16 +170,19 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	pathStatsByCount := StatsByName{}
 	for k, v := range byPath {
 		stats := StatsByName{}
-		count := 0
-		for _, s := range v {
-			stats = append(stats, s)
-			count += s.Count
+		total := 0
+		for name, count := range v {
+			stats = append(stats, &StatByName{
+				Name:  name,
+				Count: count,
+			})
+			total += count
 		}
 		sort.Sort(stats)
 
 		pathStatsByCount = append(pathStatsByCount, &StatByName{
 			Name:       k,
-			Count:      count,
+			Count:      total,
 			SubStats:   stats,
 			Requests:   len(requestByPath[k]),
 			RecentReqs: requestByPath[k],
