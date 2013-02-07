@@ -206,9 +206,22 @@ func Details(w http.ResponseWriter, r *http.Request) {
 	key := fmt.Sprintf(KEY_FULL, qtime)
 
 	c := appengine.NewContext(r)
+
+	v := struct {
+		Env             map[string]string
+		Record          *RequestStats
+		Header          http.Header
+		AllStatsByCount StatsByName
+		Real, Api       time.Duration
+	}{
+		Env: map[string]string{
+			"APPLICATION_ID": appengine.AppID(c),
+		},
+	}
+
 	item, err := memcache.Get(c, key)
 	if err != nil {
-		serveError(w, err)
+		templates.ExecuteTemplate(w, "details", v)
 		return
 	}
 
@@ -218,7 +231,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 	full := stats_full{}
 	err = dec.Decode(&full)
 	if err != nil {
-		// todo: send down an empty request
+		templates.ExecuteTemplate(w, "details", v)
 		return
 	}
 
@@ -248,22 +261,11 @@ func Details(w http.ResponseWriter, r *http.Request) {
 	}
 	sort.Sort(allStatsByCount)
 
-	v := struct {
-		Env             map[string]string
-		Record          *RequestStats
-		Header          http.Header
-		AllStatsByCount StatsByName
-		Real, Api       time.Duration
-	}{
-		Env: map[string]string{
-			"APPLICATION_ID": appengine.AppID(c),
-		},
-		Record:          full.Stats,
-		Header:          full.Header,
-		AllStatsByCount: allStatsByCount,
-		Real:            _real,
-		Api:             _api,
-	}
+	v.Record = full.Stats
+	v.Header = full.Header
+	v.AllStatsByCount = allStatsByCount
+	v.Real = _real
+	v.Api = _api
 
 	_ = templates.ExecuteTemplate(w, "details", v)
 }
