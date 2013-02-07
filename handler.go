@@ -140,7 +140,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 				Count: count,
 			})
 		}
-		sort.Sort(stats)
+		sort.Sort(Reverse{stats})
 		requests[k].SubStats = stats
 	}
 
@@ -153,7 +153,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 				Count: count,
 			})
 		}
-		sort.Sort(stats)
+		sort.Sort(Reverse{stats})
 		statsByRPC[k] = stats
 	}
 
@@ -165,7 +165,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			SubStats: statsByRPC[k],
 		})
 	}
-	sort.Sort(allStatsByCount)
+	sort.Sort(Reverse{allStatsByCount})
 
 	pathStatsByCount := StatsByName{}
 	for k, v := range byPath {
@@ -178,7 +178,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			})
 			total += count
 		}
-		sort.Sort(stats)
+		sort.Sort(Reverse{stats})
 
 		pathStatsByCount = append(pathStatsByCount, &StatByName{
 			Name:       k,
@@ -188,7 +188,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			RecentReqs: requestByPath[k],
 		})
 	}
-	sort.Sort(pathStatsByCount)
+	sort.Sort(Reverse{pathStatsByCount})
 
 	v := struct {
 		Env                 map[string]string

@@ -19,6 +19,7 @@ package appstats
 import (
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -157,4 +158,12 @@ type StatByName struct {
 	RecentReqs    []int
 	RequestStats  *RequestStats
 	Duration      time.Duration
+}
+
+type Reverse struct {
+	sort.Interface
+}
+
+func (r Reverse) Less(i, j int) bool {
+	return r.Interface.Less(j, i)
 }
