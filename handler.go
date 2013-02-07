@@ -112,9 +112,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	for _, t := range ars {
 		id := idByRequest[t]
 
-		if _, present := requestByPath[t.Path]; !present {
-			requestByPath[t.Path] = make([]int, 0)
-		}
 		requestByPath[t.Path] = append(requestByPath[t.Path], id)
 
 		for _, r := range t.RPCStats {
@@ -129,10 +126,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			byRequest[id][rpc].Count++
 
 			// byCount
-			if _, present := byCount[rpc]; !present {
-				byCount[rpc] = 0
-			}
-			byCount[rpc] += 1
+			byCount[rpc]++
 
 			// byRPC
 			if _, present := byRPC[rpc]; !present {
