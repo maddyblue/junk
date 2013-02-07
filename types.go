@@ -167,3 +167,7 @@ type Reverse struct {
 func (r Reverse) Less(i, j int) bool {
 	return r.Interface.Less(j, i)
 }
+
+type SKey struct {
+	a, b string
+}

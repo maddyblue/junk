@@ -107,8 +107,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	requestByPath := make(map[string][]int)
 	byCount := make(map[string]int)
-	byRPC := make(map[string]map[string]int)
-	byPath := make(map[string]map[string]int)
+	byRPC := make(map[SKey]int)
+	byPath := make(map[SKey]int)
 	for _, t := range ars {
 		id := idByRequest[t]
 
@@ -119,16 +119,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 			byRequest[id][rpc]++
 			byCount[rpc]++
-
-			if _, present := byRPC[rpc]; !present {
-				byRPC[rpc] = make(map[string]int)
-			}
-			byRPC[rpc][t.Path]++
-
-			if _, present := byPath[t.Path]; !present {
-				byPath[t.Path] = make(map[string]int)
-			}
-			byPath[t.Path][rpc]++
+			byRPC[SKey{rpc, t.Path}]++
+			byPath[SKey{t.Path, rpc}]++
 		}
 	}
 
@@ -146,15 +138,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	statsByRPC := make(map[string]StatsByName)
 	for k, v := range byRPC {
-		stats := StatsByName{}
-		for path, count := range v {
-			stats = append(stats, &StatByName{
-				Name:  path,
-				Count: count,
-			})
-		}
-		sort.Sort(Reverse{stats})
-		statsByRPC[k] = stats
+		statsByRPC[k.a] = append(statsByRPC[k.a], &StatByName{
+			Name:  k.b,
+			Count: v,
+		})
+	}
+	for k, v := range statsByRPC {
+		sort.Sort(Reverse{v})
+		statsByRPC[k] = v
 	}
 
 	allStatsByCount := StatsByName{}
@@ -167,23 +158,25 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 	sort.Sort(Reverse{allStatsByCount})
 
-	pathStatsByCount := StatsByName{}
+	pathStats := make(map[string]StatsByName)
 	for k, v := range byPath {
-		stats := StatsByName{}
+		pathStats[k.a] = append(pathStats[k.a], &StatByName{
+			Name:  k.b,
+			Count: v,
+		})
+	}
+	pathStatsByCount := StatsByName{}
+	for k, v := range pathStats {
 		total := 0
-		for name, count := range v {
-			stats = append(stats, &StatByName{
-				Name:  name,
-				Count: count,
-			})
-			total += count
+		for _, stat := range v {
+			total += stat.Count
 		}
-		sort.Sort(Reverse{stats})
+		sort.Sort(Reverse{v})
 
 		pathStatsByCount = append(pathStatsByCount, &StatByName{
 			Name:       k,
 			Count:      total,
-			SubStats:   stats,
+			SubStats:   v,
 			Requests:   len(requestByPath[k]),
 			RecentReqs: requestByPath[k],
 		})
