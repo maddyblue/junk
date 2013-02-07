@@ -52,6 +52,10 @@ func init() {
 	}
 }
 
+func serveError(w http.ResponseWriter, err error) {
+	http.Error(w, err.Error(), http.StatusInternalServerError)
+}
+
 func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
 	if strings.HasSuffix(r.URL.Path, "/details") {
 		Details(w, r)
@@ -271,6 +275,7 @@ func File(w http.ResponseWriter, r *http.Request) {
 
 	f, err := ioutil.ReadFile(fname)
 	if err != nil {
+		serveError(w, err)
 		return
 	}
 
