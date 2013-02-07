@@ -208,6 +208,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	item, err := memcache.Get(c, key)
 	if err != nil {
+		serveError(w, err)
 		return
 	}
 
