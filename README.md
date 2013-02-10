@@ -45,3 +45,7 @@ func Main (c appengine.Context, w http.ResponseWriter, r *http.Request) {
 ## usage
 
 Do things and view at [http://localhost:8080/_ah/stats/](http://localhost:8080/_ah/stats/) like normal.
+
+## optional configuration
+
+Refer to the [variables section](http://godoc.org/github.com/mjibson/appstats#_variables) of the documentation.
