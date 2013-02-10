@@ -24,7 +24,9 @@ import (
 	"bytes"
 	"code.google.com/p/goprotobuf/proto"
 	"encoding/gob"
+	"fmt"
 	"net/http"
+	"net/url"
 	"runtime/debug"
 	"time"
 )
@@ -130,6 +132,21 @@ func (c Context) Save() {
 		Key:   c.stats.FullKey(),
 		Value: buf_full.Bytes(),
 	}
+
+	u := url.URL{
+		Scheme:   "http",
+		Host:     c.req.Host,
+		Path:     "/_ah/stats/details",
+		RawQuery: fmt.Sprintf("time=%v", c.stats.Start.Nanosecond()),
+	}
+
+	c.Infof("Saved; %s: %s, %s: %s, link: %v",
+		item_part.Key,
+		ByteSize(len(item_part.Value)),
+		item_full.Key,
+		ByteSize(len(item_full.Value)),
+		u.String(),
+	)
 
 	memcache.SetMulti(c.Context, []*memcache.Item{item_part, item_full})
 }
