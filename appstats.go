@@ -25,15 +25,34 @@ import (
 	"code.google.com/p/goprotobuf/proto"
 	"encoding/gob"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"runtime/debug"
 	"time"
 )
 
-const (
-	PROTO_BUF_MAX = 150
+var (
+	// RECORD_FRACTION is the fraction of requests to record.
+	// Set to a number between 0.0 (none) and 1.0 (all).
+	RECORD_FRACTION float64 = 1.0
+
+	// ShouldRecord is the function used to determine if recording will occur
+	// for a given request. The default is to use RECORD_FRACTION.
+	ShouldRecord func(*http.Request) bool = DefaultShouldRecord
+
+	// PROTO_BUF_MAX is the amount of protobuf data to record.
+	// Data after this is truncated.
+	PROTO_BUF_MAX int = 150
 )
+
+func DefaultShouldRecord(r *http.Request) bool {
+	if RECORD_FRACTION >= 1.0 {
+		return true
+	}
+
+	return rand.Float64() < RECORD_FRACTION
+}
 
 type Context struct {
 	appengine.Context
@@ -183,11 +202,16 @@ func (r responseWriter) WriteHeader(i int) {
 }
 
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := NewContext(r)
-	rw := responseWriter{
-		ResponseWriter: w,
-		c:              c,
+	if ShouldRecord(r) {
+		c := NewContext(r)
+		rw := responseWriter{
+			ResponseWriter: w,
+			c:              c,
+		}
+		h.f(c, rw, r)
+		c.Save()
+	} else {
+		c := appengine.NewContext(r)
+		h.f(c, w, r)
 	}
-	h.f(c, rw, r)
-	c.Save()
 }
