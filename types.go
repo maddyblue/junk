@@ -123,31 +123,15 @@ type Frame struct {
 
 type AllRequestStats []*RequestStats
 
-func (s AllRequestStats) Len() int {
-	return len(s)
-}
-
-func (s AllRequestStats) Less(i, j int) bool {
-	return s[i].Start.Sub(s[j].Start) > 0
-}
-
-func (s AllRequestStats) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
-}
+func (s AllRequestStats) Len() int           { return len(s) }
+func (s AllRequestStats) Less(i, j int) bool { return s[i].Start.Sub(s[j].Start) > 0 }
+func (s AllRequestStats) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 
 type StatsByName []*StatByName
 
-func (s StatsByName) Len() int {
-	return len(s)
-}
-
-func (s StatsByName) Less(i, j int) bool {
-	return s[i].Count < s[j].Count
-}
-
-func (s StatsByName) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
-}
+func (s StatsByName) Len() int           { return len(s) }
+func (s StatsByName) Less(i, j int) bool { return s[i].Count < s[j].Count }
+func (s StatsByName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 
 type StatByName struct {
 	Name          string
@@ -160,13 +144,9 @@ type StatByName struct {
 	Duration      time.Duration
 }
 
-type Reverse struct {
-	sort.Interface
-}
+type Reverse struct{ sort.Interface }
 
-func (r Reverse) Less(i, j int) bool {
-	return r.Interface.Less(j, i)
-}
+func (r Reverse) Less(i, j int) bool { return r.Interface.Less(j, i) }
 
 type SKey struct {
 	a, b string
