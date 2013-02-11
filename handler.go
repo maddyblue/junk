@@ -93,7 +93,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		r := RequestStats(t)
 		ars = append(ars, &r)
 	}
-	sort.Sort(ars)
+	sort.Sort(Reverse{ars})
 
 	requestById := make(map[int]*RequestStats, len(ars))
 	idByRequest := make(map[*RequestStats]int, len(ars))
