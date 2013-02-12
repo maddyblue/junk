@@ -228,7 +228,6 @@ const HTML_MAIN = `
           </a>
           real={{$r.RequestStats.Duration}}
           {{/*
-          api={{$r.api_milliseconds}}
           overhead={{$r.overhead_walltime_milliseconds}}ms
           ({{$r.combined_rpc_count}} RPC{{$r.combined_rpc_count}},
             cost={{$r.combined_rpc_cost_micropennies}},
@@ -299,7 +298,6 @@ const HTML_DETAILS = `
         {{.Record.User}}{{ if .Record.Admin }}*{{ end }}
         real={{.Record.Duration}}
         {{/*
-        api={{.Record.api_milliseconds}}ms
         overhead={{.Record.overhead_walltime_milliseconds}}ms
         cost={{.Record.combined_rpc_cost_micropennies}}
         <br>
@@ -337,7 +335,6 @@ const HTML_DETAILS = `
                 <b>{{$t.Name}}</b>
                 real={{$t.Duration}}
                 {{/*
-                api={{t.api_milliseconds}}ms
                 cost={{t.call_cost_microdollars}}
                 billed_ops=[{{t.billed_ops_str}}]
                 */}}
@@ -392,7 +389,6 @@ const HTML_DETAILS = `
             <td>service.call</td>
             <td align="right">#RPCs</td>
             <td align="right">real time</td>
-            <td align="right">api time</td>
             <td align="right">Cost</td>
             <td align="right">Billed Ops</td>
           </tr>
@@ -464,13 +460,13 @@ function renderChart() {
   {{ range $index, $t := .Record.RPCStats }}
     chart.add_bar('{{$t.Name}}',
         {{$t.Offset.Seconds}} * 1000, {{$t.Duration.Seconds}} * 1000,
-        {{/*$t.api_milliseconds*/}}0,
-        '{{$t.Duration}}{{/* if t.api_milliseconds }} ({{t.api_milliseconds}}ms api){{ end */}}',
+        0,
+        '{{$t.Duration}}',
         'javascript:timelineClickHandler(\'{{$index}}\');');
   {{ end }}
 
-  chart.add_bar('<b>RPC Total</b>', 0, {{.Real.Seconds}} * 1000, {{.Api.Seconds}} * 1000,
-      '{{.Real}}{{ if .Api }} ({{.Api}} api){{ end }}',
+  chart.add_bar('<b>RPC Total</b>', 0, {{.Real.Seconds}} * 1000, 0,
+      '{{.Real}}',
       '');
   chart.add_bar('<b>Grand Total</b>', 0, {{.Record.Duration.Seconds}} * 1000, 0,
       '{{.Record.Duration}}', '');
