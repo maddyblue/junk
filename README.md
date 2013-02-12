@@ -12,7 +12,7 @@ In your main `.go` file:
 
 ```import "github.com/mjibson/appstats"```
 
-Add to the handler section in `init()` (other URLs will also function):
+Add to the handler section in `init()`:
 
 ```http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)```
 
@@ -49,3 +49,7 @@ Do things and view at [http://localhost:8080/_ah/stats/](http://localhost:8080/_
 ## optional configuration
 
 Refer to the [variables section](http://godoc.org/github.com/mjibson/appstats#_variables) of the documentation.
+
+## todo
+
+Cost calculation is experimental. Currently it only includes write ops (read and small ops are TODO).
