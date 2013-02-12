@@ -40,6 +40,7 @@ type RequestStats struct {
 	Method      string
 	Path, Query string
 	Status      int
+	Cost        int64
 	Start       time.Time
 	Duration    time.Duration
 	RPCStats    []RPCStat
@@ -71,6 +72,7 @@ type RPCStat struct {
 	Duration        time.Duration
 	StackData       string
 	In, Out         string
+	Cost            int64
 }
 
 func (r RPCStat) Name() string {
@@ -134,14 +136,14 @@ func (s StatsByName) Less(i, j int) bool { return s[i].Count < s[j].Count }
 func (s StatsByName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 
 type StatByName struct {
-	Name          string
-	Count         int
-	Cost, CostPct int
-	SubStats      []*StatByName
-	Requests      int
-	RecentReqs    []int
-	RequestStats  *RequestStats
-	Duration      time.Duration
+	Name         string
+	Count        int
+	Cost         int64
+	SubStats     []*StatByName
+	Requests     int
+	RecentReqs   []int
+	RequestStats *RequestStats
+	Duration     time.Duration
 }
 
 type Reverse struct{ sort.Interface }
@@ -150,4 +152,9 @@ func (r Reverse) Less(i, j int) bool { return r.Interface.Less(j, i) }
 
 type SKey struct {
 	a, b string
+}
+
+type CVal struct {
+	count int
+	cost  int64
 }

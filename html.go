@@ -48,9 +48,9 @@ const HTML_BASE = `
           <div class="g-unit g-first">
             <h1>Application Stats for {{.Env.APPLICATION_ID}}</h1>
           </div>
-          <!--div class="g-unit">
+          <div class="g-unit">
             All costs displayed in micropennies (1 dollar equals 100 pennies, 1 penny equals 1 million micropennies)
-          </div-->
+          </div>
         </div>
       </div>
     </div>
@@ -117,7 +117,7 @@ const HTML_MAIN = `
               {{$item.Name}}
             </td>
             <td>{{$item.Count}}</td>
-            <td title="">{{/*$item.Cost*/}}</td>
+            <td title="">{{$item.Cost}}</td>
             <td>{{/*$item.CostPct*/}}</td>
           </tr>
         </tbody>
@@ -126,7 +126,7 @@ const HTML_MAIN = `
           <tr>
             <td class="rpc-req">{{$subitem.Name}}</td>
             <td>{{$subitem.Count}}</td>
-            <td title="">{{/*$subitem.Cost*/}}</td>
+            <td title="">{{$subitem.Cost}}</td>
             <td>{{/*$subitem.CostPct*/}}</td>
           </tr>
           {{ end }}
@@ -171,7 +171,7 @@ const HTML_MAIN = `
           <td>
             {{$item.Count}}
           </td>
-          <td title="">{{/*$item.Cost*/}}</td>
+          <td title="">{{$item.Cost}}</td>
           <td>{{/*$item.CostPct*/}}</td>
           <td>{{$item.Requests}}</td>
           <td>
@@ -184,7 +184,7 @@ const HTML_MAIN = `
             <tr>
               <td class="rpc-req">{{$subitem.Name}}</td>
               <td>{{$subitem.Count}}</td>
-              <td title="">{{/*$subitem.Cost*/}}</td>
+              <td title="">{{$subitem.Cost}}</td>
               <td>{{/*$subitem.CostPct*/}}</td>
               <td></td>
               <td></td>
@@ -230,10 +230,10 @@ const HTML_MAIN = `
           {{/*
           overhead={{$r.overhead_walltime_milliseconds}}ms
           ({{$r.combined_rpc_count}} RPC{{$r.combined_rpc_count}},
-            cost={{$r.combined_rpc_cost_micropennies}},
             billed_ops=[{{$r.combined_rpc_billed_ops}}])
           */}}
-          ({{$r.RequestStats.RPCStats | len}} RPCs)
+          ({{$r.RequestStats.RPCStats | len}} RPCs,
+            cost={{$r.RequestStats.Cost}})
         </td>
       </tr>
     </tbody>
@@ -243,7 +243,7 @@ const HTML_MAIN = `
         <td class="rpc-req">{{$item.Name}}</td>
         <td>{{$item.Count}}</td>
 
-        <td>{{/*$item.Cost*/}}</td>
+        <td>{{$item.Cost}}</td>
         {{/*<td>{{$item.total_billed_ops_str}}</td>*/}}
       </tr>
       {{ end }}
@@ -297,9 +297,9 @@ const HTML_DETAILS = `
         <br>
         {{.Record.User}}{{ if .Record.Admin }}*{{ end }}
         real={{.Record.Duration}}
+        cost={{.Record.Cost}}
         {{/*
         overhead={{.Record.overhead_walltime_milliseconds}}ms
-        cost={{.Record.combined_rpc_cost_micropennies}}
         <br>
         billed_ops={{.Record.combined_rpc_billed_ops}}
         */}}
@@ -334,8 +334,8 @@ const HTML_DETAILS = `
                 @{{$t.Offset}}
                 <b>{{$t.Name}}</b>
                 real={{$t.Duration}}
+                cost={{$t.Cost}}
                 {{/*
-                cost={{t.call_cost_microdollars}}
                 billed_ops=[{{t.billed_ops_str}}]
                 */}}
               </td>
@@ -397,7 +397,7 @@ const HTML_DETAILS = `
             <td>{{$item.Name}}</td>
             <td align="right">{{$item.Count}}</td>
             <td align="right">{{$item.Duration}}</td>
-            <td align="right"></td>
+            <td align="right">{{$item.Cost}}</td>
             <td align="right"></td>
             <td align="right"></td>
           </tr>

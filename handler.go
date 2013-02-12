@@ -98,7 +98,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	requestById := make(map[int]*RequestStats, len(ars))
 	idByRequest := make(map[*RequestStats]int, len(ars))
 	requests := make(map[int]*StatByName)
-	byRequest := make(map[int]map[string]int)
+	byRequest := make(map[int]map[string]CVal)
 	for i, v := range ars {
 		idx := i + 1
 		requestById[idx] = v
@@ -106,12 +106,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		requests[idx] = &StatByName{
 			RequestStats: v,
 		}
-		byRequest[idx] = make(map[string]int)
+		byRequest[idx] = make(map[string]CVal)
 	}
 
 	requestByPath := make(map[string][]int)
-	byCount := make(map[string]int)
-	byRPC := make(map[SKey]int)
+	byCount := make(map[string]CVal)
+	byRPC := make(map[SKey]CVal)
 	for _, t := range ars {
 		id := idByRequest[t]
 
@@ -120,18 +120,30 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		for _, r := range t.RPCStats {
 			rpc := r.Name()
 
-			byRequest[id][rpc]++
-			byCount[rpc]++
-			byRPC[SKey{rpc, t.Path}]++
+			v := byRequest[id][rpc]
+			v.count++
+			v.cost += r.Cost
+			byRequest[id][rpc] = v
+
+			v = byCount[rpc]
+			v.count++
+			v.cost += r.Cost
+			byCount[rpc] = v
+
+			v = byRPC[SKey{rpc, t.Path}]
+			v.count++
+			v.cost += r.Cost
+			byRPC[SKey{rpc, t.Path}] = v
 		}
 	}
 
 	for k, v := range byRequest {
 		stats := StatsByName{}
-		for rpc, count := range v {
+		for rpc, s := range v {
 			stats = append(stats, &StatByName{
 				Name:  rpc,
-				Count: count,
+				Count: s.count,
+				Cost:  s.cost,
 			})
 		}
 		sort.Sort(Reverse{stats})
@@ -143,11 +155,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	for k, v := range byRPC {
 		statsByRPC[k.a] = append(statsByRPC[k.a], &StatByName{
 			Name:  k.b,
-			Count: v,
+			Count: v.count,
+			Cost:  v.cost,
 		})
 		pathStats[k.b] = append(pathStats[k.b], &StatByName{
 			Name:  k.a,
-			Count: v,
+			Count: v.count,
+			Cost:  v.cost,
 		})
 	}
 	for k, v := range statsByRPC {
@@ -158,14 +172,17 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	pathStatsByCount := StatsByName{}
 	for k, v := range pathStats {
 		total := 0
+		var cost int64
 		for _, stat := range v {
 			total += stat.Count
+			cost += stat.Cost
 		}
 		sort.Sort(Reverse{v})
 
 		pathStatsByCount = append(pathStatsByCount, &StatByName{
 			Name:       k,
 			Count:      total,
+			Cost:       cost,
 			SubStats:   v,
 			Requests:   len(requestByPath[k]),
 			RecentReqs: requestByPath[k],
@@ -177,7 +194,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	for k, v := range byCount {
 		allStatsByCount = append(allStatsByCount, &StatByName{
 			Name:     k,
-			Count:    v,
+			Count:    v.count,
+			Cost:     v.cost,
 			SubStats: statsByRPC[k],
 		})
 	}
@@ -235,7 +253,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	byCount := make(map[string]int)
+	byCount := make(map[string]CVal)
 	durationCount := make(map[string]time.Duration)
 	var _real time.Duration
 	for _, r := range full.Stats.RPCStats {
@@ -243,10 +261,12 @@ func Details(w http.ResponseWriter, r *http.Request) {
 
 		// byCount
 		if _, present := byCount[rpc]; !present {
-			byCount[rpc] = 0
 			durationCount[rpc] = 0
 		}
-		byCount[rpc] += 1
+		v := byCount[rpc]
+		v.count++
+		v.cost += r.Cost
+		byCount[rpc] = v
 		durationCount[rpc] += r.Duration
 		_real += r.Duration
 	}
@@ -255,7 +275,8 @@ func Details(w http.ResponseWriter, r *http.Request) {
 	for k, v := range byCount {
 		allStatsByCount = append(allStatsByCount, &StatByName{
 			Name:     k,
-			Count:    v,
+			Count:    v.count,
+			Cost:     v.cost,
 			Duration: durationCount[k],
 		})
 	}
