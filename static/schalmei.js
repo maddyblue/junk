@@ -28,7 +28,7 @@ function SchalmeiCtrl($scope, $http) {
 
 		$http.post($('#create-rank-form').attr('action'), $scope.createRankName).
 			success(function(data, status) {
-				$scope.show('get-rank', data);
+				$scope.show('get-rank', {Url: JSON.parse(data)});
 			});
 	};
 

@@ -88,7 +88,8 @@ func RankCreate(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, _ = json.Marshal(e.Key.IntID())
+	url, err := router.Get("get-rank").URL("id", strconv.FormatInt(e.Key.IntID(), 10))
+	b, err = json.Marshal(url.String())
 	w.Write(b)
 }
 
