@@ -28,7 +28,6 @@ import (
 	"appengine/user"
 	"appengine_internal"
 	"bytes"
-	"code.google.com/p/goprotobuf/proto"
 	"encoding/gob"
 	"fmt"
 	"math/rand"
@@ -67,7 +66,7 @@ type Context struct {
 	stats *RequestStats
 }
 
-func (c Context) Call(service, method string, in, out proto.Message, opts *appengine_internal.CallOptions) error {
+func (c Context) Call(service, method string, in, out appengine_internal.ProtoMessage, opts *appengine_internal.CallOptions) error {
 	c.stats.wg.Add(1)
 	defer c.stats.wg.Done()
 
