@@ -74,7 +74,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		keys[i] = fmt.Sprintf(KEY_PART, i*DISTANCE)
 	}
 
-	c := appengine.NewContext(r)
+	c := context(r)
 	items, err := memcache.GetMulti(c, keys)
 	if err != nil {
 		return
@@ -223,7 +223,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 	qtime := r.URL.Query().Get("time")
 	key := fmt.Sprintf(KEY_FULL, qtime)
 
-	c := appengine.NewContext(r)
+	c := context(r)
 
 	v := struct {
 		Env             map[string]string
@@ -294,7 +294,7 @@ func File(w http.ResponseWriter, r *http.Request) {
 	fname := r.URL.Query().Get("f")
 	n := r.URL.Query().Get("n")
 	lineno, _ := strconv.Atoi(n)
-	c := appengine.NewContext(r)
+	c := context(r)
 
 	f, err := ioutil.ReadFile(fname)
 	if err != nil {

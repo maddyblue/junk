@@ -49,6 +49,9 @@ var (
 	// PROTO_BUF_MAX is the amount of protobuf data to record.
 	// Data after this is truncated.
 	PROTO_BUF_MAX int = 150
+
+	// NAMESPACE is the memcache namespace under which to store appstats data.
+	NAMESPACE string = "__appstats__"
 )
 
 func DefaultShouldRecord(r *http.Request) bool {
@@ -180,7 +183,14 @@ func (c Context) Save() {
 		u.String(),
 	)
 
-	memcache.SetMulti(c.Context, []*memcache.Item{item_part, item_full})
+	nc := context(c.req)
+	memcache.SetMulti(nc, []*memcache.Item{item_part, item_full})
+}
+
+func context(r *http.Request) appengine.Context {
+	c := appengine.NewContext(r)
+	nc, _ := appengine.Namespace(c, NAMESPACE)
+	return nc
 }
 
 type Handler struct {
