@@ -14,12 +14,6 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-// Package appstats is a library for profiling the RPC performance of Google
-// App Enigne applications.
-//
-// Installation instructions: https://github.com/mjibson/appstats
-//
-// Reference: https://developers.google.com/appengine/docs/python/tools/appstats
 package appstats
 
 import (
