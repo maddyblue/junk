@@ -77,7 +77,7 @@ func RankCreate(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 
 	var g Rank
 
-	n := goon.ContextGoon(c)
+	n := goon.FromContext(c)
 	e, err := n.NewEntity(nil, &g)
 
 	g.Name = string(b)
@@ -94,8 +94,8 @@ func RankCreate(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func RankList(c appengine.Context, w http.ResponseWriter, r *http.Request) {
-	g := goon.ContextGoon(c)
-	q := datastore.NewQuery("Rank")
+	g := goon.FromContext(c)
+	q := datastore.NewQuery(goon.Kind(Rank{}))
 	var gg []*Rank
 	es, _ := g.GetAll(q, &gg)
 
@@ -118,10 +118,14 @@ func RankGet(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	s := vars["id"]
 	id, _ := strconv.ParseInt(s, 10, 64)
 
-	n := goon.ContextGoon(c)
+	n := goon.FromContext(c)
 
 	g := &Rank{}
-	e, _ := n.GetById(g, "", id, nil)
+	e, err := n.GetById(g, "", id, nil)
+	if err != nil {
+		serveError(w, err)
+		return
+	}
 	q := datastore.NewQuery("Note").Ancestor(e.Key)
 	ndata := []*Note{}
 	ns, _ := n.GetAll(q, &ndata)
@@ -171,7 +175,7 @@ func UploadSuccess(c appengine.Context, w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	n := goon.ContextGoon(c)
+	n := goon.FromContext(c)
 	var rp Rank
 	rid, _ := strconv.ParseInt(vars["id"], 10, 64)
 	rank, err := n.GetById(&rp, "", rid, nil)
@@ -218,7 +222,7 @@ func NoteGraph(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, _ := datastore.DecodeKey(vars["key"])
 	n := &Note{}
-	g := goon.ContextGoon(c)
+	g := goon.FromContext(c)
 	_, _ = g.Get(n, key)
 	wv, _ := n.Wav(c)
 
@@ -231,7 +235,7 @@ func NotePwelch(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, _ := datastore.DecodeKey(vars["key"])
 	n := &Note{}
-	g := goon.ContextGoon(c)
+	g := goon.FromContext(c)
 	_, _ = g.Get(n, key)
 	wv, _ := n.Wav(c)
 
