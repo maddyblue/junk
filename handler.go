@@ -57,11 +57,11 @@ func serveError(w http.ResponseWriter, err error) {
 }
 
 func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
-	if strings.HasSuffix(r.URL.Path, "/details") {
+	if URL_DETAILS == r.URL.Path {
 		Details(w, r)
-	} else if strings.HasSuffix(r.URL.Path, "/file") {
+	} else if URL_FILE == r.URL.Path {
 		File(w, r)
-	} else if strings.Contains(r.URL.Path, "/static/") {
+	} else if strings.HasPrefix(r.URL.Path, URL_STATIC) {
 		Static(w, r)
 	} else {
 		Index(w, r)

@@ -26,10 +26,6 @@ In your main .go file:
 
 	import "github.com/mjibson/appstats"
 
-Add to the handler section in init():
-
-	http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)
-
 Change all handler functions to the following signature:
 
 	func(appengine.Context, http.ResponseWriter, *http.Request)
@@ -47,7 +43,6 @@ Example code:
 
 	func init() {
 		http.Handle("/", appstats.NewHandler(Main))
-		http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)
 	}
 
 	func Main (c appengine.Context, w http.ResponseWriter, r *http.Request) {

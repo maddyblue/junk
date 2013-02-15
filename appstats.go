@@ -48,6 +48,17 @@ var (
 	NAMESPACE string = "__appstats__"
 )
 
+const (
+	URL         = "/_ah/stats/"
+	URL_DETAILS = URL + "details"
+	URL_FILE    = URL + "file"
+	URL_STATIC  = URL + "static/"
+)
+
+func init() {
+	http.HandleFunc(URL, AppstatsHandler)
+}
+
 func DefaultShouldRecord(r *http.Request) bool {
 	if RECORD_FRACTION >= 1.0 {
 		return true
@@ -165,7 +176,7 @@ func (c Context) Save() {
 	u := url.URL{
 		Scheme:   "http",
 		Host:     c.req.Host,
-		Path:     "/_ah/stats/details",
+		Path:     URL_DETAILS,
 		RawQuery: fmt.Sprintf("time=%v", c.stats.Start.Nanosecond()),
 	}
 
