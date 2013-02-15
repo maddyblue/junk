@@ -15,7 +15,7 @@
  */
 
 /*
-Package appstats profiles the RPC performance of Google App Enigne applications.
+Package appstats profiles the RPC performance of Google App Engine applications.
 
 Reference: https://developers.google.com/appengine/docs/python/tools/appstats
 
@@ -45,7 +45,7 @@ Example code:
 		http.Handle("/", appstats.NewHandler(Main))
 	}
 
-	func Main (c appengine.Context, w http.ResponseWriter, r *http.Request) {
+	func Main(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 		// do stuff with c: datastore.Get(c, key, entity)
 		w.Write([]byte("success"))
 	}
