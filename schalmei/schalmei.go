@@ -56,7 +56,7 @@ func init() {
 	router.Handle("/note/graph/{key}", appstats.NewHandler(NoteGraph)).Name("note-graph")
 	router.Handle("/note/pwelch/{key}", appstats.NewHandler(NotePwelch)).Name("note-pwelch")
 	http.Handle("/", router)
-	http.HandleFunc("/_ah/stats/", appstats.AppstatsHandler)
+
 }
 
 func serveError(w http.ResponseWriter, err error) {
