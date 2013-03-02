@@ -82,11 +82,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	ars := AllRequestStats{}
 	for _, v := range items {
-		var buf bytes.Buffer
-		_, _ = buf.Write(v.Value)
-		dec := gob.NewDecoder(&buf)
 		t := stats_part{}
-		err := dec.Decode(&t)
+		err := gob.NewDecoder(bytes.NewBuffer(v.Value)).Decode(&t)
 		if err != nil {
 			continue
 		}
@@ -243,11 +240,8 @@ func Details(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var buf bytes.Buffer
-	_, _ = buf.Write(item.Value)
-	dec := gob.NewDecoder(&buf)
 	full := stats_full{}
-	err = dec.Decode(&full)
+	err = gob.NewDecoder(bytes.NewBuffer(item.Value)).Decode(&full)
 	if err != nil {
 		templates.ExecuteTemplate(w, "details", v)
 		return

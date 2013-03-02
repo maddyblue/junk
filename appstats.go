@@ -140,24 +140,22 @@ func (c Context) Save() {
 	c.stats.Duration = time.Since(c.stats.Start)
 
 	var buf_part, buf_full bytes.Buffer
-	enc_full := gob.NewEncoder(&buf_full)
 	full := stats_full{
 		Header: c.req.Header,
 		Stats:  c.stats,
 	}
-	err := enc_full.Encode(&full)
+	err := gob.NewEncoder(&buf_full).Encode(&full)
 	if err != nil {
 		c.Errorf("appstats Save error: %v", err)
 		return
 	}
-	enc_part := gob.NewEncoder(&buf_part)
 	part := stats_part(*c.stats)
 	for i := range part.RPCStats {
 		part.RPCStats[i].StackData = ""
 		part.RPCStats[i].In = ""
 		part.RPCStats[i].Out = ""
 	}
-	err = enc_part.Encode(&part)
+	err = gob.NewEncoder(&buf_part).Encode(&part)
 	if err != nil {
 		c.Errorf("appstats Save error: %v", err)
 		return
