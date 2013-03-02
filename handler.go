@@ -42,13 +42,13 @@ func init() {
 	templates.Parse(HTML_FILE)
 
 	staticFiles = map[string][]byte{
-		"app_engine_logo_sm.gif": static_app_engine_logo_sm_gif,
-		"appstats_css.css":       static_appstats_css_css,
-		"appstats_js.js":         static_appstats_js_js,
-		"gantt.js":               static_gantt_js,
-		"minus.gif":              static_minus_gif,
-		"pix.gif":                static_pix_gif,
-		"plus.gif":               static_plus_gif,
+		"app_engine_logo_sm.gif": app_engine_logo_sm_gif,
+		"appstats_css.css":       appstats_css_css,
+		"appstats_js.js":         appstats_js_js,
+		"gantt.js":               gantt_js,
+		"minus.gif":              minus_gif,
+		"pix.gif":                pix_gif,
+		"plus.gif":               plus_gif,
 	}
 }
 
