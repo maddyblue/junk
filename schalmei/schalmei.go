@@ -1,7 +1,6 @@
 package schalmei
 
 import (
-	"appengine"
 	"appengine/blobstore"
 	"appengine/datastore"
 	"encoding/json"
@@ -14,8 +13,9 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/mjibson/MiniProfiler/go/miniprofiler"
+	mpg "github.com/mjibson/MiniProfiler/go/miniprofiler_gae"
 	"github.com/mjibson/goon"
-	"github.com/mjibson/appstats"
 )
 
 var router = new(mux.Router)
@@ -47,16 +47,19 @@ func init() {
 		return
 	}
 
-	router.Handle("/", appstats.NewHandler(Main)).Name("main")
-	router.Handle("/rank/create", appstats.NewHandler(RankCreate)).Name("create-rank")
-	router.Handle("/rank/list", appstats.NewHandler(RankList)).Name("list-ranks")
-	router.Handle("/rank/get/{id:[0-9]+}", appstats.NewHandler(RankGet)).Name("get-rank")
-	router.Handle("/upload-url/{id:[0-9]+}", appstats.NewHandler(UploadUrl)).Name("upload-url")
-	router.Handle("/upload-success/{id:[0-9]+}", appstats.NewHandler(UploadSuccess)).Name("upload-success")
-	router.Handle("/note/graph/{key}", appstats.NewHandler(NoteGraph)).Name("note-graph")
-	router.Handle("/note/pwelch/{key}", appstats.NewHandler(NotePwelch)).Name("note-pwelch")
+	router.Handle("/", mpg.NewHandler(Main)).Name("main")
+	router.Handle("/rank/create", mpg.NewHandler(RankCreate)).Name("create-rank")
+	router.Handle("/rank/list", mpg.NewHandler(RankList)).Name("list-ranks")
+	router.Handle("/rank/get/{id:[0-9]+}", mpg.NewHandler(RankGet)).Name("get-rank")
+	router.Handle("/upload-url/{id:[0-9]+}", mpg.NewHandler(UploadUrl)).Name("upload-url")
+	router.Handle("/upload-success/{id:[0-9]+}", mpg.NewHandler(UploadSuccess)).Name("upload-success")
+	router.Handle("/note/graph/{key}", mpg.NewHandler(NoteGraph)).Name("note-graph")
+	router.Handle("/note/pwelch/{key}", mpg.NewHandler(NotePwelch)).Name("note-pwelch")
 	http.Handle("/", router)
 
+	miniprofiler.Position = "right"
+	miniprofiler.ShowControls = false
+	miniprofiler.Enable = func(r *http.Request) bool { return true }
 }
 
 func serveError(w http.ResponseWriter, err error) {
@@ -64,15 +67,24 @@ func serveError(w http.ResponseWriter, err error) {
 	fmt.Println("serve error:", err)
 }
 
-func Main(c appengine.Context, w http.ResponseWriter, r *http.Request) {
-	err := templates.ExecuteTemplate(w, "base.html", nil)
+func Main(c mpg.Context, w http.ResponseWriter, r *http.Request) {
+	/*
+		datastore.AllocateIDs(c, "raank", nil, 5)
+		n := goon.FromContext(c)
+		q := datastore.NewQuery("raank")
+		q = q.KeysOnly()
+		q = q.Limit(10)
+		var gg []Rank
+		n.GetAll(q, &gg)
+	*/
 
+	err := templates.ExecuteTemplate(w, "base.html", miniprofiler.Includes(r, c.P))
 	if err != nil {
 		serveError(w, err)
 	}
 }
 
-func RankCreate(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+func RankCreate(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 	b, _ := ioutil.ReadAll(r.Body)
 
 	var g Rank
@@ -93,7 +105,7 @@ func RankCreate(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func RankList(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+func RankList(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 	g := goon.FromContext(c)
 	q := datastore.NewQuery(goon.Kind(Rank{}))
 	var gg []*Rank
@@ -113,7 +125,7 @@ func RankList(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func RankGet(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+func RankGet(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	s := vars["id"]
 	id, _ := strconv.ParseInt(s, 10, 64)
@@ -148,7 +160,7 @@ func RankGet(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func UploadUrl(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+func UploadUrl(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	url, _ := router.Get("upload-success").URL("id", vars["id"])
 	url, _ = blobstore.UploadURL(c, url.String(), nil)
@@ -156,7 +168,7 @@ func UploadUrl(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func UploadSuccess(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+func UploadSuccess(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	blobs, values, err := blobstore.ParseUpload(r)
@@ -218,7 +230,7 @@ func UploadSuccess(c appengine.Context, w http.ResponseWriter, r *http.Request) 
 	http.Redirect(w, r, url.String(), http.StatusFound)
 }
 
-func NoteGraph(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+func NoteGraph(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, _ := datastore.DecodeKey(vars["key"])
 	n := &Note{}
@@ -231,7 +243,7 @@ func NoteGraph(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, n.Chart(wv, reqId))
 }
 
-func NotePwelch(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+func NotePwelch(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, _ := datastore.DecodeKey(vars["key"])
 	n := &Note{}
