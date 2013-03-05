@@ -4,7 +4,7 @@
   <title><![CDATA[Matt Jibson's Blog]]></title>
   <link href="http://mjibson.github.com/atom.xml" rel="self"/>
   <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-04T20:09:45-05:00</updated>
+  <updated>2013-03-04T20:10:43-05:00</updated>
   <id>http://mjibson.github.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
@@ -12,6 +12,422 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Careers Localization, part 3: Extraction with Roslyn and Uglify]]></title>
+    <link href="http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
+    <updated>2013-03-01T15:52:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
+    <content type="html"><![CDATA[<p><a href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
+
+<p>The difficulty is to extract all of the strings so that they can be sent to translators. Compounding this difficulty, we also must make sure to send the correct number of <strong>plural forms</strong> to the translators. Look at the example below. <code>__count</code> does not appear in the translated string, only in the values object. This means we must, at extraction time, understand these value objects and be able to reason about them&#8212;we must know their types.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;There is a unicorn&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">__count</span> <span class="o">=</span> <span class="mi">3</span> <span class="p">})</span> <span class="c1">// &quot;There are some unicorns&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are a few bad ways to do this:</p>
+
+<ul>
+<li>build a parser by hand to deal with this (possible, but fragile, error-prone, and silently oblivious to things it does not support)</li>
+<li>search or grep</li>
+<li><a href="http://stackoverflow.com/a/1732454/864236">regex</a></li>
+</ul>
+
+
+<p>Our first solution was the hand-built parser. It worked reasonbly well, but there were known, unfixable bugs. We needed a solution that allowed us to have full syntatic and semantic understanding of source code files. Syntax for knowing the tree of the source code: function calls, argument lists, object access. Semantic for seeing into object types and values.</p>
+
+<h2>C# and Razor extraction with Roslyn</h2>
+
+<p>The C# team at Microsoft has been working on a project called <a href="http://msdn.microsoft.com/en-us/vstudio/roslyn.aspx">Roslyn</a>. It is a programmatic way to access the syntax tree and semantic model of C# files. That means that we can hand it a C# file and then search through it looking for certain kinds of things, and act on them. Roslyn comes with a SyntaxWalker class that walks over each node. You can override the one you want. In our case, we want any invocation (function call) named <code>_s</code> or <code>_m</code>:</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">private</span> <span class="k">static</span> <span class="n">readonly</span> <span class="n">IEnumerable</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">SINGLE_LINE</span> <span class="o">=</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">&quot;_s&quot;</span><span class="p">,</span> <span class="s">&quot;_m&quot;</span> <span class="p">};</span>
+</span><span class='line'><span class="k">public</span> <span class="n">override</span> <span class="kt">void</span> <span class="n">VisitInvocationExpression</span><span class="p">(</span><span class="n">InvocationExpressionSyntax</span> <span class="n">node</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">base</span><span class="p">.</span><span class="n">VisitInvocationExpression</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">callname</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">Expression</span><span class="p">.</span><span class="n">GetText</span><span class="p">().</span><span class="n">ToString</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">SINGLE_LINE</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">callname</span><span class="p">.</span><span class="n">EndsWith</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">var</span> <span class="n">stringInfo</span> <span class="o">=</span> <span class="n">StringInfo</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">stringInfo</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>          <span class="c1">// save it somewhere</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we&#8217;re trying to create a new <code>StringInfo</code> (just a container class). We need to examine our <code>node.ArgumentList</code> and see if the first argument is a string. We use C#&#8217;s dynamic feature coupled with various ways to call <code>StringInfo.Create</code> to easily support different types of arguments (noted in comments above the functions):</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="c1">// _s(&quot;string&quot;, object) (object may contain __count)</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="n">StringInfo</span> <span class="n">Create</span><span class="p">(</span><span class="n">ArgumentListSyntax</span> <span class="n">args</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">first</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">Arguments</span><span class="p">.</span><span class="n">FirstOrDefault</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">first</span> <span class="o">==</span> <span class="n">null</span> <span class="o">||</span> <span class="n">first</span><span class="p">.</span><span class="n">Expression</span><span class="p">.</span><span class="n">Kind</span> <span class="o">!=</span> <span class="n">SyntaxKind</span><span class="p">.</span><span class="n">StringLiteralExpression</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">var</span> <span class="n">stringInfo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringInfo</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">Text</span> <span class="o">=</span> <span class="n">first</span><span class="p">.</span><span class="n">Expression</span><span class="p">.</span><span class="n">GetFirstToken</span><span class="p">().</span><span class="n">ValueText</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">var</span> <span class="n">second</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">Arguments</span><span class="p">.</span><span class="n">Skip</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">FirstOrDefault</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">stringInfo</span><span class="p">.</span><span class="n">Count</span> <span class="o">=</span> <span class="n">HasCount</span><span class="p">((</span><span class="n">dynamic</span><span class="p">)</span><span class="n">second</span><span class="p">.</span><span class="n">Expression</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">stringInfo</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// _s(&quot;string only&quot;) (no object, no __count)</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="n">StringInfo</span> <span class="n">Create</span><span class="p">(</span><span class="n">LiteralExpressionSyntax</span> <span class="n">literal</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">literal</span> <span class="o">==</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="n">StringInfo</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">Text</span> <span class="o">=</span> <span class="n">literal</span><span class="p">.</span><span class="n">Token</span><span class="p">.</span><span class="n">ValueText</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">Count</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, now we&#8217;ve got our string. Next we need to figure out if <code>__count</code> is part of the object. We&#8217;ve implemented various ways to determine <code>HasCount()</code>, as referenced above on line 14. Again, C#&#8217;s dynamic proves useful.</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">private</span> <span class="k">const</span> <span class="n">string</span> <span class="n">COUNT</span> <span class="o">=</span> <span class="s">&quot;__count&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// _s(&quot;string&quot;, new { __count = 1 })</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">AnonymousObjectCreationExpressionSyntax</span> <span class="n">arg</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">arg</span><span class="p">.</span><span class="n">Initializers</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">x</span> <span class="o">=&gt;</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">NameEquals</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>              <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">NameEquals</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="n">Identifier</span><span class="p">.</span><span class="n">ValueText</span> <span class="o">==</span> <span class="n">COUNT</span><span class="p">;</span> <span class="c1">// see if __count is part of the object</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">HasCount</span><span class="p">((</span><span class="n">dynamic</span><span class="p">)</span><span class="n">x</span><span class="p">.</span><span class="n">Expression</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span> <span class="c1">// otherwise throw it back</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// _s(&quot;string&quot;, obj)</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">IdentifierNameSyntax</span> <span class="n">arg</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// we already have an object, just see if it has __count</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">symbols</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">LookupSymbols</span><span class="p">(</span><span class="n">arg</span><span class="p">.</span><span class="n">Span</span><span class="p">.</span><span class="n">Start</span><span class="p">,</span> <span class="nl">name:</span> <span class="n">arg</span><span class="p">.</span><span class="n">Identifier</span><span class="p">.</span><span class="n">ValueText</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">first</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">.</span><span class="n">First</span><span class="p">();</span>
+</span><span class='line'>  <span class="n">TypeSymbol</span> <span class="n">type</span> <span class="o">=</span> <span class="p">((</span><span class="n">dynamic</span><span class="p">)</span><span class="n">first</span><span class="p">).</span><span class="n">Type</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">type</span><span class="p">.</span><span class="n">GetMembers</span><span class="p">(</span><span class="n">COUNT</span><span class="p">).</span><span class="n">Any</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// _s(&quot;string&quot;, obj.member)</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">MemberAccessExpressionSyntax</span> <span class="n">arg</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// extract out member...</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">name</span> <span class="o">=</span> <span class="n">arg</span><span class="p">.</span><span class="n">Expression</span> <span class="n">as</span> <span class="n">IdentifierNameSyntax</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1">// ...and try some of our above functions</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// anything else</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">ExpressionSyntax</span> <span class="n">arg</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above tries all variants (that were in our code) that might contain <code>__count</code> somehow. The use of dynamic allows us to not care about the kind of expression, which is determined during runtime, and then the appropriate version of <code>HasCount()</code> is called. Here&#8217;s <a href="https://gist.github.com/mjibson/5052106#file-extractor-cs">a gist</a> of it all (it&#8217;s got some other features not listed here).</p>
+
+<p>The above covers our C# controllers. For the Razor views, we cheat a bit. The ASP.NET compiler is invoked which converts the views into C# files, then the same extraction logic is run on those. This is much easier than trying to write a full razor parser.</p>
+
+<h2>JavaScript extraction with UglifyJS</h2>
+
+<p>For JavaScript, we use a similar technique. <a href="https://github.com/mishoo/UglifyJS">UglifyJS</a> is a JavaScript-based JavaScript parser. It also can return a syntax tree, which we can examine for uses of <code>_s</code>, from which we can extract strings and objects. It&#8217;s a pretty hideous function and not worth pasting, but <a href="https://gist.github.com/mjibson/5052106#file-extractor-js">here it is</a>.</p>
+
+<p>Both of these extractors yield JSON, which is processed in node and sent off to our translation service. We also have a dashboard (built with <a href="http://angularjs.org/">AngularJS</a>) to view all translations, fix them, and reprocess all the files.</p>
+
+<h2>Conclusion</h2>
+
+<p>Having two full language parsers allows us to be flexible. Both our C# and JavaScript implementations are equally functional at all levels&#8212;API, extraction, display&#8212;allowing us to have one unified API in our codebase.</p>
+
+<p>Translation and localization are hard. We spent months refactoring and extending our codebase to support it. But now, we can change, add, and translate strings with little effort, because our tools handle all the hard stuff. If you care about having quality translations (supporting dynamic text insertion and pluralization), whichever solution you use (resource files or gettext-style) must be able to fully understand your code so that it can generate high-quality output to send to translators.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Careers Localization, part 2: The API]]></title>
+    <link href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/"/>
+    <updated>2013-02-28T15:52:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api</id>
+    <content type="html"><![CDATA[<p><a href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Previously</a> we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the way in which we would craft strings to be localized.</p>
+
+<h2>Markup</h2>
+
+<p>We chose to use gettext-style translation strings (i.e., not resource files where strings are identified somehow, instead we just indicate the English string right where it will be shown). We chose a syntax that allows dynamic variable replacement and easy pluralization, and can work similarly in JavaScript and C#. Here&#8217;s what we came up with:</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;Unicorns prance&quot;</span><span class="p">)</span> <span class="c1">// &quot;Unicorns prance&quot;</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;$name$ have horns&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Unicorns&quot;</span> <span class="p">})</span> <span class="c1">// &quot;Unicorns have horns&quot;</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;There are $__count$ unicorns&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">__count</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">})</span> <span class="c1">// &quot;There is 1 unicorn&quot;</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;There is a unicorn&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">__count</span> <span class="o">=</span> <span class="mi">3</span> <span class="p">})</span> <span class="c1">// &quot;There are some unicorns&quot;</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="err">@</span><span class="s">&quot;</span>
+</span><span class='line'>  <span class="n">Multi</span>
+</span><span class='line'>  <span class="n">line</span>
+</span><span class='line'>  <span class="n">supported</span><span class="p">.</span><span class="s">&quot;) // &quot;</span><span class="n">Multi</span> <span class="n">line</span> <span class="n">supported</span><span class="p">.</span><span class="s">&quot; (whitespace collapsed)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>JavaScript</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">_s</span><span class="p">(</span><span class="s1">&#39;Unicorns prance&#39;</span><span class="p">)</span> <span class="c1">// &quot;Unicorns prance&quot; (single or double quotes accepted - any valid JavaScript string)</span>
+</span><span class='line'><span class="nx">_s</span><span class="p">(</span><span class="s2">&quot;$name$ have horns&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Unicorns&quot;</span> <span class="p">})</span> <span class="c1">// &quot;Unicorns have horns&quot;</span>
+</span><span class='line'><span class="nx">_s</span><span class="p">(</span><span class="s1">&#39;There are $__count$ unicorns&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">__count</span><span class="o">:</span> <span class="mi">1</span> <span class="p">})</span> <span class="c1">// &quot;There is 1 unicorn&quot;</span>
+</span><span class='line'><span class="nx">_s</span><span class="p">(</span><span class="s2">&quot;There is a unicorn&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">__count</span><span class="o">:</span> <span class="mi">3</span> <span class="p">})</span> <span class="c1">// &quot;There are some unicorns&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We chose a function named <code>_s</code> that takes a string and an optional values object used for variable replacement. There is a special <code>__count</code> member of the values object which, if it exists, indicates to our translation engine that this is a pluralizeable string. Calls to <code>_s</code> could be in our C# files anywhere in the tree. They could also be in our razor views:</p>
+
+<figure class='code'><figcaption><span>Razor</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="err">@</span><span class="n">_s</span><span class="p">(</span><span class="s">&quot;translate this&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, it also supports existing objects:</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">public</span> <span class="n">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="n">get</span><span class="p">;</span> <span class="n">set</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">var</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="o">=</span> <span class="s">&quot;Jimmy the Unicorn&quot;</span> <span class="p">};</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;$Name$ is here!&quot;</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Markdown</h2>
+
+<p>Requirement 5 from part 1 is to support markdown formatting. The purpose of this requirement was so that we would never send HTML to translators. We do not trust someone else writing our HTML. Thus, we needed support for simplified markdown (only bold, italics, and links). Out of this grew the <code>_m</code> function (m for markdown, in contrast to s for string in <code>_s</code>). This puts certain tweets in perspective.</p>
+
+<blockquote><p>And so begins the drive to redefine &#8220;S&M&#8221; in the company lexicon.</p><footer><strong>@kevinmontrose</strong> <cite><a href='https://twitter.com/kevinmontrose/status/233392144193294336'>twitter.com/kevinmontrose/&hellip;</a></cite></footer></blockquote>
+
+
+<p>With <code>_m</code>, we can do things like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_m</span><span class="p">(</span><span class="s">&quot;Hi, **we hate fun** here at [stack overflow](stackoverflow.com).&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Limitations</h2>
+
+<p>The above API has some problems, or doesn&#8217;t support the following cases:</p>
+
+<h3>Best-practice DOM handling</h3>
+
+<p>Due to the use of markdown instead of HTML, there are some annoyances about how we must treat DOM elements. Let&#8217;s say that, before translation, we had something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span><span class="n">Hello</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">span</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;click&quot;</span><span class="o">&gt;</span><span class="n">click</span> <span class="n">here</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">magic</span><span class="p">.</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="err">$</span><span class="p">(</span><span class="s">&quot;#click&quot;</span><span class="p">).</span><span class="n">click</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In (incorrect) translated form, we would have this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span><span class="err">@</span><span class="n">_s</span><span class="p">(</span><span class="s">&quot;Hello,&quot;</span><span class="p">)</span> <span class="o">&lt;</span><span class="n">span</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;click&quot;</span><span class="o">&gt;</span><span class="err">@</span><span class="n">_s</span><span class="p">(</span><span class="s">&quot;click here&quot;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span> <span class="err">@</span><span class="n">_s</span><span class="p">(</span><span class="s">&quot;for magic.&quot;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is incorrect because the sentence has now been fragmented into three. Translators will then get these three fragments and must translate each on its own, with no power to reorder them if needed in the target language. But, how can we retain the JavaScript action? The <code>&lt;span&gt;</code> in there is not supported since we don&#8217;t allow HTML in translated strings (or, more accurately, we encode all output strings so they are HTML-safe). The solution is to use our markdown formatting and do funky stuff with the DOM. In markdown, we have access to <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code>, thus:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;</span><span class="n">div</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;click&quot;</span><span class="o">&gt;</span><span class="err">@</span><span class="n">_m</span><span class="p">(</span><span class="s">&quot;Hello, **click here** for magic.&quot;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="err">$</span><span class="p">(</span><span class="s">&quot;#click strong&quot;</span><span class="p">).</span><span class="n">click</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>**click here**</code> will render as <code>&lt;strong&gt;click here&lt;/strong&gt;</code>, which we can use in a selector. You must then also apply CSS to disable the normal bolding. Annoying, but it works.</p>
+
+<h3>Gender variants</h3>
+
+<p>Some languages vary articles by the gender (or pluralization) of its object. This is difficult to do because sometimes we don&#8217;t know the gender, and so it&#8217;s impossible to tell the translation engine which gender to use. Consider:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;I&#39;m going to $location$.&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">location</span> <span class="o">=</span> <span class="s">&quot;Brazil&quot;</span> <span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Portuguese, &#8220;to&#8221; varies based on <code>$location$</code>. We need to know the gender and pluralization of <code>$location$</code> (for example, the United States is masculine plural, and so &#8220;to&#8221; would change to &#8220;aos&#8221;). But we allow any location to be entered, so we would have to have that data for each of our target languages for all (or at least many) possible places. We&#8217;re not sure where to get that data, so we&#8217;re not supporting this yet.</p>
+
+<h3>Multiple pluralized words</h3>
+
+<p>We support exactly one <code>__count</code> instance, which means you can&#8217;t have two pluralized words in a sentence. Let&#8217;s consider the following case, assuming we wish to support any number of pluralizable words:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;I have $count1$ rainbows and $count2$ pandas.&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">count1</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">count2</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>English, German, French (and many others) have two plural forms (singular and other). This means we would have to generate <code>2 ^ 2 = 4</code> combinations of sentences to be pluralized:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">1</span> <span class="n">rainbow</span> <span class="n">and</span> <span class="mi">1</span> <span class="n">panda</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">1</span> <span class="n">rainbow</span> <span class="n">and</span> <span class="n">N</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">N</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">1</span> <span class="n">panda</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">N</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="n">N</span> <span class="n">pandas</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are languages that have <a href="http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html">up to six</a> plural forms: zero, one, two, few, many, other. So, for the above example string, we would have to generate <code>6 ^ 2 = 36</code> combinations:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">0</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">1</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">2</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">few</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">many</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">other</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="c1">// Etc., with all combinations:</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">few</span><span class="p">,</span> <span class="n">many</span><span class="p">,</span> <span class="n">other</span><span class="p">]</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">few</span><span class="p">,</span> <span class="n">many</span><span class="p">,</span> <span class="n">other</span><span class="p">]</span> <span class="n">pandas</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These must all be generated for translation because it is possible that in the target language, the surrounding words could change. For instance, maybe &#8220;have&#8221; changes based on the object, instead of the subject, as in English. Due to this complication, we capped pluralization at one item per string.</p>
+
+<h3>Other things we don&#8217;t know about</h3>
+
+<p>There are many languages, and we&#8217;re sure some of them have constructs that the above API doesn&#8217;t support at all.</p>
+
+<h2>Conclusion</h2>
+
+<p>The API allows us to do almost everything we need. The limitations ended up being truly limiting in only a few cases, and those could be worked around be restructuring the sentence. The next problem: how do we actually find the usages of <code>_s</code> and send them off to translators?</p>
+
+<p><a href="http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/">Part 3: Extraction</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 1: Why Roll Our Own?]]></title>

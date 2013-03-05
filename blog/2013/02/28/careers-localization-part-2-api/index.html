@@ -1,0 +1,455 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Careers Localization, part 2: The API - Matt Jibson's Blog</title>
+  <meta name="author" content="Matt Jibson">
+
+  
+  <meta name="description" content="Previously we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Matt Jibson's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26568697-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Matt Jibson's Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mjibson.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Careers Localization, part 2: The API</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-28T15:52:00-05:00" pubdate data-updated="true">Feb 28<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Previously</a> we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the way in which we would craft strings to be localized.</p>
+
+<h2>Markup</h2>
+
+<p>We chose to use gettext-style translation strings (i.e., not resource files where strings are identified somehow, instead we just indicate the English string right where it will be shown). We chose a syntax that allows dynamic variable replacement and easy pluralization, and can work similarly in JavaScript and C#. Here&#8217;s what we came up with:</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;Unicorns prance&quot;</span><span class="p">)</span> <span class="c1">// &quot;Unicorns prance&quot;</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;$name$ have horns&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Unicorns&quot;</span> <span class="p">})</span> <span class="c1">// &quot;Unicorns have horns&quot;</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;There are $__count$ unicorns&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">__count</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">})</span> <span class="c1">// &quot;There is 1 unicorn&quot;</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;There is a unicorn&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">__count</span> <span class="o">=</span> <span class="mi">3</span> <span class="p">})</span> <span class="c1">// &quot;There are some unicorns&quot;</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="err">@</span><span class="s">&quot;</span>
+</span><span class='line'>  <span class="n">Multi</span>
+</span><span class='line'>  <span class="n">line</span>
+</span><span class='line'>  <span class="n">supported</span><span class="p">.</span><span class="s">&quot;) // &quot;</span><span class="n">Multi</span> <span class="n">line</span> <span class="n">supported</span><span class="p">.</span><span class="s">&quot; (whitespace collapsed)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>JavaScript</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">_s</span><span class="p">(</span><span class="s1">&#39;Unicorns prance&#39;</span><span class="p">)</span> <span class="c1">// &quot;Unicorns prance&quot; (single or double quotes accepted - any valid JavaScript string)</span>
+</span><span class='line'><span class="nx">_s</span><span class="p">(</span><span class="s2">&quot;$name$ have horns&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Unicorns&quot;</span> <span class="p">})</span> <span class="c1">// &quot;Unicorns have horns&quot;</span>
+</span><span class='line'><span class="nx">_s</span><span class="p">(</span><span class="s1">&#39;There are $__count$ unicorns&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">__count</span><span class="o">:</span> <span class="mi">1</span> <span class="p">})</span> <span class="c1">// &quot;There is 1 unicorn&quot;</span>
+</span><span class='line'><span class="nx">_s</span><span class="p">(</span><span class="s2">&quot;There is a unicorn&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">__count</span><span class="o">:</span> <span class="mi">3</span> <span class="p">})</span> <span class="c1">// &quot;There are some unicorns&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We chose a function named <code>_s</code> that takes a string and an optional values object used for variable replacement. There is a special <code>__count</code> member of the values object which, if it exists, indicates to our translation engine that this is a pluralizeable string. Calls to <code>_s</code> could be in our C# files anywhere in the tree. They could also be in our razor views:</p>
+
+<figure class='code'><figcaption><span>Razor</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="err">@</span><span class="n">_s</span><span class="p">(</span><span class="s">&quot;translate this&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, it also supports existing objects:</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">public</span> <span class="n">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="n">get</span><span class="p">;</span> <span class="n">set</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">var</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="o">=</span> <span class="s">&quot;Jimmy the Unicorn&quot;</span> <span class="p">};</span>
+</span><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;$Name$ is here!&quot;</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Markdown</h2>
+
+<p>Requirement 5 from part 1 is to support markdown formatting. The purpose of this requirement was so that we would never send HTML to translators. We do not trust someone else writing our HTML. Thus, we needed support for simplified markdown (only bold, italics, and links). Out of this grew the <code>_m</code> function (m for markdown, in contrast to s for string in <code>_s</code>). This puts certain tweets in perspective.</p>
+
+<blockquote><p>And so begins the drive to redefine &#8220;S&M&#8221; in the company lexicon.</p><footer><strong>@kevinmontrose</strong> <cite><a href='https://twitter.com/kevinmontrose/status/233392144193294336'>twitter.com/kevinmontrose/&hellip;</a></cite></footer></blockquote>
+
+
+<p>With <code>_m</code>, we can do things like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_m</span><span class="p">(</span><span class="s">&quot;Hi, **we hate fun** here at [stack overflow](stackoverflow.com).&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Limitations</h2>
+
+<p>The above API has some problems, or doesn&#8217;t support the following cases:</p>
+
+<h3>Best-practice DOM handling</h3>
+
+<p>Due to the use of markdown instead of HTML, there are some annoyances about how we must treat DOM elements. Let&#8217;s say that, before translation, we had something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span><span class="n">Hello</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">span</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;click&quot;</span><span class="o">&gt;</span><span class="n">click</span> <span class="n">here</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">magic</span><span class="p">.</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="err">$</span><span class="p">(</span><span class="s">&quot;#click&quot;</span><span class="p">).</span><span class="n">click</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In (incorrect) translated form, we would have this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span><span class="err">@</span><span class="n">_s</span><span class="p">(</span><span class="s">&quot;Hello,&quot;</span><span class="p">)</span> <span class="o">&lt;</span><span class="n">span</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;click&quot;</span><span class="o">&gt;</span><span class="err">@</span><span class="n">_s</span><span class="p">(</span><span class="s">&quot;click here&quot;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span> <span class="err">@</span><span class="n">_s</span><span class="p">(</span><span class="s">&quot;for magic.&quot;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is incorrect because the sentence has now been fragmented into three. Translators will then get these three fragments and must translate each on its own, with no power to reorder them if needed in the target language. But, how can we retain the JavaScript action? The <code>&lt;span&gt;</code> in there is not supported since we don&#8217;t allow HTML in translated strings (or, more accurately, we encode all output strings so they are HTML-safe). The solution is to use our markdown formatting and do funky stuff with the DOM. In markdown, we have access to <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code>, thus:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">&lt;</span><span class="n">div</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;click&quot;</span><span class="o">&gt;</span><span class="err">@</span><span class="n">_m</span><span class="p">(</span><span class="s">&quot;Hello, **click here** for magic.&quot;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="err">$</span><span class="p">(</span><span class="s">&quot;#click strong&quot;</span><span class="p">).</span><span class="n">click</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>**click here**</code> will render as <code>&lt;strong&gt;click here&lt;/strong&gt;</code>, which we can use in a selector. You must then also apply CSS to disable the normal bolding. Annoying, but it works.</p>
+
+<h3>Gender variants</h3>
+
+<p>Some languages vary articles by the gender (or pluralization) of its object. This is difficult to do because sometimes we don&#8217;t know the gender, and so it&#8217;s impossible to tell the translation engine which gender to use. Consider:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;I&#39;m going to $location$.&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">location</span> <span class="o">=</span> <span class="s">&quot;Brazil&quot;</span> <span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Portuguese, &#8220;to&#8221; varies based on <code>$location$</code>. We need to know the gender and pluralization of <code>$location$</code> (for example, the United States is masculine plural, and so &#8220;to&#8221; would change to &#8220;aos&#8221;). But we allow any location to be entered, so we would have to have that data for each of our target languages for all (or at least many) possible places. We&#8217;re not sure where to get that data, so we&#8217;re not supporting this yet.</p>
+
+<h3>Multiple pluralized words</h3>
+
+<p>We support exactly one <code>__count</code> instance, which means you can&#8217;t have two pluralized words in a sentence. Let&#8217;s consider the following case, assuming we wish to support any number of pluralizable words:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;I have $count1$ rainbows and $count2$ pandas.&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">count1</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">count2</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>English, German, French (and many others) have two plural forms (singular and other). This means we would have to generate <code>2 ^ 2 = 4</code> combinations of sentences to be pluralized:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">1</span> <span class="n">rainbow</span> <span class="n">and</span> <span class="mi">1</span> <span class="n">panda</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">1</span> <span class="n">rainbow</span> <span class="n">and</span> <span class="n">N</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">N</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">1</span> <span class="n">panda</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">N</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="n">N</span> <span class="n">pandas</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are languages that have <a href="http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html">up to six</a> plural forms: zero, one, two, few, many, other. So, for the above example string, we would have to generate <code>6 ^ 2 = 36</code> combinations:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">0</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">1</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="mi">2</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">few</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">many</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="n">other</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="mi">0</span> <span class="n">pandas</span><span class="p">.</span>
+</span><span class='line'><span class="c1">// Etc., with all combinations:</span>
+</span><span class='line'><span class="n">I</span> <span class="n">have</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">few</span><span class="p">,</span> <span class="n">many</span><span class="p">,</span> <span class="n">other</span><span class="p">]</span> <span class="n">rainbows</span> <span class="n">and</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">few</span><span class="p">,</span> <span class="n">many</span><span class="p">,</span> <span class="n">other</span><span class="p">]</span> <span class="n">pandas</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These must all be generated for translation because it is possible that in the target language, the surrounding words could change. For instance, maybe &#8220;have&#8221; changes based on the object, instead of the subject, as in English. Due to this complication, we capped pluralization at one item per string.</p>
+
+<h3>Other things we don&#8217;t know about</h3>
+
+<p>There are many languages, and we&#8217;re sure some of them have constructs that the above API doesn&#8217;t support at all.</p>
+
+<h2>Conclusion</h2>
+
+<p>The API allows us to do almost everything we need. The limitations ended up being truly limiting in only a few cases, and those could be worked around be restructuring the sentence. The next problem: how do we actually find the usages of <code>_s</code> and send them off to translators?</p>
+
+<p><a href="/blog/2013/03/01/careers-localization-part-3-extraction/">Part 3: Extraction</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Jibson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-28T15:52:00-05:00" pubdate data-updated="true">Feb 28<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/careers/'>careers</a>, <a class='category' href='/blog/categories/localization/'>localization</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/" data-via="mjibson" data-counturl="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/" title="Previous Post: Careers Localization, part 1: Why Roll Our Own?">&laquo; Careers Localization, part 1: Why Roll Our Own?</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/03/01/careers-localization-part-3-extraction/" title="Next Post: Careers Localization, part 3: Extraction with Roslyn and Uglify">Careers Localization, part 3: Extraction with Roslyn and Uglify &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+	<h1><a href="/about">About Matt</a></h1>
+	<p><b>Matt Jibson</b> works at <a href="http://stackexchange.com/">Stack Exchange</a> on <a href="http://careers.stackoverflow.com/">Careers 2.0</a>. I play piano and pipe organ.
+	</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/01/careers-localization-part-3-extraction/">Careers Localization, part 3: Extraction with Roslyn and Uglify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/careers-localization-part-2-api/">Careers Localization, part 2: The API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/05/appstats-for-go/">Appstats for Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/10/job-offers-are-not-demands/">Job offers are not demands</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("mjibson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/mjibson" class="twitter-follow-button" data-show-count="false">Follow @mjibson</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Matt Jibson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'mjibson-blog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/';
+        var disqus_url = 'http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

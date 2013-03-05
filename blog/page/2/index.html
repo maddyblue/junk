@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Jibson">
 
   
-  <meta name="description" content="I just completed all the basic functionality for a fully-working FFT implementation. It supports inputs as arrays of real or complex values, with the &hellip;">
+  <meta name="description" content="After reading Russ Cox&#8217;s regular expression articles, I became interested in porting his RE2 library to C#. These posts will describe my effort &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,173 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/">re2net - part 1: C# RE2 implementation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-02T15:57:00-04:00" pubdate data-updated="true">May 2<span>nd</span>, 2012</time>
+        
+         | <a href="/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After reading Russ Cox&#8217;s <a href="http://swtch.com/~rsc/regexp/regexp1.html">regular expression articles</a>, I became interested in porting his <a href="http://code.google.com/p/re2/">RE2</a> library to C#. These posts will describe my effort to port the entire library, which I will do in steps. I know that one could just link to the RE2 library, but I am porting this as an academic exercise to learn C# and regular expression parsing.</p>
+
+<p>The full RE2 implementation is somewhat large. So, for now, I have started with something simpler: porting <a href="http://swtch.com/~rsc/regexp/nfa.c.txt">nfa.c</a>, which is now <a href="https://github.com/mjibson/re2net/commit/4deade8190159843ee512e8b99da5fbaa68fa1e4">committed</a>.</p>
+
+<h3>Performance</h3>
+
+<p>There is a simple script that generates the a?<sup>(n)a<sup>(n)</sup></sup> regexes and compares the performance between this simple nfa implementation and C#&#8217;s Regex class. The results (posted below) conform exactly to those posted in the article.</p>
+
+<p>n, nfa match time (s), C# Regex match time (s):</p>
+
+<pre>
+01: 00.0040588, 00.0000321
+02: 00.0000299, 00.0000027
+03: 00.0000188, 00.0000018
+04: 00.0000142, 00.0000021
+05: 00.0000191, 00.0000030
+06: 00.0000244, 00.0000052
+07: 00.0000343, 00.0000092
+08: 00.0000405, 00.0000231
+09: 00.0000569, 00.0000343
+10: 00.0000671, 00.0000683
+11: 00.0000794, 00.0001336
+12: 00.0001039, 00.0002665
+13: 00.0001218, 00.0005337
+14: 00.0001447, 00.0010694
+15: 00.0001673, 00.0021296
+16: 00.0005155, 00.0047231
+17: 00.0002180, 00.0085827
+18: 00.0002226, 00.0167507
+19: 00.0002501, 00.0322935
+20: 00.0004020, 00.0742515
+21: 00.0005820, 00.1423361
+22: 00.0004060, 00.2887820
+23: 00.0004518, 00.5772489
+24: 00.0005170, 01.1505112
+25: 00.0005616, 02.3019515
+26: 00.0006077, 04.6177123
+27: 00.0009324, 09.1860805
+28: 00.0007561, 18.5854136
+29: 00.0010960, 37.6036043
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/">How I got a job at Stack Overflow</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-28T15:58:00-04:00" pubdate data-updated="true">Apr 28<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just got a job at <a href="http://stackexchange.com/">Stack Exchange</a>. The experience was interesting enough and I learned a few things that could be valuable to others.</p>
+
+<p>We are still hiring <a href="http://careers.stackoverflow.com/jobs/16279/software-developer-new-york-stack-exchange?a=jetqDpm">another developer</a> if you are interested after reading.</p>
+
+<h3>Motivation</h3>
+
+<p>My previous job was good. Some interesting work, some boring work, and a potentially awesome project coming down the pipeline. I was making internal web apps for the firmware department of a hard drive company, and had opportunities to do anything I wanted (stay, work on firmware or other cool stuff). However, the town I was living in (Longmont, CO) was downright boring for a single person, and I wanted to leave as soon as possible just to get out.</p>
+
+<h3>The Bug</h3>
+
+<p>I visited a friend who lives in New York City over Thanksgiving. I visited <a href="http://www.topoftherocknyc.com/">Top of the Rock</a>, which is an observation deck on top of one of the taller buildings right in the middle of the city. You can see almost all of Manhattan up there, and it&#8217;s mesmerizing. While I was there I decided that New York was the place for me. The next few weeks I became more and more convinced that that was where I wanted to live. I decided to start applying for jobs at the start of the new year. And I had to get out of my city.</p>
+
+<h3>(This is not a plug)</h3>
+
+<p>Being a programmer, I use Stack Overflow. I had thus seen the displays for the <a href="http://careers.stackoverflow.com/">careers</a> site. Hey, why not use that to find a job? Ok. I made a profile, which I got to do because of my github activity, and started applying for jobs. (Yes, I ended up finding a job on the same site I am currently employed to work on. I thought it was the best way to find an awesome job, and it was. So, this isn&#8217;t a plug, it&#8217;s just the truth.)</p>
+
+<p>I applied for around 7 jobs near the first of the year. Two said to take an online test, two never replied or disappeared, and one scheduled a phone interview. The phone interview went horribly. The guy asked me one of the questions verbatim from <a href="http://www.joelonsoftware.com/articles/ThePhoneScreen.html">Joel&#8217;s article</a> and I had no idea what to say. No callback. I started studying <a href="http://www.cs.bell-labs.com/cm/cs/pearls/">Programming Pearls</a>.</p>
+
+<h3>Progress</h3>
+
+<p>I did one of the online code tests and got a phone interview a while later from that company. After a second phone interview (both were writing code on a shared document) they flew me out for a few days. Thursday was interviews (coding on a laptop, really hard and fun problems) all day. They asked me to return Friday to work on their product like a normal developer. I thought this was brilliant. A way to see how a candidate actually does the job. I liked them a lot because of how rigorous the interviews were. I wanted to work at a place that was highly demanding of everyone who worked there. They said they&#8217;d get in touch in a day or two. Two weeks later (about a month total) they declined to make an offer, and I was still stuck in a city I hated.</p>
+
+<p>I had suspected I wasn&#8217;t going to get an offer, so I applied (early February) to four more companies. Lots of phone interviews later and I have two onsite interviews scheduled for the same weekend. Of note is that neither of these two companies had had me write any code. I know that not everyone likes code writing interviews, but I do. They&#8217;re difficult. I want to work with people who can do that kind of difficult thing. The first company is a very small startup. They had me do some thinking out loud, database, and design questions. Cool product; I liked them, and they seemed to like me. Second company is more established. They just finished their new office. They had me do an hour-long written test which covered a wide range of stuff. I met with people from various organizations. They were nice, and I was okay, but not thrilled, with their product. Each said they&#8217;d get back to me very soon. Two weeks later, both declined. At this point I was ready to just up and move to New York I wanted to leave so badly.</p>
+
+<h3>First round of lessons</h3>
+
+<p>The count at this point was around 10 applications, phone screens with 7 companies, on site interviews with 3, and 0 offers. What was I doing wrong? I honestly wasn&#8217;t sure. Why did they all take two weeks to figure out they didn&#8217;t want me? Is it that hard?</p>
+
+<p>My guess is that there was a <strong>culture mismatch</strong>. I think I did well in the interviews and was technically qualified for all three jobs. But something about our interaction didn&#8217;t convince them that I was &#8220;the guy&#8221;. I think they had a two week process of saying back and forth to themselves: &#8220;He&#8217;s qualified: hire him.&#8221; &#8220;But he won&#8217;t love working here: no hire.&#8221; &#8220;So? He&#8217;ll still do good work.&#8221; &#8220;But not awesome work.&#8221; After two weeks, they either got bored or found someone else who was a better fit. My internal dialogue, however, was going like this: &#8220;I thought I knew how to program good.&#8221; &#8220;No, clearly you don&#8217;t.&#8221; &#8220;But look at all the typing I did on github!&#8221; &#8220;Even cats can type.&#8221; &#8220;:(&#8220;.</p>
+
+<h3>Proof of concept</h3>
+
+<p>At this point I was crazy to move to New York. But during the double interview weekend, Stack Exchange asked for a phone interview. I was shocked. I have read all of Joel&#8217;s articles, and I know how hard it seems to get a job there. I figured getting a job at Stack Exchange is at least as difficult at getting a job at Google (to which I did not apply, because I thought I wasn&#8217;t smart enough).</p>
+
+<p>Phone interview went, well, pretty much like their article describes. Fizzbuzz-like question. Easy pass. Harder, fun, thoughtful question with coding. Pass. Same thing with another guy. Pass. Fly out for interviews and meet Joel. Cool. Things were happening.</p>
+
+<p>On site interviews also went exactly like their articles describe. No written schedule, just one interview after the next, all coding and experience questions. Lunch downstairs with the Fog Creek guys. Gape and drool at their office space a little, but pretend like I&#8217;m used to it. Joel was sick that day, so I spoke with Michael Pryor. I&#8217;m not sure whether I should be happy with myself or not, but he asked a question that he has been asking for years, and I came up with a solution that he has never seen. I had to stop at points to carefully explain something I thought was obvious that was apparently not. Again, I&#8217;m not sure to interpret this as a good or a bad thing. (Maybe all the smart guys come up with the same smart solution. Maybe I&#8217;m so untrained that I just made something up that really isn&#8217;t that great.)</p>
+
+<p>Apparently it was good enough. I walked out of their offices feeling good, used the restroom, and went to the elevator to catch the car back to the airport. During the one minute that I was waiting for the elevator, the VP of Engineering came out and told me that they were going to make me an offer, which I accepted a week later. I was living in New York less than two weeks after that. (I resigned and decided to move before I had a job offer. I really wanted to leave.)</p>
+
+<h3>More lessons</h3>
+
+<p>Let&#8217;s compare: the first three declined offers took <strong>two weeks</strong> to respond to me. Stack Exchange took <strong>two minutes</strong>. Culture mismatch? Not in the slightest. Love the company and the product? Definitely. I get to work on something that helps developers find better jobs. Something I desperately needed and got.</p>
+
+<p>I am thrilled that those first three companies didn&#8217;t hire me. I am happier here than I would have been there. Technical ability is important, but not everything.</p>
+
+<h3>Most important lesson</h3>
+
+<p>But the most important lesson I got from all of this? <strong>Anyone can work for a dream company.</strong> I say this because I do not feel that I&#8217;m some rockstar programmer. I&#8217;ve just worked and learned like everyone else. I studied writings from some smart programmers, learned a few languages and systems, and in the end got a job at a place that I had been dreaming of working at for over 10 years, when I first heard of them (that is, any company run by Joel and Michael).</p>
+
+<p>Want a job at a dream company? Work and study, and it&#8217;s possible. Not getting offers? Maybe it&#8217;s not evidence that you aren&#8217;t that great, it&#8217;s just that you would fit better somewhere else.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -247,6 +414,14 @@ with some error.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/01/careers-localization-part-3-extraction/">Careers Localization, part 3: Extraction with Roslyn and Uglify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/careers-localization-part-2-api/">Careers Localization, part 2: The API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
       </li>
     
@@ -256,14 +431,6 @@ with some error.</p>
     
       <li class="post">
         <a href="/blog/2013/01/10/job-offers-are-not-demands/">Job offers are not demands</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/">go-dsp FFT performance with go routines</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/20/great-piano-pieces/">Great Piano Pieces</a>
       </li>
     
   </ul>
