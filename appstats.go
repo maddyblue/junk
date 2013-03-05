@@ -171,6 +171,19 @@ func (c Context) Save() {
 		Value: buf_full.Bytes(),
 	}
 
+	c.Infof("Saved; %s: %s, %s: %s, link: %v",
+		item_part.Key,
+		ByteSize(len(item_part.Value)),
+		item_full.Key,
+		ByteSize(len(item_full.Value)),
+		c.URL(),
+	)
+
+	nc := context(c.req)
+	memcache.SetMulti(nc, []*memcache.Item{item_part, item_full})
+}
+
+func (c Context) URL() string {
 	u := url.URL{
 		Scheme:   "http",
 		Host:     c.req.Host,
@@ -178,16 +191,7 @@ func (c Context) Save() {
 		RawQuery: fmt.Sprintf("time=%v", c.Stats.Start.Nanosecond()),
 	}
 
-	c.Infof("Saved; %s: %s, %s: %s, link: %v",
-		item_part.Key,
-		ByteSize(len(item_part.Value)),
-		item_full.Key,
-		ByteSize(len(item_full.Value)),
-		u.String(),
-	)
-
-	nc := context(c.req)
-	memcache.SetMulti(nc, []*memcache.Item{item_part, item_full})
+	return u.String()
 }
 
 func context(r *http.Request) appengine.Context {
