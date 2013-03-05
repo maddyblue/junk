@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: fft | Matt Jibson's Blog]]></title>
+  <link href="http://mjibson.github.com/blog/categories/fft/atom.xml" rel="self"/>
+  <link href="http://mjibson.github.com/"/>
+  <updated>2013-03-04T20:09:45-05:00</updated>
+  <id>http://mjibson.github.com/</id>
+  <author>
+    <name><![CDATA[Matt Jibson]]></name>
+    <email><![CDATA[matt.jibson@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[go-dsp FFT performance with go routines]]></title>
+    <link href="http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/"/>
+    <updated>2013-01-04T03:30:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/mjibson/go-dsp">go-dsp</a> has been around for almost a year now. Recently I have been working on performance improvements. The low-hanging fruit was easy (removing duplicate calculations, smarter array copying, efficient data reordering with bit reversal). The difficult part was getting go routines to work as intended. That is, to have them improve the performance of go-dsp. This turned out to be more difficult than I expected.</p>
+
+<h2>Why the fast Fourier Transform is parallelizable</h2>
+
+<p><a href="http://en.wikipedia.org/wiki/File:DIT-FFT-butterfly.png"><img class="right" src="/assets/images/DIT-FFT-butterfly.png" width="300"></a></p>
+
+<p>The FFT is paralellizable because of how the "fast" part is implemented. Given an input of length <code>L</code>, if there exist integers <code>M</code> and <code>N</code> such that <code>L = M * N</code>, then the original problem (one transform of size <code>L</code>) can be restated as <code>M</code> problems of size <code>N</code>. These <code>M</code> problems can be run in parallel. For example, say I have an input of size 8. I can reform this as 2 inputs of size 4. These 2 inputs can be run in parallel.</p>
+
+<h2>Attempts</h2>
+
+<p>Go's easy support of go routines was the obvious solution here. I went through <a href="https://github.com/mjibson/go-dsp/tree/mp-test">a few solutions</a> until I found one that was <strong>not</strong> slower. What I discovered was that, although the FFT is highly parallelizable, setting up parallelization can easily take more time than it saves. The actual unit of work that is done is just multiplying two pairs of numbers and saving the result.</p>
+
+<p>My first idea was to use wait groups. This involves a synchronized counter. One go routine is spun up per block (there are <code>M</code> blocks, as described above) and the counter incremented. The go routine decrements the counter when it is done. We wait until the counter is back to zero. Since the number of blocks varies from <code>2</code> to <code>L / 2</code>, this means that for about half of the time, so many go routines are spun up to do a very tiny amount of work that overall runtime increases. Ok, so, only do the wait group solution if it'll actually be faster. I ran some tests and found out that (on my machine), if the block size is over 128, it's worthwhile to spin up a new go routine. Remember that this solution was always using a single go routine when we were on smaller block sizes, ignoring any potential multicore speedup.</p>
+
+<p>The second idea was to use worker pools. Since the main problem is the creation (not use) of go routines, spin up as many as we will need up front and then send work off to them. From testing I found that putting the number of workers at the value of <a href="http://golang.org/pkg/runtime/#GOMAXPROCS"><code>GOMAXPROCS</code></a> worked out well. Each worker's job is to multiply the number pair described above. So, for each of the <code>n log n</code> iterations, we are sending off <code>L / 2</code> jobs. This ended up performing almost exactly as good as the above solution for larger block sizes, but had the added benefit of working with smaller block sizes, too. I guessed the reason for the lack of more speedup was the communication overhead. The jobs were sent using channels, which aren't free.</p>
+
+<p>The final solution addressed that problem by changing the number of jobs from <code>L / 2</code> to the block size (which, as a reminder, goes from <code>2</code> to <code>L / 2</code>). So only during one iteration are we sending the same number of jobs over. Almost always are we sending less. Previously, the jobs were specified by an index. This new solution instead specified a min and max index. The subsequent indicies are calculated in the worker itself. This results in much less channel overhead and distributes some work (index calculation) out to workers.</p>
+
+<h2>Results</h2>
+
+<p>The original, single-thread solution contains no multicore logic. It benchmarked at around 505ms. The graphs below show performance at <code>GOMAXPROCS = 6</code> and a FFT size of <code>2 ^ 20 = 1048576</code>.</p>
+
+<p><img src="/assets/images/fftmp-1.png"></p>
+
+<p>Above are results for the first two attempts. The blue line is the original, single-thread control. The green line shows the very poor performance at small block sizes. The red line shows similar performance as green for large block sizes but that it was able to handle smaller block sizes better (but still not great). Minimum runtime was 1.7x faster (267ms minimum).</p>
+
+<p><img src="/assets/images/fftmp-2.png"></p>
+
+<p>Here we see the final solution with indexed worker groups. Minimum runtime was 252ms (2.0x speedup). Not the 6x increase I wanted, but it's not bad.</p>
+
+<p>The final code (using the indexed worker group solution) is now <a href="https://github.com/mjibson/go-dsp">available</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fast Fourier Transform in Go]]></title>
+    <link href="http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go/"/>
+    <updated>2011-12-09T15:59:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go</id>
+    <content type="html"><![CDATA[<p>I just completed all the basic functionality for a fully-working <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> implementation. It supports inputs as arrays of real or complex values, with the inverse transform, too. It is part of my <a href="https://github.com/mjibson/go-dsp">go-dsp project on github</a>.</p>
+
+<p>Install with:</p>
+
+<p><code>$ goinstall "github.com/mjibson/go-dsp/fft"</code></p>
+
+<p>Some example use code:</p>
+
+<pre><code>package main
+
+import "github.com/mjibson/go-dsp/fft"
+import "fmt"
+
+func main() {
+        fmt.Println(fft.FFT_real([]float64 {1, 2, 3}))
+}
+</code></pre>
+
+<h3>Brief introduction to the fast Fourier transform</h3>
+
+<p>Input arrays of length a power of 2 use the radix-2 FFT algorithm (the butterfly one). Inputs of other sizes (non power of 2 and prime lengths) use the Bluestein algorithm. The Bluestein algorithm is interesting because (in contradistinction to the other FFT algorithms for non power of 2 lengths) it works on prime and non-prime lengths. Other solutions require one each for prime and non-prime lengths, so you end up with 3 total algorithms. The purpose of this project was just to get something working, and worry about performance and optimization later.</p>
+
+<p>So, back to Bluestein's algorithm. It works by starting with the definition of the discrete Fourier transform (the fast Fourier transform (FFT) is a way to compute the discrete Fourier transform (DFT)), and then doing some algebra on it. This results in an equation that does an operation known as convolution. Convolution is really hard. So, someone created a way to change convolution into multiplication (really easy). That way is...the Fourier transform! If you take the Fourier transform of two arrays, then multiply the result, and then take the inverse Fourier transform, you have just done convolution. So, you can do the convolution you got from messing with the DFT equation by adding some zeros to the end of the array so it's of length a power of 2, and then use the radix-2 FFT algorithm to do the FFTs, multiply, then inverse FFT back, and you have the DFT of an array of any length.</p>
+]]></content>
+  </entry>
+  
+</feed>

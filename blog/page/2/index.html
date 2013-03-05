@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Matt Jibson's Blog</title>
+  <meta name="author" content="Matt Jibson">
+
+  
+  <meta name="description" content="I just completed all the basic functionality for a fully-working FFT implementation. It supports inputs as arrays of real or complex values, with the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mjibson.github.com/blog/page/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Matt Jibson's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26568697-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Matt Jibson's Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mjibson.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/09/fast-fourier-transform-in-go/">Fast Fourier Transform in Go</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-09T15:59:00-05:00" pubdate data-updated="true">Dec 9<span>th</span>, 2011</time>
+        
+         | <a href="/blog/2011/12/09/fast-fourier-transform-in-go/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just completed all the basic functionality for a fully-working <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> implementation. It supports inputs as arrays of real or complex values, with the inverse transform, too. It is part of my <a href="https://github.com/mjibson/go-dsp">go-dsp project on github</a>.</p>
+
+<p>Install with:</p>
+
+<p><code>$ goinstall "github.com/mjibson/go-dsp/fft"</code></p>
+
+<p>Some example use code:</p>
+
+<pre><code>package main
+
+import "github.com/mjibson/go-dsp/fft"
+import "fmt"
+
+func main() {
+        fmt.Println(fft.FFT_real([]float64 {1, 2, 3}))
+}
+</code></pre>
+
+<h3>Brief introduction to the fast Fourier transform</h3>
+
+<p>Input arrays of length a power of 2 use the radix-2 FFT algorithm (the butterfly one). Inputs of other sizes (non power of 2 and prime lengths) use the Bluestein algorithm. The Bluestein algorithm is interesting because (in contradistinction to the other FFT algorithms for non power of 2 lengths) it works on prime and non-prime lengths. Other solutions require one each for prime and non-prime lengths, so you end up with 3 total algorithms. The purpose of this project was just to get something working, and worry about performance and optimization later.</p>
+
+<p>So, back to Bluestein&#8217;s algorithm. It works by starting with the definition of the discrete Fourier transform (the fast Fourier transform (FFT) is a way to compute the discrete Fourier transform (DFT)), and then doing some algebra on it. This results in an equation that does an operation known as convolution. Convolution is really hard. So, someone created a way to change convolution into multiplication (really easy). That way is&#8230;the Fourier transform! If you take the Fourier transform of two arrays, then multiply the result, and then take the inverse Fourier transform, you have just done convolution. So, you can do the convolution you got from messing with the DFT equation by adding some zeros to the end of the array so it&#8217;s of length a power of 2, and then use the radix-2 FFT algorithm to do the FFTs, multiply, then inverse FFT back, and you have the DFT of an array of any length.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/09/22/journalr/">journalr</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-22T16:00:00-04:00" pubdate data-updated="true">Sep 22<span>nd</span>, 2011</time>
+        
+         | <a href="/blog/2011/09/22/journalr/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just launched <a href="http://journalr.org">journalr</a>, an online journal site. There are almost no online journal sites, and journalr strives to remedy this and encourage more journal writing. It&#8217;s in the early stages, but it&#8217;s good enough to use. I have already begun transcribing my journals from my mission when I spent 2 years in Brazil, and have enjoyed using journalr.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/09/11/webapp2-sessions-with-the-blobstore/">webapp2 sessions with the blobstore</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-11T16:01:00-04:00" pubdate data-updated="true">Sep 11<span>th</span>, 2011</time>
+        
+         | <a href="/blog/2011/09/11/webapp2-sessions-with-the-blobstore/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently started using <a href="http://webapp-improved.appspot.com/api/webapp2_extras/sessions.html">webapp2 sessions</a>, and was happy with how they work. However, when trying to access sessions during an upload to the blobstore, I was not able to since the BlobstoreUploadHandler did not inherit from the new BaseHandler I created as directed by the webapp2 session instructions. I wanted to do this to send a message to the user that their upload was successful, using the <code>add_flash()</code> function. Appending <code>?message=Upload successful.</code> to the redirect URL would have worked, but is lame.</p>
+
+<p>Trying to use it through multiple inheritance also fails:
+<code>class EntryUploadHandler(blobstore_handlers.BlobstoreUploadHandler, BaseUploadHandler):</code>
+with some error.</p>
+
+<p>The solution was to create a BaseUploadHandler class with special handling for sessions. It appears that the upload handler doesn&#8217;t act the same as a normal RequestHandler, so you have to do everything in one place:
+`class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):</p>
+
+<pre><code>def add_message(self, level, message):
+    store = sessions.get_store(request=self.request)
+    session = store.get_session()
+    session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
+    store.save_sessions(self.response)`
+</code></pre>
+
+<p>Full code <a href="https://github.com/mjibson/journalr/blob/master/main.py">here</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+	<h1><a href="/about">About Matt</a></h1>
+	<p><b>Matt Jibson</b> works at <a href="http://stackexchange.com/">Stack Exchange</a> on <a href="http://careers.stackoverflow.com/">Careers 2.0</a>. I play piano and pipe organ.
+	</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/05/appstats-for-go/">Appstats for Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/10/job-offers-are-not-demands/">Job offers are not demands</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/">go-dsp FFT performance with go routines</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/20/great-piano-pieces/">Great Piano Pieces</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("mjibson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/mjibson" class="twitter-follow-button" data-show-count="false">Follow @mjibson</a>
+  
+</section>
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Matt Jibson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'mjibson-blog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

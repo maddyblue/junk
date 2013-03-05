@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>re2net - part 1: C# RE2 implementation - Matt Jibson's Blog</title>
+  <meta name="author" content="Matt Jibson">
+
+  
+  <meta name="description" content="After reading Russ Cox&#8217;s regular expression articles, I became interested in porting his RE2 library to C#. These posts will describe my effort &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Matt Jibson's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26568697-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Matt Jibson's Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mjibson.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">re2net - part 1: C# RE2 implementation</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-02T15:57:00-04:00" pubdate data-updated="true">May 2<span>nd</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>After reading Russ Cox&#8217;s <a href="http://swtch.com/~rsc/regexp/regexp1.html">regular expression articles</a>, I became interested in porting his <a href="http://code.google.com/p/re2/">RE2</a> library to C#. These posts will describe my effort to port the entire library, which I will do in steps. I know that one could just link to the RE2 library, but I am porting this as an academic exercise to learn C# and regular expression parsing.</p>
+
+<p>The full RE2 implementation is somewhat large. So, for now, I have started with something simpler: porting <a href="http://swtch.com/~rsc/regexp/nfa.c.txt">nfa.c</a>, which is now <a href="https://github.com/mjibson/re2net/commit/4deade8190159843ee512e8b99da5fbaa68fa1e4">committed</a>.</p>
+
+<h3>Performance</h3>
+
+<p>There is a simple script that generates the a?<sup>(n)a<sup>(n)</sup></sup> regexes and compares the performance between this simple nfa implementation and C#&#8217;s Regex class. The results (posted below) conform exactly to those posted in the article.</p>
+
+<p>n, nfa match time (s), C# Regex match time (s):</p>
+
+<pre>
+01: 00.0040588, 00.0000321
+02: 00.0000299, 00.0000027
+03: 00.0000188, 00.0000018
+04: 00.0000142, 00.0000021
+05: 00.0000191, 00.0000030
+06: 00.0000244, 00.0000052
+07: 00.0000343, 00.0000092
+08: 00.0000405, 00.0000231
+09: 00.0000569, 00.0000343
+10: 00.0000671, 00.0000683
+11: 00.0000794, 00.0001336
+12: 00.0001039, 00.0002665
+13: 00.0001218, 00.0005337
+14: 00.0001447, 00.0010694
+15: 00.0001673, 00.0021296
+16: 00.0005155, 00.0047231
+17: 00.0002180, 00.0085827
+18: 00.0002226, 00.0167507
+19: 00.0002501, 00.0322935
+20: 00.0004020, 00.0742515
+21: 00.0005820, 00.1423361
+22: 00.0004060, 00.2887820
+23: 00.0004518, 00.5772489
+24: 00.0005170, 01.1505112
+25: 00.0005616, 02.3019515
+26: 00.0006077, 04.6177123
+27: 00.0009324, 09.1860805
+28: 00.0007561, 18.5854136
+29: 00.0010960, 37.6036043
+</pre>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Jibson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-02T15:57:00-04:00" pubdate data-updated="true">May 2<span>nd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/re2net/'>re2net</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/" data-via="mjibson" data-counturl="http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/" title="Previous Post: How I got a job at Stack Overflow">&laquo; How I got a job at Stack Overflow</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/05/29/re2net-part-2-dfa/" title="Next Post: re2net - part 2: DFA">re2net - part 2: DFA &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+	<h1><a href="/about">About Matt</a></h1>
+	<p><b>Matt Jibson</b> works at <a href="http://stackexchange.com/">Stack Exchange</a> on <a href="http://careers.stackoverflow.com/">Careers 2.0</a>. I play piano and pipe organ.
+	</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/05/appstats-for-go/">Appstats for Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/10/job-offers-are-not-demands/">Job offers are not demands</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/">go-dsp FFT performance with go routines</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/20/great-piano-pieces/">Great Piano Pieces</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("mjibson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/mjibson" class="twitter-follow-button" data-show-count="false">Follow @mjibson</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Matt Jibson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'mjibson-blog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/';
+        var disqus_url = 'http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

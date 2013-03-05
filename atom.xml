@@ -1,111 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Matt Jibson's Blog</title>
-  <meta name="author" content="Matt Jibson">
-
-  
-  <meta name="description" content="Localization is a difficult feature to add to a website. A few months ago, we at Stack Overflow Careers localized into German. This took months of &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><![CDATA[Matt Jibson's Blog]]></title>
+  <link href="http://mjibson.github.com/atom.xml" rel="self"/>
+  <link href="http://mjibson.github.com/"/>
+  <updated>2013-03-04T20:09:45-05:00</updated>
+  <id>http://mjibson.github.com/</id>
+  <author>
+    <name><![CDATA[Matt Jibson]]></name>
+    <email><![CDATA[matt.jibson@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-  <link rel="canonical" href="http://mjibson.github.com/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="Matt Jibson's Blog" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-26568697-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Matt Jibson's Blog</a></h1>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:mjibson.github.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/about">About</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-27T15:52:00-05:00" pubdate data-updated="true">Feb 27<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Localization is a difficult feature to add to a website. A few months ago, we at <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a> localized into <a href="http://careers.stackoverflow.com/de/">German</a>. This took months of effort from much of the team. I would like to describe our design and implementation over a few blog posts.</p>
+  <entry>
+    <title type="html"><![CDATA[Careers Localization, part 1: Why Roll Our Own?]]></title>
+    <link href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
+    <updated>2013-02-27T15:52:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
+    <content type="html"><![CDATA[<p>Localization is a difficult feature to add to a website. A few months ago, we at <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a> localized into <a href="http://careers.stackoverflow.com/de/">German</a>. This took months of effort from much of the team. I would like to describe our design and implementation over a few blog posts.</p>
 
 <p>This post will discuss our design choices.</p>
 
@@ -142,49 +55,20 @@
 
 <p>As will be described in future posts, our implementation met all of our requirements, but with some limitations. Localization is hard, and doing everything is near impossible. If we wanted something better than the 90% solution, then what we have now is maybe in the 95% range: there are still missing features that we haven&#8217;t figured out yet.</p>
 
-<p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Part 2: The API</a></p>
-</div>
+<p><a href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/">Part 2: The API</a></p>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/05/appstats-for-go/">Appstats for Go</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-05T01:56:00-05:00" pubdate data-updated="true">Feb 5<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/02/05/appstats-for-go/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I would like to announce the release of appstats for go. Installation instructions are <a href="http://godoc.org/github.com/mjibson/appstats">available on godoc.org</a>. I&#8217;d like to thank Dave Symonds for <a href="https://groups.google.com/forum/?fromgroups=#!topic/google-appengine-go/laOsfI1dSGY">his help</a> on this project.</p>
+  <entry>
+    <title type="html"><![CDATA[Appstats for Go]]></title>
+    <link href="http://mjibson.github.com/blog/2013/02/05/appstats-for-go/"/>
+    <updated>2013-02-05T01:56:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2013/02/05/appstats-for-go</id>
+    <content type="html"><![CDATA[<p>I would like to announce the release of appstats for go. Installation instructions are <a href="http://godoc.org/github.com/mjibson/appstats">available on godoc.org</a>. I&#8217;d like to thank Dave Symonds for <a href="https://groups.google.com/forum/?fromgroups=#!topic/google-appengine-go/laOsfI1dSGY">his help</a> on this project.</p>
 
 <p>A <a href="http://schalmei-go.appspot.com/">demo site</a> is available.</p>
 
-<p><a href="/assets/images/appstats-timeline.png"><img src="/assets/images/appstats-timeline.png"></a></p>
+<p><a href="http://mjibson.github.com/assets/images/appstats-timeline.png"><img src="http://mjibson.github.com/assets/images/appstats-timeline.png"></a></p>
 
 <p><a href="https://developers.google.com/appengine/docs/python/tools/appstats">Appstats</a> is an incredibly useful library for the python (and java) runtimes. The go runtime has had no similar library, adding to the difficulty of developing significant apps. I&#8217;d like to describe a bit about how appstats is implemented (applies to python, as well) and where I think the go runtime is today.</p>
 
@@ -214,44 +98,15 @@
 <h2>today&#8217;s app engine go runtime</h2>
 
 <p>The two killer features of the python runtime on app engine are NDB and appstats. I have been refusing to make a serious app with the go runtime because of this lack. To address those concerns, I have created <a href="https://github.com/mjibson/goon">goon</a> (an NDB-like library for go) and appstats. With the addition of these two libraries, I believe <strong>the go runtime can now compete with python</strong>.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/01/10/job-offers-are-not-demands/">Job offers are not demands</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-10T22:13:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/01/10/job-offers-are-not-demands/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am contacted around once per week by people interested in hiring me. Usually email, sometimes on <a href="http://careers.stackoverflow.com">Careers</a>, even phone calls. I don&#8217;t think I&#8217;ve ever responded to these. This is not because I&#8217;m against this kind of recruiting, it&#8217;s because I haven&#8217;t been persuaded in the least by these offers. My <a href="http://careers.stackoverflow.com/mjibson">careers profile</a> even lists me as &#8220;Passive candidate interested in full-time position.&#8221;. That means I have a job, but if you have a better one, maybe I&#8217;ll take it. No one has even piqued my interest, so far. The job offers here (well, not offers, but I&#8217;m not sure of a better term) tell me all about the company and the job, but nothing about how my life will be better there.</p>
+  <entry>
+    <title type="html"><![CDATA[Job offers are not demands]]></title>
+    <link href="http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands/"/>
+    <updated>2013-01-10T22:13:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands</id>
+    <content type="html"><![CDATA[<p>I am contacted around once per week by people interested in hiring me. Usually email, sometimes on <a href="http://careers.stackoverflow.com">Careers</a>, even phone calls. I don&#8217;t think I&#8217;ve ever responded to these. This is not because I&#8217;m against this kind of recruiting, it&#8217;s because I haven&#8217;t been persuaded in the least by these offers. My <a href="http://careers.stackoverflow.com/mjibson">careers profile</a> even lists me as &#8220;Passive candidate interested in full-time position.&#8221;. That means I have a job, but if you have a better one, maybe I&#8217;ll take it. No one has even piqued my interest, so far. The job offers here (well, not offers, but I&#8217;m not sure of a better term) tell me all about the company and the job, but nothing about how my life will be better there.</p>
 
 <p>Let&#8217;s make one up and look it it:</p>
 
@@ -285,48 +140,19 @@
 <h2>Conclusion</h2>
 
 <p>If companies want to attract the best developers, they must publicly advertise <em>why</em> their job is better. Without that, no amount of &#8220;we&#8217;re awesome&#8221; talk is going to get anywhere.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/">go-dsp FFT performance with go routines</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-04T03:30:00-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="https://github.com/mjibson/go-dsp">go-dsp</a> has been around for almost a year now. Recently I have been working on performance improvements. The low-hanging fruit was easy (removing duplicate calculations, smarter array copying, efficient data reordering with bit reversal). The difficult part was getting go routines to work as intended. That is, to have them improve the performance of go-dsp. This turned out to be more difficult than I expected.</p>
+  <entry>
+    <title type="html"><![CDATA[go-dsp FFT performance with go routines]]></title>
+    <link href="http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/"/>
+    <updated>2013-01-04T03:30:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/mjibson/go-dsp">go-dsp</a> has been around for almost a year now. Recently I have been working on performance improvements. The low-hanging fruit was easy (removing duplicate calculations, smarter array copying, efficient data reordering with bit reversal). The difficult part was getting go routines to work as intended. That is, to have them improve the performance of go-dsp. This turned out to be more difficult than I expected.</p>
 
 <h2>Why the fast Fourier Transform is parallelizable</h2>
 
-<p><a href="http://en.wikipedia.org/wiki/File:DIT-FFT-butterfly.png"><img class="right" src="/assets/images/DIT-FFT-butterfly.png" width="300"></a></p>
+<p><a href="http://en.wikipedia.org/wiki/File:DIT-FFT-butterfly.png"><img class="right" src="http://mjibson.github.com/assets/images/DIT-FFT-butterfly.png" width="300"></a></p>
 
 <p>The FFT is paralellizable because of how the &#8220;fast&#8221; part is implemented. Given an input of length <code>L</code>, if there exist integers <code>M</code> and <code>N</code> such that <code>L = M * N</code>, then the original problem (one transform of size <code>L</code>) can be restated as <code>M</code> problems of size <code>N</code>. These <code>M</code> problems can be run in parallel. For example, say I have an input of size 8. I can reform this as 2 inputs of size 4. These 2 inputs can be run in parallel.</p>
 
@@ -344,53 +170,24 @@
 
 <p>The original, single-thread solution contains no multicore logic. It benchmarked at around 505ms. The graphs below show performance at <code>GOMAXPROCS = 6</code> and a FFT size of <code>2 ^ 20 = 1048576</code>.</p>
 
-<p><img src="/assets/images/fftmp-1.png"></p>
+<p><img src="http://mjibson.github.com/assets/images/fftmp-1.png"></p>
 
 <p>Above are results for the first two attempts. The blue line is the original, single-thread control. The green line shows the very poor performance at small block sizes. The red line shows similar performance as green for large block sizes but that it was able to handle smaller block sizes better (but still not great). Minimum runtime was 1.7x faster (267ms minimum).</p>
 
-<p><img src="/assets/images/fftmp-2.png"></p>
+<p><img src="http://mjibson.github.com/assets/images/fftmp-2.png"></p>
 
 <p>Here we see the final solution with indexed worker groups. Minimum runtime was 252ms (2.0x speedup). Not the 6x increase I wanted, but it&#8217;s not bad.</p>
 
 <p>The final code (using the indexed worker group solution) is now <a href="https://github.com/mjibson/go-dsp">available</a>.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/20/great-piano-pieces/">Great Piano Pieces</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-20T20:51:00-05:00" pubdate data-updated="true">Dec 20<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/12/20/great-piano-pieces/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have compiled some of my <a href="http://open.spotify.com/user/128346620/playlist/65QbOiGs3DuWa5I6a9MjXI">favorite piano recordings</a> on spotify. (Sorry rdio folks, I tried to make an equivalent playlist, but rdio doesn&#8217;t have some of the recordings I wanted and I couldn&#8217;t find suitable replacements.) Below are some short program notes.</p>
+  <entry>
+    <title type="html"><![CDATA[Great Piano Pieces]]></title>
+    <link href="http://mjibson.github.com/blog/2012/12/20/great-piano-pieces/"/>
+    <updated>2012-12-20T20:51:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2012/12/20/great-piano-pieces</id>
+    <content type="html"><![CDATA[<p>I have compiled some of my <a href="http://open.spotify.com/user/128346620/playlist/65QbOiGs3DuWa5I6a9MjXI">favorite piano recordings</a> on spotify. (Sorry rdio folks, I tried to make an equivalent playlist, but rdio doesn&#8217;t have some of the recordings I wanted and I couldn&#8217;t find suitable replacements.) Below are some short program notes.</p>
 
 <h3>Ravel Piano Concerto 2</h3>
 
@@ -407,46 +204,17 @@
 <h3>Prokofiev Piano Concerti 1, 2, 3</h3>
 
 <p>The Russians are my favorite composers (and often performers; see above). Continuing on my last point about enjoying new sounds, Prokofiev was one of the most inventive composers. Although only a handful of years behind Rachmaninoff, Prokofiev was a century ahead in terms of originality. His concerti are my favorite compositions of his. Unlike Chopin (who was a poor arranger for orchestra, and thus produced piano concerti that are little more than excellent piano over orchestral chord changes), Prokofiev excelled at all voices of the orchestra. His concerti are thus more like duets between piano and orchestra, where each has an important part in the music. I have heard these concerti so many times they no longer sound dissonant. Instead I love hearing the chords because they are so new. My ears don&#8217;t hear things like this. The second concerto, although the least popular of the three, has some of the best rhythms and chords I&#8217;ve heard.</p>
-</div>
+]]></content>
+  </entry>
   
-  
+  <entry>
+    <title type="html"><![CDATA[Success by selective education]]></title>
+    <link href="http://mjibson.github.com/blog/2012/12/16/success-by-selective-education/"/>
+    <updated>2012-12-16T14:20:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2012/12/16/success-by-selective-education</id>
+    <content type="html"><![CDATA[<h2>Or: how to win by not studying</h2>
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/16/success-by-selective-education/">Success by selective education</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-16T14:20:00-05:00" pubdate data-updated="true">Dec 16<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/12/16/success-by-selective-education/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Or: how to win by not studying</h2>
-
-<p><a href="http://en.wikipedia.org/wiki/File:MOSFET_Structure.png"><img class="right" src="/assets/images/mosfet.png" width="300"></a></p>
+<p><a href="http://en.wikipedia.org/wiki/File:MOSFET_Structure.png"><img class="right" src="http://mjibson.github.com/assets/images/mosfet.png" width="300"></a></p>
 
 <p>I once took a junior-level course in college about Metal-Oxide-Semiconductor Field-Effect Transistors. As part of the electrical engineering cirriculum, it was an important course. I had no interest whatsoever in the course, and to this day I&#8217;m still not sure what it was about. For example, I once showed up to class (I suspect my attendance was around or below 50%) to turn in a homework assignment and discovered that a midterm was scheduled for that day. I used the homework as the single sheet of notes we were allowed. I similarly neglected many of the courses I took.</p>
 
@@ -460,7 +228,7 @@
 
 <h2>Impressions</h2>
 
-<p><a href="http://en.wikipedia.org/wiki/File:Op-amp_symbol.svg"><img class="right" src="/assets/images/opamp.png" width="300"></a></p>
+<p><a href="http://en.wikipedia.org/wiki/File:Op-amp_symbol.svg"><img class="right" src="http://mjibson.github.com/assets/images/opamp.png" width="300"></a></p>
 
 <p>At the time I felt that I was making mistakes and slacking off. I thought: instead of programming I should be studying for those other classes. I felt like I was messing myself up as an engineer since I was completely ignoring half of my major courses. For example, after 6 years of electrical engineering courses, I still didn&#8217;t know what an <a href="http://en.wikipedia.org/wiki/Operational_amplifier">op-amp</a> was, even though I had studied them in at least 4 courses. I was convinced that I was making bad choices. I was paying to go to school and not study. I was spending my time doing something that I didn&#8217;t plan on pursuing as a career (I wanted to design processors for Intel or AMD, not program full-time).</p>
 
@@ -475,44 +243,15 @@
 <h2>For others</h2>
 
 <p>This is what worked for me. I wrote this blog post not to encourage students to slack off their course work, but to offer a real story. I was disappointed in myself for many years until my current job. I think there are some current students who have a similar outlook on their college career, and I wanted to offer this as a potential future.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/17/nyc-now/">NYC Now</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-17T15:47:00-04:00" pubdate data-updated="true">Jun 17<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/06/17/nyc-now/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This weekend I went to <a href="http://hacknjill.com/">hackn&#8217;jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don&#8217;t want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
+  <entry>
+    <title type="html"><![CDATA[NYC Now]]></title>
+    <link href="http://mjibson.github.com/blog/2012/06/17/nyc-now/"/>
+    <updated>2012-06-17T15:47:00-04:00</updated>
+    <id>http://mjibson.github.com/blog/2012/06/17/nyc-now</id>
+    <content type="html"><![CDATA[<p>This weekend I went to <a href="http://hacknjill.com/">hackn&#8217;jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don&#8217;t want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
 
 <p>Although the idea was one of the simpler at the hackathon (aggregation of some events APIs + a map), I think the implementation and interface are quick and pleasant enough to make it a pleasure to use. It is fast and unobtrusive. I found myself browsing around it tonight, and found quite a few things I will actually go do at some point (which I would have not found before).</p>
 
@@ -549,44 +288,15 @@
 <li>cache</li>
 </ul>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/29/re2net-part-2-dfa/">re2net - part 2: DFA</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-29T15:54:00-04:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/05/29/re2net-part-2-dfa/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have <a href="https://github.com/mjibson/re2net/commit/4f5f274fb6299c703d70541af795918371f0bdd6">added</a> a DFA state machine to the re2net library, as described <a href="http://swtch.com/~rsc/regexp/regexp1.html">here</a>. This method computes the DFA states on demand, which makes subsequent matches with the same instance faster. The crude benchmark below shows run times for the NFA (as in <a href="http://blog.mattjibson.com/2012/05/re2net---C-RE2-implementation-part-1">part 1</a>), DFA&#8217;s first run, DFA&#8217;s second run, and C#&#8217;s Regex library as a comparison.</p>
+  <entry>
+    <title type="html"><![CDATA[re2net - part 2: DFA]]></title>
+    <link href="http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa/"/>
+    <updated>2012-05-29T15:54:00-04:00</updated>
+    <id>http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa</id>
+    <content type="html"><![CDATA[<p>I have <a href="https://github.com/mjibson/re2net/commit/4f5f274fb6299c703d70541af795918371f0bdd6">added</a> a DFA state machine to the re2net library, as described <a href="http://swtch.com/~rsc/regexp/regexp1.html">here</a>. This method computes the DFA states on demand, which makes subsequent matches with the same instance faster. The crude benchmark below shows run times for the NFA (as in <a href="http://blog.mattjibson.com/2012/05/re2net---C-RE2-implementation-part-1">part 1</a>), DFA&#8217;s first run, DFA&#8217;s second run, and C#&#8217;s Regex library as a comparison.</p>
 
 <p>The results below show that the DFA is about an order of magnitude slower than the NFA on the first run (as expected, since the cache is being computed), but an order of magnitude faster on the second run (since the cache is being used).</p>
 
@@ -628,44 +338,15 @@
 29: 0.0010944, 0.0019780, 0.0000207, 37.1557184
 </pre>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/">re2net - part 1: C# RE2 implementation</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-02T15:57:00-04:00" pubdate data-updated="true">May 2<span>nd</span>, 2012</time>
-        
-         | <a href="/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>After reading Russ Cox&#8217;s <a href="http://swtch.com/~rsc/regexp/regexp1.html">regular expression articles</a>, I became interested in porting his <a href="http://code.google.com/p/re2/">RE2</a> library to C#. These posts will describe my effort to port the entire library, which I will do in steps. I know that one could just link to the RE2 library, but I am porting this as an academic exercise to learn C# and regular expression parsing.</p>
+  <entry>
+    <title type="html"><![CDATA[re2net - part 1: C# RE2 implementation]]></title>
+    <link href="http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/"/>
+    <updated>2012-05-02T15:57:00-04:00</updated>
+    <id>http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation</id>
+    <content type="html"><![CDATA[<p>After reading Russ Cox&#8217;s <a href="http://swtch.com/~rsc/regexp/regexp1.html">regular expression articles</a>, I became interested in porting his <a href="http://code.google.com/p/re2/">RE2</a> library to C#. These posts will describe my effort to port the entire library, which I will do in steps. I know that one could just link to the RE2 library, but I am porting this as an academic exercise to learn C# and regular expression parsing.</p>
 
 <p>The full RE2 implementation is somewhat large. So, for now, I have started with something simpler: porting <a href="http://swtch.com/~rsc/regexp/nfa.c.txt">nfa.c</a>, which is now <a href="https://github.com/mjibson/re2net/commit/4deade8190159843ee512e8b99da5fbaa68fa1e4">committed</a>.</p>
 
@@ -707,44 +388,15 @@
 29: 00.0010960, 37.6036043
 </pre>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/">How I got a job at Stack Overflow</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-28T15:58:00-04:00" pubdate data-updated="true">Apr 28<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I just got a job at <a href="http://stackexchange.com/">Stack Exchange</a>. The experience was interesting enough and I learned a few things that could be valuable to others.</p>
+  <entry>
+    <title type="html"><![CDATA[How I got a job at Stack Overflow]]></title>
+    <link href="http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/"/>
+    <updated>2012-04-28T15:58:00-04:00</updated>
+    <id>http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow</id>
+    <content type="html"><![CDATA[<p>I just got a job at <a href="http://stackexchange.com/">Stack Exchange</a>. The experience was interesting enough and I learned a few things that could be valuable to others.</p>
 
 <p>We are still hiring <a href="http://careers.stackoverflow.com/jobs/16279/software-developer-new-york-stack-exchange?a=jetqDpm">another developer</a> if you are interested after reading.</p>
 
@@ -795,117 +447,72 @@
 <p>But the most important lesson I got from all of this? <strong>Anyone can work for a dream company.</strong> I say this because I do not feel that I&#8217;m some rockstar programmer. I&#8217;ve just worked and learned like everyone else. I studied writings from some smart programmers, learned a few languages and systems, and in the end got a job at a place that I had been dreaming of working at for over 10 years, when I first heard of them (that is, any company run by Joel and Michael).</p>
 
 <p>Want a job at a dream company? Work and study, and it&#8217;s possible. Not getting offers? Maybe it&#8217;s not evidence that you aren&#8217;t that great, it&#8217;s just that you would fit better somewhere else.</p>
-</div>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Fast Fourier Transform in Go]]></title>
+    <link href="http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go/"/>
+    <updated>2011-12-09T15:59:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go</id>
+    <content type="html"><![CDATA[<p>I just completed all the basic functionality for a fully-working <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> implementation. It supports inputs as arrays of real or complex values, with the inverse transform, too. It is part of my <a href="https://github.com/mjibson/go-dsp">go-dsp project on github</a>.</p>
+
+<p>Install with:</p>
+
+<p><code>$ goinstall "github.com/mjibson/go-dsp/fft"</code></p>
+
+<p>Some example use code:</p>
+
+<pre><code>package main
+
+import "github.com/mjibson/go-dsp/fft"
+import "fmt"
+
+func main() {
+        fmt.Println(fft.FFT_real([]float64 {1, 2, 3}))
+}
+</code></pre>
+
+<h3>Brief introduction to the fast Fourier transform</h3>
+
+<p>Input arrays of length a power of 2 use the radix-2 FFT algorithm (the butterfly one). Inputs of other sizes (non power of 2 and prime lengths) use the Bluestein algorithm. The Bluestein algorithm is interesting because (in contradistinction to the other FFT algorithms for non power of 2 lengths) it works on prime and non-prime lengths. Other solutions require one each for prime and non-prime lengths, so you end up with 3 total algorithms. The purpose of this project was just to get something working, and worry about performance and optimization later.</p>
+
+<p>So, back to Bluestein&#8217;s algorithm. It works by starting with the definition of the discrete Fourier transform (the fast Fourier transform (FFT) is a way to compute the discrete Fourier transform (DFT)), and then doing some algebra on it. This results in an equation that does an operation known as convolution. Convolution is really hard. So, someone created a way to change convolution into multiplication (really easy). That way is&#8230;the Fourier transform! If you take the Fourier transform of two arrays, then multiply the result, and then take the inverse Fourier transform, you have just done convolution. So, you can do the convolution you got from messing with the DFT equation by adding some zeros to the end of the array so it&#8217;s of length a power of 2, and then use the radix-2 FFT algorithm to do the FFTs, multiply, then inverse FFT back, and you have the DFT of an array of any length.</p>
+]]></content>
+  </entry>
   
-
-
-    </article>
+  <entry>
+    <title type="html"><![CDATA[journalr]]></title>
+    <link href="http://mjibson.github.com/blog/2011/09/22/journalr/"/>
+    <updated>2011-09-22T16:00:00-04:00</updated>
+    <id>http://mjibson.github.com/blog/2011/09/22/journalr</id>
+    <content type="html"><![CDATA[<p>I just launched <a href="http://journalr.org">journalr</a>, an online journal site. There are almost no online journal sites, and journalr strives to remedy this and encourage more journal writing. It&#8217;s in the early stages, but it&#8217;s good enough to use. I have already begun transcribing my journals from my mission when I spent 2 years in Brazil, and have enjoyed using journalr.</p>
+]]></content>
+  </entry>
   
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
+  <entry>
+    <title type="html"><![CDATA[webapp2 sessions with the blobstore]]></title>
+    <link href="http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/"/>
+    <updated>2011-09-11T16:01:00-04:00</updated>
+    <id>http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore</id>
+    <content type="html"><![CDATA[<p>I recently started using <a href="http://webapp-improved.appspot.com/api/webapp2_extras/sessions.html">webapp2 sessions</a>, and was happy with how they work. However, when trying to access sessions during an upload to the blobstore, I was not able to since the BlobstoreUploadHandler did not inherit from the new BaseHandler I created as directed by the webapp2 session instructions. I wanted to do this to send a message to the user that their upload was successful, using the <code>add_flash()</code> function. Appending <code>?message=Upload successful.</code> to the redirect URL would have worked, but is lame.</p>
+
+<p>Trying to use it through multiple inheritance also fails:
+<code>class EntryUploadHandler(blobstore_handlers.BlobstoreUploadHandler, BaseUploadHandler):</code>
+with some error.</p>
+
+<p>The solution was to create a BaseUploadHandler class with special handling for sessions. It appears that the upload handler doesn&#8217;t act the same as a normal RequestHandler, so you have to do everything in one place:
+`class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):</p>
+
+<pre><code>def add_message(self, level, message):
+    store = sessions.get_store(request=self.request)
+    session = store.get_session()
+    session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
+    store.save_sessions(self.response)`
+</code></pre>
+
+<p>Full code <a href="https://github.com/mjibson/journalr/blob/master/main.py">here</a>.</p>
+]]></content>
+  </entry>
   
-    <section>
-	<h1><a href="/about">About Matt</a></h1>
-	<p><b>Matt Jibson</b> works at <a href="http://stackexchange.com/">Stack Exchange</a> on <a href="http://careers.stackoverflow.com/">Careers 2.0</a>. I play piano and pipe organ.
-	</p>
-</section>
-<section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/05/appstats-for-go/">Appstats for Go</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/10/job-offers-are-not-demands/">Job offers are not demands</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/">go-dsp FFT performance with go routines</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/20/great-piano-pieces/">Great Piano Pieces</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("mjibson", 4, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/mjibson" class="twitter-follow-button" data-show-count="false">Follow @mjibson</a>
-  
-</section>
-
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Matt Jibson -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-<script type="text/javascript">
-      var disqus_shortname = 'mjibson-blog';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
-</html>
+</feed>

@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>NYC Now - Matt Jibson's Blog</title>
+  <meta name="author" content="Matt Jibson">
+
+  
+  <meta name="description" content="This weekend I went to hackn&#8217;jill. I made NYC Now, a web app to find something to do right now. It shows a map with events around it. It can &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mjibson.github.com/blog/2012/06/17/nyc-now/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Matt Jibson's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26568697-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Matt Jibson's Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mjibson.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">NYC Now</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-17T15:47:00-04:00" pubdate data-updated="true">Jun 17<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This weekend I went to <a href="http://hacknjill.com/">hackn&#8217;jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don&#8217;t want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
+
+<p>Although the idea was one of the simpler at the hackathon (aggregation of some events APIs + a map), I think the implementation and interface are quick and pleasant enough to make it a pleasure to use. It is fast and unobtrusive. I found myself browsing around it tonight, and found quite a few things I will actually go do at some point (which I would have not found before).</p>
+
+<p>Things I learned:</p>
+
+<ul>
+<li>async app engine url fetch</li>
+<li>html5 url rewriting</li>
+<li>html5 location fetching</li>
+<li>more jquery</li>
+<li>I still think app engine is the best web platform around</li>
+</ul>
+
+
+<p>It is powered by:</p>
+
+<ul>
+<li>google app engine</li>
+<li>python</li>
+<li>jquery</li>
+<li>foursquare</li>
+<li>yipit</li>
+<li><a href="https://nycopendata.socrata.com/">nyc.gov open data</a></li>
+<li><a href="http://developer.nytimes.com/docs/events_api">New York Times Events API</a></li>
+</ul>
+
+
+<p>It has no:</p>
+
+<ul>
+<li>social media connections</li>
+<li>users or registration</li>
+<li>database</li>
+<li>cache</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Jibson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-17T15:47:00-04:00" pubdate data-updated="true">Jun 17<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/hackathon/'>hackathon</a>, <a class='category' href='/blog/categories/nyc-now/'>nyc now</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mjibson.github.com/blog/2012/06/17/nyc-now/" data-via="mjibson" data-counturl="http://mjibson.github.com/blog/2012/06/17/nyc-now/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/05/29/re2net-part-2-dfa/" title="Previous Post: re2net - part 2: DFA">&laquo; re2net - part 2: DFA</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/12/16/success-by-selective-education/" title="Next Post: Success by selective education">Success by selective education &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+	<h1><a href="/about">About Matt</a></h1>
+	<p><b>Matt Jibson</b> works at <a href="http://stackexchange.com/">Stack Exchange</a> on <a href="http://careers.stackoverflow.com/">Careers 2.0</a>. I play piano and pipe organ.
+	</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/05/appstats-for-go/">Appstats for Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/10/job-offers-are-not-demands/">Job offers are not demands</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/">go-dsp FFT performance with go routines</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/20/great-piano-pieces/">Great Piano Pieces</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("mjibson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/mjibson" class="twitter-follow-button" data-show-count="false">Follow @mjibson</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Matt Jibson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'mjibson-blog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://mjibson.github.com/blog/2012/06/17/nyc-now/';
+        var disqus_url = 'http://mjibson.github.com/blog/2012/06/17/nyc-now/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

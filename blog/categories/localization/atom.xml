@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: localization | Matt Jibson's Blog]]></title>
+  <link href="http://mjibson.github.com/blog/categories/localization/atom.xml" rel="self"/>
+  <link href="http://mjibson.github.com/"/>
+  <updated>2013-03-04T20:09:45-05:00</updated>
+  <id>http://mjibson.github.com/</id>
+  <author>
+    <name><![CDATA[Matt Jibson]]></name>
+    <email><![CDATA[matt.jibson@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Careers Localization, part 1: Why Roll Our Own?]]></title>
+    <link href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
+    <updated>2013-02-27T15:52:00-05:00</updated>
+    <id>http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
+    <content type="html"><![CDATA[<p>Localization is a difficult feature to add to a website. A few months ago, we at <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a> localized into <a href="http://careers.stackoverflow.com/de/">German</a>. This took months of effort from much of the team. I would like to describe our design and implementation over a few blog posts.</p>
+
+<p>This post will discuss our design choices.</p>
+
+<h2>Requirements</h2>
+
+<p>Localization consists of</p>
+
+<ol>
+<li>indicating text that should be localized</li>
+<li>translating it</li>
+<li>showing the correct translation to the user</li>
+</ol>
+
+
+<p>There are various existing solutions in most programming languages that can do this. We looked at some, but none were able to meet all of our design and support requirements:</p>
+
+<ol>
+<li>C#</li>
+<li>JavaScript</li>
+<li>Razor views</li>
+<li>data attributes for localized error messages on form validation</li>
+<li>markdown formatting (so that no HTML is ever sent to translators)</li>
+<li>dynamic text replacement</li>
+<li>pluralization-aware</li>
+<li>gettext-style (English text in a function - no resource files and identifiers)</li>
+</ol>
+
+
+<p>We discussed some of these requirements with others who had previously localized their sites. Some had decided to forfeit features due to difficulty of implementation (pluralization, dynamic text). Supporting each of these requirements is difficult, so we understood the decision to omit them. However, we were not willing to do the same.</p>
+
+<h2>Our Solution</h2>
+
+<p>The other solutions missed some our of requirements, or functioned in a way we didn't like. We were, however, heavily influenced by existing work, like that of <a href="https://github.com/danielcrenna/i18n">Daniel Crenna</a>. We have a long history of rolling our own software when the 90% solution isn't enough, and that tradition was continued here. We ended up writing the entire implementation from scratch. This includes designing an API, extraction process (to determine what strings the translators should translate), and localization engine to support numbers, dates, and translated strings. This allowed us to have a unified pipeline for text extraction and processing (i.e., the C# and JavaScript implementations could be identical at each step of the process), and give us the power and speed we wanted in the implementation.</p>
+
+<p>As will be described in future posts, our implementation met all of our requirements, but with some limitations. Localization is hard, and doing everything is near impossible. If we wanted something better than the 90% solution, then what we have now is maybe in the 95% range: there are still missing features that we haven't figured out yet.</p>
+
+<p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Part 2: The API</a></p>
+]]></content>
+  </entry>
+  
+</feed>

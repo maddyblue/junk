@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: hackathon | Matt Jibson's Blog]]></title>
+  <link href="http://mjibson.github.com/blog/categories/hackathon/atom.xml" rel="self"/>
+  <link href="http://mjibson.github.com/"/>
+  <updated>2013-03-04T20:09:45-05:00</updated>
+  <id>http://mjibson.github.com/</id>
+  <author>
+    <name><![CDATA[Matt Jibson]]></name>
+    <email><![CDATA[matt.jibson@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[NYC Now]]></title>
+    <link href="http://mjibson.github.com/blog/2012/06/17/nyc-now/"/>
+    <updated>2012-06-17T15:47:00-04:00</updated>
+    <id>http://mjibson.github.com/blog/2012/06/17/nyc-now</id>
+    <content type="html"><![CDATA[<p>This weekend I went to <a href="http://hacknjill.com/">hackn'jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don't want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
+
+<p>Although the idea was one of the simpler at the hackathon (aggregation of some events APIs + a map), I think the implementation and interface are quick and pleasant enough to make it a pleasure to use. It is fast and unobtrusive. I found myself browsing around it tonight, and found quite a few things I will actually go do at some point (which I would have not found before).</p>
+
+<p>Things I learned:</p>
+
+<ul>
+<li>async app engine url fetch</li>
+<li>html5 url rewriting</li>
+<li>html5 location fetching</li>
+<li>more jquery</li>
+<li>I still think app engine is the best web platform around</li>
+</ul>
+
+
+<p>It is powered by:</p>
+
+<ul>
+<li>google app engine</li>
+<li>python</li>
+<li>jquery</li>
+<li>foursquare</li>
+<li>yipit</li>
+<li><a href="https://nycopendata.socrata.com/">nyc.gov open data</a></li>
+<li><a href="http://developer.nytimes.com/docs/events_api">New York Times Events API</a></li>
+</ul>
+
+
+<p>It has no:</p>
+
+<ul>
+<li>social media connections</li>
+<li>users or registration</li>
+<li>database</li>
+<li>cache</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
