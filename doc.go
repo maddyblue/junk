@@ -58,7 +58,7 @@ Do things and view at http://localhost:8080/_ah/stats/, or your production URL.
 
 Configuration
 
-Refer to the variables section  of the documentation: http://godoc.org/github.com/mjibson/appstats#_variables.
+Refer to the variables section of the documentation: http://godoc.org/github.com/mjibson/appstats#_variables.
 
 
 Todo
