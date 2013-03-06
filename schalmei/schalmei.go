@@ -132,32 +132,37 @@ func RankGet(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 
 	n := goon.FromContext(c)
 
-	g := &Rank{}
-	e, err := n.GetById(g, "", id, nil)
-	if err != nil {
-		serveError(w, err)
-		return
-	}
-	q := datastore.NewQuery("Note").Ancestor(e.Key)
-	ndata := []*Note{}
-	ns, _ := n.GetAll(q, &ndata)
-	notes := make([]*noteData, len(ndata))
-	for i, ndat := range ndata {
-		notes[i] = &noteData{
-			ndat,
-			ndat.GraphUrl(ns[i].Key.Encode()),
-			ndat.PwelchUrl(ns[i].Key.Encode()),
+	c.P.Step("get by id", func() {
+		g := &Rank{}
+		e, err := n.GetById(g, "", id, nil)
+		if err != nil {
+			serveError(w, err)
+			return
 		}
-	}
 
-	u, _ := router.Get("upload-url").URL("id", s)
-	b, _ := json.Marshal(rankData{
-		Id:    e.Key.IntID(),
-		Rank:  g,
-		Url:   u.String(),
-		Notes: notes,
+		c.P.Step("query note", func() {
+			q := datastore.NewQuery("Note").Ancestor(e.Key)
+			ndata := []*Note{}
+			ns, _ := n.GetAll(q, &ndata)
+			notes := make([]*noteData, len(ndata))
+			for i, ndat := range ndata {
+				notes[i] = &noteData{
+					ndat,
+					ndat.GraphUrl(ns[i].Key.Encode()),
+					ndat.PwelchUrl(ns[i].Key.Encode()),
+				}
+			}
+
+			u, _ := router.Get("upload-url").URL("id", s)
+			b, _ := json.Marshal(rankData{
+				Id:    e.Key.IntID(),
+				Rank:  g,
+				Url:   u.String(),
+				Notes: notes,
+			})
+			w.Write(b)
+		})
 	})
-	w.Write(b)
 }
 
 func UploadUrl(c mpg.Context, w http.ResponseWriter, r *http.Request) {
@@ -253,5 +258,7 @@ func NotePwelch(c mpg.Context, w http.ResponseWriter, r *http.Request) {
 
 	tqx := r.URL.Query().Get("tqx")
 	reqId := strings.Split(tqx, ":")[1]
-	fmt.Fprintf(w, n.PwelchChart(wv, reqId))
+	c.P.Step("pwelch", func() {
+		fmt.Fprintf(w, n.PwelchChart(wv, reqId))
+	})
 }
