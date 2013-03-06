@@ -26,6 +26,16 @@
 				<li ng-repeat="rank in ranks"><a ng-click="show('get-rank', rank)" ng-bind="rank.Rank.Name + ' - ' + rank.Id"></a></li>
 			</ul>
 
+			<div ng-hide="shown">
+				<p>schalmei is a demo app for <a href="http://golang.org">go</a> app engine software. Its purpose is to showcase useful web software for go, and thus encourage more people to develop go on app engine. For a while, python has had much stronger software. With the software below (all of which schalmei uses), I hope to encourage people to entertain the idea of web development using go.</p>
+
+				<ul>
+					<li><a href="http://github.com/mjibson/goon">goon</a>: an auto-caching datastore library, similary to python's NDB</li>
+					<li><a href="http://github.com/mjibson/appstats">appstats</a>: app engine RPC profiling</li>
+					<li><a href="http://godoc.org/github.com/mjibson/MiniProfiler/go/miniprofiler">miniprofiler</a>: a mini-profiler, based on <a href="http://miniprofiler.com">miniprofiler.com</a></li>
+				</ul>
+			</div>
+
 			<div ng-show="shown == 'get-rank'">
 				<ul>
 					<li ng-bind="'Id: ' + rank.Id"></li>
