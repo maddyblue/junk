@@ -4,7 +4,7 @@
   <title><![CDATA[Category: blobstore | Matt Jibson's Blog]]></title>
   <link href="http://mjibson.github.com/blog/categories/blobstore/atom.xml" rel="self"/>
   <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-04T20:10:43-05:00</updated>
+  <updated>2013-03-13T14:15:42-06:00</updated>
   <id>http://mjibson.github.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[webapp2 sessions with the blobstore]]></title>
     <link href="http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/"/>
-    <updated>2011-09-11T16:01:00-04:00</updated>
+    <updated>2011-09-11T16:01:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore</id>
     <content type="html"><![CDATA[<p>I recently started using <a href="http://webapp-improved.appspot.com/api/webapp2_extras/sessions.html">webapp2 sessions</a>, and was happy with how they work. However, when trying to access sessions during an upload to the blobstore, I was not able to since the BlobstoreUploadHandler did not inherit from the new BaseHandler I created as directed by the webapp2 session instructions. I wanted to do this to send a message to the user that their upload was successful, using the <code>add_flash()</code> function. Appending <code>?message=Upload successful.</code> to the redirect URL would have worked, but is lame.</p>
 

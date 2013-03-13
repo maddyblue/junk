@@ -4,7 +4,7 @@
   <title><![CDATA[Category: hackathon | Matt Jibson's Blog]]></title>
   <link href="http://mjibson.github.com/blog/categories/hackathon/atom.xml" rel="self"/>
   <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-04T20:10:43-05:00</updated>
+  <updated>2013-03-13T14:15:42-06:00</updated>
   <id>http://mjibson.github.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[NYC Now]]></title>
     <link href="http://mjibson.github.com/blog/2012/06/17/nyc-now/"/>
-    <updated>2012-06-17T15:47:00-04:00</updated>
+    <updated>2012-06-17T15:47:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2012/06/17/nyc-now</id>
     <content type="html"><![CDATA[<p>This weekend I went to <a href="http://hacknjill.com/">hackn'jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don't want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
 

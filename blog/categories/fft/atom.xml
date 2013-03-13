@@ -4,7 +4,7 @@
   <title><![CDATA[Category: fft | Matt Jibson's Blog]]></title>
   <link href="http://mjibson.github.com/blog/categories/fft/atom.xml" rel="self"/>
   <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-04T20:10:43-05:00</updated>
+  <updated>2013-03-13T14:15:42-06:00</updated>
   <id>http://mjibson.github.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[go-dsp FFT performance with go routines]]></title>
     <link href="http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/"/>
-    <updated>2013-01-04T03:30:00-05:00</updated>
+    <updated>2013-01-04T03:30:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/mjibson/go-dsp">go-dsp</a> has been around for almost a year now. Recently I have been working on performance improvements. The low-hanging fruit was easy (removing duplicate calculations, smarter array copying, efficient data reordering with bit reversal). The difficult part was getting go routines to work as intended. That is, to have them improve the performance of go-dsp. This turned out to be more difficult than I expected.</p>
 
@@ -55,7 +55,7 @@
   <entry>
     <title type="html"><![CDATA[Fast Fourier Transform in Go]]></title>
     <link href="http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go/"/>
-    <updated>2011-12-09T15:59:00-05:00</updated>
+    <updated>2011-12-09T15:59:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go</id>
     <content type="html"><![CDATA[<p>I just completed all the basic functionality for a fully-working <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> implementation. It supports inputs as arrays of real or complex values, with the inverse transform, too. It is part of my <a href="https://github.com/mjibson/go-dsp">go-dsp project on github</a>.</p>
 

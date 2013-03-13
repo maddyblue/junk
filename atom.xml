@@ -4,7 +4,7 @@
   <title><![CDATA[Matt Jibson's Blog]]></title>
   <link href="http://mjibson.github.com/atom.xml" rel="self"/>
   <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-04T20:10:43-05:00</updated>
+  <updated>2013-03-13T14:15:42-06:00</updated>
   <id>http://mjibson.github.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 3: Extraction with Roslyn and Uglify]]></title>
     <link href="http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
-    <updated>2013-03-01T15:52:00-05:00</updated>
+    <updated>2013-03-01T15:52:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
     <content type="html"><![CDATA[<p><a href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
 
@@ -238,7 +238,7 @@
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 2: The API]]></title>
     <link href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/"/>
-    <updated>2013-02-28T15:52:00-05:00</updated>
+    <updated>2013-02-28T15:52:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api</id>
     <content type="html"><![CDATA[<p><a href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Previously</a> we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the way in which we would craft strings to be localized.</p>
 
@@ -432,7 +432,7 @@
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 1: Why Roll Our Own?]]></title>
     <link href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
-    <updated>2013-02-27T15:52:00-05:00</updated>
+    <updated>2013-02-27T15:52:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
     <content type="html"><![CDATA[<p>Localization is a difficult feature to add to a website. A few months ago, we at <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a> localized into <a href="http://careers.stackoverflow.com/de/">German</a>. This took months of effort from much of the team. I would like to describe our design and implementation over a few blog posts.</p>
 
@@ -478,7 +478,7 @@
   <entry>
     <title type="html"><![CDATA[Appstats for Go]]></title>
     <link href="http://mjibson.github.com/blog/2013/02/05/appstats-for-go/"/>
-    <updated>2013-02-05T01:56:00-05:00</updated>
+    <updated>2013-02-05T01:56:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2013/02/05/appstats-for-go</id>
     <content type="html"><![CDATA[<p>I would like to announce the release of appstats for go. Installation instructions are <a href="http://godoc.org/github.com/mjibson/appstats">available on godoc.org</a>. I&#8217;d like to thank Dave Symonds for <a href="https://groups.google.com/forum/?fromgroups=#!topic/google-appengine-go/laOsfI1dSGY">his help</a> on this project.</p>
 
@@ -520,7 +520,7 @@
   <entry>
     <title type="html"><![CDATA[Job offers are not demands]]></title>
     <link href="http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands/"/>
-    <updated>2013-01-10T22:13:00-05:00</updated>
+    <updated>2013-01-10T22:13:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands</id>
     <content type="html"><![CDATA[<p>I am contacted around once per week by people interested in hiring me. Usually email, sometimes on <a href="http://careers.stackoverflow.com">Careers</a>, even phone calls. I don&#8217;t think I&#8217;ve ever responded to these. This is not because I&#8217;m against this kind of recruiting, it&#8217;s because I haven&#8217;t been persuaded in the least by these offers. My <a href="http://careers.stackoverflow.com/mjibson">careers profile</a> even lists me as &#8220;Passive candidate interested in full-time position.&#8221;. That means I have a job, but if you have a better one, maybe I&#8217;ll take it. No one has even piqued my interest, so far. The job offers here (well, not offers, but I&#8217;m not sure of a better term) tell me all about the company and the job, but nothing about how my life will be better there.</p>
 
@@ -562,7 +562,7 @@
   <entry>
     <title type="html"><![CDATA[go-dsp FFT performance with go routines]]></title>
     <link href="http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/"/>
-    <updated>2013-01-04T03:30:00-05:00</updated>
+    <updated>2013-01-04T03:30:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/mjibson/go-dsp">go-dsp</a> has been around for almost a year now. Recently I have been working on performance improvements. The low-hanging fruit was easy (removing duplicate calculations, smarter array copying, efficient data reordering with bit reversal). The difficult part was getting go routines to work as intended. That is, to have them improve the performance of go-dsp. This turned out to be more difficult than I expected.</p>
 
@@ -601,7 +601,7 @@
   <entry>
     <title type="html"><![CDATA[Great Piano Pieces]]></title>
     <link href="http://mjibson.github.com/blog/2012/12/20/great-piano-pieces/"/>
-    <updated>2012-12-20T20:51:00-05:00</updated>
+    <updated>2012-12-20T20:51:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2012/12/20/great-piano-pieces</id>
     <content type="html"><![CDATA[<p>I have compiled some of my <a href="http://open.spotify.com/user/128346620/playlist/65QbOiGs3DuWa5I6a9MjXI">favorite piano recordings</a> on spotify. (Sorry rdio folks, I tried to make an equivalent playlist, but rdio doesn&#8217;t have some of the recordings I wanted and I couldn&#8217;t find suitable replacements.) Below are some short program notes.</p>
 
@@ -626,7 +626,7 @@
   <entry>
     <title type="html"><![CDATA[Success by selective education]]></title>
     <link href="http://mjibson.github.com/blog/2012/12/16/success-by-selective-education/"/>
-    <updated>2012-12-16T14:20:00-05:00</updated>
+    <updated>2012-12-16T14:20:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2012/12/16/success-by-selective-education</id>
     <content type="html"><![CDATA[<h2>Or: how to win by not studying</h2>
 
@@ -665,7 +665,7 @@
   <entry>
     <title type="html"><![CDATA[NYC Now]]></title>
     <link href="http://mjibson.github.com/blog/2012/06/17/nyc-now/"/>
-    <updated>2012-06-17T15:47:00-04:00</updated>
+    <updated>2012-06-17T15:47:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2012/06/17/nyc-now</id>
     <content type="html"><![CDATA[<p>This weekend I went to <a href="http://hacknjill.com/">hackn&#8217;jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don&#8217;t want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
 
@@ -710,7 +710,7 @@
   <entry>
     <title type="html"><![CDATA[re2net - part 2: DFA]]></title>
     <link href="http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa/"/>
-    <updated>2012-05-29T15:54:00-04:00</updated>
+    <updated>2012-05-29T15:54:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa</id>
     <content type="html"><![CDATA[<p>I have <a href="https://github.com/mjibson/re2net/commit/4f5f274fb6299c703d70541af795918371f0bdd6">added</a> a DFA state machine to the re2net library, as described <a href="http://swtch.com/~rsc/regexp/regexp1.html">here</a>. This method computes the DFA states on demand, which makes subsequent matches with the same instance faster. The crude benchmark below shows run times for the NFA (as in <a href="http://blog.mattjibson.com/2012/05/re2net---C-RE2-implementation-part-1">part 1</a>), DFA&#8217;s first run, DFA&#8217;s second run, and C#&#8217;s Regex library as a comparison.</p>
 
@@ -760,7 +760,7 @@
   <entry>
     <title type="html"><![CDATA[re2net - part 1: C# RE2 implementation]]></title>
     <link href="http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/"/>
-    <updated>2012-05-02T15:57:00-04:00</updated>
+    <updated>2012-05-02T15:57:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation</id>
     <content type="html"><![CDATA[<p>After reading Russ Cox&#8217;s <a href="http://swtch.com/~rsc/regexp/regexp1.html">regular expression articles</a>, I became interested in porting his <a href="http://code.google.com/p/re2/">RE2</a> library to C#. These posts will describe my effort to port the entire library, which I will do in steps. I know that one could just link to the RE2 library, but I am porting this as an academic exercise to learn C# and regular expression parsing.</p>
 
@@ -810,7 +810,7 @@
   <entry>
     <title type="html"><![CDATA[How I got a job at Stack Overflow]]></title>
     <link href="http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/"/>
-    <updated>2012-04-28T15:58:00-04:00</updated>
+    <updated>2012-04-28T15:58:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow</id>
     <content type="html"><![CDATA[<p>I just got a job at <a href="http://stackexchange.com/">Stack Exchange</a>. The experience was interesting enough and I learned a few things that could be valuable to others.</p>
 
@@ -869,7 +869,7 @@
   <entry>
     <title type="html"><![CDATA[Fast Fourier Transform in Go]]></title>
     <link href="http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go/"/>
-    <updated>2011-12-09T15:59:00-05:00</updated>
+    <updated>2011-12-09T15:59:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go</id>
     <content type="html"><![CDATA[<p>I just completed all the basic functionality for a fully-working <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> implementation. It supports inputs as arrays of real or complex values, with the inverse transform, too. It is part of my <a href="https://github.com/mjibson/go-dsp">go-dsp project on github</a>.</p>
 
@@ -900,7 +900,7 @@ func main() {
   <entry>
     <title type="html"><![CDATA[journalr]]></title>
     <link href="http://mjibson.github.com/blog/2011/09/22/journalr/"/>
-    <updated>2011-09-22T16:00:00-04:00</updated>
+    <updated>2011-09-22T16:00:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2011/09/22/journalr</id>
     <content type="html"><![CDATA[<p>I just launched <a href="http://journalr.org">journalr</a>, an online journal site. There are almost no online journal sites, and journalr strives to remedy this and encourage more journal writing. It&#8217;s in the early stages, but it&#8217;s good enough to use. I have already begun transcribing my journals from my mission when I spent 2 years in Brazil, and have enjoyed using journalr.</p>
 ]]></content>
@@ -909,7 +909,7 @@ func main() {
   <entry>
     <title type="html"><![CDATA[webapp2 sessions with the blobstore]]></title>
     <link href="http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/"/>
-    <updated>2011-09-11T16:01:00-04:00</updated>
+    <updated>2011-09-11T16:01:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore</id>
     <content type="html"><![CDATA[<p>I recently started using <a href="http://webapp-improved.appspot.com/api/webapp2_extras/sessions.html">webapp2 sessions</a>, and was happy with how they work. However, when trying to access sessions during an upload to the blobstore, I was not able to since the BlobstoreUploadHandler did not inherit from the new BaseHandler I created as directed by the webapp2 session instructions. I wanted to do this to send a message to the user that their upload was successful, using the <code>add_flash()</code> function. Appending <code>?message=Upload successful.</code> to the redirect URL would have worked, but is lame.</p>
 

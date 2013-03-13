@@ -4,7 +4,7 @@
   <title><![CDATA[Category: re2net | Matt Jibson's Blog]]></title>
   <link href="http://mjibson.github.com/blog/categories/re2net/atom.xml" rel="self"/>
   <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-04T20:10:43-05:00</updated>
+  <updated>2013-03-13T14:15:42-06:00</updated>
   <id>http://mjibson.github.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[re2net - part 2: DFA]]></title>
     <link href="http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa/"/>
-    <updated>2012-05-29T15:54:00-04:00</updated>
+    <updated>2012-05-29T15:54:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa</id>
     <content type="html"><![CDATA[<p>I have <a href="https://github.com/mjibson/re2net/commit/4f5f274fb6299c703d70541af795918371f0bdd6">added</a> a DFA state machine to the re2net library, as described <a href="http://swtch.com/~rsc/regexp/regexp1.html">here</a>. This method computes the DFA states on demand, which makes subsequent matches with the same instance faster. The crude benchmark below shows run times for the NFA (as in <a href="http://blog.mattjibson.com/2012/05/re2net---C-RE2-implementation-part-1">part 1</a>), DFA's first run, DFA's second run, and C#'s Regex library as a comparison.</p>
 
@@ -66,7 +66,7 @@
   <entry>
     <title type="html"><![CDATA[re2net - part 1: C# RE2 implementation]]></title>
     <link href="http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/"/>
-    <updated>2012-05-02T15:57:00-04:00</updated>
+    <updated>2012-05-02T15:57:00-06:00</updated>
     <id>http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation</id>
     <content type="html"><![CDATA[<p>After reading Russ Cox's <a href="http://swtch.com/~rsc/regexp/regexp1.html">regular expression articles</a>, I became interested in porting his <a href="http://code.google.com/p/re2/">RE2</a> library to C#. These posts will describe my effort to port the entire library, which I will do in steps. I know that one could just link to the RE2 library, but I am porting this as an academic exercise to learn C# and regular expression parsing.</p>
 

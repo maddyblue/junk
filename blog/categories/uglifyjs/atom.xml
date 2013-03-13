@@ -4,7 +4,7 @@
   <title><![CDATA[Category: uglifyjs | Matt Jibson's Blog]]></title>
   <link href="http://mjibson.github.com/blog/categories/uglifyjs/atom.xml" rel="self"/>
   <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-04T20:10:43-05:00</updated>
+  <updated>2013-03-13T14:15:42-06:00</updated>
   <id>http://mjibson.github.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 3: Extraction with Roslyn and Uglify]]></title>
     <link href="http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
-    <updated>2013-03-01T15:52:00-05:00</updated>
+    <updated>2013-03-01T15:52:00-07:00</updated>
     <id>http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
     <content type="html"><![CDATA[<p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
 
