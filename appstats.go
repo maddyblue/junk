@@ -78,6 +78,10 @@ func (c Context) Call(service, method string, in, out appengine_internal.ProtoMe
 	c.Stats.wg.Add(1)
 	defer c.Stats.wg.Done()
 
+	if service == "__go__" {
+		return c.Context.Call(service, method, in, out, opts)
+	}
+
 	stat := RPCStat{
 		Service:   service,
 		Method:    method,
