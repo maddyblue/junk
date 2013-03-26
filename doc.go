@@ -61,6 +61,16 @@ Configuration
 Refer to the variables section of the documentation: http://godoc.org/github.com/mjibson/appstats#_variables.
 
 
+Routing
+
+In general, the app.yaml will not need to change. In the case of conflicting
+routes, add the following to your app.yaml:
+
+	handlers:
+	- url: /_ah/stats/.*
+	  script: _go_app
+
+
 Todo
 
 Cost calculation is experimental. Currently it only includes write ops (read and small ops are TODO).
