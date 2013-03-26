@@ -139,6 +139,8 @@ func (c Context) FromContext(ctx appengine.Context) Context {
 	}
 }
 
+const bufMaxLen = 1000000
+
 func (c Context) Save() {
 	c.Stats.wg.Wait()
 	c.Stats.Duration = time.Since(c.Stats.Start)
@@ -148,10 +150,16 @@ func (c Context) Save() {
 		Header: c.req.Header,
 		Stats:  c.Stats,
 	}
-	err := gob.NewEncoder(&buf_full).Encode(&full)
-	if err != nil {
+	if err := gob.NewEncoder(&buf_full).Encode(&full); err != nil {
 		c.Errorf("appstats Save error: %v", err)
 		return
+	} else if buf_full.Len() > bufMaxLen {
+		// first try clearing stack traces
+		for i := range full.Stats.RPCStats {
+			full.Stats.RPCStats[i].StackData = ""
+		}
+		buf_full.Truncate(0)
+		gob.NewEncoder(&buf_full).Encode(&full)
 	}
 	part := stats_part(*c.Stats)
 	for i := range part.RPCStats {
@@ -159,8 +167,7 @@ func (c Context) Save() {
 		part.RPCStats[i].In = ""
 		part.RPCStats[i].Out = ""
 	}
-	err = gob.NewEncoder(&buf_part).Encode(&part)
-	if err != nil {
+	if err := gob.NewEncoder(&buf_part).Encode(&part); err != nil {
 		c.Errorf("appstats Save error: %v", err)
 		return
 	}

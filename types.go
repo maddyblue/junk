@@ -90,6 +90,10 @@ func (r RPCStat) Response() string {
 func (r RPCStat) Stack() Stack {
 	s := Stack{}
 
+	if r.StackData == "" {
+		return s
+	}
+
 	lines := strings.Split(r.StackData, "\n")
 	for i := 0; i < len(lines); i++ {
 		idx := strings.LastIndex(lines[i], " ")
