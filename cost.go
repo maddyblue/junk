@@ -1,8 +1,9 @@
 package appstats
 
 import (
-	"code.google.com/p/goprotobuf/proto"
 	"reflect"
+
+	"code.google.com/p/goprotobuf/proto"
 )
 
 const (

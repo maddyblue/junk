@@ -17,8 +17,6 @@
 package appstats
 
 import (
-	"appengine"
-	"appengine/memcache"
 	"bytes"
 	"encoding/gob"
 	"fmt"
@@ -29,6 +27,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"appengine"
+	"appengine/memcache"
 )
 
 var templates *template.Template
@@ -36,10 +37,10 @@ var staticFiles map[string][]byte
 
 func init() {
 	templates = template.New("appstats").Funcs(funcs)
-	templates.Parse(HTML_BASE)
-	templates.Parse(HTML_MAIN)
-	templates.Parse(HTML_DETAILS)
-	templates.Parse(HTML_FILE)
+	templates.Parse(htmlBase)
+	templates.Parse(htmlMain)
+	templates.Parse(htmlDetails)
+	templates.Parse(htmlFile)
 
 	staticFiles = map[string][]byte{
 		"app_engine_logo_sm.gif": app_engine_logo_sm_gif,
@@ -57,11 +58,11 @@ func serveError(w http.ResponseWriter, err error) {
 }
 
 func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
-	if URL_DETAILS == r.URL.Path {
+	if detailsURL == r.URL.Path {
 		Details(w, r)
-	} else if URL_FILE == r.URL.Path {
+	} else if fileURL == r.URL.Path {
 		File(w, r)
-	} else if strings.HasPrefix(r.URL.Path, URL_STATIC) {
+	} else if strings.HasPrefix(r.URL.Path, staticURL) {
 		Static(w, r)
 	} else {
 		Index(w, r)
@@ -69,9 +70,9 @@ func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	keys := make([]string, MODULUS)
+	keys := make([]string, modulus)
 	for i := range keys {
-		keys[i] = fmt.Sprintf(KEY_PART, i*DISTANCE)
+		keys[i] = fmt.Sprintf(keyPart, i*distance)
 	}
 
 	c := context(r)
@@ -90,12 +91,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		r := RequestStats(t)
 		ars = append(ars, &r)
 	}
-	sort.Sort(Reverse{ars})
+	sort.Sort(reverse{ars})
 
 	requestById := make(map[int]*RequestStats, len(ars))
 	idByRequest := make(map[*RequestStats]int, len(ars))
 	requests := make(map[int]*StatByName)
-	byRequest := make(map[int]map[string]CVal)
+	byRequest := make(map[int]map[string]cVal)
 	for i, v := range ars {
 		idx := i + 1
 		requestById[idx] = v
@@ -103,12 +104,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		requests[idx] = &StatByName{
 			RequestStats: v,
 		}
-		byRequest[idx] = make(map[string]CVal)
+		byRequest[idx] = make(map[string]cVal)
 	}
 
 	requestByPath := make(map[string][]int)
-	byCount := make(map[string]CVal)
-	byRPC := make(map[SKey]CVal)
+	byCount := make(map[string]cVal)
+	byRPC := make(map[SKey]cVal)
 	for _, t := range ars {
 		id := idByRequest[t]
 
@@ -143,7 +144,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 				Cost:  s.cost,
 			})
 		}
-		sort.Sort(Reverse{stats})
+		sort.Sort(reverse{stats})
 		requests[k].SubStats = stats
 	}
 
@@ -162,7 +163,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 	for k, v := range statsByRPC {
-		sort.Sort(Reverse{v})
+		sort.Sort(reverse{v})
 		statsByRPC[k] = v
 	}
 
@@ -174,7 +175,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			total += stat.Count
 			cost += stat.Cost
 		}
-		sort.Sort(Reverse{v})
+		sort.Sort(reverse{v})
 
 		pathStatsByCount = append(pathStatsByCount, &StatByName{
 			Name:       k,
@@ -185,7 +186,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			RecentReqs: requestByPath[k],
 		})
 	}
-	sort.Sort(Reverse{pathStatsByCount})
+	sort.Sort(reverse{pathStatsByCount})
 
 	allStatsByCount := StatsByName{}
 	for k, v := range byCount {
@@ -196,7 +197,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			SubStats: statsByRPC[k],
 		})
 	}
-	sort.Sort(Reverse{allStatsByCount})
+	sort.Sort(reverse{allStatsByCount})
 
 	v := struct {
 		Env                 map[string]string
@@ -218,7 +219,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 func Details(w http.ResponseWriter, r *http.Request) {
 	qtime := r.URL.Query().Get("time")
-	key := fmt.Sprintf(KEY_FULL, qtime)
+	key := fmt.Sprintf(keyFull, qtime)
 
 	c := context(r)
 
@@ -247,7 +248,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	byCount := make(map[string]CVal)
+	byCount := make(map[string]cVal)
 	durationCount := make(map[string]time.Duration)
 	var _real time.Duration
 	for _, r := range full.Stats.RPCStats {
