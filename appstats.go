@@ -68,14 +68,14 @@ func DefaultShouldRecord(r *http.Request) bool {
 	return rand.Float64() < RecordFraction
 }
 
-type context struct {
+type Context struct {
 	appengine.Context
 
 	req   *http.Request
 	Stats *RequestStats
 }
 
-func (c context) Call(service, method string, in, out appengine_internal.ProtoMessage, opts *appengine_internal.CallOptions) error {
+func (c Context) Call(service, method string, in, out appengine_internal.ProtoMessage, opts *appengine_internal.CallOptions) error {
 	c.Stats.wg.Add(1)
 	defer c.Stats.wg.Done()
 
@@ -110,7 +110,7 @@ func (c context) Call(service, method string, in, out appengine_internal.ProtoMe
 	return err
 }
 
-func newContext(req *http.Request) context {
+func NewContext(req *http.Request) Context {
 	c := appengine.NewContext(req)
 	var uname string
 	var admin bool
@@ -118,7 +118,7 @@ func newContext(req *http.Request) context {
 		uname = u.String()
 		admin = u.Admin
 	}
-	return context{
+	return Context{
 		Context: c,
 		req:     req,
 		Stats: &RequestStats{
@@ -132,8 +132,8 @@ func newContext(req *http.Request) context {
 	}
 }
 
-func (c context) FromContext(ctx appengine.Context) context {
-	return context{
+func (c Context) FromContext(ctx appengine.Context) Context {
+	return Context{
 		Context: ctx,
 		req:     c.req,
 		Stats:   c.Stats,
@@ -142,7 +142,7 @@ func (c context) FromContext(ctx appengine.Context) context {
 
 const bufMaxLen = 1000000
 
-func (c context) Save() {
+func (c Context) Save() {
 	c.Stats.wg.Wait()
 	c.Stats.Duration = time.Since(c.Stats.Start)
 
@@ -191,11 +191,11 @@ func (c context) Save() {
 		c.URL(),
 	)
 
-	nc := opContext(c.req)
+	nc := context(c.req)
 	memcache.SetMulti(nc, []*memcache.Item{item_part, item_full})
 }
 
-func (c context) URL() string {
+func (c Context) URL() string {
 	u := url.URL{
 		Scheme:   "http",
 		Host:     c.req.Host,
@@ -206,7 +206,7 @@ func (c context) URL() string {
 	return u.String()
 }
 
-func opContext(r *http.Request) appengine.Context {
+func context(r *http.Request) appengine.Context {
 	c := appengine.NewContext(r)
 	nc, _ := appengine.Namespace(c, Namespace)
 	return nc
@@ -227,7 +227,7 @@ func NewHandler(f func(appengine.Context, http.ResponseWriter, *http.Request)) H
 type responseWriter struct {
 	http.ResponseWriter
 
-	c context
+	c Context
 }
 
 func (r responseWriter) Write(b []byte) (int, error) {
@@ -247,7 +247,7 @@ func (r responseWriter) WriteHeader(i int) {
 
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if ShouldRecord(r) {
-		c := newContext(r)
+		c := NewContext(r)
 		rw := responseWriter{
 			ResponseWriter: w,
 			c:              c,
