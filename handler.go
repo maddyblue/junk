@@ -37,10 +37,10 @@ var staticFiles map[string][]byte
 
 func init() {
 	templates = template.New("appstats").Funcs(funcs)
-	templates.Parse(htmlBASE)
-	templates.Parse(htmlMAIN)
-	templates.Parse(htmlDETAILS)
-	templates.Parse(htmlFILE)
+	templates.Parse(htmlBase)
+	templates.Parse(htmlMain)
+	templates.Parse(htmlDetails)
+	templates.Parse(htmlFile)
 
 	staticFiles = map[string][]byte{
 		"app_engine_logo_sm.gif": app_engine_logo_sm_gif,

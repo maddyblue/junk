@@ -22,7 +22,7 @@
 
 package appstats
 
-const htmlBASE = `
+const htmlBase = `
 {{ define "top" }}<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,7 +76,7 @@ const htmlBASE = `
 {{ end }}
 `
 
-const htmlMAIN = `
+const htmlMain = `
 {{ define "main" }}
 {{ template "top" . }}
 {{ template "body" . }}
@@ -274,7 +274,7 @@ const htmlMAIN = `
 {{ end }}
 `
 
-const htmlDETAILS = `
+const htmlDetails = `
 {{ define "details" }}
 {{ template "top" . }}
 {{ template "body" . }}
@@ -478,7 +478,7 @@ renderChart();
 {{ template "footer" . }}
 {{ end }}
 `
-const htmlFILE = `
+const htmlFile = `
 {{ define "file" }}
 {{ template "top" . }}
 {{ template "body" . }}
