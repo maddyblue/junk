@@ -17,10 +17,6 @@
 package appstats
 
 import (
-	"appengine"
-	"appengine/memcache"
-	"appengine/user"
-	"appengine_internal"
 	"bytes"
 	"encoding/gob"
 	"fmt"
@@ -29,42 +25,47 @@ import (
 	"net/url"
 	"runtime/debug"
 	"time"
+
+	"appengine"
+	"appengine/memcache"
+	"appengine/user"
+	"appengine_internal"
 )
 
 var (
-	// RECORD_FRACTION is the fraction of requests to record.
+	// RecordFraction is the fraction of requests to record.
 	// Set to a number between 0.0 (none) and 1.0 (all).
-	RECORD_FRACTION float64 = 1.0
+	RecordFraction float64 = 1.0
 
 	// ShouldRecord is the function used to determine if recording will occur
-	// for a given request. The default is to use RECORD_FRACTION.
-	ShouldRecord func(*http.Request) bool = DefaultShouldRecord
+	// for a given request. The default is to use RecordFraction.
+	ShouldRecord = DefaultShouldRecord
 
-	// PROTO_BUF_MAX is the amount of protobuf data to record.
+	// ProtoMaxBytes is the amount of protobuf data to record.
 	// Data after this is truncated.
-	PROTO_BUF_MAX int = 150
+	ProtoMaxBytes = 150
 
-	// NAMESPACE is the memcache namespace under which to store appstats data.
-	NAMESPACE string = "__appstats__"
+	// Namespace is the memcache namespace under which to store appstats data.
+	Namespace = "__appstats__"
 )
 
 const (
-	URL         = "/_ah/stats/"
-	URL_DETAILS = URL + "details"
-	URL_FILE    = URL + "file"
-	URL_STATIC  = URL + "static/"
+	serveURL   = "/_ah/stats/"
+	detailsURL = serveURL + "details"
+	fileURL    = serveURL + "file"
+	staticURL  = serveURL + "static/"
 )
 
 func init() {
-	http.HandleFunc(URL, AppstatsHandler)
+	http.HandleFunc(serveURL, AppstatsHandler)
 }
 
 func DefaultShouldRecord(r *http.Request) bool {
-	if RECORD_FRACTION >= 1.0 {
+	if RecordFraction >= 1.0 {
 		return true
 	}
 
-	return rand.Float64() < RECORD_FRACTION
+	return rand.Float64() < RecordFraction
 }
 
 type Context struct {
@@ -95,11 +96,11 @@ func (c Context) Call(service, method string, in, out appengine_internal.ProtoMe
 	stat.Out = out.String()
 	stat.Cost = GetCost(out)
 
-	if len(stat.In) > PROTO_BUF_MAX {
-		stat.In = stat.In[:PROTO_BUF_MAX] + "..."
+	if len(stat.In) > ProtoMaxBytes {
+		stat.In = stat.In[:ProtoMaxBytes] + "..."
 	}
-	if len(stat.Out) > PROTO_BUF_MAX {
-		stat.Out = stat.Out[:PROTO_BUF_MAX] + "..."
+	if len(stat.Out) > ProtoMaxBytes {
+		stat.Out = stat.Out[:ProtoMaxBytes] + "..."
 	}
 
 	c.Stats.lock.Lock()
@@ -198,7 +199,7 @@ func (c Context) URL() string {
 	u := url.URL{
 		Scheme:   "http",
 		Host:     c.req.Host,
-		Path:     URL_DETAILS,
+		Path:     detailsURL,
 		RawQuery: fmt.Sprintf("time=%v", c.Stats.Start.Nanosecond()),
 	}
 
@@ -207,7 +208,7 @@ func (c Context) URL() string {
 
 func context(r *http.Request) appengine.Context {
 	c := appengine.NewContext(r)
-	nc, _ := appengine.Namespace(c, NAMESPACE)
+	nc, _ := appengine.Namespace(c, Namespace)
 	return nc
 }
 

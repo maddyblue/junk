@@ -27,11 +27,11 @@ import (
 )
 
 const (
-	KEY_PREFIX = "__appstats__:"
-	KEY_PART   = KEY_PREFIX + "%06d:part"
-	KEY_FULL   = KEY_PREFIX + "%v:full"
-	DISTANCE   = 100
-	MODULUS    = 1000
+	keyPrefix = "__appstats__:"
+	keyPart   = keyPrefix + "%06d:part"
+	keyFull   = keyPrefix + "%v:full"
+	distance  = 100
+	modulus   = 1000
 )
 
 type RequestStats struct {
@@ -57,12 +57,12 @@ type stats_full struct {
 }
 
 func (r RequestStats) PartKey() string {
-	t := (r.Start.Nanosecond() / 1000 / DISTANCE) % MODULUS * DISTANCE
-	return fmt.Sprintf(KEY_PART, t)
+	t := (r.Start.Nanosecond() / 1000 / distance) % modulus * distance
+	return fmt.Sprintf(keyPart, t)
 }
 
 func (r RequestStats) FullKey() string {
-	return fmt.Sprintf(KEY_FULL, r.Start.Nanosecond())
+	return fmt.Sprintf(keyFull, r.Start.Nanosecond())
 }
 
 type RPCStat struct {
@@ -150,15 +150,15 @@ type StatByName struct {
 	Duration     time.Duration
 }
 
-type Reverse struct{ sort.Interface }
+type reverse struct{ sort.Interface }
 
-func (r Reverse) Less(i, j int) bool { return r.Interface.Less(j, i) }
+func (r reverse) Less(i, j int) bool { return r.Interface.Less(j, i) }
 
 type SKey struct {
 	a, b string
 }
 
-type CVal struct {
+type cVal struct {
 	count int
 	cost  int64
 }
