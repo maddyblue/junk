@@ -61,8 +61,8 @@ func serveError(w http.ResponseWriter, err error) {
 func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	if u := user.Current(c); u == nil {
-		if loginUrl, err := user.LoginURL(c, r.URL.String()); err == nil {
-			http.Redirect(w, r, loginUrl, http.StatusTemporaryRedirect)
+		if loginURL, err := user.LoginURL(c, r.URL.String()); err == nil {
+			http.Redirect(w, r, loginURL, http.StatusTemporaryRedirect)
 		} else {
 			serveError(w, err)
 		}
