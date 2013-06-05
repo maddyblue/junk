@@ -30,6 +30,7 @@ import (
 
 	"appengine"
 	"appengine/memcache"
+	"appengine/user"
 )
 
 var templates *template.Template
@@ -58,6 +59,19 @@ func serveError(w http.ResponseWriter, err error) {
 }
 
 func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	if u := user.Current(c); u == nil {
+		if loginUrl, err := user.LoginURL(c, r.URL.String()); err == nil {
+			http.Redirect(w, r, loginUrl, http.StatusTemporaryRedirect)
+		} else {
+			serveError(w, err)
+		}
+		return
+	} else if !u.Admin {
+		http.Error(w, "Forbidden", http.StatusForbidden)
+		return
+	}
+
 	if detailsURL == r.URL.Path {
 		Details(w, r)
 	} else if fileURL == r.URL.Path {
