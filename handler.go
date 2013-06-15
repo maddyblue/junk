@@ -60,7 +60,9 @@ func serveError(w http.ResponseWriter, err error) {
 
 func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	if u := user.Current(c); u == nil {
+	if appengine.IsDevAppServer() {
+		// noop
+	} else if u := user.Current(c); u == nil {
 		if loginURL, err := user.LoginURL(c, r.URL.String()); err == nil {
 			http.Redirect(w, r, loginURL, http.StatusTemporaryRedirect)
 		} else {
