@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: stack exchange | Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/blog/categories/stack-exchange/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/blog/categories/stack-exchange/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[How I got a job at Stack Overflow]]></title>
-    <link href="http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/"/>
-    <updated>2012-04-28T15:58:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow</id>
+    <link href="http://mattjibson.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/"/>
+    <updated>2012-04-28T15:58:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow</id>
     <content type="html"><![CDATA[<p>I just got a job at <a href="http://stackexchange.com/">Stack Exchange</a>. The experience was interesting enough and I learned a few things that could be valuable to others.</p>
 
 <p>We are still hiring <a href="http://careers.stackoverflow.com/jobs/16279/software-developer-new-york-stack-exchange?a=jetqDpm">another developer</a> if you are interested after reading.</p>

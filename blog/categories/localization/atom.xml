@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: localization | Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/blog/categories/localization/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/blog/categories/localization/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 3: Extraction with Roslyn and Uglify]]></title>
-    <link href="http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
-    <updated>2013-03-01T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
+    <link href="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
+    <updated>2013-03-01T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
     <content type="html"><![CDATA[<p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
 
 <p>The difficulty is to extract all of the strings so that they can be sent to translators. Compounding this difficulty, we also must make sure to send the correct number of <strong>plural forms</strong> to the translators. Look at the example below. <code>__count</code> does not appear in the translated string, only in the values object. This means we must, at extraction time, understand these value objects and be able to reason about them---we must know their types.</p>
@@ -176,9 +176,9 @@ public static bool HasCount(ExpressionSyntax arg, ISemanticModel model)
   
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 2: The API]]></title>
-    <link href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/"/>
-    <updated>2013-02-28T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api</id>
+    <link href="http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api/"/>
+    <updated>2013-02-28T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api</id>
     <content type="html"><![CDATA[<p><a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Previously</a> we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the way in which we would craft strings to be localized.</p>
 
 <h2>Markup</h2>
@@ -344,9 +344,9 @@ I have [0, 1, 2, few, many, other] rainbows and [0, 1, 2, few, many, other] pand
   
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 1: Why Roll Our Own?]]></title>
-    <link href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
-    <updated>2013-02-27T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
+    <link href="http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
+    <updated>2013-02-27T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
     <content type="html"><![CDATA[<p>Localization is a difficult feature to add to a website. A few months ago, we at <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a> localized into <a href="http://careers.stackoverflow.com/de/">German</a>. This took months of effort from much of the team. I would like to describe our design and implementation over a few blog posts.</p>
 
 <p>This post will discuss our design choices.</p>

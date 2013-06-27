@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: appstats | Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/blog/categories/appstats/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/blog/categories/appstats/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Appstats for Go]]></title>
-    <link href="http://mjibson.github.com/blog/2013/02/05/appstats-for-go/"/>
-    <updated>2013-02-05T01:56:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/02/05/appstats-for-go</id>
+    <link href="http://mattjibson.com/blog/2013/02/05/appstats-for-go/"/>
+    <updated>2013-02-05T01:56:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/05/appstats-for-go</id>
     <content type="html"><![CDATA[<p>I would like to announce the release of appstats for go. Installation instructions are <a href="http://godoc.org/github.com/mjibson/appstats">available on godoc.org</a>. I'd like to thank Dave Symonds for <a href="https://groups.google.com/forum/?fromgroups=#!topic/google-appengine-go/laOsfI1dSGY">his help</a> on this project.</p>
 
 <p>A <a href="http://schalmei-go.appspot.com/">demo site</a> is available.</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -14,11 +14,97 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Go Read: Open-Source Google Reader Clone]]></title>
+    <link href="http://mattjibson.com/blog/2013/06/26/go-read-open-source-google-reader-clone/"/>
+    <updated>2013-06-26T23:20:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2013/06/26/go-read-open-source-google-reader-clone</id>
+    <content type="html"><![CDATA[<p>I would like to announce the release of <a href="http://www.goread.io">Go Read</a>. It as a Google Reader clone, and designed to be close to its simplicity and cleanliness. I wanted to build something as close to Google Reader as made sense for one person to build in a few months. Since the announcement, numerous clones have been written, and some existing ones were made known. I tried most of them and disliked them for various reasons. It seemed interesting and fun to make my own that would serve exactly my needs. I hope others find it useful.</p>
+
+<p><a href="http://www.goread.io">Try it out:</a></p>
+
+<p><a href="http://www.goread.io/"><img src="http://mattjibson.com/assets/images/goread-all.png"></a></p>
+
+<p>Specifically, I wanted:</p>
+
+<ol>
+<li>importing of existing google reader and OPML feeds</li>
+<li>a web page with decent mobile support</li>
+<li>to not install anything ever</li>
+<li>a relatively similar look to Google Reader</li>
+<li>the same keyboard shortcut keys</li>
+<li>snappy and fast</li>
+</ol>
+
+
+<h2>implementation</h2>
+
+<p>Feed readers are difficult.</p>
+
+<p>One of the biggest problems with the readers I tried over the last months was scalability. While on the front page of HN, they were slow and unusable. Many then ended up restricting their demo tier to something useless or took so long to import my feeds that I just forgot about them and never went back. I wanted to architect a reader whose scale would be limited only by how much I was willing to pay for servers. Newsblur&#8217;s early tweets suggested that the database was the bottle neck - they could not simply add new machines because it was not designed to use them. I chose the <a href="http://golang.org">go</a> runtime of <a href="https://developers.google.com/appengine/">app engine</a> and attempted to design the data structures in a way that allowed concurrency. Depending on the traffic I get, we will see if I succeeded.</p>
+
+<p>The second big difficulty is the lack of standards compliance. Most feeds are formatted more-or-less correctly, but you must support three formats (RSS, RDF, Atom). The number of date formats we encountered is comical (so much so that I <a href="http://rssdateformats.tumblr.com/">started a blog</a> to document them). At current count, there are <a href="https://github.com/mjibson/goread/blob/0387db10bd9fd9ccd90d557fa30b6e494efa577a/goapp/utils.go#L129">around 60</a> date formats I&#8217;ve seen. There are others that are just not parsable:</p>
+
+<ul>
+<li><a href="http://www.threewordphrase.com/rss.xml">Wed, 18 2012</a></li>
+<li><a href="http://www.airtightnetworks.com/fileadmin/rss/press_releases.xml">Tue, 3 Febuary 2010 00:00:00 IST</a></li>
+<li><a href="http://us.blizzard.com/en-us/news/rss.xml">Tue, 15 May 2012 24:05:00 UTC</a></li>
+<li><a href="http://www.alta.si/Rss/?id=1">čet, 24 maj 2012 00:00:00</a></li>
+</ul>
+
+
+<p>To make it snappy and fast, <a href="http://angularjs.org/">angularjs</a> is used. A single page is loaded, and all interaction is JSON. Background requests are made to save read stories, save options, fetch the needed story content. This allows us to render changes to the user even if the server takes a bit to process them - we need to wait for returns to change the UI. Angular&#8217;s data binding is just pleasant. It feels fast.</p>
+
+<p>The entire source is <a href="https://github.com/mjibson/goread">on github</a> under the ISC license. Some other readers are open source, but appeared quite difficult to actually install. Using app engine allows go read to be easily run by anyone else by basically changing a single line; instructions are in the repo. A few hundred feeds can be run under the app engine free quota (number of users is basically unimportant to datastore use).</p>
+
+<h2>future</h2>
+
+<p>Current costs are a few dollars a week. If HN ends up liking it, I assume that will multiply. I plan to add non-annoying ads that are removable with a modest fee to support it. If go read can pay for itself, I will be happy.</p>
+
+<p>There are a few features that are not yet implemented and certainly some bugs. Having a full Google Reader API would be beneficial to the existing reader apps. Pubsubhubbub support is missing. I am unlikely to consider major UI changes or great deviations from the standard reader feature set, but good ones could be proposed. I plan on using go read and improving it as I can.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Perceptual Diffs at Stack Overflow]]></title>
+    <link href="http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow/"/>
+    <updated>2013-06-11T01:03:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow</id>
+    <content type="html"><![CDATA[<h1>pdiffs are worth the time</h1>
+
+<p>After hearing about Brett Slatkin&#8217;s discussion of <a href="http://www.youtube.com/watch?v=UMnZiTL0tUc">perceptual diffs</a>, I wanted to try it out on <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a>. I wasn&#8217;t convinced it would be worth the time to implement. But then I started keeping a list of the bugs it would have found. These bugs were hard to find and solve because they were so strange. A CSS refactor missed some rare pages. Changing newlines in our files from <code>\r\n</code> to <code>\n</code> broke multiline strings on localized pages (checksum changed, so it couldn&#8217;t find the localized strings). Other obscure things. Each time this happened I thought that pdiff would have found it before we did. Eventually it became clear that it was worth the time investment.</p>
+
+<h1>implementation</h1>
+
+<p>I decided to use the same deployment style as perscribed in the videos: when new code is pushed, UI tests run, and pdiffs run separately but in parallel. This wouldn&#8217;t add any time to our commit-build-test-deploy cycle. And we could see if there were any problems before deploying to production.</p>
+
+<p><img src="http://mattjibson.com/assets/images/pdiff-build.png"></p>
+
+<p>Our pdiff step is implemented as its own nunit test class in its own category (so it can be run separately from our UI tests). We have a list of URLS and run a selenium process to screenshot each of them in all of our supported languages. Some pages need user input, so we support running arbitrary code before screenshotting. Screenshots are saved on a network drive addressed by their URL, some other identifying string, and build number.</p>
+
+<p>The second step performs the actual diffing. A process recurses through the directories and compares any files with identical URLs and identifying strings, sorted by build number. We pdiff the latest two. There is a free implementation of pdiff online, but that requires calling out to an executable. It turns out writing a naive pdiff implementation is about <a href="https://github.com/mjibson/pdiff/blob/a5974e7e175f2ba53987c53b1596cb27fc85e5a6/pdiff.go#L67">10 lines of code</a>, so we just implmented it ourselves. It&#8217;s trivial to read in two images and compare each pixel. To generate the diff image, start with black and write red if the pixels aren&#8217;t the same. Now we have a list of pdiffs. A static html file showing the pdiffed images is generated. If there are differing images, we have a chat bot (named pdiffy) that announces to our developer room for review.</p>
+
+<p><img src="http://mattjibson.com/assets/images/pdiff-chat.png"></p>
+
+<h1>results</h1>
+
+<p>It was just a few days of work to get this all done. The week after it was running, it found an unpleasant and invisible bug. We were releasing a new feature that needed to turn on at a certain date, and we were off-by-one on the year. pdiff caught it before it could go out.</p>
+
+<p>There are problems. First, it generates lots of false positives. This is because some scripts take a few seconds to initialize, so we have to wait a while before taking a screenshot. Sometimes it&#8217;s not enough, so subtle things change. I&#8217;m bumping up the wait times until these stop. Second, since there&#8217;s no real server, just some static html pages, it&#8217;s not super friendly to use. Ideally, a pdiff server would maintain a list of images that needed review instead of just telling us something changed. Then we wouldn&#8217;t duplicate work of reviewing images some one else already has. This requires a full server that knows what&#8217;s going on. Haven&#8217;t had time for this yet. Finally, we are currently only running pdiff on logged-out, static pages. Pages with dynamic content (i.e., showing random jobs) are not being tested since we have to add server support so it always renders with the same content and user state.</p>
+
+<p>For the future, I am planning on making a REST-like pdiff server running on app engine. I have a <a href="https://github.com/mjibson/go-pdiff">project started already</a> that is partially functional. I chose not to use <a href="https://github.com/bslatkin/dpxdt">dpxdt</a> because I like running things on app engine. And now that <a href="https://cloud.google.com/products/compute-engine">GCE</a> is generally available, it&#8217;s possible to use that to take screen shots. And the go-pdiff backend is just an interface, which means it&#8217;s possible to add a redis or sql backend, and make a vagrant config so it&#8217;s easy to spin up your own internal pdiff server if you don&#8217;t want to use the app engine hosted one.</p>
+
+<h1>conclusion</h1>
+
+<p>Perceptual diffs are not that hard to implement. There are not lots of drop in solutions now. But it is so straightforward to implement, and can catch so many hard kinds of bugs that nothing else can, that it is worth the time and effort.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Careers Localization, part 3: Extraction with Roslyn and Uglify]]></title>
-    <link href="http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
-    <updated>2013-03-01T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
-    <content type="html"><![CDATA[<p><a href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
+    <link href="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
+    <updated>2013-03-01T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
+    <content type="html"><![CDATA[<p><a href="http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
 
 <p>The difficulty is to extract all of the strings so that they can be sent to translators. Compounding this difficulty, we also must make sure to send the correct number of <strong>plural forms</strong> to the translators. Look at the example below. <code>__count</code> does not appear in the translated string, only in the values object. This means we must, at extraction time, understand these value objects and be able to reason about them&#8212;we must know their types.</p>
 
@@ -237,10 +323,10 @@
   
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 2: The API]]></title>
-    <link href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/"/>
-    <updated>2013-02-28T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api</id>
-    <content type="html"><![CDATA[<p><a href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Previously</a> we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the way in which we would craft strings to be localized.</p>
+    <link href="http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api/"/>
+    <updated>2013-02-28T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api</id>
+    <content type="html"><![CDATA[<p><a href="http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Previously</a> we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the way in which we would craft strings to be localized.</p>
 
 <h2>Markup</h2>
 
@@ -425,15 +511,15 @@
 
 <p>The API allows us to do almost everything we need. The limitations ended up being truly limiting in only a few cases, and those could be worked around be restructuring the sentence. The next problem: how do we actually find the usages of <code>_s</code> and send them off to translators?</p>
 
-<p><a href="http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/">Part 3: Extraction</a></p>
+<p><a href="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/">Part 3: Extraction</a></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 1: Why Roll Our Own?]]></title>
-    <link href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
-    <updated>2013-02-27T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
+    <link href="http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
+    <updated>2013-02-27T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
     <content type="html"><![CDATA[<p>Localization is a difficult feature to add to a website. A few months ago, we at <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a> localized into <a href="http://careers.stackoverflow.com/de/">German</a>. This took months of effort from much of the team. I would like to describe our design and implementation over a few blog posts.</p>
 
 <p>This post will discuss our design choices.</p>
@@ -471,20 +557,20 @@
 
 <p>As will be described in future posts, our implementation met all of our requirements, but with some limitations. Localization is hard, and doing everything is near impossible. If we wanted something better than the 90% solution, then what we have now is maybe in the 95% range: there are still missing features that we haven&#8217;t figured out yet.</p>
 
-<p><a href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/">Part 2: The API</a></p>
+<p><a href="http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api/">Part 2: The API</a></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Appstats for Go]]></title>
-    <link href="http://mjibson.github.com/blog/2013/02/05/appstats-for-go/"/>
-    <updated>2013-02-05T01:56:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/02/05/appstats-for-go</id>
+    <link href="http://mattjibson.com/blog/2013/02/05/appstats-for-go/"/>
+    <updated>2013-02-05T01:56:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/05/appstats-for-go</id>
     <content type="html"><![CDATA[<p>I would like to announce the release of appstats for go. Installation instructions are <a href="http://godoc.org/github.com/mjibson/appstats">available on godoc.org</a>. I&#8217;d like to thank Dave Symonds for <a href="https://groups.google.com/forum/?fromgroups=#!topic/google-appengine-go/laOsfI1dSGY">his help</a> on this project.</p>
 
 <p>A <a href="http://schalmei-go.appspot.com/">demo site</a> is available.</p>
 
-<p><a href="http://mjibson.github.com/assets/images/appstats-timeline.png"><img src="http://mjibson.github.com/assets/images/appstats-timeline.png"></a></p>
+<p><a href="http://mattjibson.com/assets/images/appstats-timeline.png"><img src="http://mattjibson.com/assets/images/appstats-timeline.png"></a></p>
 
 <p><a href="https://developers.google.com/appengine/docs/python/tools/appstats">Appstats</a> is an incredibly useful library for the python (and java) runtimes. The go runtime has had no similar library, adding to the difficulty of developing significant apps. I&#8217;d like to describe a bit about how appstats is implemented (applies to python, as well) and where I think the go runtime is today.</p>
 
@@ -519,9 +605,9 @@
   
   <entry>
     <title type="html"><![CDATA[Job offers are not demands]]></title>
-    <link href="http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands/"/>
-    <updated>2013-01-10T22:13:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands</id>
+    <link href="http://mattjibson.com/blog/2013/01/10/job-offers-are-not-demands/"/>
+    <updated>2013-01-10T22:13:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/01/10/job-offers-are-not-demands</id>
     <content type="html"><![CDATA[<p>I am contacted around once per week by people interested in hiring me. Usually email, sometimes on <a href="http://careers.stackoverflow.com">Careers</a>, even phone calls. I don&#8217;t think I&#8217;ve ever responded to these. This is not because I&#8217;m against this kind of recruiting, it&#8217;s because I haven&#8217;t been persuaded in the least by these offers. My <a href="http://careers.stackoverflow.com/mjibson">careers profile</a> even lists me as &#8220;Passive candidate interested in full-time position.&#8221;. That means I have a job, but if you have a better one, maybe I&#8217;ll take it. No one has even piqued my interest, so far. The job offers here (well, not offers, but I&#8217;m not sure of a better term) tell me all about the company and the job, but nothing about how my life will be better there.</p>
 
 <p>Let&#8217;s make one up and look it it:</p>
@@ -561,14 +647,14 @@
   
   <entry>
     <title type="html"><![CDATA[go-dsp FFT performance with go routines]]></title>
-    <link href="http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/"/>
-    <updated>2013-01-04T03:30:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines</id>
+    <link href="http://mattjibson.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/"/>
+    <updated>2013-01-04T03:30:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/mjibson/go-dsp">go-dsp</a> has been around for almost a year now. Recently I have been working on performance improvements. The low-hanging fruit was easy (removing duplicate calculations, smarter array copying, efficient data reordering with bit reversal). The difficult part was getting go routines to work as intended. That is, to have them improve the performance of go-dsp. This turned out to be more difficult than I expected.</p>
 
 <h2>Why the fast Fourier Transform is parallelizable</h2>
 
-<p><a href="http://en.wikipedia.org/wiki/File:DIT-FFT-butterfly.png"><img class="right" src="http://mjibson.github.com/assets/images/DIT-FFT-butterfly.png" width="300"></a></p>
+<p><a href="http://en.wikipedia.org/wiki/File:DIT-FFT-butterfly.png"><img class="right" src="http://mattjibson.com/assets/images/DIT-FFT-butterfly.png" width="300"></a></p>
 
 <p>The FFT is paralellizable because of how the &#8220;fast&#8221; part is implemented. Given an input of length <code>L</code>, if there exist integers <code>M</code> and <code>N</code> such that <code>L = M * N</code>, then the original problem (one transform of size <code>L</code>) can be restated as <code>M</code> problems of size <code>N</code>. These <code>M</code> problems can be run in parallel. For example, say I have an input of size 8. I can reform this as 2 inputs of size 4. These 2 inputs can be run in parallel.</p>
 
@@ -586,11 +672,11 @@
 
 <p>The original, single-thread solution contains no multicore logic. It benchmarked at around 505ms. The graphs below show performance at <code>GOMAXPROCS = 6</code> and a FFT size of <code>2 ^ 20 = 1048576</code>.</p>
 
-<p><img src="http://mjibson.github.com/assets/images/fftmp-1.png"></p>
+<p><img src="http://mattjibson.com/assets/images/fftmp-1.png"></p>
 
 <p>Above are results for the first two attempts. The blue line is the original, single-thread control. The green line shows the very poor performance at small block sizes. The red line shows similar performance as green for large block sizes but that it was able to handle smaller block sizes better (but still not great). Minimum runtime was 1.7x faster (267ms minimum).</p>
 
-<p><img src="http://mjibson.github.com/assets/images/fftmp-2.png"></p>
+<p><img src="http://mattjibson.com/assets/images/fftmp-2.png"></p>
 
 <p>Here we see the final solution with indexed worker groups. Minimum runtime was 252ms (2.0x speedup). Not the 6x increase I wanted, but it&#8217;s not bad.</p>
 
@@ -600,9 +686,9 @@
   
   <entry>
     <title type="html"><![CDATA[Great Piano Pieces]]></title>
-    <link href="http://mjibson.github.com/blog/2012/12/20/great-piano-pieces/"/>
-    <updated>2012-12-20T20:51:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2012/12/20/great-piano-pieces</id>
+    <link href="http://mattjibson.com/blog/2012/12/20/great-piano-pieces/"/>
+    <updated>2012-12-20T20:51:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2012/12/20/great-piano-pieces</id>
     <content type="html"><![CDATA[<p>I have compiled some of my <a href="http://open.spotify.com/user/128346620/playlist/65QbOiGs3DuWa5I6a9MjXI">favorite piano recordings</a> on spotify. (Sorry rdio folks, I tried to make an equivalent playlist, but rdio doesn&#8217;t have some of the recordings I wanted and I couldn&#8217;t find suitable replacements.) Below are some short program notes.</p>
 
 <h3>Ravel Piano Concerto 2</h3>
@@ -625,12 +711,12 @@
   
   <entry>
     <title type="html"><![CDATA[Success by selective education]]></title>
-    <link href="http://mjibson.github.com/blog/2012/12/16/success-by-selective-education/"/>
-    <updated>2012-12-16T14:20:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2012/12/16/success-by-selective-education</id>
+    <link href="http://mattjibson.com/blog/2012/12/16/success-by-selective-education/"/>
+    <updated>2012-12-16T14:20:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2012/12/16/success-by-selective-education</id>
     <content type="html"><![CDATA[<h2>Or: how to win by not studying</h2>
 
-<p><a href="http://en.wikipedia.org/wiki/File:MOSFET_Structure.png"><img class="right" src="http://mjibson.github.com/assets/images/mosfet.png" width="300"></a></p>
+<p><a href="http://en.wikipedia.org/wiki/File:MOSFET_Structure.png"><img class="right" src="http://mattjibson.com/assets/images/mosfet.png" width="300"></a></p>
 
 <p>I once took a junior-level course in college about Metal-Oxide-Semiconductor Field-Effect Transistors. As part of the electrical engineering cirriculum, it was an important course. I had no interest whatsoever in the course, and to this day I&#8217;m still not sure what it was about. For example, I once showed up to class (I suspect my attendance was around or below 50%) to turn in a homework assignment and discovered that a midterm was scheduled for that day. I used the homework as the single sheet of notes we were allowed. I similarly neglected many of the courses I took.</p>
 
@@ -644,7 +730,7 @@
 
 <h2>Impressions</h2>
 
-<p><a href="http://en.wikipedia.org/wiki/File:Op-amp_symbol.svg"><img class="right" src="http://mjibson.github.com/assets/images/opamp.png" width="300"></a></p>
+<p><a href="http://en.wikipedia.org/wiki/File:Op-amp_symbol.svg"><img class="right" src="http://mattjibson.com/assets/images/opamp.png" width="300"></a></p>
 
 <p>At the time I felt that I was making mistakes and slacking off. I thought: instead of programming I should be studying for those other classes. I felt like I was messing myself up as an engineer since I was completely ignoring half of my major courses. For example, after 6 years of electrical engineering courses, I still didn&#8217;t know what an <a href="http://en.wikipedia.org/wiki/Operational_amplifier">op-amp</a> was, even though I had studied them in at least 4 courses. I was convinced that I was making bad choices. I was paying to go to school and not study. I was spending my time doing something that I didn&#8217;t plan on pursuing as a career (I wanted to design processors for Intel or AMD, not program full-time).</p>
 
@@ -664,9 +750,9 @@
   
   <entry>
     <title type="html"><![CDATA[NYC Now]]></title>
-    <link href="http://mjibson.github.com/blog/2012/06/17/nyc-now/"/>
-    <updated>2012-06-17T15:47:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2012/06/17/nyc-now</id>
+    <link href="http://mattjibson.com/blog/2012/06/17/nyc-now/"/>
+    <updated>2012-06-17T15:47:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2012/06/17/nyc-now</id>
     <content type="html"><![CDATA[<p>This weekend I went to <a href="http://hacknjill.com/">hackn&#8217;jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don&#8217;t want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
 
 <p>Although the idea was one of the simpler at the hackathon (aggregation of some events APIs + a map), I think the implementation and interface are quick and pleasant enough to make it a pleasure to use. It is fast and unobtrusive. I found myself browsing around it tonight, and found quite a few things I will actually go do at some point (which I would have not found before).</p>
@@ -709,9 +795,9 @@
   
   <entry>
     <title type="html"><![CDATA[re2net - part 2: DFA]]></title>
-    <link href="http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa/"/>
-    <updated>2012-05-29T15:54:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa</id>
+    <link href="http://mattjibson.com/blog/2012/05/29/re2net-part-2-dfa/"/>
+    <updated>2012-05-29T15:54:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2012/05/29/re2net-part-2-dfa</id>
     <content type="html"><![CDATA[<p>I have <a href="https://github.com/mjibson/re2net/commit/4f5f274fb6299c703d70541af795918371f0bdd6">added</a> a DFA state machine to the re2net library, as described <a href="http://swtch.com/~rsc/regexp/regexp1.html">here</a>. This method computes the DFA states on demand, which makes subsequent matches with the same instance faster. The crude benchmark below shows run times for the NFA (as in <a href="http://blog.mattjibson.com/2012/05/re2net---C-RE2-implementation-part-1">part 1</a>), DFA&#8217;s first run, DFA&#8217;s second run, and C#&#8217;s Regex library as a comparison.</p>
 
 <p>The results below show that the DFA is about an order of magnitude slower than the NFA on the first run (as expected, since the cache is being computed), but an order of magnitude faster on the second run (since the cache is being used).</p>
@@ -759,9 +845,9 @@
   
   <entry>
     <title type="html"><![CDATA[re2net - part 1: C# RE2 implementation]]></title>
-    <link href="http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/"/>
-    <updated>2012-05-02T15:57:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation</id>
+    <link href="http://mattjibson.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/"/>
+    <updated>2012-05-02T15:57:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation</id>
     <content type="html"><![CDATA[<p>After reading Russ Cox&#8217;s <a href="http://swtch.com/~rsc/regexp/regexp1.html">regular expression articles</a>, I became interested in porting his <a href="http://code.google.com/p/re2/">RE2</a> library to C#. These posts will describe my effort to port the entire library, which I will do in steps. I know that one could just link to the RE2 library, but I am porting this as an academic exercise to learn C# and regular expression parsing.</p>
 
 <p>The full RE2 implementation is somewhat large. So, for now, I have started with something simpler: porting <a href="http://swtch.com/~rsc/regexp/nfa.c.txt">nfa.c</a>, which is now <a href="https://github.com/mjibson/re2net/commit/4deade8190159843ee512e8b99da5fbaa68fa1e4">committed</a>.</p>
@@ -809,9 +895,9 @@
   
   <entry>
     <title type="html"><![CDATA[How I got a job at Stack Overflow]]></title>
-    <link href="http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/"/>
-    <updated>2012-04-28T15:58:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow</id>
+    <link href="http://mattjibson.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/"/>
+    <updated>2012-04-28T15:58:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow</id>
     <content type="html"><![CDATA[<p>I just got a job at <a href="http://stackexchange.com/">Stack Exchange</a>. The experience was interesting enough and I learned a few things that could be valuable to others.</p>
 
 <p>We are still hiring <a href="http://careers.stackoverflow.com/jobs/16279/software-developer-new-york-stack-exchange?a=jetqDpm">another developer</a> if you are interested after reading.</p>
@@ -868,9 +954,9 @@
   
   <entry>
     <title type="html"><![CDATA[Fast Fourier Transform in Go]]></title>
-    <link href="http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go/"/>
-    <updated>2011-12-09T15:59:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go</id>
+    <link href="http://mattjibson.com/blog/2011/12/09/fast-fourier-transform-in-go/"/>
+    <updated>2011-12-09T15:59:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2011/12/09/fast-fourier-transform-in-go</id>
     <content type="html"><![CDATA[<p>I just completed all the basic functionality for a fully-working <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> implementation. It supports inputs as arrays of real or complex values, with the inverse transform, too. It is part of my <a href="https://github.com/mjibson/go-dsp">go-dsp project on github</a>.</p>
 
 <p>Install with:</p>
@@ -899,18 +985,18 @@ func main() {
   
   <entry>
     <title type="html"><![CDATA[journalr]]></title>
-    <link href="http://mjibson.github.com/blog/2011/09/22/journalr/"/>
-    <updated>2011-09-22T16:00:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2011/09/22/journalr</id>
+    <link href="http://mattjibson.com/blog/2011/09/22/journalr/"/>
+    <updated>2011-09-22T16:00:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2011/09/22/journalr</id>
     <content type="html"><![CDATA[<p>I just launched <a href="http://journalr.org">journalr</a>, an online journal site. There are almost no online journal sites, and journalr strives to remedy this and encourage more journal writing. It&#8217;s in the early stages, but it&#8217;s good enough to use. I have already begun transcribing my journals from my mission when I spent 2 years in Brazil, and have enjoyed using journalr.</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[webapp2 sessions with the blobstore]]></title>
-    <link href="http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/"/>
-    <updated>2011-09-11T16:01:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore</id>
+    <link href="http://mattjibson.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/"/>
+    <updated>2011-09-11T16:01:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore</id>
     <content type="html"><![CDATA[<p>I recently started using <a href="http://webapp-improved.appspot.com/api/webapp2_extras/sessions.html">webapp2 sessions</a>, and was happy with how they work. However, when trying to access sessions during an upload to the blobstore, I was not able to since the BlobstoreUploadHandler did not inherit from the new BaseHandler I created as directed by the webapp2 session instructions. I wanted to do this to send a message to the user that their upload was successful, using the <code>add_flash()</code> function. Appending <code>?message=Upload successful.</code> to the redirect URL would have worked, but is lame.</p>
 
 <p>Trying to use it through multiple inheritance also fails:

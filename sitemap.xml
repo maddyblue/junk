@@ -1,83 +1,87 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://mjibson.github.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/blog/2011/09/22/journalr/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2011/09/22/journalr/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/blog/2011/12/09/fast-fourier-transform-in-go/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2011/12/09/fast-fourier-transform-in-go/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://mjibson.github.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/
-        </loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://mjibson.github.com/blog/2012/05/29/re2net-part-2-dfa/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://mjibson.github.com/blog/2012/06/17/nyc-now/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://mjibson.github.com/blog/2012/12/16/success-by-selective-education/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://mjibson.github.com/blog/2012/12/20/great-piano-pieces/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/
+            http://mattjibson.com/blog/2012/05/02/re2net-part-1-c-number-re2-implementation/
         </loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2012/05/29/re2net-part-2-dfa/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/blog/2013/02/05/appstats-for-go/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2012/06/17/nyc-now/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://mattjibson.com/blog/2012/12/16/success-by-selective-education/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://mattjibson.com/blog/2012/12/20/great-piano-pieces/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://mattjibson.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://mattjibson.com/blog/2013/01/10/job-offers-are-not-demands/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://mattjibson.com/blog/2013/02/05/appstats-for-go/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/
+            http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/
         </loc>
-        <lastmod>2013-03-04T17:24:36-07:00</lastmod>
+        <lastmod>2013-03-04T19:24:36-05:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/</loc>
-        <lastmod>2013-03-04T18:10:33-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api/</loc>
+        <lastmod>2013-03-04T20:10:33-05:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/
-        </loc>
-        <lastmod>2013-03-04T18:10:27-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/</loc>
+        <lastmod>2013-03-04T20:10:27-05:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/about/</loc>
-        <lastmod>2013-03-04T15:35:44-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow/</loc>
+        <lastmod>2013-06-27T12:24:05-04:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/blog/archives/</loc>
-        <lastmod>2013-03-04T18:10:33-07:00</lastmod>
+        <loc>http://mattjibson.com/blog/2013/06/26/go-read-open-source-google-reader-clone/</loc>
+        <lastmod>2013-06-27T12:28:12-04:00</lastmod>
     </url>
     <url>
-        <loc>http://mjibson.github.com/</loc>
-        <lastmod>2013-03-04T18:10:33-07:00</lastmod>
+        <loc>http://mattjibson.com/about/</loc>
+        <lastmod>2013-03-04T17:35:44-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://mattjibson.com/blog/archives/</loc>
+        <lastmod>2013-06-27T12:28:12-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://mattjibson.com/</loc>
+        <lastmod>2013-06-27T12:28:12-04:00</lastmod>
     </url>
 </urlset>

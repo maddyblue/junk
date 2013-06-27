@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: careers | Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/blog/categories/careers/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/blog/categories/careers/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -14,10 +14,45 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Perceptual Diffs at Stack Overflow]]></title>
+    <link href="http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow/"/>
+    <updated>2013-06-11T01:03:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow</id>
+    <content type="html"><![CDATA[<h1>pdiffs are worth the time</h1>
+
+<p>After hearing about Brett Slatkin's discussion of <a href="http://www.youtube.com/watch?v=UMnZiTL0tUc">perceptual diffs</a>, I wanted to try it out on <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a>. I wasn't convinced it would be worth the time to implement. But then I started keeping a list of the bugs it would have found. These bugs were hard to find and solve because they were so strange. A CSS refactor missed some rare pages. Changing newlines in our files from <code>\r\n</code> to <code>\n</code> broke multiline strings on localized pages (checksum changed, so it couldn't find the localized strings). Other obscure things. Each time this happened I thought that pdiff would have found it before we did. Eventually it became clear that it was worth the time investment.</p>
+
+<h1>implementation</h1>
+
+<p>I decided to use the same deployment style as perscribed in the videos: when new code is pushed, UI tests run, and pdiffs run separately but in parallel. This wouldn't add any time to our commit-build-test-deploy cycle. And we could see if there were any problems before deploying to production.</p>
+
+<p><img src="/assets/images/pdiff-build.png"></p>
+
+<p>Our pdiff step is implemented as its own nunit test class in its own category (so it can be run separately from our UI tests). We have a list of URLS and run a selenium process to screenshot each of them in all of our supported languages. Some pages need user input, so we support running arbitrary code before screenshotting. Screenshots are saved on a network drive addressed by their URL, some other identifying string, and build number.</p>
+
+<p>The second step performs the actual diffing. A process recurses through the directories and compares any files with identical URLs and identifying strings, sorted by build number. We pdiff the latest two. There is a free implementation of pdiff online, but that requires calling out to an executable. It turns out writing a naive pdiff implementation is about <a href="https://github.com/mjibson/pdiff/blob/a5974e7e175f2ba53987c53b1596cb27fc85e5a6/pdiff.go#L67">10 lines of code</a>, so we just implmented it ourselves. It's trivial to read in two images and compare each pixel. To generate the diff image, start with black and write red if the pixels aren't the same. Now we have a list of pdiffs. A static html file showing the pdiffed images is generated. If there are differing images, we have a chat bot (named pdiffy) that announces to our developer room for review.</p>
+
+<p><img src="/assets/images/pdiff-chat.png"></p>
+
+<h1>results</h1>
+
+<p>It was just a few days of work to get this all done. The week after it was running, it found an unpleasant and invisible bug. We were releasing a new feature that needed to turn on at a certain date, and we were off-by-one on the year. pdiff caught it before it could go out.</p>
+
+<p>There are problems. First, it generates lots of false positives. This is because some scripts take a few seconds to initialize, so we have to wait a while before taking a screenshot. Sometimes it's not enough, so subtle things change. I'm bumping up the wait times until these stop. Second, since there's no real server, just some static html pages, it's not super friendly to use. Ideally, a pdiff server would maintain a list of images that needed review instead of just telling us something changed. Then we wouldn't duplicate work of reviewing images some one else already has. This requires a full server that knows what's going on. Haven't had time for this yet. Finally, we are currently only running pdiff on logged-out, static pages. Pages with dynamic content (i.e., showing random jobs) are not being tested since we have to add server support so it always renders with the same content and user state.</p>
+
+<p>For the future, I am planning on making a REST-like pdiff server running on app engine. I have a <a href="https://github.com/mjibson/go-pdiff">project started already</a> that is partially functional. I chose not to use <a href="https://github.com/bslatkin/dpxdt">dpxdt</a> because I like running things on app engine. And now that <a href="https://cloud.google.com/products/compute-engine">GCE</a> is generally available, it's possible to use that to take screen shots. And the go-pdiff backend is just an interface, which means it's possible to add a redis or sql backend, and make a vagrant config so it's easy to spin up your own internal pdiff server if you don't want to use the app engine hosted one.</p>
+
+<h1>conclusion</h1>
+
+<p>Perceptual diffs are not that hard to implement. There are not lots of drop in solutions now. But it is so straightforward to implement, and can catch so many hard kinds of bugs that nothing else can, that it is worth the time and effort.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Careers Localization, part 3: Extraction with Roslyn and Uglify]]></title>
-    <link href="http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
-    <updated>2013-03-01T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
+    <link href="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
+    <updated>2013-03-01T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
     <content type="html"><![CDATA[<p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
 
 <p>The difficulty is to extract all of the strings so that they can be sent to translators. Compounding this difficulty, we also must make sure to send the correct number of <strong>plural forms</strong> to the translators. Look at the example below. <code>__count</code> does not appear in the translated string, only in the values object. This means we must, at extraction time, understand these value objects and be able to reason about them---we must know their types.</p>
@@ -176,9 +211,9 @@ public static bool HasCount(ExpressionSyntax arg, ISemanticModel model)
   
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 2: The API]]></title>
-    <link href="http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api/"/>
-    <updated>2013-02-28T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/02/28/careers-localization-part-2-api</id>
+    <link href="http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api/"/>
+    <updated>2013-02-28T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api</id>
     <content type="html"><![CDATA[<p><a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Previously</a> we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the way in which we would craft strings to be localized.</p>
 
 <h2>Markup</h2>
@@ -344,9 +379,9 @@ I have [0, 1, 2, few, many, other] rainbows and [0, 1, 2, few, many, other] pand
   
   <entry>
     <title type="html"><![CDATA[Careers Localization, part 1: Why Roll Our Own?]]></title>
-    <link href="http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
-    <updated>2013-02-27T15:52:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
+    <link href="http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
+    <updated>2013-02-27T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
     <content type="html"><![CDATA[<p>Localization is a difficult feature to add to a website. A few months ago, we at <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a> localized into <a href="http://careers.stackoverflow.com/de/">German</a>. This took months of effort from much of the team. I would like to describe our design and implementation over a few blog posts.</p>
 
 <p>This post will discuss our design choices.</p>

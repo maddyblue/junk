@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: education | Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/blog/categories/education/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/blog/categories/education/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Success by selective education]]></title>
-    <link href="http://mjibson.github.com/blog/2012/12/16/success-by-selective-education/"/>
-    <updated>2012-12-16T14:20:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2012/12/16/success-by-selective-education</id>
+    <link href="http://mattjibson.com/blog/2012/12/16/success-by-selective-education/"/>
+    <updated>2012-12-16T14:20:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2012/12/16/success-by-selective-education</id>
     <content type="html"><![CDATA[<h2>Or: how to win by not studying</h2>
 
 <p><a href="http://en.wikipedia.org/wiki/File:MOSFET_Structure.png"><img class="right" src="/assets/images/mosfet.png" width="300"></a></p>

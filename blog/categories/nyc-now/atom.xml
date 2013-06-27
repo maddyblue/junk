@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: nyc now | Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/blog/categories/nyc-now/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/blog/categories/nyc-now/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[NYC Now]]></title>
-    <link href="http://mjibson.github.com/blog/2012/06/17/nyc-now/"/>
-    <updated>2012-06-17T15:47:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2012/06/17/nyc-now</id>
+    <link href="http://mattjibson.com/blog/2012/06/17/nyc-now/"/>
+    <updated>2012-06-17T15:47:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2012/06/17/nyc-now</id>
     <content type="html"><![CDATA[<p>This weekend I went to <a href="http://hacknjill.com/">hackn'jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don't want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
 
 <p>Although the idea was one of the simpler at the hackathon (aggregation of some events APIs + a map), I think the implementation and interface are quick and pleasant enough to make it a pleasure to use. It is fast and unobtrusive. I found myself browsing around it tonight, and found quite a few things I will actually go do at some point (which I would have not found before).</p>

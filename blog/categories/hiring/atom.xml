@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: hiring | Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/blog/categories/hiring/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/blog/categories/hiring/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Job offers are not demands]]></title>
-    <link href="http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands/"/>
-    <updated>2013-01-10T22:13:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/01/10/job-offers-are-not-demands</id>
+    <link href="http://mattjibson.com/blog/2013/01/10/job-offers-are-not-demands/"/>
+    <updated>2013-01-10T22:13:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/01/10/job-offers-are-not-demands</id>
     <content type="html"><![CDATA[<p>I am contacted around once per week by people interested in hiring me. Usually email, sometimes on <a href="http://careers.stackoverflow.com">Careers</a>, even phone calls. I don't think I've ever responded to these. This is not because I'm against this kind of recruiting, it's because I haven't been persuaded in the least by these offers. My <a href="http://careers.stackoverflow.com/mjibson">careers profile</a> even lists me as "Passive candidate interested in full-time position.". That means I have a job, but if you have a better one, maybe I'll take it. No one has even piqued my interest, so far. The job offers here (well, not offers, but I'm not sure of a better term) tell me all about the company and the job, but nothing about how my life will be better there.</p>
 
 <p>Let's make one up and look it it:</p>
@@ -57,9 +57,9 @@
   
   <entry>
     <title type="html"><![CDATA[How I got a job at Stack Overflow]]></title>
-    <link href="http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/"/>
-    <updated>2012-04-28T15:58:00-06:00</updated>
-    <id>http://mjibson.github.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow</id>
+    <link href="http://mattjibson.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow/"/>
+    <updated>2012-04-28T15:58:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2012/04/28/how-i-got-a-job-at-stack-overflow</id>
     <content type="html"><![CDATA[<p>I just got a job at <a href="http://stackexchange.com/">Stack Exchange</a>. The experience was interesting enough and I learned a few things that could be valuable to others.</p>
 
 <p>We are still hiring <a href="http://careers.stackoverflow.com/jobs/16279/software-developer-new-york-stack-exchange?a=jetqDpm">another developer</a> if you are interested after reading.</p>

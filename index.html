@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Jibson">
 
   
-  <meta name="description" content="Previously we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: text extraction from the &hellip;">
+  <meta name="description" content="I would like to announce the release of Go Read. It as a Google Reader clone, and designed to be close to its simplicity and cleanliness. I wanted to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://mjibson.github.com/">
+  <link rel="canonical" href="http://mattjibson.com/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -59,7 +59,7 @@
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:mjibson.github.com" />
+    <input type="hidden" name="q" value="site:mattjibson.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -74,6 +74,150 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/26/go-read-open-source-google-reader-clone/">Go Read: Open-Source Google Reader Clone</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-26T23:20:00-04:00" pubdate data-updated="true">Jun 26<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/26/go-read-open-source-google-reader-clone/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I would like to announce the release of <a href="http://www.goread.io">Go Read</a>. It as a Google Reader clone, and designed to be close to its simplicity and cleanliness. I wanted to build something as close to Google Reader as made sense for one person to build in a few months. Since the announcement, numerous clones have been written, and some existing ones were made known. I tried most of them and disliked them for various reasons. It seemed interesting and fun to make my own that would serve exactly my needs. I hope others find it useful.</p>
+
+<p><a href="http://www.goread.io">Try it out:</a></p>
+
+<p><a href="http://www.goread.io/"><img src="/assets/images/goread-all.png"></a></p>
+
+<p>Specifically, I wanted:</p>
+
+<ol>
+<li>importing of existing google reader and OPML feeds</li>
+<li>a web page with decent mobile support</li>
+<li>to not install anything ever</li>
+<li>a relatively similar look to Google Reader</li>
+<li>the same keyboard shortcut keys</li>
+<li>snappy and fast</li>
+</ol>
+
+
+<h2>implementation</h2>
+
+<p>Feed readers are difficult.</p>
+
+<p>One of the biggest problems with the readers I tried over the last months was scalability. While on the front page of HN, they were slow and unusable. Many then ended up restricting their demo tier to something useless or took so long to import my feeds that I just forgot about them and never went back. I wanted to architect a reader whose scale would be limited only by how much I was willing to pay for servers. Newsblur&#8217;s early tweets suggested that the database was the bottle neck - they could not simply add new machines because it was not designed to use them. I chose the <a href="http://golang.org">go</a> runtime of <a href="https://developers.google.com/appengine/">app engine</a> and attempted to design the data structures in a way that allowed concurrency. Depending on the traffic I get, we will see if I succeeded.</p>
+
+<p>The second big difficulty is the lack of standards compliance. Most feeds are formatted more-or-less correctly, but you must support three formats (RSS, RDF, Atom). The number of date formats we encountered is comical (so much so that I <a href="http://rssdateformats.tumblr.com/">started a blog</a> to document them). At current count, there are <a href="https://github.com/mjibson/goread/blob/0387db10bd9fd9ccd90d557fa30b6e494efa577a/goapp/utils.go#L129">around 60</a> date formats I&#8217;ve seen. There are others that are just not parsable:</p>
+
+<ul>
+<li><a href="http://www.threewordphrase.com/rss.xml">Wed, 18 2012</a></li>
+<li><a href="http://www.airtightnetworks.com/fileadmin/rss/press_releases.xml">Tue, 3 Febuary 2010 00:00:00 IST</a></li>
+<li><a href="http://us.blizzard.com/en-us/news/rss.xml">Tue, 15 May 2012 24:05:00 UTC</a></li>
+<li><a href="http://www.alta.si/Rss/?id=1">čet, 24 maj 2012 00:00:00</a></li>
+</ul>
+
+
+<p>To make it snappy and fast, <a href="http://angularjs.org/">angularjs</a> is used. A single page is loaded, and all interaction is JSON. Background requests are made to save read stories, save options, fetch the needed story content. This allows us to render changes to the user even if the server takes a bit to process them - we need to wait for returns to change the UI. Angular&#8217;s data binding is just pleasant. It feels fast.</p>
+
+<p>The entire source is <a href="https://github.com/mjibson/goread">on github</a> under the ISC license. Some other readers are open source, but appeared quite difficult to actually install. Using app engine allows go read to be easily run by anyone else by basically changing a single line; instructions are in the repo. A few hundred feeds can be run under the app engine free quota (number of users is basically unimportant to datastore use).</p>
+
+<h2>future</h2>
+
+<p>Current costs are a few dollars a week. If HN ends up liking it, I assume that will multiply. I plan to add non-annoying ads that are removable with a modest fee to support it. If go read can pay for itself, I will be happy.</p>
+
+<p>There are a few features that are not yet implemented and certainly some bugs. Having a full Google Reader API would be beneficial to the existing reader apps. Pubsubhubbub support is missing. I am unlikely to consider major UI changes or great deviations from the standard reader feature set, but good ones could be proposed. I plan on using go read and improving it as I can.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/11/perceptual-diffs-at-stack-overflow/">Perceptual Diffs at Stack Overflow</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-11T01:03:00-04:00" pubdate data-updated="true">Jun 11<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/11/perceptual-diffs-at-stack-overflow/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>pdiffs are worth the time</h1>
+
+<p>After hearing about Brett Slatkin&#8217;s discussion of <a href="http://www.youtube.com/watch?v=UMnZiTL0tUc">perceptual diffs</a>, I wanted to try it out on <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a>. I wasn&#8217;t convinced it would be worth the time to implement. But then I started keeping a list of the bugs it would have found. These bugs were hard to find and solve because they were so strange. A CSS refactor missed some rare pages. Changing newlines in our files from <code>\r\n</code> to <code>\n</code> broke multiline strings on localized pages (checksum changed, so it couldn&#8217;t find the localized strings). Other obscure things. Each time this happened I thought that pdiff would have found it before we did. Eventually it became clear that it was worth the time investment.</p>
+
+<h1>implementation</h1>
+
+<p>I decided to use the same deployment style as perscribed in the videos: when new code is pushed, UI tests run, and pdiffs run separately but in parallel. This wouldn&#8217;t add any time to our commit-build-test-deploy cycle. And we could see if there were any problems before deploying to production.</p>
+
+<p><img src="/assets/images/pdiff-build.png"></p>
+
+<p>Our pdiff step is implemented as its own nunit test class in its own category (so it can be run separately from our UI tests). We have a list of URLS and run a selenium process to screenshot each of them in all of our supported languages. Some pages need user input, so we support running arbitrary code before screenshotting. Screenshots are saved on a network drive addressed by their URL, some other identifying string, and build number.</p>
+
+<p>The second step performs the actual diffing. A process recurses through the directories and compares any files with identical URLs and identifying strings, sorted by build number. We pdiff the latest two. There is a free implementation of pdiff online, but that requires calling out to an executable. It turns out writing a naive pdiff implementation is about <a href="https://github.com/mjibson/pdiff/blob/a5974e7e175f2ba53987c53b1596cb27fc85e5a6/pdiff.go#L67">10 lines of code</a>, so we just implmented it ourselves. It&#8217;s trivial to read in two images and compare each pixel. To generate the diff image, start with black and write red if the pixels aren&#8217;t the same. Now we have a list of pdiffs. A static html file showing the pdiffed images is generated. If there are differing images, we have a chat bot (named pdiffy) that announces to our developer room for review.</p>
+
+<p><img src="/assets/images/pdiff-chat.png"></p>
+
+<h1>results</h1>
+
+<p>It was just a few days of work to get this all done. The week after it was running, it found an unpleasant and invisible bug. We were releasing a new feature that needed to turn on at a certain date, and we were off-by-one on the year. pdiff caught it before it could go out.</p>
+
+<p>There are problems. First, it generates lots of false positives. This is because some scripts take a few seconds to initialize, so we have to wait a while before taking a screenshot. Sometimes it&#8217;s not enough, so subtle things change. I&#8217;m bumping up the wait times until these stop. Second, since there&#8217;s no real server, just some static html pages, it&#8217;s not super friendly to use. Ideally, a pdiff server would maintain a list of images that needed review instead of just telling us something changed. Then we wouldn&#8217;t duplicate work of reviewing images some one else already has. This requires a full server that knows what&#8217;s going on. Haven&#8217;t had time for this yet. Finally, we are currently only running pdiff on logged-out, static pages. Pages with dynamic content (i.e., showing random jobs) are not being tested since we have to add server support so it always renders with the same content and user state.</p>
+
+<p>For the future, I am planning on making a REST-like pdiff server running on app engine. I have a <a href="https://github.com/mjibson/go-pdiff">project started already</a> that is partially functional. I chose not to use <a href="https://github.com/bslatkin/dpxdt">dpxdt</a> because I like running things on app engine. And now that <a href="https://cloud.google.com/products/compute-engine">GCE</a> is generally available, it&#8217;s possible to use that to take screen shots. And the go-pdiff backend is just an interface, which means it&#8217;s possible to add a redis or sql backend, and make a vagrant config so it&#8217;s easy to spin up your own internal pdiff server if you don&#8217;t want to use the app engine hosted one.</p>
+
+<h1>conclusion</h1>
+
+<p>Perceptual diffs are not that hard to implement. There are not lots of drop in solutions now. But it is so straightforward to implement, and can catch so many hard kinds of bugs that nothing else can, that it is worth the time and effort.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -96,7 +240,7 @@
   
 
 
-<time datetime="2013-03-01T15:52:00-07:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+<time datetime="2013-03-01T15:52:00-05:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
         
          | <a href="/blog/2013/03/01/careers-localization-part-3-extraction/#disqus_thread">Comments</a>
         
@@ -347,7 +491,7 @@
   
 
 
-<time datetime="2013-02-28T15:52:00-07:00" pubdate data-updated="true">Feb 28<span>th</span>, 2013</time>
+<time datetime="2013-02-28T15:52:00-05:00" pubdate data-updated="true">Feb 28<span>th</span>, 2013</time>
         
          | <a href="/blog/2013/02/28/careers-localization-part-2-api/#disqus_thread">Comments</a>
         
@@ -570,7 +714,7 @@
   
 
 
-<time datetime="2013-02-27T15:52:00-07:00" pubdate data-updated="true">Feb 27<span>th</span>, 2013</time>
+<time datetime="2013-02-27T15:52:00-05:00" pubdate data-updated="true">Feb 27<span>th</span>, 2013</time>
         
          | <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/#disqus_thread">Comments</a>
         
@@ -645,7 +789,7 @@
   
 
 
-<time datetime="2013-02-05T01:56:00-07:00" pubdate data-updated="true">Feb 5<span>th</span>, 2013</time>
+<time datetime="2013-02-05T01:56:00-05:00" pubdate data-updated="true">Feb 5<span>th</span>, 2013</time>
         
          | <a href="/blog/2013/02/05/appstats-for-go/#disqus_thread">Comments</a>
         
@@ -716,7 +860,7 @@
   
 
 
-<time datetime="2013-01-10T22:13:00-07:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
+<time datetime="2013-01-10T22:13:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
         
          | <a href="/blog/2013/01/10/job-offers-are-not-demands/#disqus_thread">Comments</a>
         
@@ -787,7 +931,7 @@
   
 
 
-<time datetime="2013-01-04T03:30:00-07:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+<time datetime="2013-01-04T03:30:00-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
         
          | <a href="/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/#disqus_thread">Comments</a>
         
@@ -855,7 +999,7 @@
   
 
 
-<time datetime="2012-12-20T20:51:00-07:00" pubdate data-updated="true">Dec 20<span>th</span>, 2012</time>
+<time datetime="2012-12-20T20:51:00-05:00" pubdate data-updated="true">Dec 20<span>th</span>, 2012</time>
         
          | <a href="/blog/2012/12/20/great-piano-pieces/#disqus_thread">Comments</a>
         
@@ -909,7 +1053,7 @@
   
 
 
-<time datetime="2012-12-16T14:20:00-07:00" pubdate data-updated="true">Dec 16<span>th</span>, 2012</time>
+<time datetime="2012-12-16T14:20:00-05:00" pubdate data-updated="true">Dec 16<span>th</span>, 2012</time>
         
          | <a href="/blog/2012/12/16/success-by-selective-education/#disqus_thread">Comments</a>
         
@@ -956,159 +1100,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/17/nyc-now/">NYC Now</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-17T15:47:00-06:00" pubdate data-updated="true">Jun 17<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/06/17/nyc-now/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This weekend I went to <a href="http://hacknjill.com/">hackn&#8217;jill</a>. I made <a href="http://nyc-now.appspot.com/">NYC Now</a>, a web app to find something to do right now. It shows a map with events around it. It can detect your location or you can set one by clicking. Ajax updates via json. Events and map markers highlight or animate on hover of the corresponding item. It is quickly filterable (easy to remove things you don&#8217;t want to see), so something can be found fast. Code <a href="https://github.com/mjibson/nycnow">is available on github</a>. BSD license.</p>
-
-<p>Although the idea was one of the simpler at the hackathon (aggregation of some events APIs + a map), I think the implementation and interface are quick and pleasant enough to make it a pleasure to use. It is fast and unobtrusive. I found myself browsing around it tonight, and found quite a few things I will actually go do at some point (which I would have not found before).</p>
-
-<p>Things I learned:</p>
-
-<ul>
-<li>async app engine url fetch</li>
-<li>html5 url rewriting</li>
-<li>html5 location fetching</li>
-<li>more jquery</li>
-<li>I still think app engine is the best web platform around</li>
-</ul>
-
-
-<p>It is powered by:</p>
-
-<ul>
-<li>google app engine</li>
-<li>python</li>
-<li>jquery</li>
-<li>foursquare</li>
-<li>yipit</li>
-<li><a href="https://nycopendata.socrata.com/">nyc.gov open data</a></li>
-<li><a href="http://developer.nytimes.com/docs/events_api">New York Times Events API</a></li>
-</ul>
-
-
-<p>It has no:</p>
-
-<ul>
-<li>social media connections</li>
-<li>users or registration</li>
-<li>database</li>
-<li>cache</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/29/re2net-part-2-dfa/">re2net - part 2: DFA</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-29T15:54:00-06:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/05/29/re2net-part-2-dfa/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have <a href="https://github.com/mjibson/re2net/commit/4f5f274fb6299c703d70541af795918371f0bdd6">added</a> a DFA state machine to the re2net library, as described <a href="http://swtch.com/~rsc/regexp/regexp1.html">here</a>. This method computes the DFA states on demand, which makes subsequent matches with the same instance faster. The crude benchmark below shows run times for the NFA (as in <a href="http://blog.mattjibson.com/2012/05/re2net---C-RE2-implementation-part-1">part 1</a>), DFA&#8217;s first run, DFA&#8217;s second run, and C#&#8217;s Regex library as a comparison.</p>
-
-<p>The results below show that the DFA is about an order of magnitude slower than the NFA on the first run (as expected, since the cache is being computed), but an order of magnitude faster on the second run (since the cache is being used).</p>
-
-<p>Until now, this has been an academic exercise to learn C# and build a simple regex parser. With that done, the next step is to support the full regex syntax. The <a href="http://code.google.com/p/re2/">RE2</a> library is this project, but I&#8217;m going to use <a href="http://code.google.com/p/go/source/browse/#hg%2Fsrc%2Fpkg%2Fregexp">Go&#8217;s regexp package</a> since I think the code will be easier to read, and it&#8217;s the same implementation. This is all assuming I maintain interest.</p>
-
-<p>Column headers, all times in seconds.</p>
-
-<p>n, NFA, DFA, DFA2, C# Regex:</p>
-
-<pre>
-01: 0.0046062, 0.0025143, 0.0000043, 00.0000278
-02: 0.0000148, 0.0000108, 0.0000024, 00.0000040
-03: 0.0000222, 0.0000231, 0.0000034, 00.0000034
-04: 0.0000145, 0.0000216, 0.0000077, 00.0000021
-05: 0.0000170, 0.0000355, 0.0000049, 00.0000030
-06: 0.0000213, 0.0000476, 0.0000102, 00.0000052
-07: 0.0000334, 0.0000742, 0.0000064, 00.0000092
-08: 0.0000395, 0.0000971, 0.0000077, 00.0000176
-09: 0.0000504, 0.0001212, 0.0000080, 00.0000346
-10: 0.0000621, 0.0001552, 0.0000086, 00.0000702
-11: 0.0000766, 0.0001821, 0.0000086, 00.0001184
-12: 0.0000899, 0.0008207, 0.0000092, 00.0002622
-13: 0.0001011, 0.0002600, 0.0000092, 00.0004787
-14: 0.0001178, 0.0003105, 0.0000111, 00.0010533
-15: 0.0001252, 0.0003729, 0.0000120, 00.0020185
-16: 0.0001759, 0.0004468, 0.0000160, 00.0041630
-17: 0.0001945, 0.0004914, 0.0000120, 00.0088549
-18: 0.0002310, 0.0005789, 0.0000157, 00.0160122
-19: 0.0002409, 0.0007215, 0.0000139, 00.0318414
-20: 0.0003145, 0.0008251, 0.0000170, 00.0634503
-21: 0.0003732, 0.0009216, 0.0000148, 00.1416363
-22: 0.0004308, 0.0009741, 0.0000185, 00.2809800
-23: 0.0004156, 0.0010700, 0.0000160, 00.5715502
-24: 0.0004849, 0.0011817, 0.0000204, 01.1391405
-25: 0.0005489, 0.0017962, 0.0000216, 02.2826699
-26: 0.0005520, 0.0014535, 0.0000228, 04.5484486
-27: 0.0010332, 0.0016941, 0.0000213, 09.0551722
-28: 0.0010230, 0.0018286, 0.0000216, 18.4857312
-29: 0.0010944, 0.0019780, 0.0000207, 37.1557184
-</pre>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1130,6 +1121,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/26/go-read-open-source-google-reader-clone/">Go Read: Open-Source Google Reader Clone</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/11/perceptual-diffs-at-stack-overflow/">Perceptual Diffs at Stack Overflow</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/01/careers-localization-part-3-extraction/">Careers Localization, part 3: Extraction with Roslyn and Uglify</a>
       </li>
     
@@ -1139,14 +1138,6 @@
     
       <li class="post">
         <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/05/appstats-for-go/">Appstats for Go</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/10/job-offers-are-not-demands/">Job offers are not demands</a>
       </li>
     
   </ul>

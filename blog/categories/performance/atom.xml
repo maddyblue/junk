@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: performance | Matt Jibson's Blog]]></title>
-  <link href="http://mjibson.github.com/blog/categories/performance/atom.xml" rel="self"/>
-  <link href="http://mjibson.github.com/"/>
-  <updated>2013-03-13T14:15:42-06:00</updated>
-  <id>http://mjibson.github.com/</id>
+  <link href="http://mattjibson.com/blog/categories/performance/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
   <author>
     <name><![CDATA[Matt Jibson]]></name>
     <email><![CDATA[matt.jibson@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[go-dsp FFT performance with go routines]]></title>
-    <link href="http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/"/>
-    <updated>2013-01-04T03:30:00-07:00</updated>
-    <id>http://mjibson.github.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines</id>
+    <link href="http://mattjibson.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines/"/>
+    <updated>2013-01-04T03:30:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/01/04/go-dsp-fft-performance-with-go-routines</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/mjibson/go-dsp">go-dsp</a> has been around for almost a year now. Recently I have been working on performance improvements. The low-hanging fruit was easy (removing duplicate calculations, smarter array copying, efficient data reordering with bit reversal). The difficult part was getting go routines to work as intended. That is, to have them improve the performance of go-dsp. This turned out to be more difficult than I expected.</p>
 
 <h2>Why the fast Fourier Transform is parallelizable</h2>
