@@ -234,7 +234,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Details(w http.ResponseWriter, r *http.Request) {
-	qtime := r.URL.Query().Get("time")
+	i, _ := strconv.Atoi(r.FormValue("time"))
+	qtime := roundTime(i)
 	key := fmt.Sprintf(keyFull, qtime)
 
 	c := context(r)
