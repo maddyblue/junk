@@ -1,13 +1,14 @@
 package com.goread.reader;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.ArrayAdapter;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -15,6 +16,9 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 
 import org.apache.http.util.ByteArrayBuffer;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -29,7 +33,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
 
     static final String TAG = "goread";
     static final int PICK_ACCOUNT_REQUEST = 1;
@@ -37,12 +41,16 @@ public class MainActivity extends Activity {
     static final String GOREAD_DOMAIN = "www.goread.io";
     static final String GOREAD_URL = "http://" + GOREAD_DOMAIN;
 
+    protected ArrayAdapter<String> aa;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
         startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
+        aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        setListAdapter(aa);
     }
 
     @Override
@@ -57,9 +65,9 @@ public class MainActivity extends Activity {
             return;
         }
         final Context c = this;
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected String doInBackground(Void... params) {
                 try {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     String authToken = GoogleAuthUtil.getToken(c, accountName, APP_ENGINE_SCOPE);
@@ -81,7 +89,6 @@ public class MainActivity extends Activity {
                                     cm.getCookieStore().add(new URI(GOREAD_URL + "/"), cookie);
                                 }
                             }
-                            listFeeds();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -105,14 +112,21 @@ public class MainActivity extends Activity {
                     Log.e(TAG, authEx.toString());
                 }
 
-                return null;
+                String s = listFeeds();
+                return s;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                parseJSON(s);
             }
         };
         task.execute();
     }
 
-    protected void listFeeds() {
+    protected String listFeeds() {
         HttpURLConnection uc = null;
+        String r = null;
         try {
             URL url = new URL(GOREAD_URL + "/user/list-feeds");
             uc = (HttpURLConnection) url.openConnection();
@@ -130,7 +144,7 @@ public class MainActivity extends Activity {
                 }
                 baf.append(buffer, 0, read);
             }
-            String r = new String(baf.toByteArray());
+            r = new String(baf.toByteArray());
 
         } catch (Exception e) {
             Log.e(TAG, "exception", e);
@@ -138,6 +152,22 @@ public class MainActivity extends Activity {
             if (uc != null) {
                 uc.disconnect();
             }
+        }
+        return r;
+    }
+
+    protected void parseJSON(String jsonStr) {
+        try {
+            JSONObject j = new JSONObject(jsonStr);
+            JSONArray oa = j.getJSONArray("Opml");
+            aa.clear();
+            for (int i = 0; i < oa.length(); i++) {
+                JSONObject o = oa.getJSONObject(i);
+                aa.add(o.getString("Title"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
