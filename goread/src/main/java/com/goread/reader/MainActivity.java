@@ -24,7 +24,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -57,16 +59,33 @@ public class MainActivity extends ListActivity {
     static final String GOREAD_DOMAIN = "www.goread.io";
     static final String GOREAD_URL = "http://" + GOREAD_DOMAIN;
 
-    protected ArrayAdapter<String> aa;
+    private ArrayAdapter<String> aa;
+    private Intent i;
+    static private JSONObject lj;
+    private JSONArray oa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
-        startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
         aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
+
+        i = getIntent();
+        if (i.hasExtra(K_OUTLINE)) {
+            int position = i.getIntExtra(K_OUTLINE, 0);
+            try {
+                JSONArray ta = lj.getJSONArray("Opml");
+                JSONObject to = ta.getJSONObject(position);
+                oa = to.getJSONArray("Outline");
+                parseJSON();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
+            startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
+        }
     }
 
     @Override
@@ -81,9 +100,9 @@ public class MainActivity extends ListActivity {
             return;
         }
         final Context c = this;
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
-            protected String doInBackground(Void... params) {
+            protected Void doInBackground(Void... params) {
                 try {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     String authToken = GoogleAuthUtil.getToken(c, accountName, APP_ENGINE_SCOPE);
@@ -128,21 +147,26 @@ public class MainActivity extends ListActivity {
                     Log.e(TAG, authEx.toString());
                 }
 
-                String s = listFeeds();
-                return s;
+                listFeeds();
+                return null;
             }
 
             @Override
-            protected void onPostExecute(String s) {
-                parseJSON(s);
+            protected void onPostExecute(Void v) {
+                try {
+                    oa = lj.getJSONArray("Opml");
+                    aa.add("all items");
+                    parseJSON();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         };
         task.execute();
     }
 
-    protected String listFeeds() {
+    protected void listFeeds() {
         HttpURLConnection uc = null;
-        String r = null;
         try {
             URL url = new URL(GOREAD_URL + "/user/list-feeds");
             uc = (HttpURLConnection) url.openConnection();
@@ -160,8 +184,8 @@ public class MainActivity extends ListActivity {
                 }
                 baf.append(buffer, 0, read);
             }
-            r = new String(baf.toByteArray());
-
+            String r = new String(baf.toByteArray());
+            lj = new JSONObject(r);
         } catch (Exception e) {
             Log.e(TAG, "exception", e);
         } finally {
@@ -169,19 +193,34 @@ public class MainActivity extends ListActivity {
                 uc.disconnect();
             }
         }
-        return r;
     }
 
-    protected void parseJSON(String jsonStr) {
+    protected void parseJSON() {
         try {
-            JSONObject j = new JSONObject(jsonStr);
-            JSONArray oa = j.getJSONArray("Opml");
-            aa.clear();
             for (int i = 0; i < oa.length(); i++) {
                 JSONObject o = oa.getJSONObject(i);
                 aa.add(o.getString("Title"));
             }
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static final String K_OUTLINE = "OUTLINE";
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        try {
+            if (position == 0) {
+            } else {
+                JSONObject o = oa.getJSONObject(position - 1);
+                if (o.has("Outline")) {
+                    Intent i = new Intent(this, MainActivity.class);
+                    i.putExtra(K_OUTLINE, position);
+                    startActivity(i);
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
