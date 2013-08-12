@@ -22,6 +22,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.webkit.WebView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.util.Date;
+
 public class StoryActivity extends Activity {
 
     @Override
@@ -30,7 +36,25 @@ public class StoryActivity extends Activity {
         setContentView(R.layout.activity_story);
         WebView wv = (WebView) findViewById(R.id.webview);
         Intent i = getIntent();
-        wv.loadData(i.getStringExtra("contents"), "text/html", null);
+        try {
+            JSONObject s = new JSONObject(i.getStringExtra("story"));
+            StringBuilder sb = new StringBuilder("<div>");
+            sb.append(String.format("<h2><a href=\"%s\">%s</a></h2>", s.getString("Link"), s.getString("Title")));
+            sb.append("<hr>");
+            sb.append(String.format("<a href=\"%s\">%s</a>", s.getString("feed"), s.getString("feed")));
+            try {
+                Date d = new Date(Long.parseLong(s.getString("Date")) * 1000);
+                DateFormat df = android.text.format.DateFormat.getDateFormat(this);
+                DateFormat tf = android.text.format.DateFormat.getTimeFormat(this);
+                sb.append(String.format(" on %s %s", df.format(d), tf.format(d)));
+            } catch (Exception e) {
+            }
+            sb.append("</div>");
+            sb.append(i.getStringExtra("contents"));
+            wv.loadData(sb.toString(), "text/html; charset=UTF-8", null);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

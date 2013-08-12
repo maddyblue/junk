@@ -82,11 +82,10 @@ public class StoryListActivity extends ListActivity {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         final Context c = this;
-        AsyncTask<Integer, Void, String> task = new AsyncTask<Integer, Void, String>() {
+        AsyncTask<Integer, Void, Void> task = new AsyncTask<Integer, Void, Void>() {
             @Override
-            protected String doInBackground(Integer... params) {
+            protected Void doInBackground(Integer... params) {
                 HttpURLConnection uc = null;
-                String r = null;
                 try {
                     URL url = new URL(MainActivity.GOREAD_URL + "/user/get-contents");
                     uc = (HttpURLConnection) url.openConnection();
@@ -119,9 +118,14 @@ public class StoryListActivity extends ListActivity {
                         }
                         baf.append(buffer, 0, read);
                     }
-                    r = new String(baf.toByteArray());
+                    String r = new String(baf.toByteArray());
                     a = new JSONArray(r);
                     r = a.getString(0);
+
+                    Intent i = new Intent(c, StoryActivity.class);
+                    i.putExtra("story", so.toString());
+                    i.putExtra("contents", r);
+                    startActivity(i);
                 } catch (Exception e) {
                     Log.e("goread", "exception", e);
                 } finally {
@@ -129,14 +133,7 @@ public class StoryListActivity extends ListActivity {
                         uc.disconnect();
                     }
                 }
-                return r;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                Intent i = new Intent(c, StoryActivity.class);
-                i.putExtra("contents", s);
-                startActivity(i);
+                return null;
             }
         };
         task.execute(position);
