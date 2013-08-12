@@ -28,6 +28,10 @@
             android:name="com.goread.reader.StoryListActivity"
             android:label="@string/title_activity_story_list" >
         </activity>
+        <activity
+            android:name="com.goread.reader.StoryActivity"
+            android:label="@string/title_activity_story" >
+        </activity>
     </application>
 
 </manifest>
