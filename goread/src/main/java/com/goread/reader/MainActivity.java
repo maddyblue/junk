@@ -25,6 +25,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -91,8 +92,7 @@ public class MainActivity extends ListActivity {
                 String accountName = p.getString(P_ACCOUNT, "");
                 doLogin(accountName);
             } else {
-                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
-                startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
+                login();
             }
         }
     }
@@ -102,6 +102,30 @@ public class MainActivity extends ListActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected void logout() {
+        SharedPreferences.Editor e = p.edit();
+        e.remove(P_ACCOUNT);
+        e.commit();
+        login();
+    }
+
+    protected void login() {
+        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
+        startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
     }
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
