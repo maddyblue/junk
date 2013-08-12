@@ -51,6 +51,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends ListActivity {
@@ -65,6 +66,7 @@ public class MainActivity extends ListActivity {
     private ArrayAdapter<String> aa;
     private Intent i;
     static public JSONObject lj;
+    static public HashMap<String, JSONObject> feeds;
     private JSONArray oa;
     private SharedPreferences p;
 
@@ -196,6 +198,18 @@ public class MainActivity extends ListActivity {
                 try {
                     oa = lj.getJSONArray("Opml");
                     aa.add("all items");
+                    feeds = new HashMap<String, JSONObject>();
+                    for (int i = 0; i < oa.length(); i++) {
+                        JSONObject o = oa.getJSONObject(i);
+                        if (o.has("Outline")) {
+                            JSONArray outa = o.getJSONArray("Outline");
+                            for (int j = 0; j < outa.length(); j++) {
+                                addFeed(outa.getJSONObject(j));
+                            }
+                        } else {
+                            addFeed(o);
+                        }
+                    }
                     parseJSON();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -203,6 +217,14 @@ public class MainActivity extends ListActivity {
             }
         };
         task.execute();
+    }
+
+    protected void addFeed(JSONObject o) {
+        try {
+            feeds.put(o.getString("XmlUrl"), o);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void listFeeds() {

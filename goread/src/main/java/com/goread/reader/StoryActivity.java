@@ -42,6 +42,9 @@ public class StoryActivity extends Activity {
         Intent i = getIntent();
         try {
             JSONObject s = new JSONObject(i.getStringExtra("story"));
+            JSONObject f = MainActivity.feeds.get(s.getString("feed"));
+            String fn = f.getString("Title");
+            setTitle(fn);
             StringBuilder sb = new StringBuilder();
             sb.append("<html><head><style>");
             InputStream is = getResources().openRawResource(R.raw.bootstrap);
@@ -56,7 +59,7 @@ public class StoryActivity extends Activity {
             sb.append("</style></head><body>");
             sb.append(String.format("<h3><a href=\"%s\">%s</a></h3>", s.getString("Link"), s.getString("Title")));
             sb.append("<hr>");
-            sb.append(String.format("<p><a href=\"%s\">%s</a>", s.getString("feed"), s.getString("feed")));
+            sb.append(String.format("<p><a href=\"%s\">%s</a>", s.getString("feed"), fn));
             try {
                 Date d = new Date(Long.parseLong(s.getString("Date")) * 1000);
                 DateFormat df = android.text.format.DateFormat.getDateFormat(this);
