@@ -104,7 +104,7 @@ public class StoryListActivity extends ListActivity {
                     a.put(o);
 
                     OutputStream os = uc.getOutputStream();
-                    os.write(a.toString().getBytes());
+                    os.write(a.toString().getBytes("UTF-8"));
                     os.close();
 
                     InputStream in = new BufferedInputStream(uc.getInputStream());
