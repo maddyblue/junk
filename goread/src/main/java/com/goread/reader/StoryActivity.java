@@ -25,6 +25,10 @@ import android.webkit.WebView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -38,10 +42,21 @@ public class StoryActivity extends Activity {
         Intent i = getIntent();
         try {
             JSONObject s = new JSONObject(i.getStringExtra("story"));
-            StringBuilder sb = new StringBuilder("<div>");
-            sb.append(String.format("<h2><a href=\"%s\">%s</a></h2>", s.getString("Link"), s.getString("Title")));
+            StringBuilder sb = new StringBuilder();
+            sb.append("<html><head><style>");
+            InputStream is = getResources().openRawResource(R.raw.bootstrap);
+            BufferedReader r = new BufferedReader(new InputStreamReader(is));
+            String l;
+            while ((l = r.readLine()) != null) {
+                sb.append(l);
+            }
+            sb.append("body { margin: 5px; font-size: 18px; }");
+            sb.append("h3 { margin: 0; font-size: 22px; }");
+            sb.append("hr { margin-top: 5px; margin-bottom: 5px; }");
+            sb.append("</style></head><body>");
+            sb.append(String.format("<h3><a href=\"%s\">%s</a></h3>", s.getString("Link"), s.getString("Title")));
             sb.append("<hr>");
-            sb.append(String.format("<a href=\"%s\">%s</a>", s.getString("feed"), s.getString("feed")));
+            sb.append(String.format("<p><a href=\"%s\">%s</a>", s.getString("feed"), s.getString("feed")));
             try {
                 Date d = new Date(Long.parseLong(s.getString("Date")) * 1000);
                 DateFormat df = android.text.format.DateFormat.getDateFormat(this);
@@ -49,10 +64,13 @@ public class StoryActivity extends Activity {
                 sb.append(String.format(" on %s %s", df.format(d), tf.format(d)));
             } catch (Exception e) {
             }
-            sb.append("</div>");
+            sb.append("</p><div>");
             sb.append(i.getStringExtra("contents"));
+            sb.append("</div></body></html>");
             wv.loadData(sb.toString(), "text/html; charset=UTF-8", null);
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
