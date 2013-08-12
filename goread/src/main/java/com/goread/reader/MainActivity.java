@@ -20,6 +20,7 @@ import android.accounts.AccountManager;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,11 +59,13 @@ public class MainActivity extends ListActivity {
     static final String APP_ENGINE_SCOPE = "ah";
     static final String GOREAD_DOMAIN = "www.goread.io";
     static final String GOREAD_URL = "http://" + GOREAD_DOMAIN;
+    static final String P_ACCOUNT = "ACCOUNT_NAME";
 
     private ArrayAdapter<String> aa;
     private Intent i;
     static public JSONObject lj;
     private JSONArray oa;
+    private SharedPreferences p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
         aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
+        p = getPreferences(MODE_PRIVATE);
 
         i = getIntent();
         if (i.hasExtra(K_OUTLINE)) {
@@ -83,8 +87,13 @@ public class MainActivity extends ListActivity {
                 e.printStackTrace();
             }
         } else {
-            Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
-            startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
+            if (p.contains(P_ACCOUNT)) {
+                String accountName = p.getString(P_ACCOUNT, "");
+                doLogin(accountName);
+            } else {
+                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
+                startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
+            }
         }
     }
 
@@ -99,12 +108,19 @@ public class MainActivity extends ListActivity {
         if (requestCode != PICK_ACCOUNT_REQUEST || resultCode != RESULT_OK) {
             return;
         }
+        String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        SharedPreferences.Editor e = p.edit();
+        e.putString(P_ACCOUNT, accountName);
+        e.commit();
+        doLogin(accountName);
+    }
+
+    protected void doLogin(final String accountName) {
         final Context c = this;
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     String authToken = GoogleAuthUtil.getToken(c, accountName, APP_ENGINE_SCOPE);
                     URL url = new URL(GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
                     HttpURLConnection urlConnection = null;
