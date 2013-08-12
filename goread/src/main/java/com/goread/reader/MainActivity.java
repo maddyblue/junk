@@ -61,7 +61,7 @@ public class MainActivity extends ListActivity {
 
     private ArrayAdapter<String> aa;
     private Intent i;
-    static private JSONObject lj;
+    static public JSONObject lj;
     private JSONArray oa;
 
     @Override
@@ -213,6 +213,8 @@ public class MainActivity extends ListActivity {
     public void onListItemClick(ListView l, View v, int position, long id) {
         try {
             if (position == 0) {
+                Intent i = new Intent(this, StoryListActivity.class);
+                startActivity(i);
             } else {
                 JSONObject o = oa.getJSONObject(position - 1);
                 if (o.has("Outline")) {
