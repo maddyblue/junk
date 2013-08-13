@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_story_list">StoryListActivity</string>
     <string name="title_activity_story">StoryActivity</string>
+    <string name="title_unknown">(title unknown)</string>
 
 </resources>

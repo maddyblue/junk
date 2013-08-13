@@ -62,7 +62,9 @@ public class StoryListActivity extends ListActivity {
                 for (int i = 0; i < sa.length(); i++) {
                     JSONObject s = sa.getJSONObject(i);
                     s.put("feed", key);
-                    aa.add(s.getString("Title"));
+                    String t = s.getString("Title");
+                    if (t.length() == 0) t = getString(R.string.title_unknown);
+                    aa.add(t);
                     sl.add(s);
                 }
             }
