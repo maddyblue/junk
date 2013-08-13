@@ -168,9 +168,9 @@ public class MainActivity extends ListActivity {
                             }
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "login io2", e);
                     } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "login uri", e);
                     } finally {
                         if (urlConnection != null) {
                             urlConnection.disconnect();
@@ -178,15 +178,15 @@ public class MainActivity extends ListActivity {
                     }
                 } catch (IOException transientEx) {
                     // Network or server error, try later
-                    Log.e(TAG, transientEx.toString());
+                    Log.e(TAG, "login io", transientEx);
                 } catch (UserRecoverableAuthException e) {
                     // Recover (with e.getIntent())
-                    Log.e(TAG, e.toString());
+                    Log.e(TAG, "login urae", e);
                     Intent recover = e.getIntent();
                     startActivityForResult(recover, PICK_ACCOUNT_REQUEST);
                 } catch (GoogleAuthException authEx) {
                     // Should always succeed if Google Play Services is installed
-                    Log.e(TAG, authEx.toString());
+                    Log.e(TAG, "login gae", authEx);
                 }
 
                 listFeeds();
@@ -212,7 +212,7 @@ public class MainActivity extends ListActivity {
                     }
                     parseJSON();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "post execute", e);
                 }
             }
         };
@@ -249,7 +249,7 @@ public class MainActivity extends ListActivity {
             String r = new String(baf.toByteArray());
             lj = new JSONObject(r);
         } catch (Exception e) {
-            Log.e(TAG, "exception", e);
+            Log.e(TAG, "list feeds", e);
         } finally {
             if (uc != null) {
                 uc.disconnect();
@@ -265,7 +265,7 @@ public class MainActivity extends ListActivity {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, "parse json", e);
         }
     }
 
@@ -286,7 +286,7 @@ public class MainActivity extends ListActivity {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, "list item click", e);
         }
     }
 }
