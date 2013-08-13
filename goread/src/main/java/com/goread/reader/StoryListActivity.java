@@ -64,6 +64,7 @@ public class StoryListActivity extends ListActivity {
                     s.put("feed", key);
                     String t = s.getString("Title");
                     if (t.length() == 0) t = getString(R.string.title_unknown);
+                    t += " - " + MainActivity.feeds.get(key).getString("Title");
                     aa.add(t);
                     sl.add(s);
                 }
