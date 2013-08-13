@@ -182,8 +182,8 @@ public class MainActivity extends ListActivity {
                 } catch (UserRecoverableAuthException e) {
                     // Recover (with e.getIntent())
                     Log.e(TAG, e.toString());
-                    //Intent recover = e.getIntent();
-                    //startActivityForResult(recover, REQUEST_CODE_TOKEN_AUTH);
+                    Intent recover = e.getIntent();
+                    startActivityForResult(recover, PICK_ACCOUNT_REQUEST);
                 } catch (GoogleAuthException authEx) {
                     // Should always succeed if Google Play Services is installed
                     Log.e(TAG, authEx.toString());
