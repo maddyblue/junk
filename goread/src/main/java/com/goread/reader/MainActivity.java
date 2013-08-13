@@ -68,6 +68,8 @@ public class MainActivity extends ListActivity {
     static public JSONObject lj;
     static public HashMap<String, JSONObject> feeds;
     private JSONArray oa;
+    private JSONObject to = null;
+    private int pos = -1;
     private SharedPreferences p;
 
     @Override
@@ -80,10 +82,13 @@ public class MainActivity extends ListActivity {
 
         i = getIntent();
         if (i.hasExtra(K_OUTLINE)) {
-            int position = i.getIntExtra(K_OUTLINE, 0);
+            pos = i.getIntExtra(K_OUTLINE, -1);
             try {
                 JSONArray ta = lj.getJSONArray("Opml");
-                JSONObject to = ta.getJSONObject(position);
+                to = ta.getJSONObject(pos);
+                String t = to.getString("Title");
+                setTitle(t);
+                aa.add(t);
                 oa = to.getJSONArray("Outline");
                 parseJSON();
             } catch (JSONException e) {
@@ -269,19 +274,26 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    private static final String K_OUTLINE = "OUTLINE";
+    public static final String K_OUTLINE = "OUTLINE";
+    public static final String K_FOLDER = "FOLDER";
+    public static final String K_FEED = "FEED";
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         try {
             if (position == 0) {
                 Intent i = new Intent(this, StoryListActivity.class);
+                i.putExtra(K_FOLDER, pos);
                 startActivity(i);
             } else {
                 JSONObject o = oa.getJSONObject(position - 1);
                 if (o.has("Outline")) {
                     Intent i = new Intent(this, MainActivity.class);
-                    i.putExtra(K_OUTLINE, position);
+                    i.putExtra(K_OUTLINE, position - 1);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(this, StoryListActivity.class);
+                    i.putExtra(K_FEED, o.getString("XmlUrl"));
                     startActivity(i);
                 }
             }

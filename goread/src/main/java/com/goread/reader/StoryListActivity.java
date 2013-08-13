@@ -38,6 +38,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class StoryListActivity extends ListActivity {
@@ -52,26 +54,77 @@ public class StoryListActivity extends ListActivity {
         aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
         try {
-            JSONObject o = MainActivity.lj.getJSONObject("Stories");
+            JSONObject stories = MainActivity.lj.getJSONObject("Stories");
             sl = new ArrayList<JSONObject>();
-            Iterator<String> keys = o.keys();
 
-            while (keys.hasNext()) {
-                String key = keys.next();
-                JSONArray sa = o.getJSONArray(key);
-                for (int i = 0; i < sa.length(); i++) {
-                    JSONObject s = sa.getJSONObject(i);
-                    s.put("feed", key);
-                    String t = s.getString("Title");
-                    if (t.length() == 0) t = getString(R.string.title_unknown);
-                    t += " - " + MainActivity.feeds.get(key).getString("Title");
-                    aa.add(t);
-                    sl.add(s);
+            Intent it = getIntent();
+            int p = it.getIntExtra(MainActivity.K_FOLDER, -1);
+            if (it.hasExtra(MainActivity.K_FEED)) {
+                String f = it.getStringExtra(MainActivity.K_FEED);
+                setTitle(MainActivity.feeds.get(f).getString("Title"));
+                addFeed(stories, f);
+            } else if (p >= 0) {
+                JSONArray a = MainActivity.lj.getJSONArray("Opml");
+                JSONObject folder = a.getJSONObject(p);
+                setTitle(folder.getString("Title"));
+                a = folder.getJSONArray("Outline");
+                for (int i = 0; i < a.length(); i++) {
+                    JSONObject f = a.getJSONObject(i);
+                    addFeed(stories, f.getString("XmlUrl"));
+                }
+            } else {
+                setTitle(R.string.all_items);
+                Iterator<String> keys = stories.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    addFeed(stories, key);
                 }
             }
+            addStories();
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void addFeed(JSONObject stories, String feed) {
+        try {
+            JSONArray sa = stories.getJSONArray(feed);
+            for (int i = 0; i < sa.length(); i++) {
+                JSONObject s = sa.getJSONObject(i);
+                s.put("feed", feed);
+                sl.add(s);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addStories() {
+        try {
+            Collections.sort(sl, new StoryComparator());
+            for (JSONObject s : sl) {
+                String t = null;
+                t = s.getString("Title");
+                if (t.length() == 0) t = getString(R.string.title_unknown);
+                t += " - " + MainActivity.feeds.get(s.getString("feed")).getString("Title");
+                aa.add(t);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class StoryComparator implements Comparator<JSONObject> {
+        @Override
+        public int compare(JSONObject o1, JSONObject o2) {
+            int c = 0;
+            try {
+                c = new Long(o1.getLong("Date")).compareTo(new Long(o2.getLong("Date")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return c;
         }
     }
 

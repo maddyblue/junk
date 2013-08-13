@@ -7,5 +7,6 @@
     <string name="title_activity_story_list">StoryListActivity</string>
     <string name="title_activity_story">StoryActivity</string>
     <string name="title_unknown">(title unknown)</string>
+    <string name="all_items">all items</string>
 
 </resources>
