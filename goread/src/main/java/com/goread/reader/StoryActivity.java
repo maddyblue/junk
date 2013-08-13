@@ -77,11 +77,4 @@ public class StoryActivity extends Activity {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.story, menu);
-        return true;
-    }
 }

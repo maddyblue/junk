@@ -25,12 +25,10 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.goread.reader.StoryListActivity"
-                android:label="@string/title_activity_story_list">
+                android:name="com.goread.reader.StoryListActivity">
         </activity>
         <activity
-                android:name="com.goread.reader.StoryActivity"
-                android:label="@string/title_activity_story">
+                android:name="com.goread.reader.StoryActivity">
         </activity>
     </application>
 </manifest>

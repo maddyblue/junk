@@ -129,13 +129,6 @@ public class StoryListActivity extends ListActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.story_list, menu);
-        return true;
-    }
-
-    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         final Context c = this;
         AsyncTask<Integer, Void, Void> task = new AsyncTask<Integer, Void, Void>() {
