@@ -65,42 +65,37 @@ public class MainActivity extends ListActivity {
 
     private ArrayAdapter<String> aa;
     private Intent i;
-    static public JSONObject lj;
-    static public HashMap<String, JSONObject> feeds;
     private JSONArray oa;
     private JSONObject to = null;
     private int pos = -1;
     private SharedPreferences p;
 
+    static public JSONObject lj = null;
+    static public HashMap<String, JSONObject> feeds;
+    private static boolean loginDone = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        p = getPreferences(MODE_PRIVATE);
         aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
-        p = getPreferences(MODE_PRIVATE);
 
-        i = getIntent();
-        if (i.hasExtra(K_OUTLINE)) {
-            pos = i.getIntExtra(K_OUTLINE, -1);
-            try {
-                JSONArray ta = lj.getJSONArray("Opml");
-                to = ta.getJSONObject(pos);
-                String t = to.getString("Title");
-                setTitle(t);
-                aa.add(t);
-                oa = to.getJSONArray("Outline");
-                parseJSON();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
+        start();
+    }
+
+    protected void start() {
+        if (!loginDone) {
             if (p.contains(P_ACCOUNT)) {
-                String accountName = p.getString(P_ACCOUNT, "");
-                doLogin(accountName);
+                getAuthCookie();
             } else {
-                login();
+                pickAccount();
             }
+        } else if (lj == null) {
+            fetchListFeeds();
+        } else {
+            displayFeeds();
         }
     }
 
@@ -118,19 +113,28 @@ public class MainActivity extends ListActivity {
             case R.id.action_logout:
                 logout();
                 return true;
+            case R.id.action_refresh:
+                refresh();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    protected void refresh() {
+        aa.clear();
+        fetchListFeeds();
     }
 
     protected void logout() {
         SharedPreferences.Editor e = p.edit();
         e.remove(P_ACCOUNT);
         e.commit();
-        login();
+        pickAccount();
     }
 
-    protected void login() {
+    protected void pickAccount() {
+        Log.e(TAG, "pickAccount");
         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
         startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
     }
@@ -143,11 +147,13 @@ public class MainActivity extends ListActivity {
         SharedPreferences.Editor e = p.edit();
         e.putString(P_ACCOUNT, accountName);
         e.commit();
-        doLogin(accountName);
+        getAuthCookie();
     }
 
-    protected void doLogin(final String accountName) {
+    protected void getAuthCookie() {
+        Log.e(TAG, "getAuthCookie");
         final Context c = this;
+        final String accountName = p.getString(P_ACCOUNT, "");
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -157,8 +163,8 @@ public class MainActivity extends ListActivity {
                     HttpURLConnection urlConnection = null;
                     try {
                         urlConnection = (HttpURLConnection) url.openConnection();
-                        urlConnection.connect();
                         urlConnection.setInstanceFollowRedirects(false);
+                        urlConnection.connect();
 
                         List<String> cookieList = urlConnection.getHeaderFields().get("Set-Cookie");
                         if (cookieList != null) {
@@ -172,10 +178,11 @@ public class MainActivity extends ListActivity {
                                 }
                             }
                         }
+                        loginDone = true;
                     } catch (IOException e) {
-                        Log.e(TAG, "login io2", e);
+                        Log.e(TAG, "pickAccount io2", e);
                     } catch (URISyntaxException e) {
-                        Log.e(TAG, "login uri", e);
+                        Log.e(TAG, "pickAccount uri", e);
                     } finally {
                         if (urlConnection != null) {
                             urlConnection.disconnect();
@@ -183,42 +190,22 @@ public class MainActivity extends ListActivity {
                     }
                 } catch (IOException transientEx) {
                     // Network or server error, try later
-                    Log.e(TAG, "login io", transientEx);
+                    Log.e(TAG, "pickAccount io", transientEx);
                 } catch (UserRecoverableAuthException e) {
                     // Recover (with e.getIntent())
-                    Log.e(TAG, "login urae", e);
+                    Log.e(TAG, "pickAccount urae", e);
                     Intent recover = e.getIntent();
                     startActivityForResult(recover, PICK_ACCOUNT_REQUEST);
                 } catch (GoogleAuthException authEx) {
                     // Should always succeed if Google Play Services is installed
-                    Log.e(TAG, "login gae", authEx);
+                    Log.e(TAG, "pickAccount gae", authEx);
                 }
-
-                listFeeds();
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void v) {
-                try {
-                    oa = lj.getJSONArray("Opml");
-                    aa.add("all items");
-                    feeds = new HashMap<String, JSONObject>();
-                    for (int i = 0; i < oa.length(); i++) {
-                        JSONObject o = oa.getJSONObject(i);
-                        if (o.has("Outline")) {
-                            JSONArray outa = o.getJSONArray("Outline");
-                            for (int j = 0; j < outa.length(); j++) {
-                                addFeed(outa.getJSONObject(j));
-                            }
-                        } else {
-                            addFeed(o);
-                        }
-                    }
-                    parseJSON();
-                } catch (JSONException e) {
-                    Log.e(TAG, "post execute", e);
-                }
+                fetchListFeeds();
             }
         };
         task.execute();
@@ -232,41 +219,101 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    protected void listFeeds() {
-        HttpURLConnection uc = null;
-        try {
-            URL url = new URL(GOREAD_URL + "/user/list-feeds");
-            uc = (HttpURLConnection) url.openConnection();
-            uc.connect();
-            uc.setInstanceFollowRedirects(false);
-            InputStream in = new BufferedInputStream(uc.getInputStream());
-            ByteArrayBuffer baf = new ByteArrayBuffer(1024);
-            int read = 0;
-            int bufSize = 512;
-            byte[] buffer = new byte[bufSize];
-            while (true) {
-                read = in.read(buffer);
-                if (read == -1) {
-                    break;
+    protected void fetchListFeeds() {
+        Log.e(TAG, "fetchListFeeds");
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                HttpURLConnection uc = null;
+                try {
+                    URL url = new URL(GOREAD_URL + "/user/list-feeds");
+                    uc = (HttpURLConnection) url.openConnection();
+                    uc.connect();
+                    uc.setInstanceFollowRedirects(false);
+                    InputStream in = new BufferedInputStream(uc.getInputStream());
+                    ByteArrayBuffer baf = new ByteArrayBuffer(1024);
+                    int read = 0;
+                    int bufSize = 512;
+                    byte[] buffer = new byte[bufSize];
+                    while (true) {
+                        read = in.read(buffer);
+                        if (read == -1) {
+                            break;
+                        }
+                        baf.append(buffer, 0, read);
+                    }
+                    String r = new String(baf.toByteArray());
+                    Log.e(TAG, r);
+                    Log.e(TAG, uc.getResponseMessage());
+                    lj = new JSONObject(r);
+                    oa = lj.getJSONArray("Opml");
+                } catch (Exception e) {
+                    Log.e(TAG, "list feeds", e);
+                } finally {
+                    if (uc != null) {
+                        uc.disconnect();
+                    }
                 }
-                baf.append(buffer, 0, read);
+                return null;
             }
-            String r = new String(baf.toByteArray());
-            lj = new JSONObject(r);
-        } catch (Exception e) {
-            Log.e(TAG, "list feeds", e);
-        } finally {
-            if (uc != null) {
-                uc.disconnect();
+
+            @Override
+            protected void onPostExecute(Void v) {
+                displayFeeds();
             }
+        };
+        task.execute();
+    }
+
+    protected void displayFeeds() {
+        Log.e(TAG, "displayFeeds");
+        try {
+            i = getIntent();
+
+            if (i.hasExtra(K_OUTLINE)) {
+                pos = i.getIntExtra(K_OUTLINE, -1);
+                try {
+                    JSONArray ta = lj.getJSONArray("Opml");
+                    to = ta.getJSONObject(pos);
+                    String t = to.getString("Title");
+                    setTitle(t);
+                    addItem(t);
+                    oa = to.getJSONArray("Outline");
+                    parseJSON();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                addItem("all items");
+                feeds = new HashMap<String, JSONObject>();
+                for (int i = 0; i < oa.length(); i++) {
+                    JSONObject o = null;
+                    o = oa.getJSONObject(i);
+                    if (o.has("Outline")) {
+                        JSONArray outa = o.getJSONArray("Outline");
+                        for (int j = 0; j < outa.length(); j++) {
+                            addFeed(outa.getJSONObject(j));
+                        }
+                    } else {
+                        addFeed(o);
+                    }
+                }
+                parseJSON();
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "display feeds json", e);
         }
+    }
+
+    protected void addItem(final String i) {
+        aa.add(i);
     }
 
     protected void parseJSON() {
         try {
             for (int i = 0; i < oa.length(); i++) {
                 JSONObject o = oa.getJSONObject(i);
-                aa.add(o.getString("Title"));
+                addItem(o.getString("Title"));
             }
 
         } catch (JSONException e) {
