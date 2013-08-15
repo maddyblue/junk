@@ -86,6 +86,7 @@ public class MainActivity extends ListActivity {
     }
 
     protected void start() {
+        Log.e(TAG, "start");
         if (!loginDone) {
             if (p.contains(P_ACCOUNT)) {
                 getAuthCookie();
@@ -246,7 +247,6 @@ public class MainActivity extends ListActivity {
                     Log.e(TAG, r);
                     Log.e(TAG, uc.getResponseMessage());
                     lj = new JSONObject(r);
-                    oa = lj.getJSONArray("Opml");
                 } catch (Exception e) {
                     Log.e(TAG, "list feeds", e);
                 } finally {
@@ -286,6 +286,7 @@ public class MainActivity extends ListActivity {
             } else {
                 addItem("all items");
                 feeds = new HashMap<String, JSONObject>();
+                oa = lj.getJSONArray("Opml");
                 for (int i = 0; i < oa.length(); i++) {
                     JSONObject o = null;
                     o = oa.getJSONObject(i);
