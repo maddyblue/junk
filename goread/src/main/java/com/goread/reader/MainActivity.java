@@ -71,8 +71,17 @@ public class MainActivity extends ListActivity {
     private SharedPreferences p;
 
     static public JSONObject lj = null;
+    static public JSONObject stories = null;
     static public HashMap<String, JSONObject> feeds;
     private static boolean loginDone = false;
+
+    static public UnreadCounts unread = null;
+
+    public class UnreadCounts {
+        public int All = 0;
+        public HashMap<String, Integer> Folders = new HashMap<String, Integer>();
+        public HashMap<String, Integer> Feeds = new HashMap<String, Integer>();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -254,9 +263,9 @@ public class MainActivity extends ListActivity {
                         baf.append(buffer, 0, read);
                     }
                     String r = new String(baf.toByteArray());
-                    Log.e(TAG, r);
-                    Log.e(TAG, uc.getResponseMessage());
                     lj = new JSONObject(r);
+                    stories = lj.getJSONObject("Stories");
+                    updateFeedProperties();
                 } catch (Exception e) {
                     Log.e(TAG, "list feeds", e);
                 } finally {
@@ -275,6 +284,50 @@ public class MainActivity extends ListActivity {
         task.execute();
     }
 
+    protected void updateFeedProperties() {
+        try {
+            unread = new UnreadCounts();
+            JSONArray opml = lj.getJSONArray("Opml");
+            updateFeedProperties(null, opml);
+        } catch (JSONException e) {
+            Log.e(TAG, "ufp", e);
+        }
+    }
+
+    protected void updateFeedProperties(String folder, JSONArray opml) {
+        try {
+            for (int i = 0; i < opml.length(); i++) {
+                JSONObject outline = opml.getJSONObject(i);
+                if (outline.has("Outline")) {
+                    updateFeedProperties(outline.getString("Title"), outline.getJSONArray("Outline"));
+                } else {
+                    String f = outline.getString("XmlUrl");
+                    if (!stories.has(f)) {
+                        continue;
+                    }
+                    JSONArray us = stories.getJSONArray(f);
+                    Integer c = us.length();
+                    if (c == 0) {
+                        continue;
+                    }
+                    unread.All += c;
+                    if (!unread.Feeds.containsKey(f)) {
+                        unread.Feeds.put(f, 0);
+                    }
+                    unread.Feeds.put(f, unread.Feeds.get(f) + c);
+                    if (folder != null) {
+                        if (!unread.Folders.containsKey(folder)) {
+                            unread.Folders.put(folder, 0);
+                        }
+                        unread.Folders.put(folder, unread.Folders.get(folder) + c);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "ufp2", e);
+        }
+    }
+
     protected void displayFeeds() {
         Log.e(TAG, "displayFeeds");
         try {
@@ -287,14 +340,22 @@ public class MainActivity extends ListActivity {
                     to = ta.getJSONObject(pos);
                     String t = to.getString("Title");
                     setTitle(t);
+                    if (unread.Folders.containsKey(t)) {
+                        Integer c = unread.Folders.get(t);
+                        t = String.format("%s (%d)", t, c);
+                    }
                     addItem(t);
                     oa = to.getJSONArray("Outline");
                     parseJSON();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "pos", e);
                 }
             } else {
-                addItem("all items");
+                String t = "all items";
+                if (unread.All > 0) {
+                    t = String.format("%s (%d)", t, unread.All);
+                }
+                addItem(t);
                 feeds = new HashMap<String, JSONObject>();
                 oa = lj.getJSONArray("Opml");
                 for (int i = 0; i < oa.length(); i++) {
@@ -324,7 +385,18 @@ public class MainActivity extends ListActivity {
         try {
             for (int i = 0; i < oa.length(); i++) {
                 JSONObject o = oa.getJSONObject(i);
-                addItem(o.getString("Title"));
+                String t = o.getString("Title");
+                if (o.has("Outline") && unread.Folders.containsKey(t)) {
+                    Integer c = unread.Folders.get(t);
+                    t = String.format("%s (%d)", t, c);
+                } else if (o.has("XmlUrl")) {
+                    String u = o.getString("XmlUrl");
+                    if (unread.Feeds.containsKey(u)) {
+                        Integer c = unread.Feeds.get(u);
+                        t = String.format("%s (%d)", t, c);
+                    }
+                }
+                addItem(t);
             }
 
         } catch (JSONException e) {

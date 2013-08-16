@@ -54,7 +54,7 @@ public class StoryListActivity extends ListActivity {
         aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
         try {
-            JSONObject stories = MainActivity.lj.getJSONObject("Stories");
+            JSONObject stories = MainActivity.stories;
             sl = new ArrayList<JSONObject>();
 
             Intent it = getIntent();
