@@ -141,14 +141,20 @@ public class MainActivity extends ListActivity {
     }
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode != PICK_ACCOUNT_REQUEST || resultCode != RESULT_OK) {
-            return;
+        if (requestCode == PICK_ACCOUNT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                SharedPreferences.Editor e = p.edit();
+                e.putString(P_ACCOUNT, accountName);
+                e.commit();
+                getAuthCookie();
+            } else {
+                Log.e(TAG, "pick not ok, try again");
+                pickAccount();
+            }
+        } else {
+            Log.e(TAG, String.format("activity result: %d, %d, %s", requestCode, resultCode, data));
         }
-        String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-        SharedPreferences.Editor e = p.edit();
-        e.putString(P_ACCOUNT, accountName);
-        e.commit();
-        getAuthCookie();
     }
 
     protected void getAuthCookie() {
