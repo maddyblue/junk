@@ -149,6 +149,7 @@ public class MainActivity extends ListActivity {
                 e.commit();
                 getAuthCookie();
             } else {
+                Log.e(TAG, String.format("%d, %d, %s", requestCode, resultCode, data));
                 Log.e(TAG, "pick not ok, try again");
                 pickAccount();
             }
@@ -161,9 +162,9 @@ public class MainActivity extends ListActivity {
         Log.e(TAG, "getAuthCookie");
         final Context c = this;
         final String accountName = p.getString(P_ACCOUNT, "");
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+        AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Boolean doInBackground(Void... params) {
                 try {
                     String authToken = GoogleAuthUtil.getToken(c, accountName, APP_ENGINE_SCOPE);
                     URL url = new URL(GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
@@ -186,6 +187,7 @@ public class MainActivity extends ListActivity {
                             }
                         }
                         loginDone = true;
+                        return Boolean.TRUE;
                     } catch (IOException e) {
                         Log.e(TAG, "pickAccount io2", e);
                     } catch (URISyntaxException e) {
@@ -207,12 +209,14 @@ public class MainActivity extends ListActivity {
                     // Should always succeed if Google Play Services is installed
                     Log.e(TAG, "pickAccount gae", authEx);
                 }
-                return null;
+                return Boolean.FALSE;
             }
 
             @Override
-            protected void onPostExecute(Void v) {
-                fetchListFeeds();
+            protected void onPostExecute(Boolean b) {
+                if (b == Boolean.TRUE) {
+                    fetchListFeeds();
+                }
             }
         };
         task.execute();
