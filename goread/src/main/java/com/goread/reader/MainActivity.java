@@ -34,6 +34,7 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
+import com.jakewharton.disklrucache.DiskLruCache;
 
 import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
@@ -41,8 +42,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
@@ -51,7 +58,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends ListActivity {
@@ -73,6 +83,7 @@ public class MainActivity extends ListActivity {
     static public JSONObject lj = null;
     static public JSONObject stories = null;
     static public HashMap<String, JSONObject> feeds;
+    static public DiskLruCache storyCache = null;
     private static boolean loginDone = false;
 
     static public UnreadCounts unread = null;
@@ -90,6 +101,15 @@ public class MainActivity extends ListActivity {
         p = getPreferences(MODE_PRIVATE);
         aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
+        if (storyCache == null) {
+            File f = getFilesDir();
+            f = new File(f, "storyCache");
+            try {
+                storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
+            } catch (IOException e) {
+                Log.e(TAG, "dlru", e);
+            }
+        }
 
         start();
     }
@@ -278,10 +298,123 @@ public class MainActivity extends ListActivity {
 
             @Override
             protected void onPostExecute(Void v) {
+                downloadStories();
                 displayFeeds();
             }
         };
         task.execute();
+    }
+
+    public static String hashStory(JSONObject j) throws JSONException {
+        return hashStory(j.getString("Feed"), j.getString("Story"));
+    }
+
+    public static String hashStory(String feed, String story) {
+        MessageDigest cript = null;
+        try {
+            cript = MessageDigest.getInstance("SHA-1");
+            cript.reset();
+            cript.update(feed.getBytes("utf8"));
+            cript.update("|".getBytes());
+            cript.update(story.getBytes());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String sha = new BigInteger(1, cript.digest()).toString(16);
+        return sha;
+    }
+
+    protected void downloadStories() {
+        Log.e(TAG, "downloadStories");
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                HttpURLConnection uc = null;
+                try {
+                    JSONArray ja = new JSONArray();
+                    Iterator<String> keys = stories.keys();
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        JSONArray sos = stories.getJSONArray(key);
+                        for (int i = 0; i < sos.length(); i++) {
+                            JSONObject so = sos.getJSONObject(i);
+                            JSONObject jo = new JSONObject()
+                                    .put("Feed", key)
+                                    .put("Story", so.getString("Id"));
+                            String hash = hashStory(jo);
+                            if (storyCache.get(hash) == null) {
+                                ja.put(jo);
+                            }
+                        }
+                    }
+
+                    URL url = new URL(GOREAD_URL + "/user/get-contents");
+                    uc = (HttpURLConnection) url.openConnection();
+                    uc.setRequestMethod("POST");
+                    uc.setDoInput(true);
+                    uc.setDoOutput(true);
+
+                    OutputStream os = uc.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(ja.toString());
+                    writer.close();
+                    os.close();
+
+                    uc.connect();
+                    InputStream in = new BufferedInputStream(uc.getInputStream());
+                    ByteArrayBuffer baf = new ByteArrayBuffer(1024);
+                    int read = 0;
+                    int bufSize = 1024;
+                    byte[] buffer = new byte[bufSize];
+                    while (true) {
+                        read = in.read(buffer);
+                        if (read == -1) {
+                            break;
+                        }
+                        baf.append(buffer, 0, read);
+                    }
+                    String r = new String(baf.toByteArray());
+                    JSONArray scs = new JSONArray(r);
+                    cacheStories(ja, scs);
+                } catch (Exception e) {
+                    Log.e(TAG, "list feeds", e);
+                } finally {
+                    if (uc != null) {
+                        uc.disconnect();
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
+            }
+        };
+        task.execute();
+    }
+
+    protected void cacheStories(JSONArray ids, JSONArray contents) {
+        for (int i = 0; i < ids.length(); i++) {
+            try {
+                JSONObject is = ids.getJSONObject(i);
+                String content = contents.getString(i);
+                String key = hashStory(is);
+                DiskLruCache.Editor edit = storyCache.edit(key);
+                edit.set(0, content);
+                edit.commit();
+            } catch (JSONException e) {
+                Log.e(TAG, "cachestories json", e);
+            } catch (IOException e) {
+                Log.e(TAG, "cachestories io", e);
+            }
+        }
+        try {
+            storyCache.flush();
+        } catch (IOException e) {
+            Log.e(TAG, "cache flush", e);
+        }
     }
 
     protected void updateFeedProperties() {

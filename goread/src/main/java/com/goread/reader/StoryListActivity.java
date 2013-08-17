@@ -27,12 +27,15 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.jakewharton.disklrucache.DiskLruCache;
+
 import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -130,10 +133,38 @@ public class StoryListActivity extends ListActivity {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        final JSONObject so = sl.get(position);
+        final String feed;
+        final String story;
+        final Intent i = new Intent(this, StoryActivity.class);
+        i.putExtra("story", so.toString());
+        try {
+            feed = so.getString("feed");
+            story = so.getString("Id");
+            String key = MainActivity.hashStory(feed, story);
+            DiskLruCache.Snapshot s = MainActivity.storyCache.get(key);
+            if (s != null) {
+                String c = s.getString(0);
+                i.putExtra("contents", c);
+                Log.e("goread", "from cache");
+                startActivity(i);
+                return;
+            }
+
+        } catch (JSONException e) {
+            return;
+        } catch (IOException e) {
+            // this should perhaps not return, since it's just the cache not being available
+            return;
+        }
+
+        // if we didn't fetch from cache, just download it
+        // todo: this should populate the cache
+
         final Context c = this;
-        AsyncTask<Integer, Void, Void> task = new AsyncTask<Integer, Void, Void>() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
-            protected Void doInBackground(Integer... params) {
+            protected Void doInBackground(Void... params) {
                 HttpURLConnection uc = null;
                 try {
                     URL url = new URL(MainActivity.GOREAD_URL + "/user/get-contents");
@@ -145,10 +176,9 @@ public class StoryListActivity extends ListActivity {
                     uc.connect();
 
                     JSONArray a = new JSONArray();
-                    JSONObject so = sl.get(params[0]);
                     JSONObject o = new JSONObject();
-                    o.put("Feed", so.getString("feed"));
-                    o.put("Story", so.getString("Id"));
+                    o.put("Feed", feed);
+                    o.put("Story", story);
                     a.put(o);
 
                     OutputStream os = uc.getOutputStream();
@@ -170,10 +200,8 @@ public class StoryListActivity extends ListActivity {
                     String r = new String(baf.toByteArray());
                     a = new JSONArray(r);
                     r = a.getString(0);
-
-                    Intent i = new Intent(c, StoryActivity.class);
-                    i.putExtra("story", so.toString());
                     i.putExtra("contents", r);
+                    Log.e("goread", "NOT from cache");
                     startActivity(i);
                 } catch (Exception e) {
                     Log.e("goread", "exception", e);
@@ -185,6 +213,6 @@ public class StoryListActivity extends ListActivity {
                 return null;
             }
         };
-        task.execute(position);
+        task.execute();
     }
 }
