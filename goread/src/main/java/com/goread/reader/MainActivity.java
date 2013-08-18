@@ -47,7 +47,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -80,6 +83,7 @@ public class MainActivity extends ListActivity {
     static public DiskLruCache storyCache = null;
     static public RequestQueue rq = null;
     private static boolean loginDone = false;
+    private File feedCache = null;
 
     static public UnreadCounts unread = null;
 
@@ -98,6 +102,34 @@ public class MainActivity extends ListActivity {
             p = getPreferences(MODE_PRIVATE);
             aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
             setListAdapter(aa);
+            if (feedCache == null) {
+                feedCache = new File(getFilesDir(), "feedCache");
+            }
+            if (lj == null) {
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(feedCache));
+                    try {
+                        StringBuilder sb = new StringBuilder();
+                        String line = br.readLine();
+
+                        while (line != null) {
+                            sb.append(line);
+                            sb.append('\n');
+                            line = br.readLine();
+                        }
+                        String s = sb.toString();
+                        updateFeedProperties(new JSONObject(s));
+                        displayFeeds();
+                        Log.e(TAG, "read from feed cache");
+                    } finally {
+                        br.close();
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "br", e);
+                }
+            } else {
+                displayFeeds();
+            }
             if (rq == null) {
                 rq = new RequestQueue(new NoCache(), new BasicNetwork(new OkHttpStack()));
                 rq.start();
@@ -107,19 +139,21 @@ public class MainActivity extends ListActivity {
                 f = new File(f, "storyCache");
                 storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
             }
-            if (!loginDone) {
-                if (p.contains(P_ACCOUNT)) {
-                    getAuthCookie();
-                } else {
-                    pickAccount();
-                }
-            } else if (lj == null) {
-                fetchListFeeds();
-            } else {
-                displayFeeds();
-            }
+            start();
         } catch (Exception e) {
             Log.e(TAG, "oc", e);
+        }
+    }
+
+    protected void start() throws IOException, GoogleAuthException {
+        if (!loginDone) {
+            if (p.contains(P_ACCOUNT)) {
+                getAuthCookie();
+            } else {
+                pickAccount();
+            }
+        } else if (lj == null) {
+            fetchListFeeds();
         }
     }
 
@@ -132,22 +166,25 @@ public class MainActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                logout();
-                return true;
-            case R.id.action_refresh:
-                refresh();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        try {
+            // Handle item selection
+            switch (item.getItemId()) {
+                case R.id.action_logout:
+                    logout();
+                    return true;
+                case R.id.action_refresh:
+                    refresh();
+                    return true;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "oois", e);
         }
+        return super.onOptionsItemSelected(item);
     }
 
-    protected void refresh() {
-        aa.clear();
-        fetchListFeeds();
+    protected void refresh() throws IOException, GoogleAuthException {
+        // todo: make sure only one of this runs at once
+        start();
     }
 
     protected void logout() {
@@ -241,14 +278,19 @@ public class MainActivity extends ListActivity {
         rq.add(new JsonObjectRequest(Request.Method.GET, GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                lj = jsonObject;
                 try {
-                    stories = lj.getJSONObject("Stories");
-                    updateFeedProperties();
+                    lj = jsonObject;
+                    FileWriter fw = new FileWriter(feedCache);
+                    fw.write(jsonObject.toString());
+                    fw.close();
+                    Log.e(TAG, "write feed cache");
+
+                    updateFeedProperties(lj);
                     downloadStories();
                     displayFeeds();
-                } catch (JSONException e) {
-                    Log.e(TAG, "flf json", e);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "flf", e);
                 }
             }
         }, null));
@@ -328,8 +370,10 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    protected void updateFeedProperties() {
+    protected void updateFeedProperties(JSONObject o) {
         try {
+            lj = o;
+            stories = lj.getJSONObject("Stories");
             unread = new UnreadCounts();
             JSONArray opml = lj.getJSONArray("Opml");
             updateFeedProperties(null, opml);
@@ -376,6 +420,7 @@ public class MainActivity extends ListActivity {
         Log.e(TAG, "displayFeeds");
         try {
             i = getIntent();
+            aa.clear();
 
             if (i.hasExtra(K_OUTLINE)) {
                 pos = i.getIntExtra(K_OUTLINE, -1);
