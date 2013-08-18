@@ -30,39 +30,33 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NoCache;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.jakewharton.disklrucache.DiskLruCache;
 
-import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.HttpCookie;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 public class MainActivity extends ListActivity {
 
@@ -84,6 +78,7 @@ public class MainActivity extends ListActivity {
     static public JSONObject stories = null;
     static public HashMap<String, JSONObject> feeds;
     static public DiskLruCache storyCache = null;
+    static public RequestQueue rq = null;
     private static boolean loginDone = false;
 
     static public UnreadCounts unread = null;
@@ -97,35 +92,34 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        p = getPreferences(MODE_PRIVATE);
-        aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        setListAdapter(aa);
-        if (storyCache == null) {
-            File f = getFilesDir();
-            f = new File(f, "storyCache");
-            try {
+        try {
+            Log.e(TAG, "onCreate");
+            setContentView(R.layout.activity_main);
+            p = getPreferences(MODE_PRIVATE);
+            aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+            setListAdapter(aa);
+            if (rq == null) {
+                rq = new RequestQueue(new NoCache(), new BasicNetwork(new OkHttpStack()));
+                rq.start();
+            }
+            if (storyCache == null) {
+                File f = getFilesDir();
+                f = new File(f, "storyCache");
                 storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
-            } catch (IOException e) {
-                Log.e(TAG, "dlru", e);
             }
-        }
-
-        start();
-    }
-
-    protected void start() {
-        Log.e(TAG, "start");
-        if (!loginDone) {
-            if (p.contains(P_ACCOUNT)) {
-                getAuthCookie();
+            if (!loginDone) {
+                if (p.contains(P_ACCOUNT)) {
+                    getAuthCookie();
+                } else {
+                    pickAccount();
+                }
+            } else if (lj == null) {
+                fetchListFeeds();
             } else {
-                pickAccount();
+                displayFeeds();
             }
-        } else if (lj == null) {
-            fetchListFeeds();
-        } else {
-            displayFeeds();
+        } catch (Exception e) {
+            Log.e(TAG, "oc", e);
         }
     }
 
@@ -170,81 +164,64 @@ public class MainActivity extends ListActivity {
     }
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode == PICK_ACCOUNT_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                SharedPreferences.Editor e = p.edit();
-                e.putString(P_ACCOUNT, accountName);
-                e.commit();
-                getAuthCookie();
+        try {
+            if (requestCode == PICK_ACCOUNT_REQUEST) {
+                if (resultCode == RESULT_OK) {
+                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    SharedPreferences.Editor e = p.edit();
+                    e.putString(P_ACCOUNT, accountName);
+                    e.commit();
+                    getAuthCookie();
+                } else {
+                    Log.e(TAG, String.format("%d, %d, %s", requestCode, resultCode, data));
+                    Log.e(TAG, "pick not ok, try again");
+                    pickAccount();
+                }
             } else {
-                Log.e(TAG, String.format("%d, %d, %s", requestCode, resultCode, data));
-                Log.e(TAG, "pick not ok, try again");
-                pickAccount();
+                Log.e(TAG, String.format("activity result: %d, %d, %s", requestCode, resultCode, data));
             }
-        } else {
-            Log.e(TAG, String.format("activity result: %d, %d, %s", requestCode, resultCode, data));
+        } catch (Exception e) {
+            Log.e(TAG, "oar", e);
         }
     }
 
-    protected void getAuthCookie() {
+    protected void getAuthCookie() throws IOException, GoogleAuthException {
         Log.e(TAG, "getAuthCookie");
         final Context c = this;
-        final String accountName = p.getString(P_ACCOUNT, "");
-        AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
-            protected Boolean doInBackground(Void... params) {
+            protected String doInBackground(Void... voids) {
                 try {
+                    String accountName = p.getString(P_ACCOUNT, "");
                     String authToken = GoogleAuthUtil.getToken(c, accountName, APP_ENGINE_SCOPE);
-                    URL url = new URL(GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
-                    HttpURLConnection urlConnection = null;
-                    try {
-                        urlConnection = (HttpURLConnection) url.openConnection();
-                        urlConnection.setInstanceFollowRedirects(false);
-                        urlConnection.connect();
-
-                        List<String> cookieList = urlConnection.getHeaderFields().get("Set-Cookie");
-                        if (cookieList != null) {
-                            CookieManager cm = new CookieManager();
-                            CookieHandler.setDefault(cm);
-                            for (String cookieS : cookieList) {
-                                List<HttpCookie> cookies = HttpCookie.parse(cookieS);
-                                for (HttpCookie cookie : cookies) {
-                                    cookie.setDomain(GOREAD_DOMAIN);
-                                    cm.getCookieStore().add(new URI(GOREAD_URL + "/"), cookie);
-                                }
-                            }
-                        }
-                        loginDone = true;
-                        return Boolean.TRUE;
-                    } catch (IOException e) {
-                        Log.e(TAG, "pickAccount io2", e);
-                    } catch (URISyntaxException e) {
-                        Log.e(TAG, "pickAccount uri", e);
-                    } finally {
-                        if (urlConnection != null) {
-                            urlConnection.disconnect();
-                        }
-                    }
-                } catch (IOException transientEx) {
-                    // Network or server error, try later
-                    Log.e(TAG, "pickAccount io", transientEx);
-                } catch (UserRecoverableAuthException e) {
-                    // Recover (with e.getIntent())
-                    Log.e(TAG, "pickAccount urae", e);
-                    Intent recover = e.getIntent();
-                    startActivityForResult(recover, PICK_ACCOUNT_REQUEST);
-                } catch (GoogleAuthException authEx) {
-                    // Should always succeed if Google Play Services is installed
-                    Log.e(TAG, "pickAccount gae", authEx);
+                    return authToken;
+                } catch (Exception e) {
+                    Log.e(TAG, "gac", e);
                 }
-                return Boolean.FALSE;
+                return null;
             }
 
             @Override
-            protected void onPostExecute(Boolean b) {
-                if (b == Boolean.TRUE) {
-                    fetchListFeeds();
+            protected void onPostExecute(String authToken) {
+                try {
+                    URL url = new URL(GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
+                    rq.add(new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            Log.e(TAG, "resp");
+                            loginDone = true;
+                            fetchListFeeds();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            Log.e(TAG, volleyError.toString());
+                            // todo: something here
+                        }
+                    }
+                    ));
+                } catch (Exception e) {
+                    Log.e(TAG, "gac ope", e);
                 }
             }
         };
@@ -261,48 +238,20 @@ public class MainActivity extends ListActivity {
 
     protected void fetchListFeeds() {
         Log.e(TAG, "fetchListFeeds");
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+        rq.add(new JsonObjectRequest(Request.Method.GET, GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
             @Override
-            protected Void doInBackground(Void... params) {
-                HttpURLConnection uc = null;
+            public void onResponse(JSONObject jsonObject) {
+                lj = jsonObject;
                 try {
-                    URL url = new URL(GOREAD_URL + "/user/list-feeds");
-                    uc = (HttpURLConnection) url.openConnection();
-                    uc.connect();
-                    uc.setInstanceFollowRedirects(false);
-                    InputStream in = new BufferedInputStream(uc.getInputStream());
-                    ByteArrayBuffer baf = new ByteArrayBuffer(1024);
-                    int read = 0;
-                    int bufSize = 512;
-                    byte[] buffer = new byte[bufSize];
-                    while (true) {
-                        read = in.read(buffer);
-                        if (read == -1) {
-                            break;
-                        }
-                        baf.append(buffer, 0, read);
-                    }
-                    String r = new String(baf.toByteArray());
-                    lj = new JSONObject(r);
                     stories = lj.getJSONObject("Stories");
                     updateFeedProperties();
-                } catch (Exception e) {
-                    Log.e(TAG, "list feeds", e);
-                } finally {
-                    if (uc != null) {
-                        uc.disconnect();
-                    }
+                    downloadStories();
+                    displayFeeds();
+                } catch (JSONException e) {
+                    Log.e(TAG, "flf json", e);
                 }
-                return null;
             }
-
-            @Override
-            protected void onPostExecute(Void v) {
-                downloadStories();
-                displayFeeds();
-            }
-        };
-        task.execute();
+        }, null));
     }
 
     public static String hashStory(JSONObject j) throws JSONException {
@@ -328,71 +277,33 @@ public class MainActivity extends ListActivity {
 
     protected void downloadStories() {
         Log.e(TAG, "downloadStories");
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                HttpURLConnection uc = null;
-                try {
-                    JSONArray ja = new JSONArray();
-                    Iterator<String> keys = stories.keys();
-                    while (keys.hasNext()) {
-                        String key = keys.next();
-                        JSONArray sos = stories.getJSONArray(key);
-                        for (int i = 0; i < sos.length(); i++) {
-                            JSONObject so = sos.getJSONObject(i);
-                            JSONObject jo = new JSONObject()
-                                    .put("Feed", key)
-                                    .put("Story", so.getString("Id"));
-                            String hash = hashStory(jo);
-                            if (storyCache.get(hash) == null) {
-                                ja.put(jo);
-                            }
-                        }
-                    }
-
-                    URL url = new URL(GOREAD_URL + "/user/get-contents");
-                    uc = (HttpURLConnection) url.openConnection();
-                    uc.setRequestMethod("POST");
-                    uc.setDoInput(true);
-                    uc.setDoOutput(true);
-
-                    OutputStream os = uc.getOutputStream();
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                    writer.write(ja.toString());
-                    writer.close();
-                    os.close();
-
-                    uc.connect();
-                    InputStream in = new BufferedInputStream(uc.getInputStream());
-                    ByteArrayBuffer baf = new ByteArrayBuffer(1024);
-                    int read = 0;
-                    int bufSize = 1024;
-                    byte[] buffer = new byte[bufSize];
-                    while (true) {
-                        read = in.read(buffer);
-                        if (read == -1) {
-                            break;
-                        }
-                        baf.append(buffer, 0, read);
-                    }
-                    String r = new String(baf.toByteArray());
-                    JSONArray scs = new JSONArray(r);
-                    cacheStories(ja, scs);
-                } catch (Exception e) {
-                    Log.e(TAG, "list feeds", e);
-                } finally {
-                    if (uc != null) {
-                        uc.disconnect();
+        try {
+            final JSONArray ja = new JSONArray();
+            Iterator<String> keys = stories.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                JSONArray sos = stories.getJSONArray(key);
+                for (int i = 0; i < sos.length(); i++) {
+                    JSONObject so = sos.getJSONObject(i);
+                    JSONObject jo = new JSONObject()
+                            .put("Feed", key)
+                            .put("Story", so.getString("Id"));
+                    String hash = hashStory(jo);
+                    if (storyCache.get(hash) == null) {
+                        ja.put(jo);
                     }
                 }
-                return null;
             }
 
-            @Override
-            protected void onPostExecute(Void v) {
-            }
-        };
-        task.execute();
+            rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray jsonArray) {
+                    cacheStories(ja, jsonArray);
+                }
+            }, null));
+        } catch (Exception e) {
+            Log.e(TAG, "ds", e);
+        }
     }
 
     protected void cacheStories(JSONArray ids, JSONArray contents) {

@@ -17,29 +17,22 @@
 package com.goread.reader;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.jakewharton.disklrucache.DiskLruCache;
 
-import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -151,68 +144,34 @@ public class StoryListActivity extends ListActivity {
                 return;
             }
 
+            // if we didn't fetch from cache, just download it
+            // todo: populate the cache
+
+            JSONArray a = new JSONArray();
+            JSONObject o = new JSONObject();
+            o.put("Feed", feed);
+            o.put("Story", story);
+            a.put(o);
+
+
+            MainActivity.rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, MainActivity.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray jsonArray) {
+                    try {
+                        String r = jsonArray.getString(0);
+                        i.putExtra("contents", r);
+                        Log.e("goread", "NOT from cache");
+                        startActivity(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, null));
         } catch (JSONException e) {
             return;
         } catch (IOException e) {
-            // this should perhaps not return, since it's just the cache not being available
+            // todo: perhaps not return, since it's just the cache not being available
             return;
         }
-
-        // if we didn't fetch from cache, just download it
-        // todo: this should populate the cache
-
-        final Context c = this;
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                HttpURLConnection uc = null;
-                try {
-                    URL url = new URL(MainActivity.GOREAD_URL + "/user/get-contents");
-                    uc = (HttpURLConnection) url.openConnection();
-                    uc.setDoOutput(true);
-                    uc.setRequestProperty("Content-Type", "application/json");
-                    uc.setRequestProperty("Accept", "application/json");
-                    uc.setRequestMethod("POST");
-                    uc.connect();
-
-                    JSONArray a = new JSONArray();
-                    JSONObject o = new JSONObject();
-                    o.put("Feed", feed);
-                    o.put("Story", story);
-                    a.put(o);
-
-                    OutputStream os = uc.getOutputStream();
-                    os.write(a.toString().getBytes("UTF-8"));
-                    os.close();
-
-                    InputStream in = new BufferedInputStream(uc.getInputStream());
-                    ByteArrayBuffer baf = new ByteArrayBuffer(1024);
-                    int read = 0;
-                    int bufSize = 512;
-                    byte[] buffer = new byte[bufSize];
-                    while (true) {
-                        read = in.read(buffer);
-                        if (read == -1) {
-                            break;
-                        }
-                        baf.append(buffer, 0, read);
-                    }
-                    String r = new String(baf.toByteArray());
-                    a = new JSONArray(r);
-                    r = a.getString(0);
-                    i.putExtra("contents", r);
-                    Log.e("goread", "NOT from cache");
-                    startActivity(i);
-                } catch (Exception e) {
-                    Log.e("goread", "exception", e);
-                } finally {
-                    if (uc != null) {
-                        uc.disconnect();
-                    }
-                }
-                return null;
-            }
-        };
-        task.execute();
     }
 }
