@@ -26,7 +26,14 @@ public class FeedAdapter extends ArrayAdapter<Outline> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = inflater.inflate(rowResourceId, parent, false);
+        View rowView;
+        if(convertView != null) {
+            rowView = convertView;
+        }
+        else {
+            rowView = inflater.inflate(rowResourceId, parent, false);    
+        }
+
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView);
         TextView textView = (TextView) rowView.findViewById(R.id.textView);
         Outline o = getItem(position);
