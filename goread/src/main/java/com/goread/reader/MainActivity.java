@@ -27,7 +27,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -71,7 +70,7 @@ public class MainActivity extends ListActivity {
     static final String GOREAD_URL = "http://" + GOREAD_DOMAIN;
     static final String P_ACCOUNT = "ACCOUNT_NAME";
 
-    private ArrayAdapter<String> aa;
+    private FeedAdapter aa;
     private Intent i;
     private JSONArray oa;
     private JSONObject to = null;
@@ -101,7 +100,7 @@ public class MainActivity extends ListActivity {
             Log.e(TAG, "onCreate");
             setContentView(R.layout.activity_main);
             p = getPreferences(MODE_PRIVATE);
-            aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+            aa = new FeedAdapter(this, R.layout.item_row);
             setListAdapter(aa);
             if (feedCache == null) {
                 feedCache = new File(getFilesDir(), "feedCache");
@@ -443,7 +442,7 @@ public class MainActivity extends ListActivity {
                         Integer c = unread.Folders.get(t);
                         t = String.format("%s (%d)", t, c);
                     }
-                    addItem(t);
+                    addItem(t, ICON_FOLDER);
                     oa = to.getJSONArray("Outline");
                     parseJSON();
                 } catch (JSONException e) {
@@ -454,7 +453,7 @@ public class MainActivity extends ListActivity {
                 if (unread.All > 0) {
                     t = String.format("%s (%d)", t, unread.All);
                 }
-                addItem(t);
+                addItem(t, ICON_FOLDER);
                 feeds = new HashMap<String, JSONObject>();
                 oa = lj.getJSONArray("Opml");
                 for (int i = 0; i < oa.length(); i++) {
@@ -476,8 +475,10 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    protected void addItem(final String i) {
-        aa.add(i);
+    public static final String ICON_FOLDER = "__folder__";
+
+    protected void addItem(String i, String icon) {
+        aa.add(new Outline(i, icon));
     }
 
     protected void parseJSON() {
@@ -485,17 +486,19 @@ public class MainActivity extends ListActivity {
             for (int i = 0; i < oa.length(); i++) {
                 JSONObject o = oa.getJSONObject(i);
                 String t = o.getString("Title");
+                String icon = ICON_FOLDER;
                 if (o.has("Outline") && unread.Folders.containsKey(t)) {
                     Integer c = unread.Folders.get(t);
                     t = String.format("%s (%d)", t, c);
                 } else if (o.has("XmlUrl")) {
                     String u = o.getString("XmlUrl");
+                    icon = getIcon(u);
                     if (unread.Feeds.containsKey(u)) {
                         Integer c = unread.Feeds.get(u);
                         t = String.format("%s (%d)", t, c);
                     }
                 }
-                addItem(t);
+                addItem(t, icon);
             }
 
         } catch (JSONException e) {
