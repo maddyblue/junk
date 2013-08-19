@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -145,7 +146,7 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    protected void start() throws IOException, GoogleAuthException {
+    protected void start() {
         if (!loginDone) {
             if (p.contains(P_ACCOUNT)) {
                 getAuthCookie();
@@ -222,7 +223,7 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    protected void getAuthCookie() throws IOException, GoogleAuthException {
+    protected void getAuthCookie() {
         Log.e(TAG, "getAuthCookie");
         final Context c = this;
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
@@ -240,6 +241,12 @@ public class MainActivity extends ListActivity {
 
             @Override
             protected void onPostExecute(String authToken) {
+                if (authToken == null) {
+                    Toast toast = Toast.makeText(c, "Error: could not authorize account", Toast.LENGTH_LONG);
+                    toast.show();
+                    pickAccount();
+                    return;
+                }
                 try {
                     URL url = new URL(GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
                     rq.add(new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
@@ -258,6 +265,9 @@ public class MainActivity extends ListActivity {
                     }
                     ));
                 } catch (Exception e) {
+                    Toast toast = Toast.makeText(c, "Error: could not log in", Toast.LENGTH_LONG);
+                    toast.show();
+                    pickAccount();
                     Log.e(TAG, "gac ope", e);
                 }
             }
