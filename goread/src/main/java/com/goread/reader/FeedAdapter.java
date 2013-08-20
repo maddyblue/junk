@@ -12,26 +12,22 @@ import com.squareup.picasso.Picasso;
 
 public class FeedAdapter extends ArrayAdapter<Outline> {
 
-    private final Context context;
     private final int rowResourceId;
 
     public FeedAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
-
-        this.context = context;
         this.rowResourceId = textViewResourceId;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View rowView;
-        if(convertView != null) {
+        if (convertView != null) {
             rowView = convertView;
-        }
-        else {
-            rowView = inflater.inflate(rowResourceId, parent, false);    
+        } else {
+            rowView = inflater.inflate(rowResourceId, parent, false);
         }
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView);
@@ -41,7 +37,7 @@ public class FeedAdapter extends ArrayAdapter<Outline> {
         if (o.Icon == MainActivity.ICON_FOLDER) {
             imageView.setImageResource(R.drawable.ic_folder_close);
         } else if (o.Icon != null) {
-            Picasso.with(context).load(o.Icon).into(imageView);
+            Picasso.with(getContext()).load(o.Icon).into(imageView);
         } else {
             imageView.setImageResource(R.drawable.ic_icon_grey);
         }
