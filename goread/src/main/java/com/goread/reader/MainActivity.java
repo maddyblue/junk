@@ -245,9 +245,6 @@ public class MainActivity extends ListActivity {
             @Override
             protected void onPostExecute(String authToken) {
                 if (authToken == null) {
-                    Toast toast = Toast.makeText(c, "Error: could not authorize account", Toast.LENGTH_LONG);
-                    toast.show();
-                    pickAccount();
                     return;
                 }
                 try {
