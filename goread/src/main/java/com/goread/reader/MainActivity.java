@@ -40,6 +40,7 @@ import com.android.volley.toolbox.NoCache;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.jakewharton.disklrucache.DiskLruCache;
 
@@ -232,6 +233,9 @@ public class MainActivity extends ListActivity {
                     String accountName = p.getString(P_ACCOUNT, "");
                     String authToken = GoogleAuthUtil.getToken(c, accountName, APP_ENGINE_SCOPE);
                     return authToken;
+                } catch (UserRecoverableAuthException e) {
+                    Intent intent = e.getIntent();
+                    startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
                 } catch (Exception e) {
                     Log.e(TAG, "gac", e);
                 }
