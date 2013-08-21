@@ -16,16 +16,15 @@
 
 package com.goread.reader;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -38,7 +37,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class StoryActivity extends Activity {
+public class StoryActivity extends SherlockActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,26 +77,24 @@ public class StoryActivity extends Activity {
             sb.append("</div></body></html>");
             wv.loadData(sb.toString(), "text/html; charset=UTF-8", null);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                final Context c = this;
-                AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(String... params) {
-                        try {
-                            String iconURL = MainActivity.getIcon(params[0]);
-                            if (iconURL != null) {
-                                Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
-                                BitmapDrawable bd = new BitmapDrawable(getResources(), bi);
-                                getActionBar().setIcon(bd);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+            final Context c = this;
+            AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>() {
+                @Override
+                protected Void doInBackground(String... params) {
+                    try {
+                        String iconURL = MainActivity.getIcon(params[0]);
+                        if (iconURL != null) {
+                            Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
+                            BitmapDrawable bd = new BitmapDrawable(getResources(), bi);
+                            getSupportActionBar().setIcon(bd);
                         }
-                        return null;
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                };
-                task.execute(s.getString("feed"));
-            }
+                    return null;
+                }
+            };
+            task.execute(s.getString("feed"));
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {

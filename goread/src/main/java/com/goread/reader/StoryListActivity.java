@@ -16,19 +16,18 @@
 
 package com.goread.reader;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.jakewharton.disklrucache.DiskLruCache;
@@ -44,7 +43,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
-public class StoryListActivity extends ListActivity {
+public class StoryListActivity extends SherlockListActivity {
 
     private ArrayAdapter<String> aa;
     private ArrayList<JSONObject> sl;
@@ -66,26 +65,24 @@ public class StoryListActivity extends ListActivity {
                 setTitle(MainActivity.feeds.get(f).getString("Title"));
                 addFeed(stories, f);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    final Context c = this;
-                    AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(String... params) {
-                            try {
-                                String iconURL = MainActivity.getIcon(params[0]);
-                                if (iconURL != null) {
-                                    Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
-                                    BitmapDrawable bd = new BitmapDrawable(getResources(), bi);
-                                    getActionBar().setIcon(bd);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                final Context c = this;
+                AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(String... params) {
+                        try {
+                            String iconURL = MainActivity.getIcon(params[0]);
+                            if (iconURL != null) {
+                                Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
+                                BitmapDrawable bd = new BitmapDrawable(getResources(), bi);
+                                getSupportActionBar().setIcon(bd);
                             }
-                            return null;
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    };
-                    task.execute(f);
-                }
+                        return null;
+                    }
+                };
+                task.execute(f);
             } else if (p >= 0) {
                 JSONArray a = MainActivity.lj.getJSONArray("Opml");
                 JSONObject folder = a.getJSONObject(p);
