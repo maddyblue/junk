@@ -439,22 +439,14 @@ public class MainActivity extends SherlockListActivity {
                     to = ta.getJSONObject(pos);
                     String t = to.getString("Title");
                     setTitle(t);
-                    if (unread.Folders.containsKey(t)) {
-                        Integer c = unread.Folders.get(t);
-                        t = String.format("%s (%d)", t, c);
-                    }
-                    addItem(t, ICON_FOLDER);
+                    addItem(t, ICON_FOLDER, unread.Folders.get(t));
                     oa = to.getJSONArray("Outline");
                     parseJSON();
                 } catch (JSONException e) {
                     Log.e(TAG, "pos", e);
                 }
             } else {
-                String t = "all items";
-                if (unread.All > 0) {
-                    t = String.format("%s (%d)", t, unread.All);
-                }
-                addItem(t, ICON_FOLDER);
+                addItem("all items", ICON_FOLDER, unread.All);
                 feeds = new HashMap<String, JSONObject>();
                 oa = lj.getJSONArray("Opml");
                 for (int i = 0; i < oa.length(); i++) {
@@ -478,8 +470,8 @@ public class MainActivity extends SherlockListActivity {
 
     public static final String ICON_FOLDER = "__folder__";
 
-    protected void addItem(String i, String icon) {
-        aa.add(new Outline(i, icon));
+    protected void addItem(String i, String icon, Integer unread) {
+        aa.add(new Outline(i, icon, unread));
     }
 
     protected void parseJSON() {
@@ -488,18 +480,17 @@ public class MainActivity extends SherlockListActivity {
                 JSONObject o = oa.getJSONObject(i);
                 String t = o.getString("Title");
                 String icon = ICON_FOLDER;
+                Integer c = null;
                 if (o.has("Outline") && unread.Folders.containsKey(t)) {
-                    Integer c = unread.Folders.get(t);
-                    t = String.format("%s (%d)", t, c);
+                    c = unread.Folders.get(t);
                 } else if (o.has("XmlUrl")) {
                     String u = o.getString("XmlUrl");
                     icon = getIcon(u);
                     if (unread.Feeds.containsKey(u)) {
-                        Integer c = unread.Feeds.get(u);
-                        t = String.format("%s (%d)", t, c);
+                        c = unread.Feeds.get(u);
                     }
                 }
-                addItem(t, icon);
+                addItem(t, icon, c);
             }
 
         } catch (JSONException e) {

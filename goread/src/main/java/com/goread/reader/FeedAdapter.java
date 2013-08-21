@@ -1,6 +1,7 @@
 package com.goread.reader;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,8 @@ public class FeedAdapter extends ArrayAdapter<Outline> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView);
         TextView textView = (TextView) rowView.findViewById(R.id.textView);
         Outline o = getItem(position);
-        textView.setText(o.Title);
+        textView.setText(o.getTitle());
+        textView.setTypeface(null, o.Unread > 0 ? Typeface.BOLD : Typeface.NORMAL);
         if (o.Icon == MainActivity.ICON_FOLDER) {
             imageView.setImageResource(R.drawable.ic_folder_close);
         } else if (o.Icon != null) {
