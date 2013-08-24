@@ -24,7 +24,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -45,14 +44,14 @@ import java.util.Iterator;
 
 public class StoryListActivity extends SherlockListActivity {
 
-    private ArrayAdapter<String> aa;
+    private StoryAdapter aa;
     private ArrayList<JSONObject> sl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storylist);
-        aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        aa = new StoryAdapter(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
         try {
             JSONObject stories = MainActivity.stories;
@@ -121,17 +120,10 @@ public class StoryListActivity extends SherlockListActivity {
     }
 
     private void addStories() {
-        try {
-            Collections.sort(sl, new StoryComparator());
-            for (JSONObject s : sl) {
-                String t = null;
-                t = s.getString("Title");
-                if (t.length() == 0) t = getString(R.string.title_unknown);
-                t += " - " + MainActivity.feeds.get(s.getString("feed")).getString("Title");
-                aa.add(t);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        Collections.sort(sl, new StoryComparator());
+        Collections.reverse(sl);
+        for (JSONObject s : sl) {
+            aa.add(s);
         }
     }
 
