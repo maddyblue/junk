@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.webkit.WebView;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -62,7 +63,7 @@ public class StoryActivity extends SherlockActivity {
             sb.append("h3 { margin: 0; font-size: 22px; }");
             sb.append("hr { margin-top: 5px; margin-bottom: 5px; }");
             sb.append("</style></head><body>");
-            sb.append(String.format("<h3><a href=\"%s\">%s</a></h3>", s.getString("Link"), s.getString("Title")));
+            sb.append(String.format("<h3><a href=\"%s\">%s</a></h3>", s.getString("Link"), Html.escapeHtml(s.getString("Title"))));
             sb.append("<hr>");
             sb.append(String.format("<p><a href=\"%s\">%s</a>", s.getString("feed"), fn));
             try {
