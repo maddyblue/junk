@@ -85,6 +85,7 @@ public class MainActivity extends SherlockListActivity {
     static public RequestQueue rq = null;
     private static boolean loginDone = false;
     private File feedCache = null;
+    private String authToken = null;
 
     static public UnreadCounts unread = null;
 
@@ -226,13 +227,13 @@ public class MainActivity extends SherlockListActivity {
     protected void getAuthCookie() {
         Log.e(TAG, "getAuthCookie");
         final Context c = this;
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
-            protected String doInBackground(Void... voids) {
+            protected Void doInBackground(Void... voids) {
                 try {
                     String accountName = p.getString(P_ACCOUNT, "");
-                    String authToken = GoogleAuthUtil.getToken(c, accountName, APP_ENGINE_SCOPE);
-                    return authToken;
+                    authToken = GoogleAuthUtil.getToken(c, accountName, APP_ENGINE_SCOPE);
+                    Log.e(TAG, "auth: " + authToken);
                 } catch (UserRecoverableAuthException e) {
                     Intent intent = e.getIntent();
                     startActivityForResult(intent, PICK_ACCOUNT_REQUEST);
@@ -243,7 +244,7 @@ public class MainActivity extends SherlockListActivity {
             }
 
             @Override
-            protected void onPostExecute(String authToken) {
+            protected void onPostExecute(Void v) {
                 if (authToken == null) {
                     return;
                 }
@@ -285,6 +286,7 @@ public class MainActivity extends SherlockListActivity {
 
     protected void fetchListFeeds() {
         Log.e(TAG, "fetchListFeeds");
+        final Context c = this;
         rq.add(new JsonObjectRequest(Request.Method.GET, GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -303,7 +305,16 @@ public class MainActivity extends SherlockListActivity {
                     Log.e(TAG, "flf", e);
                 }
             }
-        }, null));
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                Log.e(TAG, "invalidate");
+                GoogleAuthUtil.invalidateToken(c, authToken);
+                getAuthCookie();
+            }
+        }
+        ));
     }
 
     public static String hashStory(JSONObject j) throws JSONException {
