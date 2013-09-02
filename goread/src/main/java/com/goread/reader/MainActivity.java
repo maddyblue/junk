@@ -339,7 +339,6 @@ public class MainActivity extends SherlockListActivity {
     }
 
     protected void downloadStories() {
-        Log.e(TAG, "downloadStories");
         try {
             final JSONArray ja = new JSONArray();
             Iterator<String> keys = stories.keys();
@@ -357,13 +356,15 @@ public class MainActivity extends SherlockListActivity {
                     }
                 }
             }
-
-            rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray jsonArray) {
-                    cacheStories(ja, jsonArray);
-                }
-            }, null));
+            Log.e(TAG, String.format("downloading %d stories", ja.length()));
+            if (ja.length() > 0) {
+                rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        cacheStories(ja, jsonArray);
+                    }
+                }, null));
+            }
         } catch (Exception e) {
             Log.e(TAG, "ds", e);
         }
