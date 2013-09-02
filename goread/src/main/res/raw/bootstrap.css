@@ -286,7 +286,9 @@ table {
   }
 }
 
-* {
+*,
+*:before,
+*:after {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
@@ -314,6 +316,13 @@ textarea {
   line-height: inherit;
 }
 
+button,
+input,
+select[multiple],
+textarea {
+  background-image: none;
+}
+
 a {
   color: #428bca;
   text-decoration: none;
@@ -336,13 +345,26 @@ img {
 }
 
 .img-responsive {
-  display: inline-block;
+  display: block;
   height: auto;
   max-width: 100%;
 }
 
 .img-rounded {
   border-radius: 6px;
+}
+
+.img-thumbnail {
+  display: inline-block;
+  height: auto;
+  max-width: 100%;
+  padding: 4px;
+  line-height: 1.428571429;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  -webkit-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out;
 }
 
 .img-circle {
@@ -478,12 +500,12 @@ h6 {
 
 h1,
 .h1 {
-  font-size: 38px;
+  font-size: 36px;
 }
 
 h2,
 .h2 {
-  font-size: 32px;
+  font-size: 30px;
 }
 
 h3,
@@ -711,13 +733,9 @@ pre.prettyprint {
 
 pre code {
   padding: 0;
+  font-size: inherit;
   color: inherit;
   white-space: pre-wrap;
   background-color: transparent;
   border: 0;
-}
-
-.pre-scrollable {
-  max-height: 340px;
-  overflow-y: scroll;
 }
