@@ -45,7 +45,6 @@ import java.util.Iterator;
 public class StoryListActivity extends SherlockListActivity {
 
     private StoryAdapter aa;
-    private ArrayList<JSONObject> sl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +54,14 @@ public class StoryListActivity extends SherlockListActivity {
         setListAdapter(aa);
         try {
             JSONObject stories = MainActivity.stories;
-            sl = new ArrayList<JSONObject>();
+            ArrayList<JSONObject> sl = new ArrayList<JSONObject>();
 
             Intent it = getIntent();
             int p = it.getIntExtra(MainActivity.K_FOLDER, -1);
             if (it.hasExtra(MainActivity.K_FEED)) {
                 String f = it.getStringExtra(MainActivity.K_FEED);
                 setTitle(MainActivity.feeds.get(f).getString("Title"));
-                addFeed(stories, f);
+                addFeed(sl, stories, f);
 
                 final Context c = this;
                 AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>() {
@@ -89,24 +88,28 @@ public class StoryListActivity extends SherlockListActivity {
                 a = folder.getJSONArray("Outline");
                 for (int i = 0; i < a.length(); i++) {
                     JSONObject f = a.getJSONObject(i);
-                    addFeed(stories, f.getString("XmlUrl"));
+                    addFeed(sl, stories, f.getString("XmlUrl"));
                 }
             } else {
                 setTitle(R.string.all_items);
                 Iterator<String> keys = stories.keys();
                 while (keys.hasNext()) {
                     String key = keys.next();
-                    addFeed(stories, key);
+                    addFeed(sl, stories, key);
                 }
             }
-            addStories();
 
+            Collections.sort(sl, new StoryComparator());
+            Collections.reverse(sl);
+            for (JSONObject s : sl) {
+                aa.add(s);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void addFeed(JSONObject stories, String feed) {
+    private void addFeed(ArrayList<JSONObject> sl, JSONObject stories, String feed) {
         try {
             JSONArray sa = stories.getJSONArray(feed);
             for (int i = 0; i < sa.length(); i++) {
@@ -116,14 +119,6 @@ public class StoryListActivity extends SherlockListActivity {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void addStories() {
-        Collections.sort(sl, new StoryComparator());
-        Collections.reverse(sl);
-        for (JSONObject s : sl) {
-            aa.add(s);
         }
     }
 
@@ -142,7 +137,7 @@ public class StoryListActivity extends SherlockListActivity {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        final JSONObject so = sl.get(position);
+        final JSONObject so = aa.getItem(position);
         final String feed;
         final String story;
         final Intent i = new Intent(this, StoryActivity.class);
@@ -155,34 +150,34 @@ public class StoryListActivity extends SherlockListActivity {
             if (s != null) {
                 String c = s.getString(0);
                 i.putExtra("contents", c);
-                Log.e("goread", "from cache");
-                startActivity(i);
-                return;
-            }
+            } else {
+                // if we didn't fetch from cache, just download it
+                // todo: populate the cache
 
-            // if we didn't fetch from cache, just download it
-            // todo: populate the cache
+                JSONArray a = new JSONArray();
+                JSONObject o = new JSONObject();
+                o.put("Feed", feed);
+                o.put("Story", story);
+                a.put(o);
 
-            JSONArray a = new JSONArray();
-            JSONObject o = new JSONObject();
-            o.put("Feed", feed);
-            o.put("Story", story);
-            a.put(o);
-
-
-            MainActivity.rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, MainActivity.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray jsonArray) {
-                    try {
-                        String r = jsonArray.getString(0);
-                        i.putExtra("contents", r);
-                        Log.e("goread", "NOT from cache");
-                        startActivity(i);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                MainActivity.rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, MainActivity.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        try {
+                            String r = jsonArray.getString(0);
+                            i.putExtra("contents", r);
+                            Log.e("goread", "NOT from cache");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            }, null));
+                }, null));
+            }
+            startActivity(i);
+            if (!so.has("read")) {
+                so.put("read", true);
+                aa.notifyDataSetChanged();
+            }
         } catch (JSONException e) {
             return;
         } catch (IOException e) {

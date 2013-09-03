@@ -41,6 +41,7 @@ public class StoryAdapter extends ArrayAdapter<JSONObject> {
             e.printStackTrace();
         }
         rowView.setText(t);
+        rowView.setTypeface(null, s.has("read") ? Typeface.NORMAL : Typeface.BOLD);
         return rowView;
     }
 }
