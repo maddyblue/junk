@@ -186,6 +186,8 @@ public class MainActivity extends SherlockListActivity {
 
     protected void refresh() throws IOException, GoogleAuthException {
         // todo: make sure only one of this runs at once
+        Log.e(TAG, "refresh");
+        lj = null;
         start();
     }
 
