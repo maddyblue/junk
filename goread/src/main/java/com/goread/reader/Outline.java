@@ -2,19 +2,42 @@ package com.goread.reader;
 
 public class Outline {
     protected String Title;
-    public String Icon;
-    public Integer Unread;
+    protected String Key;
+    protected OutlineType Type;
 
-    public Outline(String title, String icon, Integer unread) {
+    public Outline(String title, OutlineType type, String key) {
         Title = title;
-        Icon = icon;
-        Unread = unread == null ? 0 : unread;
+        Type = type;
+        Key = key;
+    }
+
+    public String Icon() {
+        if (Type == OutlineType.FEED) {
+            return MainActivity.getIcon(Key);
+        }
+        return ICON_FOLDER;
+    }
+
+    public static final String ICON_FOLDER = "__folder__";
+
+    public int Unread() {
+        switch (Type) {
+            case ALL:
+                return MainActivity.unread.All;
+            case FOLDER:
+                return MainActivity.unread.Folder(Key);
+            case FEED:
+                return MainActivity.unread.Feed(Key);
+            default:
+                return 0;
+        }
     }
 
     public String getTitle() {
         String t = Title;
-        if (Unread > 0) {
-            t = String.format("%s (%d)", t, Unread);
+        int u = Unread();
+        if (u > 0) {
+            t = String.format("%s (%d)", t, u);
         }
         return t;
     }

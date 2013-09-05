@@ -177,6 +177,7 @@ public class StoryListActivity extends SherlockListActivity {
             if (!so.has("read")) {
                 so.put("read", true);
                 aa.notifyDataSetChanged();
+                MainActivity.updateFeedProperties();
             }
         } catch (JSONException e) {
             return;

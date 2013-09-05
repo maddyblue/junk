@@ -35,11 +35,12 @@ public class FeedAdapter extends ArrayAdapter<Outline> {
         TextView textView = (TextView) rowView.findViewById(R.id.textView);
         Outline o = getItem(position);
         textView.setText(o.getTitle());
-        textView.setTypeface(null, o.Unread > 0 ? Typeface.BOLD : Typeface.NORMAL);
-        if (o.Icon == MainActivity.ICON_FOLDER) {
+        textView.setTypeface(null, o.Unread() > 0 ? Typeface.BOLD : Typeface.NORMAL);
+        String icon = o.Icon();
+        if (icon == Outline.ICON_FOLDER) {
             imageView.setImageResource(R.drawable.ic_folder_close);
-        } else if (o.Icon != null) {
-            Picasso.with(getContext()).load(o.Icon).into(imageView);
+        } else if (icon != null) {
+            Picasso.with(getContext()).load(icon).into(imageView);
         } else {
             imageView.setImageResource(R.drawable.ic_icon_grey);
         }

@@ -84,16 +84,10 @@ public class MainActivity extends SherlockListActivity {
     static public DiskLruCache storyCache = null;
     static public RequestQueue rq = null;
     private static boolean loginDone = false;
-    private File feedCache = null;
+    private static File feedCache = null;
     private String authToken = null;
 
     static public UnreadCounts unread = null;
-
-    public class UnreadCounts {
-        public int All = 0;
-        public HashMap<String, Integer> Folders = new HashMap<String, Integer>();
-        public HashMap<String, Integer> Feeds = new HashMap<String, Integer>();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +114,8 @@ public class MainActivity extends SherlockListActivity {
                             line = br.readLine();
                         }
                         String s = sb.toString();
-                        updateFeedProperties(new JSONObject(s));
+                        lj = new JSONObject(s);
+                        updateFeedProperties();
                         displayFeeds();
                         Log.e(TAG, "read from feed cache");
                     } finally {
@@ -150,12 +145,17 @@ public class MainActivity extends SherlockListActivity {
     protected void start() {
         if (!loginDone) {
             if (p.contains(P_ACCOUNT)) {
+                Log.e(TAG, "start gac");
                 getAuthCookie();
             } else {
+                Log.e(TAG, "start pa");
                 pickAccount();
             }
         } else if (lj == null) {
+            Log.e(TAG, "start flf");
             fetchListFeeds();
+        } else {
+            Log.e(TAG, "start else");
         }
     }
 
@@ -177,6 +177,9 @@ public class MainActivity extends SherlockListActivity {
                 case R.id.action_refresh:
                     refresh();
                     return true;
+                case R.id.action_mark_read:
+                    markRead();
+                    return true;
             }
         } catch (Exception e) {
             Log.e(TAG, "oois", e);
@@ -196,6 +199,42 @@ public class MainActivity extends SherlockListActivity {
         e.remove(P_ACCOUNT);
         e.commit();
         pickAccount();
+    }
+
+    protected void markRead() {
+        Log.e(TAG, "mark read");
+        JSONArray read = new JSONArray();
+        markRead(read, oa);
+        //rq.add(new JsonArrayRequest(Request.Method.POST, GOREAD_URL + "/user/mark-read", null, null, null));
+        updateFeedProperties();
+        aa.notifyDataSetChanged();
+        persistFeedList();
+    }
+
+    private void markRead(JSONArray read, JSONArray ja) {
+        try {
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject o = ja.getJSONObject(i);
+                if (o.has("Outline")) {
+                    markRead(read, o.getJSONArray("Outline"));
+                } else if (o.has("XmlUrl")) {
+                    String u = o.getString("XmlUrl");
+                    if (!stories.isNull(u)) {
+                        JSONArray ss = stories.getJSONArray(u);
+                        for (int j = 0; j < ss.length(); j++) {
+                            JSONObject s = ss.getJSONObject(j);
+                            read.put(new JSONObject()
+                                    .put("Feed", u)
+                                    .put("Story", s.getString("Id"))
+                            );
+                            s.put("read", true);
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "mark read", e);
+        }
     }
 
     protected void pickAccount() {
@@ -292,20 +331,11 @@ public class MainActivity extends SherlockListActivity {
         rq.add(new JsonObjectRequest(Request.Method.GET, GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                try {
-                    lj = jsonObject;
-                    FileWriter fw = new FileWriter(feedCache);
-                    fw.write(jsonObject.toString());
-                    fw.close();
-                    Log.e(TAG, "write feed cache");
-
-                    updateFeedProperties(lj);
-                    downloadStories();
-                    displayFeeds();
-
-                } catch (Exception e) {
-                    Log.e(TAG, "flf", e);
-                }
+                lj = jsonObject;
+                persistFeedList();
+                updateFeedProperties();
+                downloadStories();
+                displayFeeds();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -317,6 +347,17 @@ public class MainActivity extends SherlockListActivity {
             }
         }
         ));
+    }
+
+    public static void persistFeedList() {
+        try {
+            FileWriter fw = new FileWriter(feedCache);
+            fw.write(lj.toString());
+            fw.close();
+            Log.e(TAG, "write feed cache");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static String hashStory(JSONObject j) throws JSONException {
@@ -394,9 +435,9 @@ public class MainActivity extends SherlockListActivity {
         }
     }
 
-    protected void updateFeedProperties(JSONObject o) {
+    public static void updateFeedProperties() {
         try {
-            lj = o;
+            Log.e(TAG, "ufp");
             stories = lj.getJSONObject("Stories");
             unread = new UnreadCounts();
             JSONArray opml = lj.getJSONArray("Opml");
@@ -406,7 +447,7 @@ public class MainActivity extends SherlockListActivity {
         }
     }
 
-    protected void updateFeedProperties(String folder, JSONArray opml) {
+    protected static void updateFeedProperties(String folder, JSONArray opml) {
         try {
             for (int i = 0; i < opml.length(); i++) {
                 JSONObject outline = opml.getJSONObject(i);
@@ -418,7 +459,12 @@ public class MainActivity extends SherlockListActivity {
                         continue;
                     }
                     JSONArray us = stories.getJSONArray(f);
-                    Integer c = us.length();
+                    Integer c = 0;
+                    for (int j = 0; j < us.length(); j++) {
+                        if (!us.getJSONObject(j).optBoolean("read", false)) {
+                            c++;
+                        }
+                    }
                     if (c == 0) {
                         continue;
                     }
@@ -440,6 +486,13 @@ public class MainActivity extends SherlockListActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // a sub folder may have updated the unread counts, so force a refresh
+        aa.notifyDataSetChanged();
+    }
+
     protected void displayFeeds() {
         Log.e(TAG, "displayFeeds");
         try {
@@ -453,14 +506,14 @@ public class MainActivity extends SherlockListActivity {
                     to = ta.getJSONObject(pos);
                     String t = to.getString("Title");
                     setTitle(t);
-                    addItem(t, ICON_FOLDER, unread.Folders.get(t));
+                    addItem(t, OutlineType.FOLDER, t);
                     oa = to.getJSONArray("Outline");
                     parseJSON();
                 } catch (JSONException e) {
                     Log.e(TAG, "pos", e);
                 }
             } else {
-                addItem("all items", ICON_FOLDER, unread.All);
+                addItem("all items", OutlineType.ALL, null);
                 feeds = new HashMap<String, JSONObject>();
                 oa = lj.getJSONArray("Opml");
                 for (int i = 0; i < oa.length(); i++) {
@@ -482,10 +535,8 @@ public class MainActivity extends SherlockListActivity {
         }
     }
 
-    public static final String ICON_FOLDER = "__folder__";
-
-    protected void addItem(String i, String icon, Integer unread) {
-        aa.add(new Outline(i, icon, unread));
+    protected void addItem(String i, OutlineType type, String key) {
+        aa.add(new Outline(i, type, key));
     }
 
     protected void parseJSON() {
@@ -493,20 +544,13 @@ public class MainActivity extends SherlockListActivity {
             for (int i = 0; i < oa.length(); i++) {
                 JSONObject o = oa.getJSONObject(i);
                 String t = o.getString("Title");
-                String icon = ICON_FOLDER;
-                Integer c = null;
-                if (o.has("Outline") && unread.Folders.containsKey(t)) {
-                    c = unread.Folders.get(t);
+                if (o.has("Outline")) {
+                    addItem(t, OutlineType.FOLDER, t);
                 } else if (o.has("XmlUrl")) {
                     String u = o.getString("XmlUrl");
-                    icon = getIcon(u);
-                    if (unread.Feeds.containsKey(u)) {
-                        c = unread.Feeds.get(u);
-                    }
+                    addItem(t, OutlineType.FEED, u);
                 }
-                addItem(t, icon, c);
             }
-
         } catch (JSONException e) {
             Log.e(TAG, "parse json", e);
         }
