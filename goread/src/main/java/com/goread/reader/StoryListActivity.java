@@ -177,6 +177,13 @@ public class StoryListActivity extends SherlockListActivity {
             if (!so.has("read")) {
                 so.put("read", true);
                 aa.notifyDataSetChanged();
+                JSONArray read = new JSONArray();
+                read.put(new JSONObject()
+                        .put("Feed", feed)
+                        .put("Story", story)
+                );
+                MainActivity.rq.add(new JsonArrayRequest(Request.Method.POST, MainActivity.GOREAD_URL + "/user/mark-read", read, null, null));
+                MainActivity.persistFeedList();
                 MainActivity.updateFeedProperties();
             }
         } catch (JSONException e) {

@@ -205,7 +205,7 @@ public class MainActivity extends SherlockListActivity {
         Log.e(TAG, "mark read");
         JSONArray read = new JSONArray();
         markRead(read, oa);
-        //rq.add(new JsonArrayRequest(Request.Method.POST, GOREAD_URL + "/user/mark-read", null, null, null));
+        rq.add(new JsonArrayRequest(Request.Method.POST, GOREAD_URL + "/user/mark-read", read, null, null));
         updateFeedProperties();
         aa.notifyDataSetChanged();
         persistFeedList();
