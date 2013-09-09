@@ -23,11 +23,11 @@ public class Outline {
     public int Unread() {
         switch (Type) {
             case ALL:
-                return MainActivity.unread.All;
+                return GoReadApplication.unread.All;
             case FOLDER:
-                return MainActivity.unread.Folder(Key);
+                return GoReadApplication.unread.Folder(Key);
             case FEED:
-                return MainActivity.unread.Feed(Key);
+                return GoReadApplication.unread.Feed(Key);
             default:
                 return 0;
         }
