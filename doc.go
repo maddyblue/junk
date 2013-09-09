@@ -55,7 +55,7 @@ Use your app, and view the appstats interface at http://localhost:8080/_ah/stats
 
 Configuration
 
-Refer to the variables section of the documentation: http://godoc.org/github.com/mjibson/appstats#_variables.
+Refer to the variables section of the documentation: http://godoc.org/github.com/mjibson/appstats#pkg-variables.
 
 
 Routing
