@@ -5,6 +5,7 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.jakewharton.disklrucache.DiskLruCache;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -39,6 +40,23 @@ public final class GoRead {
 
     public static GoRead get() {
         return INSTANCE;
+    }
+
+    public static String getIcon(String f) {
+        final String suffix = "=s16";
+        try {
+            JSONObject i = get().lj.getJSONObject("Icons");
+            if (i.has(f)) {
+                String u = i.getString(f);
+                if (u.endsWith(suffix)) {
+                    u = u.substring(0, u.length() - suffix.length());
+                }
+                return u;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void persistFeedList() {

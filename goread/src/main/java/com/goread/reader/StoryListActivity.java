@@ -68,7 +68,7 @@ public class StoryListActivity extends SherlockListActivity {
                     @Override
                     protected Void doInBackground(String... params) {
                         try {
-                            String iconURL = MainActivity.getIcon(params[0]);
+                            String iconURL = GoRead.getIcon(params[0]);
                             if (iconURL != null) {
                                 Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
                                 BitmapDrawable bd = new BitmapDrawable(getResources(), bi);

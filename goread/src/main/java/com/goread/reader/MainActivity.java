@@ -555,20 +555,4 @@ public class MainActivity extends SherlockListActivity {
         }
     }
 
-    public static String getIcon(String f) {
-        final String suffix = "=s16";
-        try {
-            JSONObject i = GoRead.get().lj.getJSONObject("Icons");
-            if (i.has(f)) {
-                String u = i.getString(f);
-                if (u.endsWith(suffix)) {
-                    u = u.substring(0, u.length() - suffix.length());
-                }
-                return u;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

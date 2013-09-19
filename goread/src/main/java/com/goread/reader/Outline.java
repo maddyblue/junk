@@ -13,7 +13,7 @@ public class Outline {
 
     public String Icon() {
         if (Type == OutlineType.FEED) {
-            return MainActivity.getIcon(Key);
+            return GoRead.getIcon(Key);
         }
         return ICON_FOLDER;
     }
