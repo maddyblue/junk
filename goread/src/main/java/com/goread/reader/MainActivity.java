@@ -75,17 +75,17 @@ public class MainActivity extends SherlockListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            Log.e(GoReadApplication.TAG, "onCreate");
+            Log.e(GoRead.TAG, "onCreate");
             setContentView(R.layout.activity_main);
             p = getPreferences(MODE_PRIVATE);
             aa = new FeedAdapter(this, R.layout.item_row);
             setListAdapter(aa);
-            if (GoReadApplication.feedCache == null) {
-                GoReadApplication.feedCache = new File(getFilesDir(), "feedCache");
+            if (GoRead.get().feedCache == null) {
+                GoRead.get().feedCache = new File(getFilesDir(), "feedCache");
             }
-            if (GoReadApplication.lj == null) {
+            if (GoRead.get().lj == null) {
                 try {
-                    BufferedReader br = new BufferedReader(new FileReader(GoReadApplication.feedCache));
+                    BufferedReader br = new BufferedReader(new FileReader(GoRead.get().feedCache));
                     try {
                         StringBuilder sb = new StringBuilder();
                         String line = br.readLine();
@@ -96,48 +96,48 @@ public class MainActivity extends SherlockListActivity {
                             line = br.readLine();
                         }
                         String s = sb.toString();
-                        GoReadApplication.lj = new JSONObject(s);
+                        GoRead.get().lj = new JSONObject(s);
                         updateFeedProperties();
                         displayFeeds();
-                        Log.e(GoReadApplication.TAG, "read from feed cache");
+                        Log.e(GoRead.TAG, "read from feed cache");
                     } finally {
                         br.close();
                     }
                 } catch (Exception e) {
-                    Log.e(GoReadApplication.TAG, "br", e);
+                    Log.e(GoRead.TAG, "br", e);
                 }
             } else {
                 displayFeeds();
             }
-            if (GoReadApplication.rq == null) {
-                GoReadApplication.rq = new RequestQueue(new NoCache(), new BasicNetwork(new OkHttpStack()));
-                GoReadApplication.rq.start();
+            if (GoRead.get().rq == null) {
+                GoRead.get().rq = new RequestQueue(new NoCache(), new BasicNetwork(new OkHttpStack()));
+                GoRead.get().rq.start();
             }
-            if (GoReadApplication.storyCache == null) {
+            if (GoRead.get().storyCache == null) {
                 File f = getFilesDir();
                 f = new File(f, "storyCache");
-                GoReadApplication.storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
+                GoRead.get().storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
             }
             start();
         } catch (Exception e) {
-            Log.e(GoReadApplication.TAG, "oc", e);
+            Log.e(GoRead.TAG, "oc", e);
         }
     }
 
     protected void start() {
-        if (!GoReadApplication.loginDone) {
-            if (p.contains(GoReadApplication.P_ACCOUNT)) {
-                Log.e(GoReadApplication.TAG, "start gac");
+        if (!GoRead.get().loginDone) {
+            if (p.contains(GoRead.P_ACCOUNT)) {
+                Log.e(GoRead.TAG, "start gac");
                 getAuthCookie();
             } else {
-                Log.e(GoReadApplication.TAG, "start pa");
+                Log.e(GoRead.TAG, "start pa");
                 pickAccount();
             }
-        } else if (GoReadApplication.lj == null) {
-            Log.e(GoReadApplication.TAG, "start flf");
+        } else if (GoRead.get().lj == null) {
+            Log.e(GoRead.TAG, "start flf");
             fetchListFeeds();
         } else {
-            Log.e(GoReadApplication.TAG, "start else");
+            Log.e(GoRead.TAG, "start else");
         }
     }
 
@@ -164,33 +164,33 @@ public class MainActivity extends SherlockListActivity {
                     return true;
             }
         } catch (Exception e) {
-            Log.e(GoReadApplication.TAG, "oois", e);
+            Log.e(GoRead.TAG, "oois", e);
         }
         return super.onOptionsItemSelected(item);
     }
 
     protected void refresh() throws IOException, GoogleAuthException {
         // todo: make sure only one of this runs at once
-        Log.e(GoReadApplication.TAG, "refresh");
-        GoReadApplication.lj = null;
+        Log.e(GoRead.TAG, "refresh");
+        GoRead.get().lj = null;
         start();
     }
 
     protected void logout() {
         SharedPreferences.Editor e = p.edit();
-        e.remove(GoReadApplication.P_ACCOUNT);
+        e.remove(GoRead.P_ACCOUNT);
         e.commit();
         pickAccount();
     }
 
     protected void markRead() {
-        Log.e(GoReadApplication.TAG, "mark read");
+        Log.e(GoRead.TAG, "mark read");
         JSONArray read = new JSONArray();
         markRead(read, oa);
-        GoReadApplication.rq.add(new JsonArrayRequest(Request.Method.POST, GoReadApplication.GOREAD_URL + "/user/mark-read", read, null, null));
+        GoRead.get().rq.add(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
         updateFeedProperties();
         aa.notifyDataSetChanged();
-        GoReadApplication.persistFeedList();
+        GoRead.get().persistFeedList();
     }
 
     private void markRead(JSONArray read, JSONArray ja) {
@@ -201,8 +201,8 @@ public class MainActivity extends SherlockListActivity {
                     markRead(read, o.getJSONArray("Outline"));
                 } else if (o.has("XmlUrl")) {
                     String u = o.getString("XmlUrl");
-                    if (!GoReadApplication.stories.isNull(u)) {
-                        JSONArray ss = GoReadApplication.stories.getJSONArray(u);
+                    if (!GoRead.get().stories.isNull(u)) {
+                        JSONArray ss = GoRead.get().stories.getJSONArray(u);
                         for (int j = 0; j < ss.length(); j++) {
                             JSONObject s = ss.getJSONObject(j);
                             read.put(new JSONObject()
@@ -215,53 +215,53 @@ public class MainActivity extends SherlockListActivity {
                 }
             }
         } catch (JSONException e) {
-            Log.e(GoReadApplication.TAG, "mark read", e);
+            Log.e(GoRead.TAG, "mark read", e);
         }
     }
 
     protected void pickAccount() {
-        Log.e(GoReadApplication.TAG, "pickAccount");
+        Log.e(GoRead.TAG, "pickAccount");
         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
-        startActivityForResult(intent, GoReadApplication.PICK_ACCOUNT_REQUEST);
+        startActivityForResult(intent, GoRead.PICK_ACCOUNT_REQUEST);
     }
 
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         try {
-            if (requestCode == GoReadApplication.PICK_ACCOUNT_REQUEST) {
+            if (requestCode == GoRead.PICK_ACCOUNT_REQUEST) {
                 if (resultCode == RESULT_OK) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     SharedPreferences.Editor e = p.edit();
-                    e.putString(GoReadApplication.P_ACCOUNT, accountName);
+                    e.putString(GoRead.P_ACCOUNT, accountName);
                     e.commit();
                     getAuthCookie();
                 } else {
-                    Log.e(GoReadApplication.TAG, String.format("%d, %d, %s", requestCode, resultCode, data));
-                    Log.e(GoReadApplication.TAG, "pick not ok, try again");
+                    Log.e(GoRead.TAG, String.format("%d, %d, %s", requestCode, resultCode, data));
+                    Log.e(GoRead.TAG, "pick not ok, try again");
                     pickAccount();
                 }
             } else {
-                Log.e(GoReadApplication.TAG, String.format("activity result: %d, %d, %s", requestCode, resultCode, data));
+                Log.e(GoRead.TAG, String.format("activity result: %d, %d, %s", requestCode, resultCode, data));
             }
         } catch (Exception e) {
-            Log.e(GoReadApplication.TAG, "oar", e);
+            Log.e(GoRead.TAG, "oar", e);
         }
     }
 
     protected void getAuthCookie() {
-        Log.e(GoReadApplication.TAG, "getAuthCookie");
+        Log.e(GoRead.TAG, "getAuthCookie");
         final Context c = this;
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    String accountName = p.getString(GoReadApplication.P_ACCOUNT, "");
-                    authToken = GoogleAuthUtil.getToken(c, accountName, GoReadApplication.APP_ENGINE_SCOPE);
-                    Log.e(GoReadApplication.TAG, "auth: " + authToken);
+                    String accountName = p.getString(GoRead.P_ACCOUNT, "");
+                    authToken = GoogleAuthUtil.getToken(c, accountName, GoRead.APP_ENGINE_SCOPE);
+                    Log.e(GoRead.TAG, "auth: " + authToken);
                 } catch (UserRecoverableAuthException e) {
                     Intent intent = e.getIntent();
-                    startActivityForResult(intent, GoReadApplication.PICK_ACCOUNT_REQUEST);
+                    startActivityForResult(intent, GoRead.PICK_ACCOUNT_REQUEST);
                 } catch (Exception e) {
-                    Log.e(GoReadApplication.TAG, "gac", e);
+                    Log.e(GoRead.TAG, "gac", e);
                 }
                 return null;
             }
@@ -272,18 +272,18 @@ public class MainActivity extends SherlockListActivity {
                     return;
                 }
                 try {
-                    URL url = new URL(GoReadApplication.GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GoReadApplication.GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
-                    GoReadApplication.rq.add(new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
+                    URL url = new URL(GoRead.GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GoRead.GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
+                    GoRead.get().rq.add(new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
                         @Override
                         public void onResponse(String s) {
-                            Log.e(GoReadApplication.TAG, "resp");
-                            GoReadApplication.loginDone = true;
+                            Log.e(GoRead.TAG, "resp");
+                            GoRead.get().loginDone = true;
                             fetchListFeeds();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            Log.e(GoReadApplication.TAG, volleyError.toString());
+                            Log.e(GoRead.TAG, volleyError.toString());
                             // todo: something here
                         }
                     }
@@ -292,7 +292,7 @@ public class MainActivity extends SherlockListActivity {
                     Toast toast = Toast.makeText(c, "Error: could not log in", Toast.LENGTH_LONG);
                     toast.show();
                     pickAccount();
-                    Log.e(GoReadApplication.TAG, "gac ope", e);
+                    Log.e(GoRead.TAG, "gac ope", e);
                 }
             }
         };
@@ -301,20 +301,20 @@ public class MainActivity extends SherlockListActivity {
 
     protected void addFeed(JSONObject o) {
         try {
-            GoReadApplication.feeds.put(o.getString("XmlUrl"), o);
+            GoRead.get().feeds.put(o.getString("XmlUrl"), o);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     protected void fetchListFeeds() {
-        Log.e(GoReadApplication.TAG, "fetchListFeeds");
+        Log.e(GoRead.TAG, "fetchListFeeds");
         final Context c = this;
-        GoReadApplication.rq.add(new JsonObjectRequest(Request.Method.GET, GoReadApplication.GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
+        GoRead.get().rq.add(new JsonObjectRequest(Request.Method.GET, GoRead.GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                GoReadApplication.lj = jsonObject;
-                GoReadApplication.persistFeedList();
+                GoRead.get().lj = jsonObject;
+                GoRead.get().persistFeedList();
                 updateFeedProperties();
                 downloadStories();
                 displayFeeds();
@@ -322,8 +322,8 @@ public class MainActivity extends SherlockListActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(GoReadApplication.TAG, error.toString());
-                Log.e(GoReadApplication.TAG, "invalidate");
+                Log.e(GoRead.TAG, error.toString());
+                Log.e(GoRead.TAG, "invalidate");
                 GoogleAuthUtil.invalidateToken(c, authToken);
                 getAuthCookie();
             }
@@ -355,24 +355,24 @@ public class MainActivity extends SherlockListActivity {
     protected void downloadStories() {
         try {
             final JSONArray ja = new JSONArray();
-            Iterator<String> keys = GoReadApplication.stories.keys();
+            Iterator<String> keys = GoRead.get().stories.keys();
             while (keys.hasNext()) {
                 String key = keys.next();
-                JSONArray sos = GoReadApplication.stories.getJSONArray(key);
+                JSONArray sos = GoRead.get().stories.getJSONArray(key);
                 for (int i = 0; i < sos.length(); i++) {
                     JSONObject so = sos.getJSONObject(i);
                     JSONObject jo = new JSONObject()
                             .put("Feed", key)
                             .put("Story", so.getString("Id"));
                     String hash = hashStory(jo);
-                    if (GoReadApplication.storyCache.get(hash) == null) {
+                    if (GoRead.get().storyCache.get(hash) == null) {
                         ja.put(jo);
                     }
                 }
             }
-            Log.e(GoReadApplication.TAG, String.format("downloading %d stories", ja.length()));
+            Log.e(GoRead.TAG, String.format("downloading %d stories", ja.length()));
             if (ja.length() > 0) {
-                GoReadApplication.rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoReadApplication.GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
+                GoRead.get().rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         cacheStories(ja, jsonArray);
@@ -380,7 +380,7 @@ public class MainActivity extends SherlockListActivity {
                 }, null));
             }
         } catch (Exception e) {
-            Log.e(GoReadApplication.TAG, "ds", e);
+            Log.e(GoRead.TAG, "ds", e);
         }
     }
 
@@ -390,31 +390,31 @@ public class MainActivity extends SherlockListActivity {
                 JSONObject is = ids.getJSONObject(i);
                 String content = contents.getString(i);
                 String key = hashStory(is);
-                DiskLruCache.Editor edit = GoReadApplication.storyCache.edit(key);
+                DiskLruCache.Editor edit = GoRead.get().storyCache.edit(key);
                 edit.set(0, content);
                 edit.commit();
             } catch (JSONException e) {
-                Log.e(GoReadApplication.TAG, "cachestories json", e);
+                Log.e(GoRead.TAG, "cachestories json", e);
             } catch (IOException e) {
-                Log.e(GoReadApplication.TAG, "cachestories io", e);
+                Log.e(GoRead.TAG, "cachestories io", e);
             }
         }
         try {
-            GoReadApplication.storyCache.flush();
+            GoRead.get().storyCache.flush();
         } catch (IOException e) {
-            Log.e(GoReadApplication.TAG, "cache flush", e);
+            Log.e(GoRead.TAG, "cache flush", e);
         }
     }
 
     public static void updateFeedProperties() {
         try {
-            Log.e(GoReadApplication.TAG, "ufp");
-            GoReadApplication.stories = GoReadApplication.lj.getJSONObject("Stories");
-            GoReadApplication.unread = new UnreadCounts();
-            JSONArray opml = GoReadApplication.lj.getJSONArray("Opml");
+            Log.e(GoRead.TAG, "ufp");
+            GoRead.get().stories = GoRead.get().lj.getJSONObject("Stories");
+            GoRead.get().unread = new UnreadCounts();
+            JSONArray opml = GoRead.get().lj.getJSONArray("Opml");
             updateFeedProperties(null, opml);
         } catch (JSONException e) {
-            Log.e(GoReadApplication.TAG, "ufp", e);
+            Log.e(GoRead.TAG, "ufp", e);
         }
     }
 
@@ -426,10 +426,10 @@ public class MainActivity extends SherlockListActivity {
                     updateFeedProperties(outline.getString("Title"), outline.getJSONArray("Outline"));
                 } else {
                     String f = outline.getString("XmlUrl");
-                    if (!GoReadApplication.stories.has(f)) {
+                    if (!GoRead.get().stories.has(f)) {
                         continue;
                     }
-                    JSONArray us = GoReadApplication.stories.getJSONArray(f);
+                    JSONArray us = GoRead.get().stories.getJSONArray(f);
                     Integer c = 0;
                     for (int j = 0; j < us.length(); j++) {
                         if (!us.getJSONObject(j).optBoolean("read", false)) {
@@ -439,21 +439,21 @@ public class MainActivity extends SherlockListActivity {
                     if (c == 0) {
                         continue;
                     }
-                    GoReadApplication.unread.All += c;
-                    if (!GoReadApplication.unread.Feeds.containsKey(f)) {
-                        GoReadApplication.unread.Feeds.put(f, 0);
+                    GoRead.get().unread.All += c;
+                    if (!GoRead.get().unread.Feeds.containsKey(f)) {
+                        GoRead.get().unread.Feeds.put(f, 0);
                     }
-                    GoReadApplication.unread.Feeds.put(f, GoReadApplication.unread.Feeds.get(f) + c);
+                    GoRead.get().unread.Feeds.put(f, GoRead.get().unread.Feeds.get(f) + c);
                     if (folder != null) {
-                        if (!GoReadApplication.unread.Folders.containsKey(folder)) {
-                            GoReadApplication.unread.Folders.put(folder, 0);
+                        if (!GoRead.get().unread.Folders.containsKey(folder)) {
+                            GoRead.get().unread.Folders.put(folder, 0);
                         }
-                        GoReadApplication.unread.Folders.put(folder, GoReadApplication.unread.Folders.get(folder) + c);
+                        GoRead.get().unread.Folders.put(folder, GoRead.get().unread.Folders.get(folder) + c);
                     }
                 }
             }
         } catch (JSONException e) {
-            Log.e(GoReadApplication.TAG, "ufp2", e);
+            Log.e(GoRead.TAG, "ufp2", e);
         }
     }
 
@@ -465,7 +465,7 @@ public class MainActivity extends SherlockListActivity {
     }
 
     protected void displayFeeds() {
-        Log.e(GoReadApplication.TAG, "displayFeeds");
+        Log.e(GoRead.TAG, "displayFeeds");
         try {
             i = getIntent();
             aa.clear();
@@ -473,7 +473,7 @@ public class MainActivity extends SherlockListActivity {
             if (i.hasExtra(K_OUTLINE)) {
                 pos = i.getIntExtra(K_OUTLINE, -1);
                 try {
-                    JSONArray ta = GoReadApplication.lj.getJSONArray("Opml");
+                    JSONArray ta = GoRead.get().lj.getJSONArray("Opml");
                     to = ta.getJSONObject(pos);
                     String t = to.getString("Title");
                     setTitle(t);
@@ -481,12 +481,12 @@ public class MainActivity extends SherlockListActivity {
                     oa = to.getJSONArray("Outline");
                     parseJSON();
                 } catch (JSONException e) {
-                    Log.e(GoReadApplication.TAG, "pos", e);
+                    Log.e(GoRead.TAG, "pos", e);
                 }
             } else {
                 addItem("all items", OutlineType.ALL, null);
-                GoReadApplication.feeds = new HashMap<String, JSONObject>();
-                oa = GoReadApplication.lj.getJSONArray("Opml");
+                GoRead.get().feeds = new HashMap<String, JSONObject>();
+                oa = GoRead.get().lj.getJSONArray("Opml");
                 for (int i = 0; i < oa.length(); i++) {
                     JSONObject o = null;
                     o = oa.getJSONObject(i);
@@ -502,7 +502,7 @@ public class MainActivity extends SherlockListActivity {
                 parseJSON();
             }
         } catch (JSONException e) {
-            Log.e(GoReadApplication.TAG, "display feeds json", e);
+            Log.e(GoRead.TAG, "display feeds json", e);
         }
     }
 
@@ -523,7 +523,7 @@ public class MainActivity extends SherlockListActivity {
                 }
             }
         } catch (JSONException e) {
-            Log.e(GoReadApplication.TAG, "parse json", e);
+            Log.e(GoRead.TAG, "parse json", e);
         }
     }
 
@@ -551,14 +551,14 @@ public class MainActivity extends SherlockListActivity {
                 }
             }
         } catch (JSONException e) {
-            Log.e(GoReadApplication.TAG, "list item click", e);
+            Log.e(GoRead.TAG, "list item click", e);
         }
     }
 
     public static String getIcon(String f) {
         final String suffix = "=s16";
         try {
-            JSONObject i = GoReadApplication.lj.getJSONObject("Icons");
+            JSONObject i = GoRead.get().lj.getJSONObject("Icons");
             if (i.has(f)) {
                 String u = i.getString(f);
                 if (u.endsWith(suffix)) {

@@ -48,7 +48,7 @@ public class StoryActivity extends SherlockActivity {
         Intent i = getIntent();
         try {
             JSONObject s = new JSONObject(i.getStringExtra("story"));
-            JSONObject f = GoReadApplication.feeds.get(s.getString("feed"));
+            JSONObject f = GoRead.get().feeds.get(s.getString("feed"));
             String fn = f.getString("Title");
             setTitle(fn);
             StringBuilder sb = new StringBuilder();

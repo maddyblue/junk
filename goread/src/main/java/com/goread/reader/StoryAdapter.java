@@ -36,7 +36,7 @@ public class StoryAdapter extends ArrayAdapter<JSONObject> {
         try {
             t = s.getString("Title");
             if (t.length() == 0) t = getContext().getString(R.string.title_unknown);
-            t += " - " + GoReadApplication.feeds.get(s.getString("feed")).getString("Title");
+            t += " - " + GoRead.get().feeds.get(s.getString("feed")).getString("Title");
         } catch (JSONException e) {
             e.printStackTrace();
         }

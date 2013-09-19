@@ -53,14 +53,14 @@ public class StoryListActivity extends SherlockListActivity {
         aa = new StoryAdapter(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
         try {
-            JSONObject stories = GoReadApplication.stories;
+            JSONObject stories = GoRead.get().stories;
             ArrayList<JSONObject> sl = new ArrayList<JSONObject>();
 
             Intent it = getIntent();
             int p = it.getIntExtra(MainActivity.K_FOLDER, -1);
             if (it.hasExtra(MainActivity.K_FEED)) {
                 String f = it.getStringExtra(MainActivity.K_FEED);
-                setTitle(GoReadApplication.feeds.get(f).getString("Title"));
+                setTitle(GoRead.get().feeds.get(f).getString("Title"));
                 addFeed(sl, stories, f);
 
                 final Context c = this;
@@ -82,7 +82,7 @@ public class StoryListActivity extends SherlockListActivity {
                 };
                 task.execute(f);
             } else if (p >= 0) {
-                JSONArray a = GoReadApplication.lj.getJSONArray("Opml");
+                JSONArray a = GoRead.get().lj.getJSONArray("Opml");
                 JSONObject folder = a.getJSONObject(p);
                 setTitle(folder.getString("Title"));
                 a = folder.getJSONArray("Outline");
@@ -146,7 +146,7 @@ public class StoryListActivity extends SherlockListActivity {
             feed = so.getString("feed");
             story = so.getString("Id");
             String key = MainActivity.hashStory(feed, story);
-            DiskLruCache.Snapshot s = GoReadApplication.storyCache.get(key);
+            DiskLruCache.Snapshot s = GoRead.get().storyCache.get(key);
             if (s != null) {
                 String c = s.getString(0);
                 i.putExtra("contents", c);
@@ -160,7 +160,7 @@ public class StoryListActivity extends SherlockListActivity {
                 o.put("Story", story);
                 a.put(o);
 
-                GoReadApplication.rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoReadApplication.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
+                GoRead.get().rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         try {
@@ -182,8 +182,8 @@ public class StoryListActivity extends SherlockListActivity {
                         .put("Feed", feed)
                         .put("Story", story)
                 );
-                GoReadApplication.rq.add(new JsonArrayRequest(Request.Method.POST, GoReadApplication.GOREAD_URL + "/user/mark-read", read, null, null));
-                GoReadApplication.persistFeedList();
+                GoRead.get().rq.add(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
+                GoRead.get().persistFeedList();
                 MainActivity.updateFeedProperties();
             }
         } catch (JSONException e) {
