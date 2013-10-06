@@ -160,7 +160,7 @@ public class StoryListActivity extends SherlockListActivity {
                 o.put("Story", story);
                 a.put(o);
 
-                GoRead.get().rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
+                GoRead.addReq(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         try {
@@ -182,7 +182,7 @@ public class StoryListActivity extends SherlockListActivity {
                         .put("Feed", feed)
                         .put("Story", story)
                 );
-                GoRead.get().rq.add(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
+                GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
                 GoRead.persistFeedList();
                 GoRead.updateFeedProperties();
             }

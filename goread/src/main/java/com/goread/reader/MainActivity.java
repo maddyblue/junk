@@ -31,12 +31,9 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.NoCache;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -108,10 +105,6 @@ public class MainActivity extends SherlockListActivity {
                 }
             } else {
                 displayFeeds();
-            }
-            if (GoRead.get().rq == null) {
-                GoRead.get().rq = new RequestQueue(new NoCache(), new BasicNetwork(new OkHttpStack()));
-                GoRead.get().rq.start();
             }
             if (GoRead.get().storyCache == null) {
                 File f = getFilesDir();
@@ -187,7 +180,7 @@ public class MainActivity extends SherlockListActivity {
         Log.e(GoRead.TAG, "mark read");
         JSONArray read = new JSONArray();
         markRead(read, oa);
-        GoRead.get().rq.add(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
+        GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
         GoRead.updateFeedProperties();
         aa.notifyDataSetChanged();
         GoRead.get().persistFeedList();
@@ -273,7 +266,7 @@ public class MainActivity extends SherlockListActivity {
                 }
                 try {
                     URL url = new URL(GoRead.GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GoRead.GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
-                    GoRead.get().rq.add(new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
+                    GoRead.addReq(new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
                         @Override
                         public void onResponse(String s) {
                             Log.e(GoRead.TAG, "resp");
@@ -310,7 +303,7 @@ public class MainActivity extends SherlockListActivity {
     protected void fetchListFeeds() {
         Log.e(GoRead.TAG, "fetchListFeeds");
         final Context c = this;
-        GoRead.get().rq.add(new JsonObjectRequest(Request.Method.GET, GoRead.GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
+        GoRead.addReq(new JsonObjectRequest(Request.Method.GET, GoRead.GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 GoRead.get().lj = jsonObject;
@@ -372,7 +365,7 @@ public class MainActivity extends SherlockListActivity {
             }
             Log.e(GoRead.TAG, String.format("downloading %d stories", ja.length()));
             if (ja.length() > 0) {
-                GoRead.get().rq.add(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
+                GoRead.addReq(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         cacheStories(ja, jsonArray);

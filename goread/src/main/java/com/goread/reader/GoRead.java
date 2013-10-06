@@ -2,7 +2,10 @@ package com.goread.reader;
 
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.NoCache;
 import com.jakewharton.disklrucache.DiskLruCache;
 
 import org.json.JSONArray;
@@ -26,7 +29,7 @@ public final class GoRead {
     public JSONObject stories = null;
     public HashMap<String, JSONObject> feeds;
     public DiskLruCache storyCache = null;
-    public RequestQueue rq = null;
+    private RequestQueue rq = null;
     public UnreadCounts unread = null;
     boolean loginDone = false;
     File feedCache = null;
@@ -128,5 +131,14 @@ public final class GoRead {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void addReq(Request r) {
+        GoRead g = get();
+        if (g.rq == null) {
+            g.rq = new RequestQueue(new NoCache(), new BasicNetwork(new OkHttpStack()));
+            g.rq.start();
+        }
+        g.rq.add(r);
     }
 }
