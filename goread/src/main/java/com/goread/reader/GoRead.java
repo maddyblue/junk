@@ -113,16 +113,13 @@ public final class GoRead {
                     }
                 }
             }
+            persistFeedList();
         } catch (JSONException e) {
             Log.e(TAG, "ufp2", e);
         }
     }
 
-    public static void persistFeedList() {
-        get().doPersistFeedList();
-    }
-
-    private void doPersistFeedList() {
+    private void persistFeedList() {
         try {
             FileWriter fw = new FileWriter(feedCache);
             fw.write(lj.toString());

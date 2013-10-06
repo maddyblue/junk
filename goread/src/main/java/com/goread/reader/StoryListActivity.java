@@ -183,7 +183,6 @@ public class StoryListActivity extends SherlockListActivity {
                         .put("Story", story)
                 );
                 GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
-                GoRead.persistFeedList();
                 GoRead.updateFeedProperties();
             }
         } catch (JSONException e) {

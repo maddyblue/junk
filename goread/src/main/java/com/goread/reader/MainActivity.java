@@ -183,7 +183,6 @@ public class MainActivity extends SherlockListActivity {
         GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
         GoRead.updateFeedProperties();
         aa.notifyDataSetChanged();
-        GoRead.get().persistFeedList();
     }
 
     private void markRead(JSONArray read, JSONArray ja) {
@@ -307,7 +306,6 @@ public class MainActivity extends SherlockListActivity {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 GoRead.get().lj = jsonObject;
-                GoRead.persistFeedList();
                 GoRead.updateFeedProperties();
                 downloadStories();
                 displayFeeds();
