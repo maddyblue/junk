@@ -31,6 +31,8 @@ public final class GoRead {
     public DiskLruCache storyCache = null;
     private RequestQueue rq = null;
     public UnreadCounts unread = null;
+    private HashMap<String, String> icons = new HashMap<String, String>();
+
     boolean loginDone = false;
     File feedCache = null;
 
@@ -47,20 +49,7 @@ public final class GoRead {
     }
 
     public static String getIcon(String f) {
-        final String suffix = "=s16";
-        try {
-            JSONObject i = get().lj.getJSONObject("Icons");
-            if (i.has(f)) {
-                String u = i.getString(f);
-                if (u.endsWith(suffix)) {
-                    u = u.substring(0, u.length() - suffix.length());
-                }
-                return u;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return get().icons.get(f);
     }
 
     public static void updateFeedProperties() {
@@ -68,12 +57,27 @@ public final class GoRead {
     }
 
     private void doUpdateFeedProperties() {
+        final String suffix = "=s16";
         try {
             Log.e(TAG, "ufp");
             stories = lj.getJSONObject("Stories");
             unread = new UnreadCounts();
             JSONArray opml = lj.getJSONArray("Opml");
             updateFeedProperties(null, opml);
+            HashMap<String, String> ic = new HashMap<String, String>();
+            opml = lj.getJSONArray("Feeds");
+            for (int i = 0; i < opml.length(); i++) {
+                JSONObject o = opml.getJSONObject(i);
+                String im = o.getString("Image");
+                if (im.length() == 0) {
+                    continue;
+                }
+                if (im.endsWith(suffix)) {
+                    im = im.substring(0, im.length() - suffix.length());
+                }
+                ic.put(o.getString("Url"), im);
+            }
+            icons = ic;
         } catch (JSONException e) {
             Log.e(TAG, "ufp", e);
         }
