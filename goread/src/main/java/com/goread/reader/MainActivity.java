@@ -97,7 +97,7 @@ public class MainActivity extends SherlockListActivity {
                         }
                         String s = sb.toString();
                         GoRead.get().lj = new JSONObject(s);
-                        updateFeedProperties();
+                        GoRead.updateFeedProperties();
                         displayFeeds();
                         Log.e(GoRead.TAG, "read from feed cache");
                     } finally {
@@ -188,7 +188,7 @@ public class MainActivity extends SherlockListActivity {
         JSONArray read = new JSONArray();
         markRead(read, oa);
         GoRead.get().rq.add(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
-        updateFeedProperties();
+        GoRead.updateFeedProperties();
         aa.notifyDataSetChanged();
         GoRead.get().persistFeedList();
     }
@@ -314,8 +314,8 @@ public class MainActivity extends SherlockListActivity {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 GoRead.get().lj = jsonObject;
-                GoRead.get().persistFeedList();
-                updateFeedProperties();
+                GoRead.persistFeedList();
+                GoRead.updateFeedProperties();
                 downloadStories();
                 displayFeeds();
             }
@@ -403,57 +403,6 @@ public class MainActivity extends SherlockListActivity {
             GoRead.get().storyCache.flush();
         } catch (IOException e) {
             Log.e(GoRead.TAG, "cache flush", e);
-        }
-    }
-
-    public static void updateFeedProperties() {
-        try {
-            Log.e(GoRead.TAG, "ufp");
-            GoRead.get().stories = GoRead.get().lj.getJSONObject("Stories");
-            GoRead.get().unread = new UnreadCounts();
-            JSONArray opml = GoRead.get().lj.getJSONArray("Opml");
-            updateFeedProperties(null, opml);
-        } catch (JSONException e) {
-            Log.e(GoRead.TAG, "ufp", e);
-        }
-    }
-
-    protected static void updateFeedProperties(String folder, JSONArray opml) {
-        try {
-            for (int i = 0; i < opml.length(); i++) {
-                JSONObject outline = opml.getJSONObject(i);
-                if (outline.has("Outline")) {
-                    updateFeedProperties(outline.getString("Title"), outline.getJSONArray("Outline"));
-                } else {
-                    String f = outline.getString("XmlUrl");
-                    if (!GoRead.get().stories.has(f)) {
-                        continue;
-                    }
-                    JSONArray us = GoRead.get().stories.getJSONArray(f);
-                    Integer c = 0;
-                    for (int j = 0; j < us.length(); j++) {
-                        if (!us.getJSONObject(j).optBoolean("read", false)) {
-                            c++;
-                        }
-                    }
-                    if (c == 0) {
-                        continue;
-                    }
-                    GoRead.get().unread.All += c;
-                    if (!GoRead.get().unread.Feeds.containsKey(f)) {
-                        GoRead.get().unread.Feeds.put(f, 0);
-                    }
-                    GoRead.get().unread.Feeds.put(f, GoRead.get().unread.Feeds.get(f) + c);
-                    if (folder != null) {
-                        if (!GoRead.get().unread.Folders.containsKey(folder)) {
-                            GoRead.get().unread.Folders.put(folder, 0);
-                        }
-                        GoRead.get().unread.Folders.put(folder, GoRead.get().unread.Folders.get(folder) + c);
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            Log.e(GoRead.TAG, "ufp2", e);
         }
     }
 

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.jakewharton.disklrucache.DiskLruCache;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,7 +60,66 @@ public final class GoRead {
         return null;
     }
 
-    public void persistFeedList() {
+    public static void updateFeedProperties() {
+        get().doUpdateFeedProperties();
+    }
+
+    private void doUpdateFeedProperties() {
+        try {
+            Log.e(TAG, "ufp");
+            stories = lj.getJSONObject("Stories");
+            unread = new UnreadCounts();
+            JSONArray opml = lj.getJSONArray("Opml");
+            updateFeedProperties(null, opml);
+        } catch (JSONException e) {
+            Log.e(TAG, "ufp", e);
+        }
+    }
+
+    private void updateFeedProperties(String folder, JSONArray opml) {
+        try {
+            for (int i = 0; i < opml.length(); i++) {
+                JSONObject outline = opml.getJSONObject(i);
+                if (outline.has("Outline")) {
+                    updateFeedProperties(outline.getString("Title"), outline.getJSONArray("Outline"));
+                } else {
+                    String f = outline.getString("XmlUrl");
+                    if (!stories.has(f)) {
+                        continue;
+                    }
+                    JSONArray us = stories.getJSONArray(f);
+                    Integer c = 0;
+                    for (int j = 0; j < us.length(); j++) {
+                        if (!us.getJSONObject(j).optBoolean("read", false)) {
+                            c++;
+                        }
+                    }
+                    if (c == 0) {
+                        continue;
+                    }
+                    unread.All += c;
+                    if (!unread.Feeds.containsKey(f)) {
+                        unread.Feeds.put(f, 0);
+                    }
+                    unread.Feeds.put(f, unread.Feeds.get(f) + c);
+                    if (folder != null) {
+                        if (!unread.Folders.containsKey(folder)) {
+                            unread.Folders.put(folder, 0);
+                        }
+                        unread.Folders.put(folder, unread.Folders.get(folder) + c);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "ufp2", e);
+        }
+    }
+
+    public static void persistFeedList() {
+        get().doPersistFeedList();
+    }
+
+    private void doPersistFeedList() {
         try {
             FileWriter fw = new FileWriter(feedCache);
             fw.write(lj.toString());
