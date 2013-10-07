@@ -27,6 +27,8 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.jakewharton.disklrucache.DiskLruCache;
@@ -145,7 +147,7 @@ public class StoryListActivity extends SherlockListActivity {
         try {
             feed = so.getString("feed");
             story = so.getString("Id");
-            String key = MainActivity.hashStory(feed, story);
+            String key = GoRead.hashStory(feed, story);
             DiskLruCache.Snapshot s = GoRead.get().storyCache.get(key);
             if (s != null) {
                 String c = s.getString(0);
@@ -174,22 +176,67 @@ public class StoryListActivity extends SherlockListActivity {
                 }, null));
             }
             startActivity(i);
-            if (!so.has("read")) {
-                so.put("read", true);
-                aa.notifyDataSetChanged();
-                JSONArray read = new JSONArray();
-                read.put(new JSONObject()
-                        .put("Feed", feed)
-                        .put("Story", story)
-                );
-                GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
-                GoRead.updateFeedProperties();
-            }
+            markRead(position);
         } catch (JSONException e) {
             return;
         } catch (IOException e) {
             // todo: perhaps not return, since it's just the cache not being available
             return;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.storylist, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        try {
+            switch (item.getItemId()) {
+                case R.id.action_mark_read:
+                    markRead();
+                    return true;
+            }
+        } catch (Exception e) {
+            Log.e(GoRead.TAG, "oois", e);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void markRead() throws JSONException {
+        Log.e(GoRead.TAG, "mark read");
+        markRead(-1);
+    }
+
+    private void markRead(int position) throws JSONException {
+        JSONArray read = new JSONArray();
+
+        if (position >= 0) {
+            markReadStory(read, position);
+        } else {
+            for (int i = 0; i < aa.getCount(); i++) {
+                markReadStory(read, i);
+            }
+        }
+        if (read.length() > 0) {
+            GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
+            GoRead.updateFeedProperties();
+            aa.notifyDataSetChanged();
+        }
+    }
+
+    private void markReadStory(JSONArray read, int position) throws JSONException {
+        JSONObject so = aa.getItem(position);
+        if (!so.has("read")) {
+            so.put("read", true);
+            String feed = so.getString("feed");
+            String story = so.getString("Id");
+            read.put(new JSONObject()
+                    .put("Feed", feed)
+                    .put("Story", story)
+            );
         }
     }
 }
