@@ -15,6 +15,10 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 public final class GoRead {
@@ -54,6 +58,27 @@ public final class GoRead {
 
     public static void updateFeedProperties() {
         get().doUpdateFeedProperties();
+    }
+
+    public static String hashStory(JSONObject j) throws JSONException {
+        return hashStory(j.getString("Feed"), j.getString("Story"));
+    }
+
+    public static String hashStory(String feed, String story) {
+        MessageDigest cript = null;
+        try {
+            cript = MessageDigest.getInstance("SHA-1");
+            cript.reset();
+            cript.update(feed.getBytes("utf8"));
+            cript.update("|".getBytes());
+            cript.update(story.getBytes());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String sha = new BigInteger(1, cript.digest()).toString(16);
+        return sha;
     }
 
     private void doUpdateFeedProperties() {

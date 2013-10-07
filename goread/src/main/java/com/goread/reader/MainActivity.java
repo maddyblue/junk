@@ -49,12 +49,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -136,7 +132,6 @@ public class MainActivity extends SherlockListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getSupportMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -144,7 +139,6 @@ public class MainActivity extends SherlockListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
-            // Handle item selection
             switch (item.getItemId()) {
                 case R.id.action_logout:
                     logout();
@@ -322,27 +316,6 @@ public class MainActivity extends SherlockListActivity {
         ));
     }
 
-    public static String hashStory(JSONObject j) throws JSONException {
-        return hashStory(j.getString("Feed"), j.getString("Story"));
-    }
-
-    public static String hashStory(String feed, String story) {
-        MessageDigest cript = null;
-        try {
-            cript = MessageDigest.getInstance("SHA-1");
-            cript.reset();
-            cript.update(feed.getBytes("utf8"));
-            cript.update("|".getBytes());
-            cript.update(story.getBytes());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String sha = new BigInteger(1, cript.digest()).toString(16);
-        return sha;
-    }
-
     protected void downloadStories() {
         try {
             final JSONArray ja = new JSONArray();
@@ -355,7 +328,7 @@ public class MainActivity extends SherlockListActivity {
                     JSONObject jo = new JSONObject()
                             .put("Feed", key)
                             .put("Story", so.getString("Id"));
-                    String hash = hashStory(jo);
+                    String hash = GoRead.hashStory(jo);
                     if (GoRead.get().storyCache.get(hash) == null) {
                         ja.put(jo);
                     }
@@ -380,7 +353,7 @@ public class MainActivity extends SherlockListActivity {
             try {
                 JSONObject is = ids.getJSONObject(i);
                 String content = contents.getString(i);
-                String key = hashStory(is);
+                String key = GoRead.hashStory(is);
                 DiskLruCache.Editor edit = GoRead.get().storyCache.edit(key);
                 edit.set(0, content);
                 edit.commit();
