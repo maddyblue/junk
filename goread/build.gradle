@@ -27,6 +27,27 @@ android {
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
+
+    /*
+    signingConfigs {
+        debug {
+            storeFile file("~/.android/debug.keystore")
+        }
+
+        release {
+            storeFile file("/home/mjibson/code/goread-android/goread.keystore")
+            storePassword System.console().readLine("\n\$ Enter keystore password: ")
+            keyAlias "goread"
+            keyPassword System.console().readLine("\n\$ Enter key password: ")
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+    //*/
 }
 
 dependencies {
