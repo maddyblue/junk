@@ -14,7 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.goread.reader;
+package com.goread.goreader;
 
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -336,7 +336,7 @@ public class MainActivity extends SherlockListActivity {
             }
             Log.e(GoRead.TAG, String.format("downloading %d stories", ja.length()));
             if (ja.length() > 0) {
-                GoRead.addReq(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
+                GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         cacheStories(ja, jsonArray);

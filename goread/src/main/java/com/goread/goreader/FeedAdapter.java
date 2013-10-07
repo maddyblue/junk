@@ -1,4 +1,4 @@
-package com.goread.reader;
+package com.goread.goreader;
 
 import android.content.Context;
 import android.graphics.Typeface;

@@ -14,7 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.goread.reader;
+package com.goread.goreader;
 
 import android.content.Context;
 import android.content.Intent;

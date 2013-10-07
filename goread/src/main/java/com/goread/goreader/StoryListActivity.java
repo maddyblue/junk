@@ -14,7 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.goread.reader;
+package com.goread.goreader;
 
 import android.content.Context;
 import android.content.Intent;
@@ -162,7 +162,7 @@ public class StoryListActivity extends SherlockListActivity {
                 o.put("Story", story);
                 a.put(o);
 
-                GoRead.addReq(new com.goread.reader.JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
+                GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         try {

@@ -1,4 +1,4 @@
-package com.goread.reader;
+package com.goread.goreader;
 
 import java.util.HashMap;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.goread.reader">
+          package="com.goread.goreader">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -15,7 +15,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
         <activity
-                android:name="com.goread.reader.MainActivity"
+                android:name="com.goread.goreader.MainActivity"
                 android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -24,10 +24,10 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.goread.reader.StoryListActivity">
+                android:name="com.goread.goreader.StoryListActivity">
         </activity>
         <activity
-                android:name="com.goread.reader.StoryActivity">
+                android:name="com.goread.goreader.StoryActivity">
         </activity>
     </application>
 </manifest>

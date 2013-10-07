@@ -1,4 +1,4 @@
-package com.goread.reader;
+package com.goread.goreader;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;

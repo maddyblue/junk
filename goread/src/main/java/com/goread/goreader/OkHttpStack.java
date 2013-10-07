@@ -1,4 +1,4 @@
-package com.goread.reader;
+package com.goread.goreader;
 
 import com.android.volley.toolbox.HurlStack;
 import com.squareup.okhttp.OkHttpClient;

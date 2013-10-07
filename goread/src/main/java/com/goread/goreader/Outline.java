@@ -1,4 +1,4 @@
-package com.goread.reader;
+package com.goread.goreader;
 
 public class Outline {
     protected String Title;
