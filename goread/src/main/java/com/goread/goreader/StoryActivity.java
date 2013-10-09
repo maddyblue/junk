@@ -76,7 +76,7 @@ public class StoryActivity extends SherlockActivity {
             sb.append("</p><div>");
             sb.append(i.getStringExtra("contents"));
             sb.append("</div></body></html>");
-            wv.loadData(sb.toString(), "text/html; charset=UTF-8", null);
+            wv.loadDataWithBaseURL(null, sb.toString(), null, "UTF-8", null);
 
             final Context c = this;
             AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>() {
