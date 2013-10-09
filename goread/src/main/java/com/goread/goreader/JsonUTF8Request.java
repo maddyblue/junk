@@ -16,8 +16,6 @@
 
 package com.goread.goreader;
 
-import android.util.Log;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
@@ -41,7 +39,6 @@ public class JsonUTF8Request extends JsonRequest<JSONObject> {
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         try {
-            Log.e("headers", response.headers.toString());
             String jsonString = new String(response.data, "UTF-8");
             return Response.success(new JSONObject(jsonString),
                     HttpHeaderParser.parseCacheHeaders(response));
