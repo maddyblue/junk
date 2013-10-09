@@ -296,7 +296,7 @@ public class MainActivity extends SherlockListActivity {
     protected void fetchListFeeds() {
         Log.e(GoRead.TAG, "fetchListFeeds");
         final Context c = this;
-        GoRead.addReq(new JsonObjectRequest(Request.Method.GET, GoRead.GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
+        GoRead.addReq(new JsonUTF8Request(Request.Method.GET, GoRead.GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 GoRead.get().lj = jsonObject;
