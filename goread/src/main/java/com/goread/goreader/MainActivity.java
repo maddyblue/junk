@@ -26,21 +26,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.jakewharton.disklrucache.DiskLruCache;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +60,7 @@ public class MainActivity extends SherlockListActivity {
     private int pos = -1;
     private SharedPreferences p;
     private String authToken = null;
+    private MenuItem refreshMenuItem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +131,7 @@ public class MainActivity extends SherlockListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main, menu);
+        refreshMenuItem = menu.findItem(R.id.action_refresh);
         return true;
     }
 
@@ -144,6 +143,7 @@ public class MainActivity extends SherlockListActivity {
                     logout();
                     return true;
                 case R.id.action_refresh:
+                    setRefreshing(true);
                     refresh();
                     return true;
                 case R.id.action_mark_read:
@@ -379,6 +379,7 @@ public class MainActivity extends SherlockListActivity {
 
     protected void displayFeeds() {
         Log.e(GoRead.TAG, "displayFeeds");
+        setRefreshing(false);
         try {
             i = getIntent();
             aa.clear();
@@ -466,6 +467,16 @@ public class MainActivity extends SherlockListActivity {
         } catch (JSONException e) {
             Log.e(GoRead.TAG, "list item click", e);
         }
+    }
+
+    private void setRefreshing(boolean refreshing) {
+        if(refreshMenuItem == null) return;
+
+        if(refreshing) {
+            refreshMenuItem.setActionView(R.layout.actionbar_refresh_progress);
+            refreshMenuItem.expandActionView();
+        } else
+            refreshMenuItem.setActionView(null);
     }
 
 }
