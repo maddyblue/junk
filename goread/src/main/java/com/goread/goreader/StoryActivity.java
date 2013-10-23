@@ -16,6 +16,7 @@
 
 package com.goread.goreader;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,10 +25,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.webkit.WebView;
-
-import com.actionbarsherlock.app.SherlockActivity;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,7 +36,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class StoryActivity extends SherlockActivity {
+public class StoryActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +85,7 @@ public class StoryActivity extends SherlockActivity {
                         if (iconURL != null) {
                             Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
                             BitmapDrawable bd = new BitmapDrawable(getResources(), bi);
-                            getSupportActionBar().setIcon(bd);
+                            getActionBar().setIcon(bd);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
