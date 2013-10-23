@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:goreader="http://schemas.android.com/apk/res-auto" >
+    <item
+            android:id="@+id/action_share_story"
+            android:title="@string/share_story"
+            goreader:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+            goreader:showAsAction="always"/>
+</menu>
