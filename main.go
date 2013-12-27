@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 	"unicode"
 )
 
@@ -23,8 +24,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	feed := Feed{}
-	for _, f := range files {
+	t := time.Now().Format("2006-01-02T15:04:05-07:00")
+	feed := Feed{
+		Updated: t,
+	}
+	for fi, f := range files {
 		p := filepath.Join(dir.Name(), f.Name())
 		d, err := ioutil.ReadFile(p)
 		if err != nil {
@@ -73,13 +77,18 @@ func main() {
 		}
 		r.Directions = strings.TrimSpace(r.Directions)
 		feed.Entry = append(feed.Entry, &Entry{
-			Title:    r.Name,
-			Content:  r.Atom(),
-			Category: r.Category(),
+			Id:        fmt.Sprintf("post-%v", fi),
+			Title:     r.Name,
+			Content:   r.Atom(),
+			Category:  r.Category(),
+			Published: t,
 		})
 	}
 	b, _ := xml.MarshalIndent(&feed, "", "  ")
-	ioutil.WriteFile("feed.xml", b, 0666)
+	fb := bytes.Buffer{}
+	fb.WriteString(xml.Header)
+	fb.Write(b)
+	ioutil.WriteFile("feed.xml", fb.Bytes(), 0666)
 	fmt.Println("done")
 }
 
@@ -113,6 +122,7 @@ func (r *Recipe) Atom() *Text {
 	}
 	return &Text{
 		Body: strings.TrimSpace(b.String()),
+		Type: "html",
 	}
 }
 
@@ -149,13 +159,16 @@ const RTMPL = `
 
 type Feed struct {
 	XMLName xml.Name `xml:"http://www.w3.org/2005/Atom feed"`
+	Updated string   `xml:"updated"`
 	Entry   []*Entry `xml:"entry"`
 }
 
 type Entry struct {
-	Title    string      `xml:"title"`
-	Content  *Text       `xml:"content"`
-	Category []*Category `xml:"category"`
+	Id        string      `xml:"id"`
+	Title     string      `xml:"title"`
+	Content   *Text       `xml:"content"`
+	Category  []*Category `xml:"category"`
+	Published string      `xml:"published"`
 }
 
 type Category struct {
