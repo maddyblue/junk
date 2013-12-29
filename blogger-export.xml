@@ -3,7 +3,7 @@
 <ns0:title type="html">My Blog</ns0:title>
 <ns0:link href="http://mjibson.wordpress.com" rel="self" type="application/atom+xml" />
 <ns0:link href="http://mjibson.wordpress.com" rel="self" type="application/atom+xml" />
-<ns0:updated>2013-12-26T19:10:38Z</ns0:updated>
+<ns0:updated>2013-12-29T00:53:50Z</ns0:updated>
 <ns0:generator>Blogger</ns0:generator>
 <ns0:link href="http://mjibson.wordpress.com" rel="alternate" type="text/html" />
 <ns0:link href="http://mjibson.wordpress.com" rel="alternate" type="text/html" />
@@ -13,7 +13,7 @@
 <ns0:author>
 <ns0:name>mjibson</ns0:name>
 </ns0:author>
-<ns0:content type="html">aosentu hoanetuh oanseuh aonsetuhnoasetuh anosteuhnaosteuh.</ns0:content>
+<ns0:content type="html">aosentu &lt;strong&gt;hoanetuh&lt;/strong&gt; oanseuh aonsetuhnoasetuh anosteuhnaosteuh.</ns0:content>
 <ns0:published>2013-12-26T19:09:46Z</ns0:published>
 <ns0:title type="html">test post title</ns0:title>
 <ns0:link href="http://mjibson.wordpress.com/2013/12/26/test-post-title/" rel="self" type="application/atom+xml" />

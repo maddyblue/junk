@@ -24,9 +24,23 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	t := time.Now().Format("2006-01-02T15:04:05-07:00")
+	t := time.Now().Format("2006-01-02T15:04:05Z")
 	feed := Feed{
+		Title:   &Text{Type: "html", Body: "blog"},
 		Updated: t,
+		Link: []Link{
+			{
+				Rel:  "alternate",
+				Type: "text/html",
+				Href: "http://ljrecipe.blogspot.com/",
+			},
+			{
+				Rel:  "self",
+				Type: "application/atom+xml",
+				Href: "http://ljrecipe.blogspot.com/",
+			},
+		},
+		Generator: "rec",
 	}
 	for fi, f := range files {
 		p := filepath.Join(dir.Name(), f.Name())
@@ -78,11 +92,25 @@ func main() {
 		r.Directions = strings.TrimSpace(r.Directions)
 		feed.Entry = append(feed.Entry, &Entry{
 			Id:        fmt.Sprintf("post-%v", fi),
-			Title:     r.Name,
+			Title:     &Text{Type: "html", Body: r.Name},
 			Content:   r.Atom(),
 			Category:  r.Category(),
 			Published: t,
+			Link: []Link{
+				{
+					Rel:  "alternate",
+					Type: "text/html",
+					Href: fmt.Sprintf("http://ljrecipe.blogspot.com/post-%v", fi),
+				},
+				{
+					Rel:  "self",
+					Type: "application/atom+xml",
+					Href: fmt.Sprintf("http://ljrecipe.blogspot.com/post-%v", fi),
+				},
+			},
+			Author: &Person{Name: "author"},
 		})
+		break
 	}
 	b, _ := xml.MarshalIndent(&feed, "", "  ")
 	fb := bytes.Buffer{}
@@ -127,11 +155,17 @@ func (r *Recipe) Atom() *Text {
 }
 
 func (r *Recipe) Category() []*Category {
+	return []*Category{
+		{
+			Term:   "http://schemas.google.com/blogger/2008/kind#post",
+			Scheme: "http://schemas.google.com/g/2005#kind",
+		},
+	}
 	if r.Categories == "" {
 		return nil
 	}
 	return []*Category{
-		&Category{
+		{
 			Term: r.Categories,
 		},
 	}
@@ -158,24 +192,43 @@ const RTMPL = `
 `
 
 type Feed struct {
-	XMLName xml.Name `xml:"http://www.w3.org/2005/Atom feed"`
-	Updated string   `xml:"updated"`
-	Entry   []*Entry `xml:"entry"`
+	XMLName   xml.Name `xml:"http://www.w3.org/2005/Atom ns0:feed"`
+	Title     *Text    `xml:"ns0:title"`
+	Link      []Link   `xml:"ns0:link"`
+	Updated   string   `xml:"ns0:updated"`
+	Generator string   `xml:"ns0:generator"`
+	Entry     []*Entry `xml:"ns0:entry"`
 }
 
 type Entry struct {
-	Id        string      `xml:"id"`
-	Title     string      `xml:"title"`
-	Content   *Text       `xml:"content"`
-	Category  []*Category `xml:"category"`
-	Published string      `xml:"published"`
+	Id        string      `xml:"ns0:id"`
+	Title     *Text       `xml:"ns0:title"`
+	Content   *Text       `xml:"ns0:content"`
+	Category  []*Category `xml:"ns0:category"`
+	Published string      `xml:"ns0:published"`
+	Link      []Link      `xml:"ns0:link"`
+	Author    *Person     `xml:"ns0:author"`
 }
 
 type Category struct {
-	Term string `xml:"term,attr"`
+	Term   string `xml:"term,attr"`
+	Scheme string `xml:"scheme,attr"`
 }
 
 type Text struct {
 	Type string `xml:"type,attr"`
 	Body string `xml:",chardata"`
+}
+
+type Link struct {
+	Href string `xml:"href,attr"`
+	Rel  string `xml:"rel,attr"`
+	Type string `xml:"type,attr"`
+}
+
+type Person struct {
+	Name     string `xml:"ns0:name"`
+	URI      string `xml:"uri,omitempty"`
+	Email    string `xml:"email,omitempty"`
+	InnerXML string `xml:",innerxml"`
 }
