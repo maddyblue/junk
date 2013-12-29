@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
+	"text/template"
 	"time"
 	"unicode"
 )
@@ -24,25 +24,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	t := time.Now().Format("2006-01-02T15:04:05Z")
-	feed := Feed{
-		Title:   &Text{Type: "html", Body: "blog"},
-		Updated: t,
-		Link: []Link{
-			{
-				Rel:  "alternate",
-				Type: "text/html",
-				Href: "http://ljrecipe.blogspot.com/",
-			},
-			{
-				Rel:  "self",
-				Type: "application/atom+xml",
-				Href: "http://ljrecipe.blogspot.com/",
-			},
-		},
-		Generator: "rec",
-	}
-	for fi, f := range files {
+	var rs []Recipe
+	for _, f := range files {
 		p := filepath.Join(dir.Name(), f.Name())
 		d, err := ioutil.ReadFile(p)
 		if err != nil {
@@ -90,32 +73,12 @@ func main() {
 			}
 		}
 		r.Directions = strings.TrimSpace(r.Directions)
-		feed.Entry = append(feed.Entry, &Entry{
-			Id:        fmt.Sprintf("post-%v", fi),
-			Title:     &Text{Type: "html", Body: r.Name},
-			Content:   r.Atom(),
-			Category:  r.Category(),
-			Published: t,
-			Link: []Link{
-				{
-					Rel:  "alternate",
-					Type: "text/html",
-					Href: fmt.Sprintf("http://ljrecipe.blogspot.com/post-%v", fi),
-				},
-				{
-					Rel:  "self",
-					Type: "application/atom+xml",
-					Href: fmt.Sprintf("http://ljrecipe.blogspot.com/post-%v", fi),
-				},
-			},
-			Author: &Person{Name: "author"},
-		})
-		break
+		rs = append(rs, r)
 	}
-	b, _ := xml.MarshalIndent(&feed, "", "  ")
-	fb := bytes.Buffer{}
-	fb.WriteString(xml.Header)
-	fb.Write(b)
+	fb := bytes.NewBufferString(xml.Header)
+	if err := ftmpl.Execute(fb, &rs); err != nil {
+		log.Fatal(err)
+	}
 	ioutil.WriteFile("feed.xml", fb.Bytes(), 0666)
 	fmt.Println("done")
 }
@@ -133,102 +96,69 @@ type Recipe struct {
 	Ingreds    []string
 }
 
-var tmpl *template.Template
+var ftmpl, rtmpl *template.Template
 
 func init() {
 	var err error
-	tmpl, err = template.New("r").Parse(RTMPL)
+	rtmpl, err = template.New("r").Parse(RTMPL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	ftmpl, err = template.New("f").Parse(FTMPL)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func (r *Recipe) Atom() *Text {
+func (r *Recipe) String() string {
 	b := &bytes.Buffer{}
-	if err := tmpl.Execute(b, &r); err != nil {
+	if err := rtmpl.Execute(b, &r); err != nil {
 		log.Fatal(err)
 	}
-	return &Text{
-		Body: strings.TrimSpace(b.String()),
-		Type: "html",
+	s := strings.TrimSpace(b.String())
+	s = strings.Replace(s, "\n", "", -1)
+	bs := &bytes.Buffer{}
+	if err := xml.EscapeText(bs, []byte(s)); err != nil {
+		log.Fatal(err)
 	}
+	return bs.String()
 }
 
-func (r *Recipe) Category() []*Category {
-	return []*Category{
-		{
-			Term:   "http://schemas.google.com/blogger/2008/kind#post",
-			Scheme: "http://schemas.google.com/g/2005#kind",
-		},
-	}
-	if r.Categories == "" {
-		return nil
-	}
-	return []*Category{
-		{
-			Term: r.Categories,
-		},
-	}
+var di = 1
+
+func (r *Recipe) Date() string {
+	d := time.Date(2013, time.January, di, 0, 0, 0, 0, time.UTC)
+	di++
+	return d.Format("2006-01-02T15:04:05Z")
 }
 
 const RTMPL = `
-{{if .By}}
-	<p>Recipe By: {{.By}}</p>
-{{end}}
-{{if .Size}}
-	<p>Serving Size: {{.Size}}</p>
-{{end}}
-{{if .Prep}}
-	<p>Prep Time: {{.Prep}}</p>
-{{end}}
-{{if .Ingreds}}
-<ul>
-{{range .Ingreds}}
-	<li>{{.}}</li>
-{{end}}
-</ul>
-{{end}}
+{{if .By}}Recipe By: {{.By}}<br />{{end}}
+{{if .Size}}Serving Size: {{.Size}}<br />{{end}}
+{{if .Prep}}Prep Time: {{.Prep}}<br />{{end}}
+{{if .Prep}}Categories: {{.Categories}}<br />{{end}}
+{{if .Ingreds}}<ul>{{range .Ingreds}}<li>{{.}}</li>{{end}}</ul>{{end}}
 {{.Directions}}
 `
 
-type Feed struct {
-	XMLName   xml.Name `xml:"http://www.w3.org/2005/Atom ns0:feed"`
-	Title     *Text    `xml:"ns0:title"`
-	Link      []Link   `xml:"ns0:link"`
-	Updated   string   `xml:"ns0:updated"`
-	Generator string   `xml:"ns0:generator"`
-	Entry     []*Entry `xml:"ns0:entry"`
-}
-
-type Entry struct {
-	Id        string      `xml:"ns0:id"`
-	Title     *Text       `xml:"ns0:title"`
-	Content   *Text       `xml:"ns0:content"`
-	Category  []*Category `xml:"ns0:category"`
-	Published string      `xml:"ns0:published"`
-	Link      []Link      `xml:"ns0:link"`
-	Author    *Person     `xml:"ns0:author"`
-}
-
-type Category struct {
-	Term   string `xml:"term,attr"`
-	Scheme string `xml:"scheme,attr"`
-}
-
-type Text struct {
-	Type string `xml:"type,attr"`
-	Body string `xml:",chardata"`
-}
-
-type Link struct {
-	Href string `xml:"href,attr"`
-	Rel  string `xml:"rel,attr"`
-	Type string `xml:"type,attr"`
-}
-
-type Person struct {
-	Name     string `xml:"ns0:name"`
-	URI      string `xml:"uri,omitempty"`
-	Email    string `xml:"email,omitempty"`
-	InnerXML string `xml:",innerxml"`
-}
+const FTMPL = `<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
+<ns0:title type="html">My Blog</ns0:title>
+<ns0:link href="http://mjibson.wordpress.com" rel="self" type="application/atom+xml" />
+<ns0:link href="http://mjibson.wordpress.com" rel="self" type="application/atom+xml" />
+<ns0:updated>2013-12-29T00:53:50Z</ns0:updated>
+<ns0:generator>Blogger</ns0:generator>
+<ns0:link href="http://mjibson.wordpress.com" rel="alternate" type="text/html" />
+<ns0:link href="http://mjibson.wordpress.com" rel="alternate" type="text/html" />
+{{range $i, $e := .}}<ns0:entry>
+<ns0:category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/blogger/2008/kind#post" />
+<ns0:id>post-{{$i}}</ns0:id>
+<ns0:author>
+<ns0:name>ljibson</ns0:name>
+</ns0:author>
+<ns0:content type="html">{{.String}}</ns0:content>
+<ns0:published>{{.Date}}</ns0:published>
+<ns0:title type="html">{{.Name}}</ns0:title>
+<ns0:link href="http://mjibson.wordpress.com/post-{{$i}}/" rel="self" type="application/atom+xml" />
+<ns0:link href="http://mjibson.wordpress.com/post-{{$i}}/" rel="alternate" type="text/html" />
+</ns0:entry>
+{{end}}</ns0:feed>`
