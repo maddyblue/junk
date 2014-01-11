@@ -7,5 +7,6 @@
     <string name="all_items">all items</string>
     <string name="refresh">refresh</string>
     <string name="mark_read">mark all read</string>
+    <string name="share_story">Share</string>
 
 </resources>

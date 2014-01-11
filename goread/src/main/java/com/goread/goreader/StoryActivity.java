@@ -22,12 +22,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
-
-import com.actionbarsherlock.app.SherlockActivity;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,19 +40,27 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class StoryActivity extends SherlockActivity {
+public class StoryActivity extends ActionBarActivity {
+    private String mFeedTitle = "";
+    private String mStoryTitle = "";
+    private String mStoryLink = "";
+    private ShareActionProvider mShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Needs to be called before setting the content view
         setContentView(R.layout.activity_story);
         WebView wv = (WebView) findViewById(R.id.webview);
         Intent i = getIntent();
         try {
-            JSONObject s = new JSONObject(i.getStringExtra("story"));
-            JSONObject f = GoRead.get().feeds.get(s.getString("feed"));
-            String fn = f.getString("Title");
-            setTitle(fn);
+            JSONObject story = new JSONObject(i.getStringExtra("story"));
+            JSONObject feed = GoRead.get().feeds.get(story.getString("feed"));
+            mStoryLink = story.getString("Link");
+            mStoryTitle = story.getString("Title");
+            mFeedTitle = feed.getString("Title");
+
+            setTitle(mFeedTitle);
             StringBuilder sb = new StringBuilder();
             sb.append("<html><head><style>");
             InputStream is = getResources().openRawResource(R.raw.bootstrap);
@@ -63,14 +73,16 @@ public class StoryActivity extends SherlockActivity {
             sb.append("h3 { margin: 0; font-size: 22px; }");
             sb.append("hr { margin-top: 5px; margin-bottom: 5px; }");
             sb.append("</style></head><body>");
-            sb.append(String.format("<h3><a href=\"%s\">%s</a></h3>", s.getString("Link"), Html.escapeHtml(s.getString("Title"))));
+            sb.append(String.format("<h3><a href=\"%story\">%story</a></h3>", mStoryLink,
+                    Html.escapeHtml(mStoryTitle)));
             sb.append("<hr>");
-            sb.append(String.format("<p><a href=\"%s\">%s</a>", s.getString("feed"), fn));
+            sb.append(String.format("<p><a href=\"%story\">%story</a>", story.getString("feed"),
+                    mFeedTitle));
             try {
-                Date d = new Date(Long.parseLong(s.getString("Date")) * 1000);
+                Date d = new Date(Long.parseLong(story.getString("Date")) * 1000);
                 DateFormat df = android.text.format.DateFormat.getDateFormat(this);
                 DateFormat tf = android.text.format.DateFormat.getTimeFormat(this);
-                sb.append(String.format(" on %s %s", df.format(d), tf.format(d)));
+                sb.append(String.format(" on %story %story", df.format(d), tf.format(d)));
             } catch (Exception e) {
             }
             sb.append("</p><div>");
@@ -87,7 +99,7 @@ public class StoryActivity extends SherlockActivity {
                         if (iconURL != null) {
                             Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
                             BitmapDrawable bd = new BitmapDrawable(getResources(), bi);
-                            getSupportActionBar().setIcon(bd);
+                            getActionBar().setIcon(bd);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -95,11 +107,36 @@ public class StoryActivity extends SherlockActivity {
                     return null;
                 }
             };
-            task.execute(s.getString("feed"));
+            task.execute(story.getString("feed"));
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.story, menu);
+        // Get the menu item.
+        MenuItem shareItem = menu.findItem(R.id.action_share_story);
+        // Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        setShare();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * Set the share action
+     *
+     * @return The sharing intent.
+     */
+    private void setShare() {
+        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, mStoryTitle);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mStoryLink);
+        mShareActionProvider.setShareIntent(shareIntent);
+    }
+
 }
