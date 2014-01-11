@@ -28,14 +28,13 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
-    /*
     signingConfigs {
         debug {
             storeFile file("~/.android/debug.keystore")
         }
 
         release {
-            storeFile file("/home/mjibson/code/goread-android/goread.keystore")
+            storeFile file("goread.keystore")
             storePassword System.console().readLine("\n\$ Enter keystore password: ")
             keyAlias "goread"
             keyPassword System.console().readLine("\n\$ Enter key password: ")
@@ -47,7 +46,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    //*/
 }
 
 dependencies {
