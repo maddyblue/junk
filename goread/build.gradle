@@ -28,6 +28,7 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
+    /*
     signingConfigs {
         debug {
             storeFile file("~/.android/debug.keystore")
@@ -46,6 +47,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    */
 }
 
 dependencies {
