@@ -73,16 +73,16 @@ public class StoryActivity extends ActionBarActivity {
             sb.append("h3 { margin: 0; font-size: 22px; }");
             sb.append("hr { margin-top: 5px; margin-bottom: 5px; }");
             sb.append("</style></head><body>");
-            sb.append(String.format("<h3><a href=\"%story\">%story</a></h3>", mStoryLink,
+            sb.append(String.format("<h3><a href=\"%s\">%s</a></h3>", mStoryLink,
                     Html.escapeHtml(mStoryTitle)));
             sb.append("<hr>");
-            sb.append(String.format("<p><a href=\"%story\">%story</a>", story.getString("feed"),
+            sb.append(String.format("<p><a href=\"%s\">%s</a>", story.getString("feed"),
                     mFeedTitle));
             try {
                 Date d = new Date(Long.parseLong(story.getString("Date")) * 1000);
                 DateFormat df = android.text.format.DateFormat.getDateFormat(this);
                 DateFormat tf = android.text.format.DateFormat.getTimeFormat(this);
-                sb.append(String.format(" on %story %story", df.format(d), tf.format(d)));
+                sb.append(String.format(" on %s %s", df.format(d), tf.format(d)));
             } catch (Exception e) {
             }
             sb.append("</p><div>");
