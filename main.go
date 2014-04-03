@@ -19,7 +19,6 @@ package main
 import (
 	"bytes"
 	"flag"
-	"fmt"
 	"go/format"
 	"go/parser"
 	"go/printer"
@@ -38,9 +37,10 @@ const ThirdParty = "third_party"
 const dirMode os.FileMode = 0755
 
 var (
-	dryrun  = flag.Bool("n", false, "don't perform any action, instead print them")
-	create  = flag.Bool("c", false, "create the "+ThirdParty+" directory if needed")
-	verbose = flag.Bool("v", false, "print actions")
+	dryrun   = flag.Bool("n", false, "don't perform any action, instead print them")
+	create   = flag.Bool("c", false, "create the "+ThirdParty+" directory if needed")
+	relative = flag.Bool("r", false, "use a relative third party directory (needed on App Engine)")
+	verbose  = flag.Bool("v", false, "print actions")
 
 	relpath, gopath string
 )
@@ -95,7 +95,10 @@ var ImportSites = []string{
 
 func update() {
 	paths := make(map[string]struct{})
-	reltp := filepath.ToSlash(relpath) + "/" + ThirdParty + "/"
+	reltp := ThirdParty + "/"
+	if !*relative {
+		reltp = filepath.ToSlash(relpath) + "/" + reltp
+	}
 	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
 		if err != nil || info.IsDir() {
 			return nil
@@ -196,7 +199,10 @@ func rewriteImports() (rewritten bool) {
 					continue
 				}
 				if strings.HasPrefix(v, site+"/") {
-					target := fmt.Sprintf("%s/%s/%s", relpath, ThirdParty, v)
+					target := ThirdParty + "/" + v
+					if !*relative {
+						target = relpath + "/" + target
+					}
 					if *verbose {
 						log.Printf("rewrite %s: %s -> %s\n", path, v, target)
 					}
