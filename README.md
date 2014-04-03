@@ -26,3 +26,7 @@ To update a third_party package to a newer version, fetch the most recent versio
 # bugs
 
 There is no guarantee that the source directory exists. For example, a package may have a OS-specific file (`file_windows.go`) which imports another package. On non-Windows, that other package will not have been fetched during `go get` and will thus not exist. These packages must be fetched using `go get` or some other method by hand. Or, running `party` on a Windows machine (in this case) will correctly copy those files. These cases are reported when running `party`.
+
+`party` performs the equivalent of `gofmt` on any files affected by the import rewrite, thus the diff may be somewhat larger than just the import lines.
+
+Third party imports that use local (relative) packages will fail, as those packages are assumed to be part of the standard library. Those packages will not be copied.
