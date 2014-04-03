@@ -19,6 +19,10 @@ The `-c` flag will create the `third_party` directory if it does not exist. On f
 
 A `-v` flag is available for verbosity. A `-n` flag is available to perform a dry run, in which no actions are taken.
 
+### app engine / relative imports
+
+When working on an App Engine project, use the `-r` flag. This will cause all `third_party` imports to be local packages. This is needed because otherwise App Engine will run `init()` routines from your `.go` files twice.
+
 # updating
 
 To update a third_party package to a newer version, fetch the most recent version of it with `go get -u other.com/user/package`, and run `party` again in your project's directory.
