@@ -1,6 +1,6 @@
 # party
 
-A tool for Go to automate the use of third party package versions in the [Google/Camlistore way](http://golang.org/doc/faq#get_version).
+A tool for Go to automate the use of third party package versions in the [Google/Camlistore way](http://golang.org/doc/faq#get_version). It is [similar to goven](#goven).
 
 Many existing Go package managers provide solutions to the problem of relying on other projects' code. Go handles the use of other packages elegantly, but is prone to problems when that code has breaking changes or is removed from the Internet. As a solution, the FAQ suggests copying any third party repositories into your own project and changing your import paths to match. This is a recursive process, as you must then perform the same procedure for those copied packages and so on, until all leaf packages have no external imports.
 
@@ -29,7 +29,7 @@ To update a third_party package to a newer version, fetch the most recent versio
 
 # goven
 
-goven is a precursor to party, and was useful enough to get a mention in the FAQ. However, goven has suffered from neglect and so has some bugs, lacks features, and is not cross-platform. party strives to be an improvement to goven in all ways.
+[goven](https://github.com/kr/goven) is a precursor to party, and was useful enough to get a mention in the FAQ. However, goven has suffered from neglect and so has some bugs, lacks features, and is not cross-platform. party strives to be an improvement to goven in all ways.
 
 # bugs
 
