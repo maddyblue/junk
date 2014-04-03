@@ -27,6 +27,10 @@ When working on an App Engine project, use the `-r` flag. This will cause all `t
 
 To update a third_party package to a newer version, fetch the most recent version of it with `go get -u other.com/user/package`, and run `party` again in your project's directory.
 
+# goven
+
+goven is a precursor to party, and was useful enough to get a mention in the FAQ. However, goven has suffered from neglect and so has some bugs, lacks features, and is not cross-platform. party strives to be an improvement to goven in all ways.
+
 # bugs
 
 There is no guarantee that the source directory exists. For example, a package may have a OS-specific file (`file_windows.go`) which imports another package. On non-Windows, that other package will not have been fetched during `go get` and will thus not exist. These packages must be fetched using `go get` or some other method by hand. Or, running `party` on a Windows machine (in this case) will correctly copy those files. These cases are reported when running `party`.
