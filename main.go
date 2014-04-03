@@ -28,6 +28,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"code.google.com/p/go.tools/astutil"
@@ -193,7 +194,10 @@ func rewriteImports() (rewritten bool) {
 		}
 		for _, im := range f.Imports {
 			for _, site := range ImportSites {
-				v := im.Path.Value[1 : len(im.Path.Value)-1]
+				v, err := strconv.Unquote(im.Path.Value)
+				if err != nil {
+					log.Fatal(err)
+				}
 				// don't replace ourself
 				if strings.HasPrefix(v, relpath+"/") {
 					continue
