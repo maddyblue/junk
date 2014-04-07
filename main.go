@@ -73,6 +73,7 @@ func main() {
 		}
 		gopath = s
 		relpath = strings.TrimPrefix(pwd, filepath.Join(s, "src")+string(os.PathSeparator))
+		break
 	}
 	if relpath == "" {
 		log.Fatal("couldn't determine current directory relative to $GOPATH")
