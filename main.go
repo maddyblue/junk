@@ -85,7 +85,7 @@ func main() {
 
 	if *verbose {
 		log.Println("using GOPATH:", gopath)
-		log.Println("useng relative path:", relpath)
+		log.Println("using relative path:", relpath)
 	}
 
 	for {
