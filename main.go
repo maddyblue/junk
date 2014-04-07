@@ -83,6 +83,11 @@ func main() {
 		log.Fatal("couldn't determine current directory relative to $GOPATH")
 	}
 
+	if *verbose {
+		log.Println("using GOPATH:", gopath)
+		log.Println("useng relative path:", relpath)
+	}
+
 	for {
 		update()
 		if !rewriteImports() {
