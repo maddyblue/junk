@@ -68,6 +68,10 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		s, err = filepath.EvalSymlinks(s)
+		if err != nil {
+			log.Fatal(err)
+		}
 		if !strings.HasPrefix(pwd, s) {
 			continue
 		}
