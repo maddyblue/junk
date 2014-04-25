@@ -34,16 +34,16 @@ import (
 	"code.google.com/p/go.tools/astutil"
 )
 
-const ThirdParty = "_third_party"
 const dirMode os.FileMode = 0755
 
 var (
-	dryrun   = flag.Bool("n", false, "don't perform any action, instead print them")
-	create   = flag.Bool("c", false, "create the "+ThirdParty+" directory if needed")
-	relative = flag.Bool("r", false, "use a relative third party directory (needed on App Engine)")
-	verbose  = flag.Bool("v", false, "print actions")
+	dryrun     = flag.Bool("n", false, "don't perform any action, instead print them")
+	create     = flag.Bool("c", false, "create the third party directory if needed")
+	relative   = flag.Bool("r", false, "use a relative third party directory (needed on App Engine)")
+	verbose    = flag.Bool("v", false, "print actions")
+	thirdParty = flag.String("d", "_third_party", "name of third party directory")
 
-	relpath, gopath string
+	relpath, gopath, ThirdParty string
 )
 
 func main() {
@@ -52,6 +52,10 @@ func main() {
 		*verbose = true
 	}
 
+	ThirdParty = filepath.Base(*thirdParty)
+	if ThirdParty != *thirdParty {
+		log.Fatal("third party directory cannot contain path separators")
+	}
 	if *create {
 		os.Mkdir(ThirdParty, dirMode)
 	}
