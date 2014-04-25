@@ -34,7 +34,7 @@ import (
 	"code.google.com/p/go.tools/astutil"
 )
 
-const ThirdParty = "third_party"
+const ThirdParty = "_third_party"
 const dirMode os.FileMode = 0755
 
 var (
