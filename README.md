@@ -6,26 +6,26 @@ Many existing Go package managers provide solutions to the problem of relying on
 
 party is a tool that performs all of this work. It
 
-1. Rewrites all external imports in both your project and the `third_party` directory from `other.com/user/package` to `host.com/user/your_project/third_party/other.com/user/package`.
-1. Updates or copies files from `$GOPATH/src/other.com/user/package` to `$GOPATH/src/host.com/user/your_project/third_party/other.com/user/package`.
+1. Rewrites all external imports in both your project and the third party directory from `other.com/user/package` to `host.com/user/your_project/_third_party/other.com/user/package`.
+1. Updates or copies files from `$GOPATH/src/other.com/user/package` to `$GOPATH/src/host.com/user/your_project/_third_party/other.com/user/package`.
 1. Returns to step 1 until no more rewrites are performed.
 
 # usage
 
-1. Install with `go get github.com/mjibson/party`.
+1. `go get github.com/mjibson/party`.
 1. From your project's root directory, run `party -c`.
 
-The `-c` flag will create the `third_party` directory if it does not exist. On further uses, invoking `party` with no arguments is sufficient. This is for protection so that `party` is not invoked at, say, `$GOPATH/src`, which would perform path rewriting and file updating for many files. When run without `-c`, `party` will fail if `third_party` does not exist.
+The `-c` flag will create the third party directory if it does not exist. On further uses, invoking `party` with no arguments is sufficient. This is for protection so that `party` is not invoked at, say, `$GOPATH/src`, which would perform path rewriting and file updating for many files. When run without `-c`, `party` will fail if third party does not exist.
 
-A `-v` flag is available for verbosity. A `-n` flag is available to perform a dry run, in which no actions are taken.
+The `-d` flag changes the third party directory. The `-v` flag enables verbosity. The `-n` flag performs a dry run, in which no actions are taken.
 
 ### app engine / relative imports
 
-When working on an App Engine project, use the `-r` flag. This will cause all `third_party` imports to be local packages. This is needed because otherwise App Engine will run `init()` routines from your `.go` files twice.
+When working on an App Engine project, use the `-r` flag. This will cause all third party imports to be local packages. This is needed because otherwise App Engine will run `init()` routines from your `.go` files twice if your app is also in your `$GOPATH`.
 
 # updating
 
-To update a third_party package to a newer version, fetch the most recent version of it with `go get -u other.com/user/package`, and run `party` again in your project's directory.
+To update a third party package to a newer version, fetch the most recent version of it with `go get -u other.com/user/package`, and run `party` again in your project's directory.
 
 # goven
 
