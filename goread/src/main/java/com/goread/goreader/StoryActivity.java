@@ -26,8 +26,11 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 
 import com.squareup.picasso.Picasso;
@@ -47,6 +50,7 @@ public class StoryActivity extends ActionBarActivity {
     private String mStoryTitle = "";
     private String mStoryLink = "";
     private ShareActionProvider mShareActionProvider;
+    private String mUrl = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,8 @@ public class StoryActivity extends ActionBarActivity {
         // Needs to be called before setting the content view
         setContentView(R.layout.activity_story);
         WebView wv = (WebView) findViewById(R.id.webview);
+        registerForContextMenu(wv);
+
         Intent i = getIntent();
         try {
             JSONObject story = new JSONObject(i.getStringExtra("story"));
@@ -104,16 +110,16 @@ public class StoryActivity extends ActionBarActivity {
                             getActionBar().setIcon(bd);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e(GoRead.TAG, e.getMessage(), e);
                     }
                     return null;
                 }
             };
             task.execute(story.getString("feed"));
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(GoRead.TAG, e.getMessage(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(GoRead.TAG, e.getMessage(), e);
         }
     }
 
@@ -126,6 +132,57 @@ public class StoryActivity extends ActionBarActivity {
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
         setShare();
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        // add share url entry if URL was pressed
+        WebView.HitTestResult result = ((WebView) v).getHitTestResult();
+        if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
+            mUrl = result.getExtra();
+            Log.d(GoRead.TAG, "Clicked on " + mUrl);
+            //TODO remove hardcoded ID "999"
+            menu.add(ContextMenu.NONE, 999, 0, R.string.action_share_url);
+        } else {
+            // reset previously shared URLs if no URL is pressed now
+            mUrl = null;
+        }
+        // add default share entry to context menu
+        menu.add(ContextMenu.NONE, R.id.action_share_story, 0, "Share story");
+    }
+
+    @Override
+    public boolean onContextItemSelected(android.view.MenuItem item) {
+        Intent shareIntent = null;
+        switch (item.getItemId()) {
+            //TODO remove hardcoded ID "999"
+            case 999:
+                if (mUrl != null) {
+                    shareIntent = getUrlShareIntent(mUrl);
+                }
+                // reset class member
+                mUrl = null;
+                break;
+            /*
++             * default behavior is to share the article URL
++             */
+            case R.id.action_share_story:
+            default:
+                shareIntent = getUrlShareIntent(mStoryLink);
+                break;
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share URL"));
+        return super.onContextItemSelected(item);
+    }
+
+    private Intent getUrlShareIntent(String url) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
+        i.putExtra(Intent.EXTRA_TEXT, url);
+        return i;
     }
 
     /**

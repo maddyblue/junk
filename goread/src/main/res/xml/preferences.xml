@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/server_category"
+        android:key="pref_server_category">
+        <EditTextPreference
+            android:defaultValue="@string/default_server_domain"
+            android:key="pref_server_domain"
+            android:summary="@string/server_domain_summary"
+            android:title="@string/server_domain" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

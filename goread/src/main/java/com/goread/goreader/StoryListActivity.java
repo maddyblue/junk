@@ -149,7 +149,7 @@ public class StoryListActivity extends ListActivity {
                 o.put("Story", story);
                 a.put(o);
 
-                GoRead.addReq(this, new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
+                GoRead.addReq(this, new JsonArrayRequest(Request.Method.POST, GoRead.get(this).GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         try {
@@ -208,7 +208,7 @@ public class StoryListActivity extends ListActivity {
             }
         }
         if (read.length() > 0) {
-            GoRead.addReq(this, new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
+            GoRead.addReq(this, new JsonArrayRequest(Request.Method.POST, GoRead.get(this).GOREAD_URL + "/user/mark-read", read, null, null));
             GoRead.updateFeedProperties(this);
             aa.notifyDataSetChanged();
         }

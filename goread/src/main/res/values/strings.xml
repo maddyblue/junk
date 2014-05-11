@@ -3,10 +3,16 @@
 
     <string name="app_name">go read</string>
     <string name="action_logout">logout</string>
+    <string name="action_share_url">share URL</string>
     <string name="title_unknown">(title unknown)</string>
     <string name="all_items">all items</string>
     <string name="refresh">refresh</string>
     <string name="mark_read">mark all read</string>
-    <string name="share_story">Share</string>
+    <string name="share_story">share</string>
+    <string name="preferences">preferences</string>
+    <string name="server_category">server</string>
+    <string name="server_domain">URL</string>
+    <string name="server_domain_summary">Enter the URL of your goread installation</string>
+    <string name="default_server_domain">https://goread.io</string>
 
 </resources>

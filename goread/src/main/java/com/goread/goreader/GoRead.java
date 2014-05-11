@@ -1,6 +1,8 @@
 package com.goread.goreader;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -26,15 +28,15 @@ public final class GoRead {
     public static final String TAG = "goread";
     public static final int PICK_ACCOUNT_REQUEST = 1;
     public static final String APP_ENGINE_SCOPE = "ah";
-    public static final String GOREAD_DOMAIN = "www.goread.io";
-    public static final String GOREAD_URL = "https://" + GOREAD_DOMAIN;
     public static final String P_ACCOUNT = "ACCOUNT_NAME";
+    public static final String DEFAULT_URL = "https://www.goread.io";
     private static final GoRead INSTANCE = new GoRead();
     public JSONObject lj = null;
     public JSONObject stories = null;
     public HashMap<String, JSONObject> feeds;
     public DiskLruCache storyCache = null;
     public UnreadCounts unread = null;
+    public String GOREAD_URL = "";
     boolean loginDone = false;
     File feedCache = null;
     private RequestQueue rq = null;
@@ -57,10 +59,18 @@ public final class GoRead {
                 f = new File(f, "storyCache");
                 g.storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
             }
+            if (g.GOREAD_URL == "") {
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
+                g.GOREAD_URL = sharedPref.getString(SettingsActivity.KEY_PREF_URL, DEFAULT_URL);
+            }
         } catch (Exception e) {
             Log.e(GoRead.TAG, "get", e);
         }
         return g;
+    }
+
+    public static void SetURL(String url) {
+        INSTANCE.GOREAD_URL = url;
     }
 
     public static String getIcon(Context c, String f) {
