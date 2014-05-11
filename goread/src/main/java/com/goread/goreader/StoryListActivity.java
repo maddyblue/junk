@@ -28,10 +28,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,14 +55,14 @@ public class StoryListActivity extends ListActivity {
         aa = new StoryAdapter(this, android.R.layout.simple_list_item_1);
         setListAdapter(aa);
         try {
-            JSONObject stories = GoRead.get().stories;
+            JSONObject stories = GoRead.get(this).stories;
             ArrayList<JSONObject> sl = new ArrayList<JSONObject>();
 
             Intent it = getIntent();
             int p = it.getIntExtra(MainActivity.K_FOLDER, -1);
             if (it.hasExtra(MainActivity.K_FEED)) {
                 String f = it.getStringExtra(MainActivity.K_FEED);
-                setTitle(GoRead.get().feeds.get(f).getString("Title"));
+                setTitle(GoRead.get(this).feeds.get(f).getString("Title"));
                 addFeed(sl, stories, f);
 
                 final Context c = this;
@@ -68,7 +70,7 @@ public class StoryListActivity extends ListActivity {
                     @Override
                     protected Void doInBackground(String... params) {
                         try {
-                            String iconURL = GoRead.getIcon(params[0]);
+                            String iconURL = GoRead.getIcon(c, params[0]);
                             if (iconURL != null) {
                                 Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
                                 BitmapDrawable bd = new BitmapDrawable(getResources(), bi);
@@ -82,7 +84,7 @@ public class StoryListActivity extends ListActivity {
                 };
                 task.execute(f);
             } else if (p >= 0) {
-                JSONArray a = GoRead.get().lj.getJSONArray("Opml");
+                JSONArray a = GoRead.get(this).lj.getJSONArray("Opml");
                 JSONObject folder = a.getJSONObject(p);
                 setTitle(folder.getString("Title"));
                 a = folder.getJSONArray("Outline");
@@ -122,19 +124,6 @@ public class StoryListActivity extends ListActivity {
         }
     }
 
-    public class StoryComparator implements Comparator<JSONObject> {
-        @Override
-        public int compare(JSONObject o1, JSONObject o2) {
-            int c = 0;
-            try {
-                c = new Long(o1.getLong("Date")).compareTo(new Long(o2.getLong("Date")));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return c;
-        }
-    }
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         final JSONObject so = aa.getItem(position);
@@ -146,7 +135,7 @@ public class StoryListActivity extends ListActivity {
             feed = so.getString("feed");
             story = so.getString("Id");
             String key = GoRead.hashStory(feed, story);
-            DiskLruCache.Snapshot s = GoRead.get().storyCache.get(key);
+            DiskLruCache.Snapshot s = GoRead.get(this).storyCache.get(key);
             if (s != null) {
                 String c = s.getString(0);
                 i.putExtra("contents", c);
@@ -160,7 +149,7 @@ public class StoryListActivity extends ListActivity {
                 o.put("Story", story);
                 a.put(o);
 
-                GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
+                GoRead.addReq(this, new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", a, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         try {
@@ -219,8 +208,8 @@ public class StoryListActivity extends ListActivity {
             }
         }
         if (read.length() > 0) {
-            GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
-            GoRead.updateFeedProperties();
+            GoRead.addReq(this, new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
+            GoRead.updateFeedProperties(this);
             aa.notifyDataSetChanged();
         }
     }
@@ -232,9 +221,22 @@ public class StoryListActivity extends ListActivity {
             String feed = so.getString("feed");
             String story = so.getString("Id");
             read.put(new JSONObject()
-                    .put("Feed", feed)
-                    .put("Story", story)
+                            .put("Feed", feed)
+                            .put("Story", story)
             );
+        }
+    }
+
+    public class StoryComparator implements Comparator<JSONObject> {
+        @Override
+        public int compare(JSONObject o1, JSONObject o2) {
+            int c = 0;
+            try {
+                c = new Long(o1.getLong("Date")).compareTo(new Long(o2.getLong("Date")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return c;
         }
     }
 }

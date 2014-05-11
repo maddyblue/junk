@@ -29,7 +29,9 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+
 import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,7 +57,7 @@ public class StoryActivity extends ActionBarActivity {
         Intent i = getIntent();
         try {
             JSONObject story = new JSONObject(i.getStringExtra("story"));
-            JSONObject feed = GoRead.get().feeds.get(story.getString("feed"));
+            JSONObject feed = GoRead.get(this).feeds.get(story.getString("feed"));
             mStoryLink = story.getString("Link");
             mStoryTitle = story.getString("Title");
             mFeedTitle = feed.getString("Title");
@@ -95,7 +97,7 @@ public class StoryActivity extends ActionBarActivity {
                 @Override
                 protected Void doInBackground(String... params) {
                     try {
-                        String iconURL = GoRead.getIcon(params[0]);
+                        String iconURL = GoRead.getIcon(c, params[0]);
                         if (iconURL != null) {
                             Bitmap bi = Picasso.with(c).load(iconURL).resize(128, 128).get();
                             BitmapDrawable bd = new BitmapDrawable(getResources(), bi);

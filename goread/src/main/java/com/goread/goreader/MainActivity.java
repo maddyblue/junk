@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -38,12 +39,12 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.jakewharton.disklrucache.DiskLruCache;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
@@ -53,6 +54,9 @@ import java.util.Iterator;
 
 public class MainActivity extends ListActivity {
 
+    public static final String K_OUTLINE = "OUTLINE";
+    public static final String K_FOLDER = "FOLDER";
+    public static final String K_FEED = "FEED";
     private FeedAdapter aa;
     private Intent i;
     private JSONArray oa;
@@ -71,12 +75,9 @@ public class MainActivity extends ListActivity {
             p = getPreferences(MODE_PRIVATE);
             aa = new FeedAdapter(this, R.layout.item_row);
             setListAdapter(aa);
-            if (GoRead.get().feedCache == null) {
-                GoRead.get().feedCache = new File(getFilesDir(), "feedCache");
-            }
-            if (GoRead.get().lj == null) {
+            if (GoRead.get(this).lj == null) {
                 try {
-                    BufferedReader br = new BufferedReader(new FileReader(GoRead.get().feedCache));
+                    BufferedReader br = new BufferedReader(new FileReader(GoRead.get(this).feedCache));
                     try {
                         StringBuilder sb = new StringBuilder();
                         String line = br.readLine();
@@ -87,8 +88,8 @@ public class MainActivity extends ListActivity {
                             line = br.readLine();
                         }
                         String s = sb.toString();
-                        GoRead.get().lj = new JSONObject(s);
-                        GoRead.updateFeedProperties();
+                        GoRead.get(this).lj = new JSONObject(s);
+                        GoRead.updateFeedProperties(this);
                         displayFeeds();
                         Log.e(GoRead.TAG, "read from feed cache");
                     } finally {
@@ -100,11 +101,6 @@ public class MainActivity extends ListActivity {
             } else {
                 displayFeeds();
             }
-            if (GoRead.get().storyCache == null) {
-                File f = getFilesDir();
-                f = new File(f, "storyCache");
-                GoRead.get().storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
-            }
             start();
         } catch (Exception e) {
             Log.e(GoRead.TAG, "oc", e);
@@ -112,7 +108,7 @@ public class MainActivity extends ListActivity {
     }
 
     protected void start() {
-        if (!GoRead.get().loginDone) {
+        if (!GoRead.get(this).loginDone) {
             if (p.contains(GoRead.P_ACCOUNT)) {
                 Log.e(GoRead.TAG, "start gac");
                 getAuthCookie();
@@ -120,7 +116,7 @@ public class MainActivity extends ListActivity {
                 Log.e(GoRead.TAG, "start pa");
                 pickAccount();
             }
-        } else if (GoRead.get().lj == null) {
+        } else if (GoRead.get(this).lj == null) {
             Log.e(GoRead.TAG, "start flf");
             fetchListFeeds();
         } else {
@@ -159,7 +155,7 @@ public class MainActivity extends ListActivity {
     protected void refresh() throws IOException, GoogleAuthException {
         // todo: make sure only one of this runs at once
         Log.e(GoRead.TAG, "refresh");
-        GoRead.get().lj = null;
+        GoRead.get(this).lj = null;
         start();
     }
 
@@ -174,8 +170,8 @@ public class MainActivity extends ListActivity {
         Log.e(GoRead.TAG, "mark read");
         JSONArray read = new JSONArray();
         markRead(read, oa);
-        GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
-        GoRead.updateFeedProperties();
+        GoRead.addReq(this, new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/mark-read", read, null, null));
+        GoRead.updateFeedProperties(this);
         aa.notifyDataSetChanged();
     }
 
@@ -187,13 +183,13 @@ public class MainActivity extends ListActivity {
                     markRead(read, o.getJSONArray("Outline"));
                 } else if (o.has("XmlUrl")) {
                     String u = o.getString("XmlUrl");
-                    if (!GoRead.get().stories.isNull(u)) {
-                        JSONArray ss = GoRead.get().stories.getJSONArray(u);
+                    if (!GoRead.get(this).stories.isNull(u)) {
+                        JSONArray ss = GoRead.get(this).stories.getJSONArray(u);
                         for (int j = 0; j < ss.length(); j++) {
                             JSONObject s = ss.getJSONObject(j);
                             read.put(new JSONObject()
-                                    .put("Feed", u)
-                                    .put("Story", s.getString("Id"))
+                                            .put("Feed", u)
+                                            .put("Story", s.getString("Id"))
                             );
                             s.put("read", true);
                         }
@@ -259,11 +255,11 @@ public class MainActivity extends ListActivity {
                 }
                 try {
                     URL url = new URL(GoRead.GOREAD_URL + "/_ah/login" + "?continue=" + URLEncoder.encode(GoRead.GOREAD_URL, "UTF-8") + "&auth=" + URLEncoder.encode(authToken, "UTF-8"));
-                    GoRead.addReq(new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
+                    GoRead.addReq(c, new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
                         @Override
                         public void onResponse(String s) {
                             Log.e(GoRead.TAG, "resp");
-                            GoRead.get().loginDone = true;
+                            GoRead.get(c).loginDone = true;
                             fetchListFeeds();
                         }
                     }, new Response.ErrorListener() {
@@ -287,7 +283,7 @@ public class MainActivity extends ListActivity {
 
     protected void addFeed(JSONObject o) {
         try {
-            GoRead.get().feeds.put(o.getString("XmlUrl"), o);
+            GoRead.get(this).feeds.put(o.getString("XmlUrl"), o);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -296,11 +292,11 @@ public class MainActivity extends ListActivity {
     protected void fetchListFeeds() {
         Log.e(GoRead.TAG, "fetchListFeeds");
         final Context c = this;
-        GoRead.addReq(new JsonUTF8Request(Request.Method.GET, GoRead.GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
+        GoRead.addReq(c, new JsonUTF8Request(Request.Method.GET, GoRead.GOREAD_URL + "/user/list-feeds", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                GoRead.get().lj = jsonObject;
-                GoRead.updateFeedProperties();
+                GoRead.get(c).lj = jsonObject;
+                GoRead.updateFeedProperties(c);
                 downloadStories();
                 displayFeeds();
             }
@@ -319,24 +315,24 @@ public class MainActivity extends ListActivity {
     protected void downloadStories() {
         try {
             final JSONArray ja = new JSONArray();
-            Iterator<String> keys = GoRead.get().stories.keys();
+            Iterator<String> keys = GoRead.get(this).stories.keys();
             while (keys.hasNext()) {
                 String key = keys.next();
-                JSONArray sos = GoRead.get().stories.getJSONArray(key);
+                JSONArray sos = GoRead.get(this).stories.getJSONArray(key);
                 for (int i = 0; i < sos.length(); i++) {
                     JSONObject so = sos.getJSONObject(i);
                     JSONObject jo = new JSONObject()
                             .put("Feed", key)
                             .put("Story", so.getString("Id"));
                     String hash = GoRead.hashStory(jo);
-                    if (GoRead.get().storyCache.get(hash) == null) {
+                    if (GoRead.get(this).storyCache.get(hash) == null) {
                         ja.put(jo);
                     }
                 }
             }
             Log.e(GoRead.TAG, String.format("downloading %d stories", ja.length()));
             if (ja.length() > 0) {
-                GoRead.addReq(new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
+                GoRead.addReq(this, new JsonArrayRequest(Request.Method.POST, GoRead.GOREAD_URL + "/user/get-contents", ja, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         cacheStories(ja, jsonArray);
@@ -354,7 +350,7 @@ public class MainActivity extends ListActivity {
                 JSONObject is = ids.getJSONObject(i);
                 String content = contents.getString(i);
                 String key = GoRead.hashStory(is);
-                DiskLruCache.Editor edit = GoRead.get().storyCache.edit(key);
+                DiskLruCache.Editor edit = GoRead.get(this).storyCache.edit(key);
                 edit.set(0, content);
                 edit.commit();
             } catch (JSONException e) {
@@ -364,7 +360,7 @@ public class MainActivity extends ListActivity {
             }
         }
         try {
-            GoRead.get().storyCache.flush();
+            GoRead.get(this).storyCache.flush();
         } catch (IOException e) {
             Log.e(GoRead.TAG, "cache flush", e);
         }
@@ -387,7 +383,7 @@ public class MainActivity extends ListActivity {
             if (i.hasExtra(K_OUTLINE)) {
                 pos = i.getIntExtra(K_OUTLINE, -1);
                 try {
-                    JSONArray ta = GoRead.get().lj.getJSONArray("Opml");
+                    JSONArray ta = GoRead.get(this).lj.getJSONArray("Opml");
                     to = ta.getJSONObject(pos);
                     String t = to.getString("Title");
                     setTitle(t);
@@ -399,8 +395,8 @@ public class MainActivity extends ListActivity {
                 }
             } else {
                 addItem("all items", OutlineType.ALL, null);
-                GoRead.get().feeds = new HashMap<String, JSONObject>();
-                oa = GoRead.get().lj.getJSONArray("Opml");
+                GoRead.get(this).feeds = new HashMap<String, JSONObject>();
+                oa = GoRead.get(this).lj.getJSONArray("Opml");
                 for (int i = 0; i < oa.length(); i++) {
                     JSONObject o = null;
                     o = oa.getJSONObject(i);
@@ -421,7 +417,7 @@ public class MainActivity extends ListActivity {
     }
 
     protected void addItem(String i, OutlineType type, String key) {
-        aa.add(new Outline(i, type, key));
+        aa.add(new Outline(this, i, type, key));
     }
 
     protected void parseJSON() {
@@ -440,10 +436,6 @@ public class MainActivity extends ListActivity {
             Log.e(GoRead.TAG, "parse json", e);
         }
     }
-
-    public static final String K_OUTLINE = "OUTLINE";
-    public static final String K_FOLDER = "FOLDER";
-    public static final String K_FEED = "FEED";
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -470,9 +462,9 @@ public class MainActivity extends ListActivity {
     }
 
     private void setRefreshing(boolean refreshing) {
-        if(refreshMenuItem == null) return;
+        if (refreshMenuItem == null) return;
 
-        if(refreshing) {
+        if (refreshing) {
             refreshMenuItem.setActionView(R.layout.actionbar_refresh_progress);
             refreshMenuItem.expandActionView();
         } else

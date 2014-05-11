@@ -1,5 +1,6 @@
 package com.goread.goreader;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -28,19 +29,16 @@ public final class GoRead {
     public static final String GOREAD_DOMAIN = "www.goread.io";
     public static final String GOREAD_URL = "https://" + GOREAD_DOMAIN;
     public static final String P_ACCOUNT = "ACCOUNT_NAME";
-
+    private static final GoRead INSTANCE = new GoRead();
     public JSONObject lj = null;
     public JSONObject stories = null;
     public HashMap<String, JSONObject> feeds;
     public DiskLruCache storyCache = null;
-    private RequestQueue rq = null;
     public UnreadCounts unread = null;
-    private HashMap<String, String> icons = new HashMap<String, String>();
-
     boolean loginDone = false;
     File feedCache = null;
-
-    private static final GoRead INSTANCE = new GoRead();
+    private RequestQueue rq = null;
+    private HashMap<String, String> icons = new HashMap<String, String>();
 
     private GoRead() {
         if (INSTANCE != null) {
@@ -48,16 +46,29 @@ public final class GoRead {
         }
     }
 
-    public static GoRead get() {
-        return INSTANCE;
+    public static GoRead get(Context c) {
+        GoRead g = INSTANCE;
+        try {
+            if (g.feedCache == null) {
+                g.feedCache = new File(c.getCacheDir(), "feedCache");
+            }
+            if (g.storyCache == null) {
+                File f = c.getCacheDir();
+                f = new File(f, "storyCache");
+                g.storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
+            }
+        } catch (Exception e) {
+            Log.e(GoRead.TAG, "get", e);
+        }
+        return g;
     }
 
-    public static String getIcon(String f) {
-        return get().icons.get(f);
+    public static String getIcon(Context c, String f) {
+        return get(c).icons.get(f);
     }
 
-    public static void updateFeedProperties() {
-        get().doUpdateFeedProperties();
+    public static void updateFeedProperties(Context c) {
+        get(c).doUpdateFeedProperties();
     }
 
     public static String hashStory(JSONObject j) throws JSONException {
@@ -79,6 +90,15 @@ public final class GoRead {
         }
         String sha = new BigInteger(1, cript.digest()).toString(16);
         return sha;
+    }
+
+    public static void addReq(Context c, Request r) {
+        GoRead g = get(c);
+        if (g.rq == null) {
+            g.rq = new RequestQueue(new NoCache(), new BasicNetwork(new OkHttpStack()));
+            g.rq.start();
+        }
+        g.rq.add(r);
     }
 
     private void doUpdateFeedProperties() {
@@ -157,14 +177,5 @@ public final class GoRead {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void addReq(Request r) {
-        GoRead g = get();
-        if (g.rq == null) {
-            g.rq = new RequestQueue(new NoCache(), new BasicNetwork(new OkHttpStack()));
-            g.rq.start();
-        }
-        g.rq.add(r);
     }
 }

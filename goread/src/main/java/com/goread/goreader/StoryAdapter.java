@@ -14,10 +14,12 @@ import org.json.JSONObject;
 public class StoryAdapter extends ArrayAdapter<JSONObject> {
 
     private final int rowResourceId;
+    protected Context c;
 
     public StoryAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
         this.rowResourceId = textViewResourceId;
+        this.c = context;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class StoryAdapter extends ArrayAdapter<JSONObject> {
         try {
             t = s.getString("Title");
             if (t.length() == 0) t = getContext().getString(R.string.title_unknown);
-            t += " - " + GoRead.get().feeds.get(s.getString("feed")).getString("Title");
+            t += " - " + GoRead.get(c).feeds.get(s.getString("feed")).getString("Title");
         } catch (JSONException e) {
             e.printStackTrace();
         }

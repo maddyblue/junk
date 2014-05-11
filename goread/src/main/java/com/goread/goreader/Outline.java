@@ -1,33 +1,36 @@
 package com.goread.goreader;
 
+import android.content.Context;
+
 public class Outline {
+    public static final String ICON_FOLDER = "__folder__";
     protected String Title;
     protected String Key;
     protected OutlineType Type;
+    protected Context c;
 
-    public Outline(String title, OutlineType type, String key) {
+    public Outline(Context c, String title, OutlineType type, String key) {
         Title = title;
         Type = type;
         Key = key;
+        this.c = c;
     }
 
     public String Icon() {
         if (Type == OutlineType.FEED) {
-            return GoRead.getIcon(Key);
+            return GoRead.getIcon(c, Key);
         }
         return ICON_FOLDER;
     }
 
-    public static final String ICON_FOLDER = "__folder__";
-
     public int Unread() {
         switch (Type) {
             case ALL:
-                return GoRead.get().unread.All;
+                return GoRead.get(c).unread.All;
             case FOLDER:
-                return GoRead.get().unread.Folder(Key);
+                return GoRead.get(c).unread.Folder(Key);
             case FEED:
-                return GoRead.get().unread.Feed(Key);
+                return GoRead.get(c).unread.Feed(Key);
             default:
                 return 0;
         }
