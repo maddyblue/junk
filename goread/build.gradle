@@ -8,7 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.+'
+        classpath 'com.android.tools.build:gradle:0.9.+'
     }
 }
 apply plugin: 'android'
@@ -28,17 +28,12 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
-    /*
     signingConfigs {
-        debug {
-            storeFile file("~/.android/debug.keystore")
-        }
-
         release {
-            storeFile file("goread.keystore")
-            storePassword System.console().readLine("\n\$ Enter keystore password: ")
-            keyAlias "goread"
-            keyPassword System.console().readLine("\n\$ Enter key password: ")
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
         }
     }
 
@@ -47,7 +42,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    */
 }
 
 dependencies {
