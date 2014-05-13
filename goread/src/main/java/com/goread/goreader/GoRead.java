@@ -29,7 +29,6 @@ public final class GoRead {
     public static final int PICK_ACCOUNT_REQUEST = 1;
     public static final String APP_ENGINE_SCOPE = "ah";
     public static final String P_ACCOUNT = "ACCOUNT_NAME";
-    public static final String DEFAULT_URL = "https://www.goread.io";
     private static final GoRead INSTANCE = new GoRead();
     public JSONObject lj = null;
     public JSONObject stories = null;
@@ -61,7 +60,7 @@ public final class GoRead {
             }
             if (g.GOREAD_URL == "") {
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
-                g.GOREAD_URL = sharedPref.getString(SettingsActivity.KEY_PREF_URL, DEFAULT_URL);
+                g.GOREAD_URL = sharedPref.getString(SettingsActivity.KEY_PREF_URL, c.getString(R.string.default_server_domain));
             }
         } catch (Exception e) {
             Log.e(GoRead.TAG, "get", e);

@@ -13,6 +13,6 @@
     <string name="server_category">server</string>
     <string name="server_domain">URL</string>
     <string name="server_domain_summary">Enter the URL of your goread installation</string>
-    <string name="default_server_domain">https://goread.io</string>
+    <string name="default_server_domain">https://www.goread.io</string>
 
 </resources>

@@ -277,13 +277,19 @@ public class MainActivity extends ListActivity {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
                             Log.e(GoRead.TAG, volleyError.toString());
-                            // todo: something here
+                            Toast toast = Toast.makeText(c, volleyError.getMessage(), Toast.LENGTH_LONG);
+                            toast.show();
+                            setRefreshing(false);
                         }
                     }
                     ));
                 } catch (Exception e) {
-                    Toast toast = Toast.makeText(c, "Error: could not log in", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(c, "Error: could not log in; prefs reset", Toast.LENGTH_LONG);
                     toast.show();
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+                    sp.edit().clear().commit();
+                    PreferenceManager.setDefaultValues(c, R.xml.preferences, true);
+                    GoRead.get(c).GOREAD_URL = sp.getString(SettingsFragment.ServerDomain, getString(R.string.default_server_domain));
                     pickAccount();
                     Log.e(GoRead.TAG, "gac ope", e);
                 }
