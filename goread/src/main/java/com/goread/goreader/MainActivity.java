@@ -73,7 +73,6 @@ public class MainActivity extends ListActivity {
 
         // load preferences
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        GoRead.get(this).GOREAD_URL = sharedPref.getString(SettingsActivity.KEY_PREF_URL, "https://goread.io");
         Log.d(GoRead.TAG, "Using URL " + GoRead.get(this).GOREAD_URL);
 
         try {
