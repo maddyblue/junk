@@ -58,7 +58,7 @@ public final class GoRead {
                 f = new File(f, "storyCache");
                 g.storyCache = DiskLruCache.open(f, 1, 1, (1 << 20) * 5);
             }
-            if (g.GOREAD_URL == "") {
+            if (g.GOREAD_URL == null || g.GOREAD_URL == "") {
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
                 g.GOREAD_URL = sharedPref.getString(SettingsActivity.KEY_PREF_URL, c.getString(R.string.default_server_domain));
             }
