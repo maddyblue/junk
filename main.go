@@ -102,6 +102,7 @@ func main() {
 
 var ImportSites = []string{
 	"bazil.org",
+	"bitbucket.org",
 	"code.google.com",
 	"github.com",
 	"labix.org",
