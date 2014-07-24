@@ -27,6 +27,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -42,6 +43,7 @@ var (
 	relative   = flag.Bool("r", false, "use a relative third party directory (needed on App Engine)")
 	verbose    = flag.Bool("v", false, "print actions")
 	thirdParty = flag.String("d", "_third_party", "name of third party directory")
+	flagUpdate = flag.Bool("u", false, "update (go get -d -u) used packages")
 
 	relpath, gopath, ThirdParty string
 )
@@ -138,6 +140,20 @@ func update() {
 		if err != nil {
 			log.Printf("%s required, but could not be found at %s", k, fpath)
 			continue
+		}
+		if *flagUpdate {
+			if *verbose {
+				log.Printf("go get -d -u %v", k)
+			}
+			if !*dryrun {
+				out, err := exec.Command("go", "get", "-d", "-u", k).CombinedOutput()
+				if len(out) > 0 {
+					log.Println(string(out))
+				}
+				if err != nil {
+					log.Println("go get", k, "err:", err)
+				}
+			}
 		}
 		files, err := f.Readdir(0)
 		if err != nil {
