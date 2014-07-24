@@ -48,7 +48,7 @@ The flags are:
 	-c
 		create the third party directory if it does not exist
 	-u
-		run "go get -d -u <pkg>" on packages import by party for the
+		run "go get -d -u <pkg>" on packages imported by party for the
 		current package
 	-d="_third_party"
 		set the third party directory
