@@ -67,6 +67,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	var importSites []string
 	for _, s := range filepath.SplitList(os.Getenv("GOPATH")) {
 		s, err := filepath.Abs(s)
 		if err != nil {
@@ -75,6 +76,14 @@ func main() {
 		s, err = filepath.EvalSymlinks(s)
 		if err != nil {
 			log.Fatal(err)
+		}
+		if sf, err := os.Open(filepath.Join(s, "src")); err == nil {
+			names, err := sf.Readdirnames(0)
+			if err == nil {
+				for _, name := range names {
+					importSites = append(importSites, name)
+				}
+			}
 		}
 		if !strings.HasPrefix(pwd, s) {
 			continue
@@ -91,22 +100,12 @@ func main() {
 		log.Println("using GOPATH:", gopath)
 		log.Println("using relative path:", relpath)
 	}
-
 	for {
 		update()
-		if !rewriteImports() {
+		if !rewriteImports(importSites) {
 			break
 		}
 	}
-}
-
-var ImportSites = []string{
-	"bazil.org",
-	"bitbucket.org",
-	"code.google.com",
-	"github.com",
-	"labix.org",
-	"launchpad.net",
 }
 
 func update() {
@@ -197,7 +196,7 @@ func update() {
 	}
 }
 
-func rewriteImports() (rewritten bool) {
+func rewriteImports(importSites []string) (rewritten bool) {
 	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
 		if err != nil || info.IsDir() {
 			return nil
@@ -208,7 +207,7 @@ func rewriteImports() (rewritten bool) {
 			return nil
 		}
 		for _, im := range f.Imports {
-			for _, site := range ImportSites {
+			for _, site := range importSites {
 				v, err := strconv.Unquote(im.Path.Value)
 				if err != nil {
 					log.Fatal(err)
