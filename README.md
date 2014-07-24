@@ -17,6 +17,8 @@ party is a tool that performs all of this work. It
 
 The `-c` flag will create the third party directory if it does not exist. On further uses, invoking `party` with no arguments is sufficient. This is for protection so that `party` is not invoked at, say, `$GOPATH/src`, which would perform path rewriting and file updating for many files. When run without `-c`, `party` will fail if third party does not exist.
 
+The `-u` flags runs `go get -d -u <pkg>` on all packages imported by party for the current package.
+
 The `-d` flag changes the third party directory. The `-v` flag enables verbosity. The `-n` flag performs a dry run, in which no actions are taken.
 
 ### app engine / relative imports
