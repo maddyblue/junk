@@ -305,7 +305,10 @@ func rewriteImports(importSites []string) (rewritten bool) {
 					log.Fatal(err)
 				}
 				// don't replace ourself
-				if strings.HasPrefix(v, relpath+"/") {
+				if v == relpath || strings.HasPrefix(v, relpath+"/") {
+					if *verbose {
+						log.Printf("skipping %s because it is in %s\n", v, relpath)
+					}
 					continue
 				}
 				if strings.HasPrefix(v, site+"/") {
