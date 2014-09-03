@@ -40,7 +40,7 @@ public class StoryAdapter extends ArrayAdapter<JSONObject> {
             t = s.getString("Title");
             if (t.length() == 0) t = getContext().getString(R.string.title_unknown);
             t += " - " + GoRead.get(c).feeds.get(s.getString("feed")).getString("Title");
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Log.e(GoRead.TAG, e.getMessage(), e);
         }
         rowView.setText(t);
