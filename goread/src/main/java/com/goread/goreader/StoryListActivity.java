@@ -94,10 +94,12 @@ public class StoryListActivity extends ListActivity {
                 }
             } else {
                 setTitle(R.string.all_items);
-                Iterator<String> keys = stories.keys();
-                while (keys.hasNext()) {
-                    String key = keys.next();
-                    addFeed(sl, stories, key);
+                if (stories != null) {
+                    Iterator<String> keys = stories.keys();
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        addFeed(sl, stories, key);
+                    }
                 }
             }
 
@@ -112,6 +114,9 @@ public class StoryListActivity extends ListActivity {
     }
 
     private void addFeed(ArrayList<JSONObject> sl, JSONObject stories, String feed) {
+        if (stories == null) {
+            return;
+        }
         try {
             JSONArray sa = stories.getJSONArray(feed);
             for (int i = 0; i < sa.length(); i++) {
