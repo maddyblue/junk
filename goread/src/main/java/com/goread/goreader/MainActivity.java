@@ -66,6 +66,7 @@ public class MainActivity extends ListActivity {
     private SharedPreferences p;
     private String authToken = null;
     private MenuItem refreshMenuItem = null;
+    private boolean refreshing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,8 @@ public class MainActivity extends ListActivity {
     }
 
     protected void start() {
+        refreshing = true;
+        setRefreshing();
         if (!GoRead.get(this).loginDone) {
             if (p.contains(GoRead.P_ACCOUNT)) {
                 Log.e(GoRead.TAG, "start gac");
@@ -134,6 +137,7 @@ public class MainActivity extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         refreshMenuItem = menu.findItem(R.id.action_refresh);
+        setRefreshing();
         return true;
     }
 
@@ -145,7 +149,6 @@ public class MainActivity extends ListActivity {
                     logout();
                     return true;
                 case R.id.action_refresh:
-                    setRefreshing(true);
                     refresh();
                     return true;
                 case R.id.action_mark_read:
@@ -278,7 +281,8 @@ public class MainActivity extends ListActivity {
                             Log.e(GoRead.TAG, volleyError.toString());
                             Toast toast = Toast.makeText(c, volleyError.getMessage(), Toast.LENGTH_LONG);
                             toast.show();
-                            setRefreshing(false);
+                            refreshing = false;
+                            setRefreshing();
                         }
                     }
                     ));
@@ -391,7 +395,8 @@ public class MainActivity extends ListActivity {
 
     protected void displayFeeds() {
         Log.e(GoRead.TAG, "displayFeeds");
-        setRefreshing(false);
+        refreshing = false;
+        setRefreshing();
         try {
             i = getIntent();
             aa.clear();
@@ -477,7 +482,7 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    private void setRefreshing(boolean refreshing) {
+    private void setRefreshing() {
         if (refreshMenuItem == null) return;
 
         if (refreshing) {
