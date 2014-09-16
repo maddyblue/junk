@@ -1,1 +1,1 @@
-include ':goread', ':libraries:actionbarsherlock'
+include ':goread'
