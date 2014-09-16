@@ -62,6 +62,12 @@ public final class GoRead {
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
                 g.GOREAD_URL = sharedPref.getString(SettingsActivity.KEY_PREF_URL, c.getString(R.string.default_server_domain));
             }
+            if (g.feeds == null) {
+                g.feeds = new HashMap<String, JSONObject>();
+            }
+            if (g.unread == null) {
+                g.unread = new UnreadCounts();
+            }
         } catch (Exception e) {
             Log.e(GoRead.TAG, "get", e);
         }
