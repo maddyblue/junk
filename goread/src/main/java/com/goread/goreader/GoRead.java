@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -86,7 +87,7 @@ public final class GoRead {
     }
 
     public static void updateFeedProperties(Context c) {
-        get(c).doUpdateFeedProperties();
+        get(c).doUpdateFeedProperties(c);
     }
 
     public static String hashStory(JSONObject j) throws JSONException {
@@ -119,10 +120,14 @@ public final class GoRead {
         g.rq.add(r);
     }
 
-    private void doUpdateFeedProperties() {
+    private void doUpdateFeedProperties(Context c) {
         final String suffix = "=s16";
         try {
             Log.e(TAG, "ufp");
+            if (lj.has("ErrorSubscription") && lj.getBoolean("ErrorSubscription")) {
+                Toast.makeText(c, "Free trial ended. Please subscribe on the website.", Toast.LENGTH_LONG).show();
+                return;
+            }
             stories = lj.getJSONObject("Stories");
             unread = new UnreadCounts();
             JSONArray opml = lj.getJSONArray("Opml");
