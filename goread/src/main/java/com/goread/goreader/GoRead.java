@@ -68,6 +68,9 @@ public final class GoRead {
             if (g.unread == null) {
                 g.unread = new UnreadCounts();
             }
+            if (g.lj == null) {
+                g.lj = new JSONObject();
+            }
         } catch (Exception e) {
             Log.e(GoRead.TAG, "get", e);
         }
@@ -184,6 +187,9 @@ public final class GoRead {
     }
 
     private void persistFeedList() {
+        if (lj == null) {
+            return;
+        }
         try {
             FileWriter fw = new FileWriter(feedCache);
             fw.write(lj.toString());

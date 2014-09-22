@@ -63,10 +63,12 @@ public class StoryActivity extends ActionBarActivity {
         Intent i = getIntent();
         try {
             JSONObject story = new JSONObject(i.getStringExtra("story"));
-            JSONObject feed = GoRead.get(this).feeds.get(story.getString("feed"));
             mStoryLink = story.getString("Link");
             mStoryTitle = story.getString("Title");
-            mFeedTitle = feed.getString("Title");
+            JSONObject feed = GoRead.get(this).feeds.get(story.getString("feed"));
+            if (feed != null) {
+                mFeedTitle = feed.getString("Title");
+            }
 
             setTitle(mFeedTitle);
             StringBuilder sb = new StringBuilder();
