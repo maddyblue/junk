@@ -335,7 +335,11 @@ public class MainActivity extends ListActivity {
     protected void downloadStories() {
         try {
             final JSONArray ja = new JSONArray();
-            Iterator<String> keys = GoRead.get(this).stories.keys();
+            JSONObject stories = GoRead.get(this).stories;
+            if (stories == null) {
+                return;
+            }
+            Iterator<String> keys = stories.keys();
             while (keys.hasNext()) {
                 String key = keys.next();
                 JSONArray sos = GoRead.get(this).stories.getJSONArray(key);
@@ -417,7 +421,11 @@ public class MainActivity extends ListActivity {
             } else {
                 addItem("all items", OutlineType.ALL, null);
                 GoRead.get(this).feeds = new HashMap<String, JSONObject>();
-                oa = GoRead.get(this).lj.getJSONArray("Opml");
+                JSONObject lj = GoRead.get(this).lj;
+                if (lj == null || !lj.has("Opml")) {
+                    return;
+                }
+                oa = lj.getJSONArray("Opml");
                 for (int i = 0; i < oa.length(); i++) {
                     JSONObject o = null;
                     o = oa.getJSONObject(i);
