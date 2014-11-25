@@ -88,15 +88,17 @@ package main
 import (
 	"bytes"
 	"flag"
+	"fmt"
+	"go/ast"
 	"go/format"
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -262,23 +264,50 @@ func update() {
 					log.Printf("copy %s -> %s\n", spath, dest)
 				}
 				if !*dryrun {
-					src, err := os.Open(spath)
+					b, err := ioutil.ReadFile(spath)
 					if err != nil {
 						log.Fatal(err)
 					}
-					dst, err = os.OpenFile(dest, os.O_RDWR|os.O_CREATE|os.O_TRUNC, source.Mode())
-					if err != nil {
+					if filepath.Ext(spath) == ".go" {
+						b, err = fixImportCheck(b, path.Join(relpath, destdir))
+						if err != nil {
+							log.Fatal(err)
+						}
+					}
+					if err := ioutil.WriteFile(dest, b, source.Mode()); err != nil {
 						log.Fatal(err)
 					}
-					if _, err := io.Copy(dst, src); err != nil {
-						log.Fatal(err)
-					}
-					src.Close()
-					dst.Close()
 				}
 			}
 		}
 	}
+}
+
+func fixImportCheck(body []byte, importPath string) ([]byte, error) {
+	fset := token.NewFileSet()
+	// todo: see if we can restrict the mode some more
+	f, err := parser.ParseFile(fset, "", body, parser.ParseComments)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var after *ast.CommentGroup
+	var pos token.Pos = token.Pos(len(body))
+	for _, v := range f.Comments {
+		text := strings.TrimSpace(v.Text())
+		if v.Pos() > f.Package && v.Pos() < pos && strings.HasPrefix(text, "import") {
+			pos = v.Pos()
+			after = v
+		}
+	}
+	if bytes.IndexByte(body[f.Package:pos], '\n') == -1 {
+		comment := fmt.Sprintf(`// import "%s"`, importPath)
+		buf := new(bytes.Buffer)
+		buf.Write(body[:after.Pos()-1])
+		buf.WriteString(comment)
+		buf.Write(body[after.End()-1:])
+		body = buf.Bytes()
+	}
+	return body, nil
 }
 
 func rewriteImports(importSites []string) (rewritten bool) {
