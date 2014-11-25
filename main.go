@@ -66,13 +66,6 @@ third party imports to be local packages. This is needed because otherwise App
 Engine will run init() routines from your .go files twice if your app is also in
 your $GOPATH.
 
-Goven
-
-goven (https://github.com/kr/goven) is a precursor to party, and was useful
-enough to get a mention in the FAQ. However, goven has suffered from neglect and
-so has some bugs, lacks features, and is not cross-platform. party strives to be
-an improvement to goven in all ways.
-
 Bugs
 
 There is no guarantee that the source directory exists. For example, a package
