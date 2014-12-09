@@ -173,15 +173,16 @@ func main() {
 		log.Println("using GOPATH:", gopath)
 		log.Println("using relative path:", relpath)
 	}
+	updated := make(map[string]bool)
 	for {
-		update()
+		update(updated)
 		if !rewriteImports(importSites) {
 			break
 		}
 	}
 }
 
-func update() {
+func update(updated map[string]bool) {
 	paths := make(map[string]struct{})
 	reltp := ThirdParty + "/"
 	if !*relative {
@@ -212,7 +213,8 @@ func update() {
 			log.Printf("%s required, but could not be found at %s", k, fpath)
 			continue
 		}
-		if *flagUpdate {
+		if *flagUpdate && !updated[k] {
+			updated[k] = true
 			if *verbose {
 				log.Printf("go get -d -u %v", k)
 			}
