@@ -136,14 +136,6 @@ func NewContext(req *http.Request) Context {
 	}
 }
 
-func (c Context) FromContext(ctx appengine.Context) Context {
-	return Context{
-		Context: ctx,
-		req:     c.req,
-		Stats:   c.Stats,
-	}
-}
-
 const bufMaxLen = 1000000
 
 func (c Context) save() {
