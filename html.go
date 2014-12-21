@@ -261,8 +261,7 @@ const htmlMain = `
   No requests have been recorded yet.  While it is possible that you
   simply need to wait until your server receives some requests, this
   is often caused by a configuration problem.
-  <!-- TODO:maxr templatize python/java in the below link -->
-  <a href="https://developers.google.com/appengine/docs/python/tools/appstats#EventRecorders"
+  <a href="http://godoc.org/github.com/mjibson/appstats"
   >Learn more</a>
 </div>
 {{ end }}
