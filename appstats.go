@@ -57,9 +57,10 @@ const (
 )
 
 func init() {
-	http.HandleFunc(serveURL, AppstatsHandler)
+	http.HandleFunc(serveURL, appstatsHandler)
 }
 
+// DefaultShouldRecord will record a request based on RecordFraction.
 func DefaultShouldRecord(r *http.Request) bool {
 	if RecordFraction >= 1.0 {
 		return true
@@ -68,33 +69,35 @@ func DefaultShouldRecord(r *http.Request) bool {
 	return rand.Float64() < RecordFraction
 }
 
+// Context is a timing-aware appengine.Context.
 type Context struct {
 	appengine.Context
 
 	req   *http.Request
-	Stats *RequestStats
+	stats *requestStats
 }
 
+// Call times an appengine.Context Call. Internal use only.
 func (c Context) Call(service, method string, in, out appengine_internal.ProtoMessage, opts *appengine_internal.CallOptions) error {
-	c.Stats.wg.Add(1)
-	defer c.Stats.wg.Done()
+	c.stats.wg.Add(1)
+	defer c.stats.wg.Done()
 
 	if service == "__go__" {
 		return c.Context.Call(service, method, in, out, opts)
 	}
 
-	stat := RPCStat{
+	stat := rpcStat{
 		Service:   service,
 		Method:    method,
 		Start:     time.Now(),
-		Offset:    time.Since(c.Stats.Start),
+		Offset:    time.Since(c.stats.Start),
 		StackData: string(debug.Stack()),
 	}
 	err := c.Context.Call(service, method, in, out, opts)
 	stat.Duration = time.Since(stat.Start)
 	stat.In = in.String()
 	stat.Out = out.String()
-	stat.Cost = GetCost(out)
+	stat.Cost = getCost(out)
 
 	if len(stat.In) > ProtoMaxBytes {
 		stat.In = stat.In[:ProtoMaxBytes] + "..."
@@ -103,13 +106,14 @@ func (c Context) Call(service, method string, in, out appengine_internal.ProtoMe
 		stat.Out = stat.Out[:ProtoMaxBytes] + "..."
 	}
 
-	c.Stats.lock.Lock()
-	c.Stats.RPCStats = append(c.Stats.RPCStats, stat)
-	c.Stats.Cost += stat.Cost
-	c.Stats.lock.Unlock()
+	c.stats.lock.Lock()
+	c.stats.RPCStats = append(c.stats.RPCStats, stat)
+	c.stats.Cost += stat.Cost
+	c.stats.lock.Unlock()
 	return err
 }
 
+// NewContext creates a new timing-aware context from req.
 func NewContext(req *http.Request) Context {
 	c := appengine.NewContext(req)
 	var uname string
@@ -121,7 +125,7 @@ func NewContext(req *http.Request) Context {
 	return Context{
 		Context: c,
 		req:     req,
-		Stats: &RequestStats{
+		stats: &requestStats{
 			User:   uname,
 			Admin:  admin,
 			Method: req.Method,
@@ -142,14 +146,14 @@ func (c Context) FromContext(ctx appengine.Context) Context {
 
 const bufMaxLen = 1000000
 
-func (c Context) Save() {
-	c.Stats.wg.Wait()
-	c.Stats.Duration = time.Since(c.Stats.Start)
+func (c Context) save() {
+	c.stats.wg.Wait()
+	c.stats.Duration = time.Since(c.stats.Start)
 
 	var buf_part, buf_full bytes.Buffer
 	full := stats_full{
 		Header: c.req.Header,
-		Stats:  c.Stats,
+		Stats:  c.stats,
 	}
 	if err := gob.NewEncoder(&buf_full).Encode(&full); err != nil {
 		c.Errorf("appstats Save error: %v", err)
@@ -162,7 +166,7 @@ func (c Context) Save() {
 		buf_full.Truncate(0)
 		gob.NewEncoder(&buf_full).Encode(&full)
 	}
-	part := stats_part(*c.Stats)
+	part := stats_part(*c.stats)
 	for i := range part.RPCStats {
 		part.RPCStats[i].StackData = ""
 		part.RPCStats[i].In = ""
@@ -174,20 +178,20 @@ func (c Context) Save() {
 	}
 
 	item_part := &memcache.Item{
-		Key:   c.Stats.PartKey(),
+		Key:   c.stats.PartKey(),
 		Value: buf_part.Bytes(),
 	}
 
 	item_full := &memcache.Item{
-		Key:   c.Stats.FullKey(),
+		Key:   c.stats.FullKey(),
 		Value: buf_full.Bytes(),
 	}
 
 	c.Infof("Saved; %s: %s, %s: %s, link: %v",
 		item_part.Key,
-		ByteSize(len(item_part.Value)),
+		byteSize(len(item_part.Value)),
 		item_full.Key,
-		ByteSize(len(item_full.Value)),
+		byteSize(len(item_full.Value)),
 		c.URL(),
 	)
 
@@ -195,12 +199,13 @@ func (c Context) Save() {
 	memcache.SetMulti(nc, []*memcache.Item{item_part, item_full})
 }
 
+// URL returns the appstats URL for the current request.
 func (c Context) URL() string {
 	u := url.URL{
 		Scheme:   "http",
 		Host:     c.req.Host,
 		Path:     detailsURL,
-		RawQuery: fmt.Sprintf("time=%v", c.Stats.Start.Nanosecond()),
+		RawQuery: fmt.Sprintf("time=%v", c.stats.Start.Nanosecond()),
 	}
 
 	return u.String()
@@ -212,14 +217,14 @@ func context(r *http.Request) appengine.Context {
 	return nc
 }
 
-// Handler is an http.Handler that records RPC statistics.
-type Handler struct {
+// handler is an http.Handler that records RPC statistics.
+type handler struct {
 	f func(appengine.Context, http.ResponseWriter, *http.Request)
 }
 
 // NewHandler returns a new Handler that will execute f.
-func NewHandler(f func(appengine.Context, http.ResponseWriter, *http.Request)) Handler {
-	return Handler{
+func NewHandler(f func(appengine.Context, http.ResponseWriter, *http.Request)) http.Handler {
+	return handler{
 		f: f,
 	}
 }
@@ -233,7 +238,7 @@ type responseWriter struct {
 func (r responseWriter) Write(b []byte) (int, error) {
 	// Emulate the behavior of http.ResponseWriter.Write since it doesn't
 	// call our WriteHeader implementation.
-	if r.c.Stats.Status == 0 {
+	if r.c.stats.Status == 0 {
 		r.WriteHeader(http.StatusOK)
 	}
 
@@ -241,11 +246,11 @@ func (r responseWriter) Write(b []byte) (int, error) {
 }
 
 func (r responseWriter) WriteHeader(i int) {
-	r.c.Stats.Status = i
+	r.c.stats.Status = i
 	r.ResponseWriter.WriteHeader(i)
 }
 
-func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if ShouldRecord(r) {
 		c := NewContext(r)
 		rw := responseWriter{
@@ -253,7 +258,7 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			c:              c,
 		}
 		h.f(c, rw, r)
-		c.Save()
+		c.save()
 	} else {
 		c := appengine.NewContext(r)
 		h.f(c, w, r)

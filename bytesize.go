@@ -8,38 +8,38 @@ import (
 	"fmt"
 )
 
-type ByteSize float64
+type byteSize float64
 
 const (
-	_           = iota
-	KB ByteSize = 1 << (10 * iota)
-	MB
-	GB
-	TB
-	PB
-	EB
-	ZB
-	YB
+	_B          = iota
+	kB byteSize = 1 << (10 * iota)
+	mB
+	gB
+	tB
+	pB
+	eB
+	zB
+	yB
 )
 
-func (b ByteSize) String() string {
+func (b byteSize) String() string {
 	switch {
-	case b >= YB:
-		return fmt.Sprintf("%.2fYB", b/YB)
-	case b >= ZB:
-		return fmt.Sprintf("%.2fZB", b/ZB)
-	case b >= EB:
-		return fmt.Sprintf("%.2fEB", b/EB)
-	case b >= PB:
-		return fmt.Sprintf("%.2fPB", b/PB)
-	case b >= TB:
-		return fmt.Sprintf("%.2fTB", b/TB)
-	case b >= GB:
-		return fmt.Sprintf("%.2fGB", b/GB)
-	case b >= MB:
-		return fmt.Sprintf("%.2fMB", b/MB)
-	case b >= KB:
-		return fmt.Sprintf("%.2fKB", b/KB)
+	case b >= yB:
+		return fmt.Sprintf("%.2fYB", b/yB)
+	case b >= zB:
+		return fmt.Sprintf("%.2fZB", b/zB)
+	case b >= eB:
+		return fmt.Sprintf("%.2fEB", b/eB)
+	case b >= pB:
+		return fmt.Sprintf("%.2fPB", b/pB)
+	case b >= tB:
+		return fmt.Sprintf("%.2fTB", b/tB)
+	case b >= gB:
+		return fmt.Sprintf("%.2fGB", b/gB)
+	case b >= mB:
+		return fmt.Sprintf("%.2fMB", b/mB)
+	case b >= kB:
+		return fmt.Sprintf("%.2fKB", b/kB)
 	}
 	return fmt.Sprintf("%.2fB", b)
 }

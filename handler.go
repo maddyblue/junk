@@ -58,7 +58,7 @@ func serveError(w http.ResponseWriter, err error) {
 	http.Error(w, err.Error(), http.StatusInternalServerError)
 }
 
-func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
+func appstatsHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	if appengine.IsDevAppServer() {
 		// noop
@@ -75,17 +75,17 @@ func AppstatsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if detailsURL == r.URL.Path {
-		Details(w, r)
+		details(w, r)
 	} else if fileURL == r.URL.Path {
-		File(w, r)
+		file(w, r)
 	} else if strings.HasPrefix(r.URL.Path, staticURL) {
-		Static(w, r)
+		static(w, r)
 	} else {
-		Index(w, r)
+		index(w, r)
 	}
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
+func index(w http.ResponseWriter, r *http.Request) {
 	keys := make([]string, modulus)
 	for i := range keys {
 		keys[i] = fmt.Sprintf(keyPart, i*distance)
@@ -97,27 +97,27 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ars := AllRequestStats{}
+	ars := allrequestStats{}
 	for _, v := range items {
 		t := stats_part{}
 		err := gob.NewDecoder(bytes.NewBuffer(v.Value)).Decode(&t)
 		if err != nil {
 			continue
 		}
-		r := RequestStats(t)
+		r := requestStats(t)
 		ars = append(ars, &r)
 	}
 	sort.Sort(reverse{ars})
 
-	requestById := make(map[int]*RequestStats, len(ars))
-	idByRequest := make(map[*RequestStats]int, len(ars))
-	requests := make(map[int]*StatByName)
+	requestById := make(map[int]*requestStats, len(ars))
+	idByRequest := make(map[*requestStats]int, len(ars))
+	requests := make(map[int]*statByName)
 	byRequest := make(map[int]map[string]cVal)
 	for i, v := range ars {
 		idx := i + 1
 		requestById[idx] = v
 		idByRequest[v] = idx
-		requests[idx] = &StatByName{
+		requests[idx] = &statByName{
 			RequestStats: v,
 		}
 		byRequest[idx] = make(map[string]cVal)
@@ -125,7 +125,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	requestByPath := make(map[string][]int)
 	byCount := make(map[string]cVal)
-	byRPC := make(map[SKey]cVal)
+	byRPC := make(map[skey]cVal)
 	for _, t := range ars {
 		id := idByRequest[t]
 
@@ -144,17 +144,17 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			v.cost += r.Cost
 			byCount[rpc] = v
 
-			v = byRPC[SKey{rpc, t.Path}]
+			v = byRPC[skey{rpc, t.Path}]
 			v.count++
 			v.cost += r.Cost
-			byRPC[SKey{rpc, t.Path}] = v
+			byRPC[skey{rpc, t.Path}] = v
 		}
 	}
 
 	for k, v := range byRequest {
-		stats := StatsByName{}
+		stats := statsByName{}
 		for rpc, s := range v {
-			stats = append(stats, &StatByName{
+			stats = append(stats, &statByName{
 				Name:  rpc,
 				Count: s.count,
 				Cost:  s.cost,
@@ -164,15 +164,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		requests[k].SubStats = stats
 	}
 
-	statsByRPC := make(map[string]StatsByName)
-	pathStats := make(map[string]StatsByName)
+	statsByRPC := make(map[string]statsByName)
+	pathStats := make(map[string]statsByName)
 	for k, v := range byRPC {
-		statsByRPC[k.a] = append(statsByRPC[k.a], &StatByName{
+		statsByRPC[k.a] = append(statsByRPC[k.a], &statByName{
 			Name:  k.b,
 			Count: v.count,
 			Cost:  v.cost,
 		})
-		pathStats[k.b] = append(pathStats[k.b], &StatByName{
+		pathStats[k.b] = append(pathStats[k.b], &statByName{
 			Name:  k.a,
 			Count: v.count,
 			Cost:  v.cost,
@@ -183,7 +183,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		statsByRPC[k] = v
 	}
 
-	pathStatsByCount := StatsByName{}
+	pathStatsByCount := statsByName{}
 	for k, v := range pathStats {
 		total := 0
 		var cost int64
@@ -193,7 +193,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		}
 		sort.Sort(reverse{v})
 
-		pathStatsByCount = append(pathStatsByCount, &StatByName{
+		pathStatsByCount = append(pathStatsByCount, &statByName{
 			Name:       k,
 			Count:      total,
 			Cost:       cost,
@@ -204,9 +204,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 	sort.Sort(reverse{pathStatsByCount})
 
-	allStatsByCount := StatsByName{}
+	allStatsByCount := statsByName{}
 	for k, v := range byCount {
-		allStatsByCount = append(allStatsByCount, &StatByName{
+		allStatsByCount = append(allStatsByCount, &statByName{
 			Name:     k,
 			Count:    v.count,
 			Cost:     v.cost,
@@ -217,10 +217,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	v := struct {
 		Env                 map[string]string
-		Requests            map[int]*StatByName
-		RequestStatsByCount map[int]*StatByName
-		AllStatsByCount     StatsByName
-		PathStatsByCount    StatsByName
+		Requests            map[int]*statByName
+		RequestStatsByCount map[int]*statByName
+		AllStatsByCount     statsByName
+		PathStatsByCount    statsByName
 	}{
 		Env: map[string]string{
 			"APPLICATION_ID": appengine.AppID(c),
@@ -233,7 +233,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	_ = templates.ExecuteTemplate(w, "main", v)
 }
 
-func Details(w http.ResponseWriter, r *http.Request) {
+func details(w http.ResponseWriter, r *http.Request) {
 	i, _ := strconv.Atoi(r.FormValue("time"))
 	qtime := roundTime(i)
 	key := fmt.Sprintf(keyFull, qtime)
@@ -242,9 +242,9 @@ func Details(w http.ResponseWriter, r *http.Request) {
 
 	v := struct {
 		Env             map[string]string
-		Record          *RequestStats
+		Record          *requestStats
 		Header          http.Header
-		AllStatsByCount StatsByName
+		AllStatsByCount statsByName
 		Real            time.Duration
 	}{
 		Env: map[string]string{
@@ -283,9 +283,9 @@ func Details(w http.ResponseWriter, r *http.Request) {
 		_real += r.Duration
 	}
 
-	allStatsByCount := StatsByName{}
+	allStatsByCount := statsByName{}
 	for k, v := range byCount {
-		allStatsByCount = append(allStatsByCount, &StatByName{
+		allStatsByCount = append(allStatsByCount, &statByName{
 			Name:     k,
 			Count:    v.count,
 			Cost:     v.cost,
@@ -302,7 +302,7 @@ func Details(w http.ResponseWriter, r *http.Request) {
 	_ = templates.ExecuteTemplate(w, "details", v)
 }
 
-func File(w http.ResponseWriter, r *http.Request) {
+func file(w http.ResponseWriter, r *http.Request) {
 	fname := r.URL.Query().Get("f")
 	n := r.URL.Query().Get("n")
 	lineno, _ := strconv.Atoi(n)
@@ -336,7 +336,7 @@ func File(w http.ResponseWriter, r *http.Request) {
 	_ = templates.ExecuteTemplate(w, "file", v)
 }
 
-func Static(w http.ResponseWriter, r *http.Request) {
+func static(w http.ResponseWriter, r *http.Request) {
 	fname := r.URL.Path[strings.LastIndex(r.URL.Path, "/")+1:]
 	if v, present := staticFiles[fname]; present {
 		h := w.Header()
