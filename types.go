@@ -34,7 +34,7 @@ const (
 	modulus   = 1000
 )
 
-type RequestStats struct {
+type requestStats struct {
 	User        string
 	Admin       bool
 	Method      string
@@ -43,25 +43,25 @@ type RequestStats struct {
 	Cost        int64
 	Start       time.Time
 	Duration    time.Duration
-	RPCStats    []RPCStat
+	RPCStats    []rpcStat
 
 	lock sync.Mutex
 	wg   sync.WaitGroup
 }
 
-type stats_part RequestStats
+type stats_part requestStats
 
 type stats_full struct {
 	Header http.Header
-	Stats  *RequestStats
+	Stats  *requestStats
 }
 
-func (r RequestStats) PartKey() string {
+func (r *requestStats) PartKey() string {
 	t := roundTime(r.Start.Nanosecond())
 	return fmt.Sprintf(keyPart, t)
 }
 
-func (r RequestStats) FullKey() string {
+func (r *requestStats) FullKey() string {
 	t := roundTime(r.Start.Nanosecond())
 	return fmt.Sprintf(keyFull, t)
 }
@@ -70,7 +70,7 @@ func roundTime(i int) int {
 	return (i / 1000 / distance) % modulus * distance
 }
 
-type RPCStat struct {
+type rpcStat struct {
 	Service, Method string
 	Start           time.Time
 	Offset          time.Duration
@@ -80,20 +80,20 @@ type RPCStat struct {
 	Cost            int64
 }
 
-func (r RPCStat) Name() string {
+func (r rpcStat) Name() string {
 	return r.Service + "." + r.Method
 }
 
-func (r RPCStat) Request() string {
+func (r rpcStat) Request() string {
 	return r.In
 }
 
-func (r RPCStat) Response() string {
+func (r rpcStat) Response() string {
 	return r.Out
 }
 
-func (r RPCStat) Stack() Stack {
-	s := Stack{}
+func (r rpcStat) Stack() stack {
+	s := stack{}
 
 	if r.StackData == "" {
 		return s
@@ -108,7 +108,7 @@ func (r RPCStat) Stack() Stack {
 
 		cidx := strings.LastIndex(lines[i], ":")
 		lineno, _ := strconv.Atoi(lines[i][cidx+1 : idx])
-		f := &Frame{
+		f := &frame{
 			Location: lines[i][:cidx],
 			Lineno:   lineno,
 		}
@@ -124,34 +124,34 @@ func (r RPCStat) Stack() Stack {
 	return s[2:]
 }
 
-type Stack []*Frame
+type stack []*frame
 
-type Frame struct {
+type frame struct {
 	Location string
 	Call     string
 	Lineno   int
 }
 
-type AllRequestStats []*RequestStats
+type allrequestStats []*requestStats
 
-func (s AllRequestStats) Len() int           { return len(s) }
-func (s AllRequestStats) Less(i, j int) bool { return s[i].Start.Sub(s[j].Start) < 0 }
-func (s AllRequestStats) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+func (s allrequestStats) Len() int           { return len(s) }
+func (s allrequestStats) Less(i, j int) bool { return s[i].Start.Sub(s[j].Start) < 0 }
+func (s allrequestStats) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 
-type StatsByName []*StatByName
+type statsByName []*statByName
 
-func (s StatsByName) Len() int           { return len(s) }
-func (s StatsByName) Less(i, j int) bool { return s[i].Count < s[j].Count }
-func (s StatsByName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+func (s statsByName) Len() int           { return len(s) }
+func (s statsByName) Less(i, j int) bool { return s[i].Count < s[j].Count }
+func (s statsByName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 
-type StatByName struct {
+type statByName struct {
 	Name         string
 	Count        int
 	Cost         int64
-	SubStats     []*StatByName
+	SubStats     []*statByName
 	Requests     int
 	RecentReqs   []int
-	RequestStats *RequestStats
+	RequestStats *requestStats
 	Duration     time.Duration
 }
 
@@ -159,7 +159,7 @@ type reverse struct{ sort.Interface }
 
 func (r reverse) Less(i, j int) bool { return r.Interface.Less(j, i) }
 
-type SKey struct {
+type skey struct {
 	a, b string
 }
 

@@ -14,7 +14,7 @@ const (
 
 // todo: implement read and small ops costs
 
-func GetCost(p proto.Message) int64 {
+func getCost(p proto.Message) int64 {
 	v := reflect.ValueOf(p)
 	v = reflect.Indirect(v)
 	if v.Kind() != reflect.Struct {
