@@ -11,7 +11,7 @@ import (
 type byteSize float64
 
 const (
-	_           = iota
+	_            = iota
 	_KB byteSize = 1 << (10 * iota)
 	_MB
 	_GB
