@@ -72,9 +72,8 @@ func DefaultShouldRecord(r *http.Request) bool {
 // Context is a timing-aware appengine.Context.
 type Context struct {
 	appengine.Context
-
-	req   *http.Request
-	stats *requestStats
+	header http.Header
+	stats  *requestStats
 }
 
 // Call times an appengine.Context Call. Internal use only.
@@ -124,7 +123,7 @@ func NewContext(req *http.Request) Context {
 	}
 	return Context{
 		Context: c,
-		req:     req,
+		header:  req.Header,
 		stats: &requestStats{
 			User:   uname,
 			Admin:  admin,
@@ -136,6 +135,29 @@ func NewContext(req *http.Request) Context {
 	}
 }
 
+// WithContext enables profiling of functions without a corresponding request,
+// as in the appengine/delay package. method and path may be empty.
+func WithContext(context appengine.Context, method, path string, f func(Context)) {
+	var uname string
+	var admin bool
+	if u := user.Current(context); u != nil {
+		uname = u.String()
+		admin = u.Admin
+	}
+	c := Context{
+		Context: context,
+		stats: &requestStats{
+			User:   uname,
+			Admin:  admin,
+			Method: method,
+			Path:   path,
+			Start:  time.Now(),
+		},
+	}
+	f(c)
+	c.save()
+}
+
 const bufMaxLen = 1000000
 
 func (c Context) save() {
@@ -144,7 +166,7 @@ func (c Context) save() {
 
 	var buf_part, buf_full bytes.Buffer
 	full := stats_full{
-		Header: c.req.Header,
+		Header: c.header,
 		Stats:  c.stats,
 	}
 	if err := gob.NewEncoder(&buf_full).Encode(&full); err != nil {
@@ -187,20 +209,22 @@ func (c Context) save() {
 		c.URL(),
 	)
 
-	nc := context(c.req)
+	nc := c.storeContext()
 	memcache.SetMulti(nc, []*memcache.Item{item_part, item_full})
 }
 
 // URL returns the appstats URL for the current request.
 func (c Context) URL() string {
 	u := url.URL{
-		Scheme:   "http",
-		Host:     c.req.Host,
 		Path:     detailsURL,
 		RawQuery: fmt.Sprintf("time=%v", c.stats.Start.Nanosecond()),
 	}
-
 	return u.String()
+}
+
+func (c Context) storeContext() appengine.Context {
+	nc, _ := appengine.Namespace(c.Context, Namespace)
+	return nc
 }
 
 func context(r *http.Request) appengine.Context {
