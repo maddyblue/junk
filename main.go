@@ -103,7 +103,7 @@ import (
 	"strconv"
 	"strings"
 
-	"code.google.com/p/go.tools/astutil"
+	"golang.org/x/tools/go/ast/astutil"
 )
 
 const dirMode os.FileMode = 0755
