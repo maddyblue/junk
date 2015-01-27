@@ -232,7 +232,7 @@ func fixImportCheck(body []byte, importPath string) ([]byte, error) {
 			after = v
 		}
 	}
-	if bytes.IndexByte(body[f.Package:pos], '\n') == -1 {
+	if after != nil && bytes.IndexByte(body[f.Package:pos], '\n') == -1 {
 		comment := fmt.Sprintf(`// import "%s"`, importPath)
 		buf := new(bytes.Buffer)
 		buf.Write(body[:after.Pos()-1])
