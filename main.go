@@ -40,12 +40,13 @@ import (
 const dirMode os.FileMode = 0755
 
 var (
-	dryrun     = flag.Bool("n", false, "don't perform any action, instead print them")
-	create     = flag.Bool("c", false, "create the third party directory if needed")
-	relative   = flag.Bool("r", false, "use a relative third party directory (needed on App Engine)")
-	verbose    = flag.Bool("v", false, "print actions")
-	thirdParty = flag.String("d", "_third_party", "name of third party directory")
-	flagUpdate = flag.Bool("u", false, "update (go get -d -u) used packages")
+	dryrun       = flag.Bool("n", false, "don't perform any action, instead print them")
+	create       = flag.Bool("c", false, "create the third party directory if needed")
+	relative     = flag.Bool("r", false, "use a relative third party directory (needed on App Engine)")
+	verbose      = flag.Bool("v", false, "print actions")
+	thirdParty   = flag.String("d", "_third_party", "name of third party directory")
+	flagUpdate   = flag.Bool("u", false, "update (go get -d -u) used packages")
+	includeTests = flag.Bool("t", false, "import dependencies for _test.go files")
 
 	relpath, gopath, ThirdParty string
 )
@@ -121,6 +122,9 @@ func update(updated map[string]bool) {
 	}
 	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
 		if err != nil || info.IsDir() {
+			return nil
+		}
+		if !*includeTests && strings.HasSuffix(path, "_test.go") {
 			return nil
 		}
 		fset := token.NewFileSet()
