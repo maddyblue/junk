@@ -3,7 +3,7 @@ package appstats
 import (
 	"reflect"
 
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 )
 
 const (
