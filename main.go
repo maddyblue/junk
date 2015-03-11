@@ -143,11 +143,6 @@ func update(updated map[string]bool) {
 	})
 	for k := range paths {
 		fpath := filepath.Join(gopath, "src", k)
-		f, err := os.Open(fpath)
-		if err != nil {
-			log.Printf("%s required, but could not be found at %s", k, fpath)
-			continue
-		}
 		if *flagUpdate && !updated[k] {
 			updated[k] = true
 			if *verbose {
@@ -162,6 +157,11 @@ func update(updated map[string]bool) {
 					log.Println("go get", k, "err:", err)
 				}
 			}
+		}
+		f, err := os.Open(fpath)
+		if err != nil {
+			log.Printf("%s required, but could not be found at %s", k, fpath)
+			continue
 		}
 		files, err := f.Readdir(0)
 		if err != nil {
