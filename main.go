@@ -273,7 +273,7 @@ func rewriteImports(importSites []string) (rewritten bool) {
 				if strings.HasPrefix(v, site+"/") {
 					target := ThirdParty + "/" + v
 					if !*relative {
-						target = relpath + "/" + target
+						target = filepath.ToSlash(relpath) + "/" + target
 					}
 					if *verbose {
 						log.Printf("rewrite %s: %s -> %s\n", path, v, target)
