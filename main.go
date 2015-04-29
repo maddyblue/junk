@@ -72,6 +72,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// Under certain circumstances Getwd and EvalSymlinks return different case drive letter on Windows.
+	// To ensure a match in the loop below, do an Evalsymlink on pwd too.
+	pwd, err = filepath.EvalSymlinks(pwd)
+	if err != nil {
+		log.Fatal(err)
+	}
 	var importSites []string
 	for _, s := range filepath.SplitList(os.Getenv("GOPATH")) {
 		s, err := filepath.Abs(s)
@@ -94,7 +100,7 @@ func main() {
 			continue
 		}
 		gopath = s
-		relpath = strings.TrimPrefix(pwd, filepath.Join(s, "src")+string(os.PathSeparator))
+		relpath = filepath.ToSlash(strings.TrimPrefix(pwd, filepath.Join(s, "src")+string(os.PathSeparator)))
 		break
 	}
 	if relpath == "" {
@@ -206,7 +212,7 @@ func update(updated map[string]bool) {
 						log.Fatal(err)
 					}
 					if filepath.Ext(spath) == ".go" {
-						b, err = fixImportCheck(b, path.Join(relpath, destdir))
+						b, err = fixImportCheck(b, filepath.ToSlash(path.Join(relpath, destdir)))
 						if err != nil {
 							log.Fatal(err)
 						}
