@@ -25,6 +25,9 @@ type Vorbis struct {
 
 	Vendor   string
 	Comments map[string][]string
+
+	codebook_codeword_lengths []uint32
+	codebook_multiplicands    []uint32
 }
 
 func NewVorbis(r io.Reader) (*Vorbis, error) {
@@ -34,6 +37,7 @@ func NewVorbis(r io.Reader) (*Vorbis, error) {
 	steps := []func() error{
 		v.decodeIdentification,
 		v.decodeComment,
+		v.decodeSetup,
 	}
 	for _, step := range steps {
 		if err := step(); err != nil {
@@ -70,7 +74,7 @@ func (v *Vorbis) ReadBits(bits uint) uint32 {
 	return b
 }
 
-func (v *Vorbis) Read(bits int) uint32 {
+func (v *Vorbis) Read(bits uint) uint32 {
 	var u uint32
 	for offset := uint(0); bits > 0; bits, offset = bits-8, offset+8 {
 		rem := uint(bits)
@@ -81,6 +85,10 @@ func (v *Vorbis) Read(bits int) uint32 {
 		u |= v << offset
 	}
 	return u
+}
+
+func (v *Vorbis) ReadBool() bool {
+	return v.Read(1) == 1
 }
 
 func (v *Vorbis) ReadByte() byte {
@@ -94,6 +102,20 @@ func (v *Vorbis) decode(typ uint8) error {
 	for _, c := range "vorbis" {
 		if b := rune(v.ReadByte()); b != c {
 			return fmt.Errorf("unexpected character %c, expected %c", b, c)
+		}
+	}
+	return nil
+}
+
+func (v *Vorbis) ReadFloat32() float32 {
+	return float32_unpack(v.Read(32))
+}
+
+func (v *Vorbis) expect(bs ...byte) error {
+	for _, b := range bs {
+		r := v.ReadByte()
+		if r != b {
+			return fmt.Errorf("vorbis: expected %02x, got %02x", b, r)
 		}
 	}
 	return nil
@@ -160,5 +182,88 @@ func (v *Vorbis) decodeComment() error {
 	if v.ReadByte() != 1 {
 		return ErrFraming
 	}
+	return nil
+}
+
+func (v *Vorbis) decodeSetup() error {
+	if err := v.decode(typeSetup); err != nil {
+		return err
+	}
+	if err := v.decodeCodebooks(); err != nil {
+		return err
+	}
+	if v.ReadByte() != 1 {
+		return ErrFraming
+	}
+	return nil
+}
+
+func (v *Vorbis) decodeCodebooks() error {
+	vorbis_codebook_count := int(v.ReadByte()) + 1
+	if err := v.expect(0x42, 0x43, 0x56); err != nil {
+		return err
+	}
+	codebook_dimensions := v.Read(16)
+	codebook_entries := v.Read(24)
+
+	// codeword lengths
+	ordered := v.ReadBool()
+	v.codebook_codeword_lengths = make([]uint32, codebook_entries)
+	if !ordered {
+		sparse := v.ReadBool()
+		for i := uint32(0); i < codebook_entries; i++ {
+			if sparse {
+				flag := v.ReadBool()
+				if flag {
+					length := v.Read(5) + 1
+					v.codebook_codeword_lengths[i] = length
+				} else {
+					// leave nil
+				}
+			} else {
+				length := v.Read(5) + 1
+				v.codebook_codeword_lengths[i] = length
+			}
+		}
+	} else if ordered {
+		current_entry := uint32(0)
+		current_length := v.Read(5) + 1
+		for current_entry < codebook_entries {
+			number := v.Read(uint(ilog(int64(codebook_entries) - int64(current_entry))))
+			for i := uint32(0); i < number; i++ {
+				v.codebook_codeword_lengths[i+current_entry] = current_length
+			}
+			current_entry += number
+			current_length++
+			if current_entry > codebook_entries {
+				return fmt.Errorf("vorbis: current_entry > codebook_entries")
+			}
+		}
+	}
+
+	// vector lookup table
+	codebook_lookup_type := v.Read(4)
+	switch codebook_lookup_type {
+	case 0:
+		// no lookup
+	case 1, 2:
+		codebook_minimum_value := v.ReadFloat32()
+		codebook_delta_value := v.ReadFloat32()
+		codebook_value_bits := v.Read(4) + 1
+		codebook_sequence_p := v.ReadBool()
+		var codebook_lookup_values uint32
+		if codebook_lookup_type == 1 {
+			codebook_lookup_values = lookup1_values(codebook_entries, codebook_dimensions)
+		} else {
+			codebook_lookup_values = codebook_entries * codebook_dimensions
+		}
+		v.codebook_multiplicands = make([]uint32, codebook_lookup_values)
+		for i := range v.codebook_multiplicands {
+			v.codebook_multiplicands[i] = v.Read(uint(codebook_value_bits))
+		}
+	default:
+		return fmt.Errorf("vorbis: unknown codebook_lookup_type: %v", codebook_lookup_type)
+	}
+
 	return nil
 }
