@@ -43,8 +43,7 @@ func (br *bitReader) ReadBits(bits uint) (n uint32) {
 			br.err = err
 			return 0
 		}
-		br.n <<= 8
-		br.n |= uint32(b)
+		br.n |= uint32(b) << br.bits
 		br.bits += 8
 	}
 

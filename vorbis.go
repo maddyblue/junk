@@ -74,21 +74,8 @@ func (v *Vorbis) ReadBits(bits uint) uint32 {
 	return b
 }
 
-func (v *Vorbis) Read(bits uint) uint32 {
-	var u uint32
-	for offset := uint(0); bits > 0; bits, offset = bits-8, offset+8 {
-		rem := uint(bits)
-		if rem > 8 {
-			rem = 8
-		}
-		v := v.ReadBits(rem)
-		u |= v << offset
-	}
-	return u
-}
-
 func (v *Vorbis) ReadBool() bool {
-	return v.Read(1) == 1
+	return v.ReadBits(1) == 1
 }
 
 func (v *Vorbis) ReadByte() byte {
@@ -108,7 +95,7 @@ func (v *Vorbis) decode(typ uint8) error {
 }
 
 func (v *Vorbis) ReadFloat32() float32 {
-	return float32_unpack(v.Read(32))
+	return float32_unpack(v.ReadBits(32))
 }
 
 func (v *Vorbis) expect(bs ...byte) error {
@@ -139,14 +126,14 @@ func (v *Vorbis) decodeIdentification() error {
 	if err := v.decode(typeIdentification); err != nil {
 		return err
 	}
-	v.Version = uint32(v.Read(32))
+	v.Version = uint32(v.ReadBits(32))
 	v.Channels = v.ReadByte()
-	v.SampleRate = uint32(v.Read(32))
-	v.BitrateMax = uint32(v.Read(32))
-	v.BitrateNorm = uint32(v.Read(32))
-	v.BitrateMin = uint32(v.Read(32))
-	v.Blocksize0 = 1 << v.Read(4)
-	v.Blocksize1 = 1 << v.Read(4)
+	v.SampleRate = uint32(v.ReadBits(32))
+	v.BitrateMax = uint32(v.ReadBits(32))
+	v.BitrateNorm = uint32(v.ReadBits(32))
+	v.BitrateMin = uint32(v.ReadBits(32))
+	v.Blocksize0 = 1 << v.ReadBits(4)
+	v.Blocksize1 = 1 << v.ReadBits(4)
 	if v.Blocksize0 > v.Blocksize1 || v.Blocksize0 == 0 || v.Blocksize1 == 0 {
 		return fmt.Errorf("vorbis: bad blocksize")
 	}
@@ -161,7 +148,7 @@ func (v *Vorbis) decodeComment() error {
 		return err
 	}
 	read := func() string {
-		l := int(v.Read(32))
+		l := int(v.ReadBits(32))
 		bytes := make([]byte, l)
 		for i := 0; i < l; i++ {
 			bytes[i] = byte(v.ReadByte())
@@ -170,7 +157,7 @@ func (v *Vorbis) decodeComment() error {
 	}
 	v.Vendor = read()
 	v.Comments = make(map[string][]string)
-	comments := int(v.Read(32))
+	comments := int(v.ReadBits(32))
 	for i := 0; i < comments; i++ {
 		c := read()
 		sp := strings.SplitN(c, "=", 2)
