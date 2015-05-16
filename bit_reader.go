@@ -15,7 +15,7 @@ import (
 // be checked afterwards.
 type bitReader struct {
 	r    io.ByteReader
-	n    uint32
+	n    uint64
 	bits uint
 	err  error
 }
@@ -43,11 +43,11 @@ func (br *bitReader) ReadBits(bits uint) (n uint32) {
 			br.err = err
 			return 0
 		}
-		br.n |= uint32(b) << br.bits
+		br.n |= uint64(b) << br.bits
 		br.bits += 8
 	}
 
-	n = br.n & ((1 << bits) - 1)
+	n = uint32(br.n & ((1 << bits) - 1))
 	br.n >>= bits
 	br.bits -= bits
 	return
