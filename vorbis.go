@@ -178,6 +178,14 @@ func (v *Vorbis) decodeSetup() error {
 	if err := v.decodeCodebooks(); err != nil {
 		return err
 	}
+
+	// time domain transforms
+	vorbis_time_count := v.ReadBits(6) + 1
+	for i := uint32(0); i < vorbis_time_count; i++ {
+		if v.ReadBits(16) != 0 {
+			return errors.New("vorbis: expected 0 time count value")
+		}
+	}
 	if v.ReadByte() != 1 {
 		return ErrFraming
 	}
