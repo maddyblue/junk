@@ -202,15 +202,15 @@ func (v *Vorbis) decodeCodebook() (*Codebook, error) {
 	if err := v.expect(0x42, 0x43, 0x56); err != nil {
 		return nil, err
 	}
-	codebook_dimensions := v.ReadBits(16)
-	codebook_entries := v.ReadBits(24)
+	c.codebook_dimensions = v.ReadBits(16)
+	c.codebook_entries = v.ReadBits(24)
 
 	// codeword lengths
 	ordered := v.ReadBool()
-	c.codebook_codeword_lengths = make([]uint32, codebook_entries)
+	c.codebook_codeword_lengths = make([]uint32, c.codebook_entries)
 	if !ordered {
 		sparse := v.ReadBool()
-		for i := uint32(0); i < codebook_entries; i++ {
+		for i := uint32(0); i < c.codebook_entries; i++ {
 			if sparse {
 				flag := v.ReadBool()
 				if flag {
@@ -225,18 +225,31 @@ func (v *Vorbis) decodeCodebook() (*Codebook, error) {
 	} else if ordered {
 		current_entry := uint32(0)
 		current_length := v.ReadBits(5) + 1
-		for current_entry < codebook_entries {
-			number := v.ReadBits(uint(ilog(int64(codebook_entries) - int64(current_entry))))
+		for current_entry < c.codebook_entries {
+			number := v.ReadBits(uint(ilog(int64(c.codebook_entries) - int64(current_entry))))
 			for i := uint32(0); i < number; i++ {
 				c.codebook_codeword_lengths[i+current_entry] = current_length
 			}
 			current_entry += number
 			current_length++
-			if current_entry > codebook_entries {
-				return nil, fmt.Errorf("vorbis: current_entry > codebook_entries")
+			if current_entry > c.codebook_entries {
+				return nil, fmt.Errorf("vorbis: current_entry > c.codebook_entries")
 			}
 		}
 	}
+
+	var lens []uint32
+	for _, v := range c.codebook_codeword_lengths {
+		if v > 0 {
+			lens = append(lens, v)
+		}
+	}
+
+	t, err := newHuffmanTree(lens)
+	if err != nil {
+		return nil, err
+	}
+	c.t = &t
 
 	// vector lookup table
 	codebook_lookup_type := v.ReadBits(4)
@@ -248,16 +261,42 @@ func (v *Vorbis) decodeCodebook() (*Codebook, error) {
 		codebook_delta_value := v.ReadFloat32()
 		codebook_value_bits := v.ReadBits(4) + 1
 		codebook_sequence_p := v.ReadBool()
-		_, _, _ = codebook_minimum_value, codebook_delta_value, codebook_sequence_p
 		var codebook_lookup_values uint32
 		if codebook_lookup_type == 1 {
-			codebook_lookup_values = lookup1_values(codebook_entries, codebook_dimensions)
+			codebook_lookup_values = lookup1_values(c.codebook_entries, c.codebook_dimensions)
 		} else {
-			codebook_lookup_values = codebook_entries * codebook_dimensions
+			codebook_lookup_values = c.codebook_entries * c.codebook_dimensions
 		}
 		c.codebook_multiplicands = make([]uint32, codebook_lookup_values)
 		for i := range c.codebook_multiplicands {
 			c.codebook_multiplicands[i] = v.ReadBits(uint(codebook_value_bits))
+		}
+		c.value_vector = make([][]float32, c.codebook_entries)
+		for lookup_offset := uint32(0); lookup_offset < c.codebook_entries; lookup_offset++ {
+			c.value_vector[lookup_offset] = make([]float32, c.codebook_dimensions)
+			switch codebook_lookup_type {
+			case 1:
+				var last float32
+				index_divisor := uint32(1)
+				for i := uint32(0); i < c.codebook_dimensions; i++ {
+					multiplicand_offset := (lookup_offset / index_divisor) % codebook_lookup_values
+					c.value_vector[lookup_offset][i] = float32(c.codebook_multiplicands[multiplicand_offset])*codebook_delta_value + codebook_minimum_value + last
+					if codebook_sequence_p {
+						last = c.value_vector[lookup_offset][i]
+					}
+					index_divisor *= codebook_lookup_values
+				}
+			case 2:
+				var last float32
+				multiplicand_offset := lookup_offset * c.codebook_dimensions
+				for i := uint32(0); i < c.codebook_dimensions; i++ {
+					c.value_vector[lookup_offset][i] = float32(c.codebook_multiplicands[multiplicand_offset])*codebook_delta_value + codebook_minimum_value + last
+					if codebook_sequence_p {
+						last = c.value_vector[lookup_offset][i]
+					}
+					multiplicand_offset++
+				}
+			}
 		}
 	default:
 		return nil, fmt.Errorf("vorbis: unknown codebook_lookup_type: %v", codebook_lookup_type)
