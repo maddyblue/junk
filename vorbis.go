@@ -186,6 +186,74 @@ func (v *Vorbis) decodeSetup() error {
 			return errors.New("vorbis: expected 0 time count value")
 		}
 	}
+
+	// floors
+	vorbis_floor_count := v.ReadBits(6) + 1
+	vorbis_floor_types := make([]uint32, vorbis_floor_count)
+	vorbis_floor_configurations := make([]Floor, vorbis_floor_count)
+	for i := uint32(0); i < vorbis_floor_count; i++ {
+		f := v.ReadBits(16)
+		vorbis_floor_types[i] = f
+		switch f {
+		case 0:
+			f0 := Floor0{
+				order:            v.ReadBits(8),
+				rate:             v.ReadBits(16),
+				bark_map_size:    v.ReadBits(16),
+				amplitude_bits:   v.ReadBits(6),
+				amplitude_offset: v.ReadBits(8),
+				number_of_books:  v.ReadBits(4) + 1,
+			}
+			f0.book_list = make([]uint32, f0.number_of_books)
+			for i := range f0.book_list {
+				f0.book_list[i] = v.ReadBits(8)
+			}
+			vorbis_floor_configurations[i] = f0
+		case 1:
+			f1 := Floor1{
+				partitions: v.ReadBits(5),
+			}
+			maximum_class := uint32(0)
+			f1.partition_class_list = make([]uint32, f1.partitions)
+			for i := uint32(0); i < f1.partitions; i++ {
+				c := v.ReadBits(4)
+				f1.partition_class_list[i] = c
+				if c > maximum_class {
+					maximum_class = c
+				}
+			}
+			f1.class_dimensions = make([]uint32, maximum_class+1)
+			f1.class_subclasses = make([]uint32, maximum_class+1)
+			f1.class_masterbooks = make([]uint32, maximum_class+1)
+			f1.subclass_books = make([][]uint32, maximum_class+1)
+			for i := uint32(0); i <= maximum_class; i++ {
+				f1.class_dimensions[i] = v.ReadBits(3) + 1
+				f1.class_subclasses[i] = v.ReadBits(2)
+				if f1.class_subclasses[i] != 0 {
+					f1.class_masterbooks[i] = v.ReadBits(8)
+				}
+				cs2 := 1 << f1.class_subclasses[i]
+				f1.subclass_books[i] = make([]uint32, cs2)
+				for j := 0; j < cs2; j++ {
+					f1.subclass_books[i][j] = v.ReadBits(8) - 1
+				}
+			}
+			f1.multiplier = v.ReadBits(2) + 1
+			rangebits := v.ReadBits(4)
+			f1.X_list = make([]uint32, 2)
+			f1.X_list[1] = 1 << rangebits
+			for i := uint32(0); i < f1.partitions; i++ {
+				current_class_number := f1.partition_class_list[i]
+				for j := uint32(0); j < f1.class_dimensions[current_class_number]; j++ {
+					f1.X_list = append(f1.X_list, v.ReadBits(uint(rangebits)))
+				}
+			}
+			vorbis_floor_configurations[i] = f1
+		default:
+			return fmt.Errorf("vorbis: unknown floor type %v", f)
+		}
+	}
+
 	if v.ReadByte() != 1 {
 		return ErrFraming
 	}
