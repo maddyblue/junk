@@ -29,6 +29,7 @@ type Vorbis struct {
 
 	Codebooks []*Codebook
 	Floors    []Floor
+	Residues  []Residue
 }
 
 func NewVorbis(r io.Reader) (*Vorbis, error) {
@@ -253,6 +254,47 @@ func (v *Vorbis) decodeSetup() error {
 			v.Floors[i] = f1
 		default:
 			return fmt.Errorf("vorbis: unknown floor type %v", f)
+		}
+	}
+
+	// residues
+	vorbis_residue_count := v.ReadBits(6) + 1
+	v.Residues = make([]Residue, vorbis_residue_count)
+	for ri := range v.Residues {
+		t := v.ReadBits(16)
+		switch t {
+		case 0, 1, 2:
+			r := Residue{
+				typ:             t,
+				begin:           v.ReadBits(24),
+				end:             v.ReadBits(24),
+				partition_size:  v.ReadBits(24) + 1,
+				classifications: v.ReadBits(6) + 1,
+				classbook:       v.ReadBits(8),
+			}
+			r.cascade = make([]uint32, r.classifications)
+			r.books = make([][8]int64, r.classifications)
+			for i := uint32(0); i < r.classifications; i++ {
+				high_bits := uint32(0)
+				low_bits := v.ReadBits(3)
+				bitflag := v.ReadBool()
+				if bitflag {
+					high_bits = v.ReadBits(5)
+				}
+				r.cascade[i] = high_bits*8 + low_bits
+			}
+			for i := uint32(0); i < r.classifications; i++ {
+				for j := uint(0); j < 8; j++ {
+					if r.cascade[i]&(1<<j) != 0 {
+						r.books[i][j] = int64(v.ReadBits(8))
+					} else {
+						r.books[i][j] = -1
+					}
+				}
+			}
+			v.Residues[ri] = r
+		default:
+			return fmt.Errorf("vorbis: unknown residue type %v", t)
 		}
 	}
 
