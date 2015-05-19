@@ -2,6 +2,7 @@ package vorbis
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
