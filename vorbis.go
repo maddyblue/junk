@@ -28,6 +28,7 @@ type Vorbis struct {
 	Comments map[string][]string
 
 	Codebooks []*Codebook
+	Floors    []Floor
 }
 
 func NewVorbis(r io.Reader) (*Vorbis, error) {
@@ -191,7 +192,7 @@ func (v *Vorbis) decodeSetup() error {
 	// floors
 	vorbis_floor_count := v.ReadBits(6) + 1
 	vorbis_floor_types := make([]uint32, vorbis_floor_count)
-	vorbis_floor_configurations := make([]Floor, vorbis_floor_count)
+	v.Floors = make([]Floor, vorbis_floor_count)
 	for i := uint32(0); i < vorbis_floor_count; i++ {
 		f := v.ReadBits(16)
 		vorbis_floor_types[i] = f
@@ -209,7 +210,7 @@ func (v *Vorbis) decodeSetup() error {
 			for i := range f0.book_list {
 				f0.book_list[i] = v.ReadBits(8)
 			}
-			vorbis_floor_configurations[i] = f0
+			v.Floors[i] = f0
 		case 1:
 			f1 := Floor1{
 				partitions: v.ReadBits(5),
@@ -249,7 +250,7 @@ func (v *Vorbis) decodeSetup() error {
 					f1.X_list = append(f1.X_list, v.ReadBits(uint(rangebits)))
 				}
 			}
-			vorbis_floor_configurations[i] = f1
+			v.Floors[i] = f1
 		default:
 			return fmt.Errorf("vorbis: unknown floor type %v", f)
 		}
