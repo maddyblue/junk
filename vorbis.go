@@ -30,6 +30,8 @@ type Vorbis struct {
 	Codebooks []*Codebook
 	Floors    []Floor
 	Residues  []Residue
+	Mappings  []Mapping
+	Modes     []Mode
 }
 
 func NewVorbis(r io.Reader) (*Vorbis, error) {
@@ -121,6 +123,7 @@ const (
 )
 
 var (
+	ErrSetup   = errors.New("vorbis: invalid setup header")
 	ErrFraming = fmt.Errorf("vorbis: expected framing bit")
 )
 
@@ -296,6 +299,67 @@ func (v *Vorbis) decodeSetup() error {
 		default:
 			return fmt.Errorf("vorbis: unknown residue type %v", t)
 		}
+	}
+
+	// mappings
+	vorbis_mapping_count := v.ReadBits(6) + 1
+	v.Mappings = make([]Mapping, vorbis_mapping_count)
+	for mi := uint32(0); mi < vorbis_mapping_count; mi++ {
+		t := v.ReadBits(16)
+		switch t {
+		case 0:
+			m := Mapping{}
+			if v.ReadBool() {
+				m.submaps = v.ReadBits(4) + 1
+			} else {
+				m.submaps = 1
+			}
+			if v.ReadBool() {
+				m.coupling_steps = v.ReadBits(8) + 1
+				ic := uint(ilog(int64(v.Channels) - 1))
+				m.magnitude = make([]uint32, ic)
+				m.angle = make([]uint32, ic)
+				for j := uint32(0); j < m.coupling_steps; j++ {
+					m.magnitude[j] = v.ReadBits(ic)
+					m.angle[j] = v.ReadBits(ic)
+				}
+			}
+			if v.ReadBits(2) != 0 {
+				return errors.New("vorbis: expected 0")
+			}
+			if m.submaps > 1 {
+				m.mux = make([]uint32, v.Channels)
+				for j := uint8(0); j < v.Channels; j++ {
+					m.mux[j] = v.ReadBits(4)
+				}
+			}
+			m.submap_floor = make([]uint32, m.submaps)
+			m.submap_residue = make([]uint32, m.submaps)
+			for j := uint32(0); j < m.submaps; j++ {
+				v.ReadBits(8)
+				m.submap_floor[j] = v.ReadBits(8)
+				m.submap_residue[j] = v.ReadBits(8)
+			}
+			v.Mappings[mi] = m
+		default:
+			return fmt.Errorf("vorbis: unknown mapping type %v", t)
+		}
+	}
+
+	// modes
+	vorbis_mode_count := v.ReadBits(6) + 1
+	v.Modes = make([]Mode, vorbis_mode_count)
+	for mi := uint32(0); mi < vorbis_mode_count; mi++ {
+		m := Mode{
+			blockflag:     v.ReadBool(),
+			windowtype:    v.ReadBits(16),
+			transformtype: v.ReadBits(16),
+			mapping:       v.ReadBits(8),
+		}
+		if m.windowtype != 0 || m.transformtype != 0 {
+			return ErrSetup
+		}
+		v.Modes[mi] = m
 	}
 
 	if v.ReadByte() != 1 {
