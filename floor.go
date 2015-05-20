@@ -1,9 +1,9 @@
 package vorbis
 
-type Floor interface {
+type floor interface {
 }
 
-type Floor0 struct {
+type floor0 struct {
 	order            uint32
 	rate             uint32
 	bark_map_size    uint32
@@ -13,7 +13,7 @@ type Floor0 struct {
 	book_list        []uint32
 }
 
-type Floor1 struct {
+type floor1 struct {
 	partitions           uint32
 	partition_class_list []uint32
 	class_dimensions     []uint32

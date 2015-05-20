@@ -1,6 +1,6 @@
 package vorbis
 
-type Residue struct {
+type residue struct {
 	typ             uint32
 	begin           uint32
 	end             uint32

@@ -1,6 +1,6 @@
 package vorbis
 
-type Mapping struct {
+type mapping struct {
 	submaps        uint32
 	coupling_steps uint32
 	magnitude      []uint32
