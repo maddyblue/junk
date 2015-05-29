@@ -245,6 +245,16 @@ func NewHandler(f func(appengine.Context, http.ResponseWriter, *http.Request)) h
 	}
 }
 
+// NewHandlerFunc returns a new HandlerFunc that will execute f.
+func NewHandlerFunc(f func(appengine.Context, http.ResponseWriter, *http.Request)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		h := handler{
+			f: f,
+		}
+		h.ServeHTTP(w, r)
+	}
+}
+
 type responseWriter struct {
 	http.ResponseWriter
 
