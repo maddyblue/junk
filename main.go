@@ -48,7 +48,8 @@ var (
 	flagUpdate   = flag.Bool("u", false, "update (go get -d -u) used packages")
 	includeTests = flag.Bool("t", false, "import dependencies for _test.go files")
 
-	relpath, gopath, ThirdParty string
+	relpath, ThirdParty string
+	gopath              []string
 )
 
 func main() {
@@ -79,6 +80,7 @@ func main() {
 		log.Fatal(err)
 	}
 	var importSites []string
+	gopath = []string{}
 	for _, s := range filepath.SplitList(os.Getenv("GOPATH")) {
 		s, err := filepath.Abs(s)
 		if err != nil {
@@ -97,9 +99,10 @@ func main() {
 			}
 		}
 		if !strings.HasPrefix(pwd, s) {
+			gopath = append(gopath, s)
 			continue
 		}
-		gopath = s
+		gopath = append([]string{s}, gopath...)
 		relpath = filepath.ToSlash(strings.TrimPrefix(pwd, filepath.Join(s, "src")+string(os.PathSeparator)))
 		break
 	}
@@ -108,7 +111,6 @@ func main() {
 	}
 
 	if *verbose {
-		log.Println("using GOPATH:", gopath)
 		log.Println("using relative path:", relpath)
 	}
 	updated := make(map[string]bool)
@@ -148,7 +150,11 @@ func update(updated map[string]bool) {
 		return nil
 	})
 	for k := range paths {
-		fpath := filepath.Join(gopath, "src", k)
+		fpath, err := findPackage(k)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
 		if *flagUpdate && !updated[k] {
 			updated[k] = true
 			if *verbose {
@@ -166,8 +172,7 @@ func update(updated map[string]bool) {
 		}
 		f, err := os.Open(fpath)
 		if err != nil {
-			log.Printf("%s required, but could not be found at %s", k, fpath)
-			continue
+			log.Fatal(err)
 		}
 		files, err := f.Readdir(0)
 		if err != nil {
@@ -224,6 +229,16 @@ func update(updated map[string]bool) {
 			}
 		}
 	}
+}
+
+func findPackage(name string) (string, error) {
+	for _, gp := range gopath {
+		fpath := filepath.Join(gp, "src", name)
+		if _, err := os.Stat(fpath); err == nil {
+			return fpath, nil
+		}
+	}
+	return "", fmt.Errorf("%s required, but could not be found", name)
 }
 
 func fixImportCheck(body []byte, importPath string) ([]byte, error) {
