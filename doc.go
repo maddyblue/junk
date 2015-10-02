@@ -25,6 +25,8 @@ To use this package, change your HTTP handler functions to use this signature:
 
 Register them in the usual way, wrapping them with NewHandler.
 
+Classic App Engine packages are available at https://godoc.org/gopkg.in/mjibson/v1/appstats.
+
 
 Example
 
