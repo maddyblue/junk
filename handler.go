@@ -28,6 +28,8 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/net/context"
+
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/memcache"
 	"google.golang.org/appengine/user"
@@ -59,7 +61,7 @@ func serveError(w http.ResponseWriter, err error) {
 }
 
 func appstatsHandler(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
+	c := storeContext(appengine.NewContext(r))
 	if appengine.IsDevAppServer() {
 		// noop
 	} else if u := user.Current(c); u == nil {
@@ -75,23 +77,22 @@ func appstatsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if detailsURL == r.URL.Path {
-		details(w, r)
+		details(c, w, r)
 	} else if fileURL == r.URL.Path {
-		file(w, r)
+		file(c, w, r)
 	} else if strings.HasPrefix(r.URL.Path, staticURL) {
 		static(w, r)
 	} else {
-		index(w, r)
+		index(c, w, r)
 	}
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
+func index(c context.Context, w http.ResponseWriter, r *http.Request) {
 	keys := make([]string, modulus)
 	for i := range keys {
 		keys[i] = fmt.Sprintf(keyPart, i*distance)
 	}
 
-	c := newContext(r)
 	items, err := memcache.GetMulti(c, keys)
 	if err != nil {
 		return
@@ -233,12 +234,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 	_ = templates.ExecuteTemplate(w, "main", v)
 }
 
-func details(w http.ResponseWriter, r *http.Request) {
+func details(c context.Context, w http.ResponseWriter, r *http.Request) {
 	i, _ := strconv.Atoi(r.FormValue("time"))
 	qtime := roundTime(i)
 	key := fmt.Sprintf(keyFull, qtime)
-
-	c := newContext(r)
 
 	v := struct {
 		Env             map[string]string
@@ -302,11 +301,10 @@ func details(w http.ResponseWriter, r *http.Request) {
 	_ = templates.ExecuteTemplate(w, "details", v)
 }
 
-func file(w http.ResponseWriter, r *http.Request) {
+func file(c context.Context, w http.ResponseWriter, r *http.Request) {
 	fname := r.URL.Query().Get("f")
 	n := r.URL.Query().Get("n")
 	lineno, _ := strconv.Atoi(n)
-	c := newContext(r)
 
 	f, err := ioutil.ReadFile(fname)
 	if err != nil {

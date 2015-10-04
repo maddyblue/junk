@@ -241,12 +241,6 @@ func storeContext(ctx context.Context) context.Context {
 	return nc
 }
 
-func newContext(r *http.Request) context.Context {
-	ctx := appengine.NewContext(r)
-	nc, _ := appengine.Namespace(ctx, Namespace)
-	return nc
-}
-
 // handler is an http.Handler that records RPC statistics.
 type handler struct {
 	f func(context.Context, http.ResponseWriter, *http.Request)
