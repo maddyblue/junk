@@ -126,8 +126,8 @@ func override(ctx context.Context, service, method string, in, out proto.Message
 	return err
 }
 
-// NewContext creates a new timing-aware context from req.
-func NewContext(r *http.Request) context.Context {
+// newContext creates a new timing-aware context from req.
+func newContext(r *http.Request) context.Context {
 	ctx := appengine.NewContext(r)
 
 	stats := &requestStats{
@@ -286,7 +286,7 @@ func (r responseWriter) WriteHeader(i int) {
 
 func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if ShouldRecord(r) {
-		ctx := NewContext(r)
+		ctx := newContext(r)
 		rw := responseWriter{
 			ResponseWriter: w,
 			stats:          stats(ctx),
