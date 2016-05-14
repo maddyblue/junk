@@ -1,6 +1,6 @@
 def versionMajor = 0
 def versionMinor = 2
-def versionPatch = 6
+def versionPatch = 7
 def versionBuild = 0
 
 buildscript {
@@ -8,7 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
+        classpath 'com.android.tools.build:gradle:2.1.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -19,7 +19,7 @@ repositories {
 
 android {
     compileSdkVersion 18
-    buildToolsVersion '19.1.0'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         minSdkVersion 16
@@ -28,6 +28,8 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
+    // set in ~/.gradle/gradle.properties
+    // http://stackoverflow.com/a/21020469/864236
     signingConfigs {
         release {
             storeFile file(RELEASE_STORE_FILE)
