@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="schalmei">
+<head>
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+</head>
+<body ng-controller="SchalmeiCtrl">
+	<div class="navbar navbar-inverse">
+		<div class="navbar-inner">
+			<a class="brand" href="{{ url "main" }}">schalmei</a>
+			<ul class="nav">
+				<li ng-class="isActive('show-ranks')"><a ng-click="show('show-ranks')">show ranks</a></li>
+				<li ng-class="isActive('create-rank')"><a ng-click="show('create-rank')">create rank</a></li>
+				<li><a href="/_ah/stats/">appstats</a></li>
+				<li><a href="https://github.com/mjibson/schalmei">code</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<form id="create-rank-form" ng-show="shown == 'create-rank'" action="{{ url "create-rank" }}">
+				<input type="text" ng-model="createRankName">
+				<a ng-click="createRank()">create</a>
+			</form>
+
+			<ul id="show-rank-list" ng-show="true || shown == 'show-ranks'" data-url="{{ url "list-ranks" }}">
+				<li ng-repeat="rank in ranks"><a ng-click="show('get-rank', rank)" ng-bind="rank.Rank.Name + ' - ' + rank.Id"></a></li>
+			</ul>
+
+			<div ng-hide="shown">
+				<p>schalmei is a demo app for <a href="http://golang.org">go</a> app engine software. Its purpose is to showcase useful web software for go, and thus encourage more people to develop go on app engine. For a while, python has had much stronger software. With the software below (all of which schalmei uses), I hope to encourage people to entertain the idea of web development using go.</p>
+
+				<ul>
+					<li><a href="http://github.com/mjibson/goon">goon</a>: an auto-caching datastore library, similary to python's NDB</li>
+					<li><a href="http://github.com/mjibson/appstats">appstats</a>: app engine RPC profiling</li>
+					<li><a href="http://godoc.org/github.com/mjibson/MiniProfiler/go/miniprofiler">miniprofiler</a>: a mini-profiler, based on <a href="http://miniprofiler.com">miniprofiler.com</a></li>
+					<li><a href="http://godoc.org/github.com/mjibson/MiniProfiler/go/miniprofiler_gae">miniprofiler_gae</a>: the go app engine edition of miniprofiler</li>
+				</ul>
+			</div>
+
+			<div ng-show="shown == 'get-rank'">
+				<ul>
+					<li ng-bind="'Id: ' + rank.Id"></li>
+					<li ng-bind="'Rank: ' + rank.Rank.Name"></li>
+					<li ng-repeat="note in rank.Notes">
+						<span ng-bind="'Note: ' + note.Note.Freq + ' Hz, ' + note.Note.Blob"></span>
+						<div sch-graph="note.GraphUrl"></div>
+						<div sch-graph="note.PwelchUrl"></div>
+					</li>
+				</ul>
+				<form id="file_form" enctype="multipart/form-data" method="POST">
+					wav: <input type="file" name="file">
+					<p>frequency (Hz): <input type="number" name="freq">
+					<p><input type="submit" value="add note" ng-click="uploadNote()">
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+	<script src="/static/jquery.form.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="/static/schalmei.js"></script>
+
+	<script type="text/javascript">
+		google.load('visualization', '1.0', {'packages':['corechart']});
+	</script>
+
+	{{ . }}
+</body>
+</html>
