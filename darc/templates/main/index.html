@@ -1,0 +1,59 @@
+{% extends "main/default.html" %}
+
+{% block middlebox %}
+
+<div id="middlebox">
+	<div id="leftbox">
+		<div id="promo"><img src="/templates/images/youradhere.jpg" alt="Your Ad Here" /></div>
+		<div id="promowatermark"><img src="/templates/images/greenwatermark.jpg" alt="" /></div>
+		<div id="promotext">
+			Advertise yourself<br/>
+			on plasma screens<br/>
+			all around town.
+		</div>
+		<div id="promobutton">
+			<a href="/ads/"><img src="/templates/images/button-uploadad.jpg" alt="Upload Ad" /></a>
+		</div>
+	</div>
+	<div id="rightbox">
+		<div id="couponwatermark"><img src="/templates/images/couponswatermark.jpg" alt="" /></div>
+		<div id="coupontext">
+			<h1>Coupons</h1>
+			Coming soon...
+			<br /><br />
+			<a href="/coupons/"><img src="/templates/images/button-getcoupons.jpg" alt="Get Coupons" /></a>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Welcome to i-Ads</h1>
+
+<div id="blogquote">
+	<h2>{{ entry.0.title }}</h2>
+	{{ entry.0.short|linebreaks }}
+	<a href="/blog/{{ entry.0.id }}"><img src="/templates/images/button-readmore.jpg" alt="Read More" /></a>
+</div>
+
+{% if entries %}
+<div id="recentarticles">
+	<h3>Recent Articles</h3>
+
+	<div id="listbox">
+		<ul class="listbox">
+		{% for entry in entries %}
+			<li><a href="/blog/{{ entry.id }}">{{ entry.title }}</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+
+	<br /><a href="/blog/"><img src="/templates/images/button-morearticles.jpg" alt="Read More" /></a>
+</div>
+{% endif %}
+
+<div id="clearit"></div>
+
+{% endblock %}

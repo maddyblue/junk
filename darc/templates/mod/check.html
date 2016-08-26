@@ -1,0 +1,51 @@
+{% extends "mod/default.html" %}
+
+{% block title %}
+
+ - Ad Mod
+
+{% endblock %}
+
+{% block content %}
+
+{% if done %}
+
+<p>{{ done }} ad{{ done|pluralize }} marked good.</p>
+
+<p>Proceed to the <a href="{% url darc.mod.views.s3 %}">S3 Upload page</a>.
+
+{% endif %}
+
+{% if ads %}
+
+<form action="." method="post">
+
+{% for ad in ads %}
+<table border="0" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<a href="/uploads/ads/{{ ad.id }}"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="" border="0" /></a>
+			<br /><input type="checkbox" name="{{ ad.id }}"/> Good?
+		</td>
+		<td>
+			user: {{ ad.user }}<br />
+			ad name: {{ ad.name }}<br />
+			type: {{ ad.mimetype }}<br />
+			size: {{ ad.filesize|filesizeformat }}<br />
+			date uploaded: {{ ad.date|date:"D, j M y" }}
+		</td>
+	</tr>
+</table>
+{% endfor %}
+
+<input type="submit" value="Save" />
+
+</form>
+
+{% else %}
+
+<p>No unchecked ads.</p>
+
+{% endif %}
+
+{% endblock %}

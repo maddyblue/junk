@@ -1,0 +1,20 @@
+{% extends "main/default.html" %}
+
+{% block content %}
+
+<h1>New User</h1>
+
+Need an account? Registering is quick.
+
+{% if message %}
+
+<h3 style="text-transform: none;">{{ message }} </h3>
+
+{% endif %}
+
+<form method="post" action="">
+	<table>{{ form }}</table>
+	<input type="submit" value="Register" />
+</form>
+
+{% endblock %}

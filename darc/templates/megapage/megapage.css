@@ -1,0 +1,401 @@
+/* +++ Ad Selector Box +++ */
+
+.box-top-ads{
+	width:330px;
+	height:200px;
+	float:left;
+	background: url(/templates/megapage/images/box-top-middle.jpg) repeat-x;
+}
+.box-top-left{
+	position: absolute;
+	width:7px;
+	margin-left:0px;
+}
+.box-top-middle{
+	position: absolute;
+	width:316px;
+	margin-left:7px;
+}
+.box-top-right{
+	position: absolute;
+	width:7px;
+	margin-left:323px;
+	background:url(/templates/megapage/images/box-top-right.jpg) no-repeat;
+}
+.title{
+	color:#FF6;
+	font-size: 17px;
+	text-align: center;
+	padding-top:5px;
+}
+.thumbs{
+	margin:17px 6px 0px 6px;
+	padding:0px;
+}
+	.thumbs ul{
+		list-style-type: none;
+	}
+	.thumbs li{
+		float:left;
+		padding-left:10px;
+	}
+	.thumbsnormal{
+		padding:1px;
+		background: #1D1D1D;
+		border:1px solid #444;
+		margin-right:13px;
+	}
+	.thumbshover{
+		padding:1px;
+		background: #090;
+		border:1px solid #FF6;
+	}
+.buttons{
+	margin-top:127px;
+	text-align: center;
+	height:34px;
+}
+	#leftydiv{
+		float:left;
+		margin-right:7px;
+	}
+	.pageon{
+		margin-top:11px;
+		background:url(/templates/megapage/images/pageon.jpg) no-repeat;
+		width:11px;
+		height:11px;
+		float:left;
+	}
+	.pageoff{
+		margin-top:11px;
+		background:url(/templates/megapage/images/pageoff.jpg) no-repeat;
+		width:11px;
+		height:11px;
+		float:left;
+	}
+	/*Shopping Cart Page Indicators */
+	.pageon2{
+		margin-top:11px;
+		background:url(/templates/megapage/images/pageon.jpg) no-repeat;
+		width:11px;
+		height:11px;
+		float:left;
+	}
+	.pageoff2{
+		margin-top:11px;
+		background:url(/templates/megapage/images/pageoff.jpg) no-repeat;
+		width:11px;
+		height:11px;
+		float:left;
+	}
+
+	#rightydiv{
+		float:left;
+		margin-left:7px;
+	}
+	.leftbutton{
+		margin:24px 0px 0px 80px;
+		float:left;
+	}
+	.rightbutton{
+		margin:24px 80px 0px 0px;
+		float:right;
+	}
+	/*Shopping Cart Left and Right*/
+	.leftbutton2{
+		margin:20px 0px 0px 20px;
+		float:left;
+	}
+	.rightbutton2{
+		margin:20px 20px 0px 0px;
+		float:right;
+	}
+
+/* +++ Location Selector Box +++ */
+.box-top-locations{
+	width:330px;
+	height:200px;
+	float:right;
+	background: url(/templates/megapage/images/box-top-middle.jpg) repeat-x;
+}
+/* +++ Ad Plus Location Combined Box +++ */
+.box-middle{
+	width:500px;
+	height:150px;
+	background: url(/templates/megapage/images/box-middle-middle.jpg) repeat-x;
+	margin:0 auto;
+}
+.box-middle-left{
+	position: absolute;
+	width:7px;
+	margin-left:0px;
+	font-size:12px;
+}
+	.box-middle-left-date{
+		position: absolute;
+		width:119px;
+		margin-left:7px;
+		height:150px;
+		text-align: left;
+		padding-left:12px;
+	}
+		.box-middle-left-date input{
+			width:82px;
+			border:1px solid #333;
+			background: #000 url(/templates/megapage/images/inputbg.jpg) repeat-x;
+			float:left;
+			margin-left:0px;
+		}
+		.box-middle-left-date img{
+			float:left;
+			padding-top:5px;
+			margin-left:4px;
+		}
+.box-middle-center{
+	position: absolute;
+	width:248px;
+	margin-left:126px;
+	height:150px;
+	background:url(/templates/megapage/images/box-middle-center.jpg) repeat-y;
+}
+.box-middle-center img{
+	padding:1px;
+	background: #1D1D1D;
+	border:1px solid #333;
+}
+.combined-ad{
+	float:left;
+	margin:15px 0px 0px 19px;
+}
+.combined-plus{
+	float:left;
+	margin:49px 0px 0px 12px;
+}
+	.combined-plus img{
+		border:none;
+	}
+.combined-location{
+	float:left;
+	margin:15px 0px 0px 12px;
+}
+.combined-addtocart{
+	width:100%;
+}
+	.combined-addtocart img, .combined-addtocart a img{
+		margin-top:12px;
+		border:none;
+	}
+		.box-middle-right-date{
+			position: absolute;
+			width:119px;
+			margin-left:374px;
+			height:150px;
+			text-align: left;
+			padding-left:18px;
+		}
+		.box-middle-right-date input{
+			width:82px;
+			border:1px solid #333;
+			background: #000 url(/templates/megapage/images/inputbg.jpg) repeat-x;
+			float:left;
+			margin-left:0px;
+		}
+		.box-middle-right-date img{
+			float:left;
+			padding-top:5px;
+			margin-left:4px;
+		}
+.box-middle-right{
+	position: absolute;
+	width:7px;
+	margin-left:493px;
+}
+/* +++ Shopping Cart Container Box +++ */
+.box-bottom{
+	width:310px;
+	height:265px;
+	background: url(/templates/megapage/images/box-bottom-middle.jpg) repeat-x;
+	margin:0 auto;
+}
+.box-bottom-left{
+	position: absolute;
+	width:12px;
+	margin-left:0px;
+}
+.box-bottom-middle{
+	position: absolute;
+	width:286px;
+	margin-left:12px;
+}
+.box-bottom-right{
+	position: absolute;
+	width:12px;
+	margin-left:298px;
+}
+	/*Checkout Box*/
+	.box-bottom-checkout{
+		position:absolute;
+		width:133px;
+		margin-left:357px;
+		color:#F90;
+	}
+	#totalCostText, .lightorange{
+		color:#FC0;
+	}
+	.nobackground{
+		background:none;
+		border:none;
+	}
+.cartbox{
+	width:226px;
+	height:153px;
+	background:url(/templates/megapage/images/cartbox-middle.jpg) repeat-x;
+}
+	.cartbox-left{
+		width:7px;
+		position: absolute;
+	}
+	.cartbox-middle{
+		margin-left:7px;
+		width:212px;
+		position: absolute;
+	}
+	.cartbox-right{
+		margin-left:219px;
+		width:7px;
+		position: absolute;
+	}
+.minicombo{
+	color:#FC0;
+	font-size: 12px;
+	text-align: left;
+	line-height: 160%;
+	float:left;
+	width:45%;
+	margin-left:3px;
+}
+.minicost{
+	color:#0F0;
+	font-size: 12px;
+	text-align: right;
+	line-height: 160%;
+	float:right;
+	width:45%;
+	margin-right:3px;
+}
+.minithumbs{
+	margin-top:5px;
+	background:url(/templates/megapage/images/plusmini.jpg) no-repeat center;
+}
+.minithumbs img{
+	padding:1px;
+	background: #1D1D1D;
+	border:1px solid #444;
+}
+	.leftminithumb{
+		float:left;
+		margin:3px 0px 0px 7px;
+	}
+	.rightminithumb{
+		float:right;
+		margin:3px 7px 0px 0px;
+	}
+.minidate{
+	color:#EEE;
+	font-size:10px;
+	line-height: 120%;
+	margin-top:6px;
+}
+.miniremove{
+	line-height: 120%;
+}
+.miniremoveicon{
+	background:url(/templates/megapage/images/redx2.jpg) no-repeat 0 2px;
+	padding-left:15px;
+	font-size: 12px;
+}
+.miniremove a{
+	color:#FF8689;
+}
+	.miniremove a:hover{
+		color:#E43A3B;
+	}
+
+#bottomindicator{
+	text-align:center;
+	float:left;
+	width:145px;
+	margin:19px 0px 0px 10px;
+}
+
+/* +++ Misc Styles and Structure +++ */
+#bottombox-inner2{
+		padding:20px;
+		display:block;
+		background:url(/templates/megapage/images/plus.jpg) no-repeat center;
+	}
+.clearfix{
+	clear:both;
+	height:0px;
+}
+.widebox{
+	width:100%;
+	text-align: center;
+	clear:both;
+}
+.badnews{
+	font-size:12px;
+	line-height: 150%;
+	text-align: center;
+	padding:0px 12px;
+}
+.badnews a img{
+	margin-top:5px;
+}
+#cartIntro{
+	padding-top:63px;
+	margin-left:-15px;
+	line-height: 120%;
+}
+#cartPagination{
+	float:left;
+	margin-top:20px;
+	display:inline;
+	margin-left: 78px;
+}
+/* +++ Tooltip Customization +++ */
+div#tipDiv {
+  position:absolute;
+  visibility:hidden;
+  left:0; top:0; z-index:10000;
+  background:url(/templates/megapage/images/tooltipbg.jpg) repeat-x;
+  background-color: #111;
+  border:1px solid #000;
+  width:200px;
+
+  padding:8px;
+  color:#999;
+  font-size:12px;
+  line-height:150%;
+}
+
+#tipDiv strong{
+	font-size:15px;
+	display:block;
+	color:#FFF;
+	margin-bottom:3px;
+}
+.locationcontent{
+	text-align:left;
+	padding:6px;
+}
+.locationcontent img{
+	margin-top:10px;
+	border:3px solid #666;
+}
+.address{
+	text-transform:uppercase;
+	color:#777;
+	font-size:11px;
+	line-height:115%;
+}

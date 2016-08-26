@@ -1,0 +1,596 @@
+{% load humanize %}
+
+{% extends "ads/default.html" %}
+
+{% block title %}
+
+ - Ads
+
+{% endblock %}
+
+{% block head %}
+
+{# {{{ #}
+
+<link rel="stylesheet" href="/templates/megapage/megapage.css" type="text/css" />
+<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="/templates/megapage/iehacks.css" />
+<![endif]-->
+
+<!-- Checkout -->
+<script type="text/javascript" src="/templates/megapage/scripts/checkout.js"></script>
+<script type="text/javascript" src="/templates/megapage/scripts/ajax.js"></script>
+
+<!-- jQuery -->
+<script type="text/javascript" src="/templates/megapage/scripts/jquery-1.2.1.min.js"></script>
+
+<!-- jQuery UI (Calendar) -->
+<script type="text/javascript" src="/templates/megapage/scripts/ui.datepicker.js"></script>
+<link rel="stylesheet" href="/templates/megapage/scripts/ui.datepicker.css" type="text/css" />
+
+<!-- Slider -->
+<script type="text/javascript" src="/templates/megapage/scripts/slider.js"></script>
+<script type="text/javascript" src="/templates/megapage/scripts/jquery-easing-compatibility.1.2.js"></script>
+<script type="text/javascript" src="/templates/megapage/scripts/jquery-easing.1.2.js"></script>
+<link rel="stylesheet" href="/templates/megapage/scripts/slider.css" type="text/css" />
+
+<!-- Tooltip -->
+<script src="/templates/megapage/scripts/tooltip/dw_event.js" type="text/javascript"></script>
+<script src="/templates/megapage/scripts/tooltip/dw_viewport.js" type="text/javascript"></script>
+<script src="/templates/megapage/scripts/tooltip/dw_tooltip.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+/*************************************************************************
+  This code is from Dynamic Web Coding at http://www.dyn-web.com/
+  Copyright 2003-5 by Sharon Paine
+  See Terms of Use at http://www.dyn-web.com/bus/terms.html
+  regarding conditions under which you may use this code.
+  This notice must be retained in the code as is!
+*************************************************************************/
+
+function doTooltip(e, msg)
+{
+  if(typeof Tooltip == "undefined" || !Tooltip.ready)
+		return;
+
+  Tooltip.show(e, msg);
+}
+
+function hideTip()
+{
+  if(typeof Tooltip == "undefined" || !Tooltip.ready)
+		return;
+
+  Tooltip.hide();
+}
+
+{% for ad in ads %}
+var ad{{ ad.id }} = '<strong>{{ ad.name }}</strong>Uploaded {{ ad.date|naturalday:"o\n m/d/y" }}';
+{% endfor %}
+
+{% for location in locations %}
+var location{{ location.id}} = '<strong>{{ location.name }}</strong><span class="address">{{ location.address}}<br />{{ location.city }}, {{ location.state }} {{ location.zip }}</span><br /><br /><div class="locationcontent">${{ location.cost }}/day<br />{{ location.statement }}{% if location.screen %}<br />Screen size: {{ location.screen.width }}x{{ location.screen.height }}{% endif %}{% if location.map %}<br /><img src="/uploads/locations/{{ location.id }}_map.jpg" alt="{{ location.name }}" />{% endif %}</div>';
+{% endfor %}
+
+//jQuery Calls
+$(function()
+{
+	$(".thumbsnormal").mouseover(function(){$(this).toggleClass('thumbshover');});
+	$(".thumbsnormal").mouseout(function(){$(this).toggleClass('thumbshover');});
+
+	//Initialize Tooltip
+	Tooltip.init();
+
+	//Date picker
+	today = new Date();
+	tomorrow = new Date();
+	today.setDate(today.getDate() - 1);
+	end = new Date();
+	end.setDate(today.getDate() + 90);
+	$('#startdate').datepicker({defaultDate: tomorrow, minDate: today, maxDate: end});
+	$('#enddate').datepicker({defaultDate: tomorrow, minDate: today, maxDate: end});
+
+});
+
+//Slider...
+jQuery(window).bind("load", function()
+{
+	jQuery("div#slider1").codaSlider()
+	jQuery("div#slider2").codaSlider()
+	jQuery("div#slider3").codaSlider()
+
+	//Remove initial arrows
+	$("#stripNavR2").remove();
+	$("#stripNavL2").remove();
+
+	// ads - left button
+
+	theLeftPanel = 1;
+
+	$('#leftlink0').click(function()
+	{
+		{% for page in adpages %}
+		varLeftPage{{ forloop.counter }} = document.getElementById('leftPage{{ forloop.counter }}');
+		varLeftPage{{ forloop.counter }}.className = 'pageoff';
+		{% endfor %}
+
+		// arbitrary untrue 'if' statement so that the remaining automated conditions can be 'else if' statements
+		if(false)
+		{}
+
+		{% for left, right in adpages %}
+		else if(theLeftPanel == {{ forloop.counter }})
+		{
+			theLeftPanel = {{ left|floatformat }};
+			varLeftPage{{ left|floatformat }}.className = 'pageon';
+		}
+		{% endfor %}
+	});
+
+	// ads - right button
+
+	$('#rightlink0').click(function()
+	{
+		{% for page in adpages %}
+		varLeftPage{{ forloop.counter }} = document.getElementById('leftPage{{ forloop.counter }}');
+		varLeftPage{{ forloop.counter }}.className = 'pageoff';
+		{% endfor %}
+
+		if(false)
+		{}
+
+		{% for left, right in adpages %}
+		else if(theLeftPanel == {{ forloop.counter }})
+		{
+			theLeftPanel = {{ right|floatformat }};
+			varLeftPage{{ right|floatformat }}.className = 'pageon';
+		}
+		{% endfor %}
+	});
+
+	// locations - left button
+
+	theRightPanel = 1;
+
+	$('#leftlink1').click(function()
+	{
+		{% for page in locationpages %}
+		varRightPage{{ forloop.counter }} = document.getElementById('rightPage{{ forloop.counter }}');
+		varRightPage{{ forloop.counter }}.className = 'pageoff';
+		{% endfor %}
+
+		if(false)
+		{}
+
+		{% for Right, right in locationpages %}
+		else if(theRightPanel == {{ forloop.counter }})
+		{
+			theRightPanel = {{ Right|floatformat }};
+			varRightPage{{ Right|floatformat }}.className = 'pageon';
+		}
+		{% endfor %}
+	});
+
+	// locations - right button
+
+	$('#rightlink1').click(function()
+	{
+		{% for page in locationpages %}
+		varRightPage{{ forloop.counter }} = document.getElementById('rightPage{{ forloop.counter }}');
+		varRightPage{{ forloop.counter }}.className = 'pageoff';
+		{% endfor %}
+
+		if(false)
+		{}
+
+		{% for left, right in locationpages %}
+		else if(theRightPanel == {{ forloop.counter }})
+		{
+			theRightPanel = {{ right|floatformat }};
+			varRightPage{{ right|floatformat }}.className = 'pageon';
+		}
+		{% endfor %}
+	});
+});
+
+// combo image swap
+function combineAd(thumb)
+{
+	adImage = document.getElementById("comboAd");
+	adImage.src = "/uploads/ads/" + thumb + "_tn.jpg";
+	cartButton('a'); // go to the function to enable the Add to Cart button
+	theAd = thumb; // get which ad is clicked for the addComboToCart function
+}
+
+function combineLocation(thumb)
+{
+	var locationPrice = [];
+
+	{% for location in locations %}
+	locationPrice[{{ location.id }}] = {{ location.cost }};
+	{% endfor %}
+
+	locationImage = document.getElementById("comboLocation");
+	locationImage.src = "/uploads/locations/" + thumb + "_tn.jpg";
+	cartButton('b'); //Go to the function to enable the Add to Cart button
+	theLocation = thumb;  //Get which location is clicked for the addComboToCart function
+	theCost = locationPrice[thumb];
+}
+
+var readyA, readyB; // initialize the variables outside the function to avoid a script error
+
+function cartButton(setter)
+{
+	//Make sure they've selected a date
+	checkStartDate = document.getElementById('startdate').value;
+	checkEndDate = document.getElementById('enddate').value;
+
+	if(setter == 'a')
+		readyA = "a";
+	else if(setter == 'b')
+		readyB = "b";
+
+	if(
+		readyA == "a" &&
+		readyB == "b" &&
+		checkStartDate.length > 0 &&
+		checkEndDate.length > 0)
+	{
+		//alert(endDate - startDate);
+		/*
+		if(checkStartDate > checkEndDate)
+		{
+			tempDate = checkEndDate;
+			startDate = document.getElementById('startdate');
+			endDate = document.getElementById('enddate');
+			endDate.value = startDate.value;
+			startDate.value = tempDate;
+		}
+		*/
+
+		$("#addtocartbuttonoff").hide();
+		$("#addtocartbutton").show();
+	}
+	// turn off the add to cart button
+	else
+	{
+		$("#addtocartbuttonoff").show();
+		$("#addtocartbutton").hide();
+	}
+}
+
+{# }}} #}
+
+var combos = []; // Initially there are zero combos
+var theMargin = 78; // Initially set dynamic margin
+var currentCombo = 0; // Cart starts on page 1
+var totalCombos = 0;
+var trackCombos = 2; // The combo arrows for the shopping cart start 2 higher than the combo count
+
+// Cart Checkout Data Arrays (build these up to pass on with the Check Out button)
+var IdxId = 0;
+var IdxCost = 1;
+var IdxAd = 2;
+var IdxLocation = 3;
+var IdxStart = 4;
+var IdxEnd = 5;
+var bigCost = Number(0);
+
+function addComboToCart()
+{
+	//Clear the combo once they click Add to Cart
+	adImage = document.getElementById("comboAd");
+	adImage.src = "/templates/megapage/images/selectad.jpg";
+	locationImage = document.getElementById("comboLocation");
+	locationImage.src = "/templates/megapage/images/selectlocation.jpg";
+	//Turn off the Add to Cart Button
+	$("#addtocartbuttonoff").show();
+	$("#addtocartbutton").hide();
+	readyA = "";
+	readyB = "";
+
+	startDate = new Date(checkStartDate);
+	endDate = new Date(checkEndDate);
+	days = Math.round((endDate - startDate)/(1000*60*60*24) + 1);
+
+	var a = [totalCombos++, theCost * days, theAd, theLocation, checkStartDate, checkEndDate];
+
+	combos.push(a);
+
+	//Get rid of the intro text during the first pass
+	if(combos.length == 1)
+		$('#cartIntro').remove();
+
+	//Add another gray dot for the new combo
+	middlePart = '<div id="bottomPage' + a[IdxId] + '" class="pageoff"></div>';
+
+	//Change the Left Margin
+	$("#cartPagination").css("margin-left", theMargin);
+
+	//Show the new pagination
+	$("#cartPagination").append(middlePart);
+
+	theMargin -= 5;
+
+	//Build the Cartbox
+	newCartBox = '<div class="panel"><div class="wrapper"><div class="cartbox" id="cartbox' + a[IdxId] + '"><div class="cartbox-left"><img src="/templates/megapage/images/cartbox-left.jpg" alt="" /></div><div class="cartbox-middle"><div class="minititle"><div class="minicombo" id="totalCombo' + a[IdxId] + '">Combo ' + (a[IdxId] + 1) + '</div><div class="minicost">$<span id="totalCost' + a[IdxId] + '">' + a[IdxCost] + '</span></div><div class="clearfix"></div></div><div class="minithumbs"><div class="leftminithumb"><img src="/uploads/ads/' + a[IdxAd] + '_tn.jpg" alt="' + a[IdxAd] + '" id="totalAd' + a[IdxId] + '" /></div><div class="rightminithumb"><img src="/uploads/locations/' + a[IdxLocation] + '_tn.jpg" alt="' + a[IdxLocation] + '" id="totalLocation' + a[IdxId] + '" /></div><div class="clearfix"></div></div><div class="minidate"><span id="totalStart' + a[IdxId] + '">' + a[IdxStart] + '</span> - <span id="totalEnd' + a[IdxId] + '">' + a[IdxEnd] + '</span></div><div class="miniremove"><a href="#current" class="miniremoveicon" onclick="removeComboFromCart(' + a[IdxId] + ');">Remove</a></div></div><div class="cartbox-right"><img src="/templates/megapage/images/cartbox-right.jpg" alt="" /></div></div></div></div>';
+
+	//Add the new cartbox
+	$("#addHere").append(newCartBox);
+
+	// Get rid of the prior pagination arrows to make room for the new
+	$("#stripNavR" + trackCombos).remove();
+	$("#stripNavL" + trackCombos).remove();
+
+	//Run the slider script again to take the newly-added cart item in to account
+	jQuery("div#slider3").codaSlider();
+
+	//Put the slider back on page 1
+	$("#slider3").children("div.panelContainer").css({left: 0});
+
+	//Keep the cart arrow div number in sync
+	trackCombos++;
+
+	cartPaginate();
+
+	//Get the location cost amounts
+	bigCost = bigCost + a[IdxCost];
+
+	//Set the total cost text down by the checkout button
+	tempCost = document.getElementById("totalCostText");
+	tempCost.innerHTML = bigCost;
+}
+
+function removeComboFromCart(currentCom)
+{
+	c = '';
+	i = 0;
+
+	// find the combo with a matching id
+	for(; i < combos.length; i++)
+	{
+		if(combos[i][IdxId] == currentCom)
+		{
+			c = combos[i];
+			combos.splice(i, 1);
+			break;
+		}
+	}
+
+	if(c == '')
+		return;
+
+	//Get rid of the cartbox (combo)
+	$("#cartbox" + c[IdxId]).parent().parent().remove();
+
+	//Get rid of the prior pagination arrows to make room for the new
+	$("#stripNavR" + trackCombos).remove();
+	$("#stripNavL" + trackCombos).remove();
+
+	//Run the slider script again to take the newly-removed cart item in to account
+	jQuery("div#slider3").codaSlider();
+
+	//Set the cart starting position back to the beginning
+	$("#slider3").children("div.panelContainer").css({left: 0});
+	currentCombo = 0;
+
+	//Get rid of the last pagination dot
+	$("#bottomPage" + c[IdxId]).remove();
+
+	trackCombos++;
+
+	//Reduce the pagination margin by one dot
+	theMargin += 5;
+	$("#cartPagination").css("margin-left", theMargin);
+
+	//Reset Pagination Arrows
+	cartPaginate();
+
+	//Get the location cost amounts
+	bigCost = bigCost - c[IdxCost];
+
+	//Set the total cost text down by the checkout button
+	tempCost = document.getElementById("totalCostText");
+	tempCost.innerHTML = bigCost;
+}
+
+function paginate()
+{
+	//Setup the DOM controls to turn the dots on and off
+	for(g = 0; g < combos.length; g++)
+	{
+		if(g == currentCombo)
+			cartClass = "pageon";
+		else
+			cartClass = "pageoff";
+
+		bp = document.getElementById("bottomPage" + combos[g][IdxId]);
+		bp.className = cartClass;
+	}
+}
+
+function cartPaginate()
+{
+	$("#leftlink" + trackCombos).click(function()
+	{
+		if(currentCombo == 0)
+			currentCombo = combos.length;
+
+		currentCombo = currentCombo - 1;
+
+		paginate();
+	});
+
+	$("#rightlink" + trackCombos).click(function()
+	{
+		currentCombo = currentCombo + 1;
+
+		if(currentCombo == combos.length)
+			currentCombo = 0;
+
+		paginate();
+	});
+
+	paginate();
+}
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<h1>BOOK YOUR ADS</h1>
+
+<div class="box-top-ads">
+	<div class="box-top-left"><img src="/templates/megapage/images/box-top-left.jpg" alt="" /></div>
+	<div class="box-top-middle">
+		<div style="position: absolute; top: 3px;">
+			<a href="upload"><img src="/templates/megapage/images/button-upload.jpg" alt="Upload Ads" /></a>
+		</div>
+		<div class="title">Ads</div>
+		<div class="thumbs">
+
+		{% if ads %}
+			<div class="slider-wrap">
+				<div id="slider1" class="csw">
+					<div class="panelContainer">
+
+					{% for page in ads_paged %}
+						<div class='panel'>
+							<div class='wrapper'>
+
+							{% for ad in page %}
+								<a href='#current' onmouseover="doTooltip(event,ad{{ ad.id }})" onmouseout="hideTip()" onclick="combineAd('{{ ad.id }}');"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="{{ ad.name }}" class="thumbsnormal" /></a>
+							{% endfor %}
+
+							</div>
+						</div>
+					{% endfor %}
+
+					</div>
+				</div>
+			</div>
+
+			<div id="leftindicator" style="float: left; margin: 23px 0px 0px {{ ad_margin }}px;">
+				{% for page in adpages %}
+					{% if forloop.first %}
+						<div id="leftPage{{ forloop.counter }}" class="pageon"></div>
+					{% else %}
+						<div id="leftPage{{ forloop.counter }}" class="pageoff"></div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% else %}
+			<div class="badnews">You must upload an ad before you can add anything to your cart. Click the upload button above to go to the ad management page.</div>
+		{% endif %}
+
+		</div>
+	</div>
+	<div class="box-top-right"><img src="/templates/megapage/images/box-top-right.jpg" alt="" /></div>
+</div>
+
+<div class="box-top-locations">
+	<div class="box-top-left"><img src="/templates/megapage/images/box-top-left.jpg" alt="" /></div>
+	<div class="box-top-middle">
+		<div class="title">Locations</div>
+		<div class="thumbs">
+
+			<div class="slider-wrap">
+				<div id="slider2" class="csw">
+					<div class="panelContainer">
+
+					{% for page in locations_paged %}
+						<div class='panel'>
+							<div class='wrapper'>
+
+							{% for location in page %}
+								<a href="#current" onmouseover="doTooltip(event, location{{ location.id }})" onmouseout="hideTip()" onclick="combineLocation('{{ location.id }}');"><img src="/uploads/locations/{{ location.id }}_tn.jpg" alt="location{{ location.id }}" class="thumbsnormal" /></a>
+							{% endfor %}
+
+							</div>
+						</div>
+					{% endfor %}
+
+					</div>
+				</div>
+			</div>
+
+			<div id="leftindicator" style="float:left; margin:23px 0px 0px {{ location_margin }}px;">
+				{% for page in locationpages %}
+					{% if forloop.first %}
+						<div id="rightPage{{ forloop.counter }}" class="pageon"></div>
+					{% else %}
+						<div id="rightPage{{ forloop.counter }}" class="pageoff"></div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<div class="box-top-right"><img src="/templates/megapage/images/box-top-right.jpg" alt="" /></div>
+</div>
+
+<div class="widebox"><img src="/templates/megapage/images/doubledownarrows.jpg" alt="" /></div>
+
+<div class="widebox">
+	<div class="box-middle">
+		<div class="box-middle-left"><img src="/templates/megapage/images/box-middle-left.jpg" alt="" /></div>
+		<div class="box-middle-left-date">
+		<br /><br />
+			Start Date:<br />
+			<input type="text" id="startdate" onchange="cartButton();" />
+		</div>
+		<div class="box-middle-center">
+			<div class="combined-ad">
+				<img id="comboAd" src="/templates/megapage/images/selectad.jpg" alt="Select an Ad Above" />
+			</div>
+			<div class="combined-plus"><img src="/templates/megapage/images/plusdark.jpg" alt="" /></div>
+			<div class="combined-location">
+				<img id="comboLocation" src="/templates/megapage/images/selectlocation.jpg" alt="Select a Location Above" />
+			</div>
+			<div class="clearfix"></div>
+			<div class="combined-addtocart"><img id="addtocartbuttonoff" src="/templates/megapage/images/button-addtocart-off.jpg" alt="Select an Ad and Location Above" /><a href="#current" onclick="addComboToCart();"><img id="addtocartbutton" src="/templates/megapage/images/button-addtocart.jpg" alt="Add to Cart" style="display:none;" /></a></div>
+		</div>
+		<div class="box-middle-right-date">
+		<br /><br />
+			End Date:<br />
+			<span><input type="text" id="enddate" onchange="cartButton();" /></span>
+		</div>
+		<div class="box-middle-right"><img src="/templates/megapage/images/box-middle-right.jpg" alt="" /></div>
+	</div>
+</div>
+
+<div class="widebox"><img src="/templates/megapage/images/singledownarrow.jpg" alt="" /></div>
+
+<div class="widebox">
+	<div class="box-bottom">
+		<div class="box-bottom-left">
+			<img src="/templates/megapage/images/box-bottom-left.jpg" alt="" />
+		</div>
+		<div class="box-bottom-middle">
+			<div class="title">Your Cart</div>
+			<div class="thumbs">
+				<div class="slider-wrap">
+					<div id="slider3" class="csw2">
+						<div id="cartIntro">Your cart items will appear here.</div>
+						<div class="panelContainer" id="addHere"></div>
+					</div>
+				</div>
+				<div id="cartPagination"></div>
+			</div>
+		</div>
+		<div class="box-bottom-right">
+			<img src="/templates/megapage/images/box-bottom-right.jpg" alt="" />
+		</div>
+		<div class="box-bottom-checkout">
+			<br /><br /><br /><br />
+			Total:
+			<span class="lightorange">$</span>
+			<span id="totalCostText">0</span>
+			<br />
+			<a href="#current" onclick="loadCheckout();"><img src="/templates/megapage/images/button-checkout.jpg" class="nobackground" alt="Click Here to Check Out" /></a>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

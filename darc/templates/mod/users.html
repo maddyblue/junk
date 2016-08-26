@@ -1,0 +1,30 @@
+{% extends "mod/default.html" %}
+
+{% block title %}
+
+ - Users
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Users</h1>
+
+<table border="1" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>Username</td>
+		<td>Email</td>
+		<td>Last login</td>
+		<td>Date joined</td>
+	</tr>
+	{% for u in users %}
+	<tr>
+		<td><a href="{% url darc.mod.views.user_detail u.id %}">{{ u.username }}</a></td>
+		<td>{{ u.email }}</td>
+		<td>{{ u.last_login|date:"j M, h:i A" }}</td>
+		<td>{{ u.date_joined|date:"j M, h:i A" }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

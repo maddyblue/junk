@@ -1,0 +1,96 @@
+{% extends "account/default.html" %}
+
+{% block head %}
+
+<link rel="stylesheet" href="/templates/megapage/megapage.css" type="text/css" />
+<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="/templates/megapage/iehacks.css" />
+<![endif]-->
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Your Account</h1>
+
+<p><a href="{% url darc.account.views.pay %}">Pay your bill</a></p>
+
+<p><a href="{% url darc.account.views.password_change %}">Change password</a></p>
+
+<h2>Reservations</h2>
+
+{% for r in reservations %}
+
+<div class="panel">
+	<div class="wrapper">
+		<div class="cartbox">
+			<div class="cartbox-left">
+				<img src="/templates/megapage/images/cartbox-left.jpg" alt="" />
+			</div>
+			<div class="cartbox-middle">
+				<div class="minititle">
+					<div class="minicombo">
+						Combo {{ r.combo }}
+					</div>
+					<div class="minicost">
+						$<span>{{ r.cost }}</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="minithumbs">
+					<div class="leftminithumb">
+						<img src="/uploads/ads/{{ r.ad.id }}_tn.jpg" alt="{{ r.id }}" />
+					</div>
+					<div class="rightminithumb">
+						<img src="/uploads/locations/{{ r.location.id }}_tn.jpg" alt="{{ r.location }}" />
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="minidate" style="text-align: center;">
+					<span>start: {{ r.start|date:"D, j M Y" }}</span><br />
+					<span>end: {{ r.end|date:"D, j M Y" }}</span>
+				</div>
+			</div>
+			<div class="cartbox-right">
+				<img src="/templates/megapage/images/cartbox-right.jpg" alt="" />
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if not forloop.last %}
+<br />
+{% endif %}
+
+{% endfor %}
+
+{% if not reservations %}
+	<p>No reservations.</p>
+{% endif %}
+
+<p/>
+
+<h2>Uploaded Ads</h2>
+
+{% if ads %}
+
+{% for ad in ads %}
+<table border="0" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<a href="/uploads/ads/{{ ad.id }}"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="" border="0" /></a>
+		</td>
+		<td>
+			{{ ad.name }}, {{ ad.mimetype }}, {{ ad.filesize|filesizeformat }}<br />
+			uploaded: {{ ad.date|date:"D, j M y" }}<br />
+			status: {{ ad.get_status_display }}
+		</td>
+	</tr>
+</table>
+{% endfor %}
+
+{% else %}
+	<p>No uploaded ads.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "main/default.html" %}
+
+{% block content %}
+
+{% if next %}
+<p>You must first login.</p>
+{% endif %}
+
+<h1>Login</h1>
+
+{% if form.has_errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif%}
+
+<form method="post" action=".">
+	<table>
+		<tr><td><label for="id_username">Username:</label></td><td>{{ form.username }}</td></tr>
+		<tr><td><label for="id_password">Password:</label></td><td>{{ form.password }}</td></tr>
+	</table>
+
+	<input type="submit" value="Login" />
+	<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+<h1>New User</h1>
+
+Need an account? Registering is quick.
+
+<form method="post" action="/register/">
+	<table>
+		<tr><th><label for="id_username">Username:</label></th><td><input type="text" name="username" id="id_username" /></td></tr>
+		<tr><th><label for="id_password">Password:</label></th><td><input type="password" name="password" id="id_password" /></td></tr>
+		<tr><th><label for="id_email">Email:</label></th><td><input type="text" name="email" id="id_email" /></td></tr>
+	</table>
+	<input type="submit" value="Register" />
+</form>
+
+{% endblock %}

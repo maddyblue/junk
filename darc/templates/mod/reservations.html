@@ -1,0 +1,31 @@
+{% extends "mod/default.html" %}
+
+{% block title %}
+
+ - Locations
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Today's Reservations</h1>
+
+{% for l in a %}
+<h2>{{ l.0 }}</h2>
+	{% for ad in l.1 %}
+	<table border="0" cellspacing="1" cellpadding="1">
+		<tr>
+			<td>
+				<a href="/uploads/ads/{{ ad.id }}"><img src="/uploads/ads/{{ ad.id }}_tn.jpg" alt="" border="0" /></a>
+			</td>
+			<td>
+				user: {{ ad.user }}<br />
+				ad name: {{ ad.name }}<br />
+				date uploaded: {{ ad.date|date:"D, j M y" }}
+			</td>
+		</tr>
+	</table>
+	{% endfor %}
+{% endfor %}
+
+{% endblock %}

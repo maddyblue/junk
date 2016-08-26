@@ -1,0 +1,33 @@
+{% extends "ads/default.html" %}
+
+{% block title %}
+
+ - Ad Management
+
+{% endblock %}
+
+{% block content %}
+
+{% if fail %}
+	<p>{{ fail }}</p>
+{% else %}
+	{% if upload %}
+		<p>Upload of {{ upload }} successful.</p>
+	{% endif %}
+{% endif %}
+
+<h1>UPLOAD AN AD</h1>
+
+<form enctype="multipart/form-data" method="post" action="">
+<table>{{ form }}</table>
+<input type="submit" value="Upload" />
+</form>
+
+<p>We support all image formats including: bmp, gif, jpg, png, tiff. No videos at the moment.</p>
+
+<p>Do you need help creating your ad? Please contact us!</p>
+
+<p>(970) 690-3928
+<br/><a href="mailto:admin@i-ads.com">admin@i-ads.com</a></p>
+
+{% endblock %}

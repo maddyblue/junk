@@ -1,0 +1,6 @@
+*.pyc
+*~
+darc.db
+media
+settings.py
+uploads
