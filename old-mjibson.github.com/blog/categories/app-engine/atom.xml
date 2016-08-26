@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: app engine | Matt Jibson's Blog]]></title>
+  <link href="http://mattjibson.com/blog/categories/app-engine/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
+  <author>
+    <name><![CDATA[Matt Jibson]]></name>
+    <email><![CDATA[matt.jibson@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Go Read: Open-Source Google Reader Clone]]></title>
+    <link href="http://mattjibson.com/blog/2013/06/26/go-read-open-source-google-reader-clone/"/>
+    <updated>2013-06-26T23:20:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2013/06/26/go-read-open-source-google-reader-clone</id>
+    <content type="html"><![CDATA[<p>I would like to announce the release of <a href="http://www.goread.io">Go Read</a>. It as a Google Reader clone, and designed to be close to its simplicity and cleanliness. I wanted to build something as close to Google Reader as made sense for one person to build in a few months. Since the announcement, numerous clones have been written, and some existing ones were made known. I tried most of them and disliked them for various reasons. It seemed interesting and fun to make my own that would serve exactly my needs. I hope others find it useful.</p>
+
+<p><a href="http://www.goread.io">Try it out:</a></p>
+
+<p><a href="http://www.goread.io/"><img src="/assets/images/goread-all.png"></a></p>
+
+<p>Specifically, I wanted:</p>
+
+<ol>
+<li>importing of existing google reader and OPML feeds</li>
+<li>a web page with decent mobile support</li>
+<li>to not install anything ever</li>
+<li>a relatively similar look to Google Reader</li>
+<li>the same keyboard shortcut keys</li>
+<li>snappy and fast</li>
+</ol>
+
+
+<h2>implementation</h2>
+
+<p>Feed readers are difficult.</p>
+
+<p>One of the biggest problems with the readers I tried over the last months was scalability. While on the front page of HN, they were slow and unusable. Many then ended up restricting their demo tier to something useless or took so long to import my feeds that I just forgot about them and never went back. I wanted to architect a reader whose scale would be limited only by how much I was willing to pay for servers. Newsblur's early tweets suggested that the database was the bottle neck - they could not simply add new machines because it was not designed to use them. I chose the <a href="http://golang.org">go</a> runtime of <a href="https://developers.google.com/appengine/">app engine</a> and attempted to design the data structures in a way that allowed concurrency. Depending on the traffic I get, we will see if I succeeded.</p>
+
+<p>The second big difficulty is the lack of standards compliance. Most feeds are formatted more-or-less correctly, but you must support three formats (RSS, RDF, Atom). The number of date formats we encountered is comical (so much so that I <a href="http://rssdateformats.tumblr.com/">started a blog</a> to document them). At current count, there are <a href="https://github.com/mjibson/goread/blob/0387db10bd9fd9ccd90d557fa30b6e494efa577a/goapp/utils.go#L129">around 60</a> date formats I've seen. There are others that are just not parsable:</p>
+
+<ul>
+<li><a href="http://www.threewordphrase.com/rss.xml">Wed, 18 2012</a></li>
+<li><a href="http://www.airtightnetworks.com/fileadmin/rss/press_releases.xml">Tue, 3 Febuary 2010 00:00:00 IST</a></li>
+<li><a href="http://us.blizzard.com/en-us/news/rss.xml">Tue, 15 May 2012 24:05:00 UTC</a></li>
+<li><a href="http://www.alta.si/Rss/?id=1">čet, 24 maj 2012 00:00:00</a></li>
+</ul>
+
+
+<p>To make it snappy and fast, <a href="http://angularjs.org/">angularjs</a> is used. A single page is loaded, and all interaction is JSON. Background requests are made to save read stories, save options, fetch the needed story content. This allows us to render changes to the user even if the server takes a bit to process them - we need to wait for returns to change the UI. Angular's data binding is just pleasant. It feels fast.</p>
+
+<p>The entire source is <a href="https://github.com/mjibson/goread">on github</a> under the ISC license. Some other readers are open source, but appeared quite difficult to actually install. Using app engine allows go read to be easily run by anyone else by basically changing a single line; instructions are in the repo. A few hundred feeds can be run under the app engine free quota (number of users is basically unimportant to datastore use).</p>
+
+<h2>future</h2>
+
+<p>Current costs are a few dollars a week. If HN ends up liking it, I assume that will multiply. I plan to add non-annoying ads that are removable with a modest fee to support it. If go read can pay for itself, I will be happy.</p>
+
+<p>There are a few features that are not yet implemented and certainly some bugs. Having a full Google Reader API would be beneficial to the existing reader apps. Pubsubhubbub support is missing. I am unlikely to consider major UI changes or great deviations from the standard reader feature set, but good ones could be proposed. I plan on using go read and improving it as I can.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Appstats for Go]]></title>
+    <link href="http://mattjibson.com/blog/2013/02/05/appstats-for-go/"/>
+    <updated>2013-02-05T01:56:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/05/appstats-for-go</id>
+    <content type="html"><![CDATA[<p>I would like to announce the release of appstats for go. Installation instructions are <a href="http://godoc.org/github.com/mjibson/appstats">available on godoc.org</a>. I'd like to thank Dave Symonds for <a href="https://groups.google.com/forum/?fromgroups=#!topic/google-appengine-go/laOsfI1dSGY">his help</a> on this project.</p>
+
+<p>A <a href="http://schalmei-go.appspot.com/">demo site</a> is available.</p>
+
+<p><a href="/assets/images/appstats-timeline.png"><img src="/assets/images/appstats-timeline.png"></a></p>
+
+<p><a href="https://developers.google.com/appengine/docs/python/tools/appstats">Appstats</a> is an incredibly useful library for the python (and java) runtimes. The go runtime has had no similar library, adding to the difficulty of developing significant apps. I'd like to describe a bit about how appstats is implemented (applies to python, as well) and where I think the go runtime is today.</p>
+
+<h2>implementation</h2>
+
+<p>Appstats for go was implemented by copying the python HTML templates, examining the source, and attempting to make something work in go.</p>
+
+<h3>intercepting the data</h3>
+
+<p>In order for appstats to work pleasantly, it needs to automatically populate data from the HTTP request and intercept all RPC calls to app engine's services (datastore, memcache, etc.). This is done by a wrapper that provides an <code>appengine.Context</code> instance to a handler function. Both the <code>http.ResponseWriter</code> and <code>appengine.Context</code> variables are actually appstats structs that forward importart calls and record timings and data. Go routines are fully supported: all of the internals are thread-safe, and appstats waits for all RPC calls to complete before serializing and saving its data.</p>
+
+<h3>persist to memcache</h3>
+
+<p>I had always wondered how python appstats stored its data. It was obviously in memcache, but it was interesting how it was able to so quickly store so many requests and fetch them all. How did that work? The timestamp on a request (well, just <code>time.Now()</code> when appstats starts) is used. The current count of microseconds is the memcache key to a request. If it overwrites another request, that's ok. For example, a request that happened at <code>04:10:40.40567</code> gets the key <code>40500</code>. The final two digits are converted to 0 so that we can limit the number of keys to 1000. Then, to fetch them all, appstats generates all 1000 possible keys and requests them from memcache. Only existing keys are returned. Each request stores a partial (for the index dashboard) and full (for the details page) item in memcache, with the type ("part" or "full") appended to the key name.</p>
+
+<h3>things it doesn't have</h3>
+
+<p>There are a few things that python appstats does that this implementation does not (yet). Some may not be possible ever, and some may require Google to help us out a bit:</p>
+
+<ul>
+<li>full RPC cost information (only writes cost, currently; reads and small ops not yet implemented)</li>
+<li>stack traces with variables and values at each stack frame</li>
+<li>protobuf examination for better details (in the "Response" and "Request" lines of each RPC call on the details page)</li>
+</ul>
+
+
+<h2>today's app engine go runtime</h2>
+
+<p>The two killer features of the python runtime on app engine are NDB and appstats. I have been refusing to make a serious app with the go runtime because of this lack. To address those concerns, I have created <a href="https://github.com/mjibson/goon">goon</a> (an NDB-like library for go) and appstats. With the addition of these two libraries, I believe <strong>the go runtime can now compete with python</strong>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[webapp2 sessions with the blobstore]]></title>
+    <link href="http://mattjibson.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/"/>
+    <updated>2011-09-11T16:01:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore</id>
+    <content type="html"><![CDATA[<p>I recently started using <a href="http://webapp-improved.appspot.com/api/webapp2_extras/sessions.html">webapp2 sessions</a>, and was happy with how they work. However, when trying to access sessions during an upload to the blobstore, I was not able to since the BlobstoreUploadHandler did not inherit from the new BaseHandler I created as directed by the webapp2 session instructions. I wanted to do this to send a message to the user that their upload was successful, using the <code>add_flash()</code> function. Appending <code>?message=Upload successful.</code> to the redirect URL would have worked, but is lame.</p>
+
+<p>Trying to use it through multiple inheritance also fails:
+<code>class EntryUploadHandler(blobstore_handlers.BlobstoreUploadHandler, BaseUploadHandler):</code>
+with some error.</p>
+
+<p>The solution was to create a BaseUploadHandler class with special handling for sessions. It appears that the upload handler doesn't act the same as a normal RequestHandler, so you have to do everything in one place:
+`class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):</p>
+
+<pre><code>def add_message(self, level, message):
+    store = sessions.get_store(request=self.request)
+    session = store.get_session()
+    session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
+    store.save_sessions(self.response)`
+</code></pre>
+
+<p>Full code <a href="https://github.com/mjibson/journalr/blob/master/main.py">here</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

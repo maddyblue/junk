@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: node | Matt Jibson's Blog]]></title>
+  <link href="http://mattjibson.com/blog/categories/node/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
+  <author>
+    <name><![CDATA[Matt Jibson]]></name>
+    <email><![CDATA[matt.jibson@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Careers Localization, part 3: Extraction with Roslyn and Uglify]]></title>
+    <link href="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
+    <updated>2013-03-01T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
+    <content type="html"><![CDATA[<p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
+
+<p>The difficulty is to extract all of the strings so that they can be sent to translators. Compounding this difficulty, we also must make sure to send the correct number of <strong>plural forms</strong> to the translators. Look at the example below. <code>__count</code> does not appear in the translated string, only in the values object. This means we must, at extraction time, understand these value objects and be able to reason about them---we must know their types.</p>
+
+<p><code>cpp
+_s("There is a unicorn", new { __count = 3 }) // "There are some unicorns"
+</code></p>
+
+<p>There are a few bad ways to do this:</p>
+
+<ul>
+<li>build a parser by hand to deal with this (possible, but fragile, error-prone, and silently oblivious to things it does not support)</li>
+<li>search or grep</li>
+<li><a href="http://stackoverflow.com/a/1732454/864236">regex</a></li>
+</ul>
+
+
+<p>Our first solution was the hand-built parser. It worked reasonbly well, but there were known, unfixable bugs. We needed a solution that allowed us to have full syntatic and semantic understanding of source code files. Syntax for knowing the tree of the source code: function calls, argument lists, object access. Semantic for seeing into object types and values.</p>
+
+<h2>C# and Razor extraction with Roslyn</h2>
+
+<p>The C# team at Microsoft has been working on a project called <a href="http://msdn.microsoft.com/en-us/vstudio/roslyn.aspx">Roslyn</a>. It is a programmatic way to access the syntax tree and semantic model of C# files. That means that we can hand it a C# file and then search through it looking for certain kinds of things, and act on them. Roslyn comes with a SyntaxWalker class that walks over each node. You can override the one you want. In our case, we want any invocation (function call) named <code>_s</code> or <code>_m</code>:</p>
+
+<p>``` cpp C#
+private static readonly IEnumerable<string> SINGLE_LINE = new[] { "<em>s", "</em>m" };
+public override void VisitInvocationExpression(InvocationExpressionSyntax node)
+{</p>
+
+<pre><code>base.VisitInvocationExpression(node);
+var callname = node.Expression.GetText().ToString();
+if (SINGLE_LINE.Any(callname.EndsWith))
+{
+    var stringInfo = StringInfo.Create(node.ArgumentList, model);
+    if (stringInfo != null)
+        // save it somewhere
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Now we're trying to create a new <code>StringInfo</code> (just a container class). We need to examine our <code>node.ArgumentList</code> and see if the first argument is a string. We use C#'s dynamic feature coupled with various ways to call <code>StringInfo.Create</code> to easily support different types of arguments (noted in comments above the functions):</p>
+
+<p>```
+// _s("string", object) (object may contain __count)
+public static StringInfo Create(ArgumentListSyntax args, ISemanticModel model)
+{</p>
+
+<pre><code>var first = args.Arguments.FirstOrDefault();
+if (first == null || first.Expression.Kind != SyntaxKind.StringLiteralExpression)
+    return null;
+
+var stringInfo = new StringInfo {
+    Text = first.Expression.GetFirstToken().ValueText,
+};
+
+var second = args.Arguments.Skip(1).FirstOrDefault();
+if (second != null)
+    stringInfo.Count = HasCount((dynamic)second.Expression, model);
+
+return stringInfo;
+</code></pre>
+
+<p>}</p>
+
+<p>// _s("string only") (no object, no __count)
+public static StringInfo Create(LiteralExpressionSyntax literal, ISemanticModel model)
+{</p>
+
+<pre><code>if (literal == null)
+    return null;
+
+return new StringInfo {
+    Text = literal.Token.ValueText,
+    Count = false,
+};
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Ok, now we've got our string. Next we need to figure out if <code>__count</code> is part of the object. We've implemented various ways to determine <code>HasCount()</code>, as referenced above on line 14. Again, C#'s dynamic proves useful.</p>
+
+<p>```
+private const string COUNT = "__count";</p>
+
+<p>// _s("string", new { __count = 1 })
+public static bool HasCount(AnonymousObjectCreationExpressionSyntax arg, ISemanticModel model)
+{</p>
+
+<pre><code>var result = arg.Initializers.Any(x =&gt;
+    {
+        if(x.NameEquals != null)
+            return x.NameEquals.Name.Identifier.ValueText == COUNT; // see if __count is part of the object
+        return HasCount((dynamic)x.Expression, model); // otherwise throw it back
+    });
+return result;
+</code></pre>
+
+<p>}</p>
+
+<p>// _s("string", obj)
+public static bool HasCount(IdentifierNameSyntax arg, ISemanticModel model)
+{</p>
+
+<pre><code>// we already have an object, just see if it has __count
+var symbols = model.LookupSymbols(arg.Span.Start, name: arg.Identifier.ValueText);
+var first = symbols.First();
+TypeSymbol type = ((dynamic)first).Type;
+return type.GetMembers(COUNT).Any();
+</code></pre>
+
+<p>}</p>
+
+<p>// _s("string", obj.member)
+public static bool HasCount(MemberAccessExpressionSyntax arg, ISemanticModel model)
+{</p>
+
+<pre><code>// extract out member...
+var name = arg.Expression as IdentifierNameSyntax;
+if (name != null)
+    // ...and try some of our above functions
+    return HasCount(name, model);
+return false;
+</code></pre>
+
+<p>}</p>
+
+<p>// anything else
+public static bool HasCount(ExpressionSyntax arg, ISemanticModel model)
+{</p>
+
+<pre><code>return false;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>The above tries all variants (that were in our code) that might contain <code>__count</code> somehow. The use of dynamic allows us to not care about the kind of expression, which is determined during runtime, and then the appropriate version of <code>HasCount()</code> is called. Here's <a href="https://gist.github.com/mjibson/5052106#file-extractor-cs">a gist</a> of it all (it's got some other features not listed here).</p>
+
+<p>The above covers our C# controllers. For the Razor views, we cheat a bit. The ASP.NET compiler is invoked which converts the views into C# files, then the same extraction logic is run on those. This is much easier than trying to write a full razor parser.</p>
+
+<h2>JavaScript extraction with UglifyJS</h2>
+
+<p>For JavaScript, we use a similar technique. <a href="https://github.com/mishoo/UglifyJS">UglifyJS</a> is a JavaScript-based JavaScript parser. It also can return a syntax tree, which we can examine for uses of <code>_s</code>, from which we can extract strings and objects. It's a pretty hideous function and not worth pasting, but <a href="https://gist.github.com/mjibson/5052106#file-extractor-js">here it is</a>.</p>
+
+<p>Both of these extractors yield JSON, which is processed in node and sent off to our translation service. We also have a dashboard (built with <a href="http://angularjs.org/">AngularJS</a>) to view all translations, fix them, and reprocess all the files.</p>
+
+<h2>Conclusion</h2>
+
+<p>Having two full language parsers allows us to be flexible. Both our C# and JavaScript implementations are equally functional at all levels---API, extraction, display---allowing us to have one unified API in our codebase.</p>
+
+<p>Translation and localization are hard. We spent months refactoring and extending our codebase to support it. But now, we can change, add, and translate strings with little effort, because our tools handle all the hard stuff. If you care about having quality translations (supporting dynamic text insertion and pluralization), whichever solution you use (resource files or gettext-style) must be able to fully understand your code so that it can generate high-quality output to send to translators.</p>
+]]></content>
+  </entry>
+  
+</feed>

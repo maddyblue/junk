@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: webapp2 | Matt Jibson's Blog]]></title>
+  <link href="http://mattjibson.com/blog/categories/webapp2/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
+  <author>
+    <name><![CDATA[Matt Jibson]]></name>
+    <email><![CDATA[matt.jibson@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[webapp2 sessions with the blobstore]]></title>
+    <link href="http://mattjibson.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore/"/>
+    <updated>2011-09-11T16:01:00-04:00</updated>
+    <id>http://mattjibson.com/blog/2011/09/11/webapp2-sessions-with-the-blobstore</id>
+    <content type="html"><![CDATA[<p>I recently started using <a href="http://webapp-improved.appspot.com/api/webapp2_extras/sessions.html">webapp2 sessions</a>, and was happy with how they work. However, when trying to access sessions during an upload to the blobstore, I was not able to since the BlobstoreUploadHandler did not inherit from the new BaseHandler I created as directed by the webapp2 session instructions. I wanted to do this to send a message to the user that their upload was successful, using the <code>add_flash()</code> function. Appending <code>?message=Upload successful.</code> to the redirect URL would have worked, but is lame.</p>
+
+<p>Trying to use it through multiple inheritance also fails:
+<code>class EntryUploadHandler(blobstore_handlers.BlobstoreUploadHandler, BaseUploadHandler):</code>
+with some error.</p>
+
+<p>The solution was to create a BaseUploadHandler class with special handling for sessions. It appears that the upload handler doesn't act the same as a normal RequestHandler, so you have to do everything in one place:
+`class BaseUploadHandler(blobstore_handlers.BlobstoreUploadHandler):</p>
+
+<pre><code>def add_message(self, level, message):
+    store = sessions.get_store(request=self.request)
+    session = store.get_session()
+    session.add_flash(message, level, BaseHandler.MESSAGE_KEY)
+    store.save_sessions(self.response)`
+</code></pre>
+
+<p>Full code <a href="https://github.com/mjibson/journalr/blob/master/main.py">here</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

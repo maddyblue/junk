@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Perceptual Diffs at Stack Overflow - Matt Jibson's Blog</title>
+  <meta name="author" content="Matt Jibson">
+
+  
+  <meta name="description" content="pdiffs are worth the time After hearing about Brett Slatkin&#8217;s discussion of perceptual diffs, I wanted to try it out on Stack Overflow Careers &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Matt Jibson's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26568697-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Matt Jibson's Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mattjibson.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Perceptual Diffs at Stack Overflow</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-11T01:03:00-04:00" pubdate data-updated="true">Jun 11<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>pdiffs are worth the time</h1>
+
+<p>After hearing about Brett Slatkin&#8217;s discussion of <a href="http://www.youtube.com/watch?v=UMnZiTL0tUc">perceptual diffs</a>, I wanted to try it out on <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a>. I wasn&#8217;t convinced it would be worth the time to implement. But then I started keeping a list of the bugs it would have found. These bugs were hard to find and solve because they were so strange. A CSS refactor missed some rare pages. Changing newlines in our files from <code>\r\n</code> to <code>\n</code> broke multiline strings on localized pages (checksum changed, so it couldn&#8217;t find the localized strings). Other obscure things. Each time this happened I thought that pdiff would have found it before we did. Eventually it became clear that it was worth the time investment.</p>
+
+<h1>implementation</h1>
+
+<p>I decided to use the same deployment style as perscribed in the videos: when new code is pushed, UI tests run, and pdiffs run separately but in parallel. This wouldn&#8217;t add any time to our commit-build-test-deploy cycle. And we could see if there were any problems before deploying to production.</p>
+
+<p><img src="/assets/images/pdiff-build.png"></p>
+
+<p>Our pdiff step is implemented as its own nunit test class in its own category (so it can be run separately from our UI tests). We have a list of URLS and run a selenium process to screenshot each of them in all of our supported languages. Some pages need user input, so we support running arbitrary code before screenshotting. Screenshots are saved on a network drive addressed by their URL, some other identifying string, and build number.</p>
+
+<p>The second step performs the actual diffing. A process recurses through the directories and compares any files with identical URLs and identifying strings, sorted by build number. We pdiff the latest two. There is a free implementation of pdiff online, but that requires calling out to an executable. It turns out writing a naive pdiff implementation is about <a href="https://github.com/mjibson/pdiff/blob/a5974e7e175f2ba53987c53b1596cb27fc85e5a6/pdiff.go#L67">10 lines of code</a>, so we just implmented it ourselves. It&#8217;s trivial to read in two images and compare each pixel. To generate the diff image, start with black and write red if the pixels aren&#8217;t the same. Now we have a list of pdiffs. A static html file showing the pdiffed images is generated. If there are differing images, we have a chat bot (named pdiffy) that announces to our developer room for review.</p>
+
+<p><img src="/assets/images/pdiff-chat.png"></p>
+
+<h1>results</h1>
+
+<p>It was just a few days of work to get this all done. The week after it was running, it found an unpleasant and invisible bug. We were releasing a new feature that needed to turn on at a certain date, and we were off-by-one on the year. pdiff caught it before it could go out.</p>
+
+<p>There are problems. First, it generates lots of false positives. This is because some scripts take a few seconds to initialize, so we have to wait a while before taking a screenshot. Sometimes it&#8217;s not enough, so subtle things change. I&#8217;m bumping up the wait times until these stop. Second, since there&#8217;s no real server, just some static html pages, it&#8217;s not super friendly to use. Ideally, a pdiff server would maintain a list of images that needed review instead of just telling us something changed. Then we wouldn&#8217;t duplicate work of reviewing images some one else already has. This requires a full server that knows what&#8217;s going on. Haven&#8217;t had time for this yet. Finally, we are currently only running pdiff on logged-out, static pages. Pages with dynamic content (i.e., showing random jobs) are not being tested since we have to add server support so it always renders with the same content and user state.</p>
+
+<p>For the future, I am planning on making a REST-like pdiff server running on app engine. I have a <a href="https://github.com/mjibson/go-pdiff">project started already</a> that is partially functional. I chose not to use <a href="https://github.com/bslatkin/dpxdt">dpxdt</a> because I like running things on app engine. And now that <a href="https://cloud.google.com/products/compute-engine">GCE</a> is generally available, it&#8217;s possible to use that to take screen shots. And the go-pdiff backend is just an interface, which means it&#8217;s possible to add a redis or sql backend, and make a vagrant config so it&#8217;s easy to spin up your own internal pdiff server if you don&#8217;t want to use the app engine hosted one.</p>
+
+<h1>conclusion</h1>
+
+<p>Perceptual diffs are not that hard to implement. There are not lots of drop in solutions now. But it is so straightforward to implement, and can catch so many hard kinds of bugs that nothing else can, that it is worth the time and effort.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Jibson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-11T01:03:00-04:00" pubdate data-updated="true">Jun 11<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/careers/'>careers</a>, <a class='category' href='/blog/categories/pdiff/'>pdiff</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow/" data-via="mjibson" data-counturl="http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/01/careers-localization-part-3-extraction/" title="Previous Post: Careers Localization, part 3: Extraction with Roslyn and Uglify">&laquo; Careers Localization, part 3: Extraction with Roslyn and Uglify</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/06/26/go-read-open-source-google-reader-clone/" title="Next Post: Go Read: Open-Source Google Reader Clone">Go Read: Open-Source Google Reader Clone &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+	<h1><a href="/about">About Matt</a></h1>
+	<p><b>Matt Jibson</b> works at <a href="http://stackexchange.com/">Stack Exchange</a> on <a href="http://careers.stackoverflow.com/">Careers 2.0</a>. I play piano and pipe organ.
+	</p>
+	<p>I'm on <a href="https://github.com/mjibson">GitHub</a> and <a href="https://twitter.com/mjibson">Twitter</a>.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/26/go-read-open-source-google-reader-clone/">Go Read: Open-Source Google Reader Clone</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/11/perceptual-diffs-at-stack-overflow/">Perceptual Diffs at Stack Overflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/01/careers-localization-part-3-extraction/">Careers Localization, part 3: Extraction with Roslyn and Uglify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/careers-localization-part-2-api/">Careers Localization, part 2: The API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("mjibson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/mjibson" class="twitter-follow-button" data-show-count="false">Follow @mjibson</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Matt Jibson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'mjibson-blog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow/';
+        var disqus_url = 'http://mattjibson.com/blog/2013/06/11/perceptual-diffs-at-stack-overflow/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

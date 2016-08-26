@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Careers Localization, part 3: Extraction with Roslyn and Uglify - Matt Jibson's Blog</title>
+  <meta name="author" content="Matt Jibson">
+
+  
+  <meta name="description" content="Previously we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: text extraction from the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Matt Jibson's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26568697-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Matt Jibson's Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:mattjibson.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Careers Localization, part 3: Extraction with Roslyn and Uglify</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-01T15:52:00-05:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
+
+<p>The difficulty is to extract all of the strings so that they can be sent to translators. Compounding this difficulty, we also must make sure to send the correct number of <strong>plural forms</strong> to the translators. Look at the example below. <code>__count</code> does not appear in the translated string, only in the values object. This means we must, at extraction time, understand these value objects and be able to reason about them&#8212;we must know their types.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">_s</span><span class="p">(</span><span class="s">&quot;There is a unicorn&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">__count</span> <span class="o">=</span> <span class="mi">3</span> <span class="p">})</span> <span class="c1">// &quot;There are some unicorns&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are a few bad ways to do this:</p>
+
+<ul>
+<li>build a parser by hand to deal with this (possible, but fragile, error-prone, and silently oblivious to things it does not support)</li>
+<li>search or grep</li>
+<li><a href="http://stackoverflow.com/a/1732454/864236">regex</a></li>
+</ul>
+
+
+<p>Our first solution was the hand-built parser. It worked reasonbly well, but there were known, unfixable bugs. We needed a solution that allowed us to have full syntatic and semantic understanding of source code files. Syntax for knowing the tree of the source code: function calls, argument lists, object access. Semantic for seeing into object types and values.</p>
+
+<h2>C# and Razor extraction with Roslyn</h2>
+
+<p>The C# team at Microsoft has been working on a project called <a href="http://msdn.microsoft.com/en-us/vstudio/roslyn.aspx">Roslyn</a>. It is a programmatic way to access the syntax tree and semantic model of C# files. That means that we can hand it a C# file and then search through it looking for certain kinds of things, and act on them. Roslyn comes with a SyntaxWalker class that walks over each node. You can override the one you want. In our case, we want any invocation (function call) named <code>_s</code> or <code>_m</code>:</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">private</span> <span class="k">static</span> <span class="n">readonly</span> <span class="n">IEnumerable</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">SINGLE_LINE</span> <span class="o">=</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">&quot;_s&quot;</span><span class="p">,</span> <span class="s">&quot;_m&quot;</span> <span class="p">};</span>
+</span><span class='line'><span class="k">public</span> <span class="n">override</span> <span class="kt">void</span> <span class="n">VisitInvocationExpression</span><span class="p">(</span><span class="n">InvocationExpressionSyntax</span> <span class="n">node</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">base</span><span class="p">.</span><span class="n">VisitInvocationExpression</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">callname</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">Expression</span><span class="p">.</span><span class="n">GetText</span><span class="p">().</span><span class="n">ToString</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">SINGLE_LINE</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">callname</span><span class="p">.</span><span class="n">EndsWith</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">var</span> <span class="n">stringInfo</span> <span class="o">=</span> <span class="n">StringInfo</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">stringInfo</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>          <span class="c1">// save it somewhere</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we&#8217;re trying to create a new <code>StringInfo</code> (just a container class). We need to examine our <code>node.ArgumentList</code> and see if the first argument is a string. We use C#&#8217;s dynamic feature coupled with various ways to call <code>StringInfo.Create</code> to easily support different types of arguments (noted in comments above the functions):</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="c1">// _s(&quot;string&quot;, object) (object may contain __count)</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="n">StringInfo</span> <span class="n">Create</span><span class="p">(</span><span class="n">ArgumentListSyntax</span> <span class="n">args</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">first</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">Arguments</span><span class="p">.</span><span class="n">FirstOrDefault</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">first</span> <span class="o">==</span> <span class="n">null</span> <span class="o">||</span> <span class="n">first</span><span class="p">.</span><span class="n">Expression</span><span class="p">.</span><span class="n">Kind</span> <span class="o">!=</span> <span class="n">SyntaxKind</span><span class="p">.</span><span class="n">StringLiteralExpression</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">var</span> <span class="n">stringInfo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringInfo</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">Text</span> <span class="o">=</span> <span class="n">first</span><span class="p">.</span><span class="n">Expression</span><span class="p">.</span><span class="n">GetFirstToken</span><span class="p">().</span><span class="n">ValueText</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">var</span> <span class="n">second</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">Arguments</span><span class="p">.</span><span class="n">Skip</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">FirstOrDefault</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">stringInfo</span><span class="p">.</span><span class="n">Count</span> <span class="o">=</span> <span class="n">HasCount</span><span class="p">((</span><span class="n">dynamic</span><span class="p">)</span><span class="n">second</span><span class="p">.</span><span class="n">Expression</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">stringInfo</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// _s(&quot;string only&quot;) (no object, no __count)</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="n">StringInfo</span> <span class="n">Create</span><span class="p">(</span><span class="n">LiteralExpressionSyntax</span> <span class="n">literal</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">literal</span> <span class="o">==</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="n">StringInfo</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">Text</span> <span class="o">=</span> <span class="n">literal</span><span class="p">.</span><span class="n">Token</span><span class="p">.</span><span class="n">ValueText</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">Count</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, now we&#8217;ve got our string. Next we need to figure out if <code>__count</code> is part of the object. We&#8217;ve implemented various ways to determine <code>HasCount()</code>, as referenced above on line 14. Again, C#&#8217;s dynamic proves useful.</p>
+
+<figure class='code'><figcaption><span>C#</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">private</span> <span class="k">const</span> <span class="n">string</span> <span class="n">COUNT</span> <span class="o">=</span> <span class="s">&quot;__count&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// _s(&quot;string&quot;, new { __count = 1 })</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">AnonymousObjectCreationExpressionSyntax</span> <span class="n">arg</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">arg</span><span class="p">.</span><span class="n">Initializers</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">x</span> <span class="o">=&gt;</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">NameEquals</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>              <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">NameEquals</span><span class="p">.</span><span class="n">Name</span><span class="p">.</span><span class="n">Identifier</span><span class="p">.</span><span class="n">ValueText</span> <span class="o">==</span> <span class="n">COUNT</span><span class="p">;</span> <span class="c1">// see if __count is part of the object</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">HasCount</span><span class="p">((</span><span class="n">dynamic</span><span class="p">)</span><span class="n">x</span><span class="p">.</span><span class="n">Expression</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span> <span class="c1">// otherwise throw it back</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// _s(&quot;string&quot;, obj)</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">IdentifierNameSyntax</span> <span class="n">arg</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// we already have an object, just see if it has __count</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">symbols</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">LookupSymbols</span><span class="p">(</span><span class="n">arg</span><span class="p">.</span><span class="n">Span</span><span class="p">.</span><span class="n">Start</span><span class="p">,</span> <span class="nl">name:</span> <span class="n">arg</span><span class="p">.</span><span class="n">Identifier</span><span class="p">.</span><span class="n">ValueText</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">first</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">.</span><span class="n">First</span><span class="p">();</span>
+</span><span class='line'>  <span class="n">TypeSymbol</span> <span class="n">type</span> <span class="o">=</span> <span class="p">((</span><span class="n">dynamic</span><span class="p">)</span><span class="n">first</span><span class="p">).</span><span class="n">Type</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">type</span><span class="p">.</span><span class="n">GetMembers</span><span class="p">(</span><span class="n">COUNT</span><span class="p">).</span><span class="n">Any</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// _s(&quot;string&quot;, obj.member)</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">MemberAccessExpressionSyntax</span> <span class="n">arg</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// extract out member...</span>
+</span><span class='line'>  <span class="n">var</span> <span class="n">name</span> <span class="o">=</span> <span class="n">arg</span><span class="p">.</span><span class="n">Expression</span> <span class="n">as</span> <span class="n">IdentifierNameSyntax</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1">// ...and try some of our above functions</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// anything else</span>
+</span><span class='line'><span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">HasCount</span><span class="p">(</span><span class="n">ExpressionSyntax</span> <span class="n">arg</span><span class="p">,</span> <span class="n">ISemanticModel</span> <span class="n">model</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above tries all variants (that were in our code) that might contain <code>__count</code> somehow. The use of dynamic allows us to not care about the kind of expression, which is determined during runtime, and then the appropriate version of <code>HasCount()</code> is called. Here&#8217;s <a href="https://gist.github.com/mjibson/5052106#file-extractor-cs">a gist</a> of it all (it&#8217;s got some other features not listed here).</p>
+
+<p>The above covers our C# controllers. For the Razor views, we cheat a bit. The ASP.NET compiler is invoked which converts the views into C# files, then the same extraction logic is run on those. This is much easier than trying to write a full razor parser.</p>
+
+<h2>JavaScript extraction with UglifyJS</h2>
+
+<p>For JavaScript, we use a similar technique. <a href="https://github.com/mishoo/UglifyJS">UglifyJS</a> is a JavaScript-based JavaScript parser. It also can return a syntax tree, which we can examine for uses of <code>_s</code>, from which we can extract strings and objects. It&#8217;s a pretty hideous function and not worth pasting, but <a href="https://gist.github.com/mjibson/5052106#file-extractor-js">here it is</a>.</p>
+
+<p>Both of these extractors yield JSON, which is processed in node and sent off to our translation service. We also have a dashboard (built with <a href="http://angularjs.org/">AngularJS</a>) to view all translations, fix them, and reprocess all the files.</p>
+
+<h2>Conclusion</h2>
+
+<p>Having two full language parsers allows us to be flexible. Both our C# and JavaScript implementations are equally functional at all levels&#8212;API, extraction, display&#8212;allowing us to have one unified API in our codebase.</p>
+
+<p>Translation and localization are hard. We spent months refactoring and extending our codebase to support it. But now, we can change, add, and translate strings with little effort, because our tools handle all the hard stuff. If you care about having quality translations (supporting dynamic text insertion and pluralization), whichever solution you use (resource files or gettext-style) must be able to fully understand your code so that it can generate high-quality output to send to translators.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Jibson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-01T15:52:00-05:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/careers/'>careers</a>, <a class='category' href='/blog/categories/localization/'>localization</a>, <a class='category' href='/blog/categories/node/'>node</a>, <a class='category' href='/blog/categories/roslyn/'>roslyn</a>, <a class='category' href='/blog/categories/uglifyjs/'>uglifyjs</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/" data-via="mjibson" data-counturl="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/02/28/careers-localization-part-2-api/" title="Previous Post: Careers Localization, part 2: The API">&laquo; Careers Localization, part 2: The API</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/06/11/perceptual-diffs-at-stack-overflow/" title="Next Post: Perceptual Diffs at Stack Overflow">Perceptual Diffs at Stack Overflow &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+	<h1><a href="/about">About Matt</a></h1>
+	<p><b>Matt Jibson</b> works at <a href="http://stackexchange.com/">Stack Exchange</a> on <a href="http://careers.stackoverflow.com/">Careers 2.0</a>. I play piano and pipe organ.
+	</p>
+	<p>I'm on <a href="https://github.com/mjibson">GitHub</a> and <a href="https://twitter.com/mjibson">Twitter</a>.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/26/go-read-open-source-google-reader-clone/">Go Read: Open-Source Google Reader Clone</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/11/perceptual-diffs-at-stack-overflow/">Perceptual Diffs at Stack Overflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/01/careers-localization-part-3-extraction/">Careers Localization, part 3: Extraction with Roslyn and Uglify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/28/careers-localization-part-2-api/">Careers Localization, part 2: The API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Careers Localization, part 1: Why Roll Our Own?</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("mjibson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/mjibson" class="twitter-follow-button" data-show-count="false">Follow @mjibson</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Matt Jibson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'mjibson-blog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/';
+        var disqus_url = 'http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

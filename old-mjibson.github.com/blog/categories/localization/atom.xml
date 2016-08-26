@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: localization | Matt Jibson's Blog]]></title>
+  <link href="http://mattjibson.com/blog/categories/localization/atom.xml" rel="self"/>
+  <link href="http://mattjibson.com/"/>
+  <updated>2013-06-27T12:28:22-04:00</updated>
+  <id>http://mattjibson.com/</id>
+  <author>
+    <name><![CDATA[Matt Jibson]]></name>
+    <email><![CDATA[matt.jibson@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Careers Localization, part 3: Extraction with Roslyn and Uglify]]></title>
+    <link href="http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction/"/>
+    <updated>2013-03-01T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/03/01/careers-localization-part-3-extraction</id>
+    <content type="html"><![CDATA[<p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Previously</a> we have discussed our reasoning and API for localization. Here, we would like to continue with the next topic: <strong>text extraction from the source code</strong>. That is, after we have indicated the text we would like translated, how we extract that text out of our codebase for translation. (Note: we used <a href="http://www.acclaro.com/">Acclaro</a> for the actual translation, and have been very happy with them. Recommended.)</p>
+
+<p>The difficulty is to extract all of the strings so that they can be sent to translators. Compounding this difficulty, we also must make sure to send the correct number of <strong>plural forms</strong> to the translators. Look at the example below. <code>__count</code> does not appear in the translated string, only in the values object. This means we must, at extraction time, understand these value objects and be able to reason about them---we must know their types.</p>
+
+<p><code>cpp
+_s("There is a unicorn", new { __count = 3 }) // "There are some unicorns"
+</code></p>
+
+<p>There are a few bad ways to do this:</p>
+
+<ul>
+<li>build a parser by hand to deal with this (possible, but fragile, error-prone, and silently oblivious to things it does not support)</li>
+<li>search or grep</li>
+<li><a href="http://stackoverflow.com/a/1732454/864236">regex</a></li>
+</ul>
+
+
+<p>Our first solution was the hand-built parser. It worked reasonbly well, but there were known, unfixable bugs. We needed a solution that allowed us to have full syntatic and semantic understanding of source code files. Syntax for knowing the tree of the source code: function calls, argument lists, object access. Semantic for seeing into object types and values.</p>
+
+<h2>C# and Razor extraction with Roslyn</h2>
+
+<p>The C# team at Microsoft has been working on a project called <a href="http://msdn.microsoft.com/en-us/vstudio/roslyn.aspx">Roslyn</a>. It is a programmatic way to access the syntax tree and semantic model of C# files. That means that we can hand it a C# file and then search through it looking for certain kinds of things, and act on them. Roslyn comes with a SyntaxWalker class that walks over each node. You can override the one you want. In our case, we want any invocation (function call) named <code>_s</code> or <code>_m</code>:</p>
+
+<p>``` cpp C#
+private static readonly IEnumerable<string> SINGLE_LINE = new[] { "<em>s", "</em>m" };
+public override void VisitInvocationExpression(InvocationExpressionSyntax node)
+{</p>
+
+<pre><code>base.VisitInvocationExpression(node);
+var callname = node.Expression.GetText().ToString();
+if (SINGLE_LINE.Any(callname.EndsWith))
+{
+    var stringInfo = StringInfo.Create(node.ArgumentList, model);
+    if (stringInfo != null)
+        // save it somewhere
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Now we're trying to create a new <code>StringInfo</code> (just a container class). We need to examine our <code>node.ArgumentList</code> and see if the first argument is a string. We use C#'s dynamic feature coupled with various ways to call <code>StringInfo.Create</code> to easily support different types of arguments (noted in comments above the functions):</p>
+
+<p>```
+// _s("string", object) (object may contain __count)
+public static StringInfo Create(ArgumentListSyntax args, ISemanticModel model)
+{</p>
+
+<pre><code>var first = args.Arguments.FirstOrDefault();
+if (first == null || first.Expression.Kind != SyntaxKind.StringLiteralExpression)
+    return null;
+
+var stringInfo = new StringInfo {
+    Text = first.Expression.GetFirstToken().ValueText,
+};
+
+var second = args.Arguments.Skip(1).FirstOrDefault();
+if (second != null)
+    stringInfo.Count = HasCount((dynamic)second.Expression, model);
+
+return stringInfo;
+</code></pre>
+
+<p>}</p>
+
+<p>// _s("string only") (no object, no __count)
+public static StringInfo Create(LiteralExpressionSyntax literal, ISemanticModel model)
+{</p>
+
+<pre><code>if (literal == null)
+    return null;
+
+return new StringInfo {
+    Text = literal.Token.ValueText,
+    Count = false,
+};
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Ok, now we've got our string. Next we need to figure out if <code>__count</code> is part of the object. We've implemented various ways to determine <code>HasCount()</code>, as referenced above on line 14. Again, C#'s dynamic proves useful.</p>
+
+<p>```
+private const string COUNT = "__count";</p>
+
+<p>// _s("string", new { __count = 1 })
+public static bool HasCount(AnonymousObjectCreationExpressionSyntax arg, ISemanticModel model)
+{</p>
+
+<pre><code>var result = arg.Initializers.Any(x =&gt;
+    {
+        if(x.NameEquals != null)
+            return x.NameEquals.Name.Identifier.ValueText == COUNT; // see if __count is part of the object
+        return HasCount((dynamic)x.Expression, model); // otherwise throw it back
+    });
+return result;
+</code></pre>
+
+<p>}</p>
+
+<p>// _s("string", obj)
+public static bool HasCount(IdentifierNameSyntax arg, ISemanticModel model)
+{</p>
+
+<pre><code>// we already have an object, just see if it has __count
+var symbols = model.LookupSymbols(arg.Span.Start, name: arg.Identifier.ValueText);
+var first = symbols.First();
+TypeSymbol type = ((dynamic)first).Type;
+return type.GetMembers(COUNT).Any();
+</code></pre>
+
+<p>}</p>
+
+<p>// _s("string", obj.member)
+public static bool HasCount(MemberAccessExpressionSyntax arg, ISemanticModel model)
+{</p>
+
+<pre><code>// extract out member...
+var name = arg.Expression as IdentifierNameSyntax;
+if (name != null)
+    // ...and try some of our above functions
+    return HasCount(name, model);
+return false;
+</code></pre>
+
+<p>}</p>
+
+<p>// anything else
+public static bool HasCount(ExpressionSyntax arg, ISemanticModel model)
+{</p>
+
+<pre><code>return false;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>The above tries all variants (that were in our code) that might contain <code>__count</code> somehow. The use of dynamic allows us to not care about the kind of expression, which is determined during runtime, and then the appropriate version of <code>HasCount()</code> is called. Here's <a href="https://gist.github.com/mjibson/5052106#file-extractor-cs">a gist</a> of it all (it's got some other features not listed here).</p>
+
+<p>The above covers our C# controllers. For the Razor views, we cheat a bit. The ASP.NET compiler is invoked which converts the views into C# files, then the same extraction logic is run on those. This is much easier than trying to write a full razor parser.</p>
+
+<h2>JavaScript extraction with UglifyJS</h2>
+
+<p>For JavaScript, we use a similar technique. <a href="https://github.com/mishoo/UglifyJS">UglifyJS</a> is a JavaScript-based JavaScript parser. It also can return a syntax tree, which we can examine for uses of <code>_s</code>, from which we can extract strings and objects. It's a pretty hideous function and not worth pasting, but <a href="https://gist.github.com/mjibson/5052106#file-extractor-js">here it is</a>.</p>
+
+<p>Both of these extractors yield JSON, which is processed in node and sent off to our translation service. We also have a dashboard (built with <a href="http://angularjs.org/">AngularJS</a>) to view all translations, fix them, and reprocess all the files.</p>
+
+<h2>Conclusion</h2>
+
+<p>Having two full language parsers allows us to be flexible. Both our C# and JavaScript implementations are equally functional at all levels---API, extraction, display---allowing us to have one unified API in our codebase.</p>
+
+<p>Translation and localization are hard. We spent months refactoring and extending our codebase to support it. But now, we can change, add, and translate strings with little effort, because our tools handle all the hard stuff. If you care about having quality translations (supporting dynamic text insertion and pluralization), whichever solution you use (resource files or gettext-style) must be able to fully understand your code so that it can generate high-quality output to send to translators.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Careers Localization, part 2: The API]]></title>
+    <link href="http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api/"/>
+    <updated>2013-02-28T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/28/careers-localization-part-2-api</id>
+    <content type="html"><![CDATA[<p><a href="/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/">Previously</a> we discussed our design requirements and solution for localization. Here we will continue with a description of the API. This means the way in which we would craft strings to be localized.</p>
+
+<h2>Markup</h2>
+
+<p>We chose to use gettext-style translation strings (i.e., not resource files where strings are identified somehow, instead we just indicate the English string right where it will be shown). We chose a syntax that allows dynamic variable replacement and easy pluralization, and can work similarly in JavaScript and C#. Here's what we came up with:</p>
+
+<p>``` cpp C#
+<em>s("Unicorns prance") // "Unicorns prance"
+</em>s("$name$ have horns", new { name = "Unicorns" }) // "Unicorns have horns"
+<em>s("There are $<strong>count$ unicorns", new { </strong>count = 1 }) // "There is 1 unicorn"
+</em>s("There is a unicorn", new { <em>_count = 3 }) // "There are some unicorns"
+</em>s(@"</p>
+
+<pre><code>Multi
+line
+supported.") // "Multi line supported." (whitespace collapsed)
+</code></pre>
+
+<p>```</p>
+
+<p><code>js JavaScript
+_s('Unicorns prance') // "Unicorns prance" (single or double quotes accepted - any valid JavaScript string)
+_s("$name$ have horns", { name: "Unicorns" }) // "Unicorns have horns"
+_s('There are $__count$ unicorns', { __count: 1 }) // "There is 1 unicorn"
+_s("There is a unicorn", { __count: 3 }) // "There are some unicorns"
+</code></p>
+
+<p>We chose a function named <code>_s</code> that takes a string and an optional values object used for variable replacement. There is a special <code>__count</code> member of the values object which, if it exists, indicates to our translation engine that this is a pluralizeable string. Calls to <code>_s</code> could be in our C# files anywhere in the tree. They could also be in our razor views:</p>
+
+<p>``` cpp Razor</p>
+
+<div>
+    @_s("translate this")
+</div>
+
+
+<p>```</p>
+
+<p>Finally, it also supports existing objects:</p>
+
+<p>``` cpp C#
+class User {</p>
+
+<pre><code>public string Name { get; set; }
+</code></pre>
+
+<p>}</p>
+
+<p>var user = new User { Name = "Jimmy the Unicorn" };
+_s("$Name$ is here!", user);
+```</p>
+
+<h2>Markdown</h2>
+
+<p>Requirement 5 from part 1 is to support markdown formatting. The purpose of this requirement was so that we would never send HTML to translators. We do not trust someone else writing our HTML. Thus, we needed support for simplified markdown (only bold, italics, and links). Out of this grew the <code>_m</code> function (m for markdown, in contrast to s for string in <code>_s</code>). This puts certain tweets in perspective.</p>
+
+<p><blockquote><p>And so begins the drive to redefine "S&amp;M" in the company lexicon.</p><footer><strong>@kevinmontrose</strong> <cite><a href='https://twitter.com/kevinmontrose/status/233392144193294336'>twitter.com/kevinmontrose/&hellip;</a></cite></footer></blockquote></p>
+
+<p>With <code>_m</code>, we can do things like:</p>
+
+<p><code>cpp
+_m("Hi, **we hate fun** here at [stack overflow](stackoverflow.com).")
+</code></p>
+
+<h2>Limitations</h2>
+
+<p>The above API has some problems, or doesn't support the following cases:</p>
+
+<h3>Best-practice DOM handling</h3>
+
+<p>Due to the use of markdown instead of HTML, there are some annoyances about how we must treat DOM elements. Let's say that, before translation, we had something like this:</p>
+
+<p>```</p>
+
+<div>Hello, <span id="click">click here</span> for magic.</div>
+
+
+<script>
+    $("#click").click(cb);
+</script>
+
+
+<p>```</p>
+
+<p>In (incorrect) translated form, we would have this:</p>
+
+<p>```</p>
+
+<div>@_s("Hello,") <span id="click">@_s("click here")</span> @_s("for magic.")</div>
+
+
+<p>```</p>
+
+<p>This is incorrect because the sentence has now been fragmented into three. Translators will then get these three fragments and must translate each on its own, with no power to reorder them if needed in the target language. But, how can we retain the JavaScript action? The <code>&lt;span&gt;</code> in there is not supported since we don't allow HTML in translated strings (or, more accurately, we encode all output strings so they are HTML-safe). The solution is to use our markdown formatting and do funky stuff with the DOM. In markdown, we have access to <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code>, thus:</p>
+
+<p>```</p>
+
+<div id="click">@_m("Hello, **click here** for magic.")</div>
+
+
+<script>
+    $("#click strong").click(cb);
+</script>
+
+
+<p>```</p>
+
+<p>The <code>**click here**</code> will render as <code>&lt;strong&gt;click here&lt;/strong&gt;</code>, which we can use in a selector. You must then also apply CSS to disable the normal bolding. Annoying, but it works.</p>
+
+<h3>Gender variants</h3>
+
+<p>Some languages vary articles by the gender (or pluralization) of its object. This is difficult to do because sometimes we don't know the gender, and so it's impossible to tell the translation engine which gender to use. Consider:</p>
+
+<p><code>
+_s("I'm going to $location$.", new { location = "Brazil" })
+</code></p>
+
+<p>In Portuguese, "to" varies based on <code>$location$</code>. We need to know the gender and pluralization of <code>$location$</code> (for example, the United States is masculine plural, and so "to" would change to "aos"). But we allow any location to be entered, so we would have to have that data for each of our target languages for all (or at least many) possible places. We're not sure where to get that data, so we're not supporting this yet.</p>
+
+<h3>Multiple pluralized words</h3>
+
+<p>We support exactly one <code>__count</code> instance, which means you can't have two pluralized words in a sentence. Let's consider the following case, assuming we wish to support any number of pluralizable words:</p>
+
+<p><code>
+_s("I have $count1$ rainbows and $count2$ pandas.", new { count1 = 2, count2 = 1 })
+</code></p>
+
+<p>English, German, French (and many others) have two plural forms (singular and other). This means we would have to generate <code>2 ^ 2 = 4</code> combinations of sentences to be pluralized:</p>
+
+<p><code>
+I have 1 rainbow and 1 panda.
+I have 1 rainbow and N pandas.
+I have N rainbows and 1 panda.
+I have N rainbows and N pandas.
+</code></p>
+
+<p>There are languages that have <a href="http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html">up to six</a> plural forms: zero, one, two, few, many, other. So, for the above example string, we would have to generate <code>6 ^ 2 = 36</code> combinations:</p>
+
+<p><code>
+I have 0 rainbows and 0 pandas.
+I have 1 rainbows and 0 pandas.
+I have 2 rainbows and 0 pandas.
+I have few rainbows and 0 pandas.
+I have many rainbows and 0 pandas.
+I have other rainbows and 0 pandas.
+// Etc., with all combinations:
+I have [0, 1, 2, few, many, other] rainbows and [0, 1, 2, few, many, other] pandas.
+</code></p>
+
+<p>These must all be generated for translation because it is possible that in the target language, the surrounding words could change. For instance, maybe "have" changes based on the object, instead of the subject, as in English. Due to this complication, we capped pluralization at one item per string.</p>
+
+<h3>Other things we don't know about</h3>
+
+<p>There are many languages, and we're sure some of them have constructs that the above API doesn't support at all.</p>
+
+<h2>Conclusion</h2>
+
+<p>The API allows us to do almost everything we need. The limitations ended up being truly limiting in only a few cases, and those could be worked around be restructuring the sentence. The next problem: how do we actually find the usages of <code>_s</code> and send them off to translators?</p>
+
+<p><a href="/blog/2013/03/01/careers-localization-part-3-extraction/">Part 3: Extraction</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Careers Localization, part 1: Why Roll Our Own?]]></title>
+    <link href="http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own/"/>
+    <updated>2013-02-27T15:52:00-05:00</updated>
+    <id>http://mattjibson.com/blog/2013/02/27/careers-localization-part-1-why-roll-our-own</id>
+    <content type="html"><![CDATA[<p>Localization is a difficult feature to add to a website. A few months ago, we at <a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a> localized into <a href="http://careers.stackoverflow.com/de/">German</a>. This took months of effort from much of the team. I would like to describe our design and implementation over a few blog posts.</p>
+
+<p>This post will discuss our design choices.</p>
+
+<h2>Requirements</h2>
+
+<p>Localization consists of</p>
+
+<ol>
+<li>indicating text that should be localized</li>
+<li>translating it</li>
+<li>showing the correct translation to the user</li>
+</ol>
+
+
+<p>There are various existing solutions in most programming languages that can do this. We looked at some, but none were able to meet all of our design and support requirements:</p>
+
+<ol>
+<li>C#</li>
+<li>JavaScript</li>
+<li>Razor views</li>
+<li>data attributes for localized error messages on form validation</li>
+<li>markdown formatting (so that no HTML is ever sent to translators)</li>
+<li>dynamic text replacement</li>
+<li>pluralization-aware</li>
+<li>gettext-style (English text in a function - no resource files and identifiers)</li>
+</ol>
+
+
+<p>We discussed some of these requirements with others who had previously localized their sites. Some had decided to forfeit features due to difficulty of implementation (pluralization, dynamic text). Supporting each of these requirements is difficult, so we understood the decision to omit them. However, we were not willing to do the same.</p>
+
+<h2>Our Solution</h2>
+
+<p>The other solutions missed some our of requirements, or functioned in a way we didn't like. We were, however, heavily influenced by existing work, like that of <a href="https://github.com/danielcrenna/i18n">Daniel Crenna</a>. We have a long history of rolling our own software when the 90% solution isn't enough, and that tradition was continued here. We ended up writing the entire implementation from scratch. This includes designing an API, extraction process (to determine what strings the translators should translate), and localization engine to support numbers, dates, and translated strings. This allowed us to have a unified pipeline for text extraction and processing (i.e., the C# and JavaScript implementations could be identical at each step of the process), and give us the power and speed we wanted in the implementation.</p>
+
+<p>As will be described in future posts, our implementation met all of our requirements, but with some limitations. Localization is hard, and doing everything is near impossible. If we wanted something better than the 90% solution, then what we have now is maybe in the 95% range: there are still missing features that we haven't figured out yet.</p>
+
+<p><a href="/blog/2013/02/28/careers-localization-part-2-api/">Part 2: The API</a></p>
+]]></content>
+  </entry>
+  
+</feed>

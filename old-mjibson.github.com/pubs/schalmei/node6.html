@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Results</TITLE>
+<META NAME="description" CONTENT="Results">
+<META NAME="keywords" CONTENT="schalmei">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="schalmei.css">
+
+<LINK REL="next" HREF="node7.html">
+<LINK REL="previous" HREF="node3.html">
+<LINK REL="up" HREF="schalmei.html">
+<LINK REL="next" HREF="node7.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html76"
+  HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/pubs/icons/next.png"></A>
+<A NAME="tex2html74"
+  HREF="schalmei.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/pubs/icons/up.png"></A>
+<A NAME="tex2html68"
+  HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/pubs/icons/prev.png"></A>
+<BR>
+<B> Next:</B> <A NAME="tex2html77"
+  HREF="node7.html">Discussion and Further Work</A>
+<B> Up:</B> <A NAME="tex2html75"
+  HREF="schalmei.html">Organ Sound Synthesis by</A>
+<B> Previous:</B> <A NAME="tex2html69"
+  HREF="node5.html">Sound Synthesis</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00040000000000000000">
+Results</A>
+</H1>
+
+<P>
+One test of this method involved recordings of five C<IMG
+ WIDTH="10" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$\sharp$">s of the 8-foot principal rank (C<IMG
+ WIDTH="10" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$\sharp$">1 to C<IMG
+ WIDTH="10" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$\sharp$">5). The lowest recording, which has a base frequency of 137.16Hz, was used as a reference for comparison (Figures <A HREF="node4.html#time">1</A>-<A HREF="node4.html#peaks">2</A>). Using the above method a wave was synthesized (Figure <A HREF="#synth-time">3</A>). The resulting PSD from the synthesized wave (Figure <A HREF="#synth-peaks">4</A>) shows peaks with similar frequencies and amplitudes to the reference. Clearly all of the other features of the wave (non-smoothness between peaks of Figure <A HREF="node4.html#peaks">2</A>) are lost and not generated in this synthesized wave.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="synth-time"></A><A NAME="43"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 3:</STRONG>
+Excerpt of a synthesized wave.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER"><IMG
+  WIDTH="800" HEIGHT="600" ALIGN="BOTTOM" BORDER="0"
+ SRC="./synth-time.png"
+ ALT="Image synth-time">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="synth-peaks"></A><A NAME="48"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 4:</STRONG>
+Excerpt of the PSD of a synthesized wave. The first five peaks are marked with red circles.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER"><IMG
+  WIDTH="800" HEIGHT="600" ALIGN="BOTTOM" BORDER="0"
+ SRC="./synth-peaks.png"
+ ALT="Image synth-peaks">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Listening test results are acceptable. The produced sound is clearly of correct pitch and timbre. It is also, however, clearly computer generated. This is expected because, as noted above, all features outside of the generated peaks are lost. Furthermore, when going beyond the range of the lowest and highest recorded sounds, the generated sounds can get wildly inaccurate, with the percentage contribution multipliers quickly blowing up, yielding meaningless results. Thus, generated sounds should be confined to the interval between the lowest and highest recorded notes, or within a small margin thereof.
+
+<P>
+As a result of using the closest recorded note to the desired frequency as the basis for the harmonic structure, there are very noticeable changes when listening to a full range sweep of produced noises (i.e., a generated tone corresponding to each note on an organ). This occurs when the closest recorded note switches to another recorded note. The change in harmonic structure is noticeable since it is so abrupt and unnatural.
+
+<P>
+Regarding a computer back end, this method meets the requirements of real time speed. Generating sinusoids at a certain sampling frequency (e.g., 48kHz) for <IMG
+ WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$N$"> peaks (e.g., 50) is about 2.4 million samples per second. Each sample requires a sinusoid operation, two multiplication operations, and some trivial operations that have no significant performance effect. Modern computers run in the range of billions of operations per second, or about two to four orders of magnitude faster than required to process real-time requests of a naive implementation. There is thus computational availability for multiple notes. With optimized, cached, or preprocessed data, this availability can increase further. For example, ChucK can easily mix 100 sinusoids at 44.1kHz on the author's computer, which has a clock rate of 2.0 GHz.
+
+<P>
+Processing speed of this algorithm is on the order of one second per recording. The author's implementation in Python is slowest at searching for peaks after a PSD has been performed. The PSD function, which involves many Fast Fourier Transforms (FFT), is not computationally expensive. In order to increase frequency precision, the number of FFT points is high (<IMG
+ WIDTH="25" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="img9.png"
+ ALT="$2^{17}$">), which is larger than the number of samples in most recordings under 2 seconds, and thus only one FFT is computed per recording. However, computation time is not a critical issue because it need only be done once and can be done when time constraints are lenient.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html76"
+  HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/pubs/icons/next.png"></A>
+<A NAME="tex2html74"
+  HREF="schalmei.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/pubs/icons/up.png"></A>
+<A NAME="tex2html68"
+  HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/pubs/icons/prev.png"></A>
+<BR>
+<B> Next:</B> <A NAME="tex2html77"
+  HREF="node7.html">Discussion and Further Work</A>
+<B> Up:</B> <A NAME="tex2html75"
+  HREF="schalmei.html">Organ Sound Synthesis by</A>
+<B> Previous:</B> <A NAME="tex2html69"
+  HREF="node5.html">Sound Synthesis</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+mjibson
+2009-01-06
+</ADDRESS>
+</BODY>
+</HTML>
