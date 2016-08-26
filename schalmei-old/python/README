@@ -1,0 +1,10 @@
+Prerequisites are:
+	numpy (http://numpy.scipy.org/)
+	matplotlib (http://matplotlib.sourceforge.net/)
+
+Run by:
+python schalmei.py [n]
+
+n is the number of sinusiods to generate. If n is not specified, it will default to 5.
+
+This will create the file out/chuck/haupt-princial-8-n.ck.

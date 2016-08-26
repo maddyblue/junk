@@ -1,0 +1,11 @@
+*.wav
+*.pyc
+*.aux
+*.log
+*.pdf
+*.o
+*.bbl
+*.blg
+docs
+c/schalmei
+out
