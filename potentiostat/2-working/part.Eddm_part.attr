@@ -1,0 +1,7 @@
+A 5 u Eddm_part 49b7e5c71d0f.03.81.52.e0.47.00.4a.c9 1 2 1 0
+V v 1 1 49b7e5c71d0f.03.81.52.e0.47.01.4a.c9
+F f 1 "part.part_1"
+O 1
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/2-working/schematic" 1 mgc_schematic 49b7e5c69419.03.81.52.e0.47.00.4a.c9 49b7e5c69418.03.81.52.e0.47.00.4a.c9
+P "eddm__refer_state" "eddm__refer_floating"

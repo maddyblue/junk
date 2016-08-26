@@ -1,0 +1,31 @@
+A 5 u mgc_sheet 49a784a9ed3c.03.81.52.e0.47.00.53.11 21 2 5 0
+V v 19 2 49a8ef764121.03.81.52.e0.47.00.53.58
+F f 19 "sheet1.ssht_19"
+F f 19 "sheet1.sgfx_19"
+V v 20 2 49a8ef8c954a.03.81.52.e0.47.00.53.58
+F f 20 "sheet1.ssht_20"
+F f 20 "sheet1.sgfx_20"
+V v 21 2 49a8f2250894.03.81.52.e0.47.00.53.58
+F f 21 "sheet1.ssht_21"
+F f 21 "sheet1.sgfx_21"
+O 21
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/schematic" 1 mgc_schematic 49a784a9d909.03.81.52.e0.47.00.53.11 49a784a9d908.03.81.52.e0.47.00.53.11
+R csduv 1 "$MGC_GENLIB/portbi/part" 1 Eddm_part 35b532c6b9c1.03.89.ca.2b.4d.00.0e.21 35b53c8db70c.03.89.ca.2b.4d.00.4f.9c
+R csduv 2 "$MGC_GENLIB/portbi/portbi" 1 mgc_symbol 35b532c6acbe.03.89.ca.2b.4d.00.0e.21 35b53c8db706.03.89.ca.2b.4d.00.4f.9c
+R csduv 3 "$MGC_APLIB/opamp_7pin_2off/part" 28 Eddm_part 65c776734c04.02.b9.00.05.17.00.00.00 650375b50005.02.93.22.13.44.00.00.00
+R csduv 4 "$MGC_APLIB/opamp_7pin_2off/MG_STD" 6 mgc_symbol 65bd9256da19.02.b9.00.05.17.00.00.00 650375b50003.02.93.22.13.44.00.00.00
+O 20
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/schematic" 1 mgc_schematic 49a784a9d909.03.81.52.e0.47.00.53.11 49a784a9d908.03.81.52.e0.47.00.53.11
+R csduv 1 "$MGC_GENLIB/portbi/part" 1 Eddm_part 35b532c6b9c1.03.89.ca.2b.4d.00.0e.21 35b53c8db70c.03.89.ca.2b.4d.00.4f.9c
+R csduv 2 "$MGC_GENLIB/portbi/portbi" 1 mgc_symbol 35b532c6acbe.03.89.ca.2b.4d.00.0e.21 35b53c8db706.03.89.ca.2b.4d.00.4f.9c
+R csduv 3 "$MGC_APLIB/opamp_7pin_2off/part" 28 Eddm_part 65c776734c04.02.b9.00.05.17.00.00.00 650375b50005.02.93.22.13.44.00.00.00
+R csduv 4 "$MGC_APLIB/opamp_7pin_2off/MG_STD" 6 mgc_symbol 65bd9256da19.02.b9.00.05.17.00.00.00 650375b50003.02.93.22.13.44.00.00.00
+O 19
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/schematic" 1 mgc_schematic 49a784a9d909.03.81.52.e0.47.00.53.11 49a784a9d908.03.81.52.e0.47.00.53.11
+R csduv 1 "$MGC_GENLIB/portbi/part" 1 Eddm_part 35b532c6b9c1.03.89.ca.2b.4d.00.0e.21 35b53c8db70c.03.89.ca.2b.4d.00.4f.9c
+R csduv 2 "$MGC_GENLIB/portbi/portbi" 1 mgc_symbol 35b532c6acbe.03.89.ca.2b.4d.00.0e.21 35b53c8db706.03.89.ca.2b.4d.00.4f.9c
+R csduv 3 "$MGC_APLIB/opamp_7pin_2off/part" 28 Eddm_part 65c776734c04.02.b9.00.05.17.00.00.00 650375b50005.02.93.22.13.44.00.00.00
+R csduv 4 "$MGC_APLIB/opamp_7pin_2off/MG_STD" 6 mgc_symbol 65bd9256da19.02.b9.00.05.17.00.00.00 650375b50003.02.93.22.13.44.00.00.00

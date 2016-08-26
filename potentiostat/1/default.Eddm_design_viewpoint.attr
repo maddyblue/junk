@@ -1,0 +1,27 @@
+A 5 u Eddm_design_viewpoint 498bcef5f29e.03.81.52.e0.47.00.0f.9a 1 2 19 0
+V v 1 4 498bcef7a6e7.03.81.52.e0.47.00.0f.9a
+F f 1 "default.dvpt_1"
+F o 0 
+F o 0 
+F o 0 
+O 1
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R cspuv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/1/part" 1 Eddm_part 4989ffb28782.03.81.52.e0.47.01.03.44 4989ffb28782.03.81.52.e0.47.00.03.44
+R cspuv 1 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/1/schematic" 7 mgc_schematic 498bc7fbed24.03.81.52.e0.47.00.0e.8d 4988d1f96794.03.81.52.e0.47.00.03.44
+R cspuv 2 "$MGC_APLIB/opamp_7pin_2bal/part" 5 Eddm_part 65d23f92b7ff.02.93.22.13.28.00.00.00 65d212e29283.02.93.22.13.28.00.00.00
+R cspuv 3 "$MGC_APLIB/resistor_h/part" 11 Eddm_part 65fa04ce4d05.02.93.22.13.28.00.00.00 65fa30d7d062.02.93.22.13.44.00.00.00
+R cspuv 4 "$MGC_APLIB/current_source/part" 8 Eddm_part 65c75a1c3a43.02.b9.00.05.17.00.00.00 650375b3cc50.02.93.22.13.44.00.00.00
+R cspuv 5 "$MGC_APLIB/voltage_source/part" 7 Eddm_part 65c76a316868.02.b9.00.05.17.00.00.00 650375b6ffbc.02.93.22.13.44.00.00.00
+R cspuv 6 "$MGC_APLIB/voltage_source/voltage_source" 5 mgc_symbol 65c34d1fb535.02.b9.00.05.17.00.00.00 650375b6ffbd.02.93.22.13.44.00.00.00
+R cspuv 7 "$MGC_APLIB/current_source/current_source" 6 mgc_symbol 656c46bbf5b9.02.b9.00.05.17.00.00.00 650375b3cc4f.02.93.22.13.44.00.00.00
+R cspuv 8 "$MGC_APLIB/resistor_h/resistor_h" 10 mgc_symbol 675572d3d867.02.93.22.1e.2a.00.00.00 65fa30d7d063.02.93.22.13.44.00.00.00
+R cspuv 9 "$MGC_APLIB/opamp_7pin_2bal/MG_STD" 1 mgc_symbol 65d1b2b02fd9.02.86.56.19.16.00.00.00 65d212e292b9.02.93.22.13.28.00.00.00
+R cspuv 10 "$MGC_APLIB/opamp_7pin_2bal/ANSI" 1 mgc_symbol 65d1a7d75921.02.86.56.19.16.00.00.00 65d1a7d75831.02.86.56.19.16.00.00.00
+R cspuv 11 "$MGC_APLIB/opamp_7pin_2bal/OLD" 1 mgc_symbol 65d1a859c509.02.86.56.19.16.00.00.00 65d1a859c508.02.86.56.19.16.00.00.00
+R cspuv 12 "$MGC_APLIB/ground/part" 12 Eddm_part 65bd0cf58b9d.02.b9.00.05.17.00.00.00 650375b3cc8a.02.93.22.13.44.00.00.00
+R cspuv 13 "$MGC_APLIB/portout/part" 7 Eddm_part 65bdc2f9bfb7.02.b9.00.05.17.00.00.00 6517440f0c67.02.93.22.13.44.00.00.00
+R cspuv 14 "$MGC_APLIB/vcc/part" 2 Eddm_part 6fd62cdfe417.02.93.22.1e.33.00.00.00 5db07d796000.0d.00.03.8c.18.00.00.00
+R cspuv 15 "$MGC_APLIB/ground/MG_STD" 6 mgc_symbol 65bd0cf58b9c.02.b9.00.05.17.00.00.00 650375b3cc89.02.93.22.13.44.00.00.00
+R cspuv 16 "$MGC_APLIB/ground/ANSI" 6 mgc_symbol 65bd0be77a3a.02.b9.00.05.17.00.00.00 650375b3cc88.02.93.22.13.44.00.00.00
+R cspuv 17 "$MGC_APLIB/portout/portout" 5 mgc_symbol 65bdc2f9bfb6.02.b9.00.05.17.00.00.00 6517440f0d30.02.93.22.13.44.00.00.00
+R cspuv 18 "$MGC_APLIB/vcc/vcc" 2 mgc_symbol 6fd62cdefe6b.02.93.22.1e.33.00.00.00 5db07d797000.0d.00.03.8c.18.00.00.00

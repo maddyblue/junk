@@ -1,0 +1,210 @@
+* potentiostat
+.options  tnom=27
+.temp 27
+.op  NO_SMALL_SIGNAL
+
+*//////////////////////////////////////////////////////////////////////
+* (C) National Semiconductor, Inc.
+* Models developed and under copyright by:
+* National Semiconductor, Inc.  
+
+*/////////////////////////////////////////////////////////////////////
+* Legal Notice: This material is intended for free software support.
+* The file may be copied, and distributed; however, reselling the 
+*  material is illegal
+
+*////////////////////////////////////////////////////////////////////
+* For ordering or technical information on these models, contact:
+* National Semiconductor's Customer Response Center
+*                 7:00 A.M.--7:00 P.M.  U.S. Central Time
+*                                (800) 272-9959
+* For Applications support, contact the Internet address:
+*  amps-apps@galaxy.nsc.com
+
+* ////////////////////////////////////////////////////////
+* LMC6001A Precision CMOS Single Operational Amplifier
+* ////////////////////////////////////////////////////////
+*
+* Connections:      Non-inverting input
+*                   |   Inverting input
+*                   |   |   Positive power supply
+*                   |   |   |   Negative power supply
+*                   |   |   |   |   Output
+*                   |   |   |   |   |
+*                   |   |   |   |   |
+.SUBCKT LMC6001A/NS 1   2  99  50  28
+* CAUTION:  SET .OPTIONS GMIN=1E-16 TO CORRECTLY MODEL INPUT BIAS CURRENT.
+*
+* Features:
+* Operates from single supply
+* Rail-to-rail output swing
+* Low offset voltage (max) =           350uV
+* Ultra low input current =             25fA
+* Slew rate =                        1.5V/uS
+* Gain-bandwidth product =            1.3MHz 
+* Supply current =                     450uA
+*
+* NOTE: This CMOS electrometer simulates guaranteed (100% tested)
+*       input offset voltage (VOS) & input bias current (IB)
+*
+* NOTE: - Noise is not modeled.
+*       - Asymmetrical gain is not modeled.
+*
+CI1 1  50 2P
+CI2 2  50 2P
+* 1.634 Hz pole capacitor
+C3  98 9  9.715N
+* 1.1 MHz pole capacitor
+C4  6  5  13.95P
+* 4.98 MHz pole capacitor
+C5  98 15 31.9F
+* Drain-substrate capacitor
+C6  50 4  3P
+* 28.6 MHz pole capacitor
+C7  98 11 5.62F
+DP1 1  99 DA
+DP2 50 1  DD
+DP3 2  99 DB
+DP4 50 2  DC
+D1  9  8  DX
+D2  10 9  DX
+D3  18 20 DX
+D4  21 18 DX
+D5  26 24 DX
+D6  25 27 DX
+D7  22 99 DX
+D8  50 22 DX
+D9  0  14 DX
+D10 12 0  DX
+EH  97 98 99    49 1.0
+EN  0  96 0     50 1.0
+* Input offset voltage -|
+EOS 7  1  POLY(1) 16 49 350U 1
+EP  97 0  99    0  1.0
+E1  97 19 99    18 1.0
+* Sourcing load +Vs current
+F1  99 0  VA2   1
+* Sinking load -Vs current
+F2  0  50 VA3   1
+F3  13 0  VA1   1
+G1  98 9  5     6  0.1
+G2  98 11 9     49 1U
+G3  98 15 11    49 1U
+* DC CMRR
+G4  98 16 POLY(2) 1 49 2 49 0 1.26E-8 1.26E-8
+G5  98 18 15    49 1U
+I1  99 4  33.46U
+I2  99 50 366.5U
+* Load dependent pole 
+L1  22 28 80.4U
+* CMR lead inductor
+L2  16 17 73.1M
+* 3.30 MHz lead inductor
+L3  98 3  48.2M
+M1  5  2  4     99 MX
+M2  6  7  4     99 MX
+R3  5  50 5.18K
+R4  6  50 5.18K
+R5  98 9  1E7
+R8  99 49 50K
+R9  49 50 50K
+R10 18 3  1E6
+R12 98 11 1E6
+R13 98 17 1K
+* -Rout
+R16 23 24 70.7
+* +Rout
+R17 23 25 80.3
+* +Isc slope control
+R18 20 29 64K
+* -Isc slope control
+R19 21 30 130K
+R21 98 15 1E6
+R22 22 28 636
+VA1 19 23 0V
+VA2 14 13 0V
+VA3 13 12 0V
+V2  97 8  0.713V
+V3  10 96 0.710V
+V4  29 22 1.170V
+V5  22 30 0.63V
+V6  26 22 0.63V
+V7  22 27 0.63V
+* Input bias and offset current differences
+.MODEL  DA D    (IS=425FA)
+.MODEL  DB D    (IS=425FA)
+.MODEL  DC D    (IS=405FA)
+.MODEL  DD D    (IS=400FA)
+.MODEL  DX D    (IS=1.0E-14)
+.MODEL  MX PMOS (VTO=-2.456 KP=7.0547E-4)
+.ENDS
+*$
+
+* Connections:      Non-inverting input
+*                   |   Inverting input
+*                   |   |   Positive power supply
+*                   |   |   |   Negative power supply
+*                   |   |   |   |   Output
+*                   |   |   |   |   |
+*                   |   |   |   |   |
+*.SUBCK LMC6001A/NS 1   2  99  50  28
+.OPTIONS GMIN=1E-16
+
+.param rf=10k
+.param rg=20k
+.param rdrain=10Meg
+.param rf2=10k
+.param rg2=100
+*.param vbias=-3.2382e-10
+.param ibias=-6.73658e-17
+
+.paramopt rf=(90k, 10, 10Meg)
+.paramopt rg=(10k, 10, 10Meg)
+.paramopt rdrain=(1meg, 1meg, 1000meg)
+*.paramopt vbias=(0, -5, 5)
+*.paramopt rf2=(10k, 100, 1Meg)
+.paramopt ibias=(0, -1m, 1m)
+
+*.extract tran label=vdiff (min(v(inm)) - min(v(inp))) goal=0
+*.extract tran label=imax max(i(V_I$4939)) goal=20f
+*.extract tran label=vdiff2 max(v(out2)) - min(v(out2)) goal=1e-2
+*.extract tran label=mvin2 min(v(inm2)) goal=0
+*.extract tran label=iinp min(i(V_I$6006)) goal=5f
+*.extract tran label=irdrain min(i(R_I$5141))
+*.extract tran label=isource min(i(I_I$5804))
+.extract max(v(out)) - min(v(out))
+.extract max(v(out2)) - min(v(out2))
+
+*.optimize
+
+*.step param rf 1k 1Meg LIN 5
+*.step param rg 1k 1Meg LIN 5
+*.step C_I$4737 INSTPAR .01f 1p LIN 5
+*.step param rdrain 10Meg 100Meg LIN 5
+
+V_I$7827 N$8587 out 0
+V_I$5343 N$5748 0 5
+V_I$7221 N$7979 inp 0
+V_I$3029 vsm 0 -5
+V_I$3031 vsp 0 5
+V_I$5550 N$5746 0 -5
+R_I$7829 N$8587 inm2 rg2
+R_I$5344 inm2 out2 rf2
+R_I$3027 inm out rf
+R_I$3005 0 inm rg
+R_I$6412 inp 0 rdrain
+X_I$5548_I$1 0 inm2 N$5748 N$5746 out2  LMC6001A/NS 
+X_I$3239_I$1 N$7979 inm vsp vsm out  LMC6001A/NS 
+I_I$6209 0 inp pwl(0 0 20u 0 50u 5n 70u 0)
+
+.defwave iinp=i(I_I$6209) - i(R_I$6412)
+.defwave gain=v(out) / v(inp)
+
+.tran 1n 200u
+.plot v(inp)
+.plot v(out)
+.plot v(out2)
+.plot i(V_I$7221)
+.plot i(V_I$7827)
+
+.END

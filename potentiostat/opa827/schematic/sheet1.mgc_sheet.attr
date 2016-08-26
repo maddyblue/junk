@@ -1,0 +1,31 @@
+A 5 u mgc_sheet 499c44a52481.03.81.52.e0.47.00.3b.fc 3 2 5 0
+V v 1 2 499c44a52482.03.81.52.e0.47.00.3b.fc
+F f 1 "sheet1.ssht_1"
+F f 1 "sheet1.sgfx_1"
+V v 2 2 499d085612ba.03.81.52.e0.47.00.40.90
+F f 2 "sheet1.ssht_2"
+F f 2 "sheet1.sgfx_2"
+V v 3 2 49d122e57bab.03.81.52.e0.47.00.09.96
+F f 3 "sheet1.ssht_3"
+F f 3 "sheet1.sgfx_3"
+O 3
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic" 1 mgc_schematic 499c44a503d1.03.81.52.e0.47.01.3b.fc 499c44a503d1.03.81.52.e0.47.00.3b.fc
+R csduv 1 "$MGC_APLIB/opamp_5pin/part" 32 Eddm_part 65c77548a133.02.b9.00.05.17.00.00.00 650375b4fff0.02.93.22.13.44.00.00.00
+R csduv 2 "$MGC_APLIB/opamp_5pin/MG_STD" 6 mgc_symbol 65bd85e7f909.02.b9.00.05.17.00.00.00 650375b4ffee.02.93.22.13.44.00.00.00
+R csduv 3 "$MGC_APLIB/portbi/part" 6 Eddm_part 65bdc1d888a4.02.b9.00.05.17.00.00.00 650375b76966.02.93.22.13.44.00.00.00
+R csduv 4 "$MGC_APLIB/portbi/portbi" 4 mgc_symbol 65bdc1d884e6.02.b9.00.05.17.00.00.00 650375b76a30.02.93.22.13.44.00.00.00
+O 2
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic" 1 mgc_schematic 499c44a503d1.03.81.52.e0.47.01.3b.fc 499c44a503d1.03.81.52.e0.47.00.3b.fc
+R csduv 1 "$MGC_APLIB/opamp_5pin/part" 32 Eddm_part 65c77548a133.02.b9.00.05.17.00.00.00 650375b4fff0.02.93.22.13.44.00.00.00
+R csduv 2 "$MGC_APLIB/opamp_5pin/MG_STD" 6 mgc_symbol 65bd85e7f909.02.b9.00.05.17.00.00.00 650375b4ffee.02.93.22.13.44.00.00.00
+R csduv 3 "$MGC_APLIB/portbi/part" 6 Eddm_part 65bdc1d888a4.02.b9.00.05.17.00.00.00 650375b76966.02.93.22.13.44.00.00.00
+R csduv 4 "$MGC_APLIB/portbi/portbi" 4 mgc_symbol 65bdc1d884e6.02.b9.00.05.17.00.00.00 650375b76a30.02.93.22.13.44.00.00.00
+O 1
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/opa827/schematic" 1 mgc_schematic 499c44a503d1.03.81.52.e0.47.01.3b.fc 499c44a503d1.03.81.52.e0.47.00.3b.fc
+R csduv 1 "$MGC_APLIB/opamp_5pin/part" 32 Eddm_part 65c77548a133.02.b9.00.05.17.00.00.00 650375b4fff0.02.93.22.13.44.00.00.00
+R csduv 2 "$MGC_APLIB/opamp_5pin/MG_STD" 6 mgc_symbol 65bd85e7f909.02.b9.00.05.17.00.00.00 650375b4ffee.02.93.22.13.44.00.00.00
+R csduv 3 "$MGC_APLIB/portbi/part" 6 Eddm_part 65bdc1d888a4.02.b9.00.05.17.00.00.00 650375b76966.02.93.22.13.44.00.00.00
+R csduv 4 "$MGC_APLIB/portbi/portbi" 4 mgc_symbol 65bdc1d884e6.02.b9.00.05.17.00.00.00 650375b76a30.02.93.22.13.44.00.00.00

@@ -1,0 +1,20 @@
+A 5 u Eddm_part 49a78321c02e.03.81.52.e0.47.00.52.ff 6 2 2 0
+V v 4 1 49a783e95c58.03.81.52.e0.47.00.52.ff
+F f 4 "part.part_4"
+V v 5 1 49a7852eecc7.03.81.52.e0.47.00.53.11
+F f 5 "part.part_5"
+V v 6 1 49a8373c582b.03.81.52.e0.47.00.53.58
+F f 6 "part.part_6"
+O 6
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/ths4508" 6 mgc_symbol 49a8373c4e68.03.81.52.e0.47.00.53.58 49a781eac300.03.81.52.e0.47.00.52.ff
+R csduv 1 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/schematic" 1 mgc_schematic 49a784a9d909.03.81.52.e0.47.00.53.11 49a784a9d908.03.81.52.e0.47.00.53.11
+P "eddm__refer_state" "eddm__refer_floating"
+O 5
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/ths4508" 4 mgc_symbol 49a783e95c21.03.81.52.e0.47.00.52.ff 49a781eac300.03.81.52.e0.47.00.52.ff
+R csduv 1 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/schematic" 1 mgc_schematic 49a784a9d909.03.81.52.e0.47.00.53.11 49a784a9d908.03.81.52.e0.47.00.53.11
+P "eddm__refer_state" "eddm__refer_floating"
+O 4
+P "eddm__stream_to_use" "eddm__propl_dstream"
+R csduv 0 "/top/students/UNGRAD/ECE/dolmant/home/potentiostat/ths4508/ths4508" 4 mgc_symbol 49a783e95c21.03.81.52.e0.47.00.52.ff 49a781eac300.03.81.52.e0.47.00.52.ff

@@ -1,0 +1,1092 @@
+1******* 6-Apr-09 *******  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  *******11:26:28******
+
+0* potentiostat
+
+0****     INPUT LISTING                                               
+
+0***********************************************************************
+    2  .OPTIONS  TNOM=27
+    3  .TEMP 27
+    4  .OP  NO_SMALL_SIGNAL
+    5  
+    6  *//////////////////////////////////////////////////////////////////////
+    7  * (C) National Semiconductor, Inc.
+    8  * Models developed and under copyright by:
+    9  * National Semiconductor, Inc.  
+   10  
+   11  */////////////////////////////////////////////////////////////////////
+   12  * Legal Notice: This material is intended for free software support.
+   13  * The file may be copied, and distributed  however, reselling the 
+   14  *  material is illegal
+   15  
+   16  *////////////////////////////////////////////////////////////////////
+   17  * For ordering or technical information on these models, contact:
+   18  * National Semiconductor's Customer Response Center
+   19  *                 7:00 A.M.--7:00 P.M.  U.S. Central Time
+   20  *                                (800) 272-9959
+   21  * For Applications support, contact the Internet address:
+   22  *  amps-apps@galaxy.nsc.com
+   23  
+   24  * ////////////////////////////////////////////////////////
+   25  * LMC6001A Precision CMOS Single Operational Amplifier
+   26  * ////////////////////////////////////////////////////////
+   27  *
+   28  * Connections:      Non-inverting input
+   29  *                   |   Inverting input
+   30  *                   |   |   Positive power supply
+   31  *                   |   |   |   Negative power supply
+   32  *                   |   |   |   |   Output
+   33  *                   |   |   |   |   |
+   34  *                   |   |   |   |   |
+   35  .SUBCKT LMC6001A/NS 1   2  99  50  28
+   36  * CAUTION:  SET .OPTIONS GMIN=1E-16 TO CORRECTLY MODEL INPUT BIAS CURRENT.
+   37  *
+   38  * Features:
+   39  * Operates from single supply
+   40  * Rail-to-rail output swing
+   41  * Low offset voltage (max) =           350uV
+   42  * Ultra low input current =             25fA
+   43  * Slew rate =                        1.5V/uS
+   44  * Gain-bandwidth product =            1.3MHz 
+   45  * Supply current =                     450uA
+   46  *
+   47  * NOTE: This CMOS electrometer simulates guaranteed (100% tested)
+   48  *       input offset voltage (VOS) & input bias current (IB)
+   49  *
+   50  * NOTE: - Noise is not modeled.
+   51  *       - Asymmetrical gain is not modeled.
+   52  *
+   53  CI1 1  50 2P
+   54  CI2 2  50 2P
+   55  * 1.634 Hz pole capacitor
+   56  C3  98 9  9.715N
+   57  * 1.1 MHz pole capacitor
+   58  C4  6  5  13.95P
+   59  * 4.98 MHz pole capacitor
+   60  C5  98 15 31.9F
+   61  * Drain-substrate capacitor
+   62  C6  50 4  3P
+   63  * 28.6 MHz pole capacitor
+   64  C7  98 11 5.62F
+   65  DP1 1  99 DA
+   66  DP2 50 1  DD
+   67  DP3 2  99 DB
+   68  DP4 50 2  DC
+   69  D1  9  8  DX
+   70  D2  10 9  DX
+   71  D3  18 20 DX
+   72  D4  21 18 DX
+   73  D5  26 24 DX
+   74  D6  25 27 DX
+   75  D7  22 99 DX
+   76  D8  50 22 DX
+   77  D9  0  14 DX
+   78  D10 12 0  DX
+   79  EH  97 98 99    49 1.0
+   80  EN  0  96 0     50 1.0
+   81  * Input offset voltage -|
+   82  EOS 7  1  POLY(1) 16 49 350U 1
+   83  EP  97 0  99    0  1.0
+   84  E1  97 19 99    18 1.0
+   85  * Sourcing load +Vs current
+   86  F1  99 0  VA2   1
+   87  * Sinking load -Vs current
+   88  F2  0  50 VA3   1
+   89  F3  13 0  VA1   1
+   90  G1  98 9  5     6  0.1
+   91  G2  98 11 9     49 1U
+   92  G3  98 15 11    49 1U
+   93  * DC CMRR
+   94  G4  98 16 POLY(2) 1 49 2 49 0 1.26E-8 1.26E-8
+   95  G5  98 18 15    49 1U
+   96  I1  99 4  33.46U
+   97  I2  99 50 366.5U
+   98  * Load dependent pole 
+   99  L1  22 28 80.4U
+  100  * CMR lead inductor
+  101  L2  16 17 73.1M
+  102  * 3.30 MHz lead inductor
+  103  L3  98 3  48.2M
+  104  M1  5  2  4     99 MX
+  105  M2  6  7  4     99 MX
+  106  R3  5  50 5.18K
+  107  R4  6  50 5.18K
+  108  R5  98 9  1E7
+  109  R8  99 49 50K
+  110  R9  49 50 50K
+  111  R10 18 3  1E6
+  112  R12 98 11 1E6
+  113  R13 98 17 1K
+  114  * -Rout
+  115  R16 23 24 70.7
+  116  * +Rout
+  117  R17 23 25 80.3
+  118  * +Isc slope control
+  119  R18 20 29 64K
+  120  * -Isc slope control
+  121  R19 21 30 130K
+  122  R21 98 15 1E6
+  123  R22 22 28 636
+  124  VA1 19 23 0V
+  125  VA2 14 13 0V
+  126  VA3 13 12 0V
+  127  V2  97 8  0.713V
+  128  V3  10 96 0.710V
+  129  V4  29 22 1.170V
+  130  V5  22 30 0.63V
+  131  V6  26 22 0.63V
+  132  V7  22 27 0.63V
+  133  * Input bias and offset current differences
+  134  .MODEL  DA D    (IS=425FA)
+  135  .MODEL  DB D    (IS=425FA)
+  136  .MODEL  DC D    (IS=405FA)
+  137  .MODEL  DD D    (IS=400FA)
+  138  .MODEL  DX D    (IS=1.0E-14)
+  139  .MODEL  MX PMOS (VTO=-2.456 KP=7.0547E-4)
+  140  .ENDS
+  141  *$
+  142  
+  143  * Connections:      Non-inverting input
+  144  *                   |   Inverting input
+  145  *                   |   |   Positive power supply
+  146  *                   |   |   |   Negative power supply
+  147  *                   |   |   |   |   Output
+  148  *                   |   |   |   |   |
+  149  *                   |   |   |   |   |
+  150  *.SUBCK LMC6001A/NS 1   2  99  50  28
+  151  .OPTIONS GMIN=1E-16
+  152  
+  153  .PARAM RF=10K
+  154  .PARAM RG=20K
+  155  .PARAM RDRAIN=10MEG
+  156  .PARAM RF2=10K
+  157  .PARAM RG2=100
+  158  *.param vbias=-3.2382e-10
+  159  .PARAM IBIAS=-6.73658E-17
+  160  
+  161  .PARAMOPT RF=(90K, 10, 10MEG)
+  162  .PARAMOPT RG=(10K, 10, 10MEG)
+  163  .PARAMOPT RDRAIN=(1MEG, 1MEG, 1000MEG)
+  164  *.paramopt vbias=(0, -5, 5)
+  165  *.paramopt rf2=(10k, 100, 1Meg)
+  166  .PARAMOPT IBIAS=(0, -1M, 1M)
+  167  
+  168  *.extract tran label=vdiff (min(v(inm)) - min(v(inp))) goal=0
+  169  *.extract tran label=imax max(i(V_I$4939)) goal=20f
+  170  *.extract tran label=vdiff2 max(v(out2)) - min(v(out2)) goal=1e-2
+  171  *.extract tran label=mvin2 min(v(inm2)) goal=0
+  172  *.extract tran label=iinp min(i(V_I$6006)) goal=5f
+  173  *.extract tran label=irdrain min(i(R_I$5141))
+  174  *.extract tran label=isource min(i(I_I$5804))
+  175  .EXTRACT max(v(out)) - min(v(out))
+  176  .EXTRACT max(v(out2)) - min(v(out2))
+  177  
+  178  *.optimize
+  179  
+  180  *.step param rf 1k 1Meg LIN 5
+  181  *.step param rg 1k 1Meg LIN 5
+  182  *.step C_I$4737 INSTPAR .01f 1p LIN 5
+  183  *.step param rdrain 10Meg 100Meg LIN 5
+  184  
+  185  V_I$7827 N$8587 OUT 0
+  186  V_I$5343 N$5748 0 5
+  187  V_I$7221 N$7979 INP 0
+  188  V_I$3029 VSM 0 -5
+  189  V_I$3031 VSP 0 5
+  190  V_I$5550 N$5746 0 -5
+  191  R_I$7829 N$8587 INM2 RG2
+  192  R_I$5344 INM2 OUT2 RF2
+  193  R_I$3027 INM OUT RF
+  194  R_I$3005 0 INM RG
+  195  R_I$6412 INP 0 RDRAIN
+  196  X_I$5548_I$1 0 INM2 N$5748 N$5746 OUT2  LMC6001A/NS 
+  197  X_I$3239_I$1 N$7979 INM VSP VSM OUT  LMC6001A/NS 
+  198  I_I$6209 0 INP PWL(0 0 20U 0 50U 5N 70U 0)
+  199  
+  200  .DEFWAVE IINP=I(I_I$6209) - I(R_I$6412)
+  201  .DEFWAVE GAIN=V(OUT) / V(INP)
+  202  
+  203  .TRAN 1N 200U
+  204  .PLOT V(INP)
+  205  .PLOT V(OUT)
+  206  .PLOT V(OUT2)
+  207  .PLOT I(V_I$7221)
+  208  .PLOT I(V_I$7827)
+  209  
+  210  .END
+
+End of file 
+
+
+***** 0  error(s). 
+***** 0  warning(s). 
+
+
+
+***** GENERATION ...
+
+Warning 265: OBJECT "X_I$5548_I$1.M1": W or L not specified on that device..
+Default setting relevant to that model will be used
+
+
+***** 0  error(s). 
+***** 0  warning(s). 
+
+
+INFORMATION ABOUT COMPILATION 
+
+
+Memory space allocated (bytes): 453999
+134 elements
+72 nodes 
+10 input signals
+
+ Eldo VERSION :  ELDO v6.1_1.1 (Production version)  Fri Apr 18 10:56:56 MET DST 2003
+
+
+*** DATE:  6-Apr-2009  11:26:29
+
+*** TITLE: * potentiostat
+
+TEMPERATURE : 27.000000 degrees C
+
+1*************** 6-Apr-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************11:26:29*****************
+
+0* potentiostat
+
+0****                 MODELS PARAMETERS                                    TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+ DEVICE          DIODE
+ MODEL: LMC6001A/NS.DA
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 4.2500E-13 A       N       = 1.0000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          DIODE
+ MODEL: LMC6001A/NS.DB
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 4.2500E-13 A       N       = 1.0000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          DIODE
+ MODEL: LMC6001A/NS.DC
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 4.0500E-13 A       N       = 1.0000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          DIODE
+ MODEL: LMC6001A/NS.DD
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 4.0000E-13 A       N       = 1.0000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          DIODE
+ MODEL: LMC6001A/NS.DX
+ LEVEL 1 :  Berkeley model v2.0
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+ *  Basic DC model related Parameters *
+IS      = 1.0000E-14 A       N       = 1.0000E+00 -       BV      = 0.0        V      
+IBV     = 1.0000E-03 A       IK      = 0.0        A       IKR     = 0.0        A      
+RS      = 0.0        Ohm     
+ *  Dynamic and Capacitance related Parameters *
+DCAP    = 1          -       CJO     = 0.0        F       M       = 5.0000E-01 -      
+VJ      = 1.0000E+00 V       CJSW    = 0.0        F       MJSW    = 3.3000E-01 -      
+FC      = 5.0000E-01 -       FCS     = 5.0000E-01 -       PHP     = 1.0000E+00 V      
+KMS     = 0.0        -       TT      = 0.0        s       
+ *  Temperature related Parameters *
+TNOM    = 2.7000E+01 degC    EG      = 1.1100E+00 eV      XTI     = 3.0000E+00 -      
+CTA     = 0.0        1/degK  CTP     = 0.0        1/degK  GAP1    = 7.0200E-04 eV/degK
+GAP2    = 1.1080E+03 degK    TCV     = 0.0        1/degK  TLEV    = 0.0        -      
+TLEVC   = 0.0        -       TM1     = 0.0        1/degK  TM2     = 0.0        unit1  
+TPB     = 0.0        V/degK  TPHP    = 0.0        V/degK  TRS     = 0.0        1/degK 
+TTT1    = 0.0        1/degK  TTT2    = 0.0        unit1   
+ *  Geometery related Parameters *
+SCALEV  = 2.0000E+00 -       SCALM   = 1.0000E+00 -       SHRINK  = 1.0000E+00 -      
+ *  Noise related Parameters *
+AF      = 1.0000E+00 -       KF      = 0.0        -       
+
+unit1 represents 1/degK^2
+
+ DEVICE          MOS
+ MODEL: LMC6001A/NS.MX
+ TYPE            P
+ LEVEL 1 : Berkeley Spice compatible model
+
+  names    values    units     names    values    units     names    values    units   
+  -----    ------    -----     -----    ------    -----     -----    ------    -----   
+VTO     =-2.4560E+00 V       KP      = 7.0547E-04 A/V^2   GAMMA   = 0.0        V^1/2  
+PHI     = 6.0000E-01 V       LAMBDA  = 0.0        1/V     UO      = 6.0000E+02 unit1  
+NSUB    = 0.0        At/cm^3 NSS     = 0.0        At/cm^2 TPG     = 1.0000E+00 -      
+CGSO    = 0.0        F/m     CGDO    = 0.0        F/m     CGBO    = 0.0        F/m    
+KF      = 0.0        -       AF      = 1.0000E+00 -       
+
+ *** Common extrinsic model parameters ***
+OPTACM  = 0          -       ARLEV   = 6          -       ALEV    = 6          -      
+RLEV    = 6          -       
+ * Access resistances related parameters *
+RD      = 0.0        Ohm     RS      = 0.0        Ohm     RSH     = 0.0        Ohm/Sq.
+RDC     = 0.0        Ohm     RSC     = 0.0        Ohm     
+ * Geometry related parameters *
+LD      = 0.0        m       WD      = 0.0        m       DL      = 0.0        m      
+DW      = 0.0        m       LDIF    = 0.0        m       HDIF    = 0.0        m      
+WMLT    = 1.0000E+00 -       LMLT    = 1.0000E+00 -       DEL     = 0.0        m      
+XJ      = 0.0        m       
+ * Static bulk-diode related parameters *
+DIOLEV  = 1          -       JS      = 0.0        A/m^2   JSW     = 0.0        A/m    
+IS      = 1.0000E-14 A       N       = 1.0000E+00 -       NDS     = 1.0000E+00 -      
+VNDS    =-1.0000E+00 V       VDLIN   = 5.0000E-01 -       
+ * Dynamic bulk-diode related parameters *
+DCAPLEV = 2          -       CJGATE  = 0.0                CBD     = 0.0        F      
+CBS     = 0.0        F       CJ      = 0.0        F/m^2   CJSW    = 0.0        F/m    
+FC      = 5.0000E-01 -       MJ      = 5.0000E-01 -       MJSW    = 3.3000E-01 -      
+TT      = 0.0        s       PB      = 8.0000E-01 V       PBSW    = 8.0000E-01 V      
+ * Temperature related Parameters 
+EG      = 1.1100E+00 eV      GAP1    = 7.0200E-04 eV/degK GAP2    = 1.1080E+03 degK   
+TNOM    = 2.7000E+01 degC    TLEV    = 0          -       TLEVC   = 0          -      
+TLEVI   = 1          -       XTI     = 0.0        -       
+ * Temperature Access Resistance related parameters * TLEVR = 1 
+TRD1    = 0.0        1/degK  TRS1    = 0.0        1/degK  TRSH1   = 0.0        1/degK 
+TRD2    = 0.0        unit2   TRS2    = 0.0        unit2   TRSH2   = 0.0        unit2  
+
+unit1 represents cm^2/V.s
+unit2 represents 1/degK^2
+
+
+Searching Operating Point between -1.500000E+01V and 
+                                  1.500000E+01V
+
+
+
+1*************** 6-Apr-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************11:26:29*****************
+
+0* potentiostat
+0****                 OPTION SUMMARY                                        TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+
+
+*** DC Control Options : 
+
+GMIN           = 1.00e-16 NMAXSIZE       = 60000    ITL1           = 100      
+GRAMP          = 0        NETSIZE        = 100      VMIN           = UNDEF    
+VMAX           = UNDEF    
+
+*** Accuracy Control Options : 
+
+ITOL           = 1.00e-06 EPS            = 5.00e-03 VNTOL          = 1.00e-06 
+RELTOL         = 1.00e-03 RELERR         = 5.00e-02 PIVREL         = 1.00e-03 
+PIVTOL         = 1.00e-13 ABSTOL         = 1.00e-12 FLXTOL         = 1.00e-11 
+MAXORD         = 2.00e+00 
+
+*** Time-step Control Options : 
+
+ZOOMTIME       = 1.00e+00 STEP           = 0.00e+00 STARTSMP       = 0.00e+00 
+FREQSMP        = 0.00e+00 COURESOL       = 0.00e+00 TRTOL          = 7.00e+00 
+HMIN           = 1.27e-11 ITL3           = 3        ITL4           = 13       
+FT             = 1.25e-01 DCLOG          = 1.00e+00 LVLTIM         = 2        
+LVLCNV         = 2        DVDT           = -1       RELVAR         = 1.50e-01 
+ABSVAR         = 2.00e-01 SAMPLE         = 0.00e+00 HMAX           = UNDEF    
+
+
+*** MosFet default Options : 
+
+SCALE          = 1.00e+00 SCALM          = 1.00e+00 SCALEBSIM      = 1.00e+00 
+DEFAD          = UNDEF    DEFAS          = UNDEF    DEFPD          = UNDEF    
+DEFPS          = UNDEF    DEFW           = 1.00e-04 DEFL           = 1.00e-04 
+DEFNRD         = UNDEF    DEFNRS         = UNDEF    XA             = 6.00e-06 
+LIMRMOS        = UNDEF    SHRINK         = 1.00e+00 
+
+*** General Information Options : 
+
+SDA            = 0        CPTIME         = UNDEF    STAT           = 0        
+TIMEDIV        = 0        SIMUDIV        = 10       SAVETIME       = 0        
+MAXTRAN        = 1000     MAXNODES       = 500      MAXV           = 1.00e+13 
+LIMPROBE       = 1000     FLICKER_NOISE  = 0        THERMAL_NOISE  = 0        
+TNOM           = 2.70e+01 TMAX           = UNDEF    
+SPICDC         = 0        SPIOUT         = 0        NEWTON         = 1        
+OSR            = 0        TRAP           = 1        GEAR           = 0        
+BE             = 0        PROBEOP        = 0        NOLAT          = 0        
+NWLAT          = 0        ANALOG         = 0        BBDEBUG        = 0        
+NOSIZECHK      = 0        QTRUNC         = 0        UNBOUND        = 0        
+LCAPOP         = 0        STVER          = 0        MOTOROLA       = 0        
+AMS            = 0        ASPEC          = 0        INPUT          = 0        
+NOINIT         = 0        PSF            = 0        WSF            = 0        
+WSFASCII       = 0        NOBIN          = 0        NOCOU          = 0        
+WL             = 0        NODE           = 0        LIST           = 0        
+SPI3BIN        = 0        SPI3ASC        = 0        NOMOD          = 0        
+WSF            = 0        WSFASCII       = 0        NOBIN          = 0        
+NOCOU          = 0        WL             = 0        NODE           = 0        
+LIST           = 0        SPI3BIN        = 0        SPI3ASC        = 0        
+NOMOD          = 0        RMOS           = 0        NWRMOS         = 1        
+NONWRMOS       = 0        USEDEFAP       = 0        NOASCII        = 0        
+NOAEX          = 0        AEX            = 0        AEX            = 0        
+ASCII          = 2        MIXED          = 0        SWITCH         = 0        
+USERSWITCH     = 0        TIMING         = 0        MODWL          = 1        
+ULOGIC         = 0        
+
+
+
+***> DC CPU TIME 0s 100ms <***
+
+DC:3 iterations FOR DC analysis
+
+
+
+
+1*************** 6-Apr-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************11:26:29*****************
+
+0* potentiostat
+0****                 INITIAL TRANSIENT SOLUTION                           TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+  NODE         VOLTAGE    
+ INM       3.5025E-04
+ INM2       3.5002E-04
+ INP       2.5207E-07
+ N$5746      -5.0000E+00
+ N$5748       5.0000E+00
+ N$7979       2.5207E-07
+ N$8587       5.2538E-04
+ OUT2      -1.7186E-02
+ VSM      -5.0000E+00
+ VSP       5.0000E+00
+ X_I$3239_I$1.3       0.0       
+ X_I$3239_I$1.4       2.6741E+00
+ X_I$3239_I$1.5      -4.9133E+00
+ X_I$3239_I$1.6      -4.9133E+00
+ X_I$3239_I$1.7       3.5026E-04
+ X_I$3239_I$1.8       4.2870E+00
+ X_I$3239_I$1.9       1.6966E-03
+ X_I$3239_I$1.10      -4.2900E+00
+ X_I$3239_I$1.11       1.6966E-03
+ X_I$3239_I$1.12      -4.9122E-01
+ X_I$3239_I$1.13      -4.9122E-01
+ X_I$3239_I$1.14      -4.9122E-01
+ X_I$3239_I$1.15       1.6966E-03
+ X_I$3239_I$1.16       4.4164E-09
+ X_I$3239_I$1.17       4.4164E-09
+ X_I$3239_I$1.18       1.6966E-03
+ X_I$3239_I$1.19       1.6966E-03
+ X_I$3239_I$1.20       1.1705E+00
+ X_I$3239_I$1.21      -6.2947E-01
+ X_I$3239_I$1.22       5.2538E-04
+ X_I$3239_I$1.23       1.6966E-03
+ X_I$3239_I$1.24       1.6271E-02
+ X_I$3239_I$1.25      -1.4999E-02
+ X_I$3239_I$1.26       6.3053E-01
+ X_I$3239_I$1.27      -6.2947E-01
+ X_I$3239_I$1.29       1.1705E+00
+ X_I$3239_I$1.30      -6.2947E-01
+ X_I$3239_I$1.49       0.0       
+ X_I$3239_I$1.96      -5.0000E+00
+ X_I$3239_I$1.97       5.0000E+00
+ X_I$3239_I$1.98       0.0       
+ X_I$5548_I$1.3       0.0       
+ X_I$5548_I$1.4       2.6741E+00
+ X_I$5548_I$1.5      -4.9133E+00
+ X_I$5548_I$1.6      -4.9133E+00
+ X_I$5548_I$1.7       3.5000E-04
+ X_I$5548_I$1.8       4.2870E+00
+ X_I$5548_I$1.9      -1.6367E-02
+ X_I$5548_I$1.10      -4.2900E+00
+ X_I$5548_I$1.11      -1.6367E-02
+ X_I$5548_I$1.12       4.9096E-01
+ X_I$5548_I$1.13       4.9096E-01
+ X_I$5548_I$1.14       4.9096E-01
+ X_I$5548_I$1.15      -1.6367E-02
+ X_I$5548_I$1.16       4.4103E-09
+ X_I$5548_I$1.17       4.4103E-09
+ X_I$5548_I$1.18      -1.6367E-02
+ X_I$5548_I$1.19      -1.6367E-02
+ X_I$5548_I$1.20       1.1528E+00
+ X_I$5548_I$1.21      -6.4719E-01
+ X_I$5548_I$1.22      -1.7186E-02
+ X_I$5548_I$1.23      -1.6367E-02
+ X_I$5548_I$1.24      -1.6657E-03
+ X_I$5548_I$1.25      -3.2925E-02
+ X_I$5548_I$1.26       6.1281E-01
+ X_I$5548_I$1.27      -6.4719E-01
+ X_I$5548_I$1.29       1.1528E+00
+ X_I$5548_I$1.30      -6.4719E-01
+ X_I$5548_I$1.49       0.0       
+ X_I$5548_I$1.96      -5.0000E+00
+ X_I$5548_I$1.97       5.0000E+00
+ X_I$5548_I$1.98       0.0       
+
+
+
+   VOLTAGE SOURCE CURRENT
+
+NAME      CURRENT      VOLTAGE      POWER        
+V_I$5343  -4.9996E-04   5.0000E+00  -2.4998E-03  
+V_I$7221   2.5207E-14   0.0          0.0         
+V_I$3029   4.9996E-04  -5.0000E+00  -2.4998E-03  
+V_I$3031  -5.0173E-04   5.0000E+00  -2.5087E-03  
+V_I$5550   5.0171E-04  -5.0000E+00  -2.5086E-03  
+X_I$5548_I$1.EH  -6.6782E-17   5.0000E+00  -3.3391E-16  
+X_I$5548_I$1.EN  -1.0497E-14   5.0000E+00  -5.2487E-14  
+X_I$5548_I$1.EOS   0.0          3.5000E-04   0.0         
+X_I$5548_I$1.EP   0.0          5.0000E+00   0.0         
+X_I$5548_I$1.E1  -1.7536E-06   5.0164E+00  -8.7965E-06  
+X_I$5548_I$1.F1  -1.0053E-14   5.0000E+00  -5.0264E-14  
+X_I$5548_I$1.F2   1.7536E-06   5.0000E+00   8.7678E-06  
+X_I$5548_I$1.F3  -1.7536E-06   4.9096E-01  -8.6093E-07  
+X_I$5548_I$1.G1  -1.6367E-09   1.6367E-02  -2.6789E-11  
+X_I$5548_I$1.G2  -1.6367E-08   1.6367E-02  -2.6789E-10  
+X_I$5548_I$1.G3  -1.6367E-08   1.6367E-02  -2.6789E-10  
+X_I$5548_I$1.G4   4.4103E-12  -4.4103E-09  -1.9451E-20  
+X_I$5548_I$1.G5  -1.6367E-08   1.6367E-02  -2.6789E-10  
+X_I$5548_I$1.I1   3.3460E-05   2.3259E+00   7.7824E-05  
+X_I$5548_I$1.I2   3.6650E-04   1.0000E+01   3.6650E-03  
+X_I$5548_I$1.VA1  -1.7536E-06   0.0          0.0         
+X_I$5548_I$1.VA2  -1.0053E-14   0.0          0.0         
+X_I$5548_I$1.VA3   1.7536E-06   0.0          0.0         
+X_I$5548_I$1.V2   1.0501E-14   7.1300E-01   7.4871E-15  
+X_I$5548_I$1.V3   1.0497E-14   7.1000E-01   7.4531E-15  
+X_I$5548_I$1.V4  -1.0132E-14   1.1700E+00  -1.1855E-14  
+X_I$5548_I$1.V5  -1.0069E-14   6.3000E-01  -6.3436E-15  
+X_I$5548_I$1.V6  -2.0794E-04   6.3000E-01  -1.3101E-04  
+X_I$5548_I$1.V7  -2.0619E-04   6.3000E-01  -1.2990E-04  
+X_I$3239_I$1.EH  -6.2452E-17   5.0000E+00  -3.1226E-16  
+X_I$3239_I$1.EN  -1.0500E-14   5.0000E+00  -5.2498E-14  
+X_I$3239_I$1.EOS   0.0          3.5000E-04   0.0         
+X_I$3239_I$1.EP   0.0          5.0000E+00   0.0         
+X_I$3239_I$1.E1   1.7711E-06   4.9983E+00   8.8524E-06  
+X_I$3239_I$1.F1   1.7711E-06   5.0000E+00   8.8554E-06  
+X_I$3239_I$1.F2  -1.0053E-14   5.0000E+00  -5.0264E-14  
+X_I$3239_I$1.F3   1.7711E-06  -4.9122E-01  -8.6999E-07  
+X_I$3239_I$1.G1   1.6966E-10  -1.6966E-03  -2.8784E-13  
+X_I$3239_I$1.G2   1.6966E-09  -1.6966E-03  -2.8784E-12  
+X_I$3239_I$1.G3   1.6966E-09  -1.6966E-03  -2.8784E-12  
+X_I$3239_I$1.G4   4.4164E-12  -4.4164E-09  -1.9504E-20  
+X_I$3239_I$1.G5   1.6966E-09  -1.6966E-03  -2.8784E-12  
+X_I$3239_I$1.I1   3.3460E-05   2.3259E+00   7.7824E-05  
+X_I$3239_I$1.I2   3.6650E-04   1.0000E+01   3.6650E-03  
+X_I$3239_I$1.VA1   1.7711E-06   0.0          0.0         
+X_I$3239_I$1.VA2   1.7711E-06   0.0          0.0         
+X_I$3239_I$1.VA3  -1.0053E-14   0.0          0.0         
+X_I$3239_I$1.V2   1.0499E-14   7.1300E-01   7.4856E-15  
+X_I$3239_I$1.V3   1.0500E-14   7.1000E-01   7.4547E-15  
+X_I$3239_I$1.V4  -1.0132E-14   1.1700E+00  -1.1855E-14  
+X_I$3239_I$1.V5  -1.0069E-14   6.3000E-01  -6.3436E-15  
+X_I$3239_I$1.V6  -2.0614E-04   6.3000E-01  -1.2987E-04  
+X_I$3239_I$1.V7  -2.0791E-04   6.3000E-01  -1.3098E-04  
+I_I$6209   0.0         -2.5207E-07   0.0         
+
+   TOTAL POWER DISSIPATION:  1.0539E-02 WATTS
+
+   POWER DISSIPATION THROUGH CONTROLLED SOURCES:  1.0528E-05 WATTS
+
+
+
+
+
+1*************** 6-Apr-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************11:26:29*****************
+
+0* potentiostat
+
+0****                 OPERATING POINT INFORMATION                          TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+        DIODE 1      DIODE 2      DIODE 3      DIODE 4      DIODE 5      DIODE 6      DIODE 7      DIODE 8      
+MODEL   MOD 1        MOD 2        MOD 3        MOD 4        MOD 5        MOD 6        MOD 7        MOD 8        
+ID      -4.2902E-13  -4.0381E-13  -4.2902E-13  -4.0885E-13  -1.0501E-14  -1.0497E-14  -1.0132E-14  -1.0069E-14  
+VD      -5.0000E+00  -5.0000E+00  -4.9996E+00  -5.0004E+00  -4.3034E+00  -4.2736E+00  -1.1692E+00  -6.3082E-01  
+REQ      1.1820E+15   1.2467E+15   1.1820E+15   1.2332E+15   8.5068E+15   8.5068E+15   8.5068E+15   8.5068E+15  
+CAP      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+
+DIODE: 1 X_I$5548_I$1.DP1
+DIODE: 2 X_I$5548_I$1.DP2
+DIODE: 3 X_I$5548_I$1.DP3
+DIODE: 4 X_I$5548_I$1.DP4
+DIODE: 5 X_I$5548_I$1.D1
+DIODE: 6 X_I$5548_I$1.D2
+DIODE: 7 X_I$5548_I$1.D3
+DIODE: 8 X_I$5548_I$1.D4
+
+
+MOD: 1 LMC6001A/NS.DA
+MOD: 2 LMC6001A/NS.DD
+MOD: 3 LMC6001A/NS.DB
+MOD: 4 LMC6001A/NS.DC
+MOD: 5 LMC6001A/NS.DX
+MOD: 6 LMC6001A/NS.DX
+MOD: 7 LMC6001A/NS.DX
+MOD: 8 LMC6001A/NS.DX
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       5.2538E-04   3.5002E-04   3.5025E-04   0.0          2.5207E-07  -4.9133E+00  -4.9133E+00   0.0         
+V-       3.5002E-04  -1.7186E-02   5.2538E-04   3.5025E-04   0.0         -5.0000E+00  -5.0000E+00  -1.6367E-02  
+ID       1.7536E-06   1.7536E-06  -1.7513E-08  -1.7513E-08   2.5207E-14   1.6730E-05   1.6730E-05   1.6367E-09  
+DIP: 1 R_I$7829
+DIP: 2 R_I$5344
+DIP: 3 R_I$3027
+DIP: 4 R_I$3005
+DIP: 5 R_I$6412
+DIP: 6 X_I$5548_I$1.R3
+DIP: 7 X_I$5548_I$1.R4
+DIP: 8 X_I$5548_I$1.R5
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       5.0000E+00   0.0         -1.6367E-02   0.0          0.0         -1.6367E-02  -1.6367E-02   1.1528E+00  
+V-       0.0         -5.0000E+00   0.0         -1.6367E-02   4.4103E-09  -1.6657E-03  -3.2925E-02   1.1528E+00  
+ID       1.0000E-04   1.0000E-04  -1.6367E-08   1.6367E-08  -4.4103E-12  -2.0794E-04   2.0619E-04  -1.0132E-14  
+DIP: 1 X_I$5548_I$1.R8
+DIP: 2 X_I$5548_I$1.R9
+DIP: 3 X_I$5548_I$1.R10
+DIP: 4 X_I$5548_I$1.R12
+DIP: 5 X_I$5548_I$1.R13
+DIP: 6 X_I$5548_I$1.R16
+DIP: 7 X_I$5548_I$1.R17
+DIP: 8 X_I$5548_I$1.R18
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+ID      -4.9996E-04   2.5207E-14   4.9996E-04  -5.0173E-04   5.0171E-04  -1.7536E-06  -1.0053E-14   1.7536E-06  
+
+        DIODE 1      DIODE 2      DIODE 3      DIODE 4      DIODE 5      DIODE 6      DIODE 7      DIODE 8      
+MODEL   MOD 1        MOD 2        MOD 3        MOD 4        MOD 5        MOD 6        MOD 7        MOD 8        
+ID       2.0794E-04   2.0619E-04  -1.0585E-14  -1.0581E-14  -1.0053E-14   1.7536E-06  -4.2902E-13  -4.0381E-13  
+VD       6.1448E-01   6.1426E-01  -5.0172E+00  -4.9828E+00  -4.9096E-01   4.9096E-01  -5.0000E+00  -5.0000E+00  
+REQ      1.2438E+02   1.2544E+02   8.5068E+15   8.5068E+15   8.5068E+15   1.4750E+04   1.1820E+15   1.2467E+15  
+CAP      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+
+DIODE: 1 X_I$5548_I$1.D5
+DIODE: 2 X_I$5548_I$1.D6
+DIODE: 3 X_I$5548_I$1.D7
+DIODE: 4 X_I$5548_I$1.D8
+DIODE: 5 X_I$5548_I$1.D9
+DIODE: 6 X_I$5548_I$1.D10
+DIODE: 7 X_I$3239_I$1.DP1
+DIODE: 8 X_I$3239_I$1.DP2
+
+
+MOD: 1 LMC6001A/NS.DX
+MOD: 2 LMC6001A/NS.DX
+MOD: 3 LMC6001A/NS.DX
+MOD: 4 LMC6001A/NS.DX
+MOD: 5 LMC6001A/NS.DX
+MOD: 6 LMC6001A/NS.DX
+MOD: 7 LMC6001A/NS.DA
+MOD: 8 LMC6001A/NS.DD
+
+
+
+        DIODE 1      DIODE 2      DIODE 3      DIODE 4      DIODE 5      DIODE 6      DIODE 7      DIODE 8      
+MODEL   MOD 1        MOD 2        MOD 3        MOD 4        MOD 5        MOD 6        MOD 7        MOD 8        
+ID      -4.2902E-13  -4.0885E-13  -1.0499E-14  -1.0500E-14  -1.0132E-14  -1.0069E-14   2.0614E-04   2.0791E-04  
+VD      -4.9996E+00  -5.0004E+00  -4.2853E+00  -4.2917E+00  -1.1688E+00  -6.3117E-01   6.1425E-01   6.1448E-01  
+REQ      1.1820E+15   1.2332E+15   8.5068E+15   8.5068E+15   8.5068E+15   8.5068E+15   1.2547E+02   1.2440E+02  
+CAP      0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+
+DIODE: 1 X_I$3239_I$1.DP3
+DIODE: 2 X_I$3239_I$1.DP4
+DIODE: 3 X_I$3239_I$1.D1
+DIODE: 4 X_I$3239_I$1.D2
+DIODE: 5 X_I$3239_I$1.D3
+DIODE: 6 X_I$3239_I$1.D4
+DIODE: 7 X_I$3239_I$1.D5
+DIODE: 8 X_I$3239_I$1.D6
+
+
+MOD: 1 LMC6001A/NS.DB
+MOD: 2 LMC6001A/NS.DC
+MOD: 3 LMC6001A/NS.DX
+MOD: 4 LMC6001A/NS.DX
+MOD: 5 LMC6001A/NS.DX
+MOD: 6 LMC6001A/NS.DX
+MOD: 7 LMC6001A/NS.DX
+MOD: 8 LMC6001A/NS.DX
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+V12      5.0000E+00   5.0000E+00   3.5000E-04   5.0000E+00   5.0164E+00   5.0000E+00   5.0000E+00   3.5000E-04  
+ID      -6.6782E-17  -1.0497E-14   0.0          0.0         -1.7536E-06  -6.2452E-17  -1.0500E-14   0.0         
+DIP: 1 X_I$5548_I$1.EH
+DIP: 2 X_I$5548_I$1.EN
+DIP: 3 X_I$5548_I$1.EOS
+DIP: 4 X_I$5548_I$1.EP
+DIP: 5 X_I$5548_I$1.E1
+DIP: 6 X_I$3239_I$1.EH
+DIP: 7 X_I$3239_I$1.EN
+DIP: 8 X_I$3239_I$1.EOS
+
+
+
+        I 1          I 2          I 3          I 4          I 5          I 6          I 7          I 8          
+dV       1.6367E-02   1.6367E-02   1.6367E-02  -4.4103E-09   1.6367E-02  -1.6966E-03  -1.6966E-03  -1.6966E-03  
+I       -1.6367E-09  -1.6367E-08  -1.6367E-08   4.4103E-12  -1.6367E-08   1.6966E-10   1.6966E-09   1.6966E-09  
+DIP: 1 X_I$5548_I$1.G1
+DIP: 2 X_I$5548_I$1.G2
+DIP: 3 X_I$5548_I$1.G3
+DIP: 4 X_I$5548_I$1.G4
+DIP: 5 X_I$5548_I$1.G5
+DIP: 6 X_I$3239_I$1.G1
+DIP: 7 X_I$3239_I$1.G2
+DIP: 8 X_I$3239_I$1.G3
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+      -6.4719E-01   0.0         -1.7186E-02  -4.9133E+00  -4.9133E+00   0.0          5.0000E+00   0.0         
+V-      -6.4719E-01  -1.6367E-02  -1.7186E-02  -5.0000E+00  -5.0000E+00   1.6966E-03   0.0         -5.0000E+00  
+ID       1.0069E-14   1.6367E-08   0.0          1.6730E-05   1.6730E-05  -1.6966E-10   1.0000E-04   1.0000E-04  
+DIP: 1 X_I$5548_I$1.R19
+DIP: 2 X_I$5548_I$1.R21
+DIP: 3 X_I$5548_I$1.R22
+DIP: 4 X_I$3239_I$1.R3
+DIP: 5 X_I$3239_I$1.R4
+DIP: 6 X_I$3239_I$1.R5
+DIP: 7 X_I$3239_I$1.R8
+DIP: 8 X_I$3239_I$1.R9
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       1.6966E-03   0.0          0.0          1.6966E-03   1.6966E-03   1.1705E+00  -6.2947E-01   0.0         
+V-       0.0          1.6966E-03   4.4164E-09   1.6271E-02  -1.4999E-02   1.1705E+00  -6.2947E-01   1.6966E-03  
+ID       1.6966E-09  -1.6966E-09  -4.4164E-12  -2.0614E-04   2.0791E-04  -1.0132E-14   1.0069E-14  -1.6966E-09  
+DIP: 1 X_I$3239_I$1.R10
+DIP: 2 X_I$3239_I$1.R12
+DIP: 3 X_I$3239_I$1.R13
+DIP: 4 X_I$3239_I$1.R16
+DIP: 5 X_I$3239_I$1.R17
+DIP: 6 X_I$3239_I$1.R18
+DIP: 7 X_I$3239_I$1.R19
+DIP: 8 X_I$3239_I$1.R21
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          V 8          
+ID       1.0501E-14   1.0497E-14  -1.0132E-14  -1.0069E-14  -2.0794E-04  -2.0619E-04   1.7711E-06   1.7711E-06  
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        DIP 7        DIP 8        
+V+       0.0         -4.9133E+00   0.0          0.0          0.0         -4.9133E+00   0.0          0.0         
+V-      -1.6367E-02  -4.9133E+00  -1.6367E-02  -1.6367E-02   1.6966E-03  -4.9133E+00   1.6966E-03   1.6966E-03  
+ID       0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0         
+DIP: 1 X_I$5548_I$1.C3
+DIP: 2 X_I$5548_I$1.C4
+DIP: 3 X_I$5548_I$1.C5
+DIP: 4 X_I$5548_I$1.C7
+DIP: 5 X_I$3239_I$1.C3
+DIP: 6 X_I$3239_I$1.C4
+DIP: 7 X_I$3239_I$1.C5
+DIP: 8 X_I$3239_I$1.C7
+
+
+
+        MOS 1        MOS 2        MOS 3        MOS 4        
+MODEL   MOD 1        MOD 2        MOD 3        MOD 4        
+
+ID      -1.6730E-05  -1.6730E-05  -1.6730E-05  -1.6730E-05  
+VGS     -2.6738E+00  -2.6738E+00  -2.6738E+00  -2.6738E+00  
+VDS     -7.5875E+00  -7.5875E+00  -7.5875E+00  -7.5875E+00  
+VBS      2.3259E+00   2.3259E+00   2.3259E+00   2.3259E+00  
+VTH     -2.4560E+00  -2.4560E+00  -2.4560E+00  -2.4560E+00  
+VDSAT   -2.1778E-01  -2.1778E-01  -2.1778E-01  -2.1778E-01  
+GM       1.5360E-04   1.5360E-04   1.5360E-04   1.5360E-04  
+GDS      0.0          0.0          0.0          0.0         
+GMB      0.0          0.0          0.0          0.0         
+CBD      0.0          0.0          0.0          0.0         
+CBS      0.0          0.0          0.0          0.0         
+CGS      0.0          0.0          0.0          0.0         
+CGD      0.0          0.0          0.0          0.0         
+CGB      0.0          0.0          0.0          0.0         
+Region  saturation   saturation   saturation   saturation   
+VTH_D    2.1778E-01   2.1778E-01   2.1778E-01   2.1778E-01  
+
+MOS: 1 X_I$5548_I$1.M1
+MOS: 2 X_I$5548_I$1.M2
+MOS: 3 X_I$3239_I$1.M1
+MOS: 4 X_I$3239_I$1.M2
+
+
+MOD: 1 LMC6001A/NS.MX
+MOD: 2 LMC6001A/NS.MX
+MOD: 3 LMC6001A/NS.MX
+MOD: 4 LMC6001A/NS.MX
+
+
+
+        DIODE 1      DIODE 2      DIODE 3      DIODE 4      
+MODEL   MOD 1        MOD 2        MOD 3        MOD 4        
+ID      -1.0583E-14  -1.0583E-14   1.7711E-06  -1.0053E-14  
+VD      -4.9995E+00  -5.0005E+00   4.9122E-01  -4.9122E-01  
+REQ      8.5068E+15   8.5068E+15   1.4604E+04   8.5068E+15  
+CAP      0.0          0.0          0.0          0.0         
+
+DIODE: 1 X_I$3239_I$1.D7
+DIODE: 2 X_I$3239_I$1.D8
+DIODE: 3 X_I$3239_I$1.D9
+DIODE: 4 X_I$3239_I$1.D10
+
+
+MOD: 1 LMC6001A/NS.DX
+MOD: 2 LMC6001A/NS.DX
+MOD: 3 LMC6001A/NS.DX
+MOD: 4 LMC6001A/NS.DX
+
+
+
+        V 1          V 2          
+V12      5.0000E+00   4.9983E+00  
+ID       0.0          1.7711E-06  
+DIP: 1 X_I$3239_I$1.EP
+DIP: 2 X_I$3239_I$1.E1
+
+
+
+        I 1          I 2          I 3          I 4          I 5          I 6          
+dV       5.0000E+00   5.0000E+00   4.9096E-01   5.0000E+00   5.0000E+00  -4.9122E-01  
+I       -1.0053E-14   1.7536E-06  -1.7536E-06   1.7711E-06  -1.0053E-14   1.7711E-06  
+DIP: 1 X_I$5548_I$1.F1
+DIP: 2 X_I$5548_I$1.F2
+DIP: 3 X_I$5548_I$1.F3
+DIP: 4 X_I$3239_I$1.F1
+DIP: 5 X_I$3239_I$1.F2
+DIP: 6 X_I$3239_I$1.F3
+
+
+
+        I 1          I 2          
+dV      -4.4164E-09  -1.6966E-03  
+I        4.4164E-12   1.6966E-09  
+DIP: 1 X_I$3239_I$1.G4
+DIP: 2 X_I$3239_I$1.G5
+
+
+
+        V 1          V 2          V 3          V 4          V 5          V 6          V 7          
+ID      -1.0053E-14   1.0499E-14   1.0500E-14  -1.0132E-14  -1.0069E-14  -2.0614E-04  -2.0791E-04  
+
+        DIP 1        
+V+       5.2538E-04  
+V-       5.2538E-04  
+ID       0.0         
+DIP: 1 X_I$3239_I$1.R22
+
+
+
+        DIP 1        DIP 2        DIP 3        DIP 4        DIP 5        DIP 6        
+V+      -1.7186E-02   4.4103E-09   0.0          5.2538E-04   4.4164E-09   0.0         
+V-      -1.7186E-02   4.4103E-09   0.0          5.2538E-04   4.4164E-09   0.0         
+ID      -1.7536E-06   4.4103E-12   1.6367E-08   1.7711E-06   4.4164E-12  -1.6966E-09  
+DIP: 1 X_I$5548_I$1.L1
+DIP: 2 X_I$5548_I$1.L2
+DIP: 3 X_I$5548_I$1.L3
+DIP: 4 X_I$3239_I$1.L1
+DIP: 5 X_I$3239_I$1.L2
+DIP: 6 X_I$3239_I$1.L3
+
+
+
+Eldo NEWTON: VNTOL=1.000000e-06 RELTOL=7.500000e-04
+
+................................................
+Simulation progress           : 10%
+Elapsed CPU time              : 0h 0mn 0s 30
+................................................
+Simulation progress           : 20%
+Elapsed CPU time              : 0h 0mn 0s 60
+................................................
+Simulation progress           : 30%
+Elapsed CPU time              : 0h 0mn 0s 70
+................................................
+Simulation progress           : 40%
+Elapsed CPU time              : 0h 0mn 0s 80
+................................................
+Simulation progress           : 50%
+Elapsed CPU time              : 0h 0mn 0s 100
+................................................
+Simulation progress           : 60%
+Elapsed CPU time              : 0h 0mn 0s 110
+................................................
+Simulation progress           : 70%
+Elapsed CPU time              : 0h 0mn 0s 110
+................................................
+Simulation progress           : 80%
+Elapsed CPU time              : 0h 0mn 0s 110
+................................................
+Simulation progress           : 90%
+Elapsed CPU time              : 0h 0mn 0s 130
+................................................
+Simulation progress           : 100%
+Elapsed CPU time              : 0h 0mn 0s 140
+
+
+1*************** 6-Apr-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************11:26:29*****************
+
+0* potentiostat
+0****                 EXTRACT INFORMATION                                   TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+* MAX(V(OUT))-MIN(V(OUT)) =  4.3309E-02   
+* MAX(V(OUT2))-MIN(V(OUT2)) =  3.5424E+00   
+
+1*************** 6-Apr-2009 ***********************  ELDO v6.1_1.1 (Production version)   (v6.1_1.1)  ***********************11:26:29*****************
+
+0* potentiostat
+0****                 ACCOUNTING INFORMATION                                TEMPERATURE =   27.000 DEG C
+
+0*************************************************************************************************************************
+
+
+
+
+
+    NUNODS NCNODS NUMNOD   NUMEL   DIODES    BJT  JFET  MOSFET
+
+        10     72     72     133       28      0     0       4
+
+
+    NSTOP    NTERM    PERSPA  
+
+       99      408 9.584e+01
+
+    NUMTTP  NUMRTP  LTERTP  LTERTPNW NWNOCON
+
+        71       6       6       6       0
+
+  DIGITAL  INWCALL    ITERNW   MEMSIZE
+
+        0      145 1.859e+00  10453868
+
+    NDEVCALL       NKIRCH  NMAXCALL      ITERM     LATENCY
+
+       22170            0         6   1.00e+00   0.000e+00%
+
+
+  TRANSIENT JOB TIME                 0
+
+
+
+
+***>CPU TIME 0s 150ms <***
+
+
+***>GLOBAL CPU TIME 0s 300ms <***
+
+
+***>GLOBAL ELAPSED TIME 1s <***
+
+
+  Job started at  6-Apr-2009 11:26:28
+  Job end at      6-Apr-2009 11:26:29
+
+  Run on cae15 (SunOS 5.9)
+

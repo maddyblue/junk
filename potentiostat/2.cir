@@ -1,0 +1,64 @@
+Design:  /top/students/UNGRAD/ECE/dolmant/home/potentiostat/2.default
+.options  tnom=27
+.temp 27
+V_I$7827 N$8587 out 0
+V_I$5343 N$5748 0 5
+V_I$7221 N$7979 inp 0
+V_I$3029 vsm 0 -5
+V_I$3031 vsp 0 5
+V_I$5550 N$5746 0 -5
+R_I$7829 N$8587 inm2 rg2
+R_I$5344 inm2 out2 rf2
+R_I$3027 inm out rf
+R_I$3005 0 inm rg
+R_I$6412 inp 0 rdrain
+X_I$5548_I$1 0 inm2 N$5748 N$5746 out2  LMC6001A/NS 
+X_I$3239_I$1 N$7979 inm vsp vsm out  LMC6001A/NS 
+I_I$6209 0 inp 5f
+.op  NO_SMALL_SIGNAL
+*
+* Beginning of translation table for device INSTANCE names
+*  Netlist Name       Schematic Name
+*
+*  R_I$7829           /I$7829
+*  V_I$5343           /I$5343
+*  R_I$5344           /I$5344
+*  I_I$6209           /I$6209
+*  V_I$3029           /I$3029
+*  V_I$3031           /I$3031
+*  R_I$3005           /I$3005
+*  R_I$3027           /I$3027
+*  X_I$3239_I$1       /I$3239/I$1
+*  R_I$6412           /I$6412
+*  V_I$7221           /I$7221
+*  X_I$5548_I$1       /I$5548/I$1
+*  V_I$7827           /I$7827
+*  V_I$5550           /I$5550
+* End of translation table for device INSTANCE names
+*
+* Beginning of translation table for device MODEL names
+*  Netlist Name       Schematic Name
+*
+*  LMC6001A/NS        LMC6001A/NS
+*  ACCUSIM            ACCUSIM
+* End of translation table for device MODEL names
+*
+* Beginning of translation table for NODE names
+*  Netlist Name       Schematic Name
+*
+*  0                  //ground
+*  inm2               /inm2
+*  N$8587             /N$8587
+*  out                /out
+*  N$7979             /N$7979
+*  inp                /inp
+*  out2               /out2
+*  N$5748             /N$5748
+*  N$5746             /N$5746
+*  inm                /inm
+*  vsm                /vsm
+*  vsp                /vsp
+* End of translation table for NODE names
+* >KEEP
+* >ENDKEEP
+.END
