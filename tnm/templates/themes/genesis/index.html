@@ -1,0 +1,64 @@
+<!doctype html>
+<html {%- block html %}{% endblock %}>
+<head>
+	<meta charset="utf-8">
+
+	<title></title>
+
+	{{ jquery }}
+
+	<link rel="stylesheet" href="{{ base }}css/{{ site.color }}.css">
+
+	{% block head %}{% endblock %}
+
+	{% if page.type == 'gallery' and page.layout == 1 %}
+		<script src="{{ base }}js/jquery.jcarousel.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="{{ base }}css/carousel/skin.css">
+	{% elif page.type == 'contact' %}
+		<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key={{ google_api }}&sensor=false"></script>
+		<script src="{{ base }}js/map.min.js"></script>
+	{% endif %}
+</head>
+<body>
+
+<div id="container">
+
+	<header id="top">
+		<h1><a href="{{ rel }}" class="editable line" id="_headline">{{ site.headline }}</a></h1>
+		<nav>
+			<ul id="menu">
+				{% for p in site.pages %}
+				{% set link = rel + pages[p].name if not loop.first else rel[:-1] %}
+				<li id="p_{{ p.id() }}" class="menu_item"><a href="{{ link }}" id="p_{{ p.id() }}_name" {% if page.key == p %} class="editable line current"{% endif %}>{{ pages[p].name }}</a></li>
+				{% endfor %}
+			</ul>
+		</nav>
+	</header>
+
+	<div id="main" role="main" class="{{ page.type }}_{{ page.layout }} {%- if page.type == 'blog' %} blog{% endif %}">
+
+		{% include pagetemplate %}
+
+	</div>
+</div>
+
+<footer class="bottom">
+	<div class="inner">
+		<ul class="sn editable social" id="social">
+			{% if mode == 'edit' %}
+			<div ng-show="no_social()">
+				No social media links
+			</div>
+			{% endif %}
+			{% for k, v in site.social_media.iteritems() %}
+			{% if mode == 'edit' or site[k] %}<li class="{{ k }}" id="disp_{{ k }}"{% if mode == 'edit' %} ng-show="socialmap['{{ k }}']"{% endif %}><a href="{{ v['url'] }}{{ site[k]|default('', True) }}" value="{{ site[k]|default('', True) }}" target="_blank" id="_{{ k }}">{{ v['name'] }}</a></li>{% endif %}
+			{% endfor %}
+		</ul>
+		<p>&copy; 2011 <a href="http://www.thenextmuse.com">thenextmuse.com</a></p>
+	</div>
+</footer>
+
+<script src="{{ base }}js/script.min.js"></script>
+
+</body>
+</html>

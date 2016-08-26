@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for k, v in errors.items() %}
+<br>Error in {{ k }}: {{ v }}
+{% endfor %}
+
+<form method="POST">
+
+<p><input type="text" id="fname" name="fname" value="{{ fname }}" placeholder="first name">
+<p><input type="text" id="lname" name="lname" value="{{ lname }}" placeholder="last name">
+<p><input type="text" id="sitename" name="sitename" value="{{ sitename }}" placeholder="sitename">
+<p><input type="text" id="headline" name="headline" value="{{ headline }}" placeholder="title">
+<p><input type="text" id="email" name="email" value="{{ email }}" placeholder="email">
+
+<p><input type="submit" name="submit">
+
+</form>
+
+<script src="/static/js/jquery.watermark.min.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#fname").watermark("First Name");
+	$("#lname").watermark("Last Name");
+	$("#sitename").watermark("Website Extension");
+	$("#headline").watermark("Website Headline");
+	$("#email").watermark("Contact E-mail");
+});
+</script>
+
+
+{% endblock %}

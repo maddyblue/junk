@@ -1,0 +1,40 @@
+{% extends "blog-base.html" %}
+
+{% block title %} - {{ p.title }}{% endblock %}
+
+{% block content %}
+	<div class="post type-post status-publish format-standard hentry category-inspiring">
+		<h1 id="title">{{ p.title }}</h1>
+			<div class="feature-image">
+				{{ p.imagesz(width=620, height=412, class='attachment-endless-thumbnail-staggered wp-post-image') }}
+			</div>
+			<div class="content clearfix">
+				{{ p.html }}
+			</div>
+			<div class="entry-date">
+				<span class="month">{{ p.date|date('%b') }}</span>
+				<span class="day">{{ p.date|date('%d') }}</span>
+			</div>
+			<div class="meta">
+				<div class="posts-navigation">
+					<div class="nav-previous hide-text"></div>
+					<div class="nav-next hide-text"><a href="{{ prev.url }}" rel="prev"><span>{{ prev.title }}</span></a></div>
+				</div>
+				<span class="author"><a href="{{ 'site-blog-author'|url(author=p.author) }}">{{ p.author }}</a></span>
+				<span class="date">{{ p.date|fdate }}</span>
+				<span class="comments"><a href="#comments"><fb:comments-count href="{{ p.permalink }}"></fb:comments-count> comments</a></span>
+				{% if p.has_tags -%}
+					<span class="categories">
+					{% for t in p.tags %}
+						<a href="{{ 'site-blog-tag'|url(tag=t) }}">{{ t }}</a>
+						{%- if not loop.last %},{% endif %}
+					{% endfor %}
+					</span>
+				{%- endif %}
+			</div>
+	</div>
+
+	<div id="comments" class="have-comments">
+		<div class="fb-comments" data-href="{{ p.permalink }}" data-width="670"></div>
+	</div>
+{% endblock %}

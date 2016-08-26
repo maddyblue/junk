@@ -1,0 +1,83 @@
+{% extends "admin.html" %}
+
+{% block content %}
+<div class="span4">
+	<h2>user: {{ u.first_name }} {{ u.last_name }}</h2>
+	<table class="table">
+		<tbody>
+			<tr><th>email</th><td>{{ u.email }}</td></tr>
+			<tr><th>registered</th><td>{{ u.register_date }}</td></tr>
+			<tr><th>last active</th><td>{{ u.last_active }}</td></tr>
+		</tbody>
+	</table>
+
+	<h3>actions</h3>
+	<ul class="unstyled">
+		<li>
+			<form method="POST" action="{{ 'admin-user-delete'|url(userid=u.key.id()) }}">
+				<label><input type="checkbox" name="sure"> I'm sure</label>
+				<input type="submit" value="delete" class="btn btn-danger">
+			</form>
+		</li>
+	</ul>
+</div>
+
+<div class="span8">
+{% for s in sites %}
+	{% set site = s.site %}
+	<h2>site: {{ site.key.id() }}</h2>
+
+	<table class="table">
+		<tbody>
+			<tr><th>plan</th><td>{{ site.plan }}</td></tr>
+			<tr><th>size</th><td>{{ site.size|filesizeformat }}</td></tr>
+		</tbody>
+	</table>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>page</th>
+				<th>type</th>
+				<th>active</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for i in s.pages %}
+			{% set active = i.key in site.pages %}
+			<tr {%- if active %} class="success"{% endif %}>
+				<td>{{ i.name }}</td>
+				<td>{{ i.type }}</td>
+				<td>
+					{% if active %}
+						active
+					{% else %}
+						archived
+					{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>image</th>
+				<th>size</th>
+				<th>thumb</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for i in s.images %}
+			<tr>
+				<td>{{ i.name }}</td>
+				<td>{{ i.size|filesizeformat }}</td>
+				<td><img src="{{ i.urls(100) }}"></td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+{% endfor %}
+</div>
+{% endblock %}

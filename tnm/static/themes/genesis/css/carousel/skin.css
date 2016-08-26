@@ -1,0 +1,115 @@
+ul#mycarousel li{position: relative;}
+ul#mycarousel li img{margin: 2px;}
+ul#mycarousel li.current img{outline: 2px solid #767070;}
+ul#mycarousel li span.play{position: absolute; display: block; width: 75px; height: 75px; text-indent: -9999px; background: url(play-icon.png);}
+
+.jcarousel-skin-marcos .jcarousel-container {
+
+}
+
+.jcarousel-skin-marcos .jcarousel-direction-rtl {
+	direction: rtl;
+}
+
+.jcarousel-skin-marcos .jcarousel-container-horizontal {
+    width: 84%;
+    margin: 25px 8%;
+}
+
+.jcarousel-skin-marcos .jcarousel-clip {
+    overflow: hidden;
+}
+
+.jcarousel-skin-marcos .jcarousel-clip-horizontal {
+    width:  100%;
+    height: 75px;
+}
+
+.jcarousel-skin-marcos .jcarousel-item {
+    width: 75px;
+    height: 75px;
+}
+
+.jcarousel-skin-marcos .jcarousel-item-horizontal {
+	margin-left: 0;
+    margin-right: 10px;
+}
+
+.jcarousel-skin-marcos .jcarousel-direction-rtl .jcarousel-item-horizontal {
+	margin-left: 10px;
+    margin-right: 0;
+}
+
+.jcarousel-skin-marcos .jcarousel-item-placeholder {
+    background: #fff;
+    color: #000;
+}
+
+/**
+ *  Horizontal Buttons
+ */
+.jcarousel-skin-marcos .jcarousel-next-horizontal {
+    position: absolute;
+    top: 0px;
+    right: -7%;
+    width: 50px;
+    height: 75px;
+    cursor: pointer;
+    background: #767070 url(thumb-nav.png) no-repeat -50px center;
+}
+
+.jcarousel-skin-marcos .jcarousel-direction-rtl .jcarousel-next-horizontal {
+    left: 5px;
+    right: auto;
+    background-image: url(prev-horizontal.png);
+}
+
+.jcarousel-skin-marcos .jcarousel-next-horizontal:hover,
+.jcarousel-skin-marcos .jcarousel-next-horizontal:focus {
+    background: #5c5757 url(thumb-nav.png) no-repeat -50px center;
+}
+
+.jcarousel-skin-marcos .jcarousel-next-horizontal:active {
+   top:1px;
+}
+
+.jcarousel-skin-marcos .jcarousel-next-disabled-horizontal,
+.jcarousel-skin-marcos .jcarousel-next-disabled-horizontal:hover,
+.jcarousel-skin-marcos .jcarousel-next-disabled-horizontal:focus,
+.jcarousel-skin-marcos .jcarousel-next-disabled-horizontal:active {
+    cursor: default;
+    background: #e4e2e2 url(thumb-nav.png) no-repeat -50px center;
+}
+
+.jcarousel-skin-marcos .jcarousel-prev-horizontal {
+    position: absolute;
+    top: 0px;
+    left: -7%;
+    width: 50px;
+    height: 75px;
+    cursor: pointer;
+    background: #767070 url(thumb-nav.png) no-repeat left center;
+}
+
+.jcarousel-skin-marcos .jcarousel-direction-rtl .jcarousel-prev-horizontal {
+    left: auto;
+    right: 5px;
+    background-image: url(next-horizontal.png);
+}
+
+.jcarousel-skin-marcos .jcarousel-prev-horizontal:hover, 
+.jcarousel-skin-marcos .jcarousel-prev-horizontal:focus {
+    background: #5c5757 url(thumb-nav.png) no-repeat left center;
+}
+
+.jcarousel-skin-marcos .jcarousel-prev-horizontal:active {
+    top:1px;
+}
+
+.jcarousel-skin-marcos .jcarousel-prev-disabled-horizontal,
+.jcarousel-skin-marcos .jcarousel-prev-disabled-horizontal:hover,
+.jcarousel-skin-marcos .jcarousel-prev-disabled-horizontal:focus,
+.jcarousel-skin-marcos .jcarousel-prev-disabled-horizontal:active {
+    cursor: default;
+    background: #e4e2e2 url(thumb-nav.png) no-repeat left center;
+}

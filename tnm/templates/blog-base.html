@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>The Next Muse{% block title %}{% endblock %}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="alternate" type="application/atom+xml" title="The Next Muse Blog" href="{{ 'blog-rss'|url }}">
+
+	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/blog.css" type="text/css">
+
+	<link href="http://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css">
+	<link href="http://fonts.googleapis.com/css?family=Damion" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/static/css/coda-slider-2.0.css" type="text/css" media="screen" />
+	{{ jquery }}
+
+	<script type="text/javascript">
+
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-31820328-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+
+	</script>
+</head>
+<body>
+
+<div id="body">
+
+	<div id="primary" class="maxheight">
+		{% block content %}{% endblock %}
+	</div>
+	<div id="secondary" role="secondary">
+
+		<div id="bigLogo">
+			<a href="{{ 'blog'|url }}" title="The Next Muse Blog">
+				<img src="/static/images/logo.png" />
+			</a>
+		</div>
+		<div id="tagline">A performer's guide to marketing, content strategy, brand development, social media, websites and other forward thinking pursuits in the name of RELEVANCE.</div>
+		<div class="widgets">
+
+			<div id="social-networks" class="widget clearfix">
+				<ul class="clearfix">
+					<li class="facebook">
+						<a href="https://www.facebook.com/thenextmuse"></a>
+					</li>
+					<li class="twitter">
+						<a href="https://twitter.com/thenextmuse"></a>
+					</li>
+					<li class="youtube">
+						<a href="http://www.youtube.com/user/thenextmuse"></a>
+					</li>
+					<li class="pintrest">
+						<a href="http://pinterest.com/thenextmuse/"></a>
+					</li>
+					<li class="linkedin">
+						<a href="http://www.linkedin.com/company/the-next-muse"></a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="widget">
+				<h3 class="title">Contributors</h3>
+				{% for a in authors %}
+					<a href="{{ 'site-blog-author'|url(author=a[0]) }}">{{ a[0] }}</a> ({{ a[1] }})
+					{%- if not loop.last %}<br />{% endif %}
+				{% endfor %}
+			</div>
+
+			<div class="widget">
+				<h3 class="title">Tags</h3>
+				{% for name, size in tags %}
+					<a href="{{ 'site-blog-tag'|url(tag=name) }}" style="font-size: {{ size }}%">{{ name }}</a>
+					{%- if not loop.last %},{% endif %}
+				{% endfor %}
+			</div>
+
+			<div class="widget">
+				<h3 class="title"><a href="https://twitter.com/thenextmuse">@thenextmuse</a></h3>
+				<ul id="tweet-list"></ul>
+			</div>
+
+			<div id="archives-2" class="widget widget_archive">
+				<h3 class="title">Archives</h3>
+				<ul>
+				{%- for i in months.values %}
+					<li>{{ i }}</li>
+				{% endfor -%}
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	<div class="clear"></div>
+
+</div>
+
+{% include "footer.html" %}
+
+	{% block bodyend %}{% endblock %}
+
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=181722038554000";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+
+	<script type="text/javascript" src="/static/js/plugins.js"></script>
+	<script type="text/javascript" src="/static/js/blog.min.js"></script>
+
+	<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+	<script type="text/javascript" src="http://s.sharethis.com/loader.js"></script>
+	<script>
+	var options={ "publisher": "ur-1dba1318-a503-a52-d515-67c484fcf643", "position": "left", "ad": { "visible": false, "openDelay": 5, "closeDelay": 0}, "chicklets": { "items": ["facebook", "twitter", "pinterest", "linkedin", "googleplus"]}};
+	var st_hover_widget = new sharethis.widgets.hoverbuttons(options);
+	</script>
+</body>
+</html>

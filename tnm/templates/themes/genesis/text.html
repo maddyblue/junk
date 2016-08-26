@@ -1,0 +1,59 @@
+{% if page.layout == 1 %}
+
+<div class="fullpage">
+	<span class="left">{{ images[0].render(mode) }}</span>
+	{{ page|editline(0, 'h1') }}
+	{{ page|edittext(0, 'div') }}
+</div>
+
+{% elif page.layout == 2 %}
+
+<div class="left-cont">
+	<span class="thumb">{{ images[0].render(mode) }}</span>
+	{{ page|editline(0, 'h1') }}
+	{{ page|edittext(0, 'div') }}
+
+	<div class="column">
+		<ul class="double">
+		<li>
+			{{ images[1].render(mode) }}
+			{{ page|edittext(1, 'div') }}
+		</li>
+		<li>
+			{{ images[2].render(mode) }}
+			{{ page|edittext(2, 'div') }}
+		</li>
+		</ul>
+	</div>
+	</div>
+
+{% include 'themes/genesis/aside.html' %}
+
+{% elif page.layout == 3 %}
+
+{{ images[0].render(mode) }}
+
+<div class="fullpage">
+	<span class="left">{{ images[1].render(mode) }}</span>
+	{{ page|editline(0, 'h1') }}
+	{{ page|edittext(0, 'div') }}
+</div>
+
+<div class="column">
+	<ul>
+		<li>
+			{{ page|editline(1, 'h3') }}
+			{{ page|edittext(1, 'div') }}
+		</li>
+		<li class="middle">
+			{{ page|editline(2, 'h3') }}
+			{{ page|edittext(2, 'div') }}
+		</li>
+		<li>
+			{{ page|editline(3, 'h3') }}
+			{{ page|edittext(3, 'div') }}
+		</li>
+	</ul>
+</div>
+
+{% endif %}

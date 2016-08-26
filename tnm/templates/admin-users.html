@@ -1,0 +1,29 @@
+{% extends "admin.html" %}
+
+{% block content %}
+<div class="offset2 span8">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>name</th>
+				<th>email</th>
+				<th>sites</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for u in users %}
+			<tr>
+				<td><a href="{{ 'admin-user'|url(userid=u.key.id()) }}">{{ u.first_name }} {{ u.last_name }}</a></td>
+				<td>{{ u.email }}</td>
+				<td>
+				{% for s in u.sites %}
+					{{ s.id() }}
+					{%- if not loop.last %},{% endif %}
+				{% endfor %}
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

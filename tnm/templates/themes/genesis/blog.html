@@ -1,0 +1,93 @@
+<div class="fullpage">
+	<div class="blogContent">
+		{{ page|editline(0, 'h1') }}
+
+		{% if not v1 or v1 == 'page' %}
+			{% if mode == 'edit' %}
+				<a href="{{ 'new-blog-post'|url(pageid=page.key.id()) }}">new blog post</a>
+			{% endif %}
+
+			{% for b in page.get_blogposts(1, mode == 'edit') %}
+			<div class="blogPost">
+				{{ b.imagesz(width=634, height=172) }}
+				<div class="postInfo">
+					<h3>{{ b.title }}</h3>
+					<span class="date">{{ b.date|fdate }}</span>
+					<span>by {{ b.author }}
+					{% if b.tags %}<span>in {{ b.tags|join(', ') }}</span>{% endif %}
+					</span>
+				</div>
+				<div class="postIntro">
+					<p>{{ b.short(250) }}</p>
+					<span class="more"><a href="{{ rel }}{{ page.name }}/{{ b.key.id() }}/{{ b.url }}">More</a></span>
+				</div>
+				<div class="clr"></div>
+			</div>
+			{% endfor %}
+		{% else %}
+			{% set b = page.get_blogpost(v1) %}
+			{{ b.image.get().render(mode, postid=v1) }}
+			{{ b|editposttitle('h2') }}
+			<div class="postDetails">
+				<ul>
+					<li class="date">Published on {{ b|editpostdate }}</li>
+					<li class="author">Created by {{ b|editpostauthor }}</li>
+					{% if mode == 'edit' %}
+						<li class="draft">{{ b|editpostdraft }}</li>
+					{% elif b.draft %}
+						<li class="draft">DRAFT</li>
+					{% endif %}
+				</ul>
+				<div class="clr"></div>
+			</div>
+			{{ b|editposttext('div') }}
+			<div class="tags">
+				<ul>
+					<li><h4>TAGS:</h4></li>
+					<li>lorem ipsum</li>
+					<li>keyword</li>
+					<li>music</li>
+					<li>opera</li>
+				</ul>
+			</div>
+		{% endif %}
+	</div>
+
+	<aside>
+		<ul>
+			<li>
+				<h3>About Me</h3>
+				{{ images[0].render(mode, 'left') }}
+				{{ page|edittext(0, 'div') }}
+				<div class="clr"></div>
+			</li>
+			<li>
+				<h3>Tags</h3>
+				<ul>
+					<li class="tag1">Tag 1</li>
+					<li class="tag4">Lorem Ipsum</li>
+					<li class="tag2">Dolor sit</li>
+					<li class="tag3">Soloist</li>
+					<li class="tag2">Opera</li>
+					<li class="tag4">Notes</li>
+				</ul>
+			</li>
+			<li class="recent">
+				<h3>Recent Posts</h3>
+				<ul>
+				{% for b in page.recent_posts() %}
+					{% set url = b.url %}
+					<li>
+						<a href="{{ rel }}{{ url }}">{{ b.imagesz(width=109, height=94) }}</a>
+						<h4><a href="{{ rel }}{{ url }}">{{ b.title }}</a></h4>
+						<p>{{ b.short() }}</p>
+						<div class="clr"></div>
+					</li>
+				{% endfor %}
+				</ul>
+			</li>
+		</ul>
+	</aside>
+
+	<div class="clr"></div>
+</div>

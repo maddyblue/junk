@@ -1,0 +1,12 @@
+{% extends "admin.html" %}
+
+{% block content %}
+<div class="offset2 span10">
+	<p>upload new image:</p>
+
+	<form method="POST" enctype="multipart/form-data" action="{{ url }}">
+		<input type="file" name="file">
+		<input type="submit">
+	</form>
+</div>
+{% endblock %}

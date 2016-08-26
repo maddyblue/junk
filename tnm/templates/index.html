@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if not user %}
+
+login:
+<p><a href="{{ "login-google"|url }}"><img src="/static/images/google.png" alt="google" /></a><br/>
+<p><a href="{{ "login-facebook"|url }}"><img src="/static/images/facebook.png" alt="facebook" /></a>
+
+{% endif %}
+
+{% endblock %}

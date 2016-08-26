@@ -1,0 +1,113 @@
+{% extends "blog-base.html" %}
+
+{% block title %} - Blog {% endblock %}
+
+{% block content %}
+	<div id="sliderBlog" class="carousel slide">
+		<div class="carousel-inner" style="width: 670px; height: 300px; overflow: hidden;">
+
+			<div class="slide type-slide status-publish hentry item" style="position: absolute; top: 0px; left: -670px; display: none; z-index: 2; opacity: 1; width: 670px; height: 300px;">
+				<div class="image">
+					<img class="attachment-endless-slide wp-post-image" width="670" height="300" title="slide1" alt="slide1" src="/static/images/blog-slider/operasinger.jpg">
+				</div>
+				<div class="carousel-caption">
+					<h4>Our mission at The Next Muse is to provide artists and performers with the information, resources, and tools needed...</h4>
+				</div>
+			</div>
+
+			<div class="slide type-slide status-publish hentry item" style="position: absolute; top: 0px; left: -670px; display: none; z-index: 2; opacity: 1; width: 670px; height: 300px;">
+				<div class="image">
+					<img class="attachment-endless-slide wp-post-image" width="670" height="300" title="slide1" alt="slide1" src="/static/images/blog-slider/models.jpg">
+				</div>
+				<div class="carousel-caption">
+					<h4>...to develop your business and differentiate yourself in the fast moving entertainment industry.</h4>
+				</div>
+			</div>
+
+			<div class="slide type-slide status-publish hentry item" style="position: absolute; top: 0px; left: -670px; display: none; z-index: 2; opacity: 1; width: 670px; height: 300px;">
+				<div class="image">
+					<img class="attachment-endless-slide wp-post-image" width="670" height="300" title="slide1" alt="slide1" src="/static/images/blog-slider/hiphop.jpg">
+				</div>
+				<div class="carousel-caption">
+					<h4>This site is a performer's guide to building a robust and relevant personal brand...</h4>
+				</div>
+			</div>
+
+			<div class="slide type-slide status-publish hentry item" style="position: absolute; top: 0px; left: -670px; display: none; z-index: 2; opacity: 1; width: 670px; height: 300px;">
+				<div class="image">
+					<img class="attachment-endless-slide wp-post-image" width="670" height="300" title="slide1" alt="slide1" src="/static/images/blog-slider/dancer.jpg">
+				</div>
+				<div class="carousel-caption">
+					<h4>...to optimize your marketing efforts and increase your ability to share your talents with the rest of the world.</h4>
+				</div>
+			</div>
+
+		</div>
+		<a class="carousel-control left" data-slide="prev" href="#slider" style="display: inline;">‹</a>
+		<a class="carousel-control right" data-slide="next" href="#slider" style="display: inline;">›</a>
+	</div>
+
+	<h1 id="title">The Next Muse Blog
+		{%- if tag %} - {{ tag }}{% endif -%}
+		{%- if author %} - {{ author }}{% endif -%}
+	</h1>
+
+	<div id="endless" class="staggered clearfix masonry">
+
+		<div id="endless-pad">
+			<div style="display: inline-block">
+				<strong><a href="http://eepurl.com/oeJ6b" target="_blank">Subscribe to our muse-letter</a></strong>
+			</div>
+		</div>
+
+		{% for p in posts %}
+		<div class="post type-post status-publish format-standard hentry category-uncategorized clearfix masonry-brick">
+			<div class="feature-image">
+				<a title="{{ p.title }}" href="{{ p.url }}">
+					<span class="overlay" style="display: none;"></span>
+					{{ p.imagesz(width=297, height=198, class='attachment-endless-thumbnail-staggered wp-post-image') }}
+				</a>
+			</div>
+			<div class="excerpt clearfix">
+				<h2 class="title"><a title="{{ p.title }}" href="{{ p.url }}">{{ p.title }}</a></h2>
+				<p>{{ p.short() }}</p>
+				<p class="meta">
+				<span class="date">{{ p.date|fdate }}</span>
+					<span class="comments"><a href="{{ p.url }}#comments"><fb:comments-count href="{{ p.permalink }}"></fb:comments-count> comments</a></span>
+					{% if p.has_tags -%}
+						<span class="categories">
+						{% for t in p.tags %}
+							<a href="{{ 'site-blog-tag'|url(tag=t) }}">{{ t }}</a>
+							{%- if not loop.last %},{% endif %}
+						{% endfor %}
+						</span>
+					{%- endif %}
+				</p>
+			</div>
+		</div>
+		{% endfor %}
+
+	</div>
+
+	{% if nextpage %}
+	<a id="endless-pager" class="nextPage btn btn-large" href="{{ 'site-blog-month'|url(year=nextpage.year, month=nextpage.month) }}">Load More Posts</a>
+	{% endif %}
+{% endblock %}
+
+{% block bodyend %}
+	<script type="text/javascript" src="/static/js/jquery.infinitescroll.min.js"></script>
+	<script type="text/javascript">
+		var jQuerycontainer = $('#endless');
+		jQuerycontainer.infinitescroll({
+			navSelector: "a#endless-pager",
+			nextSelector: "a#endless-pager",
+			itemSelector: ".post",
+			finishedMsg: "No more posts."
+			},
+			function( newElements ) {
+				var jQuerynewElems = jQuery( newElements );
+				jQuerycontainer.masonry( 'appended', jQuerynewElems );
+			}
+		);
+	</script>
+{% endblock %}

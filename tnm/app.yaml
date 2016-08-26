@@ -1,0 +1,58 @@
+application: thenextmuse
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?\..*
+- ^(.*/)?.*\.db
+- ^(.*/)?.*\.dist
+- ^(.*/)?.*\.exe
+- ^(.*/)?.*\.sh
+- ^(.*/)?.*\.swp
+- ^less
+- ^pw
+- ^build\.js
+- ^shell\.js
+- ^uglify-js
+
+libraries:
+- name: jinja2
+  version: "2.6"
+- name: markupsafe
+  version: latest
+- name: PIL
+  version: latest
+- name: webapp2
+  version: latest
+
+builtins:
+- admin_redirect: on
+- appstats: on
+- deferred: on
+- remote_api: on
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /favicon\.ico
+  static_files: static/images/favicon.ico
+  upload: static/images/favicon\.ico
+
+- url: /login/google
+  script: main.app
+  login: required
+
+- url: /admin.*
+  script: main.app
+  login: admin
+
+- url: /.*
+  script: main.app

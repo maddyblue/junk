@@ -1,0 +1,86 @@
+{% extends "admin.html" %}
+
+{% block content %}
+<div class="span12">
+	<div class="row">
+		<div class="span12">
+			<form class="form-horizontal" method="POST">
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label" for="title">title</label>
+						<div class="controls">
+							<input id="title" type="text" name="title" value="{{ p.title }}" class="span6"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="author">author</label>
+						<div class="controls">
+							<input id="author" type="text" name="author" value="{{ p.author }}" class="span6"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="date">date</label>
+						<div class="controls">
+							<input id="date" type="text" name="date" value="{{ p.date|date(fmt) }}"/> (format: <strong>YYYY-MM-DD HH:MM</strong>, 24-hour clock)
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="text">text</label>
+						<div class="controls">
+							<textarea name="text" id="text" class="span8 redactor" rows="14">{{ p.text }}</textarea>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="tags">tags</label>
+						<div class="controls">
+							<input id="tags" type="text" name="tags" value="{{ p.tags|join(', ') }}" class="span6"/> (comma separated)
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="draft">draft</label>
+						<div class="controls">
+							<input id="draft" type="checkbox" name="draft" {% if p.draft %}checked{% endif %}/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="link">link</label>
+						<div class="controls">
+							<input id="link" type="text" name="link" value="{{ p.link|default('', True) }}" class="span6"/> (optional)
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="autolink">autolink</label>
+						<div class="controls">
+							<input id="autolink" type="checkbox" name="autolink" {% if p.autolink %}checked{% endif %}/>
+						</div>
+					</div>
+					<div class="form-actions">
+						<input type="submit" value="save" class="btn btn-primary"/>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="offset2 span10">
+			<p><a href="{{ 'admin-images'|url }}">image list</a></p>
+			<p><a href="{{ 'admin-blog-image'|url(postid=p.key.id()) }}">upload main blog image</a></p>
+			<p>current main image:
+			<p>{{ i.render() }}
+
+			<h3><a href="{{ 'site-blog-post'|url(link=p.link) }}">preview</a></h3>
+			{{ p.text }}
+		</div>
+	</div>
+</div>
+
+<link rel="stylesheet" href="/static/redactor/redactor.css" type="text/css">
+<script src="/static/redactor/redactor.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$('.redactor').redactor();
+	});
+</script>
+
+{% endblock %}

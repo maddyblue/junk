@@ -1,0 +1,93 @@
+{% macro contact() %}
+	<div id="contact">
+		{{ page|editline(0, 'h4') }}
+		{{ page|editline(1, 'h6') }}
+
+		<form>
+			<label>Name</label>
+			<input type="text"/>
+
+			<label>Email</label>
+			<input type="text"/>
+
+			<label>What do you want to tell us?</label>
+			<textarea></textarea>
+
+			<input type="submit" class="submit" value="send" />
+		</form>
+	</div>
+{% endmacro %}
+
+{% if page.layout in [1, 4] %}
+
+{{ images[0].render(mode) }}
+
+<div class="fullpage">
+	{{ contact() }}
+
+	<aside>
+		<ul>
+			<li class="sidebarText">
+				{{ page|editline(2, 'h3') }}
+				{{ page|edittext(0, 'p') }}
+			</li>
+			{% if page.layout == 1 %}
+			<li class="googlemap">
+				{{ page|editmap(0) }}
+			</li>
+			{% elif page.layout == 4 %}
+				{% include "themes/twitter.html" %}
+			{% endif %}
+		</ul>
+	</aside>
+
+	<div class="clr"></div>
+</div>
+
+{% elif page.layout == 2 %}
+
+<div class="fullpage right">
+	<aside>
+		<ul>
+			<li class="sidebarText">
+				{{ page|editline(2, 'h3') }}
+				{{ page|edittext(0, 'p') }}
+			</li>
+			<li class="googlemap">
+				{{ page|editmap(0) }}
+			</li>
+		</ul>
+	</aside>
+
+	<div class="rightContent">
+		{{ page|editline(3, 'h3') }}
+		{{ page|edittext(1, 'p') }}
+
+		{{ contact() }}
+	</div>
+
+	<div class="clr"></div>
+</div>
+
+{% elif page.layout == 3 %}
+
+	{{ page|editmap(0) }}
+
+	<div class="fullpage">
+
+	{{ contact() }}
+
+	<aside>
+		<ul>
+			<li class="sidebarText">
+				{{ page|editline(2, 'h3') }}
+				{{ page|edittext(0, 'p') }}
+			</li>
+		</ul>
+	</aside>
+
+	<div class="clr"></div>
+
+	</div>
+
+{% endif %}

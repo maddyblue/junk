@@ -1,0 +1,22 @@
+<html>
+<body>
+
+{% if user %}
+Menu:
+<a href="{{ "logout"|url }}">logout</a>
+<a href="{{ "checkout"|url }}">checkout</a>
+<a href="{{ "edit-home"|url }}">edit</a>
+
+<p>Logged in as: {{ user.name }}
+{% endif %}
+
+{% for msg, lvl in messages %}
+<p>{{ lvl }}: {{ msg }}
+{% endfor %}
+
+<hr>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
