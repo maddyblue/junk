@@ -1,0 +1,48 @@
+\documentclass{report}
+\usepackage{cite}
+\usepackage[top=1in, bottom=1in, left=1.5in, right=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{setspace}
+\usepackage{subfigure}
+\usepackage{thesis}
+\usepackage{verbatim}
+
+\doublespacing
+
+\title{Electrochemical Biosensor Array Characterization}
+\author{Matthew W. Jibson}
+\department{Electrical and Computer Engineering}
+\semester{Summer, 2009}
+
+\usepackage[pdftex]{hyperref}
+
+\begin{document}
+
+\maketitle{}
+
+\pagenumbering{roman}
+\setcounter{page}{2}
+
+\include{form}
+\include{abstract}
+
+\tableofcontents\newpage
+\listoffigures\newpage
+\listoftables\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\include{introduction}
+\include{background}
+\include{design}
+\include{slice}
+\include{discussion}
+
+\bibliography{thesis}{}
+\bibliographystyle{ieeetr}
+
+\include{appendix}
+
+\end{document}
