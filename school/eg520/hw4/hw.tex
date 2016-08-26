@@ -1,0 +1,115 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\begin{document}
+
+\begin{flushright}
+Matt Jibson \\
+EG 520 \\
+HW 4
+\end{flushright}
+
+\begin{itemize}
+	\item[12.3]
+		\begin{enumerate}
+			\item[a.]
+				Start with three linear quations:
+				\begin{displaymath} 5.0  = \frac{1}{2}g 1.0^2 = 0.5 g \end{displaymath}
+				\begin{displaymath} 19.5 = \frac{1}{2}g 2.0^2 = 2.0 g \end{displaymath}
+				\begin{displaymath} 44.0 = \frac{1}{2}g 3.0^2 = 4.5 g \end{displaymath}
+				So,
+				\begin{displaymath}
+					\boldsymbol{A} = \left[ \begin{array}{c} 0.5 \\ 2.0 \\ 4.5 \end{array} \right],
+					\boldsymbol{b} = \left[ \begin{array}{c} 5.0 \\ 19.5 \\ 44.0 \end{array} \right],
+					\boldsymbol{x} = [ g ]
+				\end{displaymath}
+				\begin{displaymath}
+					\boldsymbol{x}^* = [ g^* ] = (\boldsymbol{A}^T \boldsymbol{A})^{-1} \boldsymbol{A}^T \boldsymbol{b} = [ 9.7755 ] \Rightarrow g = 9.7755
+				\end{displaymath}
+			\item[b.]
+				Given a new data point $(t, s) = 4.0, 78.5$, use the recursive formula:
+				\begin{displaymath}
+					\boldsymbol{P}_0 = (\boldsymbol{A}^T \boldsymbol{A})^{-1} = [ 0.040816 ], \boldsymbol{g}^{(0)} = [ 9.7755 ], \boldsymbol{a}_1 = \frac{1}{2} 4.0^2 = [ 8.0 ], b_1 = 78.5
+				\end{displaymath}
+				Hence,
+				\begin{displaymath}
+					\boldsymbol{P}_1 = \boldsymbol{P}_0 - \frac{\boldsymbol{P}_0 \boldsymbol{a}_1 \boldsymbol{a}_1^T \boldsymbol{P_0}}{1 + \boldsymbol{a}_1^T \boldsymbol{P}_0 \boldsymbol{a}_1} = 0.011299
+				\end{displaymath}
+				and
+				\begin{displaymath}
+					\boldsymbol{x}^{(1)} = \boldsymbol{x}^{(0)} + \boldsymbol{P}_1 \boldsymbol{a}_1 (b_1 - \boldsymbol{a}_1^T \boldsymbol{x}^{(0)}) = 9.80226
+				\end{displaymath}
+		\end{enumerate}
+	\item[12.9]
+		\begin{enumerate}
+			\item[a.]
+				The system of linear equations is:
+				\begin{displaymath}
+					y_i = \mathrm{sin}(\omega t_i + \theta) \Rightarrow \mathrm{arcsin} \, y_i = \omega t_i + \theta, i = 1, \dots, p
+				\end{displaymath}
+				So,
+				\begin{displaymath}
+					\boldsymbol{A} = \left[ \begin{array}{cc} t_1 & 1 \\ \vdots & 1 \\ t_p & 1 \end{array} \right],
+					\boldsymbol{x} = \left[ \begin{array}{c} \omega \\ \theta \end{array} \right],
+					\boldsymbol{b} = \left[ \begin{array}{c} \mathrm{arcsin} \, y_1 \\ \vdots \\ \mathrm{arcsin} \, y_p \end{array} \right]
+				\end{displaymath}
+			\item[b.]
+				\begin{displaymath}
+					\boldsymbol{A}^T \boldsymbol{A} = p \left[ \begin{array}{cc} \overline{T^2} & \overline{T} \\ \overline{T} & 1 \end{array} \right], \boldsymbol{x}^* = \left[ \begin{array}{c} \omega^* \\ \theta^* \end{array} \right] = (\boldsymbol{A}^T \boldsymbol{A})^{-1} \boldsymbol{A}^T \boldsymbol{b} = \frac{p}{\overline{T^2} - \overline{T}^2} \left[ \begin{array}{cc} 1 & -\overline{T} \\ -\overline{T} & \overline{T^2} \end{array} \right] \left[ \begin{array}{c} \overline{TY} \\ \overline{Y} \end{array} \right]
+				\end{displaymath}
+				So,
+				\begin{displaymath}
+					\omega = \frac{p}{\overline{T^2} - \overline{T}^2} (- \overline{Y} \, \overline{T} + \overline{TY}), 
+\theta = \frac{p}{\overline{T^2} - \overline{T}^2} ( \overline{Y} \, \overline{T^2} - \overline{TY} \, \overline{T})
+				\end{displaymath}
+		\end{enumerate}
+	\item[12.11]
+	\item[12.13]
+		Start by writing the linear equations:
+		\begin{displaymath} \begin{array}{l}
+			x_0 = 0 \\
+			x_1 = 1 = a x_0 + b = b \\
+			x_2 = 2 = a x_1 + b = a + b \\
+			x_3 = 8 = a x_2 + b = 2a + b
+		\end{array} \end{displaymath}
+		So,
+		\begin{displaymath}
+			\boldsymbol{A} = \left[ \begin{array}{cc} 0 & 1 \\ 1 & 1 \\ 2 & 1 \end{array} \right],
+			\boldsymbol{b} = \left[ \begin{array}{c} 1 \\ 2 \\ 8 \end{array} \right],
+			\boldsymbol{x} = \left[ \begin{array}{c} a \\ b \end{array} \right]
+		\end{displaymath}
+		Hence,
+		\begin{displaymath}
+			\boldsymbol{x}^* = \left[ \begin{array}{c} a^* \\ b^* \end{array} \right] = (\boldsymbol{A}^T \boldsymbol{A})^{-1} \boldsymbol{A}^T \boldsymbol{b} = \left[ \begin{array}{c} 3.5 \\ 0.16666 \end{array} \right]
+		\end{displaymath}
+	\item[12.14]
+		Start by writing the linear equations:
+		\begin{displaymath} \begin{array}{l}
+			x_0 = h_0 = 0 \\
+			x_1 = h_1 = a x_0 + b u_0 = b \\
+			x_2 = h_2 = a x_1 + b u_1 = a h_1 \\
+			x_3 = h_3 = a x_2 + b u_2 = a h_2
+		\end{array} \end{displaymath}
+		So,
+		\begin{displaymath}
+			\boldsymbol{A} = \left[ \begin{array}{cc} 0 & 1 \\ h_1 & 0 \\ h_2 & 0 \end{array} \right],
+			\boldsymbol{b} = \left[ \begin{array}{c} h_1 \\ h_2 \\ h_3 \end{array} \right],
+			\boldsymbol{x} = \left[ \begin{array}{c} a \\ b \end{array} \right]
+		\end{displaymath}
+		Hence,
+		\begin{displaymath}
+			\boldsymbol{x}^* = \left[ \begin{array}{c} a^* \\ b^* \end{array} \right] = (\boldsymbol{A}^T \boldsymbol{A})^{-1} \boldsymbol{A}^T \boldsymbol{b} = \frac{1}{h_1^2 + h_2^2} \left[ \begin{array}{cc} 1 & 0 \\ 0 & h_1^2 + h_2 ^ 2 \end{array} \right] \boldsymbol{A}^T \boldsymbol{b} = \frac{1}{h_1^2 + h_2^2} \left[ \begin{array}{c} h_3 h_2 + k_2 h_1 \\ h_1 (h_1^2 + h_2^2) \end{array} \right]
+		\end{displaymath}
+		Thus,
+		\begin{displaymath} \begin{array}{l}
+			a = \frac{h_3 h_2 + h_2 h_1}{h_1^2 + h_2^2} \\
+			b = h_1
+		\end{array} \end{displaymath}
+	\item[22.6a]
+		\begin{displaymath}
+			\boldsymbol{A} = [ \begin{array}{cc} 1 & 1 \end{array} ], \boldsymbol{b} = [1] \Rightarrow \boldsymbol{A}^T ( \boldsymbol{A} \boldsymbol{A}^T)^{-1} \boldsymbol{b} = \left[ \begin{array}{c} 0.5 \\ 0.5 \end{array} \right] = \boldsymbol{x}^*
+		\end{displaymath}
+\end{itemize}
+
+\end{document}

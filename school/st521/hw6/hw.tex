@@ -1,0 +1,68 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\begin{document}
+
+\begin{flushright}
+Matt Jibson \\
+ST 521 \\
+HW 6
+\end{flushright}
+
+\begin{enumerate}
+	\item %1
+		\begin{displaymath} \begin{array}{l}
+			\mu_0 = f_{00}(1) + f_{00}(2) + \dots + f_{00}(\infty) \\
+			f_{00}(1) = q \\
+			f_{00}(2) = pq \\
+			f_{00}(3) = p^2 q \\
+			f_{00}(4) = p^3 q \\
+			f_{00}(5) = p^4 \\
+			f_{00}(n) = 0 \mathrm{\ for\ } n \ge 6 \\
+			\mu_0 = q (1 + p + p^2 + p^3) + p^4 = (1 - p) + (p - p^2) + (p^2 - p^3) + (p^3 - p^4) + p^4 = 1 = \mu_0 = \frac{1}{\mu_0} \\
+			\mu_i, i \ge 1 = 0 \mathrm{\ since\ } f_{ii} = \infty, i \ge 1
+		\end{array} \end{displaymath}
+		So, the limiting distribution $q = (1, 0, 0, 0, 0)$.
+	\item %2
+		Find the stationary distribution $\Pi$:
+		\begin{displaymath} \begin{array}{l}
+			\Pi_0 = q_1 \Pi_1 \\
+			\Pi_1 = \Pi_0 + q_2 \Pi_2 \\
+			\Pi_2 = p_1 \Pi_1 + q_3 \Pi_3 \\
+			\Pi_3 = p_2 \Pi_2 + q_4 \Pi_4 \\
+			\\
+			\Pi_0 P_{01} = \Pi_1 P_{10} \Rightarrow \Pi_0 = q_1 \Pi_1 \\
+			\Pi_1 P_{12} = \Pi_2 P_{21} \Rightarrow p_1 \Pi_1 = q_2 \Pi_2 \\
+			\Pi_{N-2} P_{N-2, N-1} = \Pi_{N-1} P_{N-1, N-2} \Rightarrow p_{N-2} \Pi_{N-2} = q_{N-1} \Pi_{N-1} \\
+			\Pi_N P_{N, N-1} = \Pi_{N-1} P_{N-1, N} \Rightarrow p_{N-1} \Pi_N = \Pi_{N-1}
+		\end{array} \end{displaymath}
+	\item %3
+		\begin{displaymath}
+			P = \left( \begin{array}{ccccc}
+			1/2 & 1/2 & 0  & \dots \\
+			1/3 & 1/3 & 1/3 & 0 & \dots \\
+			\vdots & \ddots
+			\end{array} \right)
+		\end{displaymath}
+		\begin{displaymath}
+			\begin{array}{l}
+			\Pi_0 = \Pi_1 = \frac{1}{2} \Pi_0 + \frac{1}{3} \Pi_1 + \frac{1}{4} \Pi_2 + \dots \\
+			\Pi_2 = \frac{1}{3} \Pi_1 + \frac{1}{4} \Pi_2 + \dots \\
+			\frac{1}{2} \Pi_0 = \frac{1}{3} \Pi_1 + \frac{1}{4} \Pi_2 + \dots \\
+			\frac{1}{6} \Pi_0 = \frac{1}{4} \Pi_2 + \frac{1}{5} \Pi_3 + \dots \\
+			\end{array}
+		\end{displaymath}
+	\item %4
+		By theorem 4.1.1, need to show $\frac{(\alpha t)^j}{j!} e^{-\alpha t} + \frac{(\beta t)^j}{j!} e^{-\beta t} = \frac{((\alpha + \beta) t)^j}{j!} e^{-(\alpha + \beta)t}$:
+		\begin{displaymath} \begin{array}{l}
+			\frac{(\alpha t)^j}{j!} e^{-\alpha t} + \frac{(\beta t)^j}{j!} e^{-\beta t} =
+			(\alpha t)^j e^{-\alpha t} + (\beta t)^j e^{-\beta t} =
+			((\alpha + \beta) t)^j e^{-(\alpha + \beta)t} =
+			\frac{(\alpha t + \beta t)^j}{j!} e^{-\alpha t} e^{-\beta t}
+		\end{array} \end{displaymath}
+	\item %5
+		$P(N(t) = 1, 3, 5, \cdots) = \lambda e + \frac{(\lambda 3)^j}{6} e^{-\lambda 3} + \frac{(\lambda 5)^j}{120} e^{-\lambda 5} + \cdots$. Computationally, as $\lambda \rightarrow \infty$ (although it converges pretty fast at about $\lambda = 3$), $P(N(t) = 1, 3, 5, \cdots) \rightarrow 0.5$.
+\end{enumerate}
+
+\end{document}

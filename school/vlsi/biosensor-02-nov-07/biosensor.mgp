@@ -1,0 +1,108 @@
+%deffont "standard"   tfont "Vera.ttf"
+%deffont "thick"      tfont "VeraBd.ttf"
+%deffont "typewriter" tfont "VeraMono.ttf"
+%%
+%default 1 area 90 90, leftfill, size 2, fore "white", back "black", font "thick"
+%default 2 size 7, vgap 10, prefix " "
+%default 3 size 2, bar "gray70", vgap 10
+%default 4 size 5, vgap 30, prefix " ", font "standard"
+%%
+%tab 1 size 5, vgap 40, prefix "  ", icon box "green" 50
+%tab 2 size 4, vgap 40, prefix "      ", icon arc "yellow" 50
+%tab 3 size 3, vgap 40, prefix "            ", icon delta3 "white" 40
+%%
+%page
+
+Experiment Setup
+
+		Chip sits on probestation
+		Edge of chip has many bonding pads
+		Connect bonding pads to potentiostat electrodes
+		Potentiostat controlled by laptop
+%newimage "setup.png"
+
+%%
+%page
+
+Brief Chip Details
+
+	1cm x 1cm
+	Center of chip has a 5x5 grid, each section has a set of sensors of a given type
+		some have common aux, and/or common ref, or neither
+	Each bonding pad connects to an electrode (working, aux, or ref)
+		~50 100um x 100um bonding pads on each side
+
+For experiment:
+	Set a PDMS ring onto chip to contain ferricyanide and protect bonding pads
+	Insert ferricyanide into ring
+	Connect potentiostat to pin holders
+	Connect pins to bonding pads
+
+%%
+%page
+
+Results
+
+	Until recently results were uninteresting
+	Nothing in the middle, stuff on the edge is expected
+%newimage "25.dat1.png"
+
+%%
+%page
+
+Results
+
+		After speaking with Mike Elliot and Janet, try some new stuff
+			slower scan rate (0.025 V/s)
+			higher sensitivity (1.0E-9)
+			narrower range (0.5V to -1.3V)
+%newimage "47.png"
+
+%%
+%page
+
+Results
+
+	Since these are microelectrodes (< 50um), this is an expected shape
+		We do not expect the normal "duck" shape
+		Steady state current obtained in static solutions
+
+	Scan rate can probably be increased
+
+%%
+%page
+
+Results
+
+	Some are noisy
+		Since we are using microelectrodes we expect greater S/N, so this is weird
+		Anyone know why?
+%newimage "51.dat3.png"
+
+%%
+%page
+
+Results
+
+%newimage "51.png"
+
+%%
+%page
+
+Results
+
+%newimage "48.png"
+
+%%
+%page
+
+Next steps
+
+	Run a full set of tests on a fresh chip
+		two electrodes per sensor type
+
+	Need recommendations
+		keep scan rate at 0.025 V/s or increase/decrease?
+
+	Make our own silver chloride electrode
+		use as a reference test

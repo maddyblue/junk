@@ -1,0 +1,6 @@
+digraph G {
+	laptop -> potentiostat;
+	potentiostat -> { auxiliary; working; reference } -> pins -> bonding_pads -> chip -> probestation;
+	pins [label="micromanipulator\n pins"];
+	bonding_pads [label="bonding pads"];
+}

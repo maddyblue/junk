@@ -1,0 +1,59 @@
+
+Supplement to handout on examples of convergence modes
+------------------------------------------------------
+
+In all the example, S=[0,1], Q=Borel([0,1]), P=uniform measure
+
+1. For this example, take X to be the 0 function (i.e., X(z)=0 for all z
+in [0,1]).  We will show that there is m.s. convergence (to X) but not
+a.s. convergence (m.s. immediately implies in probability). 
+
+The m.s. value in this example is given by
+E(X_n-X)^2 = E(X_n)^2 = EX_n (because X_n take only the values 0 and 1)
+= area under the pulse (because P is the uniform measure).
+
+We can see that the areas under the pulses are going to 0. Therefore we
+have m.s. convergence.
+
+On the other hand, take any z in [0,1]. The sequence {X_n(z)} does NOT
+converge to zero because the sequence takes the value 1 infinitely often
+(and 0 otherwise). For example, if we look at z=0, the sequence {X_n(0)}
+is of the form 1,0,1,0,0,1,0,0,0,1...
+Therefore, the set of z in [0,1] for which the sequence {X_n(z)}
+converges to X (the zero function) is the empty set. Hence we do not have
+a.s. convergence.
+
+
+2. For this example, again take X to be the 0 function.
+We will show that there is a.s. convergence (to X) but not
+m.s. convergence (a.s. immediately implies in probability).
+
+The m.s. value in this example is given by
+E(X_n-X)^2 = E(X_n)^2 = n*(1/n) = 1
+
+Therefore, the m.s. value does not converge to 0, and hence we don't
+have m.s. convergence.
+
+On the other hand, for any z in (0,1], {X_n(z)} converges to 0. For
+example, if we look at z=1/3, the sequence {X_n(1/3)} is of the form
+1, sqrt{2}, sqrt{3}, 0, 0, 0, ...
+
+Therefore, the set of z in [0,1] for which the sequence {X_n(z)}
+converges to X (the zero function) is the set (0,1], which has
+probability 1. Hence we have a.s. convergence.
+
+
+3. In this example, the sequence {X_n} switches between the two functions
+shown (left function for odd values of n, right function for even n).
+The m.s. value E(X_n-X)^2 for both odd and even n are the same: 1/2.
+So the m.s. value does not converge to 0 (hence we don't have m.s.
+convergence).
+Moreover, for any z in [0,1], the sequence {X_n(z)} does not converge to
+0. For example. {X_n(1/4)}={1,0,1,0,1,0,1...}.
+Hence we don't have a.s. convergence.
+
+On the other hand, both left and right random variables have exactly the
+same distribution: both are Bernoulli with P{X_n=1}=1/2 and P{X_n=0}=1/2.
+Therefore, the distribution of X_n converges (actually, remains constant
+over n, which is a degenerate special case). Hence, we have convergence
+in distribution.

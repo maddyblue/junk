@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\begin{document}
+
+\begin{flushright}
+Matt Jibson \\
+ECE 514 \\
+HW 2
+\end{flushright}
+
+\begin{itemize}
+	\item[1.33]
+		Prove by induction. First, show the base case of $N=2$: let $F_1 \cup F_2 = A_1 \cup A_2$. By definition of $A_n$: $F_1 \cup F_2 = (F_1) \cup (F_2 \cap F_1^c)$. Since $F_2 \not \subset F_1, F_2 \subset F_1^c$, hence $(F_2 \cap F_1^c) = F_2$. Thus $F_1 \cup F_2 = A_1 \cup A_2$.
+
+		Now need to show this result for $N+1$: let $F_{N+1} \cup F_N = A_{N+1} \cup A_N$. By definition of $A_n$: $F_{N+1} \cup F_N = (F_{N+1} \cap F_N^c \cap \cdots \cap F_1^c) \cup (F_N \cap F_{N-1}^c \cap \cdots \cap F_1^c)$. Since $F_N^c \cap \cdots \cap F_1^c$ each contain $F_{N+1}$, its intersection with $F_{N+1}$ is $F_{N+1}$. Thus $F_{N+1} \cup F_N = A_{N+1} \cup A_N$.
+	\item[1.34]
+		Since $F_n$ is countable, as it is a sequence of events, the \texttt{P} function, then, for successive sets of events (i.e., ${F_1}$, then ${F_1, F_2}$, etc.) must be monotonically increasing. That is, for each added $F_n$, the result of \texttt{P} will increase. Thus, \texttt{P}$(\bigcap_{n=1}^\infty F_n)$ exists and is continuous, therefore \texttt{P}$(\bigcap_{n=1}^\infty F_n) = \lim_{N \rightarrow \infty}$\texttt{P}$(\bigcap_{n=1}^N F_n)$. (I am aware that, in the case where the next event has already occured and thus will not change the value of the union, the function is not technically monotonically increasing, since, for that $N$, $x_N \not \ge x_{N+1}$. But, since I am already wrongly bending some rules as this is not really a continuous function by calcus' standards, it's a moot point.)
+	\item[1.35]
+		Same argument as above, except that \texttt{P} is monotonically decreasing.
+	\item[1.36]
+		By induction, the base case is $N=2$: for events $F_2, F_1$, \texttt{P}$(F_2 \cup F_1) =$ \texttt{P}$(F_2) +$ \texttt{P}$(F_1) -$ \texttt{P}$(F_2 \cap F_1)$, which is less than or equal to \texttt{P}$(F_1) +$ \texttt{P}$(F_2)$.
+
+		For the inductive case, let $F_1, \dots, F_n$ be a finite sequence of events. Then \texttt{P}$(\bigcup_{n=1}^N F_n) =$ \texttt{P}$(F_N \cup (F_{N-1} \cup \cdots \cup F_1)) =$ \texttt{P}$(F_N) +$ \texttt{P}$(F_{N-1} \cup \cdots \cup F_1) -$ \texttt{P}$(F_N \cap (F_{N-1} \cup \cdots \cup F_1))$, which is less than or equal to $\Sigma_{n=1}^\infty$ \texttt{P}$(F_n)$.
+	\item[1.37]
+		From the previous proofs we can substitute the left side to get $\lim_{N \rightarrow \infty}$ \texttt{P}$(\bigcup_{n=1}^N F_n) \le \Sigma_{n=1}^\infty$ \texttt{P}$(F_n)$. Since $\Sigma_{n=1}^\infty X_n \in \Re := \lim_{N \rightarrow \infty} \Sigma_{n=1}^N X_n$, and \texttt{P}$ \in \Re$, we can conclude that this relation holds.
+	\item[2.20]
+		Let $i$ be the $i^\mathrm{th}$ block. Then, the pmf of $Y$ is $p (1-p)^{i-1}$.
+\end{itemize}
+
+\end{document}

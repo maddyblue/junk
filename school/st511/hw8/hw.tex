@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\begin{document}
+
+\begin{flushright}
+Matt Jibson \\
+ST511 S1\\
+HW 8
+\end{flushright}
+
+\begin{enumerate}
+	\item
+		\begin{itemize}
+			\item[A.] 1 - probbnml(.75, 45, 38) = 0.044607
+			\item[B.] probbnml(.75, 45, 40) = 0.99406
+			\item[C.] probbnml(.75, 45, 41) - probbnml(.75, 45, 39) = 0.016389
+			\item[D.] 1 - probnorm((38 - 33.75) / 2.904) = 0.071665
+			\item[E.] 1 - probnorm((38.5 - 33.75) / 2.904) = 0.050954
+			\item[F.] The results in (D) and (E) are fairly large compared to the exact result in (A). The corrected (E) is much closer, however. It appears that the uncorrected result is an inadequate approximation, while the corrected result is adequate.
+		\end{itemize}
+	\item
+		\begin{itemize}
+			\item[A.] 227 / 945 = 24.02\%
+			\item[B.] $0.24 \pm 1.96 \sqrt{\frac{(0.24)(1-0.24)}{945}} = 0.24 \pm 0.027 = (0.213, 0.267)$
+			\item[C.] $z = \frac{0.24 - 0.25}{\sqrt{\frac{0.25 (1-0.25)}{945}}} = \frac{-0.01}{0.014} = -0.71 \Rightarrow z < z_{0.005} = 1.645$ so reject. p-value = 0.239. \\
+				In SAS:
+				\begin{verbatim}
+					proc power;
+					onesamplefreq test=z
+					nullproportion = 0.25
+					proportion = 0.24
+					sides = 1
+					ntotal = 945
+					power = .;
+				\end{verbatim}
+				Gives power of 0.175.
+		\end{itemize}
+	\item
+		\begin{itemize}
+			\item[A.] $\frac{z_{\alpha/2}^2 \hat{\pi} (1 - \hat{\pi})}{E^2} = \frac{1.96^2 (.15) (.85)}{0.03^2} = 545$
+			\item[B.] In SAS:
+				\begin{verbatim}
+					proc power;
+					onesamplefreq test=exact
+					nullproportion = 0.10
+					proportion = 0.15
+					sides = 1
+					ntotal = 200
+					power = .;
+				\end{verbatim}
+				Gives power of 0.683.
+		\end{itemize}
+	\item In SAS:
+		\begin{verbatim}
+			data var1;
+			input status $ wt;
+			datalines;
+			lead 8
+			nolead 42
+			;
+			proc freq;
+			weight wt;
+			tables status/binomial (p=0.16);
+			exact binomial;
+		\end{verbatim}
+		Normal approximation: 0.0584, 0.2616 \\
+		Exact interval: 0.0717, 0.2911 \\
+		First method is not as adequate (though not horrible) as the second. Sample size is large enough that things are decent (but not great) by normal approximation.
+	\item
+		\begin{itemize}
+			\item[A.] $\hat{\pi}_1 = .63, \hat{\pi}_2 = .84 \Rightarrow .63 - .84 \pm 1.96 \sqrt{\frac{(.63)(1-.63)}{100} + \frac{(.84)(1-.84)}{100}} = -0.21 \pm 0.119 = (-0.091, -0.329)$
+			\item[B.] $, \hat{\pi} = \frac{63 + 84}{200} = .735, SE(\hat{\pi}_1 - \hat{\pi}_2) = \sqrt{(.735)(1-.735)(\frac{1}{100} + \frac{1}{100})} = 0.0624 \Rightarrow \frac{.63 - .84}{0.0624} = -3.37 \Rightarrow \mathrm{p-value} = 0.0008$
+		\end{itemize}
+\end{enumerate}
+
+\end{document}

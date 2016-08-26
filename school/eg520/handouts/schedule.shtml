@@ -1,0 +1,246 @@
+<html><head><!-- Created by Xess version 4.1.1 --></head><body>
+<table border="2" cellpadding="3" cellspacing="4">
+<tbody><tr>
+<td></td>
+<td></td>
+<td> ECE 520/MATH 520 Lecture and Homework Schedule, Spring 2008  </td>
+<td> Version: <br>
+January 15, 2008  </td>
+<td>   </td>
+</tr>
+<tr>
+<td align="center"><b><i> Session </i></b> </td>
+<td><b><i> Date </i></b> </td>
+<td> Topic  </td>
+<td align="center"><b><i> Chapter </i></b> </td>
+<td align="center"><b><i> Homework Due </i></b> </td>
+</tr>
+<tr>
+<td align="center"> 1  </td>
+<td> 1/22  </td>
+<td> Introduction. Examples. Math preliminary: Notation, real vector spaces, linear independence, matrices.  </td>
+<td align="center"> 1,2  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 2  </td>
+<td> 1/24  </td>
+<td> Math preliminary: Inner product, norm. Eigenvalues and
+eigenvectors, quadratic forms, calculus of several variables, chain
+rule, Taylor series, gradient, level sets, directional derivative. </td>
+<td align="center"> 3,5  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 3  </td>
+<td> 1/29  </td>
+<td> Definition of optimization problem and types of solutions. Quadratic problems. FONC.  </td>
+<td align="center"> 6  </td>
+<td>   </td>
+</tr>
+<tr>
+<td align="center"> 4  </td>
+<td> 1/31  </td>
+<td> SONC and SOSC. Basic iterative algorithms: form, basic properties, line search.  </td>
+<td align="center"> 6  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 5  </td>
+<td> 2/5  </td>
+<td> One-dimensional search methods: Golden section search, Newton's method, secant method.  </td>
+<td align="center"> 7  </td>
+<td> 1.5, 2.6, 3.2, 3.12a, 5.5, 5.8, 5.9, 6.2, 6.5, 6.11, 6.20  </td>
+</tr>
+<tr>
+<td align="center"> 6  </td>
+<td> 2/7  </td>
+<td> Multi-dimensional algorithms. Gradient methods: form, steepest descent,
+convergence.  </td>
+<td align="center"> 8  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 7  </td>
+<td> 2/12  </td>
+<td> Gradient methods: convergence of fixed step size algorithm, steepest descent algorithm. Order of convergence.  </td>
+<td align="center"> 8  </td>
+<td>   </td>
+</tr>
+<tr>
+<td align="center"> 8  </td>
+<td> 2/14  </td>
+<td> Newton's method: form, order of convergence. Properties of general algorithms.  </td>
+<td align="center"> 9  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 9  </td>
+<td> 2/19  </td>
+<td> Conjugate direction methods: form, properties, conjugate gradient formulas.  </td>
+<td align="center"> 10  </td>
+<td> 7.2a,b,d, 8.1, 8.3, 8.13, 8.17, 9.1, 9.3  </td>
+</tr>
+<tr>
+<td align="center"> 10  </td>
+<td> 2/21  </td>
+<td> Quasi-Newton methods: form, properties, rank one formula.  </td>
+<td align="center"> 11  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 11  </td>
+<td> 2/26  </td>
+<td> Quasi-Newton methods: DFP and BFGS.  </td>
+<td align="center"> 11  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 12  </td>
+<td> 2/28  </td>
+<td> Least squares problems: basic properties, grammian, examples.  </td>
+<td align="center"> 12  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 13  </td>
+<td> 3/4  </td>
+<td> RLS. Parameter identification.  </td>
+<td align="center"> 12  </td>
+<td> 10.1, 10.6, 10.7, 11.1, 11.6  </td>
+</tr>
+<tr>
+<td align="center"> 14  </td>
+<td> 3/6  </td>
+<td> Exam 1  </td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 15  </td>
+<td> 3/11  </td>
+<td> Randomized search. Simulated annealing. Genetic algorithm: Intro, representation schemes, selection.  </td>
+<td align="center"> 14  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 16  </td>
+<td> 3/13  </td>
+<td> Genetic algorithm: evolution (crossover &amp; mutation). Algorithms for constrained problems: projection, penalty method.  </td>
+<td align="center"> 14,22  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 17  </td>
+<td> 3/25  </td>
+<td> Constrained optimization: basic form with equality and inequality
+constraints. Intro to linear programs, geometric view, standard form. </td>
+<td align="center"> 15  </td>
+<td> 12.3, 12.9, 12.11, 12.13, 12.14, 22.6a (Hint: solution is
+A^T(A.A^T)^{-1}.b; see Section 12.3)  </td>
+</tr>
+<tr>
+<td align="center"> 18  </td>
+<td> 3/27  </td>
+<td> Linear programming: converting to standard form. Linear equations, elementary row operations, basic solutions.  </td>
+<td align="center"> 15,16  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 19  </td>
+<td> 4/1  </td>
+<td> Basic feasible solutions. Fundamental theorem of LP. Pivoting, changing bases and canonical augmented matrix.  </td>
+<td align="center"> 16  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 20  </td>
+<td> 4/3  </td>
+<td> Moving from one BFS to an adjacent BFS. Reduced cost coefficients. Simplex algorithm. Matrix form of simplex.  </td>
+<td align="center"> 16  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 21  </td>
+<td> 4/8  </td>
+<td> Artificial problem and feasibility. Two phase algorithm. Duality: form, example.  </td>
+<td align="center"> 16,17  </td>
+<td> 15.1, 15.5, 15.8, 16.2, 16.3, 16.9a,c, 16.10  </td>
+</tr>
+<tr>
+<td align="center"> 22  </td>
+<td> 4/10  </td>
+<td> Weak duality lemma, duality theorem, duality and Simplex
+algorithm, complementary slackness. Equivalence of feasibility and LP
+problems. </td>
+<td align="center"> 17  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 23  </td>
+<td> 4/15  </td>
+<td> General equality constraints: basic form, example. Lagrange condition for scalar equality constraint.  </td>
+<td align="center"> 17,19  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 24  </td>
+<td> 4/17  </td>
+<td> General multivariable Lagrange condition. Tangent and normal space.  </td>
+<td align="center"> 19  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 25  </td>
+<td> 4/22  </td>
+<td> Minimizing quadratic subject to linear constraint (quadratic
+programming). Simple linear quadratic regulator problem. Second order
+conditions. </td>
+<td align="center"> 19  </td>
+<td> 17.3, 17.6, 17.9, 19.6a, 19.10, 19.11a, 19.15a  </td>
+</tr>
+<tr>
+<td align="center"> 26  </td>
+<td> 4/24  </td>
+<td> Exam 2  </td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 27  </td>
+<td> 4/29  </td>
+<td> General equality and inequality constraints: form, example. KKT condition with only inequality constraints. Examples.  </td>
+<td align="center"> 20  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 28  </td>
+<td> 5/1  </td>
+<td> KKT condition for equality and inequality constraints. SONC.  </td>
+<td align="center"> 20  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 29  </td>
+<td> 5/6  </td>
+<td> SOSC. Convex optimization problems.  </td>
+<td align="center"> 20,21  </td>
+<td></td>
+</tr>
+<tr>
+<td align="center"> 30  </td>
+<td> 5/8  </td>
+<td> Convex optimization problems.  </td>
+<td align="center"> 21  </td>
+<td>19.6b,c, 19.11b,c, 19.15b, 20.9, 20.10, 20.14, 21.2, 21.10</td>
+</tr>
+<tr>
+<td></td>
+<td>   </td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+
+</body></html>

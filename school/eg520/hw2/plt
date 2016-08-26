@@ -1,0 +1,4 @@
+set terminal png
+set output "72a.png"
+
+plot [1:2] x**2 + 4 * cos(x)

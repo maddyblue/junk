@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\begin{document}
+
+\begin{flushright}
+Matt Jibson \\
+EG 520 \\
+HW 3
+\end{flushright}
+
+\begin{itemize}
+	\item[10.1]
+		To show Q-conjugacy we must show that $\boldsymbol{d}^{(j+1)T} \boldsymbol{Q} \boldsymbol{d}^{(k+1)} = 0$ for any $j \ne k$.
+		Let \begin{displaymath}
+			\boldsymbol{d}^{(j+1)} = \boldsymbol{p}^{(j+1)} - \Sigma_{i=0}^{j} \frac{\boldsymbol{p}^{(j+1)T} \boldsymbol{Q} \boldsymbol{d}^{(i)}}{\boldsymbol{d}^{(i)T} \boldsymbol{Q} \boldsymbol{d}^{(i)}} \boldsymbol{d}^{(i)},
+			\boldsymbol{d}^{(k+1)} = \boldsymbol{p}^{(k+1)} - \Sigma_{i=0}^{k} \frac{\boldsymbol{p}^{(k+1)T} \boldsymbol{Q} \boldsymbol{d}^{(i)}}{\boldsymbol{d}^{(i)T} \boldsymbol{Q} \boldsymbol{d}^{(i)}} \boldsymbol{d}^{(i)}
+		\end{displaymath}
+	\item[10.6]
+	\item[10.7] \begin{itemize}
+		\item[a.] $f(x) = \frac{5}{2} x_1^2 + \frac{1}{2} x_2^2 + 2 x_1 x_2 - 3 x_1 - x_2$,
+			\begin{displaymath}
+				\boldsymbol{Q} = \left[ \begin{array}{cc} 5 & 2 \\ 2 & 1 \end{array} \right],
+				\boldsymbol{b} = \left[ \begin{array}{c} 3 \\ 1 \end{array} \right].
+			\end{displaymath}
+		\item[b.] $\boldsymbol{x}^{(0)} = [0, 0]^T, \boldsymbol{g}(\boldsymbol{x}) = \nabla f(x) = \boldsymbol{Qx - b} = [5x_1 + 2x_2 - 3, 2 x_1 + x_2 - 1]^T$ \\
+			$\boldsymbol{g}^{(0)} = [-3.0, -1.0]^T, \boldsymbol{d}^{(0)} = [3.0, 1.0], \alpha_0 = 0.1724, \beta_0 = 0.0000, \boldsymbol{x}^{(1)} = [0.5172, 0.1724]^T$ \\
+			$\boldsymbol{g}^{(1)} = [-0.0689, 0.2068]^T, \boldsymbol{d}^{(1)} = [0.0832, -0.2021], \alpha_1 = 5.8000, \beta_1 = 0.0048, \boldsymbol{x}^{(2)} = [1, -1]^T$ \\
+			$\boldsymbol{g}^{(2)} = [0, 0]^T$, as expected. (Solved using my own program.)
+		\item[c.]
+				$5x_1 + 2x_2 - 3 = 0 \\
+				2x_1 + x_2 - 1 = 0 \\
+				x_2 = 1 - 2x_1 \\
+				5x_1 + 2 - 4x_1 - 3 = 0 \\
+				x_1 = 1 \\
+				2 + x_2 - 1 = 0 \\
+				x_2 = -1$ \\
+				Analytical solution is the same.
+		\end{itemize}
+	\item[11.1]
+	\item[11.6]
+\end{itemize}
+
+\end{document}

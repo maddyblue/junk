@@ -1,0 +1,6 @@
+*.aux
+*.dvi
+*.log
+*.pyc
+*.out
+*.toc
