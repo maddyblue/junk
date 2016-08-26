@@ -1,0 +1,26 @@
+{% extends "results/base.html" %}
+
+{% block title %}
+
+- Upload
+
+{% endblock %}
+
+{% block content %}
+
+{% if upload %}
+	<p>Upload of {{ upload.filename }} successful.</p>
+{% endif %}
+<form enctype="multipart/form-data" method="post" action="">
+<table>{{ form }}</table>
+<input type="submit" />
+</form>
+
+<hr />
+
+<form method="post" action="">
+<input type="submit" name="all" value="Reanalyze All" />
+</form>
+(This takes a few minutes to run. Don't press it unless you know what you are doing.)
+
+{% endblock %}

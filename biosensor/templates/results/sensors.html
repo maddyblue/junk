@@ -1,0 +1,129 @@
+{% extends "results/base.html" %}
+
+{% block title %}
+
+- Sensor Results
+
+{% endblock %}
+
+{% block css %}
+
+.graph {
+	font-family: sans-serif;
+	font-size: 13px;
+	background-color: #C8C8C8;
+	border: solid 1px black;
+}
+
+.graph thead th {
+	border-bottom: solid 1px black;
+	padding-bottom: 2px;
+}
+
+.bar {
+	background-color: white;
+	text-align: right;
+	border-left: solid 1px black;
+	width: 200px;
+	height: 1em;
+}
+
+.bar div {
+	border-top: solid 1px #004080;
+	border-bottom: solid 1px #004080;
+	background-color: #004080;
+	text-align: right;
+	color: white;
+	float: left;
+	padding-top: 0;
+	height: 1em;
+}
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Sensor Results</h1>
+
+<table class="graph" cellspacing="5" cellpadding="0">
+	<thead>
+		<tr>
+			<td></td>
+			<td></td>
+			<td>% of max</td>
+			<td>avg value</td>
+		</tr>
+	</thead>
+	<tbody>
+	{% for p in perc %}
+		<tr>
+			<td><a href="/uploads/sensors/s{{ p.0|stringformat:"02d" }}.png">Sensor {{ p.0 }}</a></td>
+			<td class="bar">
+				<div style="width: {{ p.2 }}%"></div>
+			</td>
+			<td>{{ p.2|floatformat:1 }}% +/- {{ p.3|floatformat:1 }}%</td>
+			<td>{{ p.1|stringformat:".2e" }} +/- {{ p.4|stringformat:".2e" }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+<p>Area vs. Output: {{ p_output }}</p>
+<img src="/uploads/sensors/area_v_output.png"/>
+
+<p>Area vs. Current Density: {{ p_density }}</p>
+<img src="/uploads/sensors/area_v_density.png"/>
+
+<p>High Area vs. Current Density (independently computed best-fit curve):</p>
+<img src="/uploads/sensors/area_high_v_density.png"/>
+
+<p>Low Area vs. Current Density (independently computed best-fit curve):</p>
+<img src="/uploads/sensors/area_low_v_density.png"/>
+
+<p>Other images:</p>
+<img src="/uploads/sensors/perim_area_v_density.png"/>
+<img src="/uploads/sensors/distance_v_density.png"/>
+<img src="/uploads/sensors/area_ratio_v_output.png"/>
+<img src="/uploads/sensors/shape_v_density.png"/>
+
+<p>Latex table:</p>
+
+{% for p in perc %}
+<br/>{{ p.0 }} &amp; {{ p.2|floatformat:1 }} $\pm$ {{ p.3|floatformat:1 }} &amp; {{ p.1|stringformat:".2e" }} $\pm$ {{ p.4|stringformat:".2e" }} \\
+{% endfor %}
+
+<p>Latex table, specific tests:</p>
+
+{% for s in specific %}
+	<br/>
+	{% for c in s %}
+		{% if not forloop.first %}
+			&amp;
+		{% endif %}
+		{{ c }}
+	{% endfor %}
+	{% if not forloop.last %}
+		\\
+	{% endif%}
+{% endfor %}
+
+<p>Ordered by descending characterization value.</p>
+
+<table border="1" cellspacing="0" cellpadding="1">
+<tr>
+	<td>Sensor</td>
+	<td>File</td>
+	<td>Date</td>
+	<td>Value</td>
+</tr>
+{% for sensor in sensors %}
+	<tr>
+		<td><a href="/uploads/sensors/s{{ sensor.sensor|stringformat:"02d" }}.png">{{ sensor.sensor}}</a></td>
+		<td><a href="/results/{{ sensor.id }}">{{ sensor.filename }}</a></td>
+		<td>{{ sensor.run_date|date:"j M y H:i:s" }}</td>
+		<td>{{ sensor.characterize_value|stringformat:".3e" }}</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

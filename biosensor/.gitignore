@@ -1,0 +1,9 @@
+*.orig
+*.pyc
+*.swp
+*~
+biosensor.db
+fit.log
+media
+settings.py
+uploads

@@ -1,0 +1,76 @@
+{% extends "results/base.html" %}
+
+{% block title %}
+
+- {{ result }}
+
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ result }}</h1>
+<form action="." method="post">
+<table border="0" cellpadding="0" cellspacing="1">
+	<tr>
+		<td>
+			<a href="/uploads/{{ result.id }}">[ download .txt data ]</a>
+			<br/><input type="submit" name="reanalyze" value="reanalyze"/>
+		</td>
+	</tr>
+</table>
+</form>
+<ul>
+	<li><a href="/uploads/sensors/s{{ result.sensor|stringformat:"02d" }}.png">sensor: {{ result.sensor|default_if_none:"unknown" }}</a></li>
+	{% if e %}
+	<li><a href="/databrowse/results/electrode/objects/{{ e.id }}/">electrode: {{ result.electrode }}</a></li>
+	<li>electrode area (um^2): {{ e.area }}</li>
+	<li>electrode perimeter (um): {{ e.perimeter }}</li>
+	<li>electrode distance (um): {{ e.distance }}</li>
+	{% else %}
+	<li>electrode: {{ result.electrode|default_if_none:"unknown" }}</li>
+	{% endif %}
+	<li>run date: {{ result.run_date|date:"j M y H:i:s" }}</li>
+	<li>upload date: {{ result.upload_date|date:"j M y H:i:s" }}</li>
+	<li>analysis: {{ result.analysis }}</li>
+	<li>init e: {{ result.init_e }}</li>
+	{% ifequal result.analysis "Cyclic Voltammetry" %}
+	<li>high e: {{ result.high_e }}</li>
+	<li>low e: {{ result.low_e }}</li>
+	<li>init pn: {{ result.init_pn }}</li>
+	<li>scan rate: {{ result.scan_rate }}</li>
+	<li>sample interval: {{ result.sample_interval }}</li>
+	{% endifequal %}
+	{% ifequal result.analysis "Differential Pulse Voltammetry" %}
+	<li>final e: {{ result.final_e }}</li>
+	<li>incr e: {{ result.incr_e }}</li>
+	<li>amplitude: {{ result.amplitude }}</li>
+	<li>pulse width: {{ result.pulse_width }}</li>
+	<li>sample width: {{ result.sample_width }}</li>
+	<li>pulse period: {{ result.pulse_period }}</li>
+	<li>characterization value: {{ result.characterize_value }}</li>
+	{% endifequal %}
+	<li>sensitivity: {{ result.sensitivity }}</li>
+	<li>solution: {{ result.solution }}</li>
+	<li>notes: {{ result.notes|linebreaksbr }}</li>
+	<li>used in sensor results page: {{ result.use|yesno }}</li>
+	<li>high value: {{ result.high_val }} at {{ result.high_time }}</li>
+	<li>low value: {{ result.low_val }} at {{ result.low_time }}</li>
+	{% ifequal result.analysis "i - t Curve" %}
+	{% if result.characterize %}
+	<li>characterization value: {{ result.characterize_value }}</li>
+	{% endif %}
+	{% endifequal %}
+</ul>
+<p><img src="/uploads/{{ result.id }}.avg.png"/></p>
+{% ifequal result.analysis "i - t Curve" %}
+{% if result.characterize %}
+<p><img src="/uploads/{{ result.id }}.c.png"\></p>
+{% endif %}
+<p><img src="/uploads/{{ result.id }}.+15.png"\></p>
+<p><img src="/uploads/{{ result.id }}.r5.png"\></p>
+{% endifequal %}
+{% ifnotequal result.analysis "Differential Pulse Voltammetry" %}
+<p><img src="/uploads/{{ result.id }}.png"/></p>
+{% endifnotequal %}
+
+{% endblock %}

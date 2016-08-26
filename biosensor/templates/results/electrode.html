@@ -1,0 +1,41 @@
+{% extends "results/base.html" %}
+
+{% block title %}
+
+- Electrode Table
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Electrode Table</h1>
+
+<table border="1" cellspacing="0" cellpadding="1">
+<tr>
+	<td>Sensor</td>
+	<td>WE</td>
+	<td>Area (um^2)</td>
+	<td>Perimeter (um)</td>
+	<td>Distance (um)</td>
+</tr>
+{% for e in electrodes %}
+	<tr>
+		<td><a href="/uploads/sensors/s{{ e.sensor.sensor|stringformat:"02d" }}.png">{{ e.sensor.sensor|stringformat:"02d" }}</a>: {{ e.sensor.get_sensor_type_display }}</td>
+		<td>{{ e.we }}: {{ e.sensor.get_we_type_display }}</td>
+		<td>{{ e.area }}</td>
+		<td>{{ e.perimeter }}</td>
+		<td>{{ e.distance }}</td>
+	</tr>
+{% endfor %}
+</table>
+
+<h1>Latex Table</h1>
+
+{% for e in electrodes %}
+<br/>
+{{ e.sensor.sensor }} &amp; {{ e.we }} &amp;
+{{ e.area }} &amp; {{ e.perimeter }} &amp; {{ e.distance }} &amp;
+{{ e.area_ae }} &amp; {{ e.perimeter_ae }} \\
+{% endfor %}
+
+{% endblock %}
