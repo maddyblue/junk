@@ -1,0 +1,58 @@
+application: missao-rio
+version: 1
+runtime: python
+api_version: 1
+
+default_expiration: "1d"
+
+builtins:
+- admin_redirect: on
+- appstats: on
+- datastore_admin: on
+- remote_api: on
+
+handlers:
+- url: /favicon.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
+
+- url: /styles
+  static_dir: static/styles
+
+- url: /themes
+  static_dir: static/themes
+
+- url: /imgs
+  static_dir: static/imgs
+
+- url: /missionaries
+  static_dir: static/missionaries
+
+- url: /js-static
+  static_dir: static/js
+
+- url: /files
+  static_dir: static/files
+
+- url: /_ah/missao-rio/.*
+  script: main.py
+  login: admin
+
+- url: /_ah/tasks/.*
+  script: main.py
+  login: admin
+
+- url: /mapreduce(/.*)?
+  script: mapreduce/main.py
+  login: admin
+
+- url: /.*
+  script: main.py
+
+admin_console:
+  pages:
+  - name: Flush Memcache
+    url: /_ah/missao-rio/flush/
+
+  - name: Cleanup Sessions
+    url: /cleanup_sessions

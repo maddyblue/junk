@@ -1,0 +1,18 @@
+{% if submit %}
+Você está responsável por estas informações por <b>todas</b> as duplas de missionários que estão servindo em sua ala. Estes missionários precisam lhe passar um relato do trabalho que tem feito para que você possa atualizar estas informações no site.
+{% else %}
+Você está responsável para trazer estes recém-conversos para a igreja neste domingo. Mas, você tem que ligar para a outra dupla de missionários em sua ala, e falar com o senior quem você conseguiu levar, e ele atualizará as informações aqui no site.
+{% endif %}
+
+<br /><br />
+<b>Statistics:</b><br />
+Pessoas que foram para pelo menos uma reunião: {{ stats.0 }} de {{ stats.1 }} ({{ stats.2 }}&#37;)<br /><br />
+
+Os nomes <b>negritos</b> ainda não foram para a igreja este mês.
+<form method="POST">
+{{ table }}
+<br />
+{% if submit %}
+<input type="submit" value="Salva" />
+{% endif %}
+</form>

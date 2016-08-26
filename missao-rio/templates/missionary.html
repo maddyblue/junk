@@ -1,0 +1,33 @@
+<h2>{{ m }}</h2>
+<img src="/photo/{{ m.key }}" width="150" />
+
+<p/>Área: {{ m.zone_name }} - {{ m.area_name }}
+<p/>Chamado: {{ m.calling }}
+<p/>Email: <a href="mailto:{{ m.email }}">{{ m.email }}</a>
+<p/>Nome completo: {{ m.full_name }}
+<p/>Release: {{ m.release }}
+<p/>Start: {{ m.start }}
+<p/>MTC: {{ m.mtc }}
+<p/>Birthday: {{ m.birth }}
+<p/>Mission ID: {{ m.mission_id }}
+<p/>Mail box: {{ m.box }}
+<p/>Parents' email: {{ m.email_parents }}
+<p/>
+	<a href="/_ah/missao-rio/edit-missionary/{{ m.key }}">edit</a>
+	<a href="/_ah/missao-rio/pf/0/{{ m.key }}">pf-mudança</a>
+	<a href="/_ah/missao-rio/pf/1/{{ m.key }}">pf-registro</a>
+	<a href="/_ah/missao-rio/pf/2/{{ m.key }}">pf-visto</a>
+	<a href="/_ah/missao-rio/mudanca-carta/{{ m.key }}">pf-mudança carta</a>
+	<a href="/_ah/missao-rio/cardfront/{{ m.key }}">cardfront</a>
+	<a href="/_ah/missao-rio/cardback/{{ m.key }}">cardback</a>
+	<a href="/_ah/missao-rio/sync-history/{{ m.key }}">sync history</a>
+	<a href="/_ah/missao-rio/return-letter/{{ m.key }}">return letter</a>
+	<a href="/_ah/missao-rio/itinerary/{{ m.key }}">itinerary</a>
+	<a href="/_ah/missao-rio/recommendation/{{ m.key }}/1">recommendation</a>
+	<a href="/_ah/missao-rio/recommendation/{{ m.key }}/0">recomendação</a>
+
+<hr>
+
+{% for chart in charts %}
+<br/>{{ chart }}
+{% endfor %}

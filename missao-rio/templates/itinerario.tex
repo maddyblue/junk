@@ -1,0 +1,31 @@
+\documentclass[12pt]{letter}
+\usepackage{textcomp}
+\usepackage{graphicx}
+
+{% include "incl-letter-portuguese.tex" %}
+
+\begin{document}
+
+\def \body
+{\'E com grande satisfa\c c\~ao que comunicamos o t\'ermino da miss\~ao de {{ m.sex }} {{ m.full_name }}, que est\'a terminando sua miss\~ao honrosamente aqui na Miss\~ao Brasil Rio de Janeiro e estar\'a chegando em {{ m.profile.it_destination }} no vôo {{ m.profile.it_flight_num }} da {{ m.profile.it_flight_comp}}, no dia {{ m.profile.it_flight_arrive|date:"d" }} de {{ month }} de {{ m.profile.it_flight_arrive|date:"Y"}}, {{ m.profile.it_flight_arrive|date:"H:i" }}h.
+
+Segue em anexo o itiner\'ario d{{ article }} {{ m }}.}
+
+\begin{letter}{ {{ stake }} }
+\date{ {{ date }} }
+\opening{Prezado {{ spres }},}
+\body
+\closing{Sinceramente,}
+\cc{ {{ bishop }} }
+\end{letter}
+
+\begin{letter}{ {{ ward }} }
+\date{ {{ date }} }
+\opening{Prezado {{ bishop }},}
+\body
+\closing{Sinceramente,}
+
+\cc{ {{ spres }} }
+\end{letter}
+
+\end{document}

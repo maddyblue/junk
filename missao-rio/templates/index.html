@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{% block t1 %}{{ t1 }}{% endblock %} - Página Batismal</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="/styles/style.css" />
+	<link rel="stylesheet" type="text/css" href="/styles/jquery-ui-1.8.6.css" />
+	<link rel="stylesheet" type="text/css" title="theme" href="/styles/style.css" />
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+	<script type="text/javascript" src="/js-static/jquery-1.4.3.min.js"></script>
+	<script type="text/javascript" src="/js-static/jquery-ui-1.8.5.min.js"></script>
+
+	<script src="/js-static/snowstorm-min.js"></script>
+	<script type="text/javascript">
+	snowStorm.snowColor = '#b5f2ff'; // blue-ish snow!?
+	snowStorm.flakesMaxActive = 30;  // show more snow on screen at once
+	snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
+	snowStorm.animationInterval = 50;    // Theoretical "miliseconds per frame" measurement. 20 = fast + smooth, but high CPU use. 50 = more conservative, but slower
+	</script>
+
+	<script type="text/javascript" src="/js-static/site.js"></script>
+
+	<!--link rel="stylesheet" media="screen" href="/js-static/lights/christmaslights.css" />
+	<script type="text/javascript" src="/js-static/lights/soundmanager2-nodebug-jsmin.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.6.0/build/yahoo-dom-event/yahoo-dom-event.js&2.6.0/build/animation/animation-min.js"></script>
+	<script type="text/javascript" src="/js-static/lights/christmaslights.js"></script-->
+
+	{% block head %}{{ headstuff }}{% endblock %}
+
+</head>
+
+<body>
+
+{% if show %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#dialog").dialog({width: 600, resizable: false});
+	});
+</script>
+
+<div id="dialog" title="{% block showtitle %}Superação!{% endblock %}" style="font-size: 135%">{% block show %}{{ show }}{% endblock %}</div>
+{% endif %}
+
+<div id="wrapper-menu-top">
+<div id="menu-top">
+	<ul><li></li>
+	</ul>
+</div><!--menu-top-->
+</div><!--wrapper-menu-top-->
+
+<div id="wrapper-header">
+<div id="header">
+<div id="wrapper-header2">
+<div id="wrapper-header3">
+	<h1>Missão Brasil Rio de Janeiro</h1>
+</div>
+</div>
+</div>
+</div>
+
+<div id="wrapper-content">
+<div id="wrapper-menu-page">
+	<div id="menu-page">
+
+	{% if session.is_admin %}
+	<h3>Administração</h3>
+	<ul>
+		<li><a href="/_ah/missao-rio/area/">Números da Missão</a></li>
+		<li><a href="/_ah/missao-rio/status/">Mission Status</a></li>
+		<li><a href="/_ah/missao-rio/missionaries/">Missionaries</a></li>
+		<li><a href="/_ah/missao-rio/view-retention/">Relatório de Retenção</a></li>
+		<li><a href="/_ah/missao-rio/raiox/">Raio-X</a></li>
+		<li><a href="/logout/">Sair</a></li>
+	</ul>
+	{% endif %}
+
+	{% if session.user %}
+	<h3>{{ session.user }}</h3>
+	<ul>
+		<li>{{ session.user.calling }}</li>
+		{% if session.user|is_zl %}
+		<li>Zona: <a href="/zone/{{ session.user|getkey:"zone" }}">{{ session.user.zone_name }}</a></li>
+		{% else %}
+		<li>Zona: {{ session.user.zone_name }}</li>
+		{% endif %}
+		<li>Área: <a href="/area/{{ session.user|getkey:"area" }}">{{ session.user.area_name }}</a></li>
+		<li><a href="/logout/">Sair</a></li>
+	</ul>
+	{% endif %}
+
+	{% if session.visitor %}
+	<h3>Bem Vindos</h3>
+	<ul>
+		<li><a href="/logout/">Sair</a></li>
+	</ul>
+	{% endif %}
+
+	{% if session.user or session.is_admin or session.visitor %}
+	<h3>Navegação</h3>
+	<ul>
+		<li><a href="/">Carta do Presidente</a></li>
+		{% if session.user %}
+		<li><a href="/relatorio/">Fazer Relatório</a></li>
+		<li><a href="/retencao/"><b>*Projeto de Retenção*</b></a></li>
+		{% endif %}
+		{% if session.user|is_zl %}
+		<li><a href="/numeros/">Passar Números</a></li>
+		{% endif %}
+		<li><a href="/batismos/">Batismos</a></li>
+		<li><a href="/batizadores/">Batizadores</a></li>
+		<li><a href="/super/">Superação</a></li>
+		<li><a href="/milagre/">Milagres da Semana</a></li>
+		<li><a href="/noticias/">Notícias do Campo</a></li>
+		<li><a href="/clima/">Clima da Semana</a></li>
+		<li><a href="/quadro/">Quadro da Missão</a></li>
+	</ul>
+
+	<h3>Outras</h3>
+	<ul>
+		<li><a href="/arquivos/">Arquivos</a></li>
+		<li><a href="/unidades/">Números das Unidades</a></li>
+	</ul>
+
+	{% else %}
+
+	<h3>Navegação</h3>
+	<ul>
+		<li><a href="/login/">Fazer login</a></li>
+	</ul>
+
+	{% endif %}
+
+	<script type="text/javascript">
+		$(function() {
+			$("#theme").selectable({
+				selected: function(event, ui) {
+					theme(ui.selected.innerHTML);
+
+					if(ui.selected.innerHTML == 'Natal')
+						snowStorm.init();
+					else
+						snowStorm.stop();
+				}
+			});
+		});
+	</script>
+
+	<h3>Tema</h3>
+	<ul id="theme">
+		<li>Botafogo</li>
+		<li>Natal</li>
+		<li>Nefitas</li>
+		<li>Pedra</li>
+		<li>Cristo - LDS</li>
+		<li>Cristo - Rio</li>
+	</ul>
+
+	<p><img src="/imgs/logo_tn.jpg" alt="" /></p>
+
+	{% if session.is_admin %}
+	<div><a href="/admin/">Admin</a></div>
+	{% endif %}
+</div><!--menu-page-->
+</div>
+<div id="content">
+
+{% if t2 %}
+<h2>{% block t2 %}{{ t2 }}{% endblock %}</h2>
+{% endif %}
+
+{% block content %}
+
+{% include page %}
+{{ page_data }}
+
+{% endblock %}
+
+</div>
+</div>
+
+<div id="wrapper-footer">
+<div id="footer">
+&copy; 2010 Missão Brasil Rio de Janeiro
+</div>
+</div>
+
+<div id="lights" style="display: block;"></div>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16461487-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</body>
+</html>

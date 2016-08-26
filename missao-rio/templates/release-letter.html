@@ -1,0 +1,31 @@
+<p/>Leaving:
+<table border=1>
+{% for d in dates %}
+<tr><td>{{ d.0 }}</td><td>
+<a href="/_ah/missao-rio/release-letter/{{ d.0.year }}/{{ d.0.month }}/{{ d.0.day }}">release</a>
+<a href="/_ah/missao-rio/release-envelope/{{ d.0.year }}/{{ d.0.month }}/{{ d.0.day }}">envelopes</a>
+</td><td>
+{% for m in d.1 %}
+	<a href="/_ah/missao-rio/itinerary/{{ m.key }}">{{ m }}</a>{% if not forloop.last %},{% endif %}
+{% endfor %}
+</td></tr>
+{% endfor %}
+</table>
+
+<p>email addresses:</p>
+<table border=1>
+{% for d in dates %}
+<tr><td>{{ d.0 }}</td><td>
+{% for m in d.1 %}
+	{{ m.email }}{% if not forloop.last %}; {% endif %}
+{% endfor %}
+</td></tr>
+{% endfor %}
+</table>
+
+<p>all:</p>
+<table>
+{% for m in rel %}
+<tr><td><a href="/_ah/missao-rio/missionary/{{ m.key }}">{{ m }}</a></td><td>{{ m.release }}</td></tr>
+{% endfor %}
+</table>

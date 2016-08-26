@@ -1,0 +1,318 @@
+<form id="relatorioForm" onsubmit="return false;">
+<input type="hidden" name="week" value="{{ week.key }}" />
+
+<table>
+	<tr><th>Semana</th><td colspan=2>{{ week.date|date:"d/m/Y" }}</td></tr>
+	<tr><th>Nome do Sénior</th><td colspan=2><select name="senior" id="id_senior">
+<option value="" selected="selected">---------</option>
+{{ missionary }}
+</select></td></tr>
+	<tr><th>Nome do Júnior</th><td colspan=2><select name="junior" id="id_junior">
+<option value="" selected="selected">---------</option>
+{{ missionary }}
+</select></td></tr>
+	<tr><th>Área</th><td colspan=2><select name="area" id="id_area">
+<option value="" selected="selected">---------</option>
+{{ area }}
+</select></td></tr>
+	<tr><td></td><th>Meta</th><th>Realizada</th></tr>
+	<tr><th>Batismos</th><td><input type="text" name="goal_baptisms" id="id_goal_baptisms" /></td><td><input type="text" name="realized_baptisms" id="id_realized_baptisms" /></td></tr>
+	<tr><th>Confirmações</th><td><input type="text" name="goal_confirmations" id="id_goal_confirmations" /></td><td><input type="text" name="realized_confirmations" id="id_realized_confirmations" /></td></tr>
+	<tr><th>Data Marcada</th><td><input type="text" name="goal_date_marked" id="id_goal_date_marked" /></td><td><input type="text" name="realized_date_marked" id="id_realized_date_marked" /></td></tr>
+	<tr><th>Pesquisadores na Reunião Sacramental</th><td><input type="text" name="goal_sacrament" id="id_goal_sacrament" /></td><td><input type="text" name="realized_sacrament" id="id_realized_sacrament" /></td></tr>
+	<tr><th>Lições com membro presente</th><td><input type="text" name="goal_with_member" id="id_goal_with_member" /></td><td><input type="text" name="realized_with_member" id="id_realized_with_member" /></td></tr>
+	<tr><th>Outras Lições</th><td><input type="text" name="goal_others" id="id_goal_others" /></td><td><input type="text" name="realized_others" id="id_realized_others" /></td></tr>
+	<tr><th>Pesquisadores que estão progredindo</th><td><input type="text" name="goal_progressing" id="id_goal_progressing" /></td><td><input type="text" name="realized_progressing" id="id_realized_progressing" /></td></tr>
+	<tr><th>Referências Recebidas</th><td><input type="text" name="goal_received" id="id_goal_received" /></td><td><input type="text" name="realized_received" id="id_realized_received" /></td></tr>
+	<tr><th>Referências Contatadas</th><td><input type="text" name="goal_contacted" id="id_goal_contacted" /></td><td><input type="text" name="realized_contacted" id="id_realized_contacted" /></td></tr>
+	<tr><th>Novos Pesquidaroes</th><td><input type="text" name="goal_new" id="id_goal_new" /></td><td><input type="text" name="realized_new" id="id_realized_new" /></td></tr>
+	<tr><th>Lições com Recém-Conversos ou Menos Ativos</th><td><input type="text" name="goal_recent_menos" id="id_goal_recent_menos" /></td><td><input type="text" name="realized_recent_menos" id="id_realized_recent_menos" /></td></tr>
+	<tr><th>Número de Noite Familiares</th><td><input type="text" name="goal_nfm" id="id_goal_nfm" /></td><td><input type="text" name="realized_nfm" id="id_realized_nfm" /></td></tr>
+	<tr><th>Frequência Reunião Sacramental</th><td></td><td><input type="text" name="attendance" id="id_attendance" /></td></tr>
+</table>
+<p/>
+<table>
+	<tr><th colspan=7>Informações de cada pessoa batizada na semana deste relatório - (precisamos cada informação)</th></tr>
+	<tr><th>Nome Completo</th><th>Fonte</th><th>Sexo</th><th>Idade</th><th>Data/Batismo</th><th>Endereço - Rua e<br />Número (seja exato)</th><th>CEP</th></tr>
+	<tr><td><input id="id_baptism_1_name" type="text" name="baptism_1_name" maxlength="100" /></td><td><select name="baptism_1_source" id="id_baptism_1_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_1_sex" id="id_baptism_1_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_1_age" type="text" name="baptism_1_age" size="3" /></td><td><input id="id_baptism_1_date" type="text" name="baptism_1_date" size="15" /></td><td><input id="id_baptism_1_address" type="text" name="baptism_1_address" maxlength="100" /></td><td><input id="id_baptism_1_cep" type="text" name="baptism_1_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_2_name" type="text" name="baptism_2_name" maxlength="100" /></td><td><select name="baptism_2_source" id="id_baptism_2_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_2_sex" id="id_baptism_2_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_2_age" type="text" name="baptism_2_age" size="3" /></td><td><input id="id_baptism_2_date" type="text" name="baptism_2_date" size="15" /></td><td><input id="id_baptism_2_address" type="text" name="baptism_2_address" maxlength="100" /></td><td><input id="id_baptism_2_cep" type="text" name="baptism_2_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_3_name" type="text" name="baptism_3_name" maxlength="100" /></td><td><select name="baptism_3_source" id="id_baptism_3_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_3_sex" id="id_baptism_3_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_3_age" type="text" name="baptism_3_age" size="3" /></td><td><input id="id_baptism_3_date" type="text" name="baptism_3_date" size="15" /></td><td><input id="id_baptism_3_address" type="text" name="baptism_3_address" maxlength="100" /></td><td><input id="id_baptism_3_cep" type="text" name="baptism_3_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_4_name" type="text" name="baptism_4_name" maxlength="100" /></td><td><select name="baptism_4_source" id="id_baptism_4_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_4_sex" id="id_baptism_4_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_4_age" type="text" name="baptism_4_age" size="3" /></td><td><input id="id_baptism_4_date" type="text" name="baptism_4_date" size="15" /></td><td><input id="id_baptism_4_address" type="text" name="baptism_4_address" maxlength="100" /></td><td><input id="id_baptism_4_cep" type="text" name="baptism_4_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_5_name" type="text" name="baptism_5_name" maxlength="100" /></td><td><select name="baptism_5_source" id="id_baptism_5_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_5_sex" id="id_baptism_5_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_5_age" type="text" name="baptism_5_age" size="3" /></td><td><input id="id_baptism_5_date" type="text" name="baptism_5_date" size="15" /></td><td><input id="id_baptism_5_address" type="text" name="baptism_5_address" maxlength="100" /></td><td><input id="id_baptism_5_cep" type="text" name="baptism_5_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_6_name" type="text" name="baptism_6_name" maxlength="100" /></td><td><select name="baptism_6_source" id="id_baptism_6_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_6_sex" id="id_baptism_6_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_6_age" type="text" name="baptism_6_age" size="3" /></td><td><input id="id_baptism_6_date" type="text" name="baptism_6_date" size="15" /></td><td><input id="id_baptism_6_address" type="text" name="baptism_6_address" maxlength="100" /></td><td><input id="id_baptism_6_cep" type="text" name="baptism_6_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_7_name" type="text" name="baptism_7_name" maxlength="100" /></td><td><select name="baptism_7_source" id="id_baptism_7_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_7_sex" id="id_baptism_7_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_7_age" type="text" name="baptism_7_age" size="3" /></td><td><input id="id_baptism_7_date" type="text" name="baptism_7_date" size="15" /></td><td><input id="id_baptism_7_address" type="text" name="baptism_7_address" maxlength="100" /></td><td><input id="id_baptism_7_cep" type="text" name="baptism_7_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_8_name" type="text" name="baptism_8_name" maxlength="100" /></td><td><select name="baptism_8_source" id="id_baptism_8_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_8_sex" id="id_baptism_8_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_8_age" type="text" name="baptism_8_age" size="3" /></td><td><input id="id_baptism_8_date" type="text" name="baptism_8_date" size="15" /></td><td><input id="id_baptism_8_address" type="text" name="baptism_8_address" maxlength="100" /></td><td><input id="id_baptism_8_cep" type="text" name="baptism_8_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_9_name" type="text" name="baptism_9_name" maxlength="100" /></td><td><select name="baptism_9_source" id="id_baptism_9_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_9_sex" id="id_baptism_9_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_9_age" type="text" name="baptism_9_age" size="3" /></td><td><input id="id_baptism_9_date" type="text" name="baptism_9_date" size="15" /></td><td><input id="id_baptism_9_address" type="text" name="baptism_9_address" maxlength="100" /></td><td><input id="id_baptism_9_cep" type="text" name="baptism_9_cep" size="10" /></td></tr>
+	<tr><td><input id="id_baptism_10_name" type="text" name="baptism_10_name" maxlength="100" /></td><td><select name="baptism_10_source" id="id_baptism_10_source">
+<option value="" selected="selected">---------</option>
+<option value="RM">RM</option>
+<option value="MR">MR</option>
+<option value="NF">NF</option>
+<option value="TM">TM</option>
+</select></td><td><select name="baptism_10_sex" id="id_baptism_10_sex">
+<option value="" selected="selected">---------</option>
+<option value="M">M</option>
+<option value="F">F</option>
+</select></td><td><input id="id_baptism_10_age" type="text" name="baptism_10_age" size="3" /></td><td><input id="id_baptism_10_date" type="text" name="baptism_10_date" size="15" /></td><td><input id="id_baptism_10_address" type="text" name="baptism_10_address" maxlength="100" /></td><td><input id="id_baptism_10_cep" type="text" name="baptism_10_cep" size="10" /></td></tr>
+</table>
+<p/>Fontes: RM - membro; MR - mídia; NF - noite familiar; TM - trabalho do missionário
+<p/>
+<table>
+	<tr><th colspan=2>Nomes das pessoas confirmadas</th></tr>
+	<tr><th>Nomes dos Confirmados</th><th>Data</th></tr>
+	<tr><td><input id="id_confirmation_1_name" type="text" name="confirmation_1_name" maxlength="100" /></td><td><input id="id_confirmation_1_date" type="text" name="confirmation_1_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_2_name" type="text" name="confirmation_2_name" maxlength="100" /></td><td><input id="id_confirmation_2_date" type="text" name="confirmation_2_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_3_name" type="text" name="confirmation_3_name" maxlength="100" /></td><td><input id="id_confirmation_3_date" type="text" name="confirmation_3_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_4_name" type="text" name="confirmation_4_name" maxlength="100" /></td><td><input id="id_confirmation_4_date" type="text" name="confirmation_4_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_5_name" type="text" name="confirmation_5_name" maxlength="100" /></td><td><input id="id_confirmation_5_date" type="text" name="confirmation_5_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_6_name" type="text" name="confirmation_6_name" maxlength="100" /></td><td><input id="id_confirmation_6_date" type="text" name="confirmation_6_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_7_name" type="text" name="confirmation_7_name" maxlength="100" /></td><td><input id="id_confirmation_7_date" type="text" name="confirmation_7_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_8_name" type="text" name="confirmation_8_name" maxlength="100" /></td><td><input id="id_confirmation_8_date" type="text" name="confirmation_8_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_9_name" type="text" name="confirmation_9_name" maxlength="100" /></td><td><input id="id_confirmation_9_date" type="text" name="confirmation_9_date" maxlength="100" /></td></tr>
+	<tr><td><input id="id_confirmation_10_name" type="text" name="confirmation_10_name" maxlength="100" /></td><td><input id="id_confirmation_10_date" type="text" name="confirmation_10_date" maxlength="100" /></td></tr>
+</table>
+<table>
+	<tr><td></td><th>Sénior</th><th>Júnior</th></tr>
+	<tr>
+	{% if week.question %}
+		<th>Pergunta</th><td colspan="2">{{ week.question }}</td></tr><tr><th>Resposta</th><td><input id="id_question_sen" type="text" name="question_sen" maxlength="100" /></td><td>
+		{% if week.question_for_both %}
+			<input id="id_question_jun" type="text" name="question_jun" maxlength="100" />
+		{% endif %}
+		</td>
+	{% else %}
+		<th></th>
+	{% endif %}
+	</tr>
+	<tr><th>06h30: Preparar para o dia</th><td><select name="routine_sen_wakeup" id="id_routine_sen_wakeup">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td><td><select name="routine_jun_wakeup" id="id_routine_jun_wakeup">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td></tr>
+	<tr><th>07h30: Desjejum</th><td><select name="routine_sen_breakfast" id="id_routine_sen_breakfast">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td><td><select name="routine_jun_breakfast" id="id_routine_jun_breakfast">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td></tr>
+	<tr><th>08h00: Estudo Pessoal</th><td><select name="routine_sen_study_pers" id="id_routine_sen_study_pers">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td><td><select name="routine_jun_study_pers" id="id_routine_jun_study_pers">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td></tr>
+	<tr><th>09h00: Estudo com Companheiro</th><td><select name="routine_sen_study_comp" id="id_routine_sen_study_comp">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td><td><select name="routine_jun_study_comp" id="id_routine_jun_study_comp">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td></tr>
+	<tr><th>10h00: Proselitismo</th><td><select name="routine_sen_proselyte" id="id_routine_sen_proselyte">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td><td><select name="routine_jun_proselyte" id="id_routine_jun_proselyte">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td></tr>
+	<tr><th>21h00: Voltar, 21h30 se estiver ensinando</th><td><select name="routine_sen_return" id="id_routine_sen_return">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td><td><select name="routine_jun_return" id="id_routine_jun_return">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td></tr>
+	<tr><th>22h30: Deitar-se</th><td><select name="routine_sen_sleep" id="id_routine_sen_sleep">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td><td><select name="routine_jun_sleep" id="id_routine_jun_sleep">
+<option value="0" selected="selected">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select></td></tr>
+	<tr><th>Número de Contatos essa Semana</th>
+		<td><select name="routine_sen_contacts" id="id_routine_sen_contacts">{{ contatos }}</select></td>
+		<td><select name="routine_jun_contacts" id="id_routine_jun_contacts">{{ contatos }}</select></td>
+	</tr>
+	<tr><th>Planejamento Semanal</th><td><input type="checkbox" name="weekly_planning" id="id_weekly_planning" /></td></tr>
+</table>
+<p/>
+<input id="relatorioSubmit" type="button" value="Mandar" onclick="if(checkRelatorio()){this.disabled=true; this.value='Mandando...'; postRelatorio();}" />
+</form>

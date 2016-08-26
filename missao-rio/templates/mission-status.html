@@ -1,0 +1,31 @@
+{% for areas in zones %}
+	<p/><b><a href="/zone/{{ areas.0.0|getkey:"zone" }}">{{ areas.0.0.zone_name }}</a></b> - {{ areas|length }} areas
+	{% for ms in areas %}
+		<br/><a href="/area/{{ ms.0.area.key }}">{{ ms.0.area.name }}</a>{% if ms.0.area.phone %} ({{ ms.0.area.phone }}){% endif %},
+		{% comment %}district: {{ ms.0.area.district.name }}{% endcomment %}
+		{% if ms.0.area.reports_with %} <b>reports with {{ ms.0.area.reports_with.name }}</b>{% endif %}
+		{% if ms.0.area.does_not_report %} <b>does not report</b>{% endif %}
+		{% for m in ms %}
+			<br/>&nbsp;&nbsp;<a href="/_ah/missao-rio/missionary/{{ m.key }}">{{ m }}</a> - {{ m.calling }} - {{ m.email }} - {{ m.full_name }} - {{ m.email_parents }}
+			<font color="red"><b>
+			{% if not m.full_name %}name{% endif %}
+			{% if not m.start %}start{% endif %}
+			{% if not m.release %}release{% endif %}
+			{% if not m.birth %}birth{% endif %}
+			{% if not m.mission_id %}id{% endif %}
+			{% if not m.email %}email{% endif %}
+			{% if not m.email_parents and not m.address_parents %}parents{% endif %}
+			{% if not m.box %}mailbox{% endif %}
+			</b></font>
+		{% endfor %}
+	{% endfor %}
+{% endfor %}
+
+<table border="1">
+{% for z in emails %}
+<tr><td>{{ z.0.zone_name }}</td><td>
+	{% for e in z %}
+		{{ e.email }};
+	{% endfor %}
+{% endfor %}
+</table>

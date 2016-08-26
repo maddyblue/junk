@@ -1,0 +1,19 @@
+{% if done %}
+Saved: {{ done }}
+<br/><br/>
+{% endif %}
+
+{% if missionary %}
+
+{{ missionary.errors }}
+{{ missionaryprofile.errors }}
+
+<form method="POST">
+<table>
+{{ missionary.as_table }}
+{{ missionaryprofile.as_table }}
+</table>
+<input type="submit" name="submit" value="missionary"/>
+</form>
+
+{% endif %}

@@ -1,0 +1,23 @@
+\documentclass[12pt]{letter}
+\usepackage[top=1cm, bottom=1cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+
+\signature{Presidente Antonio Kaulle M. Bezerra \\ Miss\~ao Brasil Rio de Janeiro}
+
+\begin{document}
+
+{% for i in letters %}
+
+\begin{letter}{ {{ i.1 }} {{ i.0 }},}
+\date{ {{ i.2 }} }
+\opening{}
+
+{% include i.3 %}
+
+\closing{Com amor e confian\c ca,}
+\end{letter}
+
+{% endfor %}
+
+\end{document}

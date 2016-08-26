@@ -1,0 +1,8 @@
+{{ df }}
+
+<table border="1">
+<tr><th>Data</th><th>{{ sums.0.ekind }}</th><th>PB</th><th>PC</th><th>Bap Men</th><th>PS</th></tr>
+{% for s in sums %}
+<tr><td>{{ s.date|date:dfilter }}</td><td>{{ s|getkey_name:"ref" }}</td><td>{{ s.PB }}{% if s.PB_best %}**{% endif %}</td><td>{{ s.PC }}</td><td>{{ s.BM }}</td><td>{{ s.PS }}</td></tr>
+{% endfor %}
+</table>

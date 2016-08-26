@@ -1,0 +1,7 @@
+*.pyc
+*.swp
+.svn
+config.py
+d.sh
+rio.db
+static/imgs/milagre*

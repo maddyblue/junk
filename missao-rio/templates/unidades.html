@@ -1,0 +1,9 @@
+{% for wards in stakes %}
+	<b>{{ wards.0.stake.name }}</b> - {{ wards.0.stake.uid }}<br/>
+
+	{% for ward in wards %}
+		{{ ward.name }} - {{ ward.uid }}<br/>
+	{% endfor %}
+
+	<br/>
+{% endfor %}

@@ -1,0 +1,36 @@
+body {
+	color: #000000;
+}
+
+#wrapper-header {
+	background: transparent url('images/header.png') top center repeat-x;
+}
+
+#header {
+	background: #eee url('images/warriors.jpg') no-repeat center top;
+}
+
+#wrapper-header2 {
+	background: transparent url('images/header-shadowleft.png') top left no-repeat;
+}
+
+#wrapper-header3 {
+	text-align: right;
+	height: 250px;
+	background: transparent url('images/header-shadowright.png') top right no-repeat;
+}
+
+#header h1 {
+	color: #34282C;
+	text-shadow: 0px 0px 2px #000000;
+	font-family:"Lucida Grande","Lucida Sans Unicode",arial,sans-serif;
+}
+
+#menu-page h3 {
+	color: #ADA96E;
+}
+
+#menu-page a:hover {color: #ADA96E;}
+
+a:link, a:visited { color: #ADA96E; }
+a:hover{ color: #ADA96E; }

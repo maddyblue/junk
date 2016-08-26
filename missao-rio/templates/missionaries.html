@@ -1,0 +1,3 @@
+{% for m in ms %}
+<br/><a href="/_ah/missao-rio/missionary/{{ m.key }}">{{ m }}</a>{% if e %} | <a href="/_ah/missao-rio/edit-missionary/{{ m.key }}">edit</a>{% endif %}
+{% endfor %}

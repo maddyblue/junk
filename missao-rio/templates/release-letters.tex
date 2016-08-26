@@ -1,0 +1,38 @@
+\documentclass[12pt]{letter}
+\usepackage[top=1cm, bottom=1cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage{textcomp}
+\usepackage{graphicx}
+
+{% include "incl-letter-portuguese.tex" %}
+
+\makeatletter
+\let\@texttop\relax
+\makeatother
+
+\begin{document}
+
+{% for m in missionaries %}
+
+\begin{letter}{Estimad{{ m.2 }} {{ m.0.sex }} {{ m.1 }},}
+
+\date{ {{ date }} }
+\opening{}
+
+\'E dif\'icil acreditar que estamos nos aproximando do t\'ermino de sua miss\~ao. Mas o fato \'e que dentro de algumas semanas voc\^e estar\'a concluindo esse trabalho sagrado, o qual tem servido com tanto afinco e amor.
+
+Agora \'e a hora de evitar pensamentos que possam desviar o foco de sua miss\~ao, esperamos sinceramente que reconhe\c ca que estas \'ultimas semanas de sua miss\~ao s\~ao as mais importantes de sua vida, n\~ao somente pelo que pode fazer aqui mas pelo esp\'irito de for\c ca que levar\'a consigo ao sair da miss\~ao. \'E poss\'ivel que esta ser\'a a \'ultima oportunidade de sua vida de servir ao Senhor como mission\'ari{{ m.2 }} de tempo integral. Ser\'a muito importante a maneira de como ir\'a concluir seus compromissos mission\'ario com o Senhor.
+
+Lembre-se das palavras do Ap\'ostolo Paulo a seu amigo e companheiro mission\'ario, Tim\'eteo, ao concluir seu trabalho mission\'ario: ``Combati o bom combate, acabei a carreira, guardei a f\'e.'' E por ter concluido sua miss\~ao fortemente, Paulo sabia que o Senhor tinha uma grande b\^en\c c\~ao para ele: ``Desde agora, a coroa da justi\c ca me est\'a guardada, a qual o Senhor, Justo Ju\'iz me dar\'a naquele dia.'' (II~Tem\'oteo~4:7--8)
+
+Daqui at\'e a conclus\~ao de sua miss\~ao, esforce-se para se aproximar ainda mais do Salvador Jesus Crsito e sentir a mais profunda influ\^encia do Esp\'irito Santo em sua vida. Continue obedecendo todas as regras da miss\~ao, sem excess\~ao. Guarde seus pensamentos e concentre sua mente em coisas sagradas. O inimigo sabe que voc\^e est\'a concluindo esse trabalho sagrado e quer tirar sua for\c ca espiritual antes de concluir sua miss\~ao a fim de que esteja fraco ao enfrentar as prova\c c\~oes que vir\~ao, a fim de que tenha mais vontade de abra\c car as maneiras e padr\~oes do mundo. Esta \'e a hora em que voc\^e ter\'a de mostar a si mesmo e ao Pai Celestial o quanto ama o Salvador que deu a vida por voc\^e. A melhor maneira de demonstar esse amor \'e perseverando at\'e o fim.
+
+No tempo que tem, deve tamb\'em acertar todas as rela\c c\~oes da miss\~ao. Se existe algum acerto financeiro com a miss\~ao, fa\c ca agora, se voc\^e tem alguma pend\^encia financeira com outros mission\'arios pague agora. Se precisar pedir perd\~ao a algu\'em, fa\c ca-o agora. Se precisa confessar alguma transgress\~ao para colocar em ordem sua vida espiritual, fala com o presidente da miss\~ao agora. Cuide destas coisas agora para que possa concluir e deixar a miss\~ao livre e sem culpa. (D\&C~4).
+
+Rogamos que seja aben\c coado pelo Senhor com as experi\^encias mais significativas de sua miss\~ao nas semanas vindouras. Voc\^e tem sido motivo de grandes alegrias em nossa miss\~ao.
+
+\closing{Com amor, confian\c ca e gratid\~ao,}
+\end{letter}
+
+{% endfor %}
+
+\end{document}

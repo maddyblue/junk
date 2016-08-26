@@ -1,0 +1,25 @@
+<form method="POST">
+João Batizadores:
+<br/><select multiple="multiple" name="jbs">
+{% for m in ms %}
+<option value="{{ m.key }}">{{ m }}</option>
+{% endfor %}
+</select>
+<br/><input type="text" size="3" name="jb_semanas"/> weeks baptizing
+
+<p/>Confirmadores:
+<br/><select multiple="multiple" name="jcs">
+{% for m in ms %}
+<option value="{{ m.key }}">{{ m }}</option>
+{% endfor %}
+</select>
+<br/><input type="text" size="3" name="jc_semanas"/> weeks confirming
+
+<p/>Distrito Batizador: <select name="distrito">
+{% for a in areas %}
+<option value="{{ a|getkey:"area" }}">{{ a|getkey_name:"zone" }} - {{ a|getkey_name:"area" }}</option>
+{% endfor %}
+</select>
+
+<p/><input type="submit"/>
+</form>

@@ -1,0 +1,12 @@
+<form method="GET">
+<select name="w">{{ wopts }}</select>
+<input type="submit" value="Change week"/>
+</form>
+
+Week of: {{ w.date }}
+
+<table border="1">
+{% for i in d %}
+<tr><td>{{ i.0 }}</td><td>{{ i.1 }}</td></tr>
+{% endfor %}
+</table>

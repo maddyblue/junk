@@ -1,0 +1,8 @@
+<form method="POST">
+<table>
+{% for m in ms %}
+<tr><td>{{ m }}</td><td>{{ m.profile.entrance }}</td><td><input type="text" name="m{{ m.profile.key }}" value="{{ m.profile.entrance|default_if_none:"" }}"/></td><td>{{ m.full_name }}</td></tr>
+{% endfor %}
+</table>
+<input type="submit"/>
+</form>

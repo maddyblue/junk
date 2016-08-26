@@ -1,0 +1,8 @@
+<form method="POST" action="">
+<table>
+{% for m in mfs %}
+<tr><td>{{ m.0 }} in</td><td>{{ m.1 }}</td><td>as {{ m.2 }}</td><td>senior: {{ m.3 }}</td></tr>
+{% endfor %}
+</table>
+<p/><input type="submit" />
+</form>

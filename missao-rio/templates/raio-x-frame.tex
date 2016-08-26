@@ -1,0 +1,53 @@
+\begin{frame}{ {{ month|title }} de {{ year }} : {{ f.name }} \\ {{ f.pb }} batismos : {{ f.pc }} confirmações : {{ f.p_hb }}\% homens batizados }
+	\begin{center}
+	\begin{tabular}{@{} r|c|c|c|c|c @{}}
+		& Encontrar & Ensinar & Levar à Igreja & Batizar & Confirmar \\
+		\hline
+		{% if not f.nopd %}
+		Por dupla & {{ f.pd_np }} & {{ f.pd_li }} & {{ f.pd_ps }} & {{ f.pd_pb }} & {{ f.pd_pc }} \\
+		{% endif %}
+		Para Batizar &
+			{{ m_np }} &
+			{{ m_li }} &
+			{{ m_ps }} &
+			{{ m_pb }} &
+			{{ m_pc }}
+			\\
+	\end{tabular}
+
+	\begin{columns}
+		\column{.5\textwidth}
+			\begin{tikzpicture}[scale=1.5]
+			\tikzstyle{every node}=[font=\small]
+
+			\setcounter{b}{0}
+			\foreach \p/\t/\q in { {{ f.pie_labels }}}
+			{
+				\setcounter{a}{\value{b}}
+				\addtocounter{b}{\p}
+				\slice{\thea/100*360}
+					{\theb/100*360}
+					{\p\%}{\t}{\q}
+			}
+
+			\end{tikzpicture}
+
+		\column{.5\textwidth}
+			\vspace{.3cm}
+			\rowcolors{1}{RoyalBlue!20}{RoyalBlue!5}
+			\begin{tabular}{p{4cm}|l}
+				Encontrar & {{ f.np }} \\
+				\textcolor{RoyalBlue!90}{\% que foram à Igreja} & \textbf{ {{ f.p_li }}\%} \\
+				Levar à Igreja & {{ f.ps }} \\
+				\textcolor{RoyalBlue!90}{\% que foram batizados} & \textbf{ {{ f.p_pb }}\%} \\
+				Batizar & {{ f.pb }} \\
+				\textcolor{RoyalBlue!90}{\% que foram confirmados} & \textbf{ {{ f.p_pc }}\%} \\
+				Confirmar & {{ f.pc }} \\
+				\hline
+				\hline
+				Homens batizados & {{ f.homem }} \\
+				Contatos por dupla \mbox{por semana} & {{ f.pd_con }}
+			\end{tabular}
+	\end{columns}
+	\end{center}
+\end{frame}

@@ -1,0 +1,24 @@
+\documentclass[12pt]{letter}
+\usepackage[top=1cm, bottom=1cm]{geometry}
+\usepackage[utf8]{inputenc}
+
+{% include "incl-letter-english.tex" %}
+
+\begin{document}
+
+\begin{letter}{Dear {{ spres }}, }
+
+\opening{}
+
+It is with great satisfaction that we communicate the return of {{ m.sex }} {{ name }}, who is returning from the Brazil Rio de Janeiro Mission and will be arriving home on or about {{ m.release|date:"F d, Y" }}.
+
+During {{ his }} mission, {{ m }} served in the following areas: {{ m.profile.return_areas }}. {{ he|title }} has made many eternal friendships with {{ his }} companions as well as with the people {{ he }} baptized. {{ he|title }} has shown a great desire to serve the Lord with all {{ his }} heart, might, mind and strength (D\&C 4). {{ he|title }} has developed a great knowledge of the scriptures and of the principles that {{ he }} taught during this time. The lives of many people have been blessed through {{ his }} work and testimony. Thank you for the opportunity of working with {{ m }}.
+
+As {{ he }} returns home, we are sure you will help him adapt to {{ his }} home ward and stake. It would be very special if {{ he }} were invited to bear testimony in the stake high council meeting. During this critical time after {{ his }} mission it is very important to keep him busy with responsibilities in the ward or stake. {{ he|title }} is capable of serving and blessing many through {{ his }} talents, gifts, knowledge, charity and obedience. As a returned missionary {{ he }} has a great desire and need to work actively in the church.
+
+See in attachment the honorable release certificate, which should be delivered to {{ m }}. We thank you for the effort of all in having supported such a special young {{ man }}. We pray that you are all blessed for the sacrifice and support you have given.
+
+\closing{Sincerely,}
+\end{letter}
+
+\end{document}

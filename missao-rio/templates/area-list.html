@@ -1,0 +1,19 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{% for areas in zones %}
+	<div>
+	<img class="showr" id="{{ areas.0 }}"/>
+
+	<a href="/zone/{{ areas.0 }}">{{ areas.0.name }}</a>
+
+	<ul id="obj_{{ areas.0 }}">
+	{% for a in areas.1 %}
+		<li><a href="/area/{{ a.key }}">{{ a.name }}</a></li>
+	{% endfor %}
+	</ul>
+	</div>
+{% endfor %}
+
+{% endblock %}

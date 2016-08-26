@@ -1,0 +1,39 @@
+/* Css originally by mejobloggs  Design by Aran @ stuio7designs.com  Please email me if you use this, as I would love to see how it is being used, also you can join my linkshare to help you with your google ranking */
+
+body {
+	color: #000000;
+}
+
+#wrapper-header {
+	background: transparent url('images/header.png') top center repeat-x;
+}
+
+#header {
+	background: #eee url('images/cristo.jpg') no-repeat center top;
+}
+
+#wrapper-header2 {
+	background: transparent url('images/header-shadowleft.png') top left no-repeat;
+}
+
+#wrapper-header3 {
+	height:250px;
+	background: transparent url('images/header-shadowright.png') top right no-repeat;
+}
+
+#header h1 {
+	color: #cc9900;
+	padding-right: 4%;
+	text-align: right;
+	text-shadow: 0px 0px 5px #000000;
+	font-family:"Lucida Grande","Lucida Sans Unicode",arial,sans-serif;
+}
+
+#menu-page h3 {
+	color: #C58917;
+}
+
+#menu-page a:hover {  color: #C58917; }
+
+a:link, a:visited { color: #5b8fbe; }
+a:hover { color: #666; }
