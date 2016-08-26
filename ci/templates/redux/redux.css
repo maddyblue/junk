@@ -1,0 +1,142 @@
+body {
+	background-color: #D5D9DD;
+	font-family: sans-serif, Arial;
+	font-size: 100%;
+	color: #333333;
+}
+
+.small {
+	font-size: 75%;
+}
+
+a {
+	text-decoration: none;
+	color: #224488;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.top {
+	vertical-align: top;
+}
+
+.main {
+	border: 1px solid #000000;
+}
+
+.header {
+	font-size: 150%;
+	font-weight: bold;
+	padding-top: 3px;
+	padding-bottom: 8px;
+	padding-right: 8px;
+	text-transform: lowercase;
+}
+
+.side {
+	width: 175px;
+	position: relative top;
+	float: right;
+	margin-left: 8px;
+	text-transform: lowercase;
+}
+
+.sidebox {
+	margin-bottom: 10px;
+	border: 1px solid #000000;
+}
+
+.block-light {
+	border-bottom: 1px solid #888888;
+	border-right: 1px solid #888888;
+	border-left: 1px solid #FFFFFF;
+	border-top: 1px solid #FFFFFF;
+	background-color: #EEEEEE;
+}
+
+.block-dark {
+	border-bottom: 1px solid #777777;
+	border-right: 1px solid #777777;
+	border-left: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	background-color: #C0C7CD;
+	font-weight: bold;
+}
+
+.content {
+	padding: 8px;
+}
+
+.sidepad {
+	padding: 5px;
+	padding-left: 8px;
+}
+
+.tableMain {
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+.tableHeaderCellL, .tableHeaderCell {
+	padding: 2px;
+	background-color: #DDDDDD;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+}
+
+.tableHeaderCellR {
+	padding: 2px;
+	background-color: #DDDDDD;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-right: 1px solid #000000;
+}
+
+.tableCell, .tableCellL, .tableCellTL, .tableCellT {
+	padding: 2px;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+}
+
+.tableCellTR, .tableCellR {
+	padding: 2px;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-right: 1px solid #000000;
+}
+
+.tableCellB, .tableCellBL {
+	padding: 2px;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+
+.tableCellBR {
+	padding: 2px;
+	border: 1px solid #000000;
+}
+
+blockquote {
+	border-left: 4px #C0C7CD solid;
+	padding:  0 0 0 10px;
+	margin: 10px 20px 10px 20px;
+	letter-spacing: 0px;
+	white-space:inherit;
+}
+
+blockquote[cite]:after {
+	content: "Quote from: " attr(cite);
+	display: block;
+	border-top: 1px solid #999;
+	margin: 1em 0 0;
+	padding: .5em 0 0;
+	font-size: .8em;
+	font-weight: bold;
+}

@@ -1,0 +1,91 @@
+<?php
+
+/* $Id$ */
+
+/* ARC globals. */
+
+/*  -- README! --
+ *
+ * There are three important settings to define:
+ *
+ * ARC_WWW_DOMAIN, ARC_WWW_PATH, NEWSFORUM
+ *
+ * If the site is accessed by:
+ * http://www.arc.com/arcsoftware/
+ * Then ARC_WWW_DOMAIN is 'www.arc.com' and
+ * ARC_WWW_PATH is '/arcsoftware/'.
+ *
+ * NEWSFORUM is the id of the forum for news. Set this after you have made some forums.
+ */
+
+/* All addresses (filesystem or www) must end in '/'. */
+
+define('ARC_TITLE', 'Your Site Title');
+define('ARC_DESCRIPTION', 'Your Site Description');
+define('ARC_WWW_DOMAIN', 'your.domain.com');
+define('ARC_WWW_PATH', '/path/to/arc/on/www/'); // '/' if root. must begin with '/'
+define('ARC_WWW_ADDR', 'http://' . ARC_WWW_DOMAIN . ARC_WWW_PATH); // you shouldn't need to change this
+define('ARC_AVATAR_PATH', 'images/avatar/');
+define('ARC_SMILIE_PATH', 'images/smilies/');
+define('ARC_DEF_TEMPLATE', 'monobook');
+
+define('PODCAST_TITLE', ARC_TITLE);
+define('PODCAST_LINK', ARC_WWW_ADDR);
+define('PODCAST_DESCRIPTION', ARC_DESCRIPTION);
+define('PODCAST_SUBTITLE', '');
+define('PODCAST_AUTHOR', '');
+define('PODCAST_OWNER', PODCAST_AUTHOR);
+define('PODCAST_EMAIL', '');
+define('PODCAST_SUMMARY', '');
+define('PODCAST_IMAGE', 'images/logo.jpg'); // relative to ARC_WWW_ADDR
+define('PODCAST_CATEGORY', '');
+define('PODCAST_EXPLICIT', ''); // 'clean', 'explicit', or ''
+
+define('DEFAULT_TIME_FORMAT', 'd M y g:i a'); // default time format, refer to http://php.net/date for more.
+define('STRIPSLASHES', get_magic_quotes_gpc());
+//define('URCHIN', 'UA-12345-6'); // Optional. If set (uncommented), will enable Google Analytics with the specified key on all pages.
+//define('GOOGLE_MAPS_KEY', ''); // Optional. Set to your Google Maps API key for use with the iAds module.
+//define('PAYPAL_BUSINESS_ADDRESS', 'user@domain.com'); // Optional. Set to your PayPal business address for use with the iAds module.
+//define('AWS_KEY', ''); // Optional. Set to your AWS key for S3 uploading.
+//define('AWS_SECRET_KEY', ''); // Optional. Set to your AWS secret key for S3 uploading.
+
+/* Modules
+ * These should all have values of true or false.
+ */
+
+define('MODULE_GAME', false);
+define('MODULE_PODCAST', false);
+define('MODULE_IADS', false);
+
+/* Section alises */
+
+define('SECTION_HOME', '/');
+define('SECTION_MAIN', 'main');
+define('SECTION_ADMIN', 'admin');
+define('SECTION_USER', 'user');
+define('SECTION_FORUM', 'forum');
+define('SECTION_GAME', 'game');
+define('SECTION_BATTLE', 'battle');
+define('SECTION_MANUAL', 'manual');
+define('SECTION_PODCAST', 'podcast');
+define('SECTION_CDDB', 'cddb');
+define('SECTION_BLOG', 'blog');
+define('SECTION_IADS', 'iads');
+
+/* Preferences */
+
+define('FORUM_THREADS_PP', 30);
+define('FORUM_POSTS_PP', 20);
+define('FORUM_THREAD_PAGES', 10);
+define('NEWSFORUM', 0);
+define('SESSION_TIMEOUT', 600); // in seconds
+define('PODCAST_DATA', SECTION_PODCAST . '/data/');
+define('IADS_SLOTS_PER_DAY', 30);
+define('IADS_DAYS_LOOKAHEAD', 30);
+
+/* Don't mess with these */
+
+define('ARC_TEMPLATE_FS', ARC_HOME_MOD . 'templates/');
+define('ARC_TEMPLATE_WWW', ARC_WWW_PATH . 'templates/');
+
+?>

@@ -1,0 +1,518 @@
+/*
+** MediaWiki 'monobook' style sheet for CSS2-capable browsers.
+** Copyright Gabriel Wicke - http://wikidev.net/
+** License: GPL (http://www.gnu.org/copyleft/gpl.html)
+**
+** Loosely based on http://www.positioniseverything.net/ordered-floats.html by Big John
+** and the Plone 2.0 styles, see http://plone.org/ (Alexander Limi,Joe Geldart & Tom Croucher,
+** Michael Zeltner and Geir B??kholt)
+** All you guys rock :)
+*/
+
+#column-content {
+    width: 100%;
+    float: right;
+    margin: 0 0 0.6em -12.2em;
+    padding:0;
+}
+#content {
+    margin: 2.8em 0 0 12.2em;
+    padding: 0em 1em 1.5em 1em;
+    background: White;
+    border: 1px solid #aaaaaa;
+    border-right: none;
+    line-height: 1.5em;
+    position: relative;
+    z-index: 2;
+}
+#column-one { padding-top: 160px; }
+/* the left column width is specified in class .portlet */
+
+/* Font size:
+** We take advantage of keyword scaling- browsers won't go below 9px
+** More at http://www.w3.org/2003/07/30-font-size
+** http://style.cleverchimp.com/font_size_intervals/altintervals.html
+*/
+
+body {
+    font: x-small sans-serif;
+    background: #f9f9f9 url("headbg.jpg") 0px 0px no-repeat;
+    color: Black;
+    margin: 0;
+    padding: 0;
+}
+
+/* scale back up to a sane default */
+#globalWrapper {
+    font-size:127%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.visualClear { clear: both; }
+
+/* general styles */
+
+table {
+    font-size: 100%;
+    background: White;
+}
+a {
+    text-decoration: none;
+    color: #002bb8;
+    background: none;
+}
+a:visited { color: #5a3696; }
+a:active { color: #ffa500; }
+a:hover { text-decoration: underline; }
+a.stub { color: #772233; }
+a.new { color:#ba0000; }
+a.new:visited { color:#a55858; }
+
+img {
+    border: none;
+    vertical-align: middle;
+}
+p {
+    margin: 0.4em 0em 0.5em 0em;
+    line-height: 1.5em;
+}
+
+p img { margin: 0; }
+
+hr {
+    height: 1px;
+    color: #aaaaaa;
+    background-color: #aaaaaa;
+    border: 0;
+    margin: 0.2em 0 0.2em 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: Black;
+    background: none;
+    font-weight: normal;
+    margin: 0;
+    padding-top: 0.5em;
+    padding-bottom: 0.17em;
+    border-bottom: 1px solid #aaaaaa;
+}
+h1 { font-size: 188%; }
+h2 { font-size: 150%; }
+h3, h4, h5, h6 {
+    border-bottom: none;
+    font-weight: bold;
+}
+h3 { font-size: 132%; }
+h4 { font-size: 116%; }
+h5 { font-size: 100%; }
+h6 { font-size: 80%;  }
+
+ul {
+    line-height: 1.5em;
+    list-style-type: square;
+    margin: 0.3em 0 0 1.5em;
+    padding:0;
+    list-style-image: url("bullet.gif");
+}
+ol {
+    line-height: 1.5em;
+    margin: 0.3em 0 0 3.2em;
+    padding:0;
+    list-style-image: none;
+}
+li { margin-bottom: 0.1em; }
+
+form {
+    border: none;
+    margin: 0;
+}
+
+textarea {
+    color: Black;
+    background-color: white;
+    width: 100%;
+    padding: 0.1em;
+}
+
+input.historysubmit {
+    padding: 0 0.3em 0.3em 0.3em !important;
+    font-size: 94%;
+    cursor: pointer;
+    height: 1.7em !important;
+    margin-left: 1.6em;
+}
+select {
+	vertical-align: top;
+}
+q {
+    font-family: serif, Times, "Times New Roman";
+    font-style: italic;
+}
+code { background-color: #f9f9f9; }
+pre {
+    padding: 1em;
+    border: 1px dashed #2f6fab;
+    color: Black;
+    background-color: #f9f9f9;
+    line-height: 1.1em;
+}
+
+/*
+** the main content area
+*/
+
+#contentSub {
+    font-size: 84%;
+    line-height: 1.2em;
+    margin: 0 0 1.4em 1em;
+    color: #7d7d7d;
+    width: auto;
+}
+span.subpages { display: block; }
+
+/* Some space under the headers in the content area */
+#bodyContent h1, #bodyContent h2 { margin-bottom:0.6em; }
+#bodyContent h3,
+#bodyContent h4,
+#bodyContent h5 {
+    margin-bottom: 0.3em;
+}
+.firstHeading {
+	margin-bottom:0.1em;
+	text-transform: lowercase;
+}
+
+/* user notification thing */
+.usermessage {
+    background-color: #ffce7b;
+    border: 1px solid #ffa500;
+    color: Black;
+    font-weight: bold;
+    margin: 2em 0em 1em 0em;
+    padding: 0.5em 1em;
+    vertical-align: middle;
+}
+.error {
+    color: red;
+    font-size: larger;
+}
+
+/* small for tables and similar */
+.small, .small * { font-size: 90%; }
+table.small { font-size: 90% }
+
+/*
+** keep the whitespace in front of the ^=, hides rule from konqueror
+** this is css3, the validator doesn't like it when validating as css2
+*/
+#bodyContent a[href ^="http://"],
+#bodyContent a[href ^="gopher://"] {
+    background: url(external.png) center right no-repeat;
+    padding-right: 13px;
+}
+#bodyContent a[href ^="https://"],
+.link-https {
+    background: url("lock_icon.gif") center right no-repeat;
+    padding-right: 16px;
+}
+#bodyContent a[href ^="mailto:"],
+.link-mailto {
+    background: url("mail_icon.gif") center right no-repeat;
+    padding-right: 18px;
+}
+#bodyContent a[href ^="news://"] {
+    background: url("news_icon.png") center right no-repeat;
+    padding-right: 18px;
+}
+#bodyContent a[href ^="ftp://"],
+.link-ftp {
+    background: url("file_icon.gif") center right no-repeat;
+    padding-right: 18px;
+}
+#bodyContent a[href ^="irc://"],
+.link-irc {
+    background: url("discussionitem_icon.gif")  center right no-repeat;
+    padding-right: 18px;
+}
+
+/*
+** Structural Elements
+*/
+
+/*
+** general portlet styles (elements in the quickbar)
+*/
+.portlet {
+    border: none;
+    margin: 0 0 0.5em 0em;
+    float: none;
+    padding: 0;
+    width: 11.6em;
+    overflow: hidden;
+}
+.portlet h4 {
+    font-size: 95%;
+    font-weight: normal;
+    white-space: nowrap;
+}
+.portlet h5 {
+    background: transparent;
+    padding: 0em 1em 0em 0.5em;
+    text-transform: lowercase;
+    display: inline;
+    font-size: 91%;
+    height: 1em;
+    font-weight: normal;
+    white-space: nowrap;
+}
+.portlet h6 {
+    background: #ffae2e;
+    border: 1px solid #2f6fab;
+    border-style: solid solid none solid;
+    padding: 0em 1em 0em 1em;
+    text-transform: lowercase;
+    display: block;
+    font-size: 1em;
+    height: 1.2em;
+    font-weight: normal;
+    white-space: nowrap;
+}
+.pBody {
+    font-size: 95%;
+    background: White;
+    border-collapse: collapse;
+    border: 1px solid #aaaaaa;
+    padding: 0 0.8em 0.3em 0.5em;
+}
+.portlet h1,
+.portlet h2,
+.portlet h3,
+.portlet h4 {
+    margin: 0;
+    padding: 0;
+}
+.portlet ul {
+    line-height: 1.5em;
+    list-style-type: square;
+    list-style-image: url("bullet.gif");
+    font-size:95%;
+}
+.portlet li {
+    padding: 0;
+    margin: 0;
+}
+
+/*
+** Logo properties
+*/
+
+#p-logo {
+    z-index: 3;
+    position:absolute; /*needed to use z-index */
+    top: 0;
+    left: 0;
+    height: 155px;
+    width: 12em;
+    overflow: visible;
+}
+#p-logo h5 { display: none; }
+#p-logo a,
+#p-logo a:hover {
+    display: block;
+    height: 155px;
+    width: 12.2em;
+    background-repeat: no-repeat;
+    background-position: 35% 50% !important;
+    text-decoration: none;
+}
+
+/*
+** the page-related actions- page/talk, edit etc
+*/
+#p-cactions {
+    position:absolute;
+    top: 1.3em;
+    left: 11.5em;
+    margin: 0;
+    white-space:nowrap;
+    width: 76%;
+    line-height: 1.1em;
+    overflow: visible;
+    background: none;
+    border-collapse: collapse;
+    padding-left: 1em;
+    list-style: none;
+    font-size: 95%;
+}
+#p-cactions .hiddenStructure { display: none; }
+#p-cactions ul {
+    list-style: none;
+}
+#p-cactions li {
+    display: inline;
+    border: 1px solid #aaaaaa;
+    border-bottom: none;
+    padding: 0 0 0.1em 0;
+    margin: 0 0.3em 0 0;
+    overflow: visible;
+    background: White;
+}
+#p-cactions li.selected {
+    border-color: #fabd23;
+    padding: 0 0 0.2em 0;
+}
+#p-cactions li a {
+    background-color: White;
+    color: #002bb8;
+    border: none;
+    padding: 0 0.8em 0.3em 0.8em;
+    text-decoration: none;
+    text-transform: lowercase;
+    position: relative;
+    z-index: 0;
+    margin: 0;
+}
+#p-cactions .selected a { z-index: 3; }
+#p-cactions .new a { color:#ba0000; }
+#p-cactions li a:hover {
+    z-index: 3;
+    text-decoration: none;
+}
+#p-cactions h5 { display: none; }
+#p-cactions li.istalk { margin-right: 0; }
+#p-cactions li.istalk a { padding-right: 0.5em; }
+#p-cactions #ca-addsection a {
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+}
+
+/*
+** IE/Mac fixes, hope to find a validating way to move this
+** to a separate stylesheet. This would work but doesn't validate:
+** @import("IEMacFixes.css");
+*/
+/* tabs: border on the a, not the div */
+* > html #p-cactions li { border:none; }
+* > html #p-cactions li a {
+    border: 1px solid #aaaaaa;
+    border-bottom: none;
+}
+* > html #p-cactions li.selected a { border-color: #fabd23; }
+/* footer icons need a fixed width */
+* > html #f-poweredbyico,
+* > html #f-copyrightico { width: 88px; }
+* > html #bodyContent,
+* > html #bodyContent pre {
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 25px;
+}
+
+/* more IE fixes */
+/* float/negative margin brokenness */
+* html #footer {margin-top: 0;}
+* html #column-content {
+    display: inline;
+    margin-bottom: 0;
+}
+* html div.editsection { font-size: smaller; }
+#pagehistory li.selected { position: relative; }
+
+/* Mac IE 5.0 fix; floated content turns invisible */
+* > html #column-content {
+    float: none;
+}
+* > html #column-one {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+* > html #footer {
+    margin-left: 13.2em;
+}
+.redirectText {
+	font-size:150%;
+	margin:5px;
+}
+
+.printfooter {
+        display: none;
+}
+
+.not_patrolled {
+	background-color: #ffa;
+}
+div.patrollink {
+	font-size: 75%;
+	text-align: right;
+}
+
+/* ARC stuff */
+
+.tableMain {
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+.tableHeaderCellL, .tableHeaderCell {
+	padding: 2px;
+	background-color: #DDDDDD;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #7d7d7d;
+	border-top: 1px solid #7d7d7d;
+}
+
+.tableHeaderCellR {
+	padding: 2px;
+	background-color: #DDDDDD;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid #7d7d7d;
+	border-top: 1px solid #7d7d7d;
+	border-right: 1px solid #7d7d7d;
+}
+
+.tableCell, .tableCellL, .tableCellTL, .tableCellT {
+	padding: 2px;
+	border-left: 1px solid #7d7d7d;
+	border-top: 1px solid #7d7d7d;
+}
+
+.tableCellTR, .tableCellR {
+	padding: 2px;
+	border-left: 1px solid #7d7d7d;
+	border-top: 1px solid #7d7d7d;
+	border-right: 1px solid #7d7d7d;
+}
+
+.tableCellB, .tableCellBL {
+	padding: 2px;
+	border-left: 1px solid #7d7d7d;
+	border-top: 1px solid #7d7d7d;
+	border-bottom: 1px solid #7d7d7d;
+}
+
+.tableCellBR {
+	padding: 2px;
+	border: 1px solid #7d7d7d;
+}
+
+blockquote {
+	border-left: 4px #c7d2ea solid;
+	padding:  0 0 0 10px;
+	margin: 10px 20px 10px 20px;
+	letter-spacing: 0px;
+	white-space:inherit;
+}
+
+blockquote[cite]:after {
+	content: "Quote from: " attr(cite);
+	display: block;
+	border-top: 1px solid #999;
+	margin: 1em 0 0;
+	padding: .5em 0 0;
+	font-size: .8em;
+	font-weight: bold;
+}

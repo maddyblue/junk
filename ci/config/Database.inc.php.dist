@@ -1,0 +1,12 @@
+<?php
+
+/* $Id$ */
+
+/* SQL database connection configuration. */
+
+$DBConf['user']     = '';
+$DBConf['pass']     = '';
+$DBConf['host']     = '';
+$DBConf['database'] = '';
+
+?>
