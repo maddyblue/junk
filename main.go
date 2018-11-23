@@ -29,5 +29,7 @@ func emitToken(typ Typ) {
 }
 
 func main() {
+	fmt.Println(lexSQL([]byte("\"\xc3\x28\"")))
+	fmt.Println(lexSQL([]byte(`"☃" "" "blah" "yo""hello" """start" "end""" """" "double """" done"`)))
 	fmt.Println(lexSQL([]byte("a b a$1 aBbC C 01 1e0 .01 01. 0x1 0x0a $12 34\n--4555 \n 67$78 $1 2")))
 }
