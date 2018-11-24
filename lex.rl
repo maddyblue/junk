@@ -144,6 +144,40 @@ func lexSQL(data []byte) error {
 			}
 			emit(Ident, string(b))
 		}
+		singleQuote =
+			"'"
+			(
+				"''" %{ numQuote++ }
+				| notASCII
+				| /[^']/
+			)*
+			"'"
+			;
+		action singleQuote {
+			if numQuote != 0 {
+				b = make([]byte, p-mark-2-numQuote)
+				// Now use numQuote as an index into b.
+				numQuote = 0
+				for i := mark+1; i < p-1; i++ {
+					b[numQuote] = data[i]
+					numQuote++
+					if data[i] == '\'' {
+						i++
+					}
+				}
+				s = string(b)
+				numQuote = 0
+			} else {
+				b = data[mark+1:p-1]
+			}
+			if isNotASCII {
+				if !utf8.Valid(b) {
+					return fmt.Errorf("invalid UTF-8 string")
+				}
+				isNotASCII = false
+			}
+			emit(Sconst, string(b))
+		}
 		top =
 			  space
 			| /--[^\n]*/
@@ -152,6 +186,7 @@ func lexSQL(data []byte) error {
 			| placeholder >mark %placeholder
 			| ident >mark %ident
 			| identQuote >mark %identQuote
+			| singleQuote >mark %singleQuote
 			#| ';' %{ emitToken(Semicolon) }
 			;
 		main :=
