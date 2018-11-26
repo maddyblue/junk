@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
 	"unicode/utf8"
@@ -29,9 +30,12 @@ func lexSQL(data []byte) error {
 		isNotASCII bool
 		numQuote int
 		b []byte
+		ch byte
+		rn rune
+		buf *bytes.Buffer
 	)
 	str := func() { s = string(data[mark:p]) }
-        _, _, _, _, _, _ = uval, err, isFconst, isUpper, isNotASCII, str
+        _, _, _, _, _, _, _ = uval, err, isFconst, isUpper, isNotASCII, str, buf
 
 	%%{
 		action mark { mark = p }
@@ -178,6 +182,59 @@ func lexSQL(data []byte) error {
 			}
 			emit(Sconst, string(b))
 		}
+		escape =
+			'a' %{ buf.WriteByte('\a') }
+			| 'b' %{ buf.WriteByte('\b') }
+			| 'f' %{ buf.WriteByte('\f') }
+			| 'n' %{ buf.WriteByte('\n') }
+			| 'r' %{ buf.WriteByte('\r') }
+			| 't' %{ buf.WriteByte('\t') }
+			| 'v' %{ buf.WriteByte('\v') }
+			;
+		slashHex =
+			('x' | 'X') xdigit {2}
+			>{ ch = 0 }
+			${ ch = (ch << 4) | unhex(data[p]) }
+			%{ buf.WriteByte(ch) }
+			;
+		slashUnicode =
+			((
+				'u' xdigit {4}
+				${ rn = (rn << 4) | rune(unhex(data[p])) }
+			) | (
+				'U' xdigit {8}
+				${ rn = (rn << 4) | rune(unhex(data[p])) }
+			))
+			>{ rn = 0 }
+			%{ buf.WriteRune(rn) }
+			;
+		slashOctal =
+			('0'..'7') {3}
+			>{ ch = 0 }
+			${ ch = (ch << 3) | data[p] - '0' }
+			%{ buf.WriteByte(ch) }
+			;
+		bytes =
+			"b'" %{ buf = new(bytes.Buffer) }
+			(
+				(
+					"''"
+					| notASCII
+					| /[^'\\]/
+				) @{ buf.WriteByte(data[p]) }
+				| "\\" (
+					escape
+					| slashHex
+					| slashUnicode
+					| slashOctal
+					| ^(escape | 'x' | 'X' | 'u' | 'U' | '0'..'7') ${ buf.WriteByte(data[p]) }
+				)
+			)*
+			"'"
+			;
+		action bytes {
+			emit(Bconst, buf.String())
+		}
 		top =
 			  space
 			| /--[^\n]*/
@@ -187,6 +244,7 @@ func lexSQL(data []byte) error {
 			| ident >mark %ident
 			| identQuote >mark %identQuote
 			| singleQuote >mark %singleQuote
+			| bytes %bytes
 			#| ';' %{ emitToken(Semicolon) }
 			;
 		main :=
@@ -198,4 +256,16 @@ func lexSQL(data []byte) error {
 	}%%
 
 	return nil
+}
+
+func unhex(c byte) byte {
+	switch {
+	case '0' <= c && c <= '9':
+		return c - '0'
+	case 'a' <= c && c <= 'f':
+		return c - 'a' + 10
+	case 'A' <= c && c <= 'F':
+		return c - 'A' + 10
+	}
+	return 0
 }

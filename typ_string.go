@@ -4,9 +4,9 @@ package main
 
 import "strconv"
 
-const _Typ_name = "PlaceholderIdentSemicolonFconstIconstSconst"
+const _Typ_name = "PlaceholderIdentSemicolonFconstIconstSconstBconst"
 
-var _Typ_index = [...]uint8{0, 11, 16, 25, 31, 37, 43}
+var _Typ_index = [...]uint8{0, 11, 16, 25, 31, 37, 43, 49}
 
 func (i Typ) String() string {
 	i -= 1

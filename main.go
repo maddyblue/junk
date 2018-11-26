@@ -19,10 +19,11 @@ const (
 	Fconst
 	Iconst
 	Sconst
+	Bconst
 )
 
 func emit(typ Typ, val string) {
-	fmt.Printf("%s: %q\n", typ, val)
+	fmt.Printf("%s: %d: %q\n", typ, len(val), val)
 }
 
 func emitToken(typ Typ) {
@@ -30,6 +31,7 @@ func emitToken(typ Typ) {
 }
 
 func main() {
+	fmt.Println(lexSQL([]byte(`b b'\u000a\U0000000A\x0a\X0A\n\012\\n' b`)))
 	fmt.Println(lexSQL([]byte("\"\xc3\x28\"")))
 	fmt.Println(lexSQL([]byte(`"☃" "" "blah" "yo""hello" """start" "end""" """" "double """" done"`)))
 	fmt.Println(lexSQL([]byte("a b a$1 aBbC C 01 1e0 .01 01. 0x1 0x0a $12 34\n--4555 \n 67$78 $1 2")))
