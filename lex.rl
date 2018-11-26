@@ -214,12 +214,11 @@ func lexSQL(data []byte) error {
 			${ ch = (ch << 3) | data[p] - '0' }
 			%{ buf.WriteByte(ch) }
 			;
-		bytes =
-			"b'" %{ buf = new(bytes.Buffer) }
+		stringLiteral =
+			"'" %{ buf = new(bytes.Buffer) }
 			(
 				(
 					"''"
-					| notASCII
 					| /[^'\\]/
 				) @{ buf.WriteByte(data[p]) }
 				| "\\" (
@@ -232,8 +231,16 @@ func lexSQL(data []byte) error {
 			)*
 			"'"
 			;
+		bytes = "b" stringLiteral;
 		action bytes {
 			emit(Bconst, buf.String())
+		}
+		escapedString = "e" stringLiteral;
+		action escapedString {
+			if !utf8.Valid(buf.Bytes()) {
+				return fmt.Errorf("invalid UTF-8 string")
+			}
+			emit(Sconst, buf.String())
 		}
 		top =
 			  space
@@ -245,6 +252,7 @@ func lexSQL(data []byte) error {
 			| identQuote >mark %identQuote
 			| singleQuote >mark %singleQuote
 			| bytes %bytes
+			| escapedString %escapedString
 			#| ';' %{ emitToken(Semicolon) }
 			;
 		main :=
