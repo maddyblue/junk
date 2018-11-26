@@ -101,7 +101,7 @@ func lexSQL(data []byte) error {
 			(int $markZero ('.' >fconst)? digit* | '.' >fconst int)
 			([eE] >fconst pn int)?
 			;
-		hex = '0x' xdigit+;
+		hex = '0x'i xdigit+;
 		placeholder = '$' int;
 		notASCII = 128..255 >{ isNotASCII = true };
 		identStart =
@@ -192,7 +192,7 @@ func lexSQL(data []byte) error {
 			| 'v' %{ buf.WriteByte('\v') }
 			;
 		slashHex =
-			('x' | 'X') xdigit {2}
+			'x'i xdigit {2}
 			>{ ch = 0 }
 			${ ch = (ch << 4) | unhex(data[p]) }
 			%{ buf.WriteByte(ch) }
@@ -226,7 +226,7 @@ func lexSQL(data []byte) error {
 					| slashHex
 					| slashUnicode
 					| slashOctal
-					| ^(escape | 'x' | 'X' | 'u' | 'U' | '0'..'7') ${ buf.WriteByte(data[p]) }
+					| ^(escape | 'x'i | 'u'i | '0'..'7') ${ buf.WriteByte(data[p]) }
 				)
 			)*
 			"'"
@@ -243,7 +243,7 @@ func lexSQL(data []byte) error {
 			emit(lex.SCONST, buf.String())
 		}
 		hexString =
-			('x' | 'X') %{ buf = new(bytes.Buffer) }
+			'x'i %{ buf = new(bytes.Buffer) }
 			"'"
 			(
 				xdigit {2}
