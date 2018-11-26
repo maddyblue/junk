@@ -47,15 +47,14 @@ const scanner_en_main int = 71
 		buf *bytes.Buffer
 	)
 	str := func() { s = string(data[mark:p]) }
-        _, _, _, _, _, _, _ = uval, err, isFconst, isUpper, isNotASCII, str, buf
 
 	
-//line lex.go:54
+//line lex.go:53
 	{
 	cs = scanner_start
 	}
 
-//line lex.go:59
+//line lex.go:58
 	{
 	if p == pe {
 		goto _test_eof
@@ -336,11 +335,11 @@ const scanner_en_main int = 71
 	}
 	goto st_out
 tr182:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st71
 tr213:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -368,11 +367,11 @@ tr213:
 		
 	goto st71
 tr248:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st71
 tr278:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -400,7 +399,7 @@ tr278:
 		
 	goto st71
 tr312:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -412,43 +411,43 @@ tr312:
 		
 	goto st71
 tr341:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st71
 tr372:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st71
 tr405:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st71
 tr435:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st71
 tr469:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st71
 tr500:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st71
 tr532:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st71
 tr565:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st71
 tr596:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st71
 tr626:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -465,25 +464,30 @@ tr626:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st71
 tr648:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st71
 tr679:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st71
 tr709:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -500,19 +504,24 @@ tr709:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st71
 tr728:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st71
 tr760:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -521,54 +530,54 @@ tr760:
 		
 	goto st71
 tr789:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st71
 tr819:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st71
 tr849:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st71
 tr879:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st71
 tr910:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st71
 tr940:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st71
 tr970:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st71
 tr1000:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st71
 tr1031:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st71
 tr1056:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st71
 tr1086:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st71
 tr1116:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -583,27 +592,27 @@ tr1116:
 		
 	goto st71
 tr1144:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st71
 tr1174:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st71
 tr1204:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st71
 tr1234:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st71
 tr1264:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st71
 tr1295:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st71
 	st71:
@@ -611,7 +620,7 @@ tr1295:
 			goto _test_eof71
 		}
 	st_case_71:
-//line lex.go:615
+//line lex.go:624
 		switch data[p] {
 		case 32:
 			goto st71
@@ -717,11 +726,11 @@ st_case_0:
 		cs = 0
 		goto _out
 tr183:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st72
 tr214:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -749,11 +758,11 @@ tr214:
 		
 	goto st72
 tr249:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st72
 tr279:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -781,7 +790,7 @@ tr279:
 		
 	goto st72
 tr313:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -793,43 +802,43 @@ tr313:
 		
 	goto st72
 tr342:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st72
 tr373:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st72
 tr406:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st72
 tr436:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st72
 tr470:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st72
 tr501:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st72
 tr533:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st72
 tr566:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st72
 tr597:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st72
 tr627:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -846,25 +855,30 @@ tr627:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st72
 tr649:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st72
 tr680:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st72
 tr710:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -881,19 +895,24 @@ tr710:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st72
 tr729:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st72
 tr761:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -902,54 +921,54 @@ tr761:
 		
 	goto st72
 tr790:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st72
 tr820:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st72
 tr850:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st72
 tr880:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st72
 tr911:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st72
 tr941:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st72
 tr971:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st72
 tr1001:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st72
 tr1032:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st72
 tr1057:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st72
 tr1087:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st72
 tr1117:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -964,27 +983,27 @@ tr1117:
 		
 	goto st72
 tr1145:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st72
 tr1175:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st72
 tr1205:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st72
 tr1235:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st72
 tr1265:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st72
 tr1296:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st72
 	st72:
@@ -992,7 +1011,7 @@ tr1296:
 			goto _test_eof72
 		}
 	st_case_72:
-//line lex.go:996
+//line lex.go:1015
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -1093,23 +1112,23 @@ tr1296:
 		}
 		goto tr212
 tr154:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr184:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr250:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr280:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -1135,11 +1154,11 @@ tr280:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr314:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -1149,65 +1168,65 @@ tr314:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr343:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr374:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr407:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr437:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr471:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr502:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr534:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr567:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr598:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr628:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -1224,31 +1243,36 @@ tr628:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr650:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr681:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr711:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -1265,103 +1289,108 @@ tr711:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr730:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr762:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr791:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr821:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr851:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr881:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr912:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr942:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr972:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1002:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1033:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1058:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1088:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1118:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -1374,43 +1403,43 @@ tr1118:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1146:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1176:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1206:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1236:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1266:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 tr1297:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st73
 	st73:
@@ -1418,7 +1447,7 @@ tr1297:
 			goto _test_eof73
 		}
 	st_case_73:
-//line lex.go:1422
+//line lex.go:1451
 		if data[p] == 34 {
 			goto st74
 		}
@@ -1427,17 +1456,17 @@ tr1297:
 		}
 		goto tr2
 tr2:
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st1
 tr3:
-//line lex.rl:120
+//line lex.rl:124
  numQuote++ 
 	goto st1
 tr5:
-//line lex.rl:120
+//line lex.rl:124
  numQuote++ 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st1
 	st1:
@@ -1445,7 +1474,7 @@ tr5:
 			goto _test_eof1
 		}
 	st_case_1:
-//line lex.go:1449
+//line lex.go:1478
 		if data[p] == 34 {
 			goto st74
 		}
@@ -1454,7 +1483,7 @@ tr5:
 		}
 		goto tr2
 tr4:
-//line lex.rl:120
+//line lex.rl:124
  numQuote++ 
 	goto st74
 	st74:
@@ -1462,7 +1491,7 @@ tr4:
 			goto _test_eof74
 		}
 	st_case_74:
-//line lex.go:1466
+//line lex.go:1495
 		switch data[p] {
 		case 32:
 			goto tr213
@@ -1576,11 +1605,11 @@ tr4:
 		}
 		goto tr5
 tr185:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st75
 tr216:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -1608,11 +1637,11 @@ tr216:
 		
 	goto st75
 tr251:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st75
 tr281:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -1640,7 +1669,7 @@ tr281:
 		
 	goto st75
 tr315:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -1652,43 +1681,43 @@ tr315:
 		
 	goto st75
 tr344:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st75
 tr375:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st75
 tr408:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st75
 tr438:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st75
 tr472:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st75
 tr503:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st75
 tr535:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st75
 tr568:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st75
 tr599:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st75
 tr629:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -1705,25 +1734,30 @@ tr629:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st75
 tr651:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st75
 tr682:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st75
 tr712:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -1740,19 +1774,24 @@ tr712:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st75
 tr731:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st75
 tr763:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -1761,54 +1800,54 @@ tr763:
 		
 	goto st75
 tr792:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st75
 tr822:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st75
 tr852:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st75
 tr882:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st75
 tr913:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st75
 tr943:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st75
 tr973:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st75
 tr1003:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st75
 tr1034:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st75
 tr1059:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st75
 tr1089:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st75
 tr1119:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -1823,27 +1862,27 @@ tr1119:
 		
 	goto st75
 tr1147:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st75
 tr1177:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st75
 tr1207:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st75
 tr1237:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st75
 tr1267:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st75
 tr1298:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st75
 	st75:
@@ -1851,7 +1890,7 @@ tr1298:
 			goto _test_eof75
 		}
 	st_case_75:
-//line lex.go:1855
+//line lex.go:1894
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -1953,17 +1992,17 @@ tr1298:
 		}
 		goto tr212
 tr156:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr186:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr217:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -1989,17 +2028,17 @@ tr217:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr252:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr282:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -2025,11 +2064,11 @@ tr282:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr316:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -2039,167 +2078,167 @@ tr316:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr345:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr376:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr409:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr439:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr473:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr504:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr536:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr569:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr600:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr652:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr683:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr732:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr764:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr793:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr823:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr853:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr883:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr914:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr944:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr974:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1004:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1035:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1060:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1090:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1120:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -2212,43 +2251,43 @@ tr1120:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1148:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1178:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1208:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1238:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1268:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 tr1299:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st76
 	st76:
@@ -2256,7 +2295,7 @@ tr1299:
 			goto _test_eof76
 		}
 	st_case_76:
-//line lex.go:2260
+//line lex.go:2299
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -2356,11 +2395,11 @@ tr1299:
 		}
 		goto tr212
 tr187:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st77
 tr218:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -2388,11 +2427,11 @@ tr218:
 		
 	goto st77
 tr253:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st77
 tr283:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -2420,7 +2459,7 @@ tr283:
 		
 	goto st77
 tr317:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -2432,43 +2471,43 @@ tr317:
 		
 	goto st77
 tr346:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st77
 tr377:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st77
 tr410:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st77
 tr440:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st77
 tr474:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st77
 tr505:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st77
 tr537:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st77
 tr570:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st77
 tr601:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st77
 tr631:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -2485,25 +2524,30 @@ tr631:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st77
 tr653:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st77
 tr684:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st77
 tr713:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -2520,19 +2564,24 @@ tr713:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st77
 tr733:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st77
 tr765:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -2541,54 +2590,54 @@ tr765:
 		
 	goto st77
 tr794:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st77
 tr824:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st77
 tr854:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st77
 tr884:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st77
 tr915:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st77
 tr945:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st77
 tr975:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st77
 tr1005:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st77
 tr1036:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st77
 tr1061:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st77
 tr1091:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st77
 tr1121:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -2603,27 +2652,27 @@ tr1121:
 		
 	goto st77
 tr1149:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st77
 tr1179:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st77
 tr1209:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st77
 tr1239:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st77
 tr1269:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st77
 tr1300:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st77
 	st77:
@@ -2631,7 +2680,7 @@ tr1300:
 			goto _test_eof77
 		}
 	st_case_77:
-//line lex.go:2635
+//line lex.go:2684
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -2733,11 +2782,11 @@ tr1300:
 		}
 		goto tr212
 tr188:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st78
 tr219:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -2765,11 +2814,11 @@ tr219:
 		
 	goto st78
 tr254:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st78
 tr284:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -2797,7 +2846,7 @@ tr284:
 		
 	goto st78
 tr318:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -2809,43 +2858,43 @@ tr318:
 		
 	goto st78
 tr347:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st78
 tr378:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st78
 tr411:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st78
 tr441:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st78
 tr475:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st78
 tr506:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st78
 tr538:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st78
 tr571:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st78
 tr602:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st78
 tr632:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -2862,25 +2911,30 @@ tr632:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st78
 tr654:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st78
 tr685:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st78
 tr714:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -2897,19 +2951,24 @@ tr714:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st78
 tr734:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st78
 tr766:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -2918,54 +2977,54 @@ tr766:
 		
 	goto st78
 tr795:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st78
 tr825:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st78
 tr855:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st78
 tr885:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st78
 tr916:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st78
 tr946:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st78
 tr976:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st78
 tr1006:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st78
 tr1037:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st78
 tr1062:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st78
 tr1092:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st78
 tr1122:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -2980,27 +3039,27 @@ tr1122:
 		
 	goto st78
 tr1150:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st78
 tr1180:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st78
 tr1210:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st78
 tr1240:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st78
 tr1270:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st78
 tr1301:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st78
 	st78:
@@ -3008,7 +3067,7 @@ tr1301:
 			goto _test_eof78
 		}
 	st_case_78:
-//line lex.go:3012
+//line lex.go:3071
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -3215,17 +3274,17 @@ tr1301:
 		}
 		goto tr277
 tr159:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr189:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr220:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -3251,17 +3310,17 @@ tr220:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr255:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr319:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -3271,65 +3330,65 @@ tr319:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr348:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr379:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr412:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr442:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr476:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr507:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr539:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr572:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr603:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr633:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -3346,31 +3405,36 @@ tr633:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr655:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr686:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr715:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -3387,92 +3451,97 @@ tr715:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr735:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr796:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr826:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr856:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr886:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr917:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr947:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr977:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1007:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1038:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1063:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1093:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1123:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -3485,43 +3554,43 @@ tr1123:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1151:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1181:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1211:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1241:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1271:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 tr1302:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st80
 	st80:
@@ -3529,7 +3598,7 @@ tr1302:
 			goto _test_eof80
 		}
 	st_case_80:
-//line lex.go:3533
+//line lex.go:3602
 		if data[p] == 39 {
 			goto st81
 		}
@@ -3538,17 +3607,17 @@ tr1302:
 		}
 		goto tr8
 tr8:
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st3
 tr9:
-//line lex.rl:154
+//line lex.rl:158
  numQuote++ 
 	goto st3
 tr11:
-//line lex.rl:154
+//line lex.rl:158
  numQuote++ 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st3
 	st3:
@@ -3556,7 +3625,7 @@ tr11:
 			goto _test_eof3
 		}
 	st_case_3:
-//line lex.go:3560
+//line lex.go:3629
 		if data[p] == 39 {
 			goto st81
 		}
@@ -3565,7 +3634,7 @@ tr11:
 		}
 		goto tr8
 tr10:
-//line lex.rl:154
+//line lex.rl:158
  numQuote++ 
 	goto st81
 	st81:
@@ -3573,7 +3642,7 @@ tr10:
 			goto _test_eof81
 		}
 	st_case_81:
-//line lex.go:3577
+//line lex.go:3646
 		switch data[p] {
 		case 32:
 			goto tr278
@@ -3687,17 +3756,17 @@ tr10:
 		}
 		goto tr11
 tr160:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr190:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr221:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -3723,17 +3792,17 @@ tr221:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr256:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr286:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -3759,11 +3828,11 @@ tr286:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr320:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -3773,65 +3842,65 @@ tr320:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr349:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr380:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr413:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr443:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr477:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr508:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr540:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr573:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr604:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr634:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -3848,31 +3917,36 @@ tr634:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr656:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr687:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr716:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -3889,103 +3963,108 @@ tr716:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr736:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr767:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr797:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr827:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr857:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr887:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr918:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr948:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr978:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1008:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1039:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1064:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1094:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1124:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -3998,43 +4077,43 @@ tr1124:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1152:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1182:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1212:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1242:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1273:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 tr1303:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st82
 	st82:
@@ -4042,7 +4121,7 @@ tr1303:
 			goto _test_eof82
 		}
 	st_case_82:
-//line lex.go:4046
+//line lex.go:4125
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -4142,17 +4221,17 @@ tr1303:
 		}
 		goto tr212
 tr161:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr191:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr222:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -4178,17 +4257,17 @@ tr222:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr257:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr287:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -4214,11 +4293,11 @@ tr287:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr321:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -4228,65 +4307,65 @@ tr321:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr350:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr381:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr414:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr444:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr478:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr509:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr541:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr574:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr605:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr635:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -4303,31 +4382,36 @@ tr635:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr657:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr688:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr717:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -4344,103 +4428,108 @@ tr717:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr737:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr768:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr798:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr828:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr858:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr888:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr919:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr949:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr979:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1009:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1040:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1065:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1095:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1125:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -4453,43 +4542,43 @@ tr1125:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1153:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1183:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1213:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1243:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1274:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 tr1304:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st83
 	st83:
@@ -4497,7 +4586,7 @@ tr1304:
 			goto _test_eof83
 		}
 	st_case_83:
-//line lex.go:4501
+//line lex.go:4590
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -4606,7 +4695,7 @@ tr1304:
 		}
 		goto st84
 tr308:
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
@@ -4616,13 +4705,13 @@ tr308:
 			goto _test_eof5
 		}
 	st_case_5:
-//line lex.go:4620
+//line lex.go:4709
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st85
 		}
 		goto st0
 tr402:
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
@@ -4632,7 +4721,7 @@ tr402:
 			goto _test_eof85
 		}
 	st_case_85:
-//line lex.go:4636
+//line lex.go:4725
 		switch data[p] {
 		case 32:
 			goto tr312
@@ -4734,25 +4823,25 @@ tr402:
 		}
 		goto tr339
 tr162:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr192:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr223:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -4778,25 +4867,25 @@ tr223:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr258:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr288:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -4822,15 +4911,15 @@ tr288:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr322:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -4840,105 +4929,105 @@ tr322:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr351:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr382:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr415:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr445:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr479:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr510:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr542:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr575:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr606:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr636:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -4955,43 +5044,48 @@ tr636:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr658:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr689:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr718:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -5008,159 +5102,164 @@ tr718:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr738:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr769:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr799:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr829:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr859:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr889:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr920:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr950:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr980:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1010:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1041:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1066:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1096:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1126:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -5173,69 +5272,69 @@ tr1126:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1154:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1184:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1214:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1244:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1275:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
 	goto st86
 tr1305:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
@@ -5245,7 +5344,7 @@ tr1305:
 			goto _test_eof86
 		}
 	st_case_86:
-//line lex.go:5249
+//line lex.go:5348
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -5450,11 +5549,11 @@ tr1305:
 		}
 		goto tr370
 tr193:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st88
 tr224:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -5482,11 +5581,11 @@ tr224:
 		
 	goto st88
 tr259:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st88
 tr289:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -5514,7 +5613,7 @@ tr289:
 		
 	goto st88
 tr323:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -5526,43 +5625,43 @@ tr323:
 		
 	goto st88
 tr352:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st88
 tr383:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st88
 tr416:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st88
 tr446:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st88
 tr480:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st88
 tr511:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st88
 tr543:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st88
 tr576:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st88
 tr607:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st88
 tr637:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -5579,25 +5678,30 @@ tr637:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st88
 tr659:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st88
 tr690:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st88
 tr719:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -5614,19 +5718,24 @@ tr719:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st88
 tr739:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st88
 tr770:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -5635,54 +5744,54 @@ tr770:
 		
 	goto st88
 tr800:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st88
 tr830:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st88
 tr860:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st88
 tr890:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st88
 tr921:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st88
 tr951:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st88
 tr981:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st88
 tr1011:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st88
 tr1042:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st88
 tr1067:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st88
 tr1097:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st88
 tr1127:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -5697,27 +5806,27 @@ tr1127:
 		
 	goto st88
 tr1155:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st88
 tr1185:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st88
 tr1215:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st88
 tr1245:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st88
 tr1276:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st88
 tr1306:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st88
 	st88:
@@ -5725,7 +5834,7 @@ tr1306:
 			goto _test_eof88
 		}
 	st_case_88:
-//line lex.go:5729
+//line lex.go:5838
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -5932,9 +6041,9 @@ tr1306:
 		}
 		goto tr401
 tr164:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -5942,11 +6051,11 @@ tr164:
 		
 	goto st90
 tr194:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -5954,7 +6063,7 @@ tr194:
 		
 	goto st90
 tr225:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -5980,9 +6089,9 @@ tr225:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -5990,11 +6099,11 @@ tr225:
 		
 	goto st90
 tr260:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6002,7 +6111,7 @@ tr260:
 		
 	goto st90
 tr290:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -6028,9 +6137,9 @@ tr290:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6038,11 +6147,11 @@ tr290:
 		
 	goto st90
 tr353:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6050,11 +6159,11 @@ tr353:
 		
 	goto st90
 tr384:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6062,11 +6171,11 @@ tr384:
 		
 	goto st90
 tr417:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6074,11 +6183,11 @@ tr417:
 		
 	goto st90
 tr447:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6086,11 +6195,11 @@ tr447:
 		
 	goto st90
 tr481:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6098,11 +6207,11 @@ tr481:
 		
 	goto st90
 tr512:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6110,11 +6219,11 @@ tr512:
 		
 	goto st90
 tr544:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6122,11 +6231,11 @@ tr544:
 		
 	goto st90
 tr577:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6134,11 +6243,11 @@ tr577:
 		
 	goto st90
 tr608:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6146,13 +6255,13 @@ tr608:
 		
 	goto st90
 tr660:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6160,13 +6269,13 @@ tr660:
 		
 	goto st90
 tr691:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6174,11 +6283,11 @@ tr691:
 		
 	goto st90
 tr740:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6186,16 +6295,16 @@ tr740:
 		
 	goto st90
 tr771:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6203,11 +6312,11 @@ tr771:
 		
 	goto st90
 tr801:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6215,11 +6324,11 @@ tr801:
 		
 	goto st90
 tr831:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6227,11 +6336,11 @@ tr831:
 		
 	goto st90
 tr861:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6239,11 +6348,11 @@ tr861:
 		
 	goto st90
 tr891:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6251,11 +6360,11 @@ tr891:
 		
 	goto st90
 tr922:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6263,11 +6372,11 @@ tr922:
 		
 	goto st90
 tr952:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6275,11 +6384,11 @@ tr952:
 		
 	goto st90
 tr982:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6287,11 +6396,11 @@ tr982:
 		
 	goto st90
 tr1012:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6299,11 +6408,11 @@ tr1012:
 		
 	goto st90
 tr1068:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6311,11 +6420,11 @@ tr1068:
 		
 	goto st90
 tr1098:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6323,11 +6432,11 @@ tr1098:
 		
 	goto st90
 tr1156:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6335,11 +6444,11 @@ tr1156:
 		
 	goto st90
 tr1186:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6347,11 +6456,11 @@ tr1186:
 		
 	goto st90
 tr1216:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6359,11 +6468,11 @@ tr1216:
 		
 	goto st90
 tr1246:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6371,11 +6480,11 @@ tr1246:
 		
 	goto st90
 tr1277:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6383,11 +6492,11 @@ tr1277:
 		
 	goto st90
 tr1307:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6399,7 +6508,7 @@ tr1307:
 			goto _test_eof90
 		}
 	st_case_90:
-//line lex.go:6403
+//line lex.go:6512
 		switch data[p] {
 		case 32:
 			goto tr312
@@ -6438,7 +6547,7 @@ tr1307:
 		case 69:
 			goto tr331
 		case 88:
-			goto tr332
+			goto st70
 		case 95:
 			goto tr333
 		case 98:
@@ -6501,9 +6610,9 @@ tr1307:
 		}
 		goto tr339
 tr165:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6511,11 +6620,11 @@ tr165:
 		
 	goto st91
 tr195:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6523,7 +6632,7 @@ tr195:
 		
 	goto st91
 tr226:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -6549,9 +6658,9 @@ tr226:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6559,11 +6668,11 @@ tr226:
 		
 	goto st91
 tr261:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6571,7 +6680,7 @@ tr261:
 		
 	goto st91
 tr291:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -6597,9 +6706,9 @@ tr291:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6607,7 +6716,7 @@ tr291:
 		
 	goto st91
 tr309:
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6615,11 +6724,11 @@ tr309:
 		
 	goto st91
 tr354:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6627,11 +6736,11 @@ tr354:
 		
 	goto st91
 tr385:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6639,11 +6748,11 @@ tr385:
 		
 	goto st91
 tr418:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6651,11 +6760,11 @@ tr418:
 		
 	goto st91
 tr448:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6663,11 +6772,11 @@ tr448:
 		
 	goto st91
 tr482:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6675,11 +6784,11 @@ tr482:
 		
 	goto st91
 tr513:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6687,11 +6796,11 @@ tr513:
 		
 	goto st91
 tr545:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6699,11 +6808,11 @@ tr545:
 		
 	goto st91
 tr578:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6711,11 +6820,11 @@ tr578:
 		
 	goto st91
 tr609:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6723,13 +6832,13 @@ tr609:
 		
 	goto st91
 tr661:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6737,13 +6846,13 @@ tr661:
 		
 	goto st91
 tr692:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6751,11 +6860,11 @@ tr692:
 		
 	goto st91
 tr741:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6763,16 +6872,16 @@ tr741:
 		
 	goto st91
 tr772:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6780,11 +6889,11 @@ tr772:
 		
 	goto st91
 tr802:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6792,11 +6901,11 @@ tr802:
 		
 	goto st91
 tr832:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6804,11 +6913,11 @@ tr832:
 		
 	goto st91
 tr862:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6816,11 +6925,11 @@ tr862:
 		
 	goto st91
 tr892:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6828,11 +6937,11 @@ tr892:
 		
 	goto st91
 tr923:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6840,11 +6949,11 @@ tr923:
 		
 	goto st91
 tr953:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6852,11 +6961,11 @@ tr953:
 		
 	goto st91
 tr983:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6864,11 +6973,11 @@ tr983:
 		
 	goto st91
 tr1013:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6876,11 +6985,11 @@ tr1013:
 		
 	goto st91
 tr1069:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6888,11 +6997,11 @@ tr1069:
 		
 	goto st91
 tr1099:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6900,11 +7009,11 @@ tr1099:
 		
 	goto st91
 tr1157:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6912,11 +7021,11 @@ tr1157:
 		
 	goto st91
 tr1187:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6924,11 +7033,11 @@ tr1187:
 		
 	goto st91
 tr1217:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6936,11 +7045,11 @@ tr1217:
 		
 	goto st91
 tr1247:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6948,11 +7057,11 @@ tr1247:
 		
 	goto st91
 tr1278:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6960,11 +7069,11 @@ tr1278:
 		
 	goto st91
 tr1308:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:65
+//line lex.rl:64
 
 			if mark == p && data[p] == '0' {
 				mark++
@@ -6976,7 +7085,7 @@ tr1308:
 			goto _test_eof91
 		}
 	st_case_91:
-//line lex.go:6980
+//line lex.go:7089
 		switch data[p] {
 		case 32:
 			goto tr312
@@ -7078,11 +7187,11 @@ tr1308:
 		}
 		goto tr339
 tr196:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st92
 tr227:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -7110,11 +7219,11 @@ tr227:
 		
 	goto st92
 tr262:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st92
 tr292:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -7142,7 +7251,7 @@ tr292:
 		
 	goto st92
 tr324:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -7154,39 +7263,39 @@ tr324:
 		
 	goto st92
 tr355:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st92
 tr386:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st92
 tr449:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st92
 tr483:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st92
 tr514:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st92
 tr546:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st92
 tr579:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st92
 tr610:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st92
 tr638:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -7203,25 +7312,30 @@ tr638:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st92
 tr662:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st92
 tr693:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st92
 tr720:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -7238,19 +7352,24 @@ tr720:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st92
 tr742:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st92
 tr773:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -7259,54 +7378,54 @@ tr773:
 		
 	goto st92
 tr803:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st92
 tr833:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st92
 tr863:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st92
 tr893:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st92
 tr924:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st92
 tr954:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st92
 tr984:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st92
 tr1014:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st92
 tr1043:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st92
 tr1070:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st92
 tr1100:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st92
 tr1128:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -7321,27 +7440,27 @@ tr1128:
 		
 	goto st92
 tr1158:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st92
 tr1188:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st92
 tr1218:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st92
 tr1248:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st92
 tr1279:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st92
 tr1309:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st92
 	st92:
@@ -7349,7 +7468,7 @@ tr1309:
 			goto _test_eof92
 		}
 	st_case_92:
-//line lex.go:7353
+//line lex.go:7472
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -7661,11 +7780,11 @@ tr1309:
 		}
 		goto tr464
 tr197:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st95
 tr228:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -7693,11 +7812,11 @@ tr228:
 		
 	goto st95
 tr263:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st95
 tr293:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -7725,7 +7844,7 @@ tr293:
 		
 	goto st95
 tr325:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -7737,43 +7856,43 @@ tr325:
 		
 	goto st95
 tr356:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st95
 tr387:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st95
 tr420:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st95
 tr450:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st95
 tr484:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st95
 tr515:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st95
 tr547:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st95
 tr580:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st95
 tr611:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st95
 tr639:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -7790,25 +7909,30 @@ tr639:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st95
 tr663:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st95
 tr694:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st95
 tr721:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -7825,19 +7949,24 @@ tr721:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st95
 tr743:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st95
 tr774:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -7846,54 +7975,54 @@ tr774:
 		
 	goto st95
 tr804:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st95
 tr834:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st95
 tr864:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st95
 tr894:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st95
 tr925:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st95
 tr955:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st95
 tr985:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st95
 tr1015:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st95
 tr1044:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st95
 tr1071:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st95
 tr1101:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st95
 tr1129:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -7908,27 +8037,27 @@ tr1129:
 		
 	goto st95
 tr1159:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st95
 tr1189:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st95
 tr1219:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st95
 tr1249:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st95
 tr1280:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st95
 tr1310:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st95
 	st95:
@@ -7936,7 +8065,7 @@ tr1310:
 			goto _test_eof95
 		}
 	st_case_95:
-//line lex.go:7940
+//line lex.go:8069
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -8246,11 +8375,11 @@ tr1310:
 		}
 		goto tr529
 tr199:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st98
 tr229:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -8278,11 +8407,11 @@ tr229:
 		
 	goto st98
 tr264:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st98
 tr294:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -8310,7 +8439,7 @@ tr294:
 		
 	goto st98
 tr326:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -8322,43 +8451,43 @@ tr326:
 		
 	goto st98
 tr357:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st98
 tr388:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st98
 tr421:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st98
 tr451:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st98
 tr486:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st98
 tr516:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st98
 tr548:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st98
 tr581:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st98
 tr612:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st98
 tr640:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -8375,25 +8504,30 @@ tr640:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st98
 tr664:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st98
 tr695:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st98
 tr722:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -8410,19 +8544,24 @@ tr722:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st98
 tr744:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st98
 tr775:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -8431,50 +8570,50 @@ tr775:
 		
 	goto st98
 tr805:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st98
 tr835:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st98
 tr865:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st98
 tr896:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st98
 tr926:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st98
 tr956:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st98
 tr986:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st98
 tr1016:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st98
 tr1045:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st98
 tr1102:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st98
 tr1130:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -8489,23 +8628,23 @@ tr1130:
 		
 	goto st98
 tr1160:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st98
 tr1220:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st98
 tr1250:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st98
 tr1281:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st98
 tr1311:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st98
 	st98:
@@ -8513,7 +8652,7 @@ tr1311:
 			goto _test_eof98
 		}
 	st_case_98:
-//line lex.go:8517
+//line lex.go:8656
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -8719,11 +8858,11 @@ tr1311:
 		}
 		goto tr561
 tr200:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st100
 tr230:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -8751,11 +8890,11 @@ tr230:
 		
 	goto st100
 tr265:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st100
 tr295:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -8783,7 +8922,7 @@ tr295:
 		
 	goto st100
 tr327:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -8795,43 +8934,43 @@ tr327:
 		
 	goto st100
 tr358:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st100
 tr389:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st100
 tr422:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st100
 tr452:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st100
 tr487:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st100
 tr517:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st100
 tr549:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st100
 tr582:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st100
 tr613:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st100
 tr641:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -8848,25 +8987,30 @@ tr641:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st100
 tr665:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st100
 tr696:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st100
 tr723:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -8883,19 +9027,24 @@ tr723:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st100
 tr745:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st100
 tr776:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -8904,54 +9053,54 @@ tr776:
 		
 	goto st100
 tr806:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st100
 tr836:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st100
 tr866:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st100
 tr897:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st100
 tr927:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st100
 tr957:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st100
 tr987:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st100
 tr1017:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st100
 tr1046:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st100
 tr1073:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st100
 tr1103:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st100
 tr1131:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -8966,27 +9115,27 @@ tr1131:
 		
 	goto st100
 tr1161:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st100
 tr1191:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st100
 tr1221:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st100
 tr1251:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st100
 tr1282:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st100
 tr1312:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st100
 	st100:
@@ -8994,7 +9143,7 @@ tr1312:
 			goto _test_eof100
 		}
 	st_case_100:
-//line lex.go:8998
+//line lex.go:9147
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -9201,11 +9350,11 @@ tr1312:
 		}
 		goto tr594
 tr201:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st102
 tr231:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -9233,11 +9382,11 @@ tr231:
 		
 	goto st102
 tr266:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st102
 tr296:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -9265,7 +9414,7 @@ tr296:
 		
 	goto st102
 tr328:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -9277,43 +9426,43 @@ tr328:
 		
 	goto st102
 tr359:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st102
 tr390:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st102
 tr423:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st102
 tr453:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st102
 tr488:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st102
 tr518:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st102
 tr550:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st102
 tr583:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st102
 tr614:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st102
 tr642:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -9330,25 +9479,30 @@ tr642:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st102
 tr666:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st102
 tr697:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st102
 tr724:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -9365,19 +9519,24 @@ tr724:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st102
 tr746:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st102
 tr777:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -9386,54 +9545,54 @@ tr777:
 		
 	goto st102
 tr807:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st102
 tr837:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st102
 tr867:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st102
 tr898:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st102
 tr928:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st102
 tr958:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st102
 tr988:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st102
 tr1018:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st102
 tr1047:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st102
 tr1074:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st102
 tr1104:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st102
 tr1132:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -9448,27 +9607,27 @@ tr1132:
 		
 	goto st102
 tr1162:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st102
 tr1192:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st102
 tr1222:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st102
 tr1252:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st102
 tr1283:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st102
 tr1313:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st102
 	st102:
@@ -9476,7 +9635,7 @@ tr1313:
 			goto _test_eof102
 		}
 	st_case_102:
-//line lex.go:9480
+//line lex.go:9639
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -9683,49 +9842,49 @@ tr1313:
 		}
 		goto tr625
 tr646:
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr175:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr171:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr181:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr206:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr202:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr212:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr236:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -9751,11 +9910,11 @@ tr236:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr232:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -9781,13 +9940,13 @@ tr232:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr242:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -9813,35 +9972,35 @@ tr242:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr271:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr267:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr277:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr301:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -9867,11 +10026,11 @@ tr301:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr297:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -9897,13 +10056,13 @@ tr297:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr307:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -9929,13 +10088,13 @@ tr307:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr334:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -9945,11 +10104,11 @@ tr334:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr329:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -9959,13 +10118,13 @@ tr329:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr339:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -9975,581 +10134,581 @@ tr339:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr364:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr360:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr370:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr395:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr391:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr401:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr428:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr424:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr434:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr458:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr454:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr464:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr493:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr489:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr499:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr523:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr519:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr529:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr555:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr551:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr561:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr588:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr584:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr594:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr619:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr615:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr625:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr643:
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr671:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr667:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr677:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr702:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr698:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr708:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr751:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr747:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr757:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr782:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr778:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr788:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr812:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr808:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr818:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr842:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr838:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr848:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr872:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr868:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr878:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr903:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr899:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr909:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr933:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr929:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr939:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr963:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr959:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr969:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr993:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr989:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr999:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1023:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1019:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1029:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1051:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1048:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1055:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1079:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1075:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1085:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1109:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1105:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1115:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1137:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -10562,11 +10721,11 @@ tr1137:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1133:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -10579,13 +10738,13 @@ tr1133:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1143:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -10598,141 +10757,141 @@ tr1143:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1167:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1163:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1173:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1197:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1193:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1203:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1227:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1223:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1233:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1257:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1253:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1263:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1288:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1284:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1294:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 tr1318:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st104
 tr1314:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st104
 tr1324:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:106
+//line lex.rl:110
  isNotASCII = true 
 	goto st104
 	st104:
@@ -10740,7 +10899,7 @@ tr1324:
 			goto _test_eof104
 		}
 	st_case_104:
-//line lex.go:10744
+//line lex.go:10903
 		switch data[p] {
 		case 32:
 			goto tr626
@@ -10830,11 +10989,11 @@ tr1324:
 		}
 		goto tr646
 tr210:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st105
 tr240:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -10862,11 +11021,11 @@ tr240:
 		
 	goto st105
 tr275:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st105
 tr305:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -10894,7 +11053,7 @@ tr305:
 		
 	goto st105
 tr337:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -10906,43 +11065,43 @@ tr337:
 		
 	goto st105
 tr368:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st105
 tr399:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st105
 tr432:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st105
 tr462:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st105
 tr497:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st105
 tr527:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st105
 tr559:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st105
 tr592:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st105
 tr623:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st105
 tr644:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -10959,25 +11118,30 @@ tr644:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st105
 tr675:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st105
 tr706:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st105
 tr725:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -10994,19 +11158,24 @@ tr725:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st105
 tr755:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st105
 tr786:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -11015,54 +11184,54 @@ tr786:
 		
 	goto st105
 tr816:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st105
 tr846:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st105
 tr876:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st105
 tr907:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st105
 tr937:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st105
 tr967:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st105
 tr997:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st105
 tr1027:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st105
 tr1053:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st105
 tr1083:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st105
 tr1113:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st105
 tr1141:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -11077,27 +11246,27 @@ tr1141:
 		
 	goto st105
 tr1171:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st105
 tr1201:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st105
 tr1231:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st105
 tr1261:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st105
 tr1292:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st105
 tr1322:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st105
 	st105:
@@ -11105,7 +11274,7 @@ tr1322:
 			goto _test_eof105
 		}
 	st_case_105:
-//line lex.go:11109
+//line lex.go:11278
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -11207,21 +11376,21 @@ tr1322:
 		}
 		goto tr212
 tr172:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr203:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr233:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -11247,21 +11416,21 @@ tr233:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr268:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr298:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -11287,13 +11456,13 @@ tr298:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr330:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -11303,206 +11472,206 @@ tr330:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr361:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr392:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr425:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr455:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr490:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr520:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr552:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr585:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr616:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr668:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr699:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr748:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr779:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr809:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr839:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr869:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr900:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr930:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr960:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr990:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1020:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1076:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1106:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1134:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -11515,57 +11684,57 @@ tr1134:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1164:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1194:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1224:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1254:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1285:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 tr1315:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st106
 	st106:
@@ -11573,7 +11742,7 @@ tr1315:
 			goto _test_eof106
 		}
 	st_case_106:
-//line lex.go:11577
+//line lex.go:11746
 		switch data[p] {
 		case 32:
 			goto tr626
@@ -11780,31 +11949,31 @@ tr1315:
 		}
 		goto tr677
 tr178:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr173:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr209:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr204:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr239:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -11830,11 +11999,11 @@ tr239:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr234:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -11860,27 +12029,27 @@ tr234:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr274:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr269:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr304:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -11906,11 +12075,11 @@ tr304:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr299:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -11936,13 +12105,13 @@ tr299:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr336:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -11952,11 +12121,11 @@ tr336:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr332:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -11966,373 +12135,373 @@ tr332:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr367:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr362:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr398:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr393:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr431:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr426:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr461:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr456:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr496:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr491:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr526:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr521:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr558:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr553:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr591:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr586:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr622:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr617:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr674:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr669:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr705:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr700:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr754:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr749:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr785:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr780:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr815:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr810:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr845:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr840:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr875:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr870:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr906:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr901:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr936:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr931:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr966:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr961:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr996:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr991:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1026:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1021:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1052:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1049:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1082:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1077:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1112:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1107:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1140:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -12345,11 +12514,11 @@ tr1140:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1135:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -12362,93 +12531,93 @@ tr1135:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1170:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1165:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1200:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1195:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1230:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1225:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1260:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1255:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1291:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1286:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 tr1321:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st108
 tr1316:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
-//line lex.rl:109
+//line lex.rl:113
  isUpper = true 
 	goto st108
 	st108:
@@ -12456,7 +12625,7 @@ tr1316:
 			goto _test_eof108
 		}
 	st_case_108:
-//line lex.go:12460
+//line lex.go:12629
 		switch data[p] {
 		case 32:
 			goto tr626
@@ -12546,7 +12715,7 @@ tr1316:
 		}
 		goto tr646
 tr678:
-//line lex.rl:246
+//line lex.rl:250
  buf = new(bytes.Buffer) 
 	goto st7
 	st7:
@@ -12554,7 +12723,7 @@ tr678:
 			goto _test_eof7
 		}
 	st_case_7:
-//line lex.go:12558
+//line lex.go:12727
 		if data[p] == 39 {
 			goto st109
 		}
@@ -12572,7 +12741,7 @@ tr678:
 		}
 		goto st0
 tr147:
-//line lex.rl:252
+//line lex.rl:256
  buf.WriteByte(ch) 
 	goto st109
 	st109:
@@ -12580,7 +12749,7 @@ tr147:
 			goto _test_eof109
 		}
 	st_case_109:
-//line lex.go:12584
+//line lex.go:12753
 		switch data[p] {
 		case 32:
 			goto tr679
@@ -12682,17 +12851,17 @@ tr147:
 		}
 		goto tr708
 tr174:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr205:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr235:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -12718,17 +12887,17 @@ tr235:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr270:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr300:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -12754,11 +12923,11 @@ tr300:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr333:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -12768,167 +12937,167 @@ tr333:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr363:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr394:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr427:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr457:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr492:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr522:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr554:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr587:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr618:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr670:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr701:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr750:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr781:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr811:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr841:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr871:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr902:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr932:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr962:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr992:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1022:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1050:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1078:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1108:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1136:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -12941,43 +13110,43 @@ tr1136:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1166:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1196:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1226:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1256:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1287:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 tr1317:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st110
 	st110:
@@ -12985,7 +13154,7 @@ tr1317:
 			goto _test_eof110
 		}
 	st_case_110:
-//line lex.go:12989
+//line lex.go:13158
 		switch data[p] {
 		case 32:
 			goto tr709
@@ -13075,11 +13244,11 @@ tr1317:
 		}
 		goto tr646
 tr245:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st111
 tr241:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -13107,11 +13276,11 @@ tr241:
 		
 	goto st111
 tr276:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 	goto st111
 tr306:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -13139,7 +13308,7 @@ tr306:
 		
 	goto st111
 tr338:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -13151,43 +13320,43 @@ tr338:
 		
 	goto st111
 tr369:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 	goto st111
 tr400:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 	goto st111
 tr433:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 	goto st111
 tr463:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 	goto st111
 tr498:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 	goto st111
 tr528:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 	goto st111
 tr560:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 	goto st111
 tr593:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 	goto st111
 tr624:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 	goto st111
 tr645:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -13204,25 +13373,30 @@ tr645:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 	goto st111
 tr676:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 	goto st111
 tr707:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 	goto st111
 tr726:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -13239,19 +13413,24 @@ tr726:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 	goto st111
 tr756:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 	goto st111
 tr787:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -13260,54 +13439,54 @@ tr787:
 		
 	goto st111
 tr817:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 	goto st111
 tr847:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 	goto st111
 tr877:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 	goto st111
 tr908:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 	goto st111
 tr938:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 	goto st111
 tr968:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 	goto st111
 tr998:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 	goto st111
 tr1028:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 	goto st111
 tr1054:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 	goto st111
 tr1084:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 	goto st111
 tr1114:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 	goto st111
 tr1142:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -13322,27 +13501,27 @@ tr1142:
 		
 	goto st111
 tr1172:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 	goto st111
 tr1202:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 	goto st111
 tr1232:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 	goto st111
 tr1262:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 	goto st111
 tr1293:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 	goto st111
 tr1323:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 	goto st111
 	st111:
@@ -13350,7 +13529,7 @@ tr1323:
 			goto _test_eof111
 		}
 	st_case_111:
-//line lex.go:13354
+//line lex.go:13533
 		switch data[p] {
 		case 32:
 			goto tr182
@@ -13559,17 +13738,17 @@ tr1323:
 		}
 		goto tr757
 tr176:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr207:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr237:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -13595,17 +13774,17 @@ tr237:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr272:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr302:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -13631,11 +13810,11 @@ tr302:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr335:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -13645,158 +13824,158 @@ tr335:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr365:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr396:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr429:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr459:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr494:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr524:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr556:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr589:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr620:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr672:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr703:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr752:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr783:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr813:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr843:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr873:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr904:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr934:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr964:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr994:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1024:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1080:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1110:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1138:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -13809,43 +13988,43 @@ tr1138:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1168:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1198:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1228:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1258:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1289:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 tr1319:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st113
 	st113:
@@ -13853,7 +14032,7 @@ tr1319:
 			goto _test_eof113
 		}
 	st_case_113:
-//line lex.go:13857
+//line lex.go:14036
 		switch data[p] {
 		case 32:
 			goto tr626
@@ -13955,77 +14134,77 @@ tr1319:
 		}
 		goto tr18
 tr18:
-//line lex.rl:218
+//line lex.rl:222
  buf = new(bytes.Buffer) 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr21:
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr88:
-//line lex.rl:229
+//line lex.rl:233
  buf.WriteByte(data[p]) 
 	goto st9
 tr102:
-//line lex.rl:215
+//line lex.rl:219
  buf.WriteByte(ch) 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr113:
-//line lex.rl:209
+//line lex.rl:213
  buf.WriteRune(rn) 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr118:
-//line lex.rl:198
+//line lex.rl:202
  buf.WriteByte(ch) 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr121:
-//line lex.rl:186
+//line lex.rl:190
  buf.WriteByte('\a') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr124:
-//line lex.rl:187
+//line lex.rl:191
  buf.WriteByte('\b') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr127:
-//line lex.rl:188
+//line lex.rl:192
  buf.WriteByte('\f') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr130:
-//line lex.rl:189
+//line lex.rl:193
  buf.WriteByte('\n') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr133:
-//line lex.rl:190
+//line lex.rl:194
  buf.WriteByte('\r') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr136:
-//line lex.rl:191
+//line lex.rl:195
  buf.WriteByte('\t') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 tr143:
-//line lex.rl:192
+//line lex.rl:196
  buf.WriteByte('\v') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st9
 	st9:
@@ -14033,7 +14212,7 @@ tr143:
 			goto _test_eof9
 		}
 	st_case_9:
-//line lex.go:14037
+//line lex.go:14216
 		switch data[p] {
 		case 39:
 			goto st114
@@ -14042,47 +14221,47 @@ tr143:
 		}
 		goto tr21
 tr19:
-//line lex.rl:218
+//line lex.rl:222
  buf = new(bytes.Buffer) 
 	goto st114
 tr103:
-//line lex.rl:215
+//line lex.rl:219
  buf.WriteByte(ch) 
 	goto st114
 tr114:
-//line lex.rl:209
+//line lex.rl:213
  buf.WriteRune(rn) 
 	goto st114
 tr119:
-//line lex.rl:198
+//line lex.rl:202
  buf.WriteByte(ch) 
 	goto st114
 tr122:
-//line lex.rl:186
+//line lex.rl:190
  buf.WriteByte('\a') 
 	goto st114
 tr125:
-//line lex.rl:187
+//line lex.rl:191
  buf.WriteByte('\b') 
 	goto st114
 tr128:
-//line lex.rl:188
+//line lex.rl:192
  buf.WriteByte('\f') 
 	goto st114
 tr131:
-//line lex.rl:189
+//line lex.rl:193
  buf.WriteByte('\n') 
 	goto st114
 tr134:
-//line lex.rl:190
+//line lex.rl:194
  buf.WriteByte('\r') 
 	goto st114
 tr137:
-//line lex.rl:191
+//line lex.rl:195
  buf.WriteByte('\t') 
 	goto st114
 tr144:
-//line lex.rl:192
+//line lex.rl:196
  buf.WriteByte('\v') 
 	goto st114
 	st114:
@@ -14090,7 +14269,7 @@ tr144:
 			goto _test_eof114
 		}
 	st_case_114:
-//line lex.go:14094
+//line lex.go:14273
 		switch data[p] {
 		case 32:
 			goto tr679
@@ -14192,17 +14371,17 @@ tr144:
 		}
 		goto tr708
 tr177:
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr208:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr238:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -14228,17 +14407,17 @@ tr238:
 			}
 			emit(lex.IDENT, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr273:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr303:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -14264,11 +14443,11 @@ tr303:
 			}
 			emit(lex.SCONST, string(b))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1030:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -14278,158 +14457,158 @@ tr1030:
 			}
 			isFconst = false
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr366:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr397:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr430:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr460:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr495:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr525:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr557:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr590:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr621:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr673:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr704:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr753:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr784:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
 			emit(lex.SCONST, buf.String())
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr814:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr844:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr874:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr905:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr935:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr965:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr995:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1025:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1081:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1111:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1139:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -14442,43 +14621,43 @@ tr1139:
 			}
 			emit(lex.PLACEHOLDER, s)
 		
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1169:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1199:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1229:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1259:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1290:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 tr1320:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
-//line lex.rl:41
+//line lex.rl:40
  mark = p 
 	goto st115
 	st115:
@@ -14486,7 +14665,7 @@ tr1320:
 			goto _test_eof115
 		}
 	st_case_115:
-//line lex.go:14490
+//line lex.go:14669
 		switch data[p] {
 		case 32:
 			goto tr626
@@ -14588,77 +14767,77 @@ tr1320:
 		}
 		goto tr24
 tr24:
-//line lex.rl:218
+//line lex.rl:222
  buf = new(bytes.Buffer) 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr27:
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr30:
-//line lex.rl:229
+//line lex.rl:233
  buf.WriteByte(data[p]) 
 	goto st11
 tr44:
-//line lex.rl:215
+//line lex.rl:219
  buf.WriteByte(ch) 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr55:
-//line lex.rl:209
+//line lex.rl:213
  buf.WriteRune(rn) 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr60:
-//line lex.rl:198
+//line lex.rl:202
  buf.WriteByte(ch) 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr63:
-//line lex.rl:186
+//line lex.rl:190
  buf.WriteByte('\a') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr66:
-//line lex.rl:187
+//line lex.rl:191
  buf.WriteByte('\b') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr69:
-//line lex.rl:188
+//line lex.rl:192
  buf.WriteByte('\f') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr72:
-//line lex.rl:189
+//line lex.rl:193
  buf.WriteByte('\n') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr75:
-//line lex.rl:190
+//line lex.rl:194
  buf.WriteByte('\r') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr78:
-//line lex.rl:191
+//line lex.rl:195
  buf.WriteByte('\t') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 tr85:
-//line lex.rl:192
+//line lex.rl:196
  buf.WriteByte('\v') 
-//line lex.rl:223
+//line lex.rl:227
  buf.WriteByte(data[p]) 
 	goto st11
 	st11:
@@ -14666,7 +14845,7 @@ tr85:
 			goto _test_eof11
 		}
 	st_case_11:
-//line lex.go:14670
+//line lex.go:14849
 		switch data[p] {
 		case 39:
 			goto st116
@@ -14675,47 +14854,47 @@ tr85:
 		}
 		goto tr27
 tr25:
-//line lex.rl:218
+//line lex.rl:222
  buf = new(bytes.Buffer) 
 	goto st116
 tr45:
-//line lex.rl:215
+//line lex.rl:219
  buf.WriteByte(ch) 
 	goto st116
 tr56:
-//line lex.rl:209
+//line lex.rl:213
  buf.WriteRune(rn) 
 	goto st116
 tr61:
-//line lex.rl:198
+//line lex.rl:202
  buf.WriteByte(ch) 
 	goto st116
 tr64:
-//line lex.rl:186
+//line lex.rl:190
  buf.WriteByte('\a') 
 	goto st116
 tr67:
-//line lex.rl:187
+//line lex.rl:191
  buf.WriteByte('\b') 
 	goto st116
 tr70:
-//line lex.rl:188
+//line lex.rl:192
  buf.WriteByte('\f') 
 	goto st116
 tr73:
-//line lex.rl:189
+//line lex.rl:193
  buf.WriteByte('\n') 
 	goto st116
 tr76:
-//line lex.rl:190
+//line lex.rl:194
  buf.WriteByte('\r') 
 	goto st116
 tr79:
-//line lex.rl:191
+//line lex.rl:195
  buf.WriteByte('\t') 
 	goto st116
 tr86:
-//line lex.rl:192
+//line lex.rl:196
  buf.WriteByte('\v') 
 	goto st116
 	st116:
@@ -14723,7 +14902,7 @@ tr86:
 			goto _test_eof116
 		}
 	st_case_116:
-//line lex.go:14727
+//line lex.go:14906
 		switch data[p] {
 		case 32:
 			goto tr760
@@ -14825,47 +15004,47 @@ tr86:
 		}
 		goto tr788
 tr26:
-//line lex.rl:218
+//line lex.rl:222
  buf = new(bytes.Buffer) 
 	goto st12
 tr46:
-//line lex.rl:215
+//line lex.rl:219
  buf.WriteByte(ch) 
 	goto st12
 tr57:
-//line lex.rl:209
+//line lex.rl:213
  buf.WriteRune(rn) 
 	goto st12
 tr62:
-//line lex.rl:198
+//line lex.rl:202
  buf.WriteByte(ch) 
 	goto st12
 tr65:
-//line lex.rl:186
+//line lex.rl:190
  buf.WriteByte('\a') 
 	goto st12
 tr68:
-//line lex.rl:187
+//line lex.rl:191
  buf.WriteByte('\b') 
 	goto st12
 tr71:
-//line lex.rl:188
+//line lex.rl:192
  buf.WriteByte('\f') 
 	goto st12
 tr74:
-//line lex.rl:189
+//line lex.rl:193
  buf.WriteByte('\n') 
 	goto st12
 tr77:
-//line lex.rl:190
+//line lex.rl:194
  buf.WriteByte('\r') 
 	goto st12
 tr80:
-//line lex.rl:191
+//line lex.rl:195
  buf.WriteByte('\t') 
 	goto st12
 tr87:
-//line lex.rl:192
+//line lex.rl:196
  buf.WriteByte('\v') 
 	goto st12
 	st12:
@@ -14873,7 +15052,7 @@ tr87:
 			goto _test_eof12
 		}
 	st_case_12:
-//line lex.go:14877
+//line lex.go:15056
 		switch data[p] {
 		case 85:
 			goto tr32
@@ -14903,9 +15082,9 @@ tr87:
 		}
 		goto tr30
 tr31:
-//line lex.rl:213
+//line lex.rl:217
  ch = 0 
-//line lex.rl:214
+//line lex.rl:218
  ch = (ch << 3) | data[p] - '0' 
 	goto st13
 	st13:
@@ -14913,13 +15092,13 @@ tr31:
 			goto _test_eof13
 		}
 	st_case_13:
-//line lex.go:14917
+//line lex.go:15096
 		if 48 <= data[p] && data[p] <= 55 {
 			goto tr42
 		}
 		goto st0
 tr42:
-//line lex.rl:214
+//line lex.rl:218
  ch = (ch << 3) | data[p] - '0' 
 	goto st14
 	st14:
@@ -14927,13 +15106,13 @@ tr42:
 			goto _test_eof14
 		}
 	st_case_14:
-//line lex.go:14931
+//line lex.go:15110
 		if 48 <= data[p] && data[p] <= 55 {
 			goto tr43
 		}
 		goto st0
 tr43:
-//line lex.rl:214
+//line lex.rl:218
  ch = (ch << 3) | data[p] - '0' 
 	goto st15
 	st15:
@@ -14941,7 +15120,7 @@ tr43:
 			goto _test_eof15
 		}
 	st_case_15:
-//line lex.go:14945
+//line lex.go:15124
 		switch data[p] {
 		case 39:
 			goto tr45
@@ -14950,7 +15129,7 @@ tr43:
 		}
 		goto tr44
 tr32:
-//line lex.rl:208
+//line lex.rl:212
  rn = 0 
 	goto st16
 	st16:
@@ -14958,7 +15137,7 @@ tr32:
 			goto _test_eof16
 		}
 	st_case_16:
-//line lex.go:14962
+//line lex.go:15141
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -14973,7 +15152,7 @@ tr32:
 		}
 		goto st0
 tr47:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st17
 	st17:
@@ -14981,7 +15160,7 @@ tr47:
 			goto _test_eof17
 		}
 	st_case_17:
-//line lex.go:14985
+//line lex.go:15164
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -14996,7 +15175,7 @@ tr47:
 		}
 		goto st0
 tr48:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st18
 	st18:
@@ -15004,7 +15183,7 @@ tr48:
 			goto _test_eof18
 		}
 	st_case_18:
-//line lex.go:15008
+//line lex.go:15187
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15019,7 +15198,7 @@ tr48:
 		}
 		goto st0
 tr49:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st19
 	st19:
@@ -15027,7 +15206,7 @@ tr49:
 			goto _test_eof19
 		}
 	st_case_19:
-//line lex.go:15031
+//line lex.go:15210
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15042,7 +15221,7 @@ tr49:
 		}
 		goto st0
 tr50:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st20
 	st20:
@@ -15050,7 +15229,7 @@ tr50:
 			goto _test_eof20
 		}
 	st_case_20:
-//line lex.go:15054
+//line lex.go:15233
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15065,7 +15244,7 @@ tr50:
 		}
 		goto st0
 tr51:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st21
 	st21:
@@ -15073,7 +15252,7 @@ tr51:
 			goto _test_eof21
 		}
 	st_case_21:
-//line lex.go:15077
+//line lex.go:15256
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15088,7 +15267,7 @@ tr51:
 		}
 		goto st0
 tr52:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st22
 	st22:
@@ -15096,7 +15275,7 @@ tr52:
 			goto _test_eof22
 		}
 	st_case_22:
-//line lex.go:15100
+//line lex.go:15279
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15111,7 +15290,7 @@ tr52:
 		}
 		goto st0
 tr53:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st23
 	st23:
@@ -15119,7 +15298,7 @@ tr53:
 			goto _test_eof23
 		}
 	st_case_23:
-//line lex.go:15123
+//line lex.go:15302
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15134,11 +15313,11 @@ tr53:
 		}
 		goto st0
 tr54:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st24
 tr84:
-//line lex.rl:203
+//line lex.rl:207
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st24
 	st24:
@@ -15146,7 +15325,7 @@ tr84:
 			goto _test_eof24
 		}
 	st_case_24:
-//line lex.go:15150
+//line lex.go:15329
 		switch data[p] {
 		case 39:
 			goto tr56
@@ -15173,9 +15352,9 @@ tr84:
 		}
 		goto st0
 tr58:
-//line lex.rl:196
+//line lex.rl:200
  ch = 0 
-//line lex.rl:197
+//line lex.rl:201
  ch = (ch << 4) | unhex(data[p]) 
 	goto st26
 	st26:
@@ -15183,7 +15362,7 @@ tr58:
 			goto _test_eof26
 		}
 	st_case_26:
-//line lex.go:15187
+//line lex.go:15366
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15198,7 +15377,7 @@ tr58:
 		}
 		goto st0
 tr59:
-//line lex.rl:197
+//line lex.rl:201
  ch = (ch << 4) | unhex(data[p]) 
 	goto st27
 	st27:
@@ -15206,7 +15385,7 @@ tr59:
 			goto _test_eof27
 		}
 	st_case_27:
-//line lex.go:15210
+//line lex.go:15389
 		switch data[p] {
 		case 39:
 			goto tr61
@@ -15287,7 +15466,7 @@ tr59:
 		}
 		goto tr78
 tr40:
-//line lex.rl:208
+//line lex.rl:212
  rn = 0 
 	goto st34
 	st34:
@@ -15295,7 +15474,7 @@ tr40:
 			goto _test_eof34
 		}
 	st_case_34:
-//line lex.go:15299
+//line lex.go:15478
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15310,7 +15489,7 @@ tr40:
 		}
 		goto st0
 tr81:
-//line lex.rl:203
+//line lex.rl:207
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st35
 	st35:
@@ -15318,7 +15497,7 @@ tr81:
 			goto _test_eof35
 		}
 	st_case_35:
-//line lex.go:15322
+//line lex.go:15501
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15333,7 +15512,7 @@ tr81:
 		}
 		goto st0
 tr82:
-//line lex.rl:203
+//line lex.rl:207
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st36
 	st36:
@@ -15341,7 +15520,7 @@ tr82:
 			goto _test_eof36
 		}
 	st_case_36:
-//line lex.go:15345
+//line lex.go:15524
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15356,7 +15535,7 @@ tr82:
 		}
 		goto st0
 tr83:
-//line lex.rl:203
+//line lex.rl:207
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st37
 	st37:
@@ -15364,7 +15543,7 @@ tr83:
 			goto _test_eof37
 		}
 	st_case_37:
-//line lex.go:15368
+//line lex.go:15547
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15391,47 +15570,47 @@ tr83:
 		}
 		goto tr85
 tr20:
-//line lex.rl:218
+//line lex.rl:222
  buf = new(bytes.Buffer) 
 	goto st39
 tr104:
-//line lex.rl:215
+//line lex.rl:219
  buf.WriteByte(ch) 
 	goto st39
 tr115:
-//line lex.rl:209
+//line lex.rl:213
  buf.WriteRune(rn) 
 	goto st39
 tr120:
-//line lex.rl:198
+//line lex.rl:202
  buf.WriteByte(ch) 
 	goto st39
 tr123:
-//line lex.rl:186
+//line lex.rl:190
  buf.WriteByte('\a') 
 	goto st39
 tr126:
-//line lex.rl:187
+//line lex.rl:191
  buf.WriteByte('\b') 
 	goto st39
 tr129:
-//line lex.rl:188
+//line lex.rl:192
  buf.WriteByte('\f') 
 	goto st39
 tr132:
-//line lex.rl:189
+//line lex.rl:193
  buf.WriteByte('\n') 
 	goto st39
 tr135:
-//line lex.rl:190
+//line lex.rl:194
  buf.WriteByte('\r') 
 	goto st39
 tr138:
-//line lex.rl:191
+//line lex.rl:195
  buf.WriteByte('\t') 
 	goto st39
 tr145:
-//line lex.rl:192
+//line lex.rl:196
  buf.WriteByte('\v') 
 	goto st39
 	st39:
@@ -15439,7 +15618,7 @@ tr145:
 			goto _test_eof39
 		}
 	st_case_39:
-//line lex.go:15443
+//line lex.go:15622
 		switch data[p] {
 		case 85:
 			goto tr90
@@ -15469,9 +15648,9 @@ tr145:
 		}
 		goto tr88
 tr89:
-//line lex.rl:213
+//line lex.rl:217
  ch = 0 
-//line lex.rl:214
+//line lex.rl:218
  ch = (ch << 3) | data[p] - '0' 
 	goto st40
 	st40:
@@ -15479,13 +15658,13 @@ tr89:
 			goto _test_eof40
 		}
 	st_case_40:
-//line lex.go:15483
+//line lex.go:15662
 		if 48 <= data[p] && data[p] <= 55 {
 			goto tr100
 		}
 		goto st0
 tr100:
-//line lex.rl:214
+//line lex.rl:218
  ch = (ch << 3) | data[p] - '0' 
 	goto st41
 	st41:
@@ -15493,13 +15672,13 @@ tr100:
 			goto _test_eof41
 		}
 	st_case_41:
-//line lex.go:15497
+//line lex.go:15676
 		if 48 <= data[p] && data[p] <= 55 {
 			goto tr101
 		}
 		goto st0
 tr101:
-//line lex.rl:214
+//line lex.rl:218
  ch = (ch << 3) | data[p] - '0' 
 	goto st42
 	st42:
@@ -15507,7 +15686,7 @@ tr101:
 			goto _test_eof42
 		}
 	st_case_42:
-//line lex.go:15511
+//line lex.go:15690
 		switch data[p] {
 		case 39:
 			goto tr103
@@ -15516,7 +15695,7 @@ tr101:
 		}
 		goto tr102
 tr90:
-//line lex.rl:208
+//line lex.rl:212
  rn = 0 
 	goto st43
 	st43:
@@ -15524,7 +15703,7 @@ tr90:
 			goto _test_eof43
 		}
 	st_case_43:
-//line lex.go:15528
+//line lex.go:15707
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15539,7 +15718,7 @@ tr90:
 		}
 		goto st0
 tr105:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st44
 	st44:
@@ -15547,7 +15726,7 @@ tr105:
 			goto _test_eof44
 		}
 	st_case_44:
-//line lex.go:15551
+//line lex.go:15730
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15562,7 +15741,7 @@ tr105:
 		}
 		goto st0
 tr106:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st45
 	st45:
@@ -15570,7 +15749,7 @@ tr106:
 			goto _test_eof45
 		}
 	st_case_45:
-//line lex.go:15574
+//line lex.go:15753
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15585,7 +15764,7 @@ tr106:
 		}
 		goto st0
 tr107:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st46
 	st46:
@@ -15593,7 +15772,7 @@ tr107:
 			goto _test_eof46
 		}
 	st_case_46:
-//line lex.go:15597
+//line lex.go:15776
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15608,7 +15787,7 @@ tr107:
 		}
 		goto st0
 tr108:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st47
 	st47:
@@ -15616,7 +15795,7 @@ tr108:
 			goto _test_eof47
 		}
 	st_case_47:
-//line lex.go:15620
+//line lex.go:15799
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15631,7 +15810,7 @@ tr108:
 		}
 		goto st0
 tr109:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st48
 	st48:
@@ -15639,7 +15818,7 @@ tr109:
 			goto _test_eof48
 		}
 	st_case_48:
-//line lex.go:15643
+//line lex.go:15822
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15654,7 +15833,7 @@ tr109:
 		}
 		goto st0
 tr110:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st49
 	st49:
@@ -15662,7 +15841,7 @@ tr110:
 			goto _test_eof49
 		}
 	st_case_49:
-//line lex.go:15666
+//line lex.go:15845
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15677,7 +15856,7 @@ tr110:
 		}
 		goto st0
 tr111:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st50
 	st50:
@@ -15685,7 +15864,7 @@ tr111:
 			goto _test_eof50
 		}
 	st_case_50:
-//line lex.go:15689
+//line lex.go:15868
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15700,11 +15879,11 @@ tr111:
 		}
 		goto st0
 tr112:
-//line lex.rl:206
+//line lex.rl:210
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st51
 tr142:
-//line lex.rl:203
+//line lex.rl:207
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st51
 	st51:
@@ -15712,7 +15891,7 @@ tr142:
 			goto _test_eof51
 		}
 	st_case_51:
-//line lex.go:15716
+//line lex.go:15895
 		switch data[p] {
 		case 39:
 			goto tr114
@@ -15739,9 +15918,9 @@ tr142:
 		}
 		goto st0
 tr116:
-//line lex.rl:196
+//line lex.rl:200
  ch = 0 
-//line lex.rl:197
+//line lex.rl:201
  ch = (ch << 4) | unhex(data[p]) 
 	goto st53
 	st53:
@@ -15749,7 +15928,7 @@ tr116:
 			goto _test_eof53
 		}
 	st_case_53:
-//line lex.go:15753
+//line lex.go:15932
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15764,7 +15943,7 @@ tr116:
 		}
 		goto st0
 tr117:
-//line lex.rl:197
+//line lex.rl:201
  ch = (ch << 4) | unhex(data[p]) 
 	goto st54
 	st54:
@@ -15772,7 +15951,7 @@ tr117:
 			goto _test_eof54
 		}
 	st_case_54:
-//line lex.go:15776
+//line lex.go:15955
 		switch data[p] {
 		case 39:
 			goto tr119
@@ -15853,7 +16032,7 @@ tr117:
 		}
 		goto tr136
 tr98:
-//line lex.rl:208
+//line lex.rl:212
  rn = 0 
 	goto st61
 	st61:
@@ -15861,7 +16040,7 @@ tr98:
 			goto _test_eof61
 		}
 	st_case_61:
-//line lex.go:15865
+//line lex.go:16044
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15876,7 +16055,7 @@ tr98:
 		}
 		goto st0
 tr139:
-//line lex.rl:203
+//line lex.rl:207
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st62
 	st62:
@@ -15884,7 +16063,7 @@ tr139:
 			goto _test_eof62
 		}
 	st_case_62:
-//line lex.go:15888
+//line lex.go:16067
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15899,7 +16078,7 @@ tr139:
 		}
 		goto st0
 tr140:
-//line lex.rl:203
+//line lex.rl:207
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st63
 	st63:
@@ -15907,7 +16086,7 @@ tr140:
 			goto _test_eof63
 		}
 	st_case_63:
-//line lex.go:15911
+//line lex.go:16090
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15922,7 +16101,7 @@ tr140:
 		}
 		goto st0
 tr141:
-//line lex.rl:203
+//line lex.rl:207
  rn = (rn << 4) | rune(unhex(data[p])) 
 	goto st64
 	st64:
@@ -15930,7 +16109,7 @@ tr141:
 			goto _test_eof64
 		}
 	st_case_64:
-//line lex.go:15934
+//line lex.go:16113
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15957,17 +16136,17 @@ tr141:
 		}
 		goto tr143
 tr17:
-//line lex.rl:250
+//line lex.rl:254
  ch = 0 
-//line lex.rl:251
+//line lex.rl:255
  ch = (ch << 4) | unhex(data[p]) 
 	goto st66
 tr148:
-//line lex.rl:252
+//line lex.rl:256
  buf.WriteByte(ch) 
-//line lex.rl:250
+//line lex.rl:254
  ch = 0 
-//line lex.rl:251
+//line lex.rl:255
  ch = (ch << 4) | unhex(data[p]) 
 	goto st66
 	st66:
@@ -15975,7 +16154,7 @@ tr148:
 			goto _test_eof66
 		}
 	st_case_66:
-//line lex.go:15979
+//line lex.go:16158
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
@@ -15990,7 +16169,7 @@ tr148:
 		}
 		goto st0
 tr146:
-//line lex.rl:251
+//line lex.rl:255
  ch = (ch << 4) | unhex(data[p]) 
 	goto st67
 	st67:
@@ -15998,7 +16177,7 @@ tr146:
 			goto _test_eof67
 		}
 	st_case_67:
-//line lex.go:16002
+//line lex.go:16181
 		if data[p] == 39 {
 			goto tr147
 		}
@@ -16855,7 +17034,7 @@ tr146:
 		}
 		goto tr1029
 tr331:
-//line lex.rl:70
+//line lex.rl:69
 
 			isFconst = true
 		
@@ -16865,7 +17044,7 @@ tr331:
 			goto _test_eof68
 		}
 	st_case_68:
-//line lex.go:16869
+//line lex.go:17048
 		switch data[p] {
 		case 43:
 			goto st69
@@ -18193,7 +18372,7 @@ tr331:
 	if p == eof {
 		switch cs {
 		case 129:
-//line lex.rl:44
+//line lex.rl:43
 
 			mark++
 			str()
@@ -18207,7 +18386,7 @@ tr331:
 			emit(lex.PLACEHOLDER, s)
 		
 		case 85, 90, 91, 125:
-//line lex.rl:56
+//line lex.rl:55
 
 			str()
 			if isFconst {
@@ -18218,13 +18397,13 @@ tr331:
 			isFconst = false
 		
 		case 126:
-//line lex.rl:73
+//line lex.rl:72
 
 			str()
 			emit(lex.ICONST, s)
 		
 		case 104, 106, 108, 113, 115:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -18241,12 +18420,17 @@ tr331:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
 		case 74:
-//line lex.rl:126
+//line lex.rl:130
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -18273,7 +18457,7 @@ tr331:
 			emit(lex.IDENT, string(b))
 		
 		case 81:
-//line lex.rl:160
+//line lex.rl:164
 
 			if numQuote != 0 {
 				b = make([]byte, p-mark-2-numQuote)
@@ -18300,12 +18484,12 @@ tr331:
 			emit(lex.SCONST, string(b))
 		
 		case 109, 114:
-//line lex.rl:235
+//line lex.rl:239
 
 			emit(lex.BCONST, buf.String())
 		
 		case 116:
-//line lex.rl:239
+//line lex.rl:243
 
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
@@ -18313,96 +18497,96 @@ tr331:
 			emit(lex.SCONST, buf.String())
 		
 		case 107:
-//line lex.rl:261
+//line lex.rl:265
 
 			emit(lex.BITCONST, string(data[mark+2:p-1]))
 		
 		case 72, 73, 75, 76, 77, 78, 80, 82, 83, 86, 88, 92, 95, 98, 100, 102, 105, 111:
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
 		case 87:
-//line lex.rl:280
+//line lex.rl:284
  emitToken(lex.DOT_DOT) 
 		case 133:
-//line lex.rl:282
+//line lex.rl:286
  emitToken(lex.NOT_EQUALS) 
 		case 135:
-//line lex.rl:283
+//line lex.rl:287
  emitToken(lex.NOT_REGIMATCH) 
 		case 134:
-//line lex.rl:284
+//line lex.rl:288
  emitToken(lex.NOT_REGMATCH) 
 		case 118:
-//line lex.rl:286
+//line lex.rl:290
  emitToken(lex.HELPTOKEN) 
 		case 119:
-//line lex.rl:287
+//line lex.rl:291
  emitToken(lex.JSON_SOME_EXISTS) 
 		case 101:
-//line lex.rl:288
+//line lex.rl:292
  emitToken(lex.JSON_ALL_EXISTS) 
 		case 97:
-//line lex.rl:290
+//line lex.rl:294
  emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) 
 		case 96:
-//line lex.rl:291
+//line lex.rl:295
  emitToken(lex.LSHIFT) 
 		case 123:
-//line lex.rl:292
+//line lex.rl:296
  emitToken(lex.NOT_EQUALS) 
 		case 122:
-//line lex.rl:293
+//line lex.rl:297
  emitToken(lex.LESS_EQUALS) 
 		case 124:
-//line lex.rl:294
+//line lex.rl:298
  emitToken(lex.CONTAINED_BY) 
 		case 121:
-//line lex.rl:296
+//line lex.rl:300
  emitToken(lex.INET_CONTAINS_OR_EQUALS) 
 		case 120:
-//line lex.rl:297
+//line lex.rl:301
  emitToken(lex.RSHIFT) 
 		case 99:
-//line lex.rl:298
+//line lex.rl:302
  emitToken(lex.GREATER_EQUALS) 
 		case 94:
-//line lex.rl:300
+//line lex.rl:304
  emitToken(lex.TYPEANNOTATE) 
 		case 93:
-//line lex.rl:301
+//line lex.rl:305
  emitToken(lex.TYPECAST) 
 		case 117:
-//line lex.rl:303
+//line lex.rl:307
  emitToken(lex.CONCAT) 
 		case 89:
-//line lex.rl:305
+//line lex.rl:309
  emitToken(lex.FLOORDIV) 
 		case 112:
-//line lex.rl:307
+//line lex.rl:311
  emitToken(lex.REGIMATCH) 
 		case 103:
-//line lex.rl:309
+//line lex.rl:313
  emitToken(lex.CONTAINS) 
 		case 79:
-//line lex.rl:311
+//line lex.rl:315
  emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) 
 		case 128:
-//line lex.rl:313
+//line lex.rl:317
  emitToken(lex.FETCHTEXT) 
 		case 127:
-//line lex.rl:314
+//line lex.rl:318
  emitToken(lex.FETCHVAL) 
 		case 132:
-//line lex.rl:316
+//line lex.rl:320
  emitToken(lex.FETCHTEXT_PATH) 
 		case 131:
-//line lex.rl:317
+//line lex.rl:321
  emitToken(lex.FETCHVAL_PATH) 
 		case 130:
-//line lex.rl:318
+//line lex.rl:322
  emitToken(lex.REMOVE_PATH) 
 		case 110:
-//line lex.rl:77
+//line lex.rl:76
 
 			if isNotASCII {
 				str()
@@ -18419,20 +18603,25 @@ tr331:
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		
-//line lex.rl:278
+//line lex.rl:282
  emitToken(Tok(data[p-1])) 
-//line lex.go:18429
+//line lex.go:18618
 		}
 	}
 
 	_out: {}
 	}
 
-//line lex.rl:327
+//line lex.rl:331
 
 
 	return nil

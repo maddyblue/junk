@@ -35,7 +35,6 @@ func lexSQL(data []byte) error {
 		buf *bytes.Buffer
 	)
 	str := func() { s = string(data[mark:p]) }
-        _, _, _, _, _, _, _ = uval, err, isFconst, isUpper, isNotASCII, str, buf
 
 	%%{
 		action mark { mark = p }
@@ -90,9 +89,14 @@ func lexSQL(data []byte) error {
 			} else {
 				str()
 			}
+
+			if id, ok := lex.Keywords[s]; ok {
+				emit(Tok(id.Tok), s)
+			} else {
+				emit(lex.IDENT, s)
+			}
 			isUpper = false
 			isNotASCII = false
-			emit(lex.IDENT, s)
 		}
 		int = digit+;
 		pn = ('-' | '+')?;

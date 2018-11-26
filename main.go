@@ -13,6 +13,7 @@ func emitToken(tok Tok) {
 }
 
 func main() {
+	fmt.Println(lexSQL([]byte(`iddent bleeh as as of not between not in not like with time as not with`)))
 	fmt.Println(lexSQL([]byte(`B'' B'0' B'1' B'01' B'1010110100011'`)))
 	fmt.Println(lexSQL([]byte(`; . .. + < << <<= <= << <<=`)))
 	fmt.Println(lexSQL([]byte(`x'636174'`)))
