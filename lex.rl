@@ -242,6 +242,17 @@ func lexSQL(data []byte) error {
 			}
 			emit(Sconst, buf.String())
 		}
+		hexString =
+			('x' | 'X') %{ buf = new(bytes.Buffer) }
+			"'"
+			(
+				xdigit {2}
+				>{ ch = 0 }
+				${ ch = (ch << 4) | unhex(data[p]) }
+				%{ buf.WriteByte(ch) }
+			)*
+			"'"
+			;
 		top =
 			  space
 			| /--[^\n]*/
@@ -253,6 +264,7 @@ func lexSQL(data []byte) error {
 			| singleQuote >mark %singleQuote
 			| bytes %bytes
 			| escapedString %escapedString
+			| hexString %bytes
 			#| ';' %{ emitToken(Semicolon) }
 			;
 		main :=
