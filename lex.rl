@@ -253,6 +253,14 @@ func lexSQL(data []byte) error {
 			)*
 			"'"
 			;
+		bitArray =
+			"B'"
+			(/[01]/)*
+			"'"
+			;
+		action bitArray {
+			emit(lex.BITCONST, string(data[mark+2:p-1]))
+		}
 		top =
 			  space
 			| /--[^\n]*/
@@ -265,6 +273,7 @@ func lexSQL(data []byte) error {
 			| bytes %bytes
 			| escapedString %escapedString
 			| hexString %bytes
+			| bitArray >mark %bitArray
 
 			| punct %{ emitToken(Tok(data[p-1])) }
 
