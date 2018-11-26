@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"unicode/utf8"
 	
-	//"github.com/cockroachdb/cockroach/pkg/sql/lex"
+	"github.com/cockroachdb/cockroach/pkg/sql/lex"
 )
 
 var _ = fmt.Println
@@ -51,14 +51,14 @@ func lexSQL(data []byte) error {
 			if err == nil && uval > 1<<63 {
 				return fmt.Errorf("integer value out of range: %d", uval)
 			}
-			emit(Placeholder, s)
+			emit(lex.PLACEHOLDER, s)
 		}
 		action number {
 			str()
 			if isFconst {
-				emit(Fconst, s)
+				emit(lex.FCONST, s)
 			} else {
-				emit(Iconst, s)
+				emit(lex.ICONST, s)
 			}
 			isFconst = false
 		}
@@ -72,12 +72,12 @@ func lexSQL(data []byte) error {
 		}
 		action hex {
 			str()
-			emit(Iconst, s)
+			emit(lex.ICONST, s)
 		}
 		action ident {
 			if isNotASCII {
 				str()
-				//s = lex.NormalizeName(s)
+				s = lex.NormalizeName(s)
 			} else if isUpper {
 				b := make([]byte, p-mark)
 				for i, c := range data[mark:p] {
@@ -92,7 +92,7 @@ func lexSQL(data []byte) error {
 			}
 			isUpper = false
 			isNotASCII = false
-			emit(Ident, s)
+			emit(lex.IDENT, s)
 		}
 		int = digit+;
 		pn = ('-' | '+')?;
@@ -146,7 +146,7 @@ func lexSQL(data []byte) error {
 				}
 				isNotASCII = false
 			}
-			emit(Ident, string(b))
+			emit(lex.IDENT, string(b))
 		}
 		singleQuote =
 			"'"
@@ -180,7 +180,7 @@ func lexSQL(data []byte) error {
 				}
 				isNotASCII = false
 			}
-			emit(Sconst, string(b))
+			emit(lex.SCONST, string(b))
 		}
 		escape =
 			'a' %{ buf.WriteByte('\a') }
@@ -233,14 +233,14 @@ func lexSQL(data []byte) error {
 			;
 		bytes = "b" stringLiteral;
 		action bytes {
-			emit(Bconst, buf.String())
+			emit(lex.BCONST, buf.String())
 		}
 		escapedString = "e" stringLiteral;
 		action escapedString {
 			if !utf8.Valid(buf.Bytes()) {
 				return fmt.Errorf("invalid UTF-8 string")
 			}
-			emit(Sconst, buf.String())
+			emit(lex.SCONST, buf.String())
 		}
 		hexString =
 			('x' | 'X') %{ buf = new(bytes.Buffer) }
@@ -265,7 +265,49 @@ func lexSQL(data []byte) error {
 			| bytes %bytes
 			| escapedString %escapedString
 			| hexString %bytes
-			#| ';' %{ emitToken(Semicolon) }
+
+			| punct %{ emitToken(Tok(data[p-1])) }
+
+			| '..' %{ emitToken(lex.DOT_DOT) }
+
+			| '!=' %{ emitToken(lex.NOT_EQUALS) }
+			| '!~*' %{ emitToken(lex.NOT_REGIMATCH) }
+			| '!~' %{ emitToken(lex.NOT_REGMATCH) }
+
+			| '??' %{ emitToken(lex.HELPTOKEN) }
+			| '?|' %{ emitToken(lex.JSON_SOME_EXISTS) }
+			| '?&' %{ emitToken(lex.JSON_ALL_EXISTS) }
+
+			| '<<=' %{ emitToken(lex.INET_CONTAINED_BY_OR_EQUALS) }
+			| '<<' %{ emitToken(lex.LSHIFT) }
+			| '<>' %{ emitToken(lex.NOT_EQUALS) }
+			| '<=' %{ emitToken(lex.LESS_EQUALS) }
+			| '<@' %{ emitToken(lex.CONTAINED_BY) }
+
+			| '>>=' %{ emitToken(lex.INET_CONTAINS_OR_EQUALS) }
+			| '>>' %{ emitToken(lex.RSHIFT) }
+			| '>=' %{ emitToken(lex.GREATER_EQUALS) }
+
+			| ':::' %{ emitToken(lex.TYPEANNOTATE) }
+			| '::' %{ emitToken(lex.TYPECAST) }
+
+			| '||' %{ emitToken(lex.CONCAT) }
+
+			| '//' %{ emitToken(lex.FLOORDIV) }
+
+			| '~*' %{ emitToken(lex.REGIMATCH) }
+
+			| '@>' %{ emitToken(lex.CONTAINS) }
+
+			| '&&' %{ emitToken(lex.INET_CONTAINS_OR_CONTAINED_BY) }
+
+			| '->>' %{ emitToken(lex.FETCHTEXT) }
+			| '->' %{ emitToken(lex.FETCHVAL) }
+
+			| '#>>' %{ emitToken(lex.FETCHTEXT_PATH) }
+			| '#>' %{ emitToken(lex.FETCHVAL_PATH) }
+			| '#-' %{ emitToken(lex.REMOVE_PATH) }
+
 			;
 		main :=
 			top**

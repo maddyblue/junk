@@ -1,5 +1,4 @@
 test:
-	#go generate
 	ragel -Z -G2 lex.rl
 	go run *.go
 

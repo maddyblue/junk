@@ -2,35 +2,18 @@ package main
 
 import "fmt"
 
-type tok struct {
-	typ Typ
-	val string
+type Tok int
+
+func emit(tok Tok, val string) {
+	fmt.Printf("%v: %d: %q\n", tok, len(val), val)
 }
 
-//go:generate stringer -type Typ
-
-type Typ int
-
-const (
-	_ Typ = iota
-	Placeholder
-	Ident
-	Semicolon
-	Fconst
-	Iconst
-	Sconst
-	Bconst
-)
-
-func emit(typ Typ, val string) {
-	fmt.Printf("%s: %d: %q\n", typ, len(val), val)
-}
-
-func emitToken(typ Typ) {
-	fmt.Printf("%s\n", typ)
+func emitToken(tok Tok) {
+	fmt.Printf("TOKEN: %v (%[1]c)\n", tok)
 }
 
 func main() {
+	fmt.Println(lexSQL([]byte(`; . .. + < << <<= <= << <<=`)))
 	fmt.Println(lexSQL([]byte(`x'636174'`)))
 	fmt.Println(lexSQL([]byte(`e e'\xc3\xb1' e'\u000a\U0000000A\x0a\X0A\n\012\\n' e`)))
 	fmt.Println(lexSQL([]byte(`b b'\u000a\U0000000A\x0a\X0A\n\012\\n' b`)))
