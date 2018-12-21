@@ -77,11 +77,46 @@ func TestLex(t *testing.T) {
 			input:  `''''`,
 			output: []string{`'`},
 		},
+		{
+			input:  `12/*34*/56`,
+			output: []string{"12", "56"},
+		},
+		{
+			input:  `12/*34*/56/*78*/90`,
+			output: []string{"12", "56", "90"},
+		},
+		{
+			input:  `1/*2/*3*/4*/5`,
+			output: []string{"1", "5"},
+		},
+		{
+			input:  `1/*2/*3*/4/*5/*6*/7*/8*/9`,
+			output: []string{"1", "9"},
+		},
+		{
+			input: `  `,
+		},
+		{
+			input: `/*`,
+			err:   "unterminated comment",
+		},
+		{
+			input: `/*/`,
+			err:   "unterminated comment",
+		},
+		{
+			input: `/* /* */   * /`,
+			err:   "unterminated comment",
+		},
+		{
+			input: `/* */* */`,
+			err:   "ERROR at 5 of 9",
+		},
 	}
 	for i, tc := range tests {
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
 			t.Logf("%q", tc.input)
-			out, err := lexSQL([]byte(tc.input))
+			out, err := lexSQL([]rune(tc.input))
 			if !IsError(err, tc.err) {
 				t.Fatalf("unexpected: %v", err)
 			}

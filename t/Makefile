@@ -1,6 +1,6 @@
 test:
 	ragel -Z lex.rl
-	go test *.go
+	go test
 
 dot:
 	ragel -Z -V -p -o lex.dot lex.rl -M singleQuote

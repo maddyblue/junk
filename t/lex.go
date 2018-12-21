@@ -10,11 +10,13 @@ import (
 
 var _ = fmt.Println
 
-func lexSQL(data []byte) (ret []string, err error) {
+func lexSQL(data []rune) (ret []string, err error) {
 	
 //line lex.rl:13
 	
-//line lex.go:18
+//line lex.rl:14
+	
+//line lex.go:20
 var _scanner_actions []byte = []byte{
 	0, 1, 0, 1, 1, 1, 2, 1, 3, 
 	1, 5, 1, 6, 1, 7, 1, 8, 
@@ -27,7 +29,7 @@ var _scanner_key_offsets []byte = []byte{
 	24, 30, 30, 31, 
 }
 
-var _scanner_trans_keys []byte = []byte{
+var _scanner_trans_keys []int32 = []int32{
 	42, 42, 47, 47, 42, 39, 32, 39, 
 	47, 9, 10, 12, 13, 48, 57, 32, 
 	39, 47, 9, 10, 12, 13, 48, 57, 
@@ -80,29 +82,26 @@ const scanner_en_singleQuote int = 5
 const scanner_en_main int = 6
 
 
-//line lex.rl:14
+//line lex.rl:15
 
 	cs, p, pe, eof := 0, 0, len(data), len(data)
-	_ = eof
 	var (
 		mark int
-		_ = mark
 		stack [1]int
 		top int
-		_, _ = stack, top
 		commentDepth int
 		buf bytes.Buffer
 		_ = buf
 	)
 
 	
-//line lex.go:100
+//line lex.go:99
 	{
 	cs = scanner_start
 	top = 0
 	}
 
-//line lex.go:106
+//line lex.go:105
 	{
 	var _klen int
 	var _trans int
@@ -181,15 +180,15 @@ _match:
 		_acts++
 		switch _scanner_actions[_acts-1] {
 		case 0:
-//line lex.rl:29
+//line lex.rl:27
  mark = p 
 		case 1:
-//line lex.rl:30
+//line lex.rl:28
 
 			commentDepth++
 		
 		case 2:
-//line lex.rl:33
+//line lex.rl:31
 
 			commentDepth--
 			if commentDepth == 0 {
@@ -199,12 +198,12 @@ goto _again
 			}
 		
 		case 4:
-//line lex.rl:58
+//line lex.rl:56
 
 			buf.WriteString(string(data[mark+1:p]))
 		
 		case 5:
-//line lex.rl:64
+//line lex.rl:62
 
 			ret = append(ret, buf.String())
 			p--
@@ -214,20 +213,20 @@ goto _again
 
 		
 		case 7:
-//line lex.rl:103
+//line lex.rl:101
  commentDepth = 1; stack[top] = cs; top++; cs = 2; goto _again
  
 		case 8:
-//line lex.rl:104
+//line lex.rl:102
  ret = append(ret, string(data[mark:p])) 
 		case 9:
-//line lex.rl:105
+//line lex.rl:103
  buf.Reset(); stack[top] = cs; top++; cs = 5; goto _again
  
 		case 10:
-//line lex.rl:108
+//line lex.rl:106
  return nil, errors.Errorf("ERROR at %d of %d", p, len(data)) 
-//line lex.go:231
+//line lex.go:230
 		}
 	}
 
@@ -247,10 +246,10 @@ _again:
 			__acts++
 			switch _scanner_actions[__acts-1] {
 			case 3:
-//line lex.rl:55
+//line lex.rl:53
  return nil, errors.New("unterminated comment") 
 			case 5:
-//line lex.rl:64
+//line lex.rl:62
 
 			ret = append(ret, buf.String())
 			p--
@@ -260,14 +259,14 @@ goto _again
 
 		
 			case 6:
-//line lex.rl:69
+//line lex.rl:67
 
 			return nil, errors.New("unterminated string")
 		
 			case 8:
-//line lex.rl:104
+//line lex.rl:102
  ret = append(ret, string(data[mark:p])) 
-//line lex.go:271
+//line lex.go:270
 			}
 		}
 	}
@@ -275,7 +274,7 @@ goto _again
 	_out: {}
 	}
 
-//line lex.rl:113
+//line lex.rl:111
 
 
 	return ret, nil

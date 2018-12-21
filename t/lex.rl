@@ -8,18 +8,16 @@ import (
 
 var _ = fmt.Println
 
-func lexSQL(data []byte) (ret []string, err error) {
+func lexSQL(data []rune) (ret []string, err error) {
 	%% machine scanner;
+	%% alphtype rune;
 	%% write data;
 
 	cs, p, pe, eof := 0, 0, len(data), len(data)
-	_ = eof
 	var (
 		mark int
-		_ = mark
 		stack [1]int
 		top int
-		_, _ = stack, top
 		commentDepth int
 		buf bytes.Buffer
 		_ = buf
