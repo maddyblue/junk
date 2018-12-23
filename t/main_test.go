@@ -112,6 +112,10 @@ func TestLex(t *testing.T) {
 			input: `/* */* */`,
 			err:   "ERROR at 5 of 9",
 		},
+		{
+			input:  `e'\x0a'`,
+			output: []string{"\xa0"},
+		},
 	}
 	for i, tc := range tests {
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
@@ -121,6 +125,9 @@ func TestLex(t *testing.T) {
 				t.Fatalf("unexpected: %v", err)
 			}
 			if !reflect.DeepEqual(out, tc.output) {
+				for i, v := range out {
+					t.Logf("%d: %q (%d)\n", i, v, len(v))
+				}
 				t.Fatalf("got: %v, expected %v", out, tc.output)
 			}
 		})
