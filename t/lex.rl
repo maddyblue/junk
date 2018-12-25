@@ -2,10 +2,13 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"unicode/utf8"
 
 	"github.com/pkg/errors"
 )
+
+var _ = fmt.Print
 
 func lexSQL(data []rune) (ret []string, err error) {
 	%% machine scanner;
@@ -26,7 +29,10 @@ func lexSQL(data []rune) (ret []string, err error) {
 	)
 
 	%%{
-		action mark { mark = p }
+		action mark {
+			//fmt.Println("mark", p)
+			mark = p
+		}
 		action start_comment {
 			commentDepth++
 		}
@@ -59,12 +65,13 @@ func lexSQL(data []rune) (ret []string, err error) {
 			;
 			
 		action write_buf {
+			//fmt.Println("write buf", string(data[mark+1:p]))
 			buf.WriteString(string(data[mark+1:p]))
 		}
 		action write_single_quote {
 			buf.WriteByte('\'')
 		}
-		action done_single_quote {
+		action done_quote {
 			if checkUTF8 && isNotASCII && !utf8.Valid(buf.Bytes()) {
 				return nil, errors.New("invalid utf8 encoding")
 			}
@@ -91,30 +98,30 @@ func lexSQL(data []rune) (ret []string, err error) {
 				sq -> start |
 				not_newline -> waitNewline |
 				'\n' -> eatWs |
-				^(ws | sq) @done_single_quote -> final |
-				zlen %done_single_quote -> final
+				^(ws | sq) @done_quote -> final |
+				zlen %done_quote -> final
 			),
 			waitNewline: (
 				'\n' -> eatWs |
-				^[\n] @done_single_quote -> final |
-				zlen %done_single_quote -> final
+				^[\n] @done_quote -> final |
+				zlen %done_quote -> final
 			),
 			eatWs: (
 				ws -> eatWs |
 				sq @mark -> start |
-				^(ws | sq) @done_single_quote -> final |
-				zlen %done_single_quote -> final
+				^(ws | sq) @done_quote -> final |
+				zlen %done_quote -> final
 			)
 			) @err(string_err)
 			;
 		escape =
-			'a' %{ buf.WriteByte('\a') }
-			| 'b' %{ buf.WriteByte('\b') }
-			| 'f' %{ buf.WriteByte('\f') }
-			| 'n' %{ buf.WriteByte('\n') }
-			| 'r' %{ buf.WriteByte('\r') }
-			| 't' %{ buf.WriteByte('\t') }
-			| 'v' %{ buf.WriteByte('\v') }
+			'a' @{ buf.WriteByte('\a') }
+			| 'b' @{ buf.WriteByte('\b') }
+			| 'f' @{ buf.WriteByte('\f') }
+			| 'n' @{ buf.WriteByte('\n') }
+			| 'r' @{ buf.WriteByte('\r') }
+			| 't' @{ buf.WriteByte('\t') }
+			| 'v' @{ buf.WriteByte('\v') }
 			;
 		action writeCh { buf.WriteByte(ch) }
 		sl = "\\";
@@ -122,7 +129,7 @@ func lexSQL(data []rune) (ret []string, err error) {
 			'x'i xdigit {2}
 			>{ ch = 0 }
 			${ ch = (ch << 4) | unhex(data[p]) }
-			%writeCh
+			@writeCh
 			;
 		slashUnicode =
 			((
@@ -133,47 +140,49 @@ func lexSQL(data []rune) (ret []string, err error) {
 				${ rn = (rn << 4) | rune(unhex(data[p])) }
 			))
 			>{ rn = 0 }
-			%{ buf.WriteRune(rn) }
+			@{ buf.WriteRune(rn) }
 			;
 		slashOctal =
 			('0'..'7') {3}
 			>{ ch = 0 }
 			${ ch = (ch << 3) | byte(data[p]) - '0' }
-			%{ buf.WriteByte(ch) }
+			@{ buf.WriteByte(ch) }
 			;
-		action writeRune { buf.WriteRune(data[p]) }
-		action read { println("slash", string(data), p, string(data[p])) }
+		action writeRune {
+			//fmt.Println("write rune", string(data[p]))
+			buf.WriteRune(data[p])
+		}
 		singleQuoteEscape := (
 			start: (
 				sq @write_buf @mark -> quote |
-				sl -> slash |
-				(ASCII ^(sl | sq)) -> start |
+				sl @write_buf -> slash |
+				(ASCII - (sl | sq)) -> start |
 				notASCII -> start
-			) >{println("readstart", string(data[p]))},
+			),
 			slash: (
-				#escape -> start |
+				escape -> start |
 				slashHex -> start |
-				#slashUnicode -> start |
-				#slashOctal -> start |
-				^(escape | 'x'i | 'u'i | '0'..'7') $writeRune ${println("had slash")} -> start
-			) >read $mark,
+				slashUnicode -> start |
+				slashOctal -> start |
+				^(escape | 'x'i | 'u'i | '0'..'7') $writeRune -> start
+			) @mark,
 			quote: (
 				sq -> start |
 				not_newline -> waitNewline |
 				'\n' -> eatWs |
-				^(ws | sq) @done_single_quote -> final |
-				zlen %done_single_quote -> final
+				^(ws | sq) @done_quote -> final |
+				zlen %done_quote -> final
 			),
 			waitNewline: (
 				'\n' -> eatWs |
-				^[\n] @done_single_quote -> final |
-				zlen %done_single_quote -> final
+				^[\n] @done_quote -> final |
+				zlen %done_quote -> final
 			),
 			eatWs: (
 				ws -> eatWs |
 				sq @mark -> start |
-				^(ws | sq) @done_single_quote -> final |
-				zlen %done_single_quote -> final
+				^(ws | sq) @done_quote -> final |
+				zlen %done_quote -> final
 			)
 			) @err(string_err)
 			;

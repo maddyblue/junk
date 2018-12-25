@@ -114,12 +114,60 @@ func TestLex(t *testing.T) {
 		},
 		{
 			input:  `e'\x0a'`,
-			output: []string{"\xa0"},
+			output: []string{"\n"},
+		},
+		{
+			input:  `e'\n'`,
+			output: []string{"\n"},
+		},
+		{
+			input:  `e'\u000a'`,
+			output: []string{"\n"},
+		},
+		{
+			input:  `e'\U0000000a'`,
+			output: []string{"\n"},
+		},
+		{
+			input:  `e'\012'`,
+			output: []string{"\n"},
+		},
+		{
+			input:  `e'\x0a\012\n\u000a\U0000000a'`,
+			output: []string{"\n\n\n\n\n"},
+		},
+		{
+			input:  `e'\\'`,
+			output: []string{"\\"},
+		},
+		{
+			input:  `e'\\n\e'`,
+			output: []string{"\\ne"},
+		},
+		{
+			input: `e'\x'`,
+			err:   "unterminated string",
+		},
+		{
+			input: `e'\x1'`,
+			err:   "unterminated string",
+		},
+		{
+			input: `e'\xx'`,
+			err:   "unterminated string",
+		},
+		{
+			input: `e'\01'`,
+			err:   "unterminated string",
+		},
+		{
+			input: `e'\u001'`,
+			err:   "unterminated string",
 		},
 	}
 	for i, tc := range tests {
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
-			t.Logf("%q", tc.input)
+			t.Logf("%s", tc.input)
 			out, err := lexSQL([]rune(tc.input))
 			if !IsError(err, tc.err) {
 				t.Fatalf("unexpected: %v", err)
