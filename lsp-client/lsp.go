@@ -288,3 +288,11 @@ func (l *Client) Format(uri string) (ID, error) {
 		TextDocument: protocol.TextDocumentIdentifier{URI: uri},
 	})
 }
+
+func (l *Client) Completion(pos protocol.TextDocumentPositionParams) (ID, error) {
+	return l.request("textDocument/completion", pos)
+}
+
+func (l *Client) Signature(pos protocol.TextDocumentPositionParams) (ID, error) {
+	return l.request("textDocument/signatureHelp", pos)
+}

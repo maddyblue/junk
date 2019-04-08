@@ -101,6 +101,8 @@ func (p *pls) Command(r *http.Request) (interface{}, error) {
 	var cmdID lsp.ID
 	method := r.FormValue("method")
 	switch method {
+	case "completion":
+		p.Completion(cl, *pos)
 	case "definition":
 		cmdID, err = cl.Definition(*pos)
 		p.RegisterCmd(cmdID, func(msg json.RawMessage) {
@@ -118,7 +120,21 @@ func (p *pls) Command(r *http.Request) (interface{}, error) {
 		})
 	case "hover":
 		p.Hover(cl, *pos)
-		cmdID, err = cl.Hover(*pos)
+	case "signature":
+		cmdID, err = cl.Signature(*pos)
+		p.RegisterCmd(cmdID, func(msg json.RawMessage) {
+			var sig protocol.SignatureHelp
+			if err := json.Unmarshal(msg, &sig); err != nil {
+				return
+			}
+			p.SendMsg(method, struct {
+				Filename  string
+				Signature protocol.SignatureHelp
+			}{
+				Filename:  reqName,
+				Signature: sig,
+			})
+		})
 	case "symbols":
 		cmdID, err = cl.Symbols(pos.TextDocument.URI)
 		p.RegisterCmd(cmdID, func(msg json.RawMessage) {
@@ -138,6 +154,31 @@ func (p *pls) Command(r *http.Request) (interface{}, error) {
 		return nil, fmt.Errorf("unknown method")
 	}
 	return nil, err
+}
+
+func (p *pls) Completion(cl *lsp.Client, pos protocol.TextDocumentPositionParams) {
+	cmdID, err := cl.Completion(pos)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	p.RegisterCmd(cmdID, func(msg json.RawMessage) {
+		var comps protocol.CompletionList
+		if err := json.Unmarshal(msg, &comps); err != nil {
+			log.Println(err)
+			return
+		}
+		if len(comps.Items) > 5 {
+			comps.Items = comps.Items[:5]
+		}
+		p.SendMsg("completion", struct {
+			Filename   string
+			Completion protocol.CompletionList
+		}{
+			Filename:   uriToFilename(pos.TextDocument.URI),
+			Completion: comps,
+		})
+	})
 }
 
 func (p *pls) Hover(cl *lsp.Client, pos protocol.TextDocumentPositionParams) {
@@ -284,10 +325,16 @@ func (p *pls) getState() interface{} {
 			methods = append(methods, "definition")
 		}
 		if c.HoverProvider {
-			methods = append(methods, "hover")
+			//methods = append(methods, "hover")
 		}
 		if c.DocumentSymbolProvider {
 			methods = append(methods, "symbols")
+		}
+		if c.CompletionProvider != nil {
+			methods = append(methods, "completion")
+		}
+		if c.SignatureHelpProvider != nil {
+			//methods = append(methods, "signature")
 		}
 		if len(methods) == 0 {
 			continue
@@ -312,6 +359,7 @@ func (p *pls) watch() {
 		if err != nil {
 			panic(err)
 		}
+		fmt.Println(event)
 		win, _ := openWin(event.ID)
 		uri := filenameToURI(event.Name)
 		cl := p.getClient(event.Name)
@@ -337,6 +385,7 @@ func (p *pls) watch() {
 			}
 			pos, _, _ := win.Position()
 			p.Hover(cl, *pos)
+			p.Completion(cl, *pos)
 		case "put":
 			continue
 			if cl == nil || win == nil {

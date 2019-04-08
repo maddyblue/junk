@@ -7,12 +7,17 @@ class App extends Component {
 		messages: [],
 		hover: {},
 		symbols: {},
+		completion: {},
+		signature: {},
 	};
 	componentDidMount() {
+		this.openWS();
+	}
+	openWS = () => {
 		const loc = 'ws://localhost:8041/ws';
-		console.log('connect to', loc);
+		console.log('connected to', loc);
 		const s = new WebSocket(loc);
-		s.onmessage = function(e) {
+		s.onmessage = e => {
 			const v = JSON.parse(e.data);
 			console.log(v);
 			switch (v.Typ) {
@@ -29,18 +34,29 @@ class App extends Component {
 					symbols[v.Msg.Filename] = v.Msg.Symbols;
 					this.setState({ symbols: symbols });
 					break;
+				case 'completion':
+					const completion = this.state.completion;
+					completion[v.Msg.Filename] = v.Msg.Completion;
+					this.setState({ completion: completion });
+					break;
+				case 'signature':
+					const signature = this.state.signature;
+					signature[v.Msg.Filename] = v.Msg.Signature;
+					this.setState({ signature: signature });
+					break;
 				default:
 					const msgs = this.state.messages;
 					msgs.unshift(v);
 					this.setState({ messages: msgs });
 					break;
 			}
-		}.bind(this);
-		s.onclose = function() {
+		};
+		s.onclose = () => {
 			s.close();
-			setTimeout(this.open, 2000);
-		}.bind(this);
-	}
+			console.log('WS closed; reconnecting');
+			setTimeout(this.openWS, 500);
+		};
+	};
 	command(method, id) {
 		var body = new FormData();
 		body.set('method', method);
@@ -70,10 +86,30 @@ class App extends Component {
 						{m}
 					</span>
 				))}
-				<div
-					className="bg-dark-blue ma3 pa1"
-					dangerouslySetInnerHTML={{ __html: this.state.hover[v.Info.Name] }}
-				/>
+				{this.state.hover[v.Info.Name] ? (
+					<div
+						className="bg-dark-blue ma3 pa1"
+						dangerouslySetInnerHTML={{ __html: this.state.hover[v.Info.Name] }}
+					/>
+				) : null}
+				<div>
+					{(
+						this.state.signature[v.Info.Name] || { signatures: [] }
+					).signatures.map(c => (
+						<div key={c.label} className="ma3">
+							<code>{c.label}</code>
+						</div>
+					))}
+				</div>
+				<div>
+					{(this.state.completion[v.Info.Name] || { items: [] }).items.map(
+						c => (
+							<div key={c.label} className="ma3">
+								<span className="pa1 ba">{c.label}</span> {c.detail}
+							</div>
+						)
+					)}
+				</div>
 				<div>
 					{(this.state.symbols[v.Info.Name] || []).map(s => (
 						<div key={s.name} className="ml3 mb3">

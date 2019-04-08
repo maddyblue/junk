@@ -48,6 +48,10 @@ func main() {
 	})
 	http.HandleFunc("/api/command", wrap(p.Command))
 	http.HandleFunc("/api/open", func(w http.ResponseWriter, r *http.Request) {
+		if n := r.FormValue("name"); n == "" || n == "undefined" {
+			log.Println("OPEN PROB", r.Form)
+			return
+		}
 		addr := fmt.Sprintf("%s:%s:%s", r.FormValue("name"), r.FormValue("line"), r.FormValue("char"))
 		fmt.Println("ADDR", addr)
 		open([]byte(addr))
