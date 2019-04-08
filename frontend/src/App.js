@@ -74,62 +74,64 @@ class App extends Component {
 		if (!this.state.Wins) {
 			return <div>loading...</div>;
 		}
-		const wins = this.state.Wins.map(v => (
-			<div key={v.Info.Name} className="mv3">
-				{v.Info.Name}:
-				{v.Methods.map(m => (
+		const wins = this.state.Wins.map(v => {
+			const symbols = (this.state.symbols[v.Info.Name] || []).map(s => (
+				<div key={s.name} className="ma3">
 					<span
-						key={m}
-						className="ml1 pa1 ba pointer"
-						onClick={() => this.command(m, v.Info.ID)}
+						className="pa1 ba pointer"
+						onClick={() =>
+							this.open(
+								v.Info.Name,
+								s.range.start.line + 1,
+								s.range.start.character + 1
+							)
+						}
 					>
-						{m}
+						{s.name} {s.detail}
 					</span>
-				))}
-				{this.state.hover[v.Info.Name] ? (
-					<div
-						className="bg-dark-blue ma3 pa1"
-						dangerouslySetInnerHTML={{ __html: this.state.hover[v.Info.Name] }}
-					/>
-				) : null}
-				<div>
-					{(
-						this.state.signature[v.Info.Name] || { signatures: [] }
-					).signatures.map(c => (
-						<div key={c.label} className="ma3">
-							<code>{c.label}</code>
-						</div>
-					))}
 				</div>
-				<div>
-					{(this.state.completion[v.Info.Name] || { items: [] }).items.map(
-						c => (
+			));
+			const completion = (
+				this.state.completion[v.Info.Name] || { items: [] }
+			).items.map(c => (
+				<div key={c.label} className="ma3">
+					<span className="pa1 ba">{c.label}</span> {c.detail}
+				</div>
+			));
+			return (
+				<div key={v.Info.Name} className="mv3">
+					{v.Info.Name}:
+					{v.Methods.map(m => (
+						<span
+							key={m}
+							className="ml1 pa1 ba pointer"
+							onClick={() => this.command(m, v.Info.ID)}
+						>
+							{m}
+						</span>
+					))}
+					{this.state.hover[v.Info.Name] ? (
+						<div
+							className="bg-dark-blue ma3 pa1"
+							dangerouslySetInnerHTML={{
+								__html: this.state.hover[v.Info.Name],
+							}}
+						/>
+					) : null}
+					<div>
+						{(
+							this.state.signature[v.Info.Name] || { signatures: [] }
+						).signatures.map(c => (
 							<div key={c.label} className="ma3">
-								<span className="pa1 ba">{c.label}</span> {c.detail}
+								<code>{c.label}</code>
 							</div>
-						)
-					)}
+						))}
+					</div>
+					{completion.length ? <div>Completion: {completion}</div> : null}
+					{symbols.length ? <div>Symbols: {symbols}</div> : null}
 				</div>
-				<div>
-					{(this.state.symbols[v.Info.Name] || []).map(s => (
-						<div key={s.name} className="ml3 mb3">
-							<span
-								className="pa1 ba pointer"
-								onClick={() =>
-									this.open(
-										v.Info.Name,
-										s.range.start.line + 1,
-										s.range.start.character + 1
-									)
-								}
-							>
-								{s.name} {s.detail}
-							</span>
-						</div>
-					))}
-				</div>
-			</div>
-		));
+			);
+		});
 		return (
 			<div>
 				{wins}
