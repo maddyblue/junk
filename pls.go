@@ -52,7 +52,7 @@ func (p *pls) SendMsg(typ string, msg interface{}) {
 }
 
 func (p *pls) AddLSP(suffix, cmd string, args ...string) error {
-	client, err := lsp.NewCmd("file://", cmd, args...)
+	client, err := lsp.NewCmd(*flagDev, "file://", cmd, args...)
 	if err != nil {
 		return err
 	}

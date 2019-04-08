@@ -30,17 +30,19 @@ type Client struct {
 	id     int64
 	msg    chan Message
 	not    chan Notification
+	debug bool
 }
 
 // NewCmd executes the specified langserver and configures a client for
 // it at the specified Root URI. The langserver must interact over its
 // stdin/stdout.
-func NewCmd(rootURI string, command string, args ...string) (*Client, error) {
+func NewCmd(debug bool, rootURI string, command string, args ...string) (*Client, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	l := &Client{
 		cancel: cancel,
 		msg:    make(chan Message),
 		not:    make(chan Notification),
+		debug: debug,
 	}
 	cmd := exec.CommandContext(ctx, command, args...)
 	l.grp, ctx = errgroup.WithContext(ctx)
@@ -173,11 +175,14 @@ func (l *Client) readMessage() ([]byte, error) {
 	if _, err := io.ReadFull(l.stdout, b); err != nil {
 		return nil, err
 	}
-	print("READ", b)
+	l.print("READ", b)
 	return b, nil
 }
 
-func print(prefix string, msg []byte) {
+func (l *Client) print(prefix string, msg []byte) {
+	if !l.debug {
+		return
+	}
 	var out bytes.Buffer
 	prefix += "\t"
 	json.Indent(&out, msg, prefix, "\t")
@@ -227,7 +232,7 @@ func (l *Client) send(msg interface{}) error {
 	buf.Write([]byte("\r\n"))
 	buf.Write(b)
 	d := buf.Bytes()
-	print("SEND", b)
+	l.print("SEND", b)
 	_, err = l.stdin.Write(d)
 	return err
 }

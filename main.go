@@ -18,6 +18,7 @@ var (
 	flagAddr = flag.String("addr", ":8041", "HTTP address")
 	//	flagLSP  = flag.String("lsp", "go:gopls,js:javascript-typescript-langserver", "LSP server specs")
 	flagLSP = flag.String("lsp", "go:gopls", "LSP server specs")
+	flagDev = flag.Bool("dev", false, "dev mode")
 )
 
 func main() {
@@ -34,7 +35,7 @@ func main() {
 		}
 	}
 
-	http.Handle("/", http.FileServer(FS(true)))
+	http.Handle("/", http.FileServer(FS(*flagDev)))
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		u := websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool { return true },
@@ -53,7 +54,6 @@ func main() {
 			return
 		}
 		addr := fmt.Sprintf("%s:%s:%s", r.FormValue("name"), r.FormValue("line"), r.FormValue("char"))
-		fmt.Println("ADDR", addr)
 		open([]byte(addr))
 	})
 	fmt.Println("listen on", *flagAddr)
