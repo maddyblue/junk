@@ -30,7 +30,7 @@ type Client struct {
 	id     int64
 	msg    chan Message
 	not    chan Notification
-	debug bool
+	debug  bool
 }
 
 // NewCmd executes the specified langserver and configures a client for
@@ -42,7 +42,7 @@ func NewCmd(debug bool, rootURI string, command string, args ...string) (*Client
 		cancel: cancel,
 		msg:    make(chan Message),
 		not:    make(chan Notification),
-		debug: debug,
+		debug:  debug,
 	}
 	cmd := exec.CommandContext(ctx, command, args...)
 	l.grp, ctx = errgroup.WithContext(ctx)
