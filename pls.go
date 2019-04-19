@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
-	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -349,6 +348,9 @@ func (p *pls) getState() interface{} {
 }
 
 func (p *pls) watch() {
+	defer func() {
+		panic("no return")
+	}()
 	l, err := acme.Log()
 	if err != nil {
 		panic(err)
@@ -359,7 +361,7 @@ func (p *pls) watch() {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println(event)
+		fmt.Println("EVENT", event)
 		win, _ := openWin(event.ID)
 		uri := filenameToURI(event.Name)
 		cl := p.getClient(event.Name)
@@ -376,6 +378,7 @@ func (p *pls) watch() {
 			}
 			p.SendMsg("state", p.getState())
 		case "focus":
+			continue
 			if cl == nil || win == nil {
 				continue
 			}
@@ -385,9 +388,7 @@ func (p *pls) watch() {
 			}
 			pos, _, _ := win.Position()
 			p.Hover(cl, *pos)
-			p.Completion(cl, *pos)
 		case "put":
-			continue
 			if cl == nil || win == nil {
 				continue
 			}
@@ -395,19 +396,47 @@ func (p *pls) watch() {
 				log.Println("SO ERR", err)
 				continue
 			}
-			id, err := cl.Format(uri)
+			id, err := cl.CodeAction(uri)
 			if err != nil {
 				log.Println(err)
 				continue
 			}
+			// Run organize imports first.
 			p.RegisterCmd(id, func(msg json.RawMessage) {
-				var edits []protocol.TextEdit
-				if err := json.Unmarshal(msg, &edits); err != nil {
+				var actions []protocol.CodeAction
+				if err := json.Unmarshal(msg, &actions); err != nil {
 					return
 				}
-				if strings.Contains(event.Name, "blah.go") {
-					win.Edit(edits)
+				changed := false
+				for _, action := range actions {
+					if action.Edit == nil || action.Edit.Changes == nil {
+						continue
+					}
+					if edits := (*action.Edit.Changes)[uri]; len(edits) > 0 {
+						win.Edit(edits)
+						changed = true
+					}
 				}
+				if changed {
+					if err := p.syncOpen(); err != nil {
+						log.Println("SO ERR", err)
+						return
+					}
+				}
+
+				// Now fmt.
+				id, err := cl.Format(uri)
+				if err != nil {
+					log.Println(err)
+					return
+				}
+				p.RegisterCmd(id, func(msg json.RawMessage) {
+					var edits []protocol.TextEdit
+					if err := json.Unmarshal(msg, &edits); err != nil {
+						return
+					}
+					win.Edit(edits)
+				})
 			})
 		}
 	}

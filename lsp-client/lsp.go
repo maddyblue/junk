@@ -178,6 +178,7 @@ func (l *Client) readMessage() ([]byte, error) {
 }
 
 func (l *Client) print(prefix string, msg []byte) {
+	return
 	if !l.debug {
 		return
 	}
@@ -298,4 +299,10 @@ func (l *Client) Completion(pos protocol.TextDocumentPositionParams) (ID, error)
 
 func (l *Client) Signature(pos protocol.TextDocumentPositionParams) (ID, error) {
 	return l.request("textDocument/signatureHelp", pos)
+}
+
+func (l *Client) CodeAction(uri string) (ID, error) {
+	return l.request("textDocument/codeAction", protocol.CodeActionParams{
+		TextDocument: protocol.TextDocumentIdentifier{URI: uri},
+	})
 }
