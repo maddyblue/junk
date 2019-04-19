@@ -72,9 +72,7 @@ func NewCmd(debug bool, rootURI string, command string, args ...string) (*Client
 			Result protocol.InitializeResult
 		}
 		id, err := l.request("initialize", protocol.InitializeParams{
-			InnerInitializeParams: protocol.InnerInitializeParams{
-				RootURI: rootURI,
-			},
+			RootURI: rootURI,
 		})
 		if err != nil {
 			return err
