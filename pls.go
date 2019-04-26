@@ -216,6 +216,11 @@ func (p *pls) syncOpen() error {
 		panic(err)
 		return err
 	}
+	// Keep track of previously open docs so we know what to close.
+	prevOpen := map[string]bool{}
+	for name := range p.prevBody {
+		prevOpen[name] = true
+	}
 	for _, w := range wins {
 		w, err := openWin(w.ID)
 		if err != nil {
@@ -227,6 +232,7 @@ func (p *pls) syncOpen() error {
 			panic(err)
 			return err
 		}
+		delete(prevOpen, filename)
 		cl := p.getClient(filename)
 		if cl == nil {
 			continue
@@ -263,6 +269,13 @@ func (p *pls) syncOpen() error {
 			panic(err)
 			return err
 		}
+	}
+	for name := range prevOpen {
+		cl := p.getClient(name)
+		if cl == nil {
+			continue
+		}
+		cl.DidClose(name)
 	}
 	return nil
 }
@@ -365,8 +378,15 @@ func (p *pls) watch() {
 		win, _ := openWin(event.ID)
 		uri := filenameToURI(event.Name)
 		cl := p.getClient(event.Name)
+		if cl == nil || win == nil {
+			continue
+		}
 		switch event.Op {
-		case "new", "del":
+		case "new", "del", "focus":
+			if err := p.syncOpen(); err != nil {
+				log.Println("SO ERR", err)
+				continue
+			}
 			if event.Op == "del" {
 				p.lock.Lock()
 				delete(p.prevBody, event.Name)
@@ -377,21 +397,11 @@ func (p *pls) watch() {
 				}
 			}
 			p.SendMsg("state", p.getState())
-		case "focus":
-			continue
-			if cl == nil || win == nil {
-				continue
+			if event.Op == "focus" {
+				pos, _, _ := win.Position()
+				p.Hover(cl, *pos)
 			}
-			if err := p.syncOpen(); err != nil {
-				log.Println("SO ERR", err)
-				continue
-			}
-			pos, _, _ := win.Position()
-			p.Hover(cl, *pos)
 		case "put":
-			if cl == nil || win == nil {
-				continue
-			}
 			if err := p.syncOpen(); err != nil {
 				log.Println("SO ERR", err)
 				continue
