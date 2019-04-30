@@ -25,9 +25,7 @@ class App extends Component {
 					this.setState(v.Msg);
 					break;
 				case 'hover':
-					const hover = this.state.hover;
-					hover[v.Msg.Filename] = v.Msg.HTML;
-					this.setState({ hover: hover });
+					this.setState({ hover: v.Msg });
 					break;
 				case 'symbols':
 					const symbols = this.state.symbols;
@@ -110,11 +108,11 @@ class App extends Component {
 							{m}
 						</span>
 					))}
-					{this.state.hover[v.Info.Name] ? (
+					{this.state.hover.Filename ? (
 						<div
 							className="bg-dark-blue ma3 pa1"
 							dangerouslySetInnerHTML={{
-								__html: this.state.hover[v.Info.Name],
+								__html: this.state.hover.HTML,
 							}}
 						/>
 					) : null}
