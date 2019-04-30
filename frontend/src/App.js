@@ -8,7 +8,6 @@ class App extends Component {
 		hover: {},
 		symbols: {},
 		completion: {},
-		signature: {},
 	};
 	componentDidMount() {
 		this.openWS();
@@ -38,9 +37,7 @@ class App extends Component {
 					this.setState({ completion: completion });
 					break;
 				case 'signature':
-					const signature = this.state.signature;
-					signature[v.Msg.Filename] = v.Msg.Signature;
-					this.setState({ signature: signature });
+					debugger;
 					break;
 				default:
 					const msgs = this.state.messages;
@@ -116,15 +113,6 @@ class App extends Component {
 							}}
 						/>
 					) : null}
-					<div>
-						{(
-							this.state.signature[v.Info.Name] || { signatures: [] }
-						).signatures.map(c => (
-							<div key={c.label} className="ma3">
-								<code>{c.label}</code>
-							</div>
-						))}
-					</div>
 					{completion.length ? <div>Completion: {completion}</div> : null}
 					{symbols.length ? <div>Symbols: {symbols}</div> : null}
 				</div>
