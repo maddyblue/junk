@@ -333,6 +333,7 @@ func (p *pls) getClient(name string) *lsp.Client {
 	return nil
 }
 
+// TODO: make this not trigger on focus events
 func (p *pls) getState() interface{} {
 	wins, err := acme.Windows()
 	if err != nil {
