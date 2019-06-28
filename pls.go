@@ -119,6 +119,8 @@ func (p *pls) Command(r *http.Request) (interface{}, error) {
 		})
 	case "hover":
 		p.Hover(cl, *pos)
+	case "references":
+		p.References(cl, *pos)
 	case "signature":
 		cmdID, err = cl.Signature(*pos)
 		p.RegisterCmd(cmdID, func(msg json.RawMessage) {
@@ -198,6 +200,27 @@ func (p *pls) Hover(cl *lsp.Client, pos protocol.TextDocumentPositionParams) {
 		}{
 			Filename: uriToFilename(pos.TextDocument.URI),
 			HTML:     res,
+		})
+	})
+}
+
+func (p *pls) References(cl *lsp.Client, pos protocol.TextDocumentPositionParams) {
+	cmdID, err := cl.References(pos)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	p.RegisterCmd(cmdID, func(msg json.RawMessage) {
+		var locs []protocol.Location
+		if err := json.Unmarshal(msg, &locs); err != nil {
+			return
+		}
+		p.SendMsg("references", struct {
+			Filename  string
+			Locations []protocol.Location
+		}{
+			Filename:  uriToFilename(pos.TextDocument.URI),
+			Locations: locs,
 		})
 	})
 }
@@ -347,6 +370,9 @@ func (p *pls) getState() interface{} {
 		}
 		if c.SignatureHelpProvider != nil {
 			//methods = append(methods, "signature")
+		}
+		if c.ReferencesProvider {
+			methods = append(methods, "references")
 		}
 		if len(methods) == 0 {
 			continue

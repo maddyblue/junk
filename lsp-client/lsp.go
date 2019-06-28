@@ -306,3 +306,9 @@ func (l *Client) CodeAction(uri string) (ID, error) {
 		TextDocument: protocol.TextDocumentIdentifier{URI: uri},
 	})
 }
+
+func (l *Client) References(pos protocol.TextDocumentPositionParams) (ID, error) {
+	return l.request("textDocument/references", protocol.ReferenceParams{
+		TextDocumentPositionParams: pos,
+	})
+}

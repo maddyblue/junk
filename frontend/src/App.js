@@ -8,6 +8,7 @@ class App extends Component {
 		hover: {},
 		symbols: {},
 		completion: {},
+		references: {},
 	};
 	componentDidMount() {
 		this.openWS();
@@ -38,6 +39,15 @@ class App extends Component {
 					break;
 				case 'signature':
 					debugger;
+					break;
+				case 'references':
+					const references = this.state.references;
+					const locations = v.Msg.Locations.map(l => ({
+						'label': l.uri + ':' + l.range.start.line + ':' + l.range.start.character,
+						'loc': l,
+					}));
+					references[v.Msg.Filename] = locations;
+					this.setState({ references: references });
 					break;
 				default:
 					const msgs = this.state.messages;
@@ -93,6 +103,13 @@ class App extends Component {
 					<span className="pa1 ba">{c.label}</span> {c.detail}
 				</div>
 			));
+			const references = (
+				this.state.references[v.Info.Name] || []
+			).map(c => (
+				<div key={c.label} className="ma3">
+					<span className="pa1 ba">{c.label}</span>
+				</div>
+			));
 			return (
 				<div key={v.Info.Name} className="mv3">
 					{v.Info.Name}:
@@ -114,6 +131,7 @@ class App extends Component {
 						/>
 					) : null}
 					{completion.length ? <div>Completion: {completion}</div> : null}
+					{references.length ? <div>References: {references}</div> : null}
 					{symbols.length ? <div>Symbols: {symbols}</div> : null}
 				</div>
 			);
