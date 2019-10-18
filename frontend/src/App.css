@@ -1,0 +1,23 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+@import './default-dark.css';
+
+a {
+	color: var(--primary);
+}
+
+.sorted th {
+	cursor: pointer;
+}
+
+.sort-asc::after {
+	content: '↓';
+}
+
+.sort-desc::after {
+	content: '↑';
+}
