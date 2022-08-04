@@ -1,0 +1,2 @@
+BOOTMAGIC_ENABLE = lite
+NKRO_ENABLE = yes
